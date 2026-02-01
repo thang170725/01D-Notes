@@ -1,3 +1,8 @@
+- [tuple](#tuple)
+- [zip()](#zip)
+- [map](#map)
+---
+# tuple
 ```bash
 - Là một kiểu dữ liệu dùng để lưu trữ các đối tượng không thay đổi về sau (giống như hằng số). Nó sử dụng để lưu trữ nhiều mục trong một biến duy nhất. 
 ```
@@ -81,7 +86,8 @@ print(days[0])
 #     days[0] = "Thứ 2"
 #     ~~~~^^^
 # TypeError: 'tuple' object does not support item assignment
-```# zip()
+```
+# zip()
 **Ex1**
 ```python
 names = ["Alice", "Bob", "Charlie"]
@@ -104,6 +110,17 @@ for name, age in zip(names, ages):
 # Alice is 25 years old
 # Bob is 30 years old
 # Charlie is 35 years old
+```
+**Ex3: zip với dict**
+```python
+data = {
+    'msv': ['v1', 'v2'],
+    'points': [2, 3]
+}
+
+print(*data)
+
+# msv points
 ```
 # map
 **Ex**

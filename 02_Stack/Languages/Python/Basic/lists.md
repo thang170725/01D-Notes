@@ -1,27 +1,22 @@
 - [list() \& len() \& in](#list--len--in)
-- [\*](#)
+  - [Ép từ dict -\> list of dict](#ép-từ-dict---list-of-dict)
+- [\* (unpack)](#-unpack)
 - [.count()](#count)
 - [.index()](#index)
 - [.insert()](#insert)
 - [.clear() \& del \& .remove() \& .pop()](#clear--del--remove--pop)
   - [xóa phần tử nhỏ hơn 2 trong list](#xóa-phần-tử-nhỏ-hơn-2-trong-list)
 - [max()](#max)
-- [\[\]](#-1)
-- [sort() \& sorted](#sort--sorted)
+- [\[\]](#)
+- [.sort() \& sorted()](#sort--sorted)
   - [Sắp xếp danh sách sự kiện](#sắp-xếp-danh-sách-sự-kiện)
 - [sum()](#sum)
-- [Ép từ dict -\> list of dict](#ép-từ-dict---list-of-dict)
 ---
 # list() & len() & in
 ```bash
 - list  : Ép kiểu khác về list thường.
 - len   : Trả về độ dài của một mảng.
 - in    : Lặp qua các phần tử trong một mảng, list.
-**Ex**
-```python
-country = ["VietNam", "England", "America"]
-
-    pr
 ```
 **Syn: list**
 ```bash
@@ -40,7 +35,69 @@ print(len(a)) # 12
 for character in a:
     print(character, end=' ') # M y   n a m e   i s  
 ```
-# *
+## Ép từ dict -> list of dict
+**Ex1**
+**Topic**
+```bash
+Cho một từ điển gồm có các khóa là mã sinh viên, các giá trị lưu trữ là điểm tổng kết. Hãy chuyển từ dạng dict -> list of dict
+```
+**Answer**
+```python
+scores = {
+    "SV001": 8.5,
+    "SV002": 7.0,
+    "SV003": 9.25
+}
+
+result = [
+    {"student_id": k, "score": v}
+    for k, v in scores.items()
+]
+
+print(result) # [{'student_id': 'SV001', 'score': 8.5}, {'student_id': 'SV002', 'score': 7.0}, {'student_id': 'SV003', 'score': 9.25}]
+```
+**Ex2**
+```python
+data = {
+    "SV001": [8.5, 7.0, 9.0],
+    "SV002": [6.5, 7.5, 8.0],
+    "SV003": [9.0, 9.5, 9.0]
+}
+
+subjects = ["toan", "ly", "hoa"]
+
+result = [
+    {
+        "mssv": k,
+        **dict(zip(subjects, v))
+    }
+    for k, v in data.items()
+]
+
+# [
+#     {'mssv': 'SV001', 'toan': 8.5, 'ly': 7.0, 'hoa': 9.0},
+#     {'mssv': 'SV002', 'toan': 6.5, 'ly': 7.5, 'hoa': 8.0},
+#     {'mssv': 'SV003', 'toan': 9.0, 'ly': 9.5, 'hoa': 9.0}
+# ]
+```
+**Ex3**
+```python
+data = {
+    'msv': ['v1', 'v2'],
+    'points': [2, 3]
+}
+
+result = [
+    dict(zip(data.keys(), values))
+    for values in zip(*data.values())
+]
+
+# [
+#     {'msv': 'v1', 'points': 2},
+#     {'msv': 'v2', 'points': 3}
+# ]
+```
+# * (unpack)
 ```bash
 - * : Trải các phần tử của list ra thành nhiều đối số.
 ```
@@ -179,7 +236,7 @@ a.reverse()
 
 print(a)
 ```
-# sort() & sorted
+# .sort() & sorted()
 ```bash
 Sắp xếp các phần tử trong mảng. Nếu là chuỗi thì sắp xếp theo thứ tự alphabet.
 ```
@@ -190,53 +247,22 @@ a.sort(reverse=True)
 - a: Là tên biến
 - reverse=True: Sắp giảm. Mặc định là False
 ```
-Sắp xếp list dict (hay dùng nhất)
-🔹 Ví dụ:
+**Ex1: Sắp xếp list dict**
+```python
 events = [
     {'name': 'A', 'people': 50},
     {'name': 'B', 'people': 20},
     {'name': 'C', 'people': 100}
 ]
 
-✅ Sắp xếp tăng dần theo key
-events.sort(key=lambda x: x['people'])
-
-
-➡️ Kết quả: 20 → 50 → 100
-
-✅ Giảm dần
-events.sort(key=lambda x: x['people'], reverse=True)
-
-✅ Sắp xếp theo nhiều tiêu chí
-
-Ví dụ:
-
-tăng theo people
-
-nếu bằng nhau → tăng theo name
-
+events.sort(key=lambda x: x['people']) # 20 → 50 → 100
+```
+**Ex2: Sắp xếp theo nhiều tiêu chí**
+```python
 events.sort(key=lambda x: (x['people'], x['name']))
-
-3️⃣ Sắp xếp dict of list
-
-Ví dụ:
-
-data = {
-    'A': [5, 2, 9],
-    'B': [1, 8, 3]
-}
-
-🔹 Sắp xếp từng list bên trong
-for v in data.values():
-    v.sort()
-
-🔹 Sắp xếp dict theo tổng giá trị của list
-sorted_data = dict(
-    sorted(data.items(), key=lambda x: sum(x[1]))
-)
-
-4️⃣ Sắp xếp list object (class)
-🔹 Class ví dụ
+```
+**Ex3: Sắp xếp list object (class)**
+```python
 class Event:
     def __init__(self, name, people):
         self.name = name
@@ -248,38 +274,8 @@ events = [
     Event("C", 100)
 ]
 
-✅ Sắp xếp theo thuộc tính
 events.sort(key=lambda e: e.people)
-
-✅ Giảm dần
-events.sort(key=lambda e: e.people, reverse=True)
-
-5️⃣ Dùng operator.attrgetter (đẹp & chuyên nghiệp)
-from operator import attrgetter
-
-events.sort(key=attrgetter('people'))
-
-
-👉 Thường được chấm cao hơn trong bài thi 😎
-
-6️⃣ Sắp xếp theo key không chắc tồn tại (an toàn)
-events.sort(key=lambda x: x.get('people', 0))
-
-7️⃣ Những lỗi hay gặp khi đi thi ❌
-
-❌ Quên key=
-
-events.sort(lambda x: x['people'])  # SAI
-
-
-❌ Viết nhầm key
-
-x['pepple']  # crash ngay
-
-
-❌ Gán lại sort()
-
-events = events.sort()  # events = None
+```
 ## Sắp xếp danh sách sự kiện
 ```bash
 # cột 1 là địa điểm, cột 2 là số lượng khách.
@@ -308,92 +304,4 @@ max_key = max(my_dict, key=my_dict.get) # Lấy Key có Value lớn nhất
 max_value = my_dict[max_key] # Lấy Value tương ứng
 
 print(f"Key lớn nhất là: {max_key}, Value là: {max_value}") # Kết quả: Key lớn nhất là: b, Value là: 50
-```
-
-# Ép từ dict -> list of dict
-**Ex1**
-**Topic**
-```bash
-Cho một từ điển gồm có các khóa là mã sinh viên, các giá trị lưu trữ là điểm tổng kết. Hãy chuyển từ dạng dict -> list of dict
-```
-**Answer**
-```python
-scores = {
-    "SV001": 8.5,
-    "SV002": 7.0,
-    "SV003": 9.25
-}
-
-result = [
-    {"student_id": k, "score": v}
-    for k, v in scores.items()
-]
-
-print(result) # [{'student_id': 'SV001', 'score': 8.5}, {'student_id': 'SV002', 'score': 7.0}, {'student_id': 'SV003', 'score': 9.25}]
-```
-Bài toán
-
-Bạn có dict dạng:
-
-data = {
-    "SV001": [8.5, 7.0, 9.0],
-    "SV002": [6.5, 7.5, 8.0],
-    "SV003": [9.0, 9.5, 9.0]
-}
-
-
-Mỗi:
-
-key = mã sinh viên
-
-value = list điểm (hoặc dữ liệu liên quan)
-
-👉 Muốn ép sang list of dict.
-
-✅ Trường hợp 1 (PHỔ BIẾN NHẤT):
-Value là list các cột (điểm, thuộc tính…)
-
-Giả sử list có ý nghĩa:
-
-[diem_toan, diem_ly, diem_hoa]
-
-✨ Cách chuẩn & rõ ràng nhất
-subjects = ["toan", "ly", "hoa"]
-
-result = [
-    {
-        "mssv": k,
-        **dict(zip(subjects, v))
-    }
-    for k, v in data.items()
-]
-
-📤 Kết quả
-[
-    {'mssv': 'SV001', 'toan': 8.5, 'ly': 7.0, 'hoa': 9.0},
-    {'mssv': 'SV002', 'toan': 6.5, 'ly': 7.5, 'hoa': 8.0},
-    {'mssv': 'SV003', 'toan': 9.0, 'ly': 9.5, 'hoa': 9.0}
-]
-
-
-✔ Chuẩn dữ liệu bảng
-✔ In bảng đẹp, sort, filter dễ
-✔ Tư duy giống pandas
-
-**Ex3**
-```python
-data = {
-    'msv': ['v1', 'v2'],
-    'points': [2, 3]
-}
-
-result = [
-    dict(zip(data.keys(), values))
-    for values in zip(*data.values())
-]
-
-# [
-#     {'msv': 'v1', 'points': 2},
-#     {'msv': 'v2', 'points': 3}
-# ]
 ```

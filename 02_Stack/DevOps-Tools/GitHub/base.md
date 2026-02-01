@@ -1,4 +1,15 @@
-Chuyển đổi giữa các commit
+- [C](#c)
+---
+# Cấu trúc thư mục
+**Chi tiết**
+```bash
+1. ssh.md   : Cách tạo và add SSH key để không phải nhập pass.
+
+pr-workflow.md: Quy trình tạo và duyệt Pull Request.
+
+actions.md: CI/CD tự động hóa.
+
+issues.md: Quản lý task và lỗi.Chuyển đổi giữa các commit
 git checkout f62cf8
 Quay lại bất kỳ commit nào, quay lại commit có địa chỉ f62cf8
 git rebase
@@ -219,7 +230,7 @@ Cách mở khóa Office 365Chuyển đổi giữa các commit
     2. nhập số 2
     3. nhập số 1
 Powercfg /batteryreport
-3. Git & GitHub
+1. Git & GitHub
 git
 git –-version
 Hiển thị thông tin phiên bản của git.
@@ -379,14 +390,3 @@ Dùng khi git/gitHub yêu cầu tài khoản và mật khẩu: nếu remote là 
     7. 7. Copy chuỗi token đó - chỉ hiện 1 lần
     8. Khi git push, nhập: Username: thang170725, Password: dán token vừa tạo
     9. Lưu token để không phải nhập lại: git config --global credential.helper store
-Cách dùng SSH key để push/pull
-    1. Kiểm tra xem đã có SSH key chưa: ls ~/.ssh
-    2. Tạo key nếu chưa có: ssh-keygen -t ed25519 -C "your_email@example.com" -> rồi nhấn enter liên tục
-    3. Copy nội dung public key: cat ~/.ssh/id_ed25519.pub
-    4. Thêm vào gitHub
-        1. https://github.com/settings/keys
-        2. New SSH key
-        3. Title: đặt tên cho key ví dụ ubuntu laptop
-        4. Dán key 
-        5. Add SSH key
-    5. Đổi remote từ HTTPS sang SSH: git remote set-url origin git@github.com:thang170725/elgamal.git

@@ -1,6 +1,5 @@
 - [ls](#ls)
-  - [mkdir](#mkdir)
-  - [touch](#touch)
+- [mkdir \& touch](#mkdir--touch)
 ---
 # ls
 ```bash
@@ -18,13 +17,15 @@ find . -type f | wc -l
 
 Chỉ folder
 find . -type d | wc -l
-## mkdir
-Tạo ra thư mục
-**Syn**
+# mkdir & touch
+```bash
+- mkdir   : Tạo ra thư mục
+- touch : Tạo file
+**Syn: mkdir**
 ```bash
 mkdir git_test
 ```
-## touch
+**Syn: touch**
 ```bash
 touch index.html (Tao một file tên là index.html)
 ```

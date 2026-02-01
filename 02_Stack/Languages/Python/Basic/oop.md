@@ -1,17 +1,17 @@
 - [class](#class)
   - [__dict__](#dict)
-- [__init__() \& __str__() \& __len__()](#init--str--len)
+  - [__init__() \& __str__() \& __len__()](#init--str--len)
   - [__mro__](#mro)
   - [__call__()](#call)
   - [__getitem__()](#getitem)
   - [__add__() \& __sub__() \& __mul__() \& __truediv__()](#add--sub--mul--truediv)
+  - [__floordiv__() \& __mod__() \&  __divmod__()](#floordiv--mod---divmod)
   - [__iadd()__ \& __isub__() \& __imul__() \& __itruediv__() __iffloordiv__ \& __imod__() \& __ipow__()](#iadd--isub--imul--itruediv-iffloordiv--imod--ipow)
   - [__lt__() \& __gt__() \& __eq__() \& __ne__() \& __le__() \& __ge__()](#lt--gt--eq--ne--le--ge)
   - [__neg__()](#neg)
   - [setattr() \& __setattr__()](#setattr--setattr)
   - [Del](#del)
   - [__pos__() \& __abs__() \& __invert__()](#pos--abs--invert)
-  - [__floordiv__() \& __mod__() \&  __divmod__()](#floordiv--mod---divmod)
   - [a.__lshift__(b)](#alshiftb)
   - [__radd__() \& __rsub__() __rmul__()](#radd--rsub-rmul)
   - [\_rtruediv() \& rfloordiv \& rmod() \& __rpow__()](#_rtruediv--rfloordiv--rmod--rpow)
@@ -89,7 +89,7 @@ class User:
 func_names = [name for name, obj in User.__dict__.items() if callable(obj)]
 print(func_names) # ['__init__', 'get_name', 'set_name']
 ```
-# __init__() & __str__() & __len__()	
+## __init__() & __str__() & __len__()	
 ```bash
 - __init__  : Là hàm định dạng cho một class.
 - __str__   : Dữ liệu trả về khi đối tượng được gọi.
@@ -144,6 +144,7 @@ m = MyList([10, 20, 30])
 print(m[1])  # 20
 ```
 ## __add__() & __sub__() & __mul__() & __truediv__()
+**Syn**
 ```bash
 - __add__       : Tự động được gọi đến khi dùng toán tử +.
 - __sub__       : Tự động được gọi đến khi dùng toán tử -.
@@ -191,6 +192,35 @@ print(a+b) # 1.27
 print(a-b) # -0.07
 print(a*b) # 0.40
 print(a/b) # 0.90
+```
+## __floordiv__() & __mod__() &  __divmod__()
+```bash
+- __floordiv    : //
+- __mod__       : %
+```
+**Ex**
+```python
+class Candies:
+    def __init__(self, total):
+        self.total = total
+
+    def __floordiv__(self, people):
+        # mỗi người được bao nhiêu viên
+        return self.total // people
+
+    def __mod__(self, people):
+        # còn dư bao nhiêu viên
+        return self.total % people
+
+    def __divmod__(self, people):
+        # trả về (mỗi người, dư)
+        return (self.total // people, self.total % people)
+
+c = Candies(17)
+
+print(c // 5)          # 3
+print(c % 5)           # 2
+print(divmod(c, 5))    # (3, 2)
 ```
 ## __iadd()__ & __isub__() & __imul__() & __itruediv__() __iffloordiv__ & __imod__() & __ipow__()
 **Ex**
@@ -332,35 +362,6 @@ p2 = Person("An")
 print(p1 == p2)  # True
 ```
 ## __pos__() & __abs__() & __invert__()
-## __floordiv__() & __mod__() &  __divmod__()
-```bash
-- __floordiv    : //
-- __mod__       : %
-```
-**Ex**
-```python
-class Candies:
-    def __init__(self, total):
-        self.total = total
-
-    def __floordiv__(self, people):
-        # mỗi người được bao nhiêu viên
-        return self.total // people
-
-    def __mod__(self, people):
-        # còn dư bao nhiêu viên
-        return self.total % people
-
-    def __divmod__(self, people):
-        # trả về (mỗi người, dư)
-        return (self.total // people, self.total % people)
-
-c = Candies(17)
-
-print(c // 5)          # 3
-print(c % 5)           # 2
-print(divmod(c, 5))    # (3, 2)
-```
 ## a.__lshift__(b)
 Dịch bit sang phải a >> b a.__rshift__(b)
 Phép AND a & b a.__and__(b)

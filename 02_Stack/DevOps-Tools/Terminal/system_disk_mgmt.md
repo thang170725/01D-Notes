@@ -6,6 +6,8 @@
 - [sudo apt clean](#sudo-apt-clean)
 - [sudo apt autoclean](#sudo-apt-autoclean)
 - [Mount ổ cứng](#mount-ổ-cứng)
+- [uptime](#uptime)
+- [ac (Accounting)](#ac-accounting)
 ---
 # clear
 ```bash
@@ -132,4 +134,26 @@ sudo journalctl --vacuum-time=7d
 2. sudo apt install cifs-utils
 3. sudo apt install ntfs-sg
 4. sudo ntfsfix -b -d /dev/nvme1n1p4
+```
+# uptime
+```bash
+Xem thời gian bắt đầu mở máy tính.
+```
+**Ex**
+```bash
+thang@PhatToNhuLai:~$ uptime -s
+2025-08-14 15:29:59
+```
+# ac (Accounting) 
+```bash
+- Lệnh ac sẽ cho biết tổng số giờ ma người dùng đã đăng nhập.
+```
+**Syn**
+```bash
+1. Cài đặt nếu chưa có:
+    1. sudo apt install acct   # Ubuntu/Debian
+    2. sudo systemctl start acct
+    3. sudo systemctl enable acct
+2. ac -d    # Aug 14 total      5.40
+3. ac -p    # total      569.53
 ```
