@@ -3,7 +3,7 @@
 - [Quản lý phiếu nhập hàng](#quản-lý-phiếu-nhập-hàng)
 - [Sơ đồ lớp (cầu thủ - người - câu lạc bộ)](#sơ-đồ-lớp-cầu-thủ---người---câu-lạc-bộ)
 - [Bài toán căn hộ OOP](#bài-toán-căn-hộ-oop)
-- [phiếu đăng lý khóa học](#phiếu-đăng-lý-khóa-học)
+- [phiếu đăng ký khóa học](#phiếu-đăng-ký-khóa-học)
 ---
 # Quản lý sự kiện
 ```bash
@@ -538,7 +538,7 @@ def main():
 if __name__ == "__main__":
     main()
 ```
-# phiếu đăng lý khóa học
+# phiếu đăng ký khóa học
 ```python
 from abc import ABC, abstractmethod
 
