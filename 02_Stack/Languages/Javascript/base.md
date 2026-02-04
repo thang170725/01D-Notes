@@ -5,13 +5,18 @@
 # Cấu trúc
 ```bash
 Javascript/
-├── 01_basics_datatypes.md   # Biến, Xem kết quả biến, Number, String, Array (thay cho List), Object (thay cho Dict)
-├── 02_control_flow.md       # If-else, Switch-case, For, While
-├── 03_functions.md          # Function, Arrow function, Scope
-├── 04_dom_elements.md       # querySelector, classList, manipulation (Đặc thù Web)
-├── 05_events.md             # Click, Input, addEventListener
-├── 06_api.md          # Fetch, Promise
-└── 07_practice_cases.md     # Các bài tập tổng hợp
+├── api.md
+├── base.md
+├── basics_datatypes.md
+├── class-list.md
+├── dom_elements.md
+├── event.md
+├── function.md
+├── leaflet.md
+├── loop_control.md
+├── object.md
+├── string.md
+└── time.md
 ```
 # Extensions hỗ trợ Javascript
 - Quokka.js

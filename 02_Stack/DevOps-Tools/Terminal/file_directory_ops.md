@@ -29,3 +29,16 @@ mkdir git_test
 ```bash
 touch index.html (Tao một file tên là index.html)
 ```
+# pwd
+```bash
+Xem đường dẫn thư mục làm việc hiện tại.
+```
+# cat 
+**Ex**
+```bash
+cat file.text # Liệt kê nội dung của file.txt
+```
+# rmdir a
+```bash
+xóa thư mục a, thư mục a phải là thư mục trống.
+```

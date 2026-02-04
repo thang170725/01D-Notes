@@ -2,6 +2,8 @@
 - [Hóa Đơn bán hàng](#hóa-đơn-bán-hàng)
 - [Quản lý phiếu nhập hàng](#quản-lý-phiếu-nhập-hàng)
 - [Sơ đồ lớp (cầu thủ - người - câu lạc bộ)](#sơ-đồ-lớp-cầu-thủ---người---câu-lạc-bộ)
+- [Bài toán căn hộ OOP](#bài-toán-căn-hộ-oop)
+- [phiếu đăng lý khóa học](#phiếu-đăng-lý-khóa-học)
 ---
 # Quản lý sự kiện
 ```bash
@@ -468,4 +470,147 @@ if __name__ == "__main__":
 
     print("\n--- Player List ---")
     club.show_players()
+```
+# Bài toán căn hộ OOP
+```bash
+1. Apartment (id_apartment, area, bedrooms, build_year, price, apartment_type)
+```
+```python
+import math
+
+class Apartment:
+    def __init__(self, apartment_id, area, bedrooms, build_year, price, apartment_type):
+        self.apartment_id = apartment_id
+        self.area = area
+        self.bedrooms = bedrooms
+        self.build_year = build_year
+        self.price = price
+        self.apartment_type = apartment_type
+    
+    def __str__(self):
+        return f"{self.apartment_id} {self.area} {self.bedrooms} {self.build_year} {self.price} {self.apartment_type}"
+    
+    def __eq__(self, other):
+        return self.apartment_type == other.apartment_type and math.fabs(self.area - other.area) < 10
+    
+    def __add__(self, other):
+        if self.apartment_type != other.apartment_type:
+            raise ValueError("2 can ho khonh cung loai")
+        
+        return Apartment(
+            'GOP_'+ self.apartment_id + other.apartment_id,
+            self.area + other.area,
+            self.bedrooms + other.bedrooms,
+            max(self.build_year, other.build_year),
+            self.price + other.price,           
+            self.apartment_type
+        )
+
+def main():
+    try:
+        while True:
+            n = int(input('n = '))
+
+            if n > 3:
+                break
+        
+        li = [Apartment(
+            input('apartment_id: '),
+            float(input('area: ')),
+            int(input('bedrooms: ')),
+            int(input('build_year: ')),
+            float(input('price: ')),
+            input('apartment_type: '),
+        ) for _ in range(n)]
+
+        with open('canho.txt', 'w') as f:
+            for i in li:          
+                print(i)
+                f.write(f'{i}\n')
+        
+        apartment1 = Apartment('5', 12, 4, 2022, 12, '1pn')
+        apartment2 = Apartment('5', 12, 4, 2022, 12, '1pn')
+        print(apartment1 == apartment2)
+        print(apartment1 + apartment2)
+    except:
+        print("Loi")
+
+if __name__ == "__main__":
+    main()
+```
+# phiếu đăng lý khóa học
+```python
+from abc import ABC, abstractmethod
+
+class Course(ABC):
+    def __init__(self, course_id, name, tuition, time):
+        self.course_id = course_id
+        self.name = name
+        self.tuition = tuition
+        self.time = time
+
+    @abstractmethod
+    def calc_total(self):
+        pass
+
+    def __str__(self):
+        return f"{self.course_id:<15} | {self.name:<20} | {self.tuition:<5} | {self.time:<5} | {self.calc_total():<7}"
+
+class NormalCourse(Course):
+    def calc_total(self):
+        return self.tuition * self.time
+
+class DiscountCourse(Course):
+    def calc_total(self):
+        return self.tuition * self.time * 0.9
+
+class Items:
+    def __init__(self):
+        self.li = [
+            NormalCourse('KH001', 'Python cơ bản', 300, 6),
+            NormalCourse('KH002', 'Lập trình web', 400, 5),
+            NormalCourse('KH003', 'Khoa học dữ liệu', 500, 4)
+        ]
+    
+    def find_time(self):
+        return [row for row in self.li if row.time > 5]
+    
+    def sort_item(self):
+        self.li.sort(key= lambda c : c.calc_total(), reverse=True)
+    
+    def build_receipt(self):
+        lines = []
+        lines.append(f"Mã phiếu: PH01{' '*20}Ngày đăng ký: 02/02/2026")
+        lines.append(f"Mã học viên: HV01{' '*17}Tên học viên: Nguyễn Lan Anh")
+        lines.append("Danh sách khóa học đăng ký")
+
+        for c in self.li:
+            lines.append(str(c))
+
+        total = sum(c.calc_total() for c in self.li)
+        lines.append(f"Tổng tiền: {total}".rjust(60))
+
+        return "\n".join(lines)
+
+    def display(self):
+        print(self.build_receipt())
+    
+    def save_to_file(self, filename="phieu.txt"):
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(self.build_receipt())
+
+def main():
+    items = Items()
+
+    print("Các khóa học có thời gian > 5:")
+    for c in items.find_time():
+        print(c)
+
+    print("\nDanh sách sau khi sắp xếp:")
+    items.sort_item()
+    items.display()
+    items.save_to_file()
+
+if __name__ == "__main__":
+    main()
 ```

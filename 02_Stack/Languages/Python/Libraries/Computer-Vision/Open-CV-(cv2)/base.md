@@ -5,6 +5,92 @@
 
 
 
+Computer Vision
+Kênh  màu
+    • Mặc định Opencv sử dụng kênh màu BGR.
+    • Vì OpenCV ban đầu đưuọc viết bằng C/C++ và theo chuẩn xử lý ảnh của Windows Bitmap (BMP) - vốn lưu pixel theo thứ tự BGR. Để tăng hiệu suất và tránh chuyển đổi không cần thiết, OpenCV giữ nguyên thứ tự này.
+    • Khi đọc ảnh từ file, OpenCV đọc pixel theo thứ tự BGR để tránh tốn tài nguyên chuyển đổi qua lại nếu bạn xử lý nhiều ảnh ở cấp hệ thống.
+Segmentation mask là gì?
+    • Là một ảnh đen trắng (hoặc đa kênh) dùng để biểu diện phân vùng (vật thể hoặc khu vực) trong ảnh gốc
+        ◦ Mỗi pixel trong mask cho biết vật thể nào (hoặc lớp nào) nó thuộc về.
+        ◦ Có 2 loại phổ biến:
+            ▪ binary mask: pixel=1 nếu thuộc vật thể, 0 nếu là nền.
+            ▪ multi-class mask: pixel =0,1,2,… tương ứng với các lớp khác nhau (mèo, chó, người, …).
+    • Không phụ thuộc vào màu sắc, mà phụ thuộc vào nhãn mà bạn gán khi huấn luyện mô hình.
+Multi-channel image
+Là ảnh có nhiều kênh màu.
+Depth - Độ sâu
+    • Là số lớp (layers) trong mô hình.
+    • Tăng depth → mô hình học được tính chất phức tạp hơn.
+Width - Độ rộng
+    • Là số lương filters (kernels) mỗi lớp convolution.
+    • Tăng width → mỗi lớp trích xuất ddwuocj nhiều đặc trưng hơn.
+    • Ví dụ: Có nhiều người cùng quan sát vào một ảnh → mỗi người chú ý vào đặc điểm khác nhau.
+Resolution - Độ phân giải ảnh
+    • Là kích thước ảnh đầu vào (224x224 → 380x380).
+    • Tăng resolution → mô hình nhìn thấy chi tiết nhỏ hơn.
+    • Ví dụ: Cùng một bức tranh, nếu ảnh lớn hơn thì nhìn rõ mắt, mũi, lông mi, ...
+Kernel
+    • Phần lớn các bộ lọc đều dựa trên khái niệm convolution (tích chập) – tức là áp một ma trận (kernel) lên từng vùng nhỏ của ảnh để tính toán giá trị mới cho pixel trung tâm. Cách áp dụng kernel này có một quy tắc chuẩn:
+    • Duyệt từng pixel trong ảnh gốc.
+    • Với mỗi pixel, lấy vùng lân cận (theo kích thước kernel), nhân chéo với kernel.
+    • Tính tổng và gán giá trị kết quả vào pixel tương ứng trong ảnh mới.
+Ví dụ:
+Với bộ lọc làm mờ trung bình (mean blur), kernel là ma trận các số bằng nhau, cộng lại rồi chia trung bình.
+ Sự khác nhau của các bộ lọc:
+Tùy loại bộ lọc mà kernel hoặc cách áp dụng sẽ khác nhau:
+Bộ lọc
+Cách hoạt động đặc trưng
+Làm mờ (blur)
+Tính trung bình vùng lân cận – làm giảm chi tiết, nhiễu.
+Gaussian Blur
+Dùng kernel theo phân phối Gauss – làm mờ mịn, tự nhiên hơn.
+Median Blur
+Lấy giá trị trung vị trong vùng lân cận – khử nhiễu muối tiêu.
+Sharpen (làm sắc nét)
+Dùng kernel làm nổi bật cạnh, tăng tương phản cục bộ.
+Sobel, Laplacian
+Dùng để phát hiện biên cạnh – áp kernel đạo hàm.
+Bộ lọc tùy chỉnh
+Người dùng định nghĩa kernel riêng và áp dụng tương tự.
+Bài tập
+Cho một ma trận ảnh 5×5 và một kernel 3×3, hãy tính kết quả tích chập (convolution)
+import numpy as np
+
+img = np.array([
+    [1,2,3,4,5], 
+    [6,7,8,9,10],
+    [11,12,13,14,15],
+    [16,17,18,19,20],
+    [21,22,23,24,25]
+])
+kernel = np.array([
+    [2,4,6],
+    [1,2,3],
+    [3,4,5]
+])
+
+h, w = img.shape
+kh, kw = kernel.shape
+out_h = h - kh + 1
+out_w = w - kw + 1
+
+# ✅ Tạo mảng kết quả có kích thước sẵn
+out = np.zeros((out_h, out_w))
+
+for i in range(out_h):
+    for j in range(out_w):
+        out[i, j] = np.sum(img[i:i+kh, j:j+kw] * kernel)
+
+print(out)
+[[178. 202. 226.]
+ [298. 322. 346.]
+ [418. 442. 466.]]
+Chuẩn hóa
+Bài tập
+Chuẩn hóa ảnh về [0,1]
+x_train = x_train.astype('float32') / 255.0
+x_test  = x_test.astype('float32') / 255.0
 
 
 ResizeWindow()

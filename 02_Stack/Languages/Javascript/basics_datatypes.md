@@ -1,6 +1,9 @@
-- [console.log()](#consolelog)
-- [document.write()](#documentwrite)
+- [console.log() \& document.write()](#consolelog--documentwrite)
 - [window.alert() | alert() \& confirm() \& prompt()](#windowalert--alert--confirm--prompt)
+- [comments](#comments)
+- [var \& let \& const](#var--let--const)
+- [typeof](#typeof)
+- [Number() \& ParseInt() \& ParseFloat()](#number--parseint--parsefloat)
 - [Sorting Objects](#sorting-objects)
   - [5](#5)
   - [3](#3)
@@ -24,28 +27,55 @@
 ```js
 alert("I am a robot"); // window.alert(“I am a robot”);
 ```
+# comments 
+```bash
+Để chú thích ra câu lệnh ở file js
+```
+**Syn**
+```bash
+- // - chú thích 1 dòng
+- /* */ - chú thích nhiều dòng
+```
+# var & let & const
+**Syn**
+```bash
+var | let | const + <variable>;
+
+- var: Chỉ định biến toàn cục (được khuyến cáo sử dụng).
+- let: Chỉ định biến cục bộ.
+- const: Chỉ định biến không thể thay đổi nữa.
+```
 # typeof
 ```bash
 - Để kiểm tra kiểu dữ liệu của biến.  
 ```
-Cú pháp: typeof variable;
-Xử lý số
-Number()
+**Syn**
+```bash
+typeof variable;
+```
+# Number() & ParseInt() & ParseFloat()
+```bash
+- Number    : Ép sang kiểu số.
+```
+**Ex1: Number**
+```js
 var a = "100.12345";
 var b = Number(a);
-document.write(typeof b);
-number
-ParseInt()
+document.write(typeof b); // number
+```
+**Ex2: ParseInt**
+```js
 var a = "123"; // kiểu chuỗi
 var b = new Object("123"); // kiểu đối tượng
 var c = 123.52; // kiểu số thực
 var result = parseInt(a) + parseInt(b) + parseInt(c);
-document.write(result);
-369
-ParseFloat()
+document.write(result); // 369
+```
+**Ex3: ParseFloat**
+```js
 var str = "12.34";
-console.log(typeof parseFloat(str))
-Number
+console.log(typeof parseFloat(str)) // Number
+```
 toPrecision()
 Xác định chiều dài của một số cho trước.
 var a = 100.12345;
@@ -933,15 +963,6 @@ Có thể gây ra lỗ hổng bảo mật nếu bạn chèn nội dung do ngư�
 window.print()
 In nội dung của cửa sổ trình duyệt hiện tại. Nó sẽ đưa đến một cửa số chuyên để in ấn ra giấy.
 Cú pháp: Window.print();
-JS Comments 
-Để chú thích ra câu lệnh ở file js
-    • // - chú thích 1 dòng
-    • /* */ - chú thích nhiều dòng
-JS variables
-var | let | const + <variable>;
-    • var: Chỉ định biến toàn cục (được khuyến cáo sử dụng).
-    • let: Chỉ định biến cục bộ.
-    • const: Chỉ định biến không thể thay đổi nữa.
 JS Operators
 Phép tính
 +

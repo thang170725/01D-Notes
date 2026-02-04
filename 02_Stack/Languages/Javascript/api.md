@@ -3,9 +3,11 @@
   - [GET data JSON bằng async + fetch](#get-data-json-bằng-async--fetch)
   - [POST data JSON bằng async + fetch](#post-data-json-bằng-async--fetch)
 - [FormData() \& .blob() \& URL.createObjectURL()](#formdata--blob--urlcreateobjecturl)
-    - [Demo POST ảnh về server xử lý rồi lại chuyển lại về giao diện](#demo-post-ảnh-về-server-xử-lý-rồi-lại-chuyển-lại-về-giao-diện)
+  - [Demo POST ảnh về server xử lý rồi lại chuyển lại về giao diện](#demo-post-ảnh-về-server-xử-lý-rồi-lại-chuyển-lại-về-giao-diện)
 - [localStorage](#localstorage)
 - [.setItem() \& .getItem() \& .removeItem() \& .clear()](#setitem--getitem--removeitem--clear)
+- [FileReader](#filereader)
+  - [.readAsText() \& .readAsDataURL \& .readAsArrayBuffer() \& \& .readAsBinary()](#readastext--readasdataurl--readasarraybuffer---readasbinary)
 ---
 # Promise
 ```bash
@@ -233,9 +235,7 @@ createUser()
 ```bash
 Là một đối tượng dùng để lưu trữ dữ liệu nhị phân
 ```
-
-
-### Demo POST ảnh về server xử lý rồi lại chuyển lại về giao diện
+## Demo POST ảnh về server xử lý rồi lại chuyển lại về giao diện
 **html**
 ```html
 <div class='send-image'>
@@ -324,4 +324,27 @@ localStorage.setItem("user", JSON.stringify(user));
 ```js
 const user = JSON.parse(localStorage.getItem("user"));
 console.log(user.name); // Thắng
+```
+# FileReader
+```bash
+- là một Web API cho phép đọc nội dung của:
+  + File
+  + Blob
+- và trả về dữ liệu dưới dạng:
+  + text
+  + base64 (Data URL)
+  + ArrayBuffer
+  + Binary string (ít dùng)
+- chỉ chạy trong browser, không dùng trong Node.js.
+```
+**Syn**
+```bash
+const reader = new FileReader();
+```
+## .readAsText() & .readAsDataURL & .readAsArrayBuffer() & & .readAsBinary()
+```bash
+- reader.readAsText(file)         : đọc file text
+- reader.readAsDataURL(file)      : đọc ảnh / base64
+- reader.readAsArrayBuffer(file)  : đọc binary
+- reader.readAsBinaryString(file) : cũ, ít dùng
 ```

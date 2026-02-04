@@ -1,4 +1,5 @@
 - [input](#input)
+- [button](#button)
 ---
 # input 
 ```bash
@@ -14,7 +15,7 @@
     placeholder=''
 >
 
-- type          : quy định chức năng của thẻ input đó.
+- type : quy định chức năng của thẻ input đó.
     + text: tạo ra trường nhập văn bản.
     + password: trường nhập mật khẩu, các kí tự sẽ bị che đi bằng các ký tự *.
     + submit: tạo một nút bấm (để submit để nộp gửi lên form).
@@ -31,11 +32,9 @@
     + Number: kiểu số.
     + url: kiểu đường dẫn cho trang web.
     + email: kiểu email.
-- accept        : là thuộc tính của type=file, dùng để giới hạn loại file mà người dùng được chọn
-    + image/ → nhóm MIME type của ảnh
-    + * → tất cả định dạng ảnh
-    Cho phép: image/png, image/jpeg, image/jpg, image/webp, image/gif, image/svg+xml, …
-    Không cho chọn: .exe, .pdf, .mp4, .zip
+- accept : là thuộc tính của type=file, dùng để giới hạn loại file mà người dùng được chọn
+    + image/* → nhóm MIME type của ảnh, tất cả định dạng ảnh
+    + Cho phép: image/png, image/jpeg, image/jpg, image/webp, image/gif, image/svg+xml, … Không cho chọn: .exe, .pdf, .mp4, .zip
 - value         : Để xác định giá trị mặc định cho ô đầu vào.   
 - name          : Để xác tên cho ô đầu vào, dùng khi người dùng submit thông tin.
 - placeholder   : Để đặt một văn bản mẫu cho ô đầu vào.
@@ -47,3 +46,5 @@
 - autocomplete  : Gợi ý các lựa chọn để người dùng nhập dữ liệu nhanh và dễ dàng hơn
 - step          : Thường được sử dụng trong cá loại nhập số, dùng để xác định giá trị bước nhảy của ô
 ```
+# button
+Để tạo ra một nút bấm.

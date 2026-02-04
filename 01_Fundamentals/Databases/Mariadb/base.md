@@ -1,3 +1,17 @@
+- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
+- [Giới thiệu](#giới-thiệu)
+- [Cách tạo db](#cách-tạo-db)
+---
+# Cấu trúc thư mục
+```bash
+Mariadb/
+├── 01_Datatypes.md       # Gom từ Data-Type/base.md (Số, chữ, thời gian)
+├── 02_Structure_DDL.md   # [Data Definition] Tạo/Sửa/Xóa Database, Table (Create, Drop, Alter)
+├── 03_Data_DML.md        # [Data Manipulation] Thao tác dữ liệu (Insert, Update, Delete)
+├── 04_Query_DQL.md       # [Data Query] Truy vấn dữ liệu (Select, Join, Group by)
+└── 05_Advanced.md        # Backup, Restore, User/Permission, Index
+```
+# Giới thiệu
 ```bash
 - MariaDB là một hệ quản trị CSDL RIÊNG BIỆT. Không phải “chế độ” của MySQL
 - MySQL ban đầu do Monty Widenius tạo. Oracle mua MySQL. Monty fork MySQL → tạo MariaDB. MariaDB = con ruột của MySQL gốc
@@ -9,7 +23,6 @@
 - Cùng protocol
 - Cùng port 3306
 ```
-
 # Cách tạo db
 ```bash
 1. mariadb -u root -p | sudo mariadb

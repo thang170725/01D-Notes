@@ -6,9 +6,10 @@
 - [change | onchange](#change--onchange)
 - [oninput|input](#oninputinput)
 - [keydown | onkeydown \& keypress | onkeypress](#keydown--onkeydown--keypress--onkeypress)
-- [target.value](#targetvalue)
-- [mousedown \& mouseup](#mousedown--mouseup)
-- [onSubmit](#onsubmit)
+- [load | onload \& loadstart | onloadstart \& loadend | onloadend](#load--onload--loadstart--onloadstart--loadend--onloadend)
+- [Progress | onprogress](#progress--onprogress)
+- [target](#target)
+  - [.value](#value)
 ---
 # document.addEventListener() & removeEventListener()
 ```bash
@@ -161,23 +162,6 @@ function main(){
 }
 main();
 ```
-# target.value
-```bash
-- Lấy giá trị hiện tại của input / textarea / select khi có sự kiện xảy ra.
-```
-**Ex: gõ tới đâu chữ hiện tới đó**
-```html
-<input id="name" type="text" />
-<p id="output"></p>
-```
-```js
-const input = document.getElementById("name");
-const output = document.getElementById("output");
-
-input.addEventListener("input", (event) => {
-  output.innerText = event.target.value;
-});
-```
 animationstart || onanimationstart
 Xảy ra khi hoạt ảnh CSS bắt đầu.
 <div></div>
@@ -329,7 +313,10 @@ là một sự kiện xảy ra khi quá trình tải một tài nguyên nào đ�
 Cho phép bạn xử lý tình huống khi người dùng hoặc trình duyệt chủ động hủy quá trình tải.
 Bạn có thể sử dụng để thông báo cho người dùng rằng quá trình tải đã bị hủy, hoặc để hiện thị một thông báo lỗi.
 Trong một số trường hợp, bạn có thể cần giải phóng tài nguyên khi quá trình tải bị hủy, ví dụ như đóng kết nối mạng.
-onload
+# load | onload & loadstart | onloadstart & loadend | onloadend
+```bash
+- onload    : Lấy dữ liệu, khi đọc thành công.
+- onloadend : Tắt loading, luôn chạy cuối.
 Afterprint
 Beforeprint
 Beforeunload
@@ -343,7 +330,7 @@ Dragstart
 Drop
 Durationchange
 Ended
-Error
+# Error
 Focusin
 Focusout
 Fullscreenchange
@@ -354,7 +341,7 @@ Keyup
 Load
 Loadeddata
 Loadedmetadata
-Loadstart
+
 Message
 # mousedown & mouseup
 ```bash
@@ -385,7 +372,9 @@ Paste
 Pause
 Playying
 Popstate
-Progress
+# Progress | onprogress
+```bash
+- onprogress  : Hiển thị phần trăm tiến trình
 Ratechange
 Reset
 Scroll
@@ -509,4 +498,22 @@ form.addEventListener('submit', async (e) => {
     console.error(err)
   }
 })
+```
+# target
+## .value
+```bash
+- Lấy giá trị hiện tại của input / textarea / select khi có sự kiện xảy ra.
+```
+**Ex: gõ tới đâu chữ hiện tới đó**
+```html
+<input id="name" type="text" />
+<p id="output"></p>
+```
+```js
+const input = document.getElementById("name");
+const output = document.getElementById("output");
+
+input.addEventListener("input", (event) => {
+  output.innerText = event.target.value;
+});
 ```

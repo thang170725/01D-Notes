@@ -1,27 +1,9 @@
 ```bash
-/Personal-Knowledge-Base
-├── 01_Fundamentals/
-│   ├── Computer-Science/
-│   └── Web-Technology/           <-- TẠO MỚI FOLDER NÀY
-│       ├── http-protocol.md      # Note về GET, POST, Header
-│       ├── cookies.md            # Note về thuộc tính: HttpOnly, Secure, SameSite
-│       └── sessions.md           # Note về Server-side storage, Session ID
-├── 02_Stack/
-│   ├── Backend/
-│   │   ├── nodejs/
-│   │   │   └── session-management.md  # Cách code cụ thể trong Node
-│   │   └── fastapi/
-│   │       └── cookie-handling.md     # Cách code cụ thể trong FastAPI
-└── 03_Domains/
-    └── Security/                 <-- NƠI KẾT NỐI
-        └── web-vulnerabilities.md # Note về XSS (đánh cắp cookie), CSRF
+.
+├── 01_Fundamentals     # Những tài liệu ít thay đổi
+├── 02_Stack            # Những thứ liên quan đến ngày CNTT (tools công cụ)
+├── 03_Domains          # Các lĩnh vực học
+├── 04_Architectures    # Thiết kế hệ thống
+├── 05_Article          # Giải trí, âm nhạc
+└── base.md
 ```
-
-Ngày 1
-150 directories, 314 files
-(.venv) thang@PhatToNhuLai:~/workspace/dev-notes$ 
- *  History restored 
-
-thang@PhatToNhuLai:~/workspace/dev-notes$ du -sh
-5,7M    .
-thang@PhatToNhuLai:~/workspace/dev-notes$ 

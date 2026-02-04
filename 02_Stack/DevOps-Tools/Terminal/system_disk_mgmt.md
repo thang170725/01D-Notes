@@ -8,6 +8,10 @@
 - [Mount ổ cứng](#mount-ổ-cứng)
 - [uptime](#uptime)
 - [ac (Accounting)](#ac-accounting)
+- [Sửa lỗi 2 màn](#sửa-lỗi-2-màn)
+- [rm -rf ~/.cache/huggingface](#rm--rf-cachehuggingface)
+- [GPU](#gpu)
+  - [Kiểm tra GPU NVIDIA](#kiểm-tra-gpu-nvidia)
 ---
 # clear
 ```bash
@@ -157,3 +161,60 @@ thang@PhatToNhuLai:~$ uptime -s
 2. ac -d    # Aug 14 total      5.40
 3. ac -p    # total      569.53
 ```
+# Sửa lỗi 2 màn
+```bash
+1. prime-select query: Nếu là intel -> đây là lý do màn hình rời không hoạt động. On-demand là bạn đang ở chế độ GPU chuyển đổi theo yêu cầu (hybrid mode)
+2. sudo prime-select nvidia
+3. sudo reboot
+```
+# rm -rf ~/.cache/huggingface
+# GPU
+Kiểm tra secure boot
+    1. mokutil --sb-state
+    2. sudo dmesg | grep -i secure
+Gỡ bỏ driver NVIDIA cũ
+    1. sudo apt purge 'nvidia-*'
+Cài driver NVIDIA
+    1. ubuntu-drivers devices: Chạy lệnh sau để xem máy bạn đã cài driver gì.
+    2. sudo apt update
+    3. sudo apt install nvidia-driver-550: Cài driver cho nvidia nếu chưa cài.
+    4. sudo reboot: Nếu chạy lệnh 2 thì phải chạy lệnh này ngay sau đó.
+    5. Nếu lỗi kiểm tra secure Boot.
+    6. lsmod | grep nvidia: Nếu không có dòng nào -> driver chưa được kernel load.
+    7. 
+## Kiểm tra GPU NVIDIA
+```bash
+1. nvidia-smi
+2. lspci | grep -i vga: Kiểm tra tên gpu bất kỳ loại nào.
+3. dpkg -L nvidia-utils-470 | grep nvidia-smi: Kiểm tra xem gói nằm ở đâu.
+```
+Cài đặt NVIDIA
+    1. sudo apt update
+    2. sudo apt install nvidia-smi
+Thêm vào Path
+    1. export PATH=/usr/bin:$PATH
+    2. source ~/.bashrc
+Cài CUDA Tookit
+    1. nvcc --version: Kiểm tra gói cuda toolkit nào được cài chưa.
+    2. sudo apt install nvidia-cuda-toolkit hoặc nên web cài
+Thêm nvcc vào PATH
+    1. nano ~/.bashrc
+    2. export PATH=/usr/local/cuda-12.9/bin${PATH:+:${PATH}}: Thêm dòng này vào cuối file.
+    3. export LD_LIBRARY_PATH=/usr/local/cuda-12.9/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}: thêm dòng này vào cuối file.
+    4. Ctrl+O, Enter, Ctrl+X
+    5. source ~/.bashrc
+    6. nvcc --version
+Cài cuDNN
+Kiểm tra xem cuDNN đã được cài ở đâu
+    1. dpkg -L libcudnn9-dev-cuda-12
+    2. sudo find /usr -name cudnn_version.h
+    3. sudo ln -s /usr/include/x86_64-linux-gnu/cudnn_version.h /usr/include/cudnn_version.h: Tạo liên kết mềm.
+    4. cat /usr/include/cudnn_version.h | grep CUDNN_MAJOR -A 2: Kiểm tra
+    5. 
+Thêm cuDNN vào PATH
+    1. source ~/.bashrc
+    2. export PATH=/usr/local/cuda/bin:$PATH
+    3. export LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
+    4. source ~/.bashrc
+    5. sudo ldconfig: Cập nhật cache thư viện
+lsmod | grep nvidia
