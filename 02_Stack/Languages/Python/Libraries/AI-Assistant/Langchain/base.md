@@ -4,7 +4,7 @@
 # Cấu trúc thư mục
 ```bash
 LangChain/
-├── 01_model_io.md           # Model I/O: ChatModels, Prompts, OutputParsers
+├── 01_model_io.md           # Nơi tương tác với bộ não
 ├── 02_retrieval.md          # RAG: DocumentLoaders, TextSplitters, VectorStores
 ├── 03_chains.md             # Chuỗi xử lý: LCEL (LangChain Expression Language)
 ├── 04_memory.md             # Bộ nhớ: WindowBuffer, SummaryMemory, DBConn
@@ -13,11 +13,6 @@ LangChain/
 ```
 **Chi tiết**
 ```bash
-1. 01_model_io.md (Đầu vào & Đầu ra)
-    + Đây là nơi bạn tương tác với "bộ não".
-    + Hàm/Class: ChatOpenAI, PromptTemplate, FewShotPromptTemplate, PydanticOutputParser.
-    + Mẹo: Ghi chú cách dùng PromptTemplate để tái sử dụng mẫu câu lệnh.
-
 2. 02_retrieval.md (Quản lý tri thức - RAG)
 Dành cho việc "dạy" LLM đọc dữ liệu của bạn.
 
@@ -77,7 +72,6 @@ LLM
 Parse output (JSON)
  ↓
 Save vào DB / gọi API / chain tiếp
-
 
 # LangChain giống như:
 # “Spring Boot cho LLM” hoặc “Express cho AI”

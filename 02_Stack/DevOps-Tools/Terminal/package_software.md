@@ -1,5 +1,6 @@
 - [Install \& run .deb](#install--run-deb)
 - [Cài GIMP (remove background img)](#cài-gimp-remove-background-img)
+- [Installation LibreOffice](#installation-libreoffice)
 - [Tải video](#tải-video)
 - [Cài bộ gõ tiếng việt (linux)](#cài-bộ-gõ-tiếng-việt-linux)
 - [Gỡ, xóa phần mềm, …](#gỡ-xóa-phần-mềm-)
@@ -14,6 +15,11 @@
 sudo apt install gimp     # Ubuntu / Debian
 sudo pacman -S gimp       # Arch
 sudo dnf install gimp     # Fedora
+```
+# Installation LibreOffice
+```bash
+1. sudo apt update
+2. sudo apt install libreoffice
 ```
 # Tải video
 **Step**
@@ -45,9 +51,19 @@ ffmpeg -i dance_korea.mp4 -c:v libx264 -c:a aac output.mp4 # thường xuất hi
     6. ibus restart: Thiết lập để sử dụng.
     7. Sau đó vào settings -> Region & Lanuage -> …
 # Gỡ, xóa phần mềm, …
+**Ex: Uninstall libreoffice**
 ```bash
-1. dpkg -l | grep chrome: Tìm phần mềm đã cài.
-2. sudo apt remove google-chrome-stable: Gỡ phần mềm. | sudo apt purge google-chrome-stable: Nếu muốn gỡ sạch hơn.
-3. sudo apt autoremove: Dọn lại hệ thống (xóa gói đã cài nhưng không cần nữa).
-4. sudo apt clean: Xóa cache tải về của apt. | sudo apt autoclean: Nếu muốn dọn triệt để hơn (chỉ giữ lại vài file).
+1. Kiểm tra gói đã cài
+    + dpkg -l | grep libreoffice    # Tìm phần mềm đã cài.
+    + snap list | grep libreoffice
+2. Gỡ phần mềm
+    + sudo apt remove libreoffice
+    + sudo apt purge 'libreoffice*' # Lệnh này sẽ xóa tất cả gói bắt đầu bằng libreoffice
+3. Dọn sạch các gói phụ thuộc + file cấu hình
+    + sudo apt autoremove --purge
+    + sudo apt autoclean
+4. Xóa dữ liệu LibreOffice trong thư mục người dùng
+    + rm -rf ~/.config/libreoffice
+    + rm -rf ~/.cache/libreoffice
+    + rm -rf ~/.local/share/libreoffice
 ```

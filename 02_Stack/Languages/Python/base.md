@@ -2,9 +2,14 @@
 - [Tạo môi trường ảo \& activate](#tạo-môi-trường-ảo--activate)
 - [deactivate](#deactivate)
 - [which python](#which-python)
-
 ---
-
+# Installation
+**Ex: Cài đặt Python3.10**
+```bash
+1. sudo add-apt-repository ppa:deadsnakes/ppa
+2. sudo apt update
+3. sudo apt install python3.10
+```
 # Kiểm tra
 ```bash
 1. python --version | python3.10 --version      : Kiểm tra phiên bản python đang sử dụng.

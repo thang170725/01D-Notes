@@ -14,7 +14,7 @@ backend/
 │   │   ├── service.py      # Logic xử lý recipe
 │   │   ├── models.py       # DB model của recipe
 │   │   ├── routes.py       # Endpoint cho recipe
-│   │   ├── dependencies.py # auth, get_current_user
+│   │   ├── dependencies.py # database connection, redis client, http client
 │   │   ├── repository.py   # DB access
 │   │   └── schemas.py      # Pydantic schemas cho recipe
 │   │

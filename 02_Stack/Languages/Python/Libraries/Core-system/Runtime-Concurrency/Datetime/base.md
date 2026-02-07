@@ -1,4 +1,7 @@
-# Cấu trúc thư mục
+- [Directory Structure](#directory-structure)
+- [12/01/2026 18:35:10](#12012026-183510)
+---
+# Directory Structure
 ```bash
 Datetime/
 ├── 01_basic_objects.md      # Các đối tượng chính: date, time, datetime (now, today)
@@ -7,48 +10,8 @@ Datetime/
 ├── 04_timezone_dst.md       # Múi giờ: timezone, zoneinfo (UTC, Local time)
 └── 05_timestamp_unix.md     # Làm việc với máy chủ: timestamp, fromtimestamp
 ```
-**Chi tiết**
-```bash
-1. 01_basic_objects.md (Khởi tạo)
-    + Hàm chính: datetime.now(), date.today(), datetime(year, month, day, ...).
-    + Ghi chú: Cách lấy riêng lẻ dt.year, dt.month, dt.hour.
-    + Mẹo: Ghi chú sự khác biệt giữa date (chỉ có ngày) và datetime (có cả giờ).
 
-2. 02_formatting_parsing.md (Đọc/Ghi chuỗi)
-Đây là file bạn sẽ mở ra nhiều nhất để tra cứu các mã format (%Y, %m, %d).
-
-Hàm chính: * dt.strftime("%Y-%m-%d"): (String From Time) Biến đối tượng thành chuỗi để hiển thị.
-
-datetime.strptime(string, format): (String Parse Time) Biến chuỗi từ API/DB thành đối tượng Python.
-
-3. 03_arithmetic_delta.md (Tính toán)
-Đây là nơi chứa logic giống như hàm create_access_token bạn vừa làm.
-
-Hàm chính: timedelta(days=..., minutes=...).
-
-Ví dụ: * Tính ngày mai: now + timedelta(days=1).
-
-Tính khoảng cách giữa 2 thời điểm: diff = end - start.
-
-4. 04_timezone_dst.md (Múi giờ)
-Cực kỳ quan trọng khi làm Backend toàn cầu.
-
-Hàm chính: timezone.utc, astimezone().
-
-Lưu ý quan trọng: Cách phân biệt Naive datetime (không có múi giờ) và Aware datetime (có múi giờ).
-
-Mẹo: Ghi chú câu lệnh datetime.now(timezone.utc) mà tôi đã nhắc bạn ở trên.
-
-5. 05_timestamp_unix.md (Thời gian hệ thống)
-Hàm chính: dt.timestamp(), datetime.fromtimestamp().
-
-Ứng dụng: Chuyển đổi thời gian thành con số (ví dụ: 1706692800) để lưu trữ nhẹ hơn hoặc tính toán nhanh hơn.
-```
-
-
-
-
-5. Định dạng ngày giờ (strftime)
+1. Định dạng ngày giờ (strftime)
 
 👉 Chuyển datetime → chuỗi
 

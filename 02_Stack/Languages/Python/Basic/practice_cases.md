@@ -4,6 +4,7 @@
 - [Sơ đồ lớp (cầu thủ - người - câu lạc bộ)](#sơ-đồ-lớp-cầu-thủ---người---câu-lạc-bộ)
 - [Bài toán căn hộ OOP](#bài-toán-căn-hộ-oop)
 - [phiếu đăng ký khóa học](#phiếu-đăng-ký-khóa-học)
+- [Sơ đồ lớp](#sơ-đồ-lớp)
 ---
 # Quản lý sự kiện
 ```bash
@@ -612,5 +613,92 @@ def main():
     items.save_to_file()
 
 if __name__ == "__main__":
+    main()
+```
+# Sơ đồ lớp
+```python
+from abc import ABC, abstractmethod
+
+class Person(ABC):
+    def __init__(self, name, gender):
+        self.name = name
+        self.gender = gender
+    
+    @abstractmethod
+    def __str__(self):
+        pass
+
+class Service:
+    def __init__(self, service_id, name, price, number_of_times):
+        self.service_id = service_id
+        self.name = name
+        self.price = price
+        self.number_of_times = number_of_times
+    
+    def total(self):
+        return self.number_of_times * self.price
+
+class Services:
+    def __init__(self):
+        self.services = []
+    
+    def update_service(self):
+        for s in self.services:
+            if s.name == 'xét nghiệm máu':
+                s.price = 300
+
+    def find_max(self):
+        m = max(s.price for s in self.services)
+
+        res = [s for s in self.services if s.price == m]
+        print(res)
+
+    def sort_services(self):
+        self.services.sort(key=lambda s: s.total())
+
+class Patient(Person):
+    def __init__(self, patient_id, name, gender):
+        super().__init__(name, gender)
+        self.patient_id = patient_id
+        self.services = Services()
+
+    def __str__(self):
+        return (
+            f"{self.patient_id} {self.name} {self.gender}"
+            f"{[s for s in self.services]}"
+        )
+
+
+def main():
+    patient = Patient('1', 'thang', 'nam')
+    
+    try:
+        while True:
+            n = int(input('n: '))
+            if n >2:
+                break
+        
+        patient.services = [
+            Service(
+                input("service id: "),
+                input("name: "),
+                input("price: "),
+                input("number of times: ")
+            )
+            for _ in range(n)
+        ]
+    except:
+        print('error')
+    
+    
+    patient.services.find_max()
+
+    patient.services.update_service()
+
+    patient.services.sort_services()
+
+    print(patient)
+
+if __name__ == '__main__':
     main()
 ```

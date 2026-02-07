@@ -8,6 +8,7 @@
 - ls -al: sẽ liệt kê các file và thư mục với thông tin chi tiết như quyền, kích thước, chủ sở hữu, …
 4. ls | wc -l       : Đếm TẤT CẢ (file + folder) trong thư mục cha (Ex: ls /home/user/test | wc -l)
 5. ls -A | wc -l    : Đếm tất cả kể cả file ẩn
+6. `ls -lah`        # Liệt kê file chi tiết (Size, Hidden):** 
 ```
 File + folder
 find . | wc -l
@@ -23,7 +24,8 @@ find . -type d | wc -l
 - touch : Tạo file
 **Syn: mkdir**
 ```bash
-mkdir git_test
+1. mkdir git_test
+2. `mkdir -p path/to/dir` # Tạo thư mục tầng (Nested)
 ```
 **Syn: touch**
 ```bash

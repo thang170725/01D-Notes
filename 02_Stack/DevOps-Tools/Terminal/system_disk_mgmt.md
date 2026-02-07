@@ -12,6 +12,7 @@
 - [rm -rf ~/.cache/huggingface](#rm--rf-cachehuggingface)
 - [GPU](#gpu)
   - [Kiểm tra GPU NVIDIA](#kiểm-tra-gpu-nvidia)
+- [lsblk](#lsblk)
 ---
 # clear
 ```bash
@@ -218,3 +219,53 @@ Thêm cuDNN vào PATH
     4. source ~/.bashrc
     5. sudo ldconfig: Cập nhật cache thư viện
 lsmod | grep nvidia
+# lsblk
+```bash
+Trả về danh sách các ổ phân vùng.
+```
+**Syn**
+```bash
+1. lsblk
+2. lsblk -f
+```
+Keyboard
+xset r off
+Tắt repeat hoàn toàn, nhấn phím sẽ không lặp.
+xset r on
+Mở repeat.
+# sudo
+Cho phép sử dụng các task yêu cầu phải có quyền quản trị hoặc quyền root.
+    • Sudo apt upgrade: tải các gói mới nhất về máy
+    • sudo apt install software-properties-common -y: tải một ứng dựng nào đó
+    • sudo add-apt-repository ppa:deadsnakes/ppa
+    •  sudo apt clean: xóa cache tải về của apt 
+
+Tải và sử dụng phần mềm gparted
+    1. sudo apt update
+    2. sudo apt install gparted: Tải ứng dụng phân vùng và format ổ mới.
+    3. sudo gparted: Mở ứng dụng gparted.
+    4. sudo update-grub: Cập nhật lại GRUB. (tùy chọn).
+
+
+
+Cài portaudio
+    1. sudo apt update
+    2. sudo apt install portaudio19-dev python3-dev
+    3. Vào môi trường ảo cài lại pyaudio (pip install pyaudio).
+laalMic
+Kiểm tra microphone có hoạt động không
+    1. arecord - l: Nếu không có card nào hiện ra -> hệ thống không phát hiện được mic.
+    2. arecord -D plughw:0,0 -f cd test.wav: Ghi âm.
+    3. arecord -D hw:1,0 -f cd test.wav: Ghi âm.
+    4. aplay test.wav: Chạy cái số 2. Sau 5 giây thì chạy lại cái này.
+Mic bị gain quá cao (bị khuếch đại quá mức)
+    1. alsamixer.
+    2. Nhấn F4.
+    3. Dùng phím mũi tên để giảm gian xuống thấp hơn.
+    4. Esc để thoát.
+Dkms status
+mokutil –sb-state
+Cài đặt espeak-ng
+    1. sudo apt update
+    2. sudo apt install espeak-ng
+    3. espeak-ng “xin chào”
