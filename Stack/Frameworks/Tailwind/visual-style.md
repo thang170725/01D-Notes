@@ -31,7 +31,7 @@
 **Syn**
 ```bash
 - shadow-sm	    : bóng rất nhẹ
-- shadow	    : bóng mặc định
+- shadow	      : bóng mặc định
 - shadow-md	    : bóng vừa
 - shadow-lg	    : bóng rõ, sâu
 - shadow-xl	    : bóng rất sâu

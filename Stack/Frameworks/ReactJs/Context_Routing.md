@@ -120,21 +120,18 @@ function SidebarItem({ to, label }) {
 export default SidebarItem
 ```
 ## useNavigate()
-**1️⃣ Khai báo route**
+**Ex**
 ```js
+// 1️⃣ Khai báo route
 <Route path="/profile" element={<MyProfile />} />
-```
-**2️⃣ DropdownItem giữ nguyên**
-```js
+
+// 2️⃣ DropdownItem giữ nguyên**
+import { useNavigate } from "react-router-dom";
+
+const navigate = useNavigate();
 <DropdownItem
   icon={User}
   label="My Profile"
   onClick={() => navigate("/profile")}
 />
-```
-**3️⃣ Dùng useNavigate**
-```js
-import { useNavigate } from "react-router-dom";
-
-const navigate = useNavigate();
 ```

@@ -2,6 +2,8 @@
 - Dùng để xử lý màu sắc (text-color, background-color, border-color).
 ```
 - [text (Màu chữ)](#text-màu-chữ)
+- [background](#background)
+- [shadow](#shadow)
 ---
 # text (Màu chữ)
 **Ex1**
@@ -56,3 +58,7 @@ Hoặc custom màu:
 border-red-500
 border-slate-300
 border-[#ff5733]
+# shadow
+```bash
+className="shadow-[0_4px_10px_rgba(14,165,233,0.4)]"
+```

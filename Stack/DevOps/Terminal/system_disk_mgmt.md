@@ -269,3 +269,4 @@ Cài đặt espeak-ng
     1. sudo apt update
     2. sudo apt install espeak-ng
     3. espeak-ng “xin chào”
+# Powercfg /batteryreport

@@ -1,9 +1,6 @@
 - [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
-- [React hoạt động như thế nào?](#react-hoạt-động-như-thế-nào)
-- [Cài đặt ReactJS trên Linux \& Khởi tạo](#cài-đặt-reactjs-trên-linux--khởi-tạo)
-- [Kiểm tra react đã được thêm vào dự án hay chưa](#kiểm-tra-react-đã-được-thêm-vào-dự-án-hay-chưa)
-- [Upgrade to React 18](#upgrade-to-react-18)
+- [Installation](#installation)
 - [Cấu trúc test \& luồng hoạt động](#cấu-trúc-test--luồng-hoạt-động)
 ---
 # Directory Structure
@@ -18,18 +15,13 @@ ReactJs/
 ```
 # Introduction
 ```bash
-- ReactJS là một Framework để xây UI
-- Mọi thứ = Component
-- UI = hàm của state
-    • Được đánh giá thân thiện với SEO
-    • Khả năng mở rộng tốt, tái sử dụng cao
-    • Hiệu suất cao
-    • Phát triển nhanh chóng
-    • Khả năng tương thích ngược
-    • Tương lai sáng
-- ReactJS được sử dụng để xây dụng ứng dụng 1 trang.
-- React cho phép chúng ta tạo các thành phần UI có thể tái sử dụng.
-- React là một khuôn khổ Javascript frontend, là một thư viên Javascript do FaceBook tạo ra.
+- ReactJS là một Framework do FaceBook tạo ra để xây UI. Mọi thứ = Component
+  + Khả năng mở rộng tốt, tái sử dụng cao
+  + Hiệu suất cao
+  + Phát triển nhanh chóng
+  + Khả năng tương thích ngược
+  + Tương lai sáng
+- ReactJS được sử dụng để xây dụng ứng dụng 1 trang. React cho phép chúng ta tạo các thành phần UI có thể tái sử dụng.
 - React hoạt động như thế nào?
   + Thay vì thao tác trức tiếp DOM của trình duyệt, React tạo ra một DOM ảo trong bộ nhớ, nơi nó thực hiện tất cả các thao tác cần thiết, trước khi thức hiện các thay đổi trong DOM của trình duyệt.
 ```
@@ -39,7 +31,7 @@ ReactJs/
 1. npm create vite@latest react-basic -- --template react
 2. cd react-basic
 3. npm install
-4. npm run dev
+4. npm run dev | npm run dev -- --host
 ```
 # Cấu trúc test & luồng hoạt động
 Xem trong link này để hiểu rõ cấu trúc: [form-frontend](../../microservice/form.md)
