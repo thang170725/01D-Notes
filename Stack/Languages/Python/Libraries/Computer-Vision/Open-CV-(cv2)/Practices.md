@@ -1,3 +1,47 @@
+- [✅ Tạo mảng kết quả có kích thước sẵn](#-tạo-mảng-kết-quả-có-kích-thước-sẵn)
+- [Hàm in mã ASCII của phím bấm (dùng OpenCV)](#hàm-in-mã-ascii-của-phím-bấm-dùng-opencv)
+- [lấy tọa độ điểm khi click chuột vào frame](#lấy-tọa-độ-điểm-khi-click-chuột-vào-frame)
+- [resize giữ tỉ lệ khi biết chiều rộng, tự tính chiều cao](#resize-giữ-tỉ-lệ-khi-biết-chiều-rộng-tự-tính-chiều-cao)
+- [Biển đổi 4 điểm từ chụp nghiêng sang chụp thẳng](#biển-đổi-4-điểm-từ-chụp-nghiêng-sang-chụp-thẳng)
+---
+Bài tập
+Cho một ma trận ảnh 5×5 và một kernel 3×3, hãy tính kết quả tích chập (convolution)
+import numpy as np
+
+img = np.array([
+    [1,2,3,4,5], 
+    [6,7,8,9,10],
+    [11,12,13,14,15],
+    [16,17,18,19,20],
+    [21,22,23,24,25]
+])
+kernel = np.array([
+    [2,4,6],
+    [1,2,3],
+    [3,4,5]
+])
+
+h, w = img.shape
+kh, kw = kernel.shape
+out_h = h - kh + 1
+out_w = w - kw + 1
+
+# ✅ Tạo mảng kết quả có kích thước sẵn
+out = np.zeros((out_h, out_w))
+
+for i in range(out_h):
+    for j in range(out_w):
+        out[i, j] = np.sum(img[i:i+kh, j:j+kw] * kernel)
+
+print(out)
+[[178. 202. 226.]
+ [298. 322. 346.]
+ [418. 442. 466.]]
+Chuẩn hóa
+Bài tập
+Chuẩn hóa ảnh về [0,1]
+x_train = x_train.astype('float32') / 255.0
+x_test  = x_test.astype('float32') / 255.0
 # Hàm in mã ASCII của phím bấm (dùng OpenCV)
 ```python
 import cv2
@@ -23,13 +67,8 @@ def print_ascii_key():
 
 print_ascii_key()
 ```
-- [lấy tọa độ 1 điểm khi click chuột trái](#lấy-tọa-độ-1-điểm-khi-click-chuột-trái)
-- [lấy tọa độ 1 điểm khi click chuột trái và vẽ lại điểm đó](#lấy-tọa-độ-1-điểm-khi-click-chuột-trái-và-vẽ-lại-điểm-đó)
-- [Lấy nhiều điểm (ví dụ chọn 4 điểm)](#lấy-nhiều-điểm-ví-dụ-chọn-4-điểm)
-
----
-
-# lấy tọa độ 1 điểm khi click chuột trái
+# lấy tọa độ điểm khi click chuột vào frame
+**Ex1: Lấy tọa độ 1 điểm**
 ```python
 import cv2
 
@@ -45,20 +84,9 @@ cv2.setMouseCallback("Image", mouse_callback)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
-
 # Khi bạn click chuột trái vào ảnh, tọa độ (x, y) sẽ được in ra.
 ```
-
-# lấy tọa độ 1 điểm khi click chuột trái và vẽ lại điểm đó
-```python
-def mouse_callback(event, x, y, flags, param):
-    if event == cv2.EVENT_LBUTTONDOWN:
-        cv2.circle(img, (x, y), 5, (0, 0, 255), -1)
-        cv2.imshow("Image", img)
-        print(x, y)
-```
-
-# Lấy nhiều điểm (ví dụ chọn 4 điểm)
+**Ex2: Lấy nhiều điểm (ví dụ chọn 4 điểm)**
 ```python
 import cv2
 import numpy as np
@@ -80,6 +108,76 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 print(points)
+```
+**Ex4**
+```python
+Bài tập
+Lấy tọa độ điểm bằng frame đầu của video
+import cv2
+
+points = []
+
+def get_coords(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        points.append((x, y))
+        print(f"Click: {x}, {y}")
+
+cap = cv2.VideoCapture("video.mp4")
+
+cv2.namedWindow("Video")
+cv2.setMouseCallback("Video", get_coords)
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        break
+
+    # vẽ điểm đã click
+    for p in points:
+        cv2.circle(frame, p, 5, (0, 0, 255), -1)
+
+    cv2.imshow("Video", frame)
+
+    if cv2.waitKey(30) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+import cv2
+
+points = []
+
+def get_coords(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+        points.append((x, y))
+        print(points)
+
+cap = cv2.VideoCapture("video.mp4")
+
+ret, frame = cap.read()   # 👈 CHỈ đọc 1 frame
+if not ret:
+    print("Không đọc được video")
+    exit()
+
+cv2.namedWindow("Frame 0")
+cv2.setMouseCallback("Frame 0", get_coords)
+
+while True:
+    show = frame.copy()
+
+    for p in points:
+        cv2.circle(show, p, 5, (0, 0, 255), -1)
+
+    cv2.imshow("Frame 0", show)
+
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('q'):   # nhấn q để thoát
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+
+print("Tọa độ cuối cùng:", points)
 ```
 # resize giữ tỉ lệ khi biết chiều rộng, tự tính chiều cao
 ```python

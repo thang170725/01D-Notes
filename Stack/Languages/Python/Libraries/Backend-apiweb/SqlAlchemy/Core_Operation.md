@@ -1,3 +1,4 @@
+- [text()](#text)
 - [.connect()](#connect)
 - [.begin()](#begin)
   - [.execute()](#execute)
@@ -7,9 +8,22 @@
     - [Demo Insert 2 bảng trong 1 transaction (chuẩn)](#demo-insert-2-bảng-trong-1-transaction-chuẩn)
 - [select](#select)
 ---
+# text()
+```bash
+Để bao quanh query
+```
+**Syn**
+```bash
+from sqlalchemy import text
+
+query = text("SELECT * FROM users")
+```
 # .connect()
-**Ex**
-```python
+```bash
+- create_engine chưa thật sự mở kết nối ngay lập tức nó chỉ là factory nên cần dùng .connect()
+- Mở một connection (kết nối vật lý) tới database.
+**Syn**
+```bash
 from sqlalchemy import create_engine
 
 engine = create_engine(
@@ -17,11 +31,32 @@ engine = create_engine(
 )
 
 with engine.connect() as conn:
-        print('DB CONNECT OK')
+    print('DB CONNECT OK')
+
+Lúc này SQLAlchemy:
+    1. Lấy 1 connection từ connection pool
+    2. Mở kết nối thật tới DB
+    3. Trả về object conn
+    4. Sau khi thoát khỏi with, connection sẽ: Được trả về pool, Không bị leak
 ```
 # .begin()
 ## .execute()
+```bash
+Gửi câu SQL xuống database để thực thi.
+```
 ### .fetchall()
+```bash
+- Lấy mọi dòng có kết quả trùng.
+- dữ liệu trả về là list[obj]
+```
+**Ex**
+```python
+result = conn.execute(text("SELECT * FROM users"))
+rows = result.fetchall()
+print(rows) # [(1, 'Thang', 25), (2, 'An', 30)]
+
+# Nhìn giống tuple, nhưng thực ra mỗi phần tử là: sqlalchemy.engine.row.Row
+```
 # insert
 ## .values()
 **Ex**

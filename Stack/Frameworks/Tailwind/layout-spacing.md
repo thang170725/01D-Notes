@@ -9,6 +9,8 @@
   - [items-start \& items-end \& items-stretch](#items-start--items-end--items-stretch)
   - [flex-wrap](#flex-wrap)
 - [grid](#grid)
+  - [grid-cols](#grid-cols)
+  - [col-span](#col-span)
 - [fixed (dính vào màn hình)](#fixed-dính-vào-màn-hình)
 - [min](#min)
 ---

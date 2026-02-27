@@ -15,6 +15,8 @@
 - [keydown | onkeydown \& keypress | onkeypress](#keydown--onkeydown--keypress--onkeypress)
 - [load | onload \& loadstart | onloadstart \& loadend | onloadend](#load--onload--loadstart--onloadstart--loadend--onloadend)
 - [Progress | onprogress](#progress--onprogress)
+- [.preventDefault()](#preventdefault)
+- [onSubmit](#onsubmit)
 - [target](#target)
   - [.value](#value)
 - [classList.toggle()](#classlisttoggle)
@@ -70,6 +72,8 @@ document.body.appendChild(d);
 - [keydown | onkeydown \& keypress | onkeypress](#keydown--onkeydown--keypress--onkeypress)
 - [load | onload \& loadstart | onloadstart \& loadend | onloadend](#load--onload--loadstart--onloadstart--loadend--onloadend)
 - [Progress | onprogress](#progress--onprogress)
+- [.preventDefault()](#preventdefault)
+- [onSubmit](#onsubmit)
 - [target](#target)
   - [.value](#value)
 - [classList.toggle()](#classlisttoggle)
@@ -488,12 +492,16 @@ Hiện thông báo là giá trị của thẻ select
 </select>
 function Display(value){
      alert(value);
-
+```
+# .preventDefault()
+```bash
+- Mặc định: trình duyệt reload trang
+- JS dùng event.preventDefault() để chặn reload và tự xử lý logic
+```
 # onSubmit
 ```bash
 - submit là event của <form>. Khi bấm nút submit hoặc Enter → form emit event submit
-- Mặc định: trình duyệt reload trang
-- JS dùng event.preventDefault() để chặn reload và tự xử lý logic
+
 ```
 **Ex1**
 ```js
@@ -563,6 +571,17 @@ form.addEventListener('submit', async (e) => {
 })
 ```
 # target
+**Ex**
+```html
+<input type="text" name="username" onchange="handleChange(event)">
+```
+```js
+handleChange = (e) => {
+    console.log(e.target)
+}
+
+// <input type="text" name="username" onchange="handleChange(event)">
+```
 ## .value
 ```bash
 - Lấy giá trị hiện tại của input / textarea / select khi có sự kiện xảy ra.

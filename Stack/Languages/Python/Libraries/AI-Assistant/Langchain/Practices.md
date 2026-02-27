@@ -338,3 +338,156 @@ if __name__ == "__main__":
 # sửa address thành hà nội cho tôi
 # {'id': 'u1', 'name': 'Nguyen Van A', 'address': 'Hà Nội'}
 ```
+# Demo một pipeline chuẩn production-style
+```bash
+1. Router (phân loại READ / ACTION)
+2. Read Flow (truy vấn dữ liệu)
+3. Action Flow (structured output → validate → confirm → gọi backend giả lập)
+4. LCEL chuẩn
+5. Tách rõ AI layer và Business layer
+-> Sau này bạn có thể dùng khung này để scale lên SaaS / ngân hàng / ecommerce.
+```
+**Architecture**
+```bash
+User Input
+   ↓
+Intent Router (LLM)
+   ↓
+ ┌───────────────┬────────────────┐
+ │               │                │
+READ         ACTION            UNKNOWN
+ │               │
+DB Query     Extract structured data
+ │               │
+LLM format   Validate → Confirm → Execute
+ │               │
+Response     Response
+```
+**Pipeline**
+**Step 1: Import & Setup**
+```python
+from typing import Literal
+from pydantic import BaseModel
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser, PydanticOutputParser
+from langchain_core.runnables import RunnableLambda, RunnableBranch
+```
+**Step 2: Model**
+```python
+model = ChatOpenAI(
+    temperature=0
+)
+```
+**Step 3: Intent Router**
+```python
+class Intent(BaseModel):
+    intent: Literal["READ", "ACTION", "UNKNOWN"]
+
+router_parser = PydanticOutputParser(pydantic_object=Intent)
+
+router_prompt = ChatPromptTemplate.from_template("""
+Phân loại yêu cầu người dùng thành 1 trong 3 loại:
+
+READ: chỉ xem thông tin
+ACTION: thay đổi dữ liệu hệ thống
+UNKNOWN: không rõ
+
+User: {input}
+
+{format_instructions}
+""")
+
+router_chain = (
+    router_prompt.partial(
+        format_instructions=router_parser.get_format_instructions()
+    )
+    | model
+    | router_parser
+)
+```
+**Step 4: Read Flow**
+```bash
+fake_db = {
+    "balance": "10,000,000 VND",
+    "address": "TP.HCM"
+}
+
+def read_account_info(input_dict):
+    question = input_dict["input"]
+
+    if "số dư" in question:
+        return {"result": fake_db["balance"]}
+
+    if "địa chỉ" in question:
+        return {"result": fake_db["address"]}
+
+    return {"result": "Không tìm thấy thông tin"}
+
+read_prompt = ChatPromptTemplate.from_template("""
+Dựa vào dữ liệu sau trả lời thân thiện cho người dùng:
+
+Data: {result}
+""")
+
+read_chain = (
+    RunnableLambda(read_account_info)
+    | read_prompt
+    | model
+    | StrOutputParser()
+)
+```
+**Step 5: Action flow**
+```bash
+class UpdateAddress(BaseModel):
+    action: Literal["update_address"]
+    new_address: str
+
+action_parser = PydanticOutputParser(pydantic_object=UpdateAddress)
+
+action_prompt = ChatPromptTemplate.from_template("""
+Trích xuất yêu cầu cập nhật địa chỉ.
+
+User: {input}
+
+{format_instructions}
+""")
+
+extract_action_chain = (
+    action_prompt.partial(
+        format_instructions=action_parser.get_format_instructions()
+    )
+    | model
+    | action_parser
+)
+
+def execute_action(data: UpdateAddress):
+    # Validate
+    if len(data.new_address) < 3:
+        return "Địa chỉ không hợp lệ"
+
+    # Giả lập update DB
+    fake_db["address"] = data.new_address
+
+    return f"Đã cập nhật địa chỉ thành {data.new_address}"
+
+action_chain = (
+    extract_action_chain
+    | RunnableLambda(execute_action)
+)
+```
+**Step 6: Main Router pipeline**
+```bash
+def route_logic(input_dict):
+    intent = router_chain.invoke(input_dict)
+
+    if intent.intent == "READ":
+        return read_chain.invoke(input_dict)
+
+    if intent.intent == "ACTION":
+        return action_chain.invoke(input_dict)
+
+    return "Xin lỗi, tôi chưa hiểu yêu cầu."
+
+main_pipeline = RunnableLambda(route_logic)
+```

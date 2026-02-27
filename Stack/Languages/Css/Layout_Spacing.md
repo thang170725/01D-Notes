@@ -1,3 +1,4 @@
+- [Units](#units)
 - [Box](#box)
   - [Height/Width \& max-height \& max-width](#heightwidth--max-height--max-width)
   - [background](#background)
@@ -12,6 +13,7 @@
   - [outline-width](#outline-width)
   - [outline-style](#outline-style)
   - [Position](#position)
+  - [resize](#resize)
 - [text](#text)
   - [text-indent](#text-indent)
   - [letter-spacing \& line-height \& word-spacing](#letter-spacing--line-height--word-spacing)
@@ -301,6 +303,19 @@ div{
     position: fixed;
     top: 0; /*khi dùng fix có thể di chuyển bằng, top, left, ... */
 }
+```
+## resize
+```bash
+Định dạng cho vùng nội dung người dùng có thể thay đổi kích thước. Phải sử dụng cùng overflow đối với các thẻ khác. Sử dụng cùng thẻ textarea thì không cần overflow.
+```
+**Syn**
+```bash
+resize: value;
+
+- both: Người dùng có thể thay đổi cả chiều cao và chiều rộng của thành phần.
+- none: Người dùng không được thay đổi.
+- horizontal: Người dùng có thể thay đổi chiều ngang.
+- vertical: Người dùng có thể thay đổi chiều dọc.
 ```
 # text
 ## text-indent

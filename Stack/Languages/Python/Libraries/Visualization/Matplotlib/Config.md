@@ -5,7 +5,6 @@
 - [figure()](#figure)
 - [khung hình với kích thước 10x4 inches sẽ được hiển thị lên màn hình](#khung-hình-với-kích-thước-10x4-inches-sẽ-được-hiển-thị-lên-màn-hình)
 - [tight\_layout()](#tight_layout)
-- [imshow()](#imshow)
 - [.colorbar()](#colorbar)
 ---
 # Title() & set_title() 
@@ -89,17 +88,16 @@ plt.imshow(digits.images[0], cmap='gray')
 plt.show()
 # khung hình với kích thước 10x4 inches sẽ được hiển thị lên màn hình
 # tight_layout()
+```bash
 Nếu một giao diện có nhiều biểu đồ thì hãy sử dụng phương thức này để các biểu đồ không bị chồng lên nhau.
-Cú pháp: 
+```
+**Syn**
+```bash
 plt.tight_layout()
+```
 Xticks()
 Cú pháp:
 plt.xticks(rotation=45)
-# imshow()
-```bash
-- Dùng để hiển thị ma trận như một ảnh.
-- Ma trận 2D (100×100) → được hiểu là ảnh grayscale
-```
 # .colorbar()
 ```bash
 - Để hiển thị thanh màu bên cạnh

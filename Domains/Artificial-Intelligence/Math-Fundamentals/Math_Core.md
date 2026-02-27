@@ -132,64 +132,47 @@ features = np.array(features)
 print("Feature shape:", features.shape)
 ```
 # Computer Vision
-Kernel
-    • Phần lớn các bộ lọc đều dựa trên khái niệm convolution (tích chập) – tức là áp một ma trận (kernel) lên từng vùng nhỏ của ảnh để tính toán giá trị mới cho pixel trung tâm. Cách áp dụng kernel này có một quy tắc chuẩn:
-    • Duyệt từng pixel trong ảnh gốc.
-    • Với mỗi pixel, lấy vùng lân cận (theo kích thước kernel), nhân chéo với kernel.
-    • Tính tổng và gán giá trị kết quả vào pixel tương ứng trong ảnh mới.
-Ví dụ:
-Với bộ lọc làm mờ trung bình (mean blur), kernel là ma trận các số bằng nhau, cộng lại rồi chia trung bình.
- Sự khác nhau của các bộ lọc:
-Tùy loại bộ lọc mà kernel hoặc cách áp dụng sẽ khác nhau:
-Bộ lọc
-Cách hoạt động đặc trưng
-Làm mờ (blur)
-Tính trung bình vùng lân cận – làm giảm chi tiết, nhiễu.
-Gaussian Blur
+## Kernel
+```bash
+- Phần lớn các bộ lọc đều dựa trên khái niệm convolution (tích chập) – tức là áp một ma trận (kernel) lên từng vùng nhỏ của ảnh để tính toán giá trị mới cho pixel trung tâm. 
+- Cách áp dụng kernel này có một quy tắc chuẩn:
+    + Duyệt từng pixel trong ảnh gốc.
+    + Với mỗi pixel, lấy vùng lân cận (theo kích thước kernel), nhân chéo với kernel.
+    + Tính tổng và gán giá trị kết quả vào pixel tương ứng trong ảnh mới.
+```
+## Gaussian Blur
+```bash
 Dùng kernel theo phân phối Gauss – làm mờ mịn, tự nhiên hơn.
-Median Blur
+```
+## Median Blur
+```bash
 Lấy giá trị trung vị trong vùng lân cận – khử nhiễu muối tiêu.
-Sharpen (làm sắc nét)
+```
+## Sharpen (làm sắc nét)
+```bash
 Dùng kernel làm nổi bật cạnh, tăng tương phản cục bộ.
-Sobel, Laplacian
+```
+## Sobel, Laplacian
+```bash
 Dùng để phát hiện biên cạnh – áp kernel đạo hàm.
-Bộ lọc tùy chỉnh
-Người dùng định nghĩa kernel riêng và áp dụng tương tự.
+```
+Thuật toán ID3 (Iterative Dichotomiser 3)
+    • Là thuật toán xây dựng cây quyết định bằng cách chọn thuộc tính “tốt nhất” để chia dữ liệu tại mỗi bước.
+    • Thuộc tính “tốt nhất” được chọn dựa trên việc giảm độ hỗn loạn (entropy) nhiều nhất → nghĩa là giúp dữ liệu trở nên “thuần” nhất có thể.
+Entropy (độ hỗn loạn):
+Cho biết một tập dữ liệu có lẫn lộn hay không. (Khi chia dữ liệu theo thuộc tính A thì độ hỗn loạn mới là bao nhiêu)
+Công thức:
+Entropy(S) = -[p1.log2(p1) + p2.log2(p2) + … ]
+    • pi: phần trăm mẫu thuộc lớp i (ví dụ: [‘no’, ‘no’, ‘yes’, ‘yes’, ‘yes’] thì p_no = 2/5). Nếu tập đã thuần (100% Yes) → entropy = 0 (không hỗn loạn).
+    • Nếu chia đều (50% Yes - 50% No) → entropy = 1 (hỗn loạn tối đa).
+EntropyA(S) = [(|Sv1| / S) * Entropy(Sv1) + (|Sv2| / S) * Entropy(Sv2) + ...]
+    • Chia dữ liệu theo thuộc tính A → thành nhiều nhóm (ví dụ “Weather” → Sunny/Rain/Windy…)
+    • Tính entropy của từng nhóm.
+    • Lấy trung bình theo trọng số số lượng mẫu.
+Information Gain (độ tăng thông tin):
+Sự giảm hỗn loạn khi chia theo thuộc tính. Thuộc tính có Information Gain cao nhất → chọn làm node.
+Gain(S,A)=Entropy(S)−EntropyA(S)
+    • Gain = mức giảm độ hỗn loạn khi chia bằng A.
+    • A càng làm tập “thuần” hơn → Gain càng lớn → được chọn.
 Bài tập
-Cho một ma trận ảnh 5×5 và một kernel 3×3, hãy tính kết quả tích chập (convolution)
-import numpy as np
-
-img = np.array([
-    [1,2,3,4,5], 
-    [6,7,8,9,10],
-    [11,12,13,14,15],
-    [16,17,18,19,20],
-    [21,22,23,24,25]
-])
-kernel = np.array([
-    [2,4,6],
-    [1,2,3],
-    [3,4,5]
-])
-
-h, w = img.shape
-kh, kw = kernel.shape
-out_h = h - kh + 1
-out_w = w - kw + 1
-
-# ✅ Tạo mảng kết quả có kích thước sẵn
-out = np.zeros((out_h, out_w))
-
-for i in range(out_h):
-    for j in range(out_w):
-        out[i, j] = np.sum(img[i:i+kh, j:j+kw] * kernel)
-
-print(out)
-[[178. 202. 226.]
- [298. 322. 346.]
- [418. 442. 466.]]
-Chuẩn hóa
-Bài tập
-Chuẩn hóa ảnh về [0,1]
-x_train = x_train.astype('float32') / 255.0
-x_test  = x_test.astype('float32') / 255.0
+Demo cây quyết định với thuật toán id3

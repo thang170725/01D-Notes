@@ -18,11 +18,14 @@ khởi tạo một đối tượng LLM (Large Language Model)
 ```
 **Syn**
 ```bash
+from langchain_community.chat_models import ChatOllama # from langchain_ollama import ChatOllama
+
 llm = ChatOllama(
     model="llama3",
     temperature=0
 )
 
+- model         : tên của model llm
 - temperature   : độ ngẫu nhiên của AI
 ```
 # PromptTemplate

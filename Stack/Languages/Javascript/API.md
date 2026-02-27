@@ -223,14 +223,66 @@ aasync function createUser() {
 
 createUser()
 ```
-# FormData() & .blob() & URL.createObjectURL()
-**FormData**
+# FormData()
 ```bash
-- Là một đối tượng giúp bạn tạo ra các cặp key-value giống như dữ liệu trong form HTML, để gửi đi bằng fetch hoặc XMLHttpRequest.
-- Nó dùng được cho text, file (ảnh, pdf, …)
-- Cần gửi với Content-Type: multipart/form-data
+- Là một API dùng để
+  + Gửi dữ liệu dạng form HTML
+  + Gửi file (ảnh, video, PDF…)
+  + Gửi dữ liệu theo chuẩn multipart/form-data
+  + Kết hợp text + file trong cùng một request
+- Thường dùng với fetch() hoặc axios() để upload dữ liệu lên server
 ```
-**.blob()**
+**Syn**
+```bash
+const formData = new FormData()
+```
+## .append() & .entries()	
+```bash
+- append  : Thêm dữ liệu
+- entries : Lặp toàn bộ dữ liệu
+```
+**Ex1: Text**
+```js
+const formData = new FormData()
+
+formData.append("username", "thang")
+formData.append("age", 25)
+
+for (let [key, value] of formData.entries()) {
+  console.log(key, value)
+}
+
+// username thang
+// age 25
+```
+**Ex2: File**
+```html
+<input type="file" id="avatar" />
+```
+```js
+const input = document.getElementById("avatar")
+
+input.addEventListener("change", () => {
+  const file = input.files[0]
+
+  const formData = new FormData()
+  formData.append("avatar", file)
+  formData.append("username", "thang")
+
+  for (let [key, value] of formData.entries()) {
+    console.log(key, value)
+  }
+})
+
+// avatar File { name: "avatar.png", size: 24567, type: "image/png" }
+// username thang
+```
+## set(name, value)	Ghi đè dữ liệu
+## get(name)	Lấy 1 giá trị
+## getAll(name)	Lấy tất cả giá trị cùng key
+## delete(name)	Xóa key
+
+ & .blob() & URL.createObjectURL()**.blob()**
 ```bash
 Là một đối tượng dùng để lưu trữ dữ liệu nhị phân
 ```

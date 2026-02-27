@@ -1,4 +1,5 @@
-- [Show() \& imshow()](#show--imshow)
+- [Show()](#show)
+- [imshow()](#imshow)
 - [matshow()](#matshow)
 - [plot()](#plot)
 - [marker](#marker)
@@ -11,6 +12,14 @@
 - [có phương thức này mới có thể sử dụng được set\_title, …](#có-phương-thức-này-mới-có-thể-sử-dụng-được-set_title-)
 ---
 # Show()
+```bash
+Để hiển thị chart
+```
+# imshow()
+```bash
+- Dùng để hiển thị ma trận như một ảnh.
+- Ma trận 2D (100×100) → được hiểu là ảnh grayscale
+```
 # matshow()
 ```bash
 - Dùng để hiển thị ma trận dưới dạng hình ảnh. 
@@ -99,21 +108,30 @@ plt.scatter(x,y)
 plt.show()
 ```
 # Hist()
+```bash
 Để tạo biểu đồ histogram. Nó được chia thành các bin (khoảng giá trị) và hiển thị tần suất (số lượng) các điểm dữ liệu rơi vào mỗi bin.
-Cú pháp:
+```
+**Syn**
+```bash
 plt.hist(x, bins=10, density=False, cumulative=False, color='blue', edgecolor='black', anpha=””…)
-    • x: Dữ liệu đầu vào.
-    • bins: Số lượng cột, chia dữ liệu thành bao nhiêu khoảng.
-    • density: Mặc định False (hiển thị tần suất), nếu True biểu đồ sẽ chuẩn hóa thành xác suất. (False: trục y = số lượng, True: trục y = xác suất).
-    • cumulative: Nếu True, sẽ vẽ biểu đồ tích lũy (cộng dồn từ trái sang phải).
-    • color: Màu của các cột.
-    • edgecolor: Màu đường viền của cột, giúp phân biệt dễ dàng hơn, thường là black hoặc white.
-    • anpha: Mức độ trong suốt (opacity) của biểu đồ
+
+- x: Dữ liệu đầu vào.
+- bins: Số lượng cột, chia dữ liệu thành bao nhiêu khoảng.
+- density: Mặc định False (hiển thị tần suất), nếu True biểu đồ sẽ chuẩn hóa thành xác suất. (False: trục y = số lượng, True: trục y = xác suất).
+- cumulative: Nếu True, sẽ vẽ biểu đồ tích lũy (cộng dồn từ trái sang phải).
+- color: Màu của các cột.
+- edgecolor: Màu đường viền của cột, giúp phân biệt dễ dàng hơn, thường là black hoặc white.
+- anpha: Mức độ trong suốt (opacity) của biểu đồ
+```
+**Ex**
+```python
 import numpy as np
 import matplotlib.pyplot as plt
+
 number = np.random.uniform(0.0, 10, 100)
 plt.hist(number, 100)
 plt.show()
+```
 # bar()
 Để tạo biểu đồ cột (bar chart). Biểu đồ cột là một cách trực quan để so sánh các giá trị giữa các danh mục khác nhau.
 Cú pháp: matplotlib.pyplot.bar(x, height, width=0.8, bottom=None, align='center', data=None, **kwargs)

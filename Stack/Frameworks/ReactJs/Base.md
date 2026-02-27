@@ -2,16 +2,18 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 - [Cấu trúc test \& luồng hoạt động](#cấu-trúc-test--luồng-hoạt-động)
+- [React.createElement()](#reactcreateelement)
+- [className](#classname)
 ---
 # Directory Structure
 ```bash
-ReactJs/
-├── 01_jsx_components.md     # Gom: JSX, Function Components, Props (Cơ bản)
-├── 02_state_lifecycle.md    # Quản lý dữ liệu & Vòng đời
-├── 03_forms_events.md       # Handling events, Controlled vs Uncontrolled Components
-├── 04_hooks_advanced.md     # useRef, useMemo, useCallback, Custom Hooks
-├── 05_context_routing.md     # useContext (Global State), React Router
-└── external_libs             # Chứa các thư viện bên ngoài 
+ReactJs/                    # mình dùng thư mục này để xem kiến thức cơ bản về ReactJS
+├── JSX_Componentsd         # mình dùng file này để hiểu JSX, Function Components, Props (Cơ bản)
+├── State_Lifecycle.md      # mình dùng file này để quản lý dữ liệu & Vòng đời
+├── 03_forms_events.md      # Handling events, Controlled vs Uncontrolled Components
+├── Hooks_Advanced.md       # mình dùng file này để sử dụng useRef, useMemo, useCallback, Custom Hooks
+├── Context_Routing.md      # mình dùng file này để thao tác liên quan đến URL trên frontend
+└── External_Libs           # mình dùng file này để chứa các thư viện bên ngoài 
 ```
 # Introduction
 ```bash
@@ -168,7 +170,37 @@ body {
 cd frontend/web-cra
 npm start
 ```
+# React.createElement()
+```bash
+Để tạo ra đối tượng.
+```
+**Syn** 
+```bash
+React.createElement(value1, value2, value3);
 
+- Value1 là thẻ, function
+- Value2 là object
+- Value3 là nội dung
+```
+**Ex**
+```js
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+const myElement = React.createElement('h1', {}, 'I do not use JSX!');
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(myElement);
+```
+# className
+```bash
+Để đặt tên class cho các thẻ HTML
+import React from 'react';import ReactDOM from 'react-dom/client';
+
+const myElement = <h1 className="myclass">Hello World</h1>;
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(myElement);
 Phần 2
 React Render HTML
 React hiển thị HTML cho trang web bằng cách sử dụng hàm có tên là createRoot() và phương thức render.
