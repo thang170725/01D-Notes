@@ -10,7 +10,7 @@ Basic                           # mình dùng thư mục này để xem kiến t
 ├── Function.md                 # mình dùng file này để thao tác tất cả mọi thứ về hàm
 ├── input_output_comment.md
 ├── lists.md
-├── oop.md
+├── Class_OOP.md                # mình dùng file này để thao tác về class, lập trình hướng đối tượng
 ├── practice_cases.md
 ├── strings.md
 └── tuples_zip_map_filter.md
