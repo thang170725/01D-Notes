@@ -3,9 +3,17 @@
   - [du](#du)
   - [free](#free)
   - [df](#df)
+  - [systemctl](#systemctl)
+  - [sudo systemctl status](#sudo-systemctl-status)
+- [Create \& Confid](#create--confid)
+  - [sudo systemctl start](#sudo-systemctl-start)
+- [Remove \& Close](#remove--close)
+  - [sudo systemctl stop](#sudo-systemctl-stop)
+  - [sudo systemctl disable](#sudo-systemctl-disable)
 - [clear](#clear)
 - [sudo apt clean](#sudo-apt-clean)
 - [sudo apt autoclean](#sudo-apt-autoclean)
+  - [sudo apt autoremove](#sudo-apt-autoremove)
 - [Mount ổ cứng](#mount-ổ-cứng)
 - [uptime](#uptime)
 - [ac (Accounting)](#ac-accounting)
@@ -53,6 +61,52 @@ Xem dung lượng còn lại của ổ, -h là để hiển thị theo đơn v�
 free -h
 - -h: giúp hiển thị con số dưới dạng dễ đọc như GB, MB thay vì những dãy byte dài ngoằng
 ```
+## systemctl
+**Ex**
+```bash
+1. systemctl list-units --type=service
+    + Hiển thị các service đang active
+2. systemctl list-unit-files --type=service
+    + Hiển thị các service kể cả đang tắt
+3. systemctl list-units --type=service --state=running
+    + Chỉ xem service đang chạy
+```
+## sudo systemctl status
+```bash
+- Nó dùng để:
+    + Kiểm tra service có đang chạy không
+    + Xem PID
+    + Xem log gần nhất
+    + Xem có lỗi không
+    + Xem service có tự start khi boot không
+```
+# Create & Confid
+## sudo systemctl start
+**Syn**
+```bash
+sudo systemctl stop <service>
+```
+# Remove & Close
+## sudo systemctl stop
+```bash
+- Dừng (stop) một service đang chạy
+- Khi chạy lệnh này, systemd sẽ:
+    + Gửi tín hiệu dừng (SIGTERM)
+    + Tắt tiến trình của service
+    + Giải phóng tài nguyên (RAM, CPU, file lock, port…)
+```
+**Syn**
+```bash
+sudo systemctl stop <tên-service>
+```
+## sudo systemctl disable
+```bash
+Dùng khi muốn tắt hẳn service
+```
+**Syn**
+```bash
+sudo systemctl disable <service>
+```
 # clear
 ```bash
 Xóa hết các dòng lệnh.
@@ -65,18 +119,10 @@ Xóa toàn bộ file .deb đã tải
 ```bash
 Chỉ xóa các gói cũ, không còn dùng.
 ```
-2️⃣ Xóa package không còn cần thiết
-bash
-Copy code
-sudo apt autoremove
+## sudo apt autoremove
+```bash
 Xóa dependency thừa sau khi gỡ phần mềm.
-
-👉 Thường nên chạy combo:
-
-bash
-Copy code
-sudo apt autoremove --purge
-sudo apt clean
+```
 3️⃣ Dọn log hệ thống (journal)
 Kiểm tra log đang chiếm bao nhiêu:
 

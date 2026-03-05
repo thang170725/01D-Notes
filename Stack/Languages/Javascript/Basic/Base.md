@@ -4,7 +4,7 @@
 ---
 # Cấu trúc
 ```bash
-Javascript/                 # mình dùng thư mục này để xem kiến thức cơ bản của JS
+Basic/                 # mình dùng thư mục này để xem kiến thức cơ bản của JS
 ├── API.md                  # mình dùng file này để thao tác tất cả liên quan đến API 
 ├── Base.md                 # mình dùng file này để xem kiến thức cơ bản và các tiện ích của JS
 ├── DOM.md                  # mình dùng file này để thao tác tất cả liên quan đến DOM
@@ -12,8 +12,10 @@ Javascript/                 # mình dùng thư mục này để xem kiến thứ
 ├── Function.md             # mình dùng file này để thao tác với hàm hoặc gắn hàm vào phương thức nào đó trừ DOM
 ├── External_Libs.md        # mình dùng file này để dùng js kết hợp với các thư viện, api ngoài
 ├── Loop_Control.md         # mình dùng file này để thao tác điều kiên và lặp
+├── Practices.md            # mình dùng file này để xem code mẫu, bài tập
 ├── String.md               # mình dùng file này để thao tác với chuỗi
-├── Output_Support.md       # mình dùng file này để in ra, hiển thị ra và các thứ bổ trợ
+├── IO.md                   # mình dùng file này để nhập, xuất, các thao thác nhằm cung cấp thêm thông tin
+├── List.md                 # mình dùng file này để thao tác với array, list trong js
 └── Time.md                 # mình dùng file này để xử lý thời gian
 ```
 # Extensions hỗ trợ Javascript

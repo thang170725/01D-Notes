@@ -1,5 +1,5 @@
 - [Directory Structure](#directory-structure)
-- [Introduction Docker](#introduction-docker)
+- [Introduction](#introduction)
   - [Image](#image)
   - [Container](#container)
   - [Docker Engine](#docker-engine)
@@ -7,24 +7,20 @@
 ---
 # Directory Structure
 ```bash
-Docker/
-├── 01_Fundamentals_CLI.md    # Khái niệm & Lệnh: image, container, ps, rm, logs
-├── 02_Dockerfile_Mastery.md  # Xây dựng Image: FROM, RUN, COPY, CMD vs ENTRYPOINT
-├── 03_Storage_Volumes.md     # Dữ liệu: Bind Mounts, Named Volumes (Giữ data khi xóa container)
-├── 04_Networking.md          # Kết nối: Bridge, Host, Docker Network (Cách các container gọi nhau)
-├── 05_Docker_Compose.md      # Đa dịch vụ: Cấu hình file yaml, build, up, down
-└── 06_Optimization_Security.md # Nâng cao: Multi-stage build, .dockerignore, quét lỗ hổng
+Docker/             # mình dùng thư mục này để xem kiến thức về Docker
+├── Base.md         # mình dùng file này để xem kiến thức và tiện ích
+├── Practices.md    # mình dùng file này để xem lệnh mẫu và bài tập
+└── Process.md      # mình dùng file này để thao tác với docker
 ```
-# Introduction Docker
+# Introduction
 ```bash
 Giả sử em viết một app:
 - Trước khi có Docker.
-    + Máy em chạy được ✅
-    + Lên máy người khác → lỗi ❌
-    + Lên server → thiếu lib, sai version ❌
-    + “Máy em chạy mà 😭”
-    + 👉 Nguyên nhân: mỗi máy có môi trường khác nhau
-- Docker giải quyết thế nào? Docker cho phép:
+    + Máy em chạy được 
+    + Lên máy người khác → lỗi 
+    + Lên server → thiếu lib, sai version 
+    + Nguyên nhân: mỗi máy có môi trường khác nhau
+- Docker cho phép:
     + Đóng gói app + môi trường + thư viện + cấu hình
     + Thành một gói duy nhất gọi là container
     + Chạy giống hệt nhau ở mọi nơi

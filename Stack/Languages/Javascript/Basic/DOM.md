@@ -78,6 +78,69 @@ document.body.appendChild(d);
   - [.value](#value)
 - [classList.toggle()](#classlisttoggle)
 ---
+Events - DOM
+Đặt một hành động tác động lên các đối tượng HTML, qua đó ta có thể bắt được sự kiện và yêu cầu javascript thực thi một chương trình nào đó.
+    • Sử dụng trực tiếp vào thẻ HTML thông qua từ khóa js.
+    • Sử dụng chấm sự kiện.
+    • Sử dụng addEventListener.
+Sử dụng trực tiếp vào thẻ HTML thông qua từ khóa js
+Xảy ra khi click vào đối tuộng được gắn thuộc tính .
+<button onclick="display1()">BUTTON1</button>
+<input type="button" value="BUTTON2" onclick="display2()">
+ <input type="submit" value="BUTTON3" onclick="display3()">
+
+function display1(){
+    alert("Hello World!!");
+}
+function display2(){
+     confirm("Hello World!!");
+            }
+            function display3(){
+                prompt("Hello World!!");
+            }
+
+
+Sử dụng chấm sự kiện
+Lưu ý: với cách này cần kết hợp với lấy giá trị element.
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tester</title>
+    </head>
+    <body>
+        <!--Tạo nút bấm (có 3 cách)-->
+        <button>BUTTON1</button>
+        <input type="button" value="BUTTON2" id="display1">
+        <input type="submit" value="BUTTON3" class="display2">
+        <script type="text/javascript">
+        // Dùng fuction để đóng gói sự kiện
+            function Display1(){
+                let c = document.getElementsByTagName("button");
+                // lấy bằng tag name thi khi gọi đến phải gọi như mảng
+                c[0].onclick = function d(){
+                    alert("Hello World");
+                }
+            }
+            function Display2(){
+                let c = document.getElementById("display1");
+                c.onclick = function d(){
+                    confirm("Hello World");
+                }
+            }
+            function Display3(){
+                let c = document.getElementsByClassName("display2");
+                // lấy bằng class name thì khi gọi đến phải gọi như mẳng
+                c[0].onclick = function d(){
+                    prompt("Hello World");
+                }
+            }
+            // Gọi hàm
+            Display1();
+            Display2();
+            Display3();
+        </script>
+    </body>
+</html>
 # document.addEventListener() & removeEventListener()
 ```bash
 - addEventListener    : Gắn một trình xử lý sự kiện.

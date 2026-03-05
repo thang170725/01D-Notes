@@ -1,11 +1,285 @@
-- [.trim() \& trimstart() \& trimEnd()](#trim--trimstart--trimend)
+- [Strings](#strings)
+  - [length](#length)
+  - [.toString() \& String()](#tostring--string)
+  - [+](#)
+  - [${} - template string](#---template-string)
+  - [CharAt() | at()](#charat--at)
+  - [CharCodeAt()](#charcodeat)
+  - [.indexOf() and .search()](#indexof-and-search)
+  - [lastIndexOf()](#lastindexof)
+  - [.sclice(), .substring() and .substr()](#sclice-substring-and-substr)
+  - [.replace()](#replace)
+  - [replaceAll()](#replaceall)
+  - [.toUpperCase() \&\& .toLowerCase()](#touppercase--tolowercase)
+  - [concat()](#concat)
+  - [.split()](#split)
+  - [.padStart()](#padstart)
+  - [padEnd()](#padend)
+  - [repeat()](#repeat)
+  - [.includes()](#includes)
+  - [startsWith()](#startswith)
+  - [endsWith()](#endswith)
+  - [matchAll()](#matchall)
+  - [Iterator {}](#iterator-)
+  - [valueOf()](#valueof)
+  - [Small()](#small)
+  - [.trim() \& trimstart() \& trimEnd()](#trim--trimstart--trimend)
 - [RegExp (Biểu thức chính quy)](#regexp-biểu-thức-chính-quy)
   - [.match()](#match)
   - [.test()](#test)
-
 ---
+# Strings
+```bash
+- Trong javascript chuỗi cũng có thể coi là một mảng nên có thể lấy giá trị chuỗi giống như ở mảng được. 
+- giữa “” và ‘’ không có khác biệt. template có ưu điểm hơn là có thể nhúng biểu thức vào chuỗi, viết chuỗi trên nhiều dòng dễ dàng và có thể sử dụng được biểu thức câu lệnh trong chuỗi.
+```
+**Syn**
+```bash
+- var | let <name> = “ … “; - basic String
+- var | let <name> = ‘ … ‘; - basic String
+- var | let <name> = new String(value ); - Object String
+- var | let <name> = ` … `; -  template String
+```
+## length
+```bash
+Để đếm số ký tự trong chuỗi.
+```
+**Ex**
+```js
+var Str = "Hello Wolrd";
+console.log(Str.length); // 11
+```
+## .toString() & String()
+```bash
+Ép kiểu từ số sang chuỗi.
+```
+**Syn**
+```bash
+- <variable1>.toString(); – không được dùng với null hoặc undefinded (sẽ lỗi).
+- <variable> + “”;
+- String(num);
+```
+**Ex1**
+```js
+var Number = 17;
+console.log(typeof Number); // number
 
-# .trim() & trimstart() & trimEnd()
+Number = Number.toString();
+console.log(typeof Number); // string
+```
+**Ex2**
+```js
+var a = 100;
+var result = a.toString(2);
+
+// 2 - kết quả trả về sẽ là số được biểu diễn dưới dạng nhị phân.
+// 8- kết quả trả về sẽ là số được biểu diễn dưới dạng bát phân.
+// 16- kết quả trả về là số được biểu diễn dưới dạng thập lục phân.
+```
+## +
+```bash
+Dùng để công chuỗi
+```
+let value = 789;
+let str = value + "";  // "789"
+## ${} - template string
+Để nhúng một biểu thức javascript vào chuỗi.
+let name = "Thắng";
+let age = 20;
+let str = `${name} is ${age}`;
+Thắng is 20
+## CharAt() | at()
+Lấy ra ký tự ở vị trí thứ n.
+Cú pháp:
+    • <variable>.charAt(); // mặc định lấy ra ký tự đầu tiên.
+    • <variable>.charAt(n); // lấy ra ký tự thứ n
+let a = "Hello World";
+console.log(a.charAt());
+console.log(a.charAt(6));
+H
+W
+## CharCodeAt()
+Lấy ra mã số của ký tự ở vị trí thứ n trong bảng mã ASCII hoặc Unicode.
+let a = "alpha";
+console.log(a.charCodeAt());
+console.log(a.charCodeAt(6));
+97
+NaN
+## .indexOf() and .search()
+Dùng để tìm kiếm chuỗi hoặc ký tự trong chuỗi mẹ. Trả về vị trí bắt đầu xuất hiện.
+var Str = "Hello Wolrd";
+console.log(Str.indexOf('W'));
+console.log(Str.search('W'));
+6
+6
+## lastIndexOf()
+Dùng để tìm kiếm chuỗi hoặc ký tự trong chuỗi mẹ. Trả về vị trí bắt đầu xuất hiện. Nếu chuỗi có nhiều phần tử thỏa mãn điều kiện thì kết quả sẽ trả về vị trí cuối cùng.
+Cú pháp:
+<variable>.lastIndexOf(value);
+## .sclice(), .substring() and .substr()
+Để cắt ký tự, chuỗi con trong chuỗi khác.
+var Str = "Hello Wolrd";
+console.log(Str.substring(6,11));
+console.log(Str.slice(6,11));
+console.log(Str.substr(6,5));
+World
+World
+World
+
+## .replace()
+Để thay đổi một chuỗi. 
+a = a.replace("coder", "programer");
+console.log(a);
+Hello, My name is programer
+Javascript không cho phép thay thế chuỗi giống như thay thế ở mảng.
+let arr = ["a", "b", "c", "d"];
+console.log(arr);
+arr[0] = "e";
+console.log(arr);
+let str = "abcd";
+console.log(str);
+str[0] = "e";
+console.log(str);
+ ['a', 'b', 'c', 'd']
+ ['e', 'b', 'c', 'd']
+abcd
+abcd
+## replaceAll()
+Để thay thế chuỗi con trong chuỗi mẹ. Sự khác biệt giữa replace và replaceAll là replace chỉ thay thế chuỗi con đầu tiên được tìm thấy trong chuỗi mẹ còn replaceAll thì thay thế tất cả chuỗi con.
+Cú pháp:
+<variable>.replaceAll(value1, value2);
+    • value1: Chuỗi cần thay thế.
+    • value2: Chuỗi thay thế.
+## .toUpperCase() && .toLowerCase()
+```bash
+- toUpperCase: Để chuyển chuỗi thành chữ hoa.
+- toLowerCase: Để chuyển chuỗi về chữ thường.
+```
+**Syn: toUpperCase**
+```bash
+<variable>.toUpperCase();
+```
+**Syn: toLowerCase**
+```bash
+<variable>.toLowerCase();
+```
+## concat()
+Để nối chuỗi với nhau, có thể thay thế bằng dấu + để nối chuỗi.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script type="text/javascript">
+    let Text1 = "Hello," + " Wolrd" + " I am from VN";
+    let Text2 = "";
+    Text2 = Text2.concat("hello,", " World", " I am from VN");
+    console.log(Text1);
+    console.log(Text2);
+  </script>
+</body>
+</html>
+Hello, Wolrd I am from VN
+Hello, World I am from VN
+## .split()
+Để chuyển đổi chuỗi sang mảng.
+let a = "Hello World i am from Viet Nam"
+a = a.split(" ");
+for(var i = 0; i < a.length; i++){
+  console.log(a[i]);
+}
+Hello
+World
+i
+am
+from
+Viet
+Nam
+
+## .padStart()
+Thêm một ký tự hoặc một chuỗi nào đó vào phần đầu của chuỗi.
+Cú pháp:
+<variable>.padStart(<value1>, <value2>);
+       value1: Độ dài của chuỗi sau cùng.
+       value2: Chỉ định thêm cái gì vào chuỗi.
+let a = "VietNam";
+a = a.padStart(8, "O");
+console.log(a);
+OVietNam
+## padEnd()
+Thêm một ký tự hoặc một chuỗi nào đó vào phần cuối của chuỗi.
+Cú pháp:
+<variable>.padEnd(<value1>, <value2>);
+       value1: Độ dài của chuỗi sau cùng.
+       value2: Chỉ định thêm cái gì vào chuỗi.
+let a = "VietNam";
+a = a.padStart(8, "O");
+console.log(a);
+VietNamO
+## repeat()
+Để lặp lại một chuỗi nào đó.
+Cú pháp:
+<variable>.repeat(n) – Chỉ định lặp lai n lần.
+function main(){
+   let text = "Hello";
+   console.log(text.repeat(3));
+
+}
+main()
+'HelloHelloHello'
+## .includes()
+```bash
+Để tìm kiếm chuỗi con trong chuỗi mẹ. trả về true, false.
+```
+**Syn**
+```bash
+<variable>.includes(value);
+```
+**Ex**
+```js
+let text = "Hello world";
+console.log(text.includes("world")); // True
+```
+## startsWith()
+Kiểm tra xem chuỗi có bắt đầu bằng một chuỗi hoặc một ký tự nào đó không. Trả về true hoặc false.
+function main(){
+   let text = "Hello world";
+   console.log(text.startsWith("world"));
+
+}
+main()
+False
+
+## endsWith() 
+Xác định một chuỗi có kết thúc bằng một kí tự hoặc một chuỗi được người dùng cung cấp hay không. Trả về True, ngược lại hàm trả về False.
+function main(){
+   let text = "Hello world";
+   console.log(text.endsWith("world"));
+
+}
+main()
+True
+
+## matchAll()
+function main(){
+   let text = "Hello world";
+   console.log(text.matchAll("w"));
+
+}
+main()
+## Iterator {}
+## valueOf()
+Trả về giá trị nguyên thủy của một chuỗi, không thay đổi chuỗi gốc.
+Có thể sử dụng để chuyển đổi một đối tượng chuỗi thành một chuỗi.
+## Small()
+Sẽ bao chuỗi trong cặp thẻ <small>...</small>, khiến chữ hiển thị nhỏ hơn mặc định trên trình duyệt.
+let text = "Hello";
+let result = text.small();
+console.log(result); // <small>Hello</small>
+## .trim() & trimstart() & trimEnd()
 
 ```bash
 - trim      : Xóa khoảng trắng ở 2 đầu của chuỗi.

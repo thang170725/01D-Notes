@@ -4,10 +4,13 @@
 - [Date](#date)
   - [toUTCString()](#toutcstring)
   - [toLocaleDateString()](#tolocaledatestring)
-  - [.getFullYear() \& .() \& getDay() \& .getHours() \& .getDate() \& .getMinutes() \& .getSeconds() \& .getMiliseconds() \& .getTime()](#getfullyear----getday--gethours--getdate--getminutes--getseconds--getmiliseconds--gettime)
+  - [Get](#get)
+  - [.getFullYear() \& .getHours()  \& .getMinutes() \& .getSeconds() \& .getMiliseconds() \& .getTime()](#getfullyear--gethours---getminutes--getseconds--getmiliseconds--gettime)
+  - [.getDate()](#getdate)
+    - [getDay()](#getday)
   - [.getUTCMonth() \& .getUTCDate() \& .getUTCFullYear() \& .getUTCMonth() \& .getUTCDay() \& .getUTCHours() \& .getUTCMinutes() \& .getUTCSeconds() \& .getUTCMiliseconds()](#getutcmonth--getutcdate--getutcfullyear--getutcmonth--getutcday--getutchours--getutcminutes--getutcseconds--getutcmiliseconds)
   - [getTimezoneOffset()](#gettimezoneoffset)
-  - [.setFullYear()setMonth()setDate()setHours()setMinutes()setSeconds()](#setfullyearsetmonthsetdatesethourssetminutessetseconds)
+  - [.setFullYear() \& setMonth() \& setDate() \& setHours() \& setMinutes() \& setSeconds()](#setfullyear--setmonth--setdate--sethours--setminutes--setseconds)
 ---
 # setTimeout() & setInterval()
 ```bash
@@ -148,12 +151,15 @@ main();
 ```
 Date.parse()
 Trả về giá trị mili giây khoảng cách từ ngày 1 tháng 1 năm 1970.
-## .getFullYear() & .() & getDay() & .getHours() & .getDate() & .getMinutes() & .getSeconds() & .getMiliseconds() & .getTime()
+## Get
+```bash
+Trả về  giá trị thời gian
+```
+## .getFullYear() & .getHours()  & .getMinutes() & .getSeconds() & .getMiliseconds() & .getTime()
 ```bash
 - getFullYear   : Để lấy ra năm.
 - getMonth      : Để lấy ra tháng. Nhưng phải công thêm 1 thì mới ra tháng hiện tại.
-- getDay        : Để lấy ra ngày trong tuần. Nhưng phải cộng thêm 1 mới ra ngày thực tế.
-- getDate       : Để lấy ra ngày trong tháng
+- getDate       : Để 
 - getHours      : Để lấy ra giờ trong ngày
 - getTime       : Để lấy ra mili giây. Trả về mili giây thời gian tính từ nhày 1 tháng 1 năm 1970.
 ```
@@ -162,15 +168,14 @@ Trả về giá trị mili giây khoảng cách từ ngày 1 tháng 1 năm 1970.
 const d = new Date();
 console.log(d.getFullYear()); // 2025
 ```
-**Ex2: getDate**
+## .getDate()
+```bash
+Lấy ra ngày trong tháng 
+```
+**Ex**
 ```js
 let date = new Date();
 console.log(date.getDate(), typeof date.getDate()) // [ 26, 'number' ]
-```
-**Ex3: getDay**
-```js
-let date = new Date();
-console.log(date.getDay(), typeof date.getDay()) // [ 3, 'number' ]
 ```
 **Ex4: getHours**
 ```js
@@ -187,6 +192,23 @@ console.log(date.getMinutes(), typeof date.getMinutes()) // [ 54, 'number' ]
 let date = new Date();
 console.log(date.getSeconds(), typeof date.getSeconds()) // [ 20, 'number' ]
 ```
+### getDay()
+```bash
+- Để lấy ra ngày trong tuần.
+```
+**Ex**
+```js
+let date = new Date();
+console.log(date.getDay(), typeof date.getDay()) // [ 3, 'number' ]
+
+// 0	: Chủ nhật
+// 1	: Thứ hai
+// 2	: Thứ ba
+// 3	: Thứ tư
+// 4	: Thứ năm
+// 5	: Thứ sáu
+// 6	: Thứ bảy
+```
 ## .getUTCMonth() & .getUTCDate() & .getUTCFullYear() & .getUTCMonth() & .getUTCDay() & .getUTCHours() & .getUTCMinutes() & .getUTCSeconds() & .getUTCMiliseconds()
 **Ex2: getUTCMonth**
 ```js
@@ -202,13 +224,21 @@ trả về sự khác biệt (tính bằng phút) giữa giờ địa phương v
 let date = new Date();
 console.log(date.getTimezoneOffset()) // -420 (phút) Tương ứng với 7 tiếng UTC+7
 ```
-## .setFullYear()setMonth()setDate()setHours()setMinutes()setSeconds()
+## .setFullYear() & setMonth() & setDate() & setHours() & setMinutes() & setSeconds()
 ```bash
 - setFullYear   : Để cài đặt một năm nào đó.
+- setDate       : Thay đổi ngày trong tháng
 ```
 **Ex**
 ```js
 let date = new Date();
 .setFullYear(2023)
 console.log(date.toDateString()) // 'Sun Feb 26 2023'
+```
+**Ex: Cộng thêm 5 ngày**
+```js
+const date = new Date("2026-03-02")
+date.setDate(date.getDate() + 5)
+
+console.log(date) // Sat Mar 07 2026 07:00:00 GMT+0700 (Indochina Time)
 ```

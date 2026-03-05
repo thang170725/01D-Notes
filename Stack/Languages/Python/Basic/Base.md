@@ -11,7 +11,7 @@ Basic                           # mình dùng thư mục này để xem kiến t
 ├── input_output_comment.md
 ├── lists.md
 ├── Class_OOP.md                # mình dùng file này để thao tác về class, lập trình hướng đối tượng
-├── practice_cases.md
+├── Practices.md                # mình dùng file này để xem code mẫu, bài tập
 ├── strings.md
 └── tuples_zip_map_filter.md
 ```

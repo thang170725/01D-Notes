@@ -1,9 +1,20 @@
-- [class](#class)
-- [Objects](#objects)
+- [class \& Objects](#class--objects)
+  - [Object.key()](#objectkey)
+  - [Entries()](#entries)
   - [. \& \[\]](#--)
   - [delete](#delete)
 ---
-# class
+# class & Objects
+```bash
+- Trên thực tế thường khai báo các đối tượng bằng từ khóa const.
+```
+**Syn**
+```bash
+- const | let | var <name> = new Object(key: value1, key: value2, …);
+- const | let | var <name> = new Object();
+- const | let | var <name> = { key: value1, key: value2, …};
+- const | let | var <name> = {};
+```
 **Ex1: Thêm thuộc tính vào class**
 ```js
 a = {}
@@ -28,22 +39,49 @@ function send({name: message}) {
     return message
 }
 ```
-- [class](#class)
-- [Objects](#objects)
-  - [. \& \[\]](#--)
-  - [delete](#delete)
----
-# Objects
+## Object.key()
 ```bash
-- Trên thực tế thường khai báo các đối tượng bằng từ khóa const.
+Trả về một mảng chứa tất cả key (thuộc tính) của một object.
 ```
-**Syn**
+**Ex**
+```js
+const user = {
+  name: "Thang",
+  age: 25,
+  city: "Bac Giang"
+}
+
+console.log(Object.keys(user)) // ["name", "age", "city"]
+```
+## Entries()
 ```bash
-- const | let | var <name> = new Object(key: value1, key: value2, …);
-- const | let | var <name> = new Object();
-- const | let | var <name> = { key: value1, key: value2, …};
-- const | let | var <name> = {};
+Chuyển một class thành mảng các cặp [key, value].
+Ví dụ:
+const data = {
+    "Monday": ["Math", "English"],
+    "Tuesday": ["Physics", "PE"]
+};
+
+console.log(Object.entries(data));
+[
+["Monday", ["Math", "English"]],
+["Tuesday", ["Physics", "PE"]]
+]
+const data = {
+    Monday: ["Math", "English"],
+    Tuesday: ["Physics", "PE"]
+};
+
+for (const [day, slots] of Object.entries(data)) {
+    console.log(day);
+    console.log(slots);
+}
+Monday, Tuesday
+["Math", "English"], ["Physics", "PE"]
+Sẽ trả về văn bản đã được render, có nghĩa là phần tử nào bị ẩn đi bởi css sẽ không được hiển thị.
+Có thể gây ra lỗ hổng bảo mật nếu bạn chèn nội dung do người dùng cung cấp mà không kiểm tra kĩ lưỡng.
 ```
+
 ## . & []
 ```bash
 Dùng để thêm key-value hoặc lấy ra value.

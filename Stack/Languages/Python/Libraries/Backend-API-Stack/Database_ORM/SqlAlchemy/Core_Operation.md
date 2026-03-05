@@ -1,12 +1,9 @@
 - [text()](#text)
 - [.connect()](#connect)
 - [.begin()](#begin)
-  - [.execute()](#execute)
-    - [.fetchall()](#fetchall)
 - [insert](#insert)
   - [.values()](#values)
     - [Demo Insert 2 bảng trong 1 transaction (chuẩn)](#demo-insert-2-bảng-trong-1-transaction-chuẩn)
-- [select](#select)
 ---
 # text()
 ```bash
@@ -40,23 +37,6 @@ Lúc này SQLAlchemy:
     4. Sau khi thoát khỏi with, connection sẽ: Được trả về pool, Không bị leak
 ```
 # .begin()
-## .execute()
-```bash
-Gửi câu SQL xuống database để thực thi.
-```
-### .fetchall()
-```bash
-- Lấy mọi dòng có kết quả trùng.
-- dữ liệu trả về là list[obj]
-```
-**Ex**
-```python
-result = conn.execute(text("SELECT * FROM users"))
-rows = result.fetchall()
-print(rows) # [(1, 'Thang', 25), (2, 'An', 30)]
-
-# Nhìn giống tuple, nhưng thực ra mỗi phần tử là: sqlalchemy.engine.row.Row
-```
 # insert
 ## .values()
 **Ex**
@@ -87,76 +67,3 @@ with engine.begin() as conn:
         )
     )
 ```
-# select
-**Ex**
-```python
-from sqlalchemy import select
-
-stmt = select(districts)
-
-with engine.connect() as conn:
-    rows = conn.execute(stmt).fetchall()
-
-for row in rows:
-    print(row.id, row.name, row.city)
-```
-5.2 WHERE
-stmt = select(districts).where(
-    districts.c.name == "Ba Đình"
-)
-
-5.3 JOIN (rất quan trọng)
-stmt = (
-    select(
-        listings.c.id,
-        listings.c.price_total,
-        districts.c.name,
-        districts.c.city
-    )
-    .join(districts, listings.c.id_districts == districts.c.id)
-)
-
-with engine.connect() as conn:
-    for row in conn.execute(stmt):
-        print(row)
-
-6️⃣ UPDATE
-from sqlalchemy import update
-
-stmt = (
-    update(listings)
-    .where(listings.c.id == 1)
-    .values(price_total=58000000000)
-)
-
-with engine.begin() as conn:
-    conn.execute(stmt)
-
-7️⃣ DELETE
-from sqlalchemy import delete
-
-stmt = delete(listings).where(listings.c.id == 1)
-
-with engine.begin() as conn:
-    conn.execute(stmt)
-
-8️⃣ SELECT + PAGINATION (crawler / API)
-stmt = (
-    select(listings)
-    .order_by(listings.c.id.desc())
-    .limit(20)
-    .offset(0)
-)
-
-9️⃣ Dùng raw SQL khi cần (rất thực tế)
-from sqlalchemy import text
-
-stmt = text("""
-SELECT l.id, l.price_total, d.name, d.city
-FROM listings l
-JOIN districts d ON l.id_districts = d.id
-WHERE l.price_total > :price
-""")
-
-with engine.connect() as conn:
-    result = conn.execute(stmt, {"price": 50000000000})
