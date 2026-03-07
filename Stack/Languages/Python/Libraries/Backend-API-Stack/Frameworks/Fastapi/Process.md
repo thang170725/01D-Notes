@@ -1,23 +1,37 @@
-- [Config \& Create](#config--create)
+- [App Configuration](#app-configuration)
   - [FastAPI()](#fastapi)
     - [.include\_router()](#include_router)
       - [APIRouter()](#apirouter)
     - [.add\_middleware()](#add_middleware)
       - [CORSMiddleware](#corsmiddleware)
     - [.mount()](#mount)
+- [Routing (HTTP Methods)](#routing-http-methods)
 - [.get() \& .post() \& .put()](#get--post--put)
   - [@router.post()](#routerpost)
   - [lấy data Json từ client](#lấy-data-json-từ-client)
   - [lấy data Json từ client](#lấy-data-json-từ-client-1)
-- [Depends](#depends)
-- [OAuth2PasswordBearer()](#oauth2passwordbearer)
-- [UploadFile \& File()](#uploadfile--file)
+- [Authentication](#authentication)
+  - [OAuth2PasswordBearer()](#oauth2passwordbearer)
+- [Dependency Injection](#dependency-injection)
+  - [Depends](#depends)
+- [Request Data](#request-data)
+  - [UploadFile \& File()](#uploadfile--file)
   - [.filename](#filename)
   - [.content\_type](#content_type)
   - [.file](#file)
   - [await file.read()](#await-fileread)
+- [Response](#response)
+  - [HTTPException](#httpexception)
 ---
-# Config & Create
+# App Configuration
+```bash
+- Nhóm này chứa các thành phần dùng để khởi tạo và cấu hình ứng dụng FastAPI, bao gồm tạo app, chia router, thêm middleware và mount các ứng dụng hoặc static service khác.
+- Mục đích chính:
+    + Tạo app FastAPI
+    + Tổ chức cấu trúc project
+    + cấu hình middleware
+    + mount app hoặc static files
+```
 ## FastAPI() 
 ```bash
 - Dùng để tạo một ứng dụng web API. 
@@ -147,6 +161,14 @@ app.mount(
     StaticFiles(directory=images_path),# Thư mục thật trên ổ cứng
     name="images"                      # Tên để reverse URL (ít dùng)
 )
+```
+# Routing (HTTP Methods) 
+```bash
+- Nhóm này định nghĩa các endpoint API và cách server phản hồi khi client gửi request thông qua các HTTP method như GET, POST, PUT.
+- Mục đích chính:
+    + tạo endpoint API
+    + xử lý request từ client
+    + map URL → function xử lý
 ```
 # .get() & .post() & .put()
 ```bash
@@ -279,7 +301,62 @@ async def fetch_data(user: UserSchema):
 
 - [Depends](#depends)
 ---
-# Depends
+# Authentication
+```bash
+- Nhóm này xử lý xác thực người dùng, đảm bảo chỉ những client hợp lệ mới truy cập được API.
+- Mục đích chính:
+    + xác thực token
+    + bảo vệ endpoint
+    + tích hợp OAuth2
+```
+## OAuth2PasswordBearer()
+```bash
+- Lấy Bearer Token từ HTTP Header
+- Bắt buộc endpoint phải có token
+- Trả về token dạng string
+```
+**Ex**
+```python
+from fastapi import FastAPI, Depends
+from fastapi.security import OAuth2PasswordBearer
+from fastapi.testclient import TestClient
+
+app = FastAPI()
+
+# Khai báo OAuth2
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
+
+# Endpoint test
+@app.get("/profile")
+def get_profile(token: str = Depends(oauth2_scheme)):
+    print("TOKEN NHẬN ĐƯỢC:", token)
+    return {
+        "received_token": token
+    }
+
+# Tạo client test
+client = TestClient(app)
+
+# Fake request có header Authorization
+response = client.get(
+    "/profile",
+    headers={"Authorization": "Bearer fake_token_123"}
+)
+
+print("RESPONSE JSON:", response.json())
+
+# TOKEN NHẬN ĐƯỢC: fake_token_123
+# RESPONSE JSON: {'received_token': 'fake_token_123'}
+```
+# Dependency Injection
+```bash
+- Nhóm này cho phép tái sử dụng logic chung (database, auth, config...) bằng cơ chế dependency injection của FastAPI.
+- Mục đích chính:
+    + chia sẻ logic giữa các endpoint
+    + inject service hoặc database
+    + xử lý security dependency
+```
+## Depends
 ```bash
 - Depends = cơ chế “nhờ FastAPI làm hộ việc chuẩn bị thứ mình cần”
 - Bạn không tự tạo nữa, FastAPI tiêm (inject) vào cho bạn.
@@ -329,46 +406,16 @@ def get_items(db: Session = Depends(get_db)):
 # Inject vào function
 # Xong request → tự đóng DB
 ```
-# OAuth2PasswordBearer()
+
+# Request Data
 ```bash
-- Lấy Bearer Token từ HTTP Header
-- Bắt buộc endpoint phải có token
-- Trả về token dạng string
+- Nhóm này xử lý dữ liệu mà client gửi lên server, ví dụ JSON body hoặc file upload.
+- Mục đích chính:
+    + đọc dữ liệu JSON từ request
+    + nhận file upload
+    + truy cập thông tin file
 ```
-**Ex**
-```python
-from fastapi import FastAPI, Depends
-from fastapi.security import OAuth2PasswordBearer
-from fastapi.testclient import TestClient
-
-app = FastAPI()
-
-# Khai báo OAuth2
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
-
-# Endpoint test
-@app.get("/profile")
-def get_profile(token: str = Depends(oauth2_scheme)):
-    print("TOKEN NHẬN ĐƯỢC:", token)
-    return {
-        "received_token": token
-    }
-
-# Tạo client test
-client = TestClient(app)
-
-# Fake request có header Authorization
-response = client.get(
-    "/profile",
-    headers={"Authorization": "Bearer fake_token_123"}
-)
-
-print("RESPONSE JSON:", response.json())
-
-# TOKEN NHẬN ĐƯỢC: fake_token_123
-# RESPONSE JSON: {'received_token': 'fake_token_123'}
-```
-# UploadFile & File()
+## UploadFile & File()
 **Syn**
 ```bash
 from fastapi import FastAPI, File, UploadFile
@@ -396,7 +443,8 @@ file object thật
 ```bash
 Đọc nội dung
 ```
-# HTTPException
+# Response
+## HTTPException
 ```bash
 - dùng để:
     + Chủ động trả lỗi HTTP cho client

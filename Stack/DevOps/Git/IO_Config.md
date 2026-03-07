@@ -1,6 +1,7 @@
 - [git config](#git-config)
 - [git clone](#git-clone)
 - [git pull](#git-pull)
+- [git init](#git-init)
 ---
 # git config
 **Syn**
@@ -35,3 +36,12 @@ Lệnh này giúp bạn sao chép toàn bộ mã nguồn, lịch sử thay đổ
     git pull origin main
 2. git pull --no-rebase origin main
 ```
+# git init
+    1. Tạo ra một kho lưu trữ repo. Tạo ra thư mục ẩn “.git” chứa tất cả các thông tin cần thiết để git theo dõi các thay đổi của dự án.
+    2. Hiểu đơn giản là bất đầu nói với git theo dõi sự thay đổi của dự án.
+git init EX1
+Git sẽ tạo ra một thư mục EX1 mới và nó sẽ trở thành kho lưu trữ repo
+(là nơi để quản lý file)
+cd vào thư mục a
+git init
+Thư mục a sẽ trở thành kho lưu trữ repo

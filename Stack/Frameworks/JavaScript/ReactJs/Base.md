@@ -8,12 +8,13 @@
 # Directory Structure
 ```bash
 ReactJs/                    # mình dùng thư mục này để xem kiến thức cơ bản về ReactJS
-├── JSX_Componentsd         # mình dùng file này để hiểu JSX, Function Components, Props (Cơ bản)
+├── Base.md                 # mình dùng file này để hiểu JSX, Function Components, Props (Cơ bản)
+├── JSX_Components.md       # mình dùng file này để hiểu JSX, Function Components, Props (Cơ bản)
 ├── State_Lifecycle.md      # mình dùng file này để quản lý dữ liệu & Vòng đời
-├── 03_forms_events.md      # Handling events, Controlled vs Uncontrolled Components
-├── Hooks_Advanced.md       # mình dùng file này để sử dụng useRef, useMemo, useCallback, Custom Hooks
+├── Practices.md            # mình dùng file này để xem code mẫu, bài tập
+├── Hooks.md                # mình dùng file này để sử dụng useRef, useMemo, useCallback, Custom Hooks
 ├── Context_Routing.md      # mình dùng file này để thao tác liên quan đến URL trên frontend
-└── External_Libs           # mình dùng file này để chứa các thư viện bên ngoài 
+└── External_Libs.md        # mình dùng file này để chứa các thư viện bên ngoài 
 ```
 # Introduction
 ```bash

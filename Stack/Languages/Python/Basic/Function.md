@@ -5,6 +5,7 @@
 - [nonlocal](#nonlocal)
 - [global](#global)
 - [yield](#yield)
+- [map](#map)
 ---
 # function
 ## *args
@@ -112,4 +113,15 @@ def read_file(path):
             yield line
 
 # Không load toàn bộ file vào bộ nhớ.
+```
+# map
+**Ex**
+```python
+def Change(n):
+    n = int(n)
+    return "Số chẵn" if n % 2 == 0 else "Số lẻ"
+
+n = input("Nhập các số cách nhau bởi dấu cách: ").split()
+res = list(map(Change, n))
+print(res)
 ```

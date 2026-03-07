@@ -17,23 +17,13 @@ git remote set-url origin https://github.com/thang170725/elgamal.git
 git checkout f62cf8
 Quay lại bất kỳ commit nào, quay lại commit có địa chỉ f62cf8
 
-Phần 2: Cấu hình dự án bằng git
-git init
-    1. Tạo ra một kho lưu trữ repo. Tạo ra thư mục ẩn “.git” chứa tất cả các thông tin cần thiết để git theo dõi các thay đổi của dự án.
-    2. Hiểu đơn giản là bất đầu nói với git theo dõi sự thay đổi của dự án.
-git init EX1
-Git sẽ tạo ra một thư mục EX1 mới và nó sẽ trở thành kho lưu trữ repo
-(là nơi để quản lý file)
-cd vào thư mục a
-git init
-Thư mục a sẽ trở thành kho lưu trữ repo
 git log
 Hiển thị lịch sử các commit.
 git log --oneline
 
 git add
-    3. Đưa vào khu vực tổ chức staging area. Hiểu đơn giản là nói với git những thay đổi nào muốn lưu lại.
-    4. git add chỉ lưu vào vùng nhớ tạm thời không đưa vào lịch sử dự án nên cần phải commit để làm điều này.
+    1. Đưa vào khu vực tổ chức staging area. Hiểu đơn giản là nói với git những thay đổi nào muốn lưu lại.
+    2. git add chỉ lưu vào vùng nhớ tạm thời không đưa vào lịch sử dự án nên cần phải commit để làm điều này.
 git add ReadMe.txt
 Lưu lại những thay đổi trong file ReadMe.txt
 git add .

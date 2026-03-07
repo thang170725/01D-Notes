@@ -1,4 +1,6 @@
 - [Directory Structure](#directory-structure)
+- [Installation](#installation)
+- [git –-version](#git--version)
 ---
 # Directory Structure
 ```bash
@@ -7,7 +9,8 @@ GitHub/                     # mình dùng thư mục này để xem kiến thứ
 ├── Base.md                 # mình dùng file này để xem kiến thức cơ bản và các tiện ích của JS
 ├── Process.md              # mình dùng file này để làm tất cả thao tác ngoại trừ (nhánh, cấu hình, đẩy lên, kéo về)
 ├── File_Directory_Ops.md   # mình dùng file này để thao tác với file, thư mục
-└── Branch.md               # mình dùng file này để thao tác với nhánh
+├── Branch.md               # mình dùng file này để thao tác với nhánh
+└── Practices.md            # mình dùng file này xem bài tập, các lệnh mẫu
 ```
 # Installation
 ```bash

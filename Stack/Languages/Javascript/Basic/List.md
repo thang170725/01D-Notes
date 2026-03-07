@@ -143,16 +143,38 @@ Text.splice(1,0,['i', 'from', 'to Viet Nam']);
 document.write(Text)
 Hello,i,am,a,coder
 Hello,i,from,to Viet Nam,i,am,a,coder
-.sort()
+## .sort()
+```bash
 Dùng để sắp xếp. nếu là số thì sắp xếp tăng dần, nếu là chữ thì sắp xếp theo bảng chữ cái. 
+```
+**Ex1**
+```js
 var N = [2,4,1,6,8];
 N.sort();
-document.write(N + '<br>');
-var T = ['lee', 'quoc', 'viet', 'anh'];
-T.sort()
-document.write(T);
-1,2,4,6,8
-anh,lee,quoc,viet
+```
+**Ex2: sắp xếp list object**
+```bash
+- < 0	: a đứng trước b
+- > 0	: b đứng trước a
+- 0	    : giữ nguyên
+```
+```js
+const exercises = [
+  { name: "Squat", order_index: 2 },
+  { name: "Push-up", order_index: 1 },
+  { name: "Plank", order_index: 3 }
+];
+
+exercises.sort((a, b) => a.order_index - b.order_index);
+
+console.log(exercises);
+
+// [
+//   { name: "Push-up", order_index: 1 },
+//   { name: "Squat", order_index: 2 },
+//   { name: "Plank", order_index: 3 }
+// ]
+```
 .reverse()
 Có tác dụng đảo ngược phần tử đầu xuống cuối và cứ tuần tự như thế.
 function main(){
@@ -198,17 +220,20 @@ reduce()
 Hàm reduce sẽ duyệt qua từng phần tử trong mảng, sau đó trả về một giá trị cuối cùng, giá trị này phụ thuộc vào chương trình của hàm mà bạn truyền vào reduce.
 reduceRight() 
 Công dụng giống reduce nhưng duyệt mảng từ phải qua trái.
-filter()
+## .filter()
+```bash
 Để lặp qua các phần tử trong mảng, dùng để lọc các phần tử trong mảng theo một điều kiện nào đó.
-function main(){
-   let arr = [1,2,3,3,4,5];
-   let list = arr.filter(function(item){
-      return item > 3;
-   })
-   console.log(list);
-}
-main()
-[4, 5]
+```
+**Ex**
+```js
+let arr = [1,2,3,3,4,5];
+
+let list = arr.filter(function(item){
+   return item > 3;
+})
+
+console.log(list); // [4, 5]
+```
 copyWithin()
 Để sao chép các phần tử trong mảng với vị trí bắt đầu và kết thúc việc sao chép được xác định.
 fill() 

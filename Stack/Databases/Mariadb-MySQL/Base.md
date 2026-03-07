@@ -4,12 +4,11 @@
 ---
 # Directory Structure
 ```bash
-Mariadb/                # mình dùng thư mục này để xem kiến thức về Mariadb
-├── 01_Datatypes.md     # Gom từ Data-Type/base.md (Số, chữ, thời gian)
-├── DB_Tables.md        # mình dùng file này để thao tác với DB, Table
-├── Data.md             # mình dùng file này đểthao tác với dữ liệu 
-├── 04_Query_DQL.md     # [Data Query] Truy vấn dữ liệu (Select, Join, Group by)
-└── 05_Advanced.md      # Backup, Restore, User/Permission, Index
+Mariadb/              # mình dùng thư mục này để xem kiến thức về Mariadb
+├── DB_Tables.md      # mình dùng file này để thao tác với DB, Table
+├── Data.md           # mình dùng file này đểthao tác với dữ liệu 
+├── Query_DQL.md      # mình dùng file này để truy vấn dữ liệu
+└── Base.md           # mình dùng file này để xem kiến thức, tiện ích
 ```
 # Introduction
 ```bash
