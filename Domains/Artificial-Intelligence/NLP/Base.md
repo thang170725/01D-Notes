@@ -2,7 +2,8 @@
 ```bash
 NLP/                            # mình dùng thư mục này để xem kiến thức NLP trong AI
 ├── LLMS.md                     # mình dùng file này để hiểu kiến thức về các mô hình LLM cụ thể
-├── Architecture.md             # mình dùng file này để hiểu rõ các kiến trúc, luồng hoạt động (khung xương của model)
+├── Architecture/             # mình dùng thư mục này để xem các kiến trúc trong NLP
+├── Math_Technical/           # mình dùng thư mục này để xem các kĩ thuật và toán học trong NLP
 ├── Practices.md                # mình dùng file này để xem code mẫu, bài tập
 ├── Text_Preprocessing.md       # mình dùng file này để thao tác tiền dữ liệu (tất cả những thao tác với dữ liệu trước khi embedding)
 ├── 05_LLMs_Generative.md       # Kỷ nguyên Generative: GPT, Llama, Prompt Engineering, Fine-tuning
@@ -275,16 +276,7 @@ def positional_encoding_fast(seq_len, d_model):
     return PE
 
 PhoBERT
-RNN (Recurrent Neural Network)
-    • Là một loại mạng neural dùng để xử lý dữ liệu tuần tự (sequential data). RNN hoạt động dựa trên ý tưởng: thông tin ở bước t−1 sẽ được kết hợp với đầu vào ở bước t để tạo ra trạng thái mới.
-    • Thay vì xử lý từng input một cách độc lập như MLP (Multilayer Perceptron), RNN giữ lại trạng thái (state) từ bước trước đó và sử dụng nó để xử lý input hiện tại. Điều này rất phù hợp với: Chuỗi văn bản, Dữ liệu thời gian (time series), Chuỗi tín hiệu âm thanh, video…
-    • Có một khái niệm quan trong là hidden state (trí nhớ tạm thời của RNN tại thời điểm đó).
-    • Ý tưởng: Mỗi bước thơi gian lấy input + trạng thái cũ → tạo trạng thái mới
-    • Vấn đề: 
-        ◦ RNN quên rất nhanh.
-        ◦ Không nhớ được thông tin xa.
-        ◦ Bị vanishing gradient khi chuỗi dài.
-        ◦ Bạn đọc câu: "Tôi ăn cơm lúc 7h sáng, và đến chiều thì tôi đói." RNN có thể không nhớ phần trước (7h sáng) vì quá xa → mất ngữ cảnh → RNN phù hợp với chuỗi ngắn, hoặc tác vụ đơn giản.
+
 BPTT (Backpropagation Through Time)
     • Đây là kỹ thuật tính gradient cho RNN. Vì RNN có trạng thái ẩn h_t phụ thuộc vào tất cả các h_(t-1), h_(t-2), …, nên backprop bình thường không đủ, ta phải "trải graph ra theo thời gian" và tính gradient qua từng step.
     • Về cơ bản: BPTT là backpropagation chuẩn, nhưng áp dụng lên graph được unfold theo time steps.
@@ -327,118 +319,8 @@ vocab_size = len(chars)
 embedding_dim = 10
 hidden_dim = 20
 
-# Mô hình RNN
-class RNNModel(nn.Module):
-    def __init__(self):
-        super(RNNModel, self).__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
-        self.rnn = nn.RNN(embedding_dim, hidden_dim, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, vocab_size)
 
-    def forward(self, x):
-        x = self.embedding(x)  # [batch, seq, embed_dim]
-        out, _ = self.rnn(x)   # [batch, seq, hidden_dim]
-        out = self.fc(out)     # [batch, seq, vocab_size]
-        return out
 
-model = RNNModel()
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
-
-# Huấn luyện
-for epoch in range(100):
-    optimizer.zero_grad()
-    output = model(input_seq)
-    loss = criterion(output.view(-1, vocab_size), target_seq.view(-1))
-    loss.backward()
-    optimizer.step()
-    if epoch % 10 == 0:
-        print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
-
-# Dự đoán tiếp theo
-with torch.no_grad():
-    out = model(input_seq)
-    predicted_idx = torch.argmax(out, dim=2).squeeze().tolist()
-    predicted_chars = ''.join([idx2char[idx] for idx in predicted_idx])
-    print("Dự đoán:", predicted_chars)
-
-import torchimport torch.nn as nn
-import torch.optim as optim
-
-# Dữ liệu: mapping từ chữ cái sang số
-chars = sorted(list(set("hello")))
-char2idx = {ch: idx for idx, ch in enumerate(chars)}
-idx2char = {idx: ch for ch, idx in char2idx.items()}
-
-# Dữ liệu huấn luyện
-seq = "hell"
-target = "ello"
-
-# Biến đổi thành tensor
-input_seq = torch.tensor([char2idx[ch] for ch in seq])  # [h, e, l, l]
-target_seq = torch.tensor([char2idx[ch] for ch in target])  # [e, l, l, o]
-
-# Đưa về định dạng batch_size x seq_len
-input_seq = input_seq.unsqueeze(0)
-target_seq = target_seq.unsqueeze(0)
-
-# Tham số mô hình
-vocab_size = len(chars)
-embedding_dim = 10
-hidden_dim = 20
-
-# Mô hình RNN
-class RNNModel(nn.Module):
-    def __init__(self):
-        super(RNNModel, self).__init__()
-        self.embedding = nn.Embedding(vocab_size, embedding_dim)
-        self.rnn = nn.RNN(embedding_dim, hidden_dim, batch_first=True)
-        self.fc = nn.Linear(hidden_dim, vocab_size)
-
-    def forward(self, x):
-        x = self.embedding(x)  # [batch, seq, embed_dim]
-        out, _ = self.rnn(x)   # [batch, seq, hidden_dim]
-        out = self.fc(out)     # [batch, seq, vocab_size]
-        return out
-
-model = RNNModel()
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
-
-# Huấn luyện
-for epoch in range(100):
-    optimizer.zero_grad()
-    output = model(input_seq)
-    loss = criterion(output.view(-1, vocab_size), target_seq.view(-1))
-    loss.backward()
-    optimizer.step()
-    if epoch % 10 == 0:
-        print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
-
-# Dự đoán tiếp theo
-with torch.no_grad():
-    out = model(input_seq)
-    predicted_idx = torch.argmax(out, dim=2).squeeze().tolist()
-    predicted_chars = ''.join([idx2char[idx] for idx in predicted_idx])
-    print("Dự đoán:", predicted_chars)
-
-LSTM (Long Short-Term Memory)
-    • Để giải quyết việc mất trí nhớ của RNN, LSTM tách biệt hoàn toàn hai khái niệm: Hidden State (trạng thái ẩn) và Cell State (trạng thái ô - đóng vai trò như một đường băng chuyền thông tin xuyên suốt). Thêm cấu trúc “cổng” (gate) và có cell state giúp duy trì thông tin dài hạn.
-    • Cơ chế 3 Cổng (Gates): Hãy tưởng tượng Cell State là một băng tải chạy dọc từ đầu đến cuối chuỗi. Các cổng sẽ quyết định cái gì được đặt lên hoặc nhấc ra khỏi băng tải đó:
-        ◦ Forget Gate (Cổng quên): "Chúng ta nên bỏ bớt cái gì cũ không?"
-            ▪ Nó nhận đầu vào xt​ và ht−1​, đi qua hàm Sigmoid (cho ra giá trị từ 0 đến 1).
-            ▪ Nếu là 0: Xóa bỏ hoàn toàn thông tin cũ. Nếu là 1: Giữ lại toàn bộ.
-        ◦ Input Gate (Cổng vào): "Có thông tin mới nào đáng giá để lưu lại không?"
-            ▪ Gồm 2 phần: Một hàm Sigmoid quyết định cập nhật cái gì và một hàm tanh tạo ra một vector giá trị mới tiềm năng để đưa vào Cell State.
-        ◦ Output Gate (Cổng ra): "Từ những gì đang có, chúng ta nên xuất bản cái gì ra ngoài?"
-            ▪ Nó quyết định giá trị nào trong Cell State sẽ được dùng để tạo ra Hidden State (ht​) cho bước tiếp theo. LSTM có 3 cổng: Forget - Input – Output
-    • Ưu điểm: Nhớ được thông tin xa hơn, Giảm vanishing gradient, Ổn định hơn khi xử lý văn bản dài
-GRU (Gated Recurrent Unit)
-    • GRU (Gated Recurrent Unit) là một phiên bản "tối giản" của LSTM. Nó ra đời sau (vào năm 2014) với mục tiêu làm cho mạng nơ-ron hồi tiếp chạy nhanh hơn và tốn ít bộ nhớ hơn nhưng vẫn giữ được khả năng "nhớ lâu" của LSTM.
-    • 3 sự thay đổi lớn so với LSTM:
-        1. Hợp nhất hai trạng thái thành một: Trong khi LSTM tách biệt Cell State (Ct​ - trí nhớ dài hạn) và Hidden State (ht​ - trí nhớ ngắn hạn), thì GRU gộp chúng lại làm một. GRU chỉ dùng duy nhất Hidden State (ht​) để truyền tải thông tin xuyên suốt qua các bước thời gian. Điều này giúp cấu trúc của nó gọn nhẹ hơn hẳn.
-        2. Cơ chế 2 Cổng (Gates) thay vì 3: GRU không dùng "Cổng quên" riêng biệt và "Cổng vào" riêng biệt. Thay vào đó, nó dùng: Update Gate (Cổng cập nhật): Đây là sự kết hợp giữa Cổng quên và Cổng vào của LSTM. Nó quyết định xem bao nhiêu phần trăm thông tin cũ từ quá khứ cần giữ lại, và bao nhiêu phần trăm thông tin mới sẽ được nạp vào. Ví dụ: Nếu giá trị cổng là 0.7, nó có thể hiểu là giữ 70% cũ và nạp thêm 30% mới.
-    • Reset Gate (Cổng đặt lại): Cổng này quyết định xem nên "quên" bao nhiêu thông tin từ trạng thái ẩn trước đó để tính toán thông tin mới (candidate state). Nó giúp mô hình loại bỏ những thông tin không còn liên quan đến ngữ cảnh hiện tại.
 
 
 BERT (Bidirectional Encoder Representations from Transformers)

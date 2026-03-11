@@ -10,6 +10,24 @@
 ```bash
 - Để xây dựng mạng nơ ron nhanh chóng.
 ```
+nn
+├── Layers
+│   ├── Linear
+│   ├── Conv2d
+│   ├── Embedding
+│
+├── Activations
+│   ├── ReLU
+│   ├── Tanh
+│   ├── Sigmoid
+│
+├── Loss Functions
+│   ├── CrossEntropyLoss
+│   ├── MSELoss
+│
+└── Model Tools
+    ├── Module
+    ├── Sequential
 Sequential()
 Khởi tạo mô hình mạng nơ ron
 Cú pháp:

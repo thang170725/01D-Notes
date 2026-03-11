@@ -81,7 +81,6 @@ Monday, Tuesday
 Sẽ trả về văn bản đã được render, có nghĩa là phần tử nào bị ẩn đi bởi css sẽ không được hiển thị.
 Có thể gây ra lỗ hổng bảo mật nếu bạn chèn nội dung do người dùng cung cấp mà không kiểm tra kĩ lưỡng.
 ```
-
 ## . & []
 ```bash
 Dùng để thêm key-value hoặc lấy ra value.

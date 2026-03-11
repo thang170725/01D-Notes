@@ -76,8 +76,10 @@ a = a.some(function (Number){
 })
 console.log(a);
 true
-find()
+## find()
+```bash
 Tìm phần tử trong mảng rồi in ra màn hình. Chỉ trả về một giá trị.
+```
 ## .filter()
 ```bash
 Tìm phần tử trong mảng thỏa mãn điều kiện. trả về nhiều giá trị nếu thỏa mãn.

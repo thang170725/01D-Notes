@@ -1,25 +1,15 @@
 - [Kiểm tra java đã cài trong máy chưa](#kiểm-tra-java-đã-cài-trong-máy-chưa)
 - [System.out.println() \& System.out.print() \& System.out.printf()](#systemoutprintln--systemoutprint--systemoutprintf)
-
 ---
-
 # Kiểm tra java đã cài trong máy chưa
+```bash
 1. java --version
 2. which java		: kiểm tra đường dẫn java
-
-# System.out.println() & System.out.print() & System.out.printf()
-- Dùng để xuất một nội dung ra màn hình có xuống dòng, không xuống dòng, hoặc theo một định dạng nào đó.
-**Ex**
-```java
-public class Test {
-	public static void main(String[] args) {
-        System.out.println("hello world");
-	}
-}
 ```
-
+# javac
+```bash
 Khi biên dịch chương trình, bằng công cụ javac, trình biên dịch sẽ chuyển đổi mã nguồn thành mã byte (byte code).
-
+```
 
 Tóm lại:
 B1: Viết mã: Bạn viết mã bằng trình soạn thảo văn bản.
@@ -44,20 +34,21 @@ B3: Chọn enviroment variable.
 B4: Chọn new tab of user variable.
 B5: Viết đường dẫn.
 B6: Chọn OK.
-JVM – JRE – JDK
-https://www.youtube.com/watch?v=VDItFvpvckI
-JVM (Java Virtual Machine)
+# JVM
+```bash
+- https://www.youtube.com/watch?v=VDItFvpvckI
+- JVM (Java Virtual Machine)
     • là một thiết bị trừu tượng ảo có thể giúp máy tính chạy các chương trình java.
     • Nó được gọi là máy ảo vì nó không tồn tại vật lý.
     • Nó cung cấp môi trường runtime mà trong đó Java Bytecode có thể được thực thi.
     • JVM có sẵn cho nhiều nền tảng Window, linux, … 
     • JVM, JRE, JDK là phụ thuộc nền tảng bởi vì cấu hình của OS (hệ điều hành) là khác nhau. Nhưng Java không phụ thuộc vào nền tảng.
-JVM thực hiện các tác vụ sau:
+- JVM thực hiện các tác vụ sau:
     • Tải code.
     • Kiểm tra code.
     • Thực thi code.
     • Cung cấp môi trường runtime.
-JVM cung cấp các định nghĩa cho: khu vực bộ nhớ, định dạng class file, thiết lập Register, heap cho trình rọn rác và các báo lỗi nghiêm trọng (fatal error).
+- JVM cung cấp các định nghĩa cho: khu vực bộ nhớ, định dạng class file, thiết lập Register, heap cho trình rọn rác và các báo lỗi nghiêm trọng (fatal error).
 
     • Classloader: là một hệ thống con của JVM được sử dụng để tải class file.
     • Class Area: lưu trữ cấu trúc mỗi lớp, chẳng hạn như hằng, trường, dữ liệu phương thức, code của phương thức
@@ -68,11 +59,12 @@ JVM cung cấp các định nghĩa cho: khu vực bộ nhớ, định dạng cla
     • Execution Engine: bao gồm một bộ xử lý ảo Virtual Processor, một trình thông dịch. Đọc bytecode Stream sau đó thực thi các chỉ thị
     • Just-in-time (JIT) compiler: được sử dụng để cải thiện hiệu suất. JIT biên dịch các phần của bytecode mà có cùng tính năng tại cùng một thời điểm, và vì thế giảm lượng thời gian cần thiết để biên dịch. ở đây khái niệm Compiler là một bộ biên dịch tập
     • Của JVM thành tập của CPU cụ thể
-JRE (Java runtime Enviroment)
+```
+# JRE (Java runtime Enviroment)
 Được sử dụng để cung cấp môi trường runtime. Nó là trình triển khai của JVM. JRE bao gồm các thư viện và các file khác mà JVM sử dụng tại runtime. Trình triển khai của JVM cững được công bố bởi các công ty nước ngoài Sun Micro Systems.
 JRE = JVM + libraries
 
-JDK (Java Development Kit)
+# JDK (Java Development Kit)
 Nó bao gồm JRE và các development tool.
 
 Cấu trúc format
