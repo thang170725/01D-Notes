@@ -1,19 +1,57 @@
-- [Promise](#promise)
+- [Asynchronous](#asynchronous)
+  - [Promise](#promise)
+    - [Promise.resolve()](#promiseresolve)
+    - [Promise.reject()](#promisereject)
+    - [Promise.all()](#promiseall)
+    - [Promise.race()	lấy promise xong đầu](#promiseracelấy-promise-xong-đầu)
 - [async \& fetch](#async--fetch)
   - [GET data JSON bằng async + fetch](#get-data-json-bằng-async--fetch)
   - [POST data JSON bằng async + fetch](#post-data-json-bằng-async--fetch)
-- [FormData() \& .blob() \& URL.createObjectURL()](#formdata--blob--urlcreateobjecturl)
+- [FormData()](#formdata)
+  - [.append() \& .entries()](#append--entries)
+  - [set(name, value)	Ghi đè dữ liệu](#setname-valueghi-đè-dữ-liệu)
+  - [get(name)	Lấy 1 giá trị](#getnamelấy-1-giá-trị)
+  - [getAll(name)	Lấy tất cả giá trị cùng key](#getallnamelấy-tất-cả-giá-trị-cùng-key)
+  - [delete(name)	Xóa key](#deletenamexóa-key)
   - [Demo POST ảnh về server xử lý rồi lại chuyển lại về giao diện](#demo-post-ảnh-về-server-xử-lý-rồi-lại-chuyển-lại-về-giao-diện)
 - [localStorage](#localstorage)
 - [.setItem() \& .getItem() \& .removeItem() \& .clear()](#setitem--getitem--removeitem--clear)
 - [FileReader](#filereader)
   - [.readAsText() \& .readAsDataURL \& .readAsArrayBuffer() \& \& .readAsBinary()](#readastext--readasdataurl--readasarraybuffer---readasbinary)
 ---
-# Promise
+# Asynchronous
+## Promise
 ```bash
-Đây là cách viết xử lý API truyền thống bằng chuỗi promise.
+- Promise được dùng để xử lý các tác vụ bất đồng bộ (asynchronous) trong JavaScript.
+- Ví dụ các việc mất thời gian:
+  + gọi API
+  + đọc file
+  + truy vấn database
+  + setTimeout
+  + upload file
+```
+**Syn**
+```bash
+const promise = new Promise((resolve, reject) => {});
+
+- resolve() → báo thành công
+- reject() → báo thất bại
 ```
 **Ex**
+```js
+const myPromise = new Promise((resolve, reject) => {
+
+  const success = true;
+
+  if (success) {
+    resolve("Success!");
+  } else {
+    reject("Error!");
+  }
+
+});
+```
+**Ex: API bằng Promise**
 ```js
 // 1. Tạo dữ liệu muốn gửi đi
 const data = {
@@ -42,6 +80,42 @@ fetch('http://localhost:5000/api', {
   console.error('Lỗi khi gọi API:', error);
 });
 ```
+### Promise.resolve()	
+```bash
+tạo promise thành công
+```
+### Promise.reject()	
+```bash
+tạo promise lỗi
+```
+### Promise.all()	
+```bash
+chạy nhiều Promise song song và chờ tất cả hoàn thành.
+```
+**Syn**
+```bash
+Promise.all(iterable)
+
+- iterable  : thường là một mảng chứa các Promise
+- Output    : Trả về một Promise mới
+```
+**Ex**
+```js
+const p1 = Promise.resolve(10);
+const p2 = Promise.resolve(20);
+const p3 = Promise.resolve(30);
+
+Promise.all([p1, p2, p3])
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+// [10, 20, 30]
+```
+### Promise.race()	lấy promise xong đầu
 # async & fetch
 ```bash
 - fetch : Là một API dùng để gửi các yêu cầu HTTP (GET, POST, PUT, DELETE, …) đến server và xử lý kết quả trả về. 

@@ -1,7 +1,6 @@
 - [Strings](#strings)
   - [length](#length)
-  - [.toString() \& String()](#tostring--string)
-  - [+](#)
+  - [.toString() \& String() \& +](#tostring--string--)
   - [${} - template string](#---template-string)
   - [CharAt() | at()](#charat--at)
   - [CharCodeAt()](#charcodeat)
@@ -51,7 +50,7 @@
 var Str = "Hello Wolrd";
 console.log(Str.length); // 11
 ```
-## .toString() & String()
+## .toString() & String() & +
 ```bash
 Ép kiểu từ số sang chuỗi.
 ```
@@ -61,7 +60,7 @@ console.log(Str.length); // 11
 - <variable> + “”;
 - String(num);
 ```
-**Ex1**
+**Ex1: toString()**
 ```js
 var Number = 17;
 console.log(typeof Number); // number
@@ -78,11 +77,7 @@ var result = a.toString(2);
 // 8- kết quả trả về sẽ là số được biểu diễn dưới dạng bát phân.
 // 16- kết quả trả về là số được biểu diễn dưới dạng thập lục phân.
 ```
-## +
-```bash
-Dùng để công chuỗi
-```
-**Ex**
+**Ex3: +**
 ```js
 let value = 789;
 let str = value + "";  // "789"
@@ -315,6 +310,49 @@ console.log(text.matchAll("w"));
 ```bash
 - Trả về giá trị nguyên thủy của một chuỗi, không thay đổi chuỗi gốc.
 - Có thể sử dụng để chuyển đổi một đối tượng chuỗi thành một chuỗi.
+```
+**Ex1**
+```js
+let num = new Number(10)
+
+console.log(num.valueOf()) // 10
+
+// num là object Number
+// valueOf() trả về giá trị số thực sự
+```
+**Ex2: Ví dụ với Date**
+```js
+let date = new Date()
+
+console.log(date.valueOf()) // 1710412345678
+
+// Đây là timestamp (milliseconds từ 1/1/1970).
+```
+**Ex3: Ví dụ JavaScript tự gọi valueOf()**
+```js
+let num = new Number(10)
+
+console.log(num + 5) // 15
+
+// Quy trình:
+// num là object
+// JS cần số để cộng
+// JS tự gọi num.valueOf() 
+// lấy 10
+// 10 + 5 = 15
+```
+**Ex4: Ví dụ custom object (hay trong phỏng vấn)**
+```js
+let obj = {
+  valueOf() {
+    return 50
+  }
+}
+
+console.log(obj + 20) // 70
+
+// Vì JS sẽ: obj.valueOf() → 50
+// 50 + 20
 ```
 ## Small()
 ```bash

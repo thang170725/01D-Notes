@@ -10,6 +10,7 @@
     - [Index](#index)
     - [ForeignKey](#foreignkey)
     - [ForeignKeyConstraint](#foreignkeyconstraint)
+    - [relationship](#relationship)
   - [Data Types](#data-types)
     - [Integer](#integer)
     - [String \& DateTime](#string--datetime)
@@ -28,6 +29,7 @@
 - [Process](#process)
   - [Transaction Actions](#transaction-actions)
     - [.add() \& .commit() \& refresh()](#add--commit--refresh)
+- [Insert (thêm mới vào db)](#insert-thêm-mới-vào-db)
 ---
 # Create & Config
 ```bash
@@ -205,6 +207,45 @@ __table_args__ = (
     ),
 )
 ```
+### relationship
+```bash
+relationship giúp bạn lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN
+```
+**Syn**
+```bash
+relationship("TenModel", back_populates="ten_field")
+
+- Input
+    + 'TenModel'        : tên class model liên kết, dạng str
+    + back_populates    : tên field ở model bên kia, dùng để liên kết 2 chiều
+    + lazy              : cách load data
+    + cascade           : xóa dây chuyền
+- Output: trả về dạng Object
+```
+**Ex**
+```python
+class User(Base):
+    __tablename__ = "user"
+    id = Column(Integer, primary_key=True)
+
+    posts = relationship("Post", back_populates="user")
+
+class Post(Base):
+    __tablename__ = "post"
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+
+    user = relationship("User", back_populates="posts")
+
+post = db.query(Post).first()
+
+print(post.user)       # 👉 object User
+print(post.user.id)    # 👉 truy cập bình thường
+
+user = db.query(User).first()
+
+print(user.posts)  # 👉 list các Post
+```
 ## Data Types
 ### Integer
 ### String & DateTime
@@ -312,5 +353,51 @@ def register(
         "username": user.username
     }
 ```
+# Insert (thêm mới vào db)
+```bash
+Để insert data vào database bằng ORM của SQLAlchemy, bạn làm theo flow chuẩn: tạo model → tạo session → add → commit.
+```
+**Ex: insert vào db bằng ORM**
+```python
+# 1. Định nghĩa model (table)
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.orm import declarative_base
 
+Base = declarative_base()
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    age = Column(Integer)
+
+# 2. Kết nối DB + tạo bảng
+engine = create_engine("sqlite:///example.db", echo=True)
+Base.metadata.create_all(engine)
+
+# 3. Tạo session
+from sqlalchemy.orm import sessionmaker
+
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# 4. Insert 1 record
+new_user = User(name="Thang", age=22)
+
+session.add(new_user)
+session.commit()
+
+#  Sau commit() thì data mới thực sự được ghi xuống DB.
+```
+**Ex2: Insert nhiều record**
+```python
+users = [
+    User(name="A", age=20),
+    User(name="B", age=25),
+    User(name="C", age=30),
+]
+
+session.add_all(users)
+session.commit()
+```

@@ -1,8 +1,9 @@
 - [class \& Objects](#class--objects)
   - [Object.key()](#objectkey)
   - [Entries()](#entries)
-  - [. \& \[\]](#--)
+  - [.key \& \['key'\]](#key--key)
   - [delete](#delete)
+- [Prototype](#prototype)
 ---
 # class & Objects
 ```bash
@@ -81,7 +82,7 @@ Monday, Tuesday
 Sẽ trả về văn bản đã được render, có nghĩa là phần tử nào bị ẩn đi bởi css sẽ không được hiển thị.
 Có thể gây ra lỗ hổng bảo mật nếu bạn chèn nội dung do người dùng cung cấp mà không kiểm tra kĩ lưỡng.
 ```
-## . & []
+## .key & ['key']
 ```bash
 Dùng để thêm key-value hoặc lấy ra value.
 ```
@@ -94,17 +95,52 @@ Dùng để thêm key-value hoặc lấy ra value.
 ## delete
 ```bash
 Để xóa một key ra khỏi Object.
+
 ```
-Cú pháp:
-    • delete <name>.key;
-    • delete <name>[‘key’];
-Lưu ý: khi key là một hàm thì phải thêm () vào sau key.
-Tạo môt đối tượng rỗng, thêm các key  (name, age,  address) vào đối tượng đó và gắn giá trị.  Xuất name của đối tượng sau đó xóa bỏ key name và xuất cả Object lên màn hình.
- var Obj = {};
- Obj.name = "Jason";
- Obj['age'] = 23;
- Obj.address = "36 London England";
- document.write(Obj.name + '<br/>');
- delete Obj.name;
- document.write(Obj.name + Obj.age + Obj.address);
- // Obj.name + " " +  Obj.age + " " + Obj.address
+**Syn**
+```bash
+- delete <name>.key;
+- delete <name>[‘key’];
+```
+# Prototype
+```bash
+- Trong Prototype-based programming, object có thể kế thừa trực tiếp từ object khác.
+- JavaScript dùng Prototype chain để tìm thuộc tính.
+```
+**Ex1: Demo cơ bản prototype**
+```js
+function Person(name) {
+  this.name = name
+}
+
+Person.prototype.sayHello = function () {
+  console.log("Hello " + this.name)
+}
+
+const p1 = new Person("Thang")
+p1.sayHello() // Hello Thang
+
+// Điều xảy ra
+// p1
+//  ↓
+// Person.prototype
+//  ↓
+// Object.prototype
+//  ↓
+// null
+```
+**Ex2: Demo class (thực chất vẫn là prototype)**
+```js
+class Person {
+  constructor(name) {
+    this.name = name
+  }
+
+  sayHello() {
+    console.log("Hello " + this.name)
+  }
+}
+
+const p = new Person("Thang")
+p.sayHello() // Thực chất JS chuyển thành: Person.prototype.sayHello
+```

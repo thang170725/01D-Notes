@@ -10,6 +10,9 @@
   - [Hiển thị nhiều field của nhiều bảng](#hiển-thị-nhiều-field-của-nhiều-bảng)
   - [Hiển thị nhiều field của nhiều bảng có điều kiện](#hiển-thị-nhiều-field-của-nhiều-bảng-có-điều-kiện)
 - [like](#like)
+- [group\_by](#group_by)
+- [count](#count)
+- [DISTINCT](#distinct)
 ---
 # Kiểu dữ liệu
 ```bash
@@ -104,6 +107,9 @@ WHERE id = 5;
   - [Hiển thị nhiều field của nhiều bảng](#hiển-thị-nhiều-field-của-nhiều-bảng)
   - [Hiển thị nhiều field của nhiều bảng có điều kiện](#hiển-thị-nhiều-field-của-nhiều-bảng-có-điều-kiện)
 - [like](#like)
+- [group\_by](#group_by)
+- [count](#count)
+- [DISTINCT](#distinct)
 ---
 # Select
 ```bash
@@ -144,4 +150,63 @@ SELECT * FROM Courses WHERE courseId = '2';
 **Ex: truy vấn dữ liệu theo điều kiện**
 ```sql
 SELECT * FROM exercises WHERE name LIKE '%Mountain%'
+```
+# group_by
+```bash
+Dùng để gom các dòng có cùng giá trị lại thành một nhóm
+```
+# count
+```bash
+Dùng để đếm số dòng trong mỗi nhóm
+```
+**Ex: đếm số user trong mỗi phòng ban**
+```bash
+| id | name | department |
+| -- | ---- | ---------- |
+| 1  | A    | IT         |
+| 2  | B    | HR         |
+| 3  | C    | IT         |
+| 4  | D    | HR         |
+| 5  | E    | IT         |
+```
+```sql
+SELECT department, COUNT(*) AS total
+FROM employees
+GROUP BY department;
+
+| department | total |
+| ---------- | ----- |
+| IT         | 3     |
+| HR         | 2     |
+```
+# DISTINCT 
+```bash
+dùng để loại bỏ các giá trị trùng lặp trong kết quả query.
+```
+**Ex1: Dùng DISTINCT cơ bản**
+```bash
+Bài toán: Lấy danh sách các môn học không trùng
+
+Table Teacher
+teacher_id	subject_id
+1	          Math
+1	          Math
+2	          Physics
+3	          Math
+```
+```sql
+SELECT subject_id FROM Teacher;
+
+-- 👉 Kết quả:
+-- Math
+-- Math
+-- Physics
+-- Math
+
+-- ✅ Dùng DISTINCT
+SELECT DISTINCT subject_id FROM Teacher;
+
+-- 👉 Kết quả:
+-- Math
+-- Physics
 ```

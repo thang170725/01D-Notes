@@ -1,5 +1,6 @@
-Threading
-    • Threading là đa luồng giúp chạy nhiều luồng song song trong một process. Ví dụ: đọc video + xử lý AI song song → nhanh hơn.
+- [nếu không có threading nó sẽ chạy kiểu này](#nếu-không-có-threading-nó-sẽ-chạy-kiểu-này)
+- [đối với phần tính toán threading không thật sự chạy song song](#đối-với-phần-tính-toán-threading-không-thật-sự-chạy-song-song)
+---
 Thread()
 Cú pháp:
 t = threading.Thread(target=func, args=(a,b,c))

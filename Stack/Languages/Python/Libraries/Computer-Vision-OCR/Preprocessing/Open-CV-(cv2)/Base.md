@@ -1,7 +1,6 @@
 - [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
-- [Kênh  màu](#kênh--màu)
-- [Segmentation mask](#segmentation-mask)
+- [Installation](#installation)
 - [__version__](#version)
 ---
 # Directory Structure
@@ -15,7 +14,10 @@ Open-CV             # mình dùng thư mục này để xem kiến thức
 # Introduction
 ```bash
 - OpenCV để xử lý hình ảnh và nó hỗ trợ vô số các thuật toán liên quan đến lĩnh vực thị giác máy tính và lĩnh vực học máy. Nó có thể sử dụng card đồ họa (GPU) để xử lý nhằm tăng tốc độ xử lý.
-- Cần pip install opencv-python, import cv2
+```
+# Installation
+```bash
+1. pip install opencv-python
 ```
 # __version__
 ```bash

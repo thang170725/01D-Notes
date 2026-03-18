@@ -1,43 +1,134 @@
-Vispy
-    • Một thư viện mạnh mẽ cho việc trực quan hóa dữ liệu 2D và 3D hiệu suất cao bằng Python, sử dụng OpenGL. 
-    • Một thư viện đồ họa hiệu năng cao. Nó không dùng CPU để vẽ từng điểm, mà gửi toàn bộ dữ liệu xuống Card đồ họa (GPU) để xử lý song song.
-App
+- [Create \& Config # Run (tạo \& cấu hình \& Chạy)](#create--config--run-tạo--cấu-hình--chạy)
+  - [App](#app)
+    - [use\_app()](#use_app)
+  - [scene](#scene)
+    - [.SceneCanvas()](#scenecanvas)
+  - [central\_widget](#central_widget)
+    - [.add\_view()](#add_view)
+      - [.camera](#camera)
+  - [GridLines()](#gridlines)
+  - [XYZAxis()](#xyzaxis)
+- [Run()](#run)
+- [Draw (Vẽ)](#draw-vẽ)
+  - [visuals](#visuals)
+    - [.Sphere()](#sphere)
+- [Process (xử lý)](#process-xử-lý)
+  - [.transform](#transform)
+  - [STTransform (Scale + translate transform)](#sttransform-scale--translate-transform)
+  - [TurntableCamera()](#turntablecamera)
+- [Tạo đối tượng chữ](#tạo-đối-tượng-chữ)
+- [tạo điểm](#tạo-điểm)
+- [tạo cửa sổ hiển thị](#tạo-cửa-sổ-hiển-thị)
+- [thêm mọt view box](#thêm-mọt-view-box)
+- [thiết lập camera 'turntable' cho phép xoay và zoom 3d](#thiết-lập-camera-turntable-cho-phép-xoay-và-zoom-3d)
+- [khởi tạo đối tượng markers](#khởi-tạo-đối-tượng-markers)
+- [gán dữ liệu (chỉ một hàng trong pos)](#gán-dữ-liệu-chỉ-một-hàng-trong-pos)
+- [thêm lưới tọa độ](#thêm-lưới-tọa-độ)
+- [Thiết lập phạm vi nhìn](#thiết-lập-phạm-vi-nhìn)
+- [=========================](#)
+- [FORCE BACKEND](#force-backend)
+- [=========================](#-1)
+- [=========================](#-2)
+- [DỮ LIỆU BAN ĐẦU](#dữ-liệu-ban-đầu)
+- [=========================](#-3)
+- [=========================](#-4)
+- [TẠO CỬA SỔ](#tạo-cửa-sổ)
+- [=========================](#-5)
+- [=========================](#-6)
+- [MARKER](#marker)
+- [=========================](#-7)
+- [lưới tọa độ](#lưới-tọa-độ)
+- [=========================](#-8)
+- [ANIMATION](#animation)
+- [=========================](#-9)
+- [timer ~60 FPS](#timer-60-fps)
+---
+# Create & Config # Run (tạo & cấu hình & Chạy)
+## App
+```bash
 Thành phần này quản lý vòng lặp sự kiện (event loop) và hiển thị cửa sổ
-use_app()
+```
+### use_app()
+**Ex**
+```python
 from vispy import app
+
 app.use_app('pyqt5')
+
 import numpy as np
 from vispy import scene
-app.use_app('pyqt5'): Vispy cần một cửa sổ để hiển thị. Ở đây nó ép buộc sử dụng PyQt5 (một thư viện giao diện mạnh mẽ) làm nền tảng hiển thị cửa sổ.
-Run()
-    • Chức năng: Khởi động vòng lặp ứng dụng chính (main event loop) của VisPy. Đây là hàm chặn (blocking) và cần thiết để cửa sổ hiển thị và tương tác hoạt động.
-    • Cách dùng: Gọi ở cuối script của bạn.
+
+app.use_app('pyqt5')
+# Vispy cần một cửa sổ để hiển thị. Ở đây nó ép buộc sử dụng PyQt5 (một thư viện giao diện mạnh mẽ) làm nền tảng hiển thị cửa sổ.
+```
+## scene
+```bash
+Để xây dựng cấu trúc cảnh 3D (scene graph), quản lý các đối tượng trực quan (visuals), camera, và các widget.
+```
+### .SceneCanvas()
+```bash
+Tạo cửa sổ chính (canvas) để hiển thị cảnh. Nó là lớp cơ sở cho mọi ứng dụng VisPy.
+```
+**Syn**
+```bash
+canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True, title=’Demo’)
+
+- size=(W, H): Kích thước cửa sổ.
+- keys:
+    + 'interactive': Kích hoạt các phím tắt tương tác cơ bản (ví dụ: Escape để đóng, F11 để toàn màn hình).
+- bgcolor=‘black’: màu nền.
+- show=True: Hiển thị cửa sổ ngay lập tức.
+- Title=: thêm tiêu đề cho cửa sổ
+```
+## central_widget
+### .add_view()
+```bash
+- Thêm một ViewBox vào cửa sổ. ViewBox là "cửa sổ nhìn" vào cảnh 3D, nơi chứa camera và các đối tượng trực quan.
+- Ouput trả về một ViewBox
+```
+**Syn**
+```bash
+view = canvas.central_widget.add_view()
+```
+#### .camera
+**Ex**
+```python
+view = canvas.central_widget.add_view()
+
+view.camera = 'turntable' # cho phép xoay bằng chuột
+```
+## GridLines()
+```bash
+Thêm lưới toạ độ (Grid)
+```
+**Syn**
+```bash
+grid = scene.visuals.GridLines(parent=view.scene)
+```
+## XYZAxis()
+```bash
+Vẽ tọa độ trục Oxyz
+```
+**Syn**
+```bash
+axis = scene.visuals.XYZAxis(parent=view.scene)
+
+- Trục X → đỏ
+- Trục Y → xanh lá
+- Trục Z → xanh dương
+```
+# Run()
+```bash
+- Khởi động vòng lặp ứng dụng chính (main event loop) của VisPy. Đây là hàm chặn (blocking) và cần thiết để cửa sổ hiển thị và tương tác hoạt động.
+- Cách dùng: Gọi ở cuối script của bạn.
+```
 Quit()
 Chức năng: Thoát khỏi vòng lặp ứng dụng.
 Timer
 start
 stop
 Connect
-Scene
-Thành phần này xây dựng cấu trúc cảnh 3D (scene graph), quản lý các đối tượng trực quan (visuals), camera, và các widget.
-SceneCanvas()
-Tạo cửa sổ chính (canvas) để hiển thị cảnh. Nó là lớp cơ sở cho mọi ứng dụng VisPy.
-Cú pháp:
-canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True, title=’Demo’)
-    • size=(W, H): Kích thước cửa sổ.
-    • keys='interactive': Kích hoạt các phím tắt tương tác cơ bản (ví dụ: Escape để đóng, F11 để toàn màn hình).
-    • bgcolor=‘black’: màu nền.
-    • show=True: Hiển thị cửa sổ ngay lập tức.
-    • Title=: thêm tiêu đề cho cửa sổ
 
-central_widget
-
-add_view()
-Thêm một ViewBox vào cửa sổ. ViewBox là "cửa sổ nhìn" vào cảnh 3D, nơi chứa camera và các đối tượng trực quan.
-Cú pháp:
-view = canvas.central_widget.add_view()
-camera
-view.camera = 'turntable'
 .set_range()
 .azimuth
 .elevation
@@ -62,8 +153,75 @@ Camera xác định cách bạn nhìn vào cảnh.
         view.camera.set_range(x_min, x_max, y_min, y_max, z_min, z_max): Thiết lập phạm vi tọa độ của cảnh.
 .title
 canvas.title = 'One Point'
+# Draw (Vẽ)
+## visuals
+### .Sphere()
+```bash
+- Bản chất Sphere = một đối tượng hình cầu 3D
+- Nó thuộc: scene.visuals.Sphere
+- Dùng để 
+    + Vẽ hành tinh 🌍
+    + Vẽ mặt trời 🌞
+    + Vẽ object tròn trong 3D
+```
+**Syn**
+```bash
+scene.visuals.Sphere(
+    radius=1.0,
+    method='latitude',
+    parent=view.scene,
+    color=(1, 0, 0, 1)
+)
 
-Visuals
+- radius: bán kính
+- method: cách dựng mesh (thường để 'latitude')
+- parent: nó nằm trong scene nào
+- color: màu (RGBA)
+```
+# Process (xử lý)
+## .transform
+```bash
+- transform = cách bạn thay đổi vị trí / kích thước / xoay object
+- Hiểu đơn giản: object nằm đâu trong không gian
+- Nó làm được gì?
+    + Di chuyển (translate)
+    + Phóng to / thu nhỏ (scale)
+    + Xoay (rotate)
+```
+## STTransform (Scale + translate transform)
+**Syn**
+```bash
+scene.transforms.STTransform(
+    translate=(x, y, z),
+    scale=(sx, sy, sz)
+)
+```
+**Ex: Di chuyển sang phải**
+```python
+sun.transform = scene.transforms.STTransform(
+    translate=(3, 0, 0)
+)
+```
+**Ex: phóng to**
+```python
+sun.transform = scene.transforms.STTransform(
+    scale=(2, 2, 2)
+)
+```
+## TurntableCamera()
+**Syn**
+```bash
+view.camera = scene.cameras.TurntableCamera(
+    fov=45,
+    distance=10,
+    elevation=10,
+    azimuth=0,
+    distance=12
+)
+
+- fov       : góc nhìn (perspective)
+- distance  : Khoảng cách camera
+```
 Markers()
     • Vẽ Điểm rời rạc: Hiển thị một tập hợp các điểm được xác định bởi tọa độ (x,y) hoặc (x,y,z).
     • Tùy chỉnh Hình dạng: Cho phép định rõ hình dạng của mỗi điểm (ví dụ: tròn, vuông, kim cương, mũi tên, v.v.).
@@ -84,10 +242,6 @@ scatter.set_data(pos, edge_color=None, face_color=color, size=10)
     • edge_color: Màu (string, tuple, hoặc (N, 3) / (N, 4) array). Màu của đường viền (cạnh) của các điểm.
     • Scaling: Chuỗi (string). Cách thức kích thước điểm được xử lý. Ví dụ: 'fixed' (kích thước cố định trên màn hình) hoặc 'scene' (kích thước thay đổi theo mức zoom/khoảng cách 3D).
     • parent: ViewBox hoặc SceneNode. Nút cha (Node) mà visual này sẽ thuộc về trong scene graph.
-GridLines()
-Thêm lưới toạ độ (Grid)
-Cú pháp:
-scene.visuals.GridLines(parent=view.scene)
 Text()
 Cú pháp:
 from vispy import scene
@@ -114,12 +268,7 @@ Color()
 from vispy.color import Color
 point_color = Color('red')
 Cameras
-TurntableCamera()
-view.camera = scene.cameras.TurntableCamera(
-    elevation=10,
-    azimuth=0,
-    distance=12
-)
+
 Bài tập
 Vẽ 1 điểm trong không gian 3d
 import numpy as np

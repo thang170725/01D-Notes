@@ -1,9 +1,36 @@
+- [IO](#io)
+  - [Mở video từ file](#mở-video-từ-file)
 - [✅ Tạo mảng kết quả có kích thước sẵn](#-tạo-mảng-kết-quả-có-kích-thước-sẵn)
 - [Hàm in mã ASCII của phím bấm (dùng OpenCV)](#hàm-in-mã-ascii-của-phím-bấm-dùng-opencv)
 - [lấy tọa độ điểm khi click chuột vào frame](#lấy-tọa-độ-điểm-khi-click-chuột-vào-frame)
 - [resize giữ tỉ lệ khi biết chiều rộng, tự tính chiều cao](#resize-giữ-tỉ-lệ-khi-biết-chiều-rộng-tự-tính-chiều-cao)
 - [Biển đổi 4 điểm từ chụp nghiêng sang chụp thẳng](#biển-đổi-4-điểm-từ-chụp-nghiêng-sang-chụp-thẳng)
+- [Color Process (Bài tập xử lý màu sắc)](#color-process-bài-tập-xử-lý-màu-sắc)
+  - [chuyển ảnh màu sang ảnh đen trắng](#chuyển-ảnh-màu-sang-ảnh-đen-trắng)
+- [Code thuần làm mờ ảnh](#code-thuần-làm-mờ-ảnh)
 ---
+# IO
+## Mở video từ file
+```python
+import cv2
+
+cap = cv2.VideoCapture(r'E:\video\Một chút chill.mp4')
+if not cap.isOpened():
+    print("Không thể mở video")
+exit()
+
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Không thể đọc video hoặc đã hết video")
+        break
+    cv2.imshow(frame)
+    if cv2.waitKey(25) & 0xFF == ord('q'):
+        print("Bạn đã nhấn 'q', thoát...")
+        break
+cap.release()
+cv2.destroyAllWindows()
+```
 Bài tập
 Cho một ma trận ảnh 5×5 và một kernel 3×3, hãy tính kết quả tích chập (convolution)
 import numpy as np
@@ -306,4 +333,45 @@ Point 1: (151, 523)
 Point 2: (248, 450)
 Point 3: (257, 489)
 Point 4: (159, 556)
+```
+# Color Process (Bài tập xử lý màu sắc)
+## chuyển ảnh màu sang ảnh đen trắng
+```python
+import cv2
+
+anh = cv2.imread('anh1.jpg')
+gray = cv2.cvtColor(anh, cv2.COLOR_BGR2GRAY)
+
+inv = 255 - gray
+
+cv2.imshow("anh", inv)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+```
+# Code thuần làm mờ ảnh
+```python
+import numpy as np
+import cv2
+img = cv2.imread('anh3.jpg')
+kernel = np.array([
+    [1,2,1],
+    [2,4,2],
+    [1,2,1]
+], dtype=np.float32)/16
+h, w, c = img.shape
+blurred = np.zeros_like(img)
+
+for y in range(1,h-1):
+    for x in range(1,w-1):
+        for ch in range(3):
+            region = img[y-1:y+2, x-1:x+2, ch]
+            blurred[y,x,ch] = np.sum(region*kernel)
+# Cắt giá trị vượt giới hạn (0-255)
+blurred = np.clip(blurred, 0, 255).astype(np.uint8)
+
+# Hiển thị
+cv2.imshow('Original', img.astype(np.uint8))
+cv2.imshow('Blurred', blurred)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 ```

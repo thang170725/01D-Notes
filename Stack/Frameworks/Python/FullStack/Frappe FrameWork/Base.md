@@ -12,6 +12,7 @@
 - [patches.txt – LỊCH SỬ CẬP NHẬT](#patchestxt--lịch-sử-cập-nhật)
 
 ---
+- [Introduction](#introduction)
 - [Tạo project \& môi trường ảo python (thư mục làm việc)](#tạo-project--môi-trường-ảo-python-thư-mục-làm-việc)
 - [Cập nhật và cài đặt gói hệ thống cốt lõi](#cập-nhật-và-cài-đặt-gói-hệ-thống-cốt-lõi)
 - [Thiết lập liên kết python](#thiết-lập-liên-kết-python)
@@ -65,7 +66,23 @@
 - [Vì sao ERP dùng Frappe?](#vì-sao-erp-dùng-frappe)
 
 ---
-
+# Introduction
+```bash
+- Frappe Framework là một web framework full-stack dùng để xây dựng:
+  + ERP
+  + CRM
+  + hệ thống quản lý nội bộ
+  + dashboard dữ liệu
+  + web app doanh nghiệp
+- Framework này nổi tiếng vì là nền tảng để xây dựng ERPNext – một hệ thống ERP mã nguồn mở rất phổ biến.
+- Tech stack chính của Frappe:
+  + Backend	    : Python
+  + Database	  : MariaDB
+  + Frontend	  : JavaScript
+  + API	        : REST
+  + Realtime	  : WebSocket
+  + Task queue  : Redis
+```
 # Tạo project & môi trường ảo python (thư mục làm việc)
 ```bash
 1. mkdir ~/frappe-vue-test

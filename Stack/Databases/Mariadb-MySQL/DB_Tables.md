@@ -15,7 +15,9 @@
   - [Xóa khóa chính](#xóa-khóa-chính)
 - [Update](#update)
 - [alter table](#alter-table)
-- [nối bảng](#nối-bảng)
+- [JOIN (nối bảng)](#join-nối-bảng)
+  - [join (inner join)](#join-inner-join)
+  - [left join](#left-join)
 ---
 # Create & Use
 ## create database
@@ -161,4 +163,50 @@ ALTER TABLE ten_bang AUTO_INCREMENT = 1;
 - Bảng phải trống
 - Nếu vẫn còn record có id = 10 → AUTO_INCREMENT sẽ không về 1
 ```
-# nối bảng
+# JOIN (nối bảng)
+## join (inner join)
+```bash
+- JOIN mặc định trong SQL thực ra là INNER JOIN.
+```
+**Ex**
+```bash
+Bảng students
+id	name
+1	  An
+2	  Bình
+3	  Cường
+
+Bảng scores
+student_id	score
+1	          8
+2	          9
+```
+```sql
+SELECT students.name, scores.score
+FROM students
+JOIN scores
+ON students.id = scores.student_id;
+
+-- name	score
+-- An	8
+-- Bình	9
+-- Cường bị mất vì không có điểm.
+```
+## left join
+```bash
+- Giữ tất cả dữ liệu bảng bên trái.
+- Nếu bảng phải không có → NULL.
+```
+**Ex**
+```sql
+SELECT students.name, scores.score
+FROM students
+LEFT JOIN scores
+ON students.id = scores.student_id;
+
+-- name	score
+-- An	8
+-- Bình	9
+-- Cường	NULL
+-- Cường vẫn còn dù không có điểm.
+```

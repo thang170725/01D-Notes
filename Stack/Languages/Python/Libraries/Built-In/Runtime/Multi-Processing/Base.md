@@ -1,20 +1,16 @@
-Multiprocessing
-Process()
-p = mp.Process(target=func, args=(a, b))
-.start()
-.join()
-Queue()
-.put & .get()
-def producer(q):
-    for i in range(5):
-        q.put(i)
-
-def consumer(q):
-    while True:
-        item = q.get()
-        print("Got:", item)
-
-if __name__ == "__main__":
-    q = mp.Queue()
-    mp.Process(target=producer, args=(q,)).start()
-    mp.Process(target=consumer, args=(q,)).start()
+- [Directory Structure](#directory-structure)
+- [Introduction](#introduction)
+---
+# Directory Structure
+```bash
+Multi-Processing/    # Mình dùng thư mục này để xem kiến thức về multi-processing
+├── Base.md                   # Mình dùng thư mục này để xem các thư viện liên quan đến hệ thống
+├── Practices.md  # Mình dùng thư mục này để định nghĩa kiểu dữ liệu và cấu trúc chứa dữ liệu
+└── Process.md 
+```
+# Introduction
+```bash
+- Multiprocessing = chạy nhiều tiến trình (process) cùng lúc để tận dụng nhiều core CPU → giúp xử lý nhanh hơn thật.
+    + Bình thường: 1 CPU core → làm từng việc một -> chậm khi việc nặng
+    + Multiprocessing: nhiều CPU core → mỗi core làm 1 việc -> nhanh hơn rõ rệt
+```

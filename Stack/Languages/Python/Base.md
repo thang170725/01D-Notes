@@ -1,3 +1,4 @@
+- [Installation](#installation)
 - [Kiểm tra](#kiểm-tra)
 - [Tạo môi trường ảo \& activate](#tạo-môi-trường-ảo--activate)
 - [deactivate](#deactivate)
@@ -26,7 +27,9 @@
 3. D:\python_env\Scripts\activate (Windows) | source env/bin/activate (Linux)
 ```
 # deactivate
+```bash
 Thoát khỏi môi trường ảo hiện tại.
+```
 # which python
 ```bash
 - Xem đường dẫn môi trường run python trỏ đến đâu.
