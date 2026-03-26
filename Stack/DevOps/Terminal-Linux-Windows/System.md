@@ -1,33 +1,73 @@
-- [Display](#display)
+- [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
+  - [uptime](#uptime)
+  - [ac (Accounting)](#ac-accounting)
   - [tree](#tree)
   - [du](#du)
   - [free](#free)
   - [df](#df)
   - [systemctl](#systemctl)
   - [sudo systemctl status](#sudo-systemctl-status)
-- [Create \& Confid](#create--confid)
+  - [sudo lsof](#sudo-lsof)
+  - [ss -tulpn | grep](#ss--tulpn--grep)
+- [systemctl list-units](#systemctl-list-units)
+  - [Powercfg /batteryreport (Windows)](#powercfg-batteryreport-windows)
+- [Create \& Config (Tạo \& cấu hình)](#create--config-tạo--cấu-hình)
   - [sudo systemctl start](#sudo-systemctl-start)
-- [Remove \& Close](#remove--close)
+- [Remove \& Close (Nhóm xóa \& dừng)](#remove--close-nhóm-xóa--dừng)
   - [sudo systemctl stop](#sudo-systemctl-stop)
   - [sudo systemctl disable](#sudo-systemctl-disable)
 - [clear](#clear)
 - [sudo apt clean](#sudo-apt-clean)
 - [sudo apt autoclean](#sudo-apt-autoclean)
   - [sudo apt autoremove](#sudo-apt-autoremove)
-- [Mount ổ cứng](#mount-ổ-cứng)
-- [uptime](#uptime)
-- [ac (Accounting)](#ac-accounting)
+- [Mount disk (mount ổ cứng)](#mount-disk-mount-ổ-cứng)
 - [Sửa lỗi 2 màn](#sửa-lỗi-2-màn)
 - [rm -rf ~/.cache/huggingface](#rm--rf-cachehuggingface)
 - [GPU](#gpu)
-  - [Kiểm tra GPU NVIDIA](#kiểm-tra-gpu-nvidia)
+  - [CUDA Toolkit](#cuda-toolkit)
+  - [Check (kiểm tra)](#check-kiểm-tra)
+    - [nvidia-smi](#nvidia-smi)
+      - [Các bước kiểm tra GPU NVIDIA](#các-bước-kiểm-tra-gpu-nvidia)
+    - [Kiểm tra secure boot](#kiểm-tra-secure-boot)
+  - [Install (cài đặt)](#install-cài-đặt)
+    - [Các bước cài driver NVIDIA](#các-bước-cài-driver-nvidia)
+    - [Các bước cài CUDA Tookit](#các-bước-cài-cuda-tookit)
+    - [Các bước cài cuDNN](#các-bước-cài-cudnn)
+- [Remove (xóa, gỡ bỏ)](#remove-xóa-gỡ-bỏ)
+  - [Gỡ bỏ driver NVIDIA cũ](#gỡ-bỏ-driver-nvidia-cũ)
 - [lsblk](#lsblk)
-- [sudo](#sudo)
-- [Powercfg /batteryreport](#powercfg-batteryreport)
+- [Keyboard](#keyboard)
+  - [Remove \& Stop (Xóa, Tắt, Dừng)](#remove--stop-xóa-tắt-dừng)
+    - [xset r off](#xset-r-off)
+  - [Create \& Open (Tạo, Mở)](#create--open-tạo-mở)
+    - [xset r on](#xset-r-on)
+- [Microphone](#microphone)
+  - [Check (Kiểm tra)](#check-kiểm-tra-1)
+    - [Các bước kiểm tra microphone có hoạt động không](#các-bước-kiểm-tra-microphone-có-hoạt-động-không)
+    - [Mic bị gain quá cao (bị khuếch đại quá mức)](#mic-bị-gain-quá-cao-bị-khuếch-đại-quá-mức)
 ---
-# Display
+# Display (Nhóm cung cấp thông tin)
+## uptime
 ```bash
-Nhóm này dùng để cung cấp thông tin, mục đích là liệt kê.
+Xem thời gian bắt đầu mở máy tính.
+```
+**Ex**
+```bash
+thang@PhatToNhuLai:~$ uptime -s
+2025-08-14 15:29:59
+```
+## ac (Accounting) 
+```bash
+- Lệnh ac sẽ cho biết tổng số giờ ma người dùng đã đăng nhập.
+```
+**Syn**
+```bash
+1. Cài đặt nếu chưa có:
+    1. sudo apt install acct   # Ubuntu/Debian
+    2. sudo systemctl start acct
+    3. sudo systemctl enable acct
+2. ac -d    # Aug 14 total      5.40
+3. ac -p    # total      569.53
 ```
 ## tree
 ```bash
@@ -80,13 +120,83 @@ free -h
     + Xem có lỗi không
     + Xem service có tự start khi boot không
 ```
-# Create & Confid
+**Ex**
+```bash
+(sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe/frontend$ sudo systemctl status 1798
+
+# ● mariadb.service - MariaDB 10.11.13 database server
+#      Loaded: loaded (/usr/lib/systemd/system/mariadb.service; enabled; preset: enabled)
+#      Active: active (running) since Wed 2026-03-25 20:34:16 +07; 42min ago
+#        Docs: man:mariadbd(8)
+#              https://mariadb.com/kb/en/library/systemd/
+#     Process: 1630 ExecStartPre=/usr/bin/install -m 755 -o mysql -g root -d /var/run/mysqld (code=exited, status=0/SU>
+#     Process: 1668 ExecStartPre=/bin/sh -c systemctl unset-environment _WSREP_START_POSITION (code=exited, status=0/S>
+#     Process: 1685 ExecStartPre=/bin/sh -c [ ! -e /usr/bin/galera_recovery ] && VAR= ||   VAR=`/usr/bin/galera_recove>
+#     Process: 1936 ExecStartPost=/bin/sh -c systemctl unset-environment _WSREP_START_POSITION (code=exited, status=0/>
+#     Process: 1938 ExecStartPost=/etc/mysql/debian-start (code=exited, status=0/SUCCESS)
+#    Main PID: 1798 (mariadbd)
+#      Status: "Taking your SQL requests now..."
+#       Tasks: 9 (limit: 123309)
+#      Memory: 112.6M (peak: 117.5M)
+#         CPU: 581ms
+#      CGroup: /system.slice/mariadb.service
+#              └─1798 /usr/sbin/mariadbd
+```
+## sudo lsof
+```bash
+Kiểm tra xem port nào đang bị sử dụng
+```
+**Ex**
+```bash
+(sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe/frontend$ sudo lsof -i :3306
+
+# COMMAND   PID  USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
+# mariadbd 1798 mysql   34u  IPv4  20838      0t0  TCP localhost:mysql (LISTEN)
+```
+## ss -tulpn | grep 
+```bash
+Kiểm tra xem port nào đang bị sử dụng
+```
+**Ex**
+```bash
+Kiểm tra xem port nào đang bị sử dụng.
+```
+**Ex**
+```bash
+(sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe/frontend$ ss -tulpn | grep 3306
+# tcp   LISTEN 0      80                               127.0.0.1:3306       0.0.0.0:*
+```
+# systemctl list-units
+```bash
+Dùng để: liệt kê các service đang hoạt động (hoặc được systemd quản lý) và lọc ra những service liên quan đến MySQL hoặc MariaDB
+```
+**Ex**
+```bash
+systemctl list-units --type=service | grep -E 'mysql|mariadb'
+
+- systemctl list-units --type=service
+    + systemctl: công cụ quản lý service trong Linux (systemd)
+    + list-units: liệt kê các “unit” (đơn vị hệ thống)
+    + --type=service: chỉ lấy service
+=> Kết quả: danh sách các service đang active (đang chạy)
+- | (pipe): Chuyển output của lệnh bên trái sang lệnh bên phải
+    + grep -E 'mysql|mariadb'
+    + grep: tìm kiếm text
+    + -E: cho phép dùng regex (biểu thức chính quy)
+    + 'mysql|mariadb': tìm dòng chứa mysql HOẶC mariadb
+=> Hiểu đơn giản: “Cho tôi xem các service đang chạy có liên quan đến MySQL hoặc MariaDB”
+```
+## Powercfg /batteryreport (Windows)
+# Create & Config (Tạo & cấu hình)
 ## sudo systemctl start
+```bash
+Mở lại một service đã Stop.
+```
 **Syn**
 ```bash
-sudo systemctl stop <service>
+sudo systemctl start <service>
 ```
-# Remove & Close
+# Remove & Close (Nhóm xóa & dừng)
 ## sudo systemctl stop
 ```bash
 - Dừng (stop) một service đang chạy
@@ -123,102 +233,13 @@ Chỉ xóa các gói cũ, không còn dùng.
 ```bash
 Xóa dependency thừa sau khi gỡ phần mềm.
 ```
-3️⃣ Dọn log hệ thống (journal)
-Kiểm tra log đang chiếm bao nhiêu:
-
-bash
-Copy code
-journalctl --disk-usage
-Chỉ giữ log 7 ngày:
-
-bash
-Copy code
-sudo journalctl --vacuum-time=7d
-Hoặc giới hạn dung lượng (ví dụ 500MB):
-
-bash
-Copy code
-sudo journalctl --vacuum-size=500M
-4️⃣ Dọn cache người dùng
-bash
-Copy code
-rm -rf ~/.cache/*
-⚠️ Lệnh này chỉ xóa cache, không ảnh hưởng dữ liệu cá nhân.
-
-5️⃣ Nếu có dùng Docker (rất hay đầy disk)
-Kiểm tra:
-
-bash
-Copy code
-docker system df
-Dọn rác Docker:
-
-bash
-Copy code
-docker system prune -a
-⚠️ Sẽ xóa image, container không dùng.
-
-6️⃣ Nếu dùng Snap
-Xem snap chiếm dung lượng:
-
-bash
-Copy code
-du -h /var/lib/snapd/snaps | sort -h
-Xóa snap version cũ:
-
-bash
-Copy code
-sudo snap set system refresh.retain=2
-sudo snap remove --purge <tên_snap>
-7️⃣ Tìm thư mục “ăn dung lượng”
-Rất hữu ích:
-
-bash
-Copy code
-sudo du -h / --max-depth=1 2>/dev/null | sort -h
-Hoặc dùng công cụ trực quan:
-
-bash
-Copy code
-sudo apt install ncdu
-sudo ncdu /
-👉 Gợi ý nhanh
-Nếu bạn chỉ muốn dọn rác cơ bản, an toàn, cứ chạy:
-
-bash
-Copy code
-sudo apt autoremove --purge
-sudo apt clean
-sudo journalctl --vacuum-time=7d
-# Mount ổ cứng
+# Mount disk (mount ổ cứng)
 **Step**
 ```bash
 1. sudo apt install nfs-common
 2. sudo apt install cifs-utils
 3. sudo apt install ntfs-sg
 4. sudo ntfsfix -b -d /dev/nvme1n1p4
-```
-# uptime
-```bash
-Xem thời gian bắt đầu mở máy tính.
-```
-**Ex**
-```bash
-thang@PhatToNhuLai:~$ uptime -s
-2025-08-14 15:29:59
-```
-# ac (Accounting) 
-```bash
-- Lệnh ac sẽ cho biết tổng số giờ ma người dùng đã đăng nhập.
-```
-**Syn**
-```bash
-1. Cài đặt nếu chưa có:
-    1. sudo apt install acct   # Ubuntu/Debian
-    2. sudo systemctl start acct
-    3. sudo systemctl enable acct
-2. ac -d    # Aug 14 total      5.40
-3. ac -p    # total      569.53
 ```
 # Sửa lỗi 2 màn
 ```bash
@@ -228,32 +249,75 @@ thang@PhatToNhuLai:~$ uptime -s
 ```
 # rm -rf ~/.cache/huggingface
 # GPU
-Kiểm tra secure boot
-    1. mokutil --sb-state
-    2. sudo dmesg | grep -i secure
-Gỡ bỏ driver NVIDIA cũ
-    1. sudo apt purge 'nvidia-*'
-Cài driver NVIDIA
-    1. ubuntu-drivers devices: Chạy lệnh sau để xem máy bạn đã cài driver gì.
-    2. sudo apt update
-    3. sudo apt install nvidia-driver-550: Cài driver cho nvidia nếu chưa cài.
-    4. sudo reboot: Nếu chạy lệnh 2 thì phải chạy lệnh này ngay sau đó.
-    5. Nếu lỗi kiểm tra secure Boot.
-    6. lsmod | grep nvidia: Nếu không có dòng nào -> driver chưa được kernel load.
-    7. 
-## Kiểm tra GPU NVIDIA
+## CUDA Toolkit
 ```bash
-1. nvidia-smi
-2. lspci | grep -i vga: Kiểm tra tên gpu bất kỳ loại nào.
-3. dpkg -L nvidia-utils-470 | grep nvidia-smi: Kiểm tra xem gói nằm ở đâu.
+- Nó là bộ thư viện lập trình (compiler, headers...) để bạn code và chạy trực tiếp trên Ubuntu.
 ```
-Cài đặt NVIDIA
-    1. sudo apt update
-    2. sudo apt install nvidia-smi
-Thêm vào Path
-    1. export PATH=/usr/bin:$PATH
-    2. source ~/.bashrc
-Cài CUDA Tookit
+## Check (kiểm tra)
+### nvidia-smi
+```bash
+thang@PhatToNhuLai:~$ nvidia-smi
+Sun Mar 22 17:22:42 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 570.211.01             Driver Version: 570.211.01     CUDA Version: 12.8     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3050 ...    Off |   00000000:01:00.0 Off |                  N/A |
+| N/A   64C    P3             16W /   60W |     327MiB /   4096MiB |     25%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A            3111      G   /usr/lib/xorg/Xorg                      165MiB |
+|    0   N/A  N/A            3478      G   /usr/bin/gnome-shell                     44MiB |
+|    0   N/A  N/A            4231      G   ...rack-uuid=3190708988185955192         23MiB |
+|    0   N/A  N/A            4554      G   /usr/share/cursor/cursor                 62MiB |
++-----------------------------------------------------------------------------------------+
+
+- Driver Version: 570.211.01    : Đây là phiên bản driver rất mới. Nó là "cầu nối" phần cứng.
+- CUDA Version: 12.8            : Đây là điểm gây hiểu lầm nhất.
+    + Ý nghĩa: Đây KHÔNG PHẢI là phiên bản CUDA bạn đã cài. Đây là phiên bản CUDA cao nhất mà Driver này có thể hỗ trợ.
+- GPU Name: NVIDIA GeForce RTX 3050 (4096MiB):
+    + Bạn có 4GB VRAM. Đây là thông số quan trọng nhất khi chọn Model AI.
+    + Lời khuyên: Với 4GB, bạn sẽ chạy cực tốt các dòng YOLO (v8, v10, v11), các model MediaPipe, hoặc các LLM siêu nhỏ (như Phi-3 mini) nếu biết cách tối ưu. Đừng cố chạy các model quá nặng như Llama-3 70B vì sẽ bị báo lỗi Out of Memory (OOM).
+```
+#### Các bước kiểm tra GPU NVIDIA
+```bash
+1. xem driver gpu
+    nvidia-smi
+2. Kiểm tra tên gpu bất kỳ loại nào.
+    lspci | grep -i vga                      
+3. Kiểm tra xem gói nằm ở đâu.
+    dpkg -L nvidia-utils-470 | grep nvidia-smi
+```
+### Kiểm tra secure boot
+```bash
+1. mokutil --sb-state
+2. sudo dmesg | grep -i secure
+```
+## Install (cài đặt)
+### Các bước cài driver NVIDIA
+```bash
+1. Chạy lệnh sau để xem máy bạn đã cài driver gì.
+    ubuntu-drivers devices: 
+2. sudo apt update
+3. Cài driver cho nvidia nếu chưa cài.
+    sudo apt install nvidia-driver-550
+4. Nếu chạy lệnh 2 thì phải chạy lệnh này ngay sau đó.
+    sudo reboot
+5. Nếu lỗi => kiểm tra secure Boot.
+6. Nếu không có dòng nào -> driver chưa được kernel load.
+    lsmod | grep nvidia 
+```
+### Các bước cài CUDA Tookit
+```bash
     1. nvcc --version: Kiểm tra gói cuda toolkit nào được cài chưa.
     2. sudo apt install nvidia-cuda-toolkit hoặc nên web cài
 Thêm nvcc vào PATH
@@ -263,7 +327,16 @@ Thêm nvcc vào PATH
     4. Ctrl+O, Enter, Ctrl+X
     5. source ~/.bashrc
     6. nvcc --version
-Cài cuDNN
+```
+Cài đặt NVIDIA
+    1. sudo apt update
+    2. sudo apt install nvidia-smi
+Thêm vào Path
+    1. export PATH=/usr/bin:$PATH
+    2. source ~/.bashrc
+
+### Các bước cài cuDNN
+```bash
 Kiểm tra xem cuDNN đã được cài ở đâu
     1. dpkg -L libcudnn9-dev-cuda-12
     2. sudo find /usr -name cudnn_version.h
@@ -277,6 +350,12 @@ Thêm cuDNN vào PATH
     4. source ~/.bashrc
     5. sudo ldconfig: Cập nhật cache thư viện
 lsmod | grep nvidia
+```
+# Remove (xóa, gỡ bỏ)
+## Gỡ bỏ driver NVIDIA cũ
+```bash
+1. sudo apt purge 'nvidia-*'
+```
 # lsblk
 ```bash
 Trả về danh sách các ổ phân vùng.
@@ -286,45 +365,30 @@ Trả về danh sách các ổ phân vùng.
 1. lsblk
 2. lsblk -f
 ```
-Keyboard
-xset r off
+# Keyboard
+## Remove & Stop (Xóa, Tắt, Dừng)
+### xset r off
+```bash
 Tắt repeat hoàn toàn, nhấn phím sẽ không lặp.
-xset r on
+```
+## Create & Open (Tạo, Mở)
+### xset r on
+```bash
 Mở repeat.
-# sudo
-Cho phép sử dụng các task yêu cầu phải có quyền quản trị hoặc quyền root.
-    • Sudo apt upgrade: tải các gói mới nhất về máy
-    • sudo apt install software-properties-common -y: tải một ứng dựng nào đó
-    • sudo add-apt-repository ppa:deadsnakes/ppa
-    •  sudo apt clean: xóa cache tải về của apt 
-
-Tải và sử dụng phần mềm gparted
-    1. sudo apt update
-    2. sudo apt install gparted: Tải ứng dụng phân vùng và format ổ mới.
-    3. sudo gparted: Mở ứng dụng gparted.
-    4. sudo update-grub: Cập nhật lại GRUB. (tùy chọn).
-
-
-
-Cài portaudio
-    1. sudo apt update
-    2. sudo apt install portaudio19-dev python3-dev
-    3. Vào môi trường ảo cài lại pyaudio (pip install pyaudio).
-laalMic
-Kiểm tra microphone có hoạt động không
-    1. arecord - l: Nếu không có card nào hiện ra -> hệ thống không phát hiện được mic.
-    2. arecord -D plughw:0,0 -f cd test.wav: Ghi âm.
-    3. arecord -D hw:1,0 -f cd test.wav: Ghi âm.
-    4. aplay test.wav: Chạy cái số 2. Sau 5 giây thì chạy lại cái này.
-Mic bị gain quá cao (bị khuếch đại quá mức)
-    1. alsamixer.
-    2. Nhấn F4.
-    3. Dùng phím mũi tên để giảm gian xuống thấp hơn.
-    4. Esc để thoát.
-Dkms status
-mokutil –sb-state
-Cài đặt espeak-ng
-    1. sudo apt update
-    2. sudo apt install espeak-ng
-    3. espeak-ng “xin chào”
-# Powercfg /batteryreport
+```
+# Microphone
+## Check (Kiểm tra)
+### Các bước kiểm tra microphone có hoạt động không
+```bash
+1. arecord - l: Nếu không có card nào hiện ra -> hệ thống không phát hiện được mic.
+2. arecord -D plughw:0,0 -f cd test.wav: Ghi âm.
+3. arecord -D hw:1,0 -f cd test.wav: Ghi âm.
+4. aplay test.wav: Chạy cái số 2. Sau 5 giây thì chạy lại cái này.
+```
+### Mic bị gain quá cao (bị khuếch đại quá mức)
+```bash
+1. alsamixer.
+2. Nhấn F4.
+3. Dùng phím mũi tên để giảm gian xuống thấp hơn.
+4. Esc để thoát.
+```

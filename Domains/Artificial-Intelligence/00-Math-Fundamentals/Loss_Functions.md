@@ -3,9 +3,14 @@
   - [Demo về công thức BCE bằng math](#demo-về-công-thức-bce-bằng-math)
 ---
 # Mean Squared Error (MSE)
-**Syn**
 ```bash
-MSE = 1/n . [(y_pred1 – y1)^2 + (y_pred1 – y1)^2 + … ]
+Công thức tính loss function thương dùng cho Regression (Linear, v.v).
+```
+**Formula**
+```bash
+MSE = 1/n . [(y1_true - y1_pred)^2 + (y2_true - y2_pred)^2 + … ]
+
+- Output: càng gần 0 càng tốt
 ```
 # Binary Cross-Entropy (Log Loss)
 ```bash

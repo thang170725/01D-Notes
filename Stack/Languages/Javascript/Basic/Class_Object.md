@@ -1,11 +1,12 @@
-- [class \& Objects](#class--objects)
+- [new Object \& {}](#new-object--)
   - [Object.key()](#objectkey)
   - [Entries()](#entries)
   - [.key \& \['key'\]](#key--key)
   - [delete](#delete)
+- [Class](#class)
 - [Prototype](#prototype)
 ---
-# class & Objects
+# new Object & {}
 ```bash
 - Trên thực tế thường khai báo các đối tượng bằng từ khóa const.
 ```
@@ -102,6 +103,7 @@ Dùng để thêm key-value hoặc lấy ra value.
 - delete <name>.key;
 - delete <name>[‘key’];
 ```
+# Class
 # Prototype
 ```bash
 - Trong Prototype-based programming, object có thể kế thừa trực tiếp từ object khác.

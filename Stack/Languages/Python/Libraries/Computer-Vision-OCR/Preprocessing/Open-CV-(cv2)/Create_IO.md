@@ -1,3 +1,4 @@
+- [Read (đọc, lấy)](#read-đọc-lấy)
 - [imread()](#imread)
 - [NameWindow()](#namewindow)
 - [Imshow() \& WaitKey() \& destroyAllWindows()](#imshow--waitkey--destroyallwindows)
@@ -12,6 +13,7 @@
   - [imdecode](#imdecode)
   - [imencode](#imencode)
 ---
+# Read (đọc, lấy)
 # imread()
 ```bash
 - Được sử dụng để đọc một hình ảnh từ ổ đĩa và lưu nó dưới dạng một mảng NumPy để xử lý trong các ứng dụng xử lý ảnh.

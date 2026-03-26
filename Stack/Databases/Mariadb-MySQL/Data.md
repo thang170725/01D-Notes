@@ -95,22 +95,6 @@ UPDATE workout_plans
 SET note = 'Chest and Triceps workout'
 WHERE id = 5;
 ```
-- [Kiểu dữ liệu](#kiểu-dữ-liệu)
-  - [JSON](#json)
-- [insert into](#insert-into)
-- [delete](#delete)
-  - [Xóa dữ liệu một hoặc nhiều hàng](#xóa-dữ-liệu-một-hoặc-nhiều-hàng)
-  - [on delete cascade](#on-delete-cascade)
-- [Update](#update)
-  - [update](#update-1)
-- [Select](#select)
-  - [Hiển thị nhiều field của nhiều bảng](#hiển-thị-nhiều-field-của-nhiều-bảng)
-  - [Hiển thị nhiều field của nhiều bảng có điều kiện](#hiển-thị-nhiều-field-của-nhiều-bảng-có-điều-kiện)
-- [like](#like)
-- [group\_by](#group_by)
-- [count](#count)
-- [DISTINCT](#distinct)
----
 # Select
 ```bash
 Dùng để xem dữ liệu trong bảng.

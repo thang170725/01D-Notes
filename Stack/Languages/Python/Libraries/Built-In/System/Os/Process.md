@@ -1,5 +1,6 @@
-- [Create](#create)
+- [Create \& Config (Tạo \& Cấu hình)](#create--config-tạo--cấu-hình)
   - [.mkdir()](#mkdir)
+  - [getenv](#getenv)
 - [Check](#check)
   - [.path.isfile()](#pathisfile)
   - [.path.isdir()](#pathisdir)
@@ -15,13 +16,12 @@
   - [.chdir()](#chdir)
   - [splitext()](#splitext)
   - [relpath()](#relpath)
-  - [getenv](#getenv)
   - [system()](#system)
   - [name](#name)
   - [sep](#sep)
   - [pathsep](#pathsep)
 ---
-# Create
+# Create & Config (Tạo & Cấu hình)
 ## .mkdir()
 **Ex: Tạo file/thư mục nếu chưa tồn tại**
 ```python
@@ -29,6 +29,31 @@ import os
 
 if not os.path.exists("output"):
     os.mkdir("output")
+```
+## getenv
+```bash
+- Biến môi trường thường dùng để:
+  + Lưu cấu hình (API key, DB URL, port…)
+  + Tránh hard-code giá trị nhạy cảm trong code
+  + Dễ thay đổi theo môi trường (dev / test / production)
+=> getenv giúp bạn đọc các giá trị này trong runtime
+```
+**Syn**
+```bash
+import os
+
+os.getenv(key, default=None)
+
+- key: tên biến môi trường
+- default: giá trị mặc định nếu biến không tồn tại (optional)
+``` 
+**Ex**
+```python
+import os
+
+port = os.getenv("PORT", "3000")
+
+print(port)
 ```
 # Check 
 ## .path.isfile()
@@ -159,7 +184,6 @@ path
 Basename()
 ## splitext()
 ## relpath()
-## getenv
 ## system()
 ## name
 ## sep

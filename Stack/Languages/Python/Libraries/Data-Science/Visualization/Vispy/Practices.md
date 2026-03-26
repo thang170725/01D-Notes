@@ -1,3 +1,149 @@
+- [Vẽ 1 điểm trong không gian 3d](#vẽ-1-điểm-trong-không-gian-3d)
+- [Thêm hiệu ứng dao động và đập cho 1 điểm trong không gian 3 chiều](#thêm-hiệu-ứng-dao-động-và-đập-cho-1-điểm-trong-không-gian-3-chiều)
+- [Hình trái tim](#hình-trái-tim)
+- [Cây thông noel](#cây-thông-noel)
+# Vẽ 1 điểm trong không gian 3d
+```python
+import numpy as np
+from vispy import app
+app.use_app('pyqt5')
+from vispy import scene
+from vispy.color import Color
+
+# tạo điểm
+point_pos = np.array([[0.0,0.0,0.0]])
+point_color = Color('red')
+point_size = 10
+
+# tạo cửa sổ hiển thị
+canvas = scene.SceneCanvas(
+    keys='interactive',
+    size=(600, 600),
+    show=True
+)
+canvas.title = 'One Point'
+
+# thêm mọt view box
+view = canvas.central_widget.add_view()
+
+# thiết lập camera 'turntable' cho phép xoay và zoom 3d
+view.camera = 'turntable'
+
+# khởi tạo đối tượng markers
+single_marker = scene.visuals.Markers(
+    parent=view.scene,
+    antialias=0 # tắt khử răng cưa
+)
+
+# gán dữ liệu (chỉ một hàng trong pos)
+single_marker.set_data(
+    point_pos,
+    face_color=point_color,
+    size=point_size,
+    symbol='o', # hình tròn
+    edge_color='white' # viền trắng
+)
+
+# thêm lưới tọa độ
+scene.visuals.GridLines(parent=view.scene)
+
+# Thiết lập phạm vi nhìn
+view.camera.set_range(x=(-1, 1), y=(-1, 1), z=(-1, 1))
+
+if __name__ == '__main__':
+    app.run()
+```
+# Thêm hiệu ứng dao động và đập cho 1 điểm trong không gian 3 chiều
+```python
+import numpy as np
+from vispy import app, scene
+from vispy.color import Color
+
+# =========================
+# FORCE BACKEND
+# =========================
+app.use_app('pyqt5')
+
+# =========================
+# DỮ LIỆU BAN ĐẦU
+# =========================
+base_pos = np.array([[0.0, 0.0, 0.0]], dtype=np.float32)
+point_color = Color('red')
+base_size = 10
+
+# =========================
+# TẠO CỬA SỔ
+# =========================
+canvas = scene.SceneCanvas(
+    keys='interactive',
+    size=(600, 600),
+    show=True,
+    title='Animated 3D Point'
+)
+
+view = canvas.central_widget.add_view()
+view.camera = 'turntable'
+view.camera.set_range(x=(-1, 1), y=(-1, 1), z=(-1, 1))
+
+# =========================
+# MARKER
+# =========================
+marker = scene.visuals.Markers(
+    parent=view.scene,
+    antialias=0
+)
+
+marker.set_data(
+    base_pos,
+    face_color=point_color,
+    size=base_size,
+    symbol='o',
+    edge_color='white'
+)
+
+# lưới tọa độ
+scene.visuals.GridLines(parent=view.scene)
+
+# =========================
+# ANIMATION
+# =========================
+t = 0.0
+
+def update(event):
+    global t
+    t += 0.05
+
+    # 1️⃣ ĐẬP (thay đổi size)
+    size = base_size + 4 * np.sin(t)
+
+    # 2️⃣ DAO ĐỘNG 3D NHẸ
+    offset = 0.15
+    pos = np.array([[
+        offset * np.sin(t),
+        offset * np.cos(t * 1.3),
+        offset * np.sin(t * 0.7)
+    ]], dtype=np.float32)
+
+    marker.set_data(
+        pos,
+        face_color=point_color,
+        size=size,
+        symbol='o',
+        edge_color='white'
+    )
+
+    # 3️⃣ XOAY CAMERA CHẬM
+    view.camera.azimuth += 0.2
+    view.camera.elevation = 30 + 10 * np.sin(t * 0.3)
+
+# timer ~60 FPS
+timer = app.Timer(interval=1/60, connect=update, start=True)
+
+if __name__ == '__main__':
+    app.run()
+```
+# Hình trái tim
+```python
 from vispy import app, scene
 import numpy as np
 
@@ -194,493 +340,9 @@ class DustHeart:
 
 if __name__ == '__main__':
     DustHeart().run()
-
-# from vispy import app, scene
-# import numpy as np
-# from PIL import Image
-# import os
-
-# app.use_app('pyqt5')
-
-# class NeonLoveTree:
-#     def __init__(self, image_path='nguoi_yeu.jpg'):
-#         self.t = 0.0
-#         self.image_path = image_path
-
-#     def load_image_points(self, N_target=5000):
-#         """Chuyển đổi ảnh thành các hạt bụi để lồng vào cây"""
-#         if os.path.exists(self.image_path):
-#             img = Image.open(self.image_path).convert('RGB')
-#             img.thumbnail((150, 150))
-#             data = np.array(img)
-            
-#             y_coords, x_coords = np.where(np.sum(data, axis=2) > 20)
-            
-#             if len(y_coords) > N_target:
-#                 idx = np.random.choice(len(y_coords), N_target, replace=False)
-#                 y_coords, x_coords = y_coords[idx], x_coords[idx]
-            
-#             z_img = (x_coords / data.shape[1] - 0.5) * 2.5
-#             y_img = (1.0 - y_coords / data.shape[0]) * 3.5 - 1.0
-#             x_img = np.zeros_like(x_coords)
-            
-#             points = np.column_stack((x_img, y_img, z_img))
-#             colors = data[y_coords, x_coords] / 255.0
-#             alphas = np.ones((len(points), 1)) * 0.8
-#             colors = np.hstack([colors, alphas])
-#             return points, colors
-#         else:
-#             print("Không tìm thấy ảnh, tạo vùng nhấn mặc định.")
-#             p = np.random.normal(0, 0.5, (1000, 3))
-#             p[:, 1] += 1.0
-#             c = np.full((1000, 4), [1.0, 0.4, 0.7, 0.8])
-#             return p, c
-
-#     def generate_tree(self):
-#         # 1. Thân cây với MÀU SẮC NGẪU NHIÊN RỰC RỠ
-#         N_tree = 30_000
-#         i = np.arange(N_tree)
-#         h_raw = i / N_tree
-#         height = 10.0 * h_raw - 5.0
-        
-#         # Bề mặt sần sùi
-#         base_radius = 3.5 * (1.0 - h_raw)**0.8
-#         roughness = np.random.normal(0, 0.4, N_tree) * (1.1 - h_raw)
-#         r = base_radius + roughness
-        
-#         theta = i * 0.2
-#         x = r * np.cos(theta) + np.random.normal(0, 0.1, N_tree)
-#         z = r * np.sin(theta) + np.random.normal(0, 0.1, N_tree)
-#         y = height
-        
-#         tree_points = np.column_stack((x, y, z))
-        
-#         # MÀU NGẪU NHIÊN cho từng hạt - tạo hiệu ứng cầu vồng
-#         tree_colors = np.random.uniform(0.3, 1.0, (N_tree, 3))
-#         tree_colors = np.hstack([tree_colors, np.full((N_tree, 1), 0.6)])
-
-#         # 2. TRANG TRÍ: Các quả cầu lớn màu sắc trên cây
-#         N_ornaments = 200
-#         orn_heights = np.random.uniform(-4, 4, N_ornaments)
-#         h_norm = (orn_heights + 5) / 10.0
-#         orn_radius = 3.0 * (1.0 - h_norm)**0.8
-        
-#         orn_theta = np.random.uniform(0, 2*np.pi, N_ornaments)
-#         orn_r = orn_radius * np.random.uniform(0.7, 1.0, N_ornaments)
-        
-#         orn_x = orn_r * np.cos(orn_theta)
-#         orn_z = orn_r * np.sin(orn_theta)
-#         orn_y = orn_heights
-        
-#         ornament_points = np.column_stack((orn_x, orn_y, orn_z))
-        
-#         # Màu sắc rực rỡ cho quả cầu: đỏ, vàng, xanh, tím, hồng
-#         color_palette = np.array([
-#             [1.0, 0.0, 0.0, 1.0],  # Đỏ
-#             [1.0, 0.8, 0.0, 1.0],  # Vàng
-#             [0.0, 0.5, 1.0, 1.0],  # Xanh dương
-#             [0.8, 0.0, 1.0, 1.0],  # Tím
-#             [1.0, 0.2, 0.6, 1.0],  # Hồng
-#             [0.0, 1.0, 0.5, 1.0],  # Xanh lá neon
-#         ])
-#         color_indices = np.random.choice(len(color_palette), N_ornaments)
-#         ornament_colors = color_palette[color_indices]
-
-#         # 3. TRANG TRÍ: Dây đèn xoắn quanh cây
-#         N_lights = 500
-#         light_heights = np.linspace(-4.5, 4.5, N_lights)
-#         h_norm_lights = (light_heights + 5) / 10.0
-#         light_radius = 3.2 * (1.0 - h_norm_lights)**0.8
-        
-#         light_theta = np.linspace(0, 20*np.pi, N_lights)
-#         light_x = light_radius * np.cos(light_theta)
-#         light_z = light_radius * np.sin(light_theta)
-        
-#         light_points = np.column_stack((light_x, light_heights, light_z))
-        
-#         # Đèn nhấp nháy với màu vàng-trắng sáng
-#         light_colors = np.full((N_lights, 4), [1.0, 1.0, 0.6, 1.0])
-
-#         # 4. Ngôi sao đỉnh cây (Starburst)
-#         N_star = 1500
-#         s_r = np.random.uniform(0, 0.5, N_star)
-#         s_theta = np.random.uniform(0, 2*np.pi, N_star)
-#         s_phi = np.random.uniform(0, np.pi, N_star)
-#         sx = s_r * np.sin(s_phi) * np.cos(s_theta)
-#         sy = 5.2 + s_r * np.cos(s_phi)
-#         sz = s_r * np.sin(s_phi) * np.sin(s_theta)
-        
-#         burst = np.random.choice(N_star, N_star//4)
-#         sx[burst] *= 3; sy[burst] = 5.2 + (sy[burst]-5.2)*3; sz[burst] *= 3
-        
-#         star_points = np.column_stack((sx, sy, sz))
-#         star_colors = np.full((N_star, 4), [1.0, 0.9, 0.0, 1.0])
-
-#         # 5. Lồng Ảnh người yêu
-#         img_points, img_colors = self.load_image_points()
-
-#         # Gộp tất cả
-#         self.all_pts = np.vstack([
-#             tree_points, 
-#             ornament_points, 
-#             light_points, 
-#             star_points, 
-#             img_points
-#         ]).astype(np.float32)
-        
-#         self.all_cols = np.vstack([
-#             tree_colors, 
-#             ornament_colors, 
-#             light_colors, 
-#             star_colors, 
-#             img_colors
-#         ]).astype(np.float32)
-        
-#         # Kích thước: quả cầu lớn hơn, đèn trung bình, cây nhỏ
-#         tree_sizes = np.random.uniform(1, 2.5, len(tree_points))
-#         orn_sizes = np.random.uniform(8, 15, len(ornament_points))  # Quả cầu lớn
-#         light_sizes = np.random.uniform(4, 7, len(light_points))    # Đèn sáng
-#         star_sizes = np.random.uniform(2, 4, len(star_points))
-#         img_sizes = np.full(len(img_points), 3.5)
-        
-#         self.all_sizes = np.hstack([
-#             tree_sizes, orn_sizes, light_sizes, star_sizes, img_sizes
-#         ]).astype(np.float32)
-        
-#         # Lưu vị trí để biết đâu là đèn (để nhấp nháy)
-#         self.light_start = len(tree_points) + len(ornament_points)
-#         self.light_end = self.light_start + len(light_points)
-
-#     def setup(self):
-#         self.canvas = scene.SceneCanvas(bgcolor='black', show=True, fullscreen=True)
-#         self.view = self.canvas.central_widget.add_view()
-#         self.view.camera = 'turntable'
-#         self.view.camera.distance = 15
-        
-#         self.scatter = scene.visuals.Markers(parent=self.view.scene, antialias=0)
-#         self.scatter.set_data(self.all_pts, face_color=self.all_cols, size=self.all_sizes)
-        
-#         self.canvas.events.key_press.connect(self.on_key_press)
-
-#     def update(self, event):
-#         self.t += 0.02
-        
-#         # Xoay cây
-#         angle = 0.01
-#         c, s = np.cos(angle), np.sin(angle)
-        
-#         new_x = self.all_pts[:, 0] * c - self.all_pts[:, 2] * s
-#         new_z = self.all_pts[:, 0] * s + self.all_pts[:, 2] * c
-#         self.all_pts[:, 0] = new_x
-#         self.all_pts[:, 2] = new_z
-
-#         # Hiệu ứng nhấp nháy cho đèn
-#         twinkle = 0.5 + 0.5 * np.sin(self.t * 8)
-#         self.all_cols[self.light_start:self.light_end, 3] = twinkle
-        
-#         # Ngôi sao lấp lánh
-#         star_twinkle = 0.7 + 0.3 * np.sin(self.t * 5)
-#         self.all_cols[-5000:-5000+1500, 3] = star_twinkle
-
-#         self.scatter.set_data(self.all_pts, face_color=self.all_cols, size=self.all_sizes)
-
-#     def run(self):
-#         self.generate_tree()
-#         self.setup()
-#         self.timer = app.Timer(interval=1/60, connect=self.update, start=True)
-#         app.run()
-
-#     def on_key_press(self, event):
-#         if event.key in ('Escape', 'Q'):
-#             self.canvas.close()
-#             app.quit()
-
-# if __name__ == '__main__':
-#     NeonLoveTree(image_path='nguoi_yeu.jpg').run()
-
-# from vispy import app, scene
-# from vispy.scene import visuals
-# import numpy as np
-# from PIL import Image
-# import os
-
-# app.use_app('pyqt5')
-
-# class NeonLoveTree:
-#     def __init__(self, image_path='nguoi_yeu.jpg'):
-#         self.t = 0.0
-#         self.image_path = image_path
-#         self.phase = 0  # 0: tree, 1: transition, 2: galaxy
-
-#     def generate_galaxy(self, N=50000):
-#         """Tạo dải ngân hà sắc nét"""
-#         angles = np.random.uniform(0, 4*np.pi, N)
-        
-#         radii = np.zeros(N)
-#         for i in range(N):
-#             if np.random.random() < 0.3:
-#                 radii[i] = np.random.uniform(0, 1.5)
-#             elif np.random.random() < 0.6:
-#                 radii[i] = np.random.uniform(1.5, 4)
-#             else:
-#                 radii[i] = np.random.uniform(4, 8)
-        
-#         spiral_offset = 0.8 * angles
-#         noise_factor = 0.1 + 0.2 * (radii / 8.0)
-        
-#         x = radii * np.cos(angles + spiral_offset) + np.random.normal(0, noise_factor, N)
-#         z = radii * np.sin(angles + spiral_offset) + np.random.normal(0, noise_factor, N)
-#         y = np.random.normal(0, 0.2, N) * (1 + radii/10)
-        
-#         galaxy_points = np.column_stack((x, y, z))
-        
-#         colors = np.zeros((N, 4))
-#         dist = np.sqrt(x**2 + z**2)
-        
-#         for i in range(N):
-#             if dist[i] < 1.5:
-#                 colors[i] = [1.0, 1.0, 0.95, 1.0]
-#             elif dist[i] < 4:
-#                 colors[i] = [0.4, 0.6, 1.0, 0.9]
-#             else:
-#                 colors[i] = [0.9, 0.5, 0.8, 0.7]
-        
-#         sizes = np.zeros(N)
-#         for i in range(N):
-#             if dist[i] < 1.5:
-#                 sizes[i] = np.random.uniform(3, 6)
-#             elif dist[i] < 4:
-#                 sizes[i] = np.random.uniform(2, 4)
-#             else:
-#                 sizes[i] = np.random.uniform(1, 2.5)
-        
-#         return galaxy_points, colors, sizes
-
-#     def generate_tree(self):
-#         # 1. Thân cây
-#         N_tree = 30_000
-#         i = np.arange(N_tree)
-#         h_raw = i / N_tree
-#         height = 10.0 * h_raw - 5.0
-        
-#         base_radius = 3.5 * (1.0 - h_raw)**0.8
-#         roughness = np.random.normal(0, 0.4, N_tree) * (1.1 - h_raw)
-#         r = base_radius + roughness
-        
-#         theta = i * 0.2
-#         x = r * np.cos(theta) + np.random.normal(0, 0.1, N_tree)
-#         z = r * np.sin(theta) + np.random.normal(0, 0.1, N_tree)
-#         y = height
-        
-#         tree_points = np.column_stack((x, y, z))
-#         tree_colors = np.random.uniform(0.3, 1.0, (N_tree, 3))
-#         tree_colors = np.hstack([tree_colors, np.full((N_tree, 1), 0.6)])
-
-#         # 2. Quả cầu
-#         N_ornaments = 200
-#         orn_heights = np.random.uniform(-4, 4, N_ornaments)
-#         h_norm = (orn_heights + 5) / 10.0
-#         orn_radius = 3.0 * (1.0 - h_norm)**0.8
-        
-#         orn_theta = np.random.uniform(0, 2*np.pi, N_ornaments)
-#         orn_r = orn_radius * np.random.uniform(0.7, 1.0, N_ornaments)
-        
-#         orn_x = orn_r * np.cos(orn_theta)
-#         orn_z = orn_r * np.sin(orn_theta)
-#         orn_y = orn_heights
-        
-#         ornament_points = np.column_stack((orn_x, orn_y, orn_z))
-        
-#         color_palette = np.array([
-#             [1.0, 0.0, 0.0, 1.0],
-#             [1.0, 0.8, 0.0, 1.0],
-#             [0.0, 0.5, 1.0, 1.0],
-#             [0.8, 0.0, 1.0, 1.0],
-#             [1.0, 0.2, 0.6, 1.0],
-#             [0.0, 1.0, 0.5, 1.0],
-#         ])
-#         color_indices = np.random.choice(len(color_palette), N_ornaments)
-#         ornament_colors = color_palette[color_indices]
-
-#         # 3. Dây đèn
-#         N_lights = 500
-#         light_heights = np.linspace(-4.5, 4.5, N_lights)
-#         h_norm_lights = (light_heights + 5) / 10.0
-#         light_radius = 3.2 * (1.0 - h_norm_lights)**0.8
-        
-#         light_theta = np.linspace(0, 20*np.pi, N_lights)
-#         light_x = light_radius * np.cos(light_theta)
-#         light_z = light_radius * np.sin(light_theta)
-        
-#         light_points = np.column_stack((light_x, light_heights, light_z))
-#         light_colors = np.full((N_lights, 4), [1.0, 1.0, 0.6, 1.0])
-
-#         # 4. Ngôi sao
-#         N_star = 1500
-#         s_r = np.random.uniform(0, 0.5, N_star)
-#         s_theta = np.random.uniform(0, 2*np.pi, N_star)
-#         s_phi = np.random.uniform(0, np.pi, N_star)
-#         sx = s_r * np.sin(s_phi) * np.cos(s_theta)
-#         sy = 5.2 + s_r * np.cos(s_phi)
-#         sz = s_r * np.sin(s_phi) * np.sin(s_theta)
-        
-#         burst = np.random.choice(N_star, N_star//4)
-#         sx[burst] *= 3; sy[burst] = 5.2 + (sy[burst]-5.2)*3; sz[burst] *= 3
-        
-#         star_points = np.column_stack((sx, sy, sz))
-#         star_colors = np.full((N_star, 4), [1.0, 0.9, 0.0, 1.0])
-
-#         # Gộp các phần xoay
-#         self.rotating_pts = np.vstack([
-#             tree_points, ornament_points, light_points, star_points
-#         ]).astype(np.float32)
-        
-#         self.rotating_cols = np.vstack([
-#             tree_colors, ornament_colors, light_colors, star_colors
-#         ]).astype(np.float32)
-        
-#         tree_sizes = np.random.uniform(1, 2.5, len(tree_points))
-#         orn_sizes = np.random.uniform(8, 15, len(ornament_points))
-#         light_sizes = np.random.uniform(4, 7, len(light_points))
-#         star_sizes = np.random.uniform(2, 4, len(star_points))
-        
-#         self.rotating_sizes = np.hstack([
-#             tree_sizes, orn_sizes, light_sizes, star_sizes
-#         ]).astype(np.float32)
-        
-#         # Galaxy
-#         galaxy_points, galaxy_colors, galaxy_sizes = self.generate_galaxy()
-#         self.galaxy_pts = galaxy_points.astype(np.float32)
-#         self.galaxy_cols = galaxy_colors.astype(np.float32)
-#         self.galaxy_sizes = galaxy_sizes.astype(np.float32)
-        
-#         # Indices
-#         self.light_start = len(tree_points) + len(ornament_points)
-#         self.light_end = self.light_start + len(light_points)
-
-#     def setup(self):
-#         self.canvas = scene.SceneCanvas(bgcolor='black', show=True, fullscreen=True)
-#         self.view = self.canvas.central_widget.add_view()
-#         self.view.camera = 'turntable'
-#         self.view.camera.distance = 15
-        
-#         # Scatter cho particles
-#         self.scatter = scene.visuals.Markers(parent=self.view.scene, antialias=0)
-#         self.grid = scene.visuals.GridLines(parent=self.view.scene, color=(0.3,0.3,0.3,1))
-#         self.scatter.set_data(self.rotating_pts, face_color=self.rotating_cols, size=self.rotating_sizes)
-        
-#         # Text CHRISTMAS - Sharp vector text
-#         self.text = visuals.Text(
-#             text="CHRISTMAS",
-#             pos=(0, 0, 0),
-#             color=(1.0, 0.85, 0.0, 1.0),
-#             font_size=120,
-#             bold=True,
-#             anchor_x='center',
-#             anchor_y='middle',
-#             parent=self.view.scene
-#         )
-        
-#         # Image - Sharp bitmap
-#         # if os.path.exists(self.image_path):
-#         #     img = Image.open(self.image_path).convert('RGBA')
-#         #     img.thumbnail((400, 400), Image.Resampling.LANCZOS)
-            
-#         #     # Tạo Image visual nằm ngang
-#         #     self.image_visual = visuals.Image(
-#         #         np.array(img),
-#         #         parent=self.view.scene,
-#         #         method='impostor'
-#         #     )
-            
-#         #     # Scale và position để nằm dưới đất
-#         #     width, height = img.size
-#         #     scale_factor = 3.5 / max(width, height) * 100
-            
-#         #     self.image_visual.transform = scene.transforms.MatrixTransform()
-#         #     self.image_visual.transform.scale((scale_factor, scale_factor, 1))
-#         #     self.image_visual.transform.rotate(90, (1, 0, 0))  # Xoay nằm ngang
-#         #     self.image_visual.transform.translate((0, -5.3, 0))
-        
-#         self.canvas.events.key_press.connect(self.on_key_press)
-
-#     def update(self, event):
-#         self.t += 0.02
-        
-#         # Phase 0: Christmas tree
-#         if self.phase == 0:
-#             if self.t < 30:
-#                 # Xoay particles
-#                 angle = 0.01
-#                 c, s = np.cos(angle), np.sin(angle)
-                
-#                 new_x = self.rotating_pts[:, 0] * c - self.rotating_pts[:, 2] * s
-#                 new_z = self.rotating_pts[:, 0] * s + self.rotating_pts[:, 2] * c
-#                 self.rotating_pts[:, 0] = new_x
-#                 self.rotating_pts[:, 2] = new_z
-
-#                 # Đèn nhấp nháy
-#                 twinkle = 0.5 + 0.5 * np.sin(self.t * 8)
-#                 self.rotating_cols[self.light_start:self.light_end, 3] = twinkle
-                
-#                 self.scatter.set_data(self.rotating_pts, face_color=self.rotating_cols, size=self.rotating_sizes)
-#             else:
-#                 self.phase = 1
-#                 self.transition_start = self.t
-        
-#         # Phase 1: Transition
-#         elif self.phase == 1:
-#             progress = (self.t - self.transition_start) / 5.0
-            
-#             if progress < 1.0:
-#                 # Fade tree
-#                 n_rot = len(self.rotating_pts)
-#                 self.rotating_pts = self.rotating_pts * (1 - progress) + self.galaxy_pts[:n_rot] * progress
-#                 self.rotating_cols[:, 3] *= (1 - progress)
-                
-#                 # Fade text and image
-#                 self.text.color = (1.0, 0.85, 0.0, 1.0 - progress)
-#                 # if hasattr(self, 'image_visual'):
-#                 #     self.image_visual.opacity = 1.0 - progress
-                
-#                 self.scatter.set_data(self.rotating_pts, face_color=self.rotating_cols, size=self.rotating_sizes)
-#             else:
-#                 # Hide text and image
-#                 self.text.parent = None
-#                 if hasattr(self, 'image_visual'):
-#                     self.image_visual.parent = None
-                
-#                 # Switch to galaxy
-#                 self.scatter.set_data(self.galaxy_pts, face_color=self.galaxy_cols, size=self.galaxy_sizes)
-#                 self.phase = 2
-#                 self.current_pts = self.galaxy_pts.copy()
-        
-#         # Phase 2: Galaxy
-#         elif self.phase == 2:
-#             angle = 0.005
-#             c, s = np.cos(angle), np.sin(angle)
-            
-#             new_x = self.current_pts[:, 0] * c - self.current_pts[:, 2] * s
-#             new_z = self.current_pts[:, 0] * s + self.current_pts[:, 2] * c
-#             self.current_pts[:, 0] = new_x
-#             self.current_pts[:, 2] = new_z
-            
-#             self.scatter.set_data(self.current_pts, face_color=self.galaxy_cols, size=self.galaxy_sizes)
-
-#     def run(self):
-#         self.generate_tree()
-#         self.setup()
-#         self.timer = app.Timer(interval=1/60, connect=self.update, start=True)
-#         app.run()
-
-#     def on_key_press(self, event):
-#         if event.key in ('Escape', 'Q'):
-#             self.canvas.close()
-#             app.quit()
-
-# if __name__ == '__main__':
-#     NeonLoveTree(image_path='nguoi_yeu.jpg').run()
-
+```
+# Cây thông noel
+```python
 from vispy import app, scene
 from vispy.scene import visuals
 import numpy as np
@@ -937,3 +599,4 @@ class NeonLoveTree:
 
 if __name__ == '__main__':
     NeonLoveTree(image_path='nguoi_yeu.jpg').run()
+```

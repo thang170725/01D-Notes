@@ -1,4 +1,5 @@
-- [Arrays](#arrays)
+- [Create (tạo)](#create-tạo)
+  - [new Array \& \[\]](#new-array--)
   - [isArray()](#isarray)
   - [.length](#length)
   - [.join()](#join)
@@ -7,8 +8,10 @@
   - [.forEach()](#foreach)
   - [every()](#every)
   - [some()](#some)
-  - [find()](#find)
+- [Filter (lọc)](#filter-lọc)
+  - [.find()](#find)
   - [.filter()](#filter)
+- [Shape (xử lý hình dạng)](#shape-xử-lý-hình-dạng)
   - [.push()](#push)
   - [.pop()](#pop)
   - [shift()](#shift)
@@ -20,6 +23,7 @@
   - [.slice()](#slice)
   - [.indexOf()](#indexof)
   - [lastIndexOf()](#lastindexof)
+- [Process (xử lý mảng)](#process-xử-lý-mảng)
   - [.reduce()](#reduce)
   - [reduceRight()](#reduceright)
   - [.filter()](#filter-1)
@@ -35,7 +39,8 @@
   - [toSorted()](#tosorted)
   - [ToReversed()](#toreversed)
 ---
-# Arrays
+# Create (tạo)
+## new Array & []
 ```bash
 Trong một Array có thể chứa các kiểu dữ liệu dữ liệu khác nhau.
 ```
@@ -137,15 +142,40 @@ a = a.some(function (Number){
 
 console.log(a); // true
 ```
-## find()
+# Filter (lọc)
+## .find()
 ```bash
-Tìm phần tử trong mảng rồi in ra màn hình. Chỉ trả về một giá trị.
+- Tìm phần tử trong mảng rồi in ra màn hình. 
+- Chỉ trả về một giá trị.
+```
+**Ex1: Tìm số đầu tiên > 10**
+```js
+const numbers = [3, 7, 12, 5, 20];
+
+const result = numbers.find((num) => num > 10);
+
+console.log(result); // 12
+
+// find sẽ trả về phần tử đầu tiên thỏa mãn điều kiện
+```
+**Ex2: Tìm user có id = 2**
+```js
+const users = [
+  { id: 1, name: "Nam" },
+  { id: 2, name: "Linh" },
+  { id: 3, name: "Huy" },
+];
+
+const user = users.find((item) => item.id === 2);
+
+console.log(user);
+// { id: 2, name: "Linh" }
 ```
 ## .filter()
 ```bash
 Tìm phần tử trong mảng thỏa mãn điều kiện. trả về nhiều giá trị nếu thỏa mãn.
 ```
-**Ex: Không dùng filter**
+**Ex1: Không dùng filter**
 ```js
 let a = [1,2,3,4,5,6,7];
 
@@ -169,6 +199,25 @@ console.log(a); // khi này a đang là một đối tương (object)
 // length: 3
 // [[Prototype]]: Array(0)
 ```
+**Ex3: Lấy tất cả user có id > 1**
+```js
+const users = [
+  { id: 1, name: "Nam" },
+  { id: 2, name: "Linh" },
+  { id: 3, name: "Huy" },
+];
+
+const result = users.filter((item) => item.id > 1);
+
+console.log(result);
+/*
+[
+  { id: 2, name: "Linh" },
+  { id: 3, name: "Huy" }
+]
+*/
+```
+# Shape (xử lý hình dạng)
 ## .push()
 ```bash
 Hàm này sẽ thêm phần tử vào cuối mảng.
@@ -316,6 +365,7 @@ let arr = [1,2,3,3,4,5];
    
 console.log(arr.lastIndexOf(3)); // 3
 ```
+# Process (xử lý mảng)
 ## .reduce() 
 ```bash
 Hàm reduce sẽ duyệt qua từng phần tử trong mảng, sau đó trả về một giá trị cuối cùng, giá trị này phụ thuộc vào chương trình của hàm mà bạn truyền vào reduce.

@@ -1,5 +1,6 @@
 - [Blur](#blur)
   - [Gussian Blur](#gussian-blur)
+- [Circle (thuật toán \& công thức đường tròn, hình tròn)](#circle-thuật-toán--công-thức-đường-tròn-hình-tròn)
 # Blur
 ## Gussian Blur
 **Cách hoạt động**
@@ -14,4 +15,19 @@ Giá trị pixel mới tại (1,1) sẽ là:
 = 0.625+2.5+1.875+ 6.25+15+8.75+ 5.625+12.5+6.875
 = 65
 Vậy, giá trị pixel mới tại vị trí (1,1) trong ma trận kết quả sẽ là 65.
+```
+# Circle (thuật toán & công thức đường tròn, hình tròn)
+## Parametric
+```bash
+Dùng để biểu diễn điểm chạy trên đường tròn theo góc
+```
+**Formula**
+```bash
+x=rcos(θ),y=rsin(θ)
+
+- Input:
+  + r = bán kính
+  + θ (angle) = góc quay (tính bằng radian)
+- Output:
+  + (x, y) = tọa độ điểm trên đường tròn
 ```

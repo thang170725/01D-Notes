@@ -49,11 +49,7 @@ while True:
     except ValueError:
         print("❌ Lỗi: phải nhập số nguyên")
 
-```- [Nhập số nguyên nhỏ hơn 5 chữ số](#nhập-số-nguyên-nhỏ-hơn-5-chữ-số)
-- [Nhập vào hai số nguyên S và E, quy định S \< E và E không quá 8 chữ số.](#nhập-vào-hai-số-nguyên-s-và-e-quy-định-s--e-và-e-không-quá-8-chữ-số)
-
----
-
+```
 # Nhập số nguyên nhỏ hơn 5 chữ số
 ```python
 while True:

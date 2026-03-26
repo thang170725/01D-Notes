@@ -3,6 +3,10 @@
 - [font (chỉnh chữ)](#font-chỉnh-chữ)
 - [Border (chỉnh đường viền)](#border-chỉnh-đường-viền)
 - [text](#text)
+- [Background (Chỉnh nền)](#background-chỉnh-nền)
+  - [bg-cover](#bg-cover)
+  - [bg-no-repeat](#bg-no-repeat)
+  - [bg-center](#bg-center)
 ---
 # rounded
 ```bash
@@ -103,3 +107,7 @@ border-double
 - text-xl	    : bóng rất sâu
 - shadow-2xl	: bóng cực sâu
 ```
+# Background (Chỉnh nền)
+## bg-cover
+## bg-no-repeat
+## bg-center

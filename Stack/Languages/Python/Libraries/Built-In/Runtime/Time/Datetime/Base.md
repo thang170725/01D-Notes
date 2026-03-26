@@ -1,5 +1,4 @@
 - [Directory Structure](#directory-structure)
-- [12/01/2026 18:35:10](#12012026-183510)
 ---
 # Directory Structure
 ```bash

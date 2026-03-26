@@ -1,6 +1,4 @@
 - [Directory Structure](#directory-structure)
-- [Fields](#fields)
-  - [Bài toán mức thấp (Low-level Vision)](#bài-toán-mức-thấp-low-level-vision)
   - [Bài toán phát hiện \& định vị (Detection \& Localization)](#bài-toán-phát-hiện--định-vị-detection--localization)
   - [Bài toán phân vùng (Segmentation)](#bài-toán-phân-vùng-segmentation)
   - [Bài toán nhận dạng (Recognition)](#bài-toán-nhận-dạng-recognition)
@@ -19,7 +17,7 @@
 ```bash
 Computer-Vision           # mình dùng thư mục này để xem kiến thức về CV
 ├── Base.md               # mình dùng file này để xem kiến thức cơ bản và tiện ích
-├── Architecture.md       # mình dùng file này để xem các kiến trúc
+├── Architecture/       # mình dùng file này để xem các kiến trúc model
 ├── Fields/               # mình dùng thư mục này để xem các lĩnh vực
 ├── Models.md             # mình dùng thư mục này để xem các model cụ thể
 ├── Process_IMG.md        # mình dùng thư mục này để xử lý ảnh
@@ -69,10 +67,6 @@ Xử lý tín hiệu ảnh, chưa cần hiểu nội dung.
 ```
 ## Bài toán nhận dạng (Recognition)
 ```bash
-1. Face Recognition
-    - Giải quyết: Đây là ai?
-2. OCR (Optical Character Recognition)
-    - Giải quyết: Đọc chữ trong ảnh.
 3. Action Recognition
     - Giải quyết: Người trong video đang làm gì?
 4. Gesture Recognition

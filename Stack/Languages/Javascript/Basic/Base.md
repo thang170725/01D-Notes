@@ -1,8 +1,8 @@
-- [Cấu trúc](#cấu-trúc)
+- [Directory Structure](#directory-structure)
 - [Extensions hỗ trợ Javascript](#extensions-hỗ-trợ-javascript)
 - [JS Where To](#js-where-to)
 ---
-# Cấu trúc
+# Directory Structure
 ```bash
 Basic/                             # mình dùng thư mục này để xem kiến thức cơ bản của JS
 ├── DOM/                           # mình dùng thư mục này để thao tác tất cả liên quan đến DOM
@@ -21,13 +21,15 @@ Basic/                             # mình dùng thư mục này để xem kiế
 ├── String.md                      # mình dùng file này để thao tác với chuỗi
 ├── Time.md                        # mình dùng file này để xử lý thời gian
 ├── Try_Catch_Finally.md           # mình dùng file này để xử lý lỗi
-└──  Window.md                     # mình dùng file này để thao tác với Window
+└── Window.md                      # mình dùng file này để thao tác với Window
 ```
 # Extensions hỗ trợ Javascript
-- Quokka.js
+```bash
+1. Quokka.js
+```
 # JS Where To
 ```bash
-- Internal: Viết vào file HTML và sử dụng thẻ <script> … </script> để bao quanh.
-- External: Viết ra một file javascript riêng rồi import vào file HTML bằng thuộc tính src=’’;
-- Inline: Viết code js thẳng vào thẻ của file HTML thông qua các thuộc tính của javascript hỗ trợ liên kết với file HTML
+1. Internal: Viết vào file HTML và sử dụng thẻ <script> … </script> để bao quanh.
+2. External: Viết ra một file javascript riêng rồi import vào file HTML bằng thuộc tính src=’’;
+3. Inline: Viết code js thẳng vào thẻ của file HTML thông qua các thuộc tính của javascript hỗ trợ liên kết với file HTML
 ```

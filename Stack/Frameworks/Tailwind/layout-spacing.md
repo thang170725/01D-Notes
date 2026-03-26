@@ -13,6 +13,7 @@
   - [col-span](#col-span)
 - [fixed (dính vào màn hình)](#fixed-dính-vào-màn-hình)
 - [min](#min)
+- [inset](#inset)
 ---
 # w & h & min-h-screen
 ```bash
@@ -236,3 +237,17 @@ Modal
 
 Hover effect
 # min
+# inset
+```bash
+Nó chỉ hoạt động khi element có position (ví dụ: fixed, absolute, relative
+```
+**Ex**
+```html
+<div className="fixed inset-0 ..."></div>
+
+<!-- 
+fixed: phần tử bám theo viewport
+inset-0: kéo full màn hình (trên, dưới, trái, phải = 0)
+=> 👉 Kết quả: div phủ toàn bộ màn hình (full screen background 
+-->
+```

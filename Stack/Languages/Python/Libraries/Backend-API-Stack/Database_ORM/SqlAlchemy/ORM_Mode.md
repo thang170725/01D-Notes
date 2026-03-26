@@ -1,7 +1,8 @@
-- [Create \& Config](#create--config)
+- [Create \& Config (tạo \& cấu hình hệ thống)](#create--config-tạo--cấu-hình-hệ-thống)
   - [Connection Setup](#connection-setup)
     - [sessionmaker()](#sessionmaker)
     - [Session](#session)
+      - [refresh()](#refresh)
   - [Model Definition](#model-definition)
     - [declarative\_base() \& DeclarativeBase](#declarative_base--declarativebase)
     - [__table\_args__](#table_args)
@@ -26,16 +27,10 @@
     - [filter\_by()](#filter_by)
   - [Logic Healers](#logic-healers)
 - [sa](#sa)
-- [Process](#process)
-  - [Transaction Actions](#transaction-actions)
-    - [.add() \& .commit() \& refresh()](#add--commit--refresh)
 - [Insert (thêm mới vào db)](#insert-thêm-mới-vào-db)
+  - [.add() \& .commit()](#add--commit)
 ---
-# Create & Config
-```bash
-- khởi tạo và cấu hình
-- Thiết kế bản vẽ (Model) và chuẩn bị công cụ kết nối
-```
+# Create & Config (tạo & cấu hình hệ thống)
 ## Connection Setup
 ```bash
 Thiết lập kết nối
@@ -104,6 +99,36 @@ def create_user(db: Session):
     db.commit()
     db.refresh(user)
     return user
+```
+#### refresh()
+```bash
+- Thuộc ORM không dùng cho CORE.
+- Mục đích:
+    + Load lại dữ liệu từ DB vào object
+    + Đồng bộ state sau khi:
+        - commit
+        - trigger DB
+        - update từ nơi khác
+```
+**Ex**
+```python
+@router.post("/register")
+def register(
+    payload: UserSchema,
+    db: Session = Depends(get_db)
+):
+    user = User(
+        **payload.model_dump(exclude_unset=True)
+    )
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    return {
+        "id": user.id,
+        "username": user.username
+    }
 ```
 ## Model Definition
 ```bash
@@ -322,40 +347,12 @@ def upgrade():
 def downgrade():
     op.drop_table("users")
 ```
-# Process
-## Transaction Actions
-```bash
-Hành động ghi
-```
-### .add() & .commit() & refresh()
+# Insert (thêm mới vào db)
+## .add() & .commit()
 ```bash
 - add       : đưa object vào session chưa ghi xuống db.
 - commit    : thực sự insert vào db. nếu lỗi -> rollback
-- refresh   : lấy dữ liệu mới nhất từ db
-```
-**Ex**
-```python
-@router.post("/register")
-def register(
-    payload: UserSchema,
-    db: Session = Depends(get_db)
-):
-    user = User(
-        **payload.model_dump(exclude_unset=True)
-    )
-
-    db.add(user)
-    db.commit()
-    db.refresh(user)
-
-    return {
-        "id": user.id,
-        "username": user.username
-    }
-```
-# Insert (thêm mới vào db)
-```bash
-Để insert data vào database bằng ORM của SQLAlchemy, bạn làm theo flow chuẩn: tạo model → tạo session → add → commit.
+- Để insert data vào database bằng ORM của SQLAlchemy, bạn làm theo flow chuẩn: tạo model → tạo session → add → commit.
 ```
 **Ex: insert vào db bằng ORM**
 ```python

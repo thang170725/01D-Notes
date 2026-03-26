@@ -1,6 +1,9 @@
-- [Strings](#strings)
+- [Create (tạo)](#create-tạo)
+  - ["" \& '' \& new String \& \`\`](#----new-string--)
+- [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
   - [length](#length)
-  - [.toString() \& String() \& +](#tostring--string--)
+- [Process (xử lý chuỗi)](#process-xử-lý-chuỗi)
+- [.toString() \& String() \& +](#tostring--string--)
   - [${} - template string](#---template-string)
   - [CharAt() | at()](#charat--at)
   - [CharCodeAt()](#charcodeat)
@@ -29,7 +32,8 @@
   - [.exec()](#exec)
   - [.replace()](#replace-1)
 ---
-# Strings
+# Create (tạo)
+## "" & '' & new String & ``
 ```bash
 - Trong javascript chuỗi cũng có thể coi là một mảng nên có thể lấy giá trị chuỗi giống như ở mảng được. 
 - giữa “” và ‘’ không có khác biệt. template có ưu điểm hơn là có thể nhúng biểu thức vào chuỗi, viết chuỗi trên nhiều dòng dễ dàng và có thể sử dụng được biểu thức câu lệnh trong chuỗi.
@@ -41,6 +45,7 @@
 - var | let <name> = new String(value ); - Object String
 - var | let <name> = ` … `; -  template String
 ```
+# Display (cung cấp thông tin)
 ## length
 ```bash
 Để đếm số ký tự trong chuỗi.
@@ -50,7 +55,8 @@
 var Str = "Hello Wolrd";
 console.log(Str.length); // 11
 ```
-## .toString() & String() & +
+# Process (xử lý chuỗi)
+# .toString() & String() & +
 ```bash
 Ép kiểu từ số sang chuỗi.
 ```
