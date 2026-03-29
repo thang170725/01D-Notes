@@ -1,50 +1,9 @@
-- [Linear Regression](#linear-regression)
-  - [Thuật toán Linear Regression](#thuật-toán-linear-regression)
-  - [Demo code thuần không dùng thư viện Linear Regression 1 đặc trưng](#demo-code-thuần-không-dùng-thư-viện-linear-regression-1-đặc-trưng)
+- [Demo code thuần không dùng thư viện Linear Regression 1 đặc trưng](#demo-code-thuần-không-dùng-thư-viện-linear-regression-1-đặc-trưng)
   - [Xây dựng model linear 2 đặc trưng](#xây-dựng-model-linear-2-đặc-trưng)
-  - [Train model linear với numpy](#train-model-linear-với-numpy)
+- [Xây dựng model linear với numpy](#xây-dựng-model-linear-với-numpy)
   - [Train model Linear với pytorch](#train-model-linear-với-pytorch)
 ---
-# Linear Regression
-```bash
-Đầu ra dự đoán là liên tục và có độ dốc không đổi. Nó được sử dụng để dự đoán các giá trị trong một phạm vi liên tục (doanh số, giá cả) thay vì cố gắng phân loại chúng thành các danh mục nhóm (chó, mèo).
-```   
-## Thuật toán Linear Regression
-```bash
-Bạn có dataset đã được scale sẵn (Z-score), gồm:
-| x₁ | x₂ | x₃ | y  |
-| -- | -- | -- | -- |
-| 1  | 0  | -1 | 2  |
-| 0  | 1  | 1  | 3  |
-| -1 | -1 | 0  | -1 |
-
-Yêu cầu:
-1. Viết mô hình: 𝑦 = 𝑤1.𝑥1 + 𝑤2.𝑥2 + 𝑤3.𝑥3 + 𝑏 
-2. Dùng dạng ma trận: 𝑦 = w𝑋 + 𝑏
-3. Tìm: 𝑤1,𝑤2,𝑤3, w1
-```
-```bash
----- Loop 1 ------
-Step 1: Tính y
-    - Tự chọn w1 = 0.1, w2 = 0.2, w3 = 0.15, b = 0
-    - y1 = 𝑤1.𝑥1 + 𝑤2.𝑥2 + 𝑤3.𝑥3 + 𝑏 = 0.1x1 + 0.2x0 + 0.15x2 = 0.4
-    - y2 = 0.5
-    - y3 = 0.2
-    - ... (nếu data co nhiều dòng)
-Step 2: Tính loss (MSE)
-    MSE = (1/n) [(y1_true - y2_pred)**2 + ...] = 3.4
-Step 3: BackProp (đạo hàm)
-    dL/dw = -(2/n).(Y_true - (W.X + b)).X = [1.2, 3.0, 2]
-    dL/db = -(2/n).(Y_true - (W.X + b)) = 1
-Step 3: Update (cập nhật trọng số)
-    - Tự chọn learning rate = 0.002
-    W = W - (dL/dw).lr = [1, 2.8, 1]
-    b = b - (dL/db).lr = 1
-
----- Loop 2 -----
-...
-```
-## Demo code thuần không dùng thư viện Linear Regression 1 đặc trưng
+# Demo code thuần không dùng thư viện Linear Regression 1 đặc trưng
 ```python
 def predict(X, W, b):
     return W * X + b
@@ -153,64 +112,155 @@ print("Final b:", b)
 test = [176, 28]   # chiều cao 176cm, tuổi 28
 print(f"Predict weight for height={test[0]}, age={test[1]} → {predict(test, W, b)} kg")
 ```
-## Train model linear với numpy
+# Xây dựng model linear với numpy
+```bash
+Dự đoán điểm dựa vào thời gian học, số bài tập đã làm, số buổi đi học.
+```
+**Batch Gradient Decent (sử dụng tất cả dữ liệu trong dataset rồi mới cập nhật trọng số**
 ```python
 import pandas as pd
 import numpy as np
+from typing import Tuple
 
-# ====== Bước 1: Tạo bộ dữ liệu ======
 np.random.seed(42)
-thoi_gian = np.random.randint(low=5, high=30, size=30, dtype=int)
-so_bai_tap = np.random.randint(low=3, high=20, size=30, dtype=int)
-so_buoi_di_hoc = np.random.randint(low=2, high=8, size=30, dtype=int)
 
-# ====== Bước 2: khởi tạo w, b đầu tiên ======
-diem = 2*thoi_gian + 3*so_bai_tap + 2*so_buoi_di_hoc + np.random.normal(loc=0, scale=5, size=30)
+class LinearRegression:
+    def __init__(self, dataset: pd.DataFrame, target: str = "points", lr=0.001, epochs=1000) -> None:
+        self.X = dataset.drop(target, axis=1).to_numpy() # (30, 3)
+        self.y = dataset[target].to_numpy() # (30, )
+        self.n = len(self.y)
+        
+        self.W = np.random.rand(self.X.shape[1])
+        self.b = 0
 
-df = pd.DataFrame({
-    "thoi_gian": thoi_gian,
-    "so_bai_tap": so_bai_tap,
-    "so_buoi_di_hoc": so_buoi_di_hoc,
-    "diem": diem
-})
+        self.lr = lr
+        self.epochs = epochs
 
-# ====== Bước 3: Thuật toán Linear =======
-def activate_function(X, w, b):
-    return np.dot(X, w) + b # x1*w1 + x2*w2 + x3*w3 + … + b
+    # hàm kích hoạt
+    def activate_function(self) -> np.ndarray: # (30, )
+        return np.dot(self.X, self.W) + self.b
 
-def cost_function(X, y, w, b):
-    m = len(y)
-    mse = 0
-    for i in range(m):
-        y_pred = sum([X[i][j]*w[j] for j in range(len(w))]) + b
-        loss = (y[i] - y_pred)**2
-        mse += loss
-    return mse/m
+    # tính sai số
+    def cost_function(self) -> float:
+        y_pred = self.activate_function()
+        return np.mean(np.power(self.y - y_pred, 2))
 
-def update_w_b(X, y, w, b, learning_rate):
-    m = len(y)
-    y_pred = np.dot(X, w) + b
-    error = y - y_pred
-    dw = -2/m * np.dot(X.T, error)
-    db = -2/m * np.sum(error)
+    def backprop(self) -> None:
+        y_pred = self.activate_function()
+        error = self.y -y_pred
+        
+        dw = -2/self.n * np.dot(self.X.T, error)
+        db = -2/self.n * np.sum(error)
 
-    w = w - dw*learning_rate
-    b = b - db*learning_rate
-    return w,b
+        self.W = self.W - dw*self.lr
+        self.b = self.b - db*self.lr
 
-def train(X, y, w, b, learning_rate, epoch):
-    for i in range(epoch):
-        w, b = update_w_b(X,y,w,b,learning_rate=learning_rate)
-        if i%100 == 0:
-            print("epoch: ", i, "cost: ", cost_function(X,y,w,b))
-    return w, b
+    def train(self) -> None:
+        for i in range(self.epochs):
+            self.backprop()
+        
+            if i%100 == 0:
+                print("epoch: ", i, "cost: ", self.cost_function())
 
-# ======= Bước 4: Đánh giá ======
-X = df.drop('diem', axis=1).values
-y = df['diem'].values
-w1 = np.zeros(X.shape[1])
-w, b = train(X, y, w1, 0.1, 0.0001, 1000)
-print(activate_function([15, 10, 3], w, b))
+    def predict(self, new_X: np.ndarray) -> float:
+        return np.dot(new_X, self.W) + self.b
+
+if __name__ == "__main__":
+    # ====== Bước 1: Tạo bộ dữ liệu ======
+    times = np.random.randint(low=5, high=30, size=30, dtype=int)
+    number_exercises = np.random.randint(low=3, high=20, size=30, dtype=int)
+    number_schools = np.random.randint(low=2, high=8, size=30, dtype=int)
+    points = 2*times + 3*number_exercises + 2*number_schools + np.random.normal(loc=0, scale=5, size=30)
+
+    df = pd.DataFrame({
+        "times": times,
+        "number_exercises": number_exercises,
+        "number_schools": number_schools,
+        "points": points
+    })
+    
+    # ===== Bước 2: Train model ========
+    linear_regression = LinearRegression(dataset=df, target="points", lr=0.0001, epochs=1000)
+    linear_regression.train()
+```
+**Mini Batch Size**
+```python
+import pandas as pd
+import numpy as np
+from typing import Tuple
+
+np.random.seed(42)
+
+class LinearRegression:
+    def __init__(self, dataset: pd.DataFrame, target: str = "points", lr=0.001, epochs=1000) -> None:
+        self.X = dataset.drop(target, axis=1).to_numpy() # (30, 3)
+        self.y = dataset[target].to_numpy() # (30, )
+        self.n = len(self.y)
+        
+        self.W = np.random.rand(self.X.shape[1])
+        self.b = 0
+
+        self.lr = lr
+        self.epochs = epochs
+
+    # hàm kích hoạt
+    def activate_function(self) -> np.ndarray: # (30, )
+        return np.dot(self.X, self.W) + self.b
+
+    # tính sai số
+    def cost_function(self) -> float:
+        y_pred = self.activate_function()
+        return np.mean(np.power(self.y - y_pred, 2))
+
+    def backprop(self, X_batch, y_batch) -> None:
+        m = len(y_batch)
+        y_pred = np.dot(X_batch, self.W) + self.b
+        error = y_batch - y_pred
+
+        dw = -2/m * np.dot(X_batch.T, error)
+        db = -2/m * np.sum(error)
+
+        self.W = self.W - dw*self.lr
+        self.b = self.b - db*self.lr
+
+    def train(self, batch_size=10) -> None:
+        for epoch in range(self.epochs):
+
+            # 🔀 shuffle dữ liệu mỗi epoch (rất quan trọng)
+            indices = np.random.permutation(self.n)
+            X_shuffled = self.X[indices]
+            y_shuffled = self.y[indices]
+
+            # chia batch
+            for i in range(0, self.n, batch_size):
+                X_batch = X_shuffled[i:i+batch_size]
+                y_batch = y_shuffled[i:i+batch_size]
+
+                self.backprop(X_batch, y_batch)
+
+            if epoch % 100 == 0:
+                print("epoch:", epoch, "cost:", self.cost_function())
+
+    def predict(self, new_X: np.ndarray) -> float:
+        return np.dot(new_X, self.W) + self.b
+
+if __name__ == "__main__":
+    # ====== Bước 1: Tạo bộ dữ liệu ======
+    times = np.random.randint(low=5, high=30, size=30, dtype=int)
+    number_exercises = np.random.randint(low=3, high=20, size=30, dtype=int)
+    number_schools = np.random.randint(low=2, high=8, size=30, dtype=int)
+    points = 2*times + 3*number_exercises + 2*number_schools + np.random.normal(loc=0, scale=5, size=30)
+
+    df = pd.DataFrame({
+        "times": times,
+        "number_exercises": number_exercises,
+        "number_schools": number_schools,
+        "points": points
+    })
+    
+    # ===== Bước 2: Train model ========
+    linear_regression = LinearRegression(dataset=df, target="points", lr=0.0001, epochs=1000)
+    linear_regression.train(batch_size=10)
 ```
 ## Train model Linear với pytorch
 **Ex1**

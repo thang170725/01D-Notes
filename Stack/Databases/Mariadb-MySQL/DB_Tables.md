@@ -5,16 +5,13 @@
 - [Add](#add)
   - [Thêm cột vào db](#thêm-cột-vào-db)
   - [Thêm khóa ngoài](#thêm-khóa-ngoài)
-- [Đổi kiểu dữ liệu cho một cột](#đổi-kiểu-dữ-liệu-cho-một-cột)
-- [Đổi kiểu dữ liệu và thêm khóa chính](#đổi-kiểu-dữ-liệu-và-thêm-khóa-chính)
 - [Delete](#delete)
   - [TRUNCATE TABLE](#truncate-table)
   - [Xóa bảng](#xóa-bảng)
-  - [drop column](#drop-column)
-  - [Xóa khóa ngoài](#xóa-khóa-ngoài)
-  - [Xóa khóa chính](#xóa-khóa-chính)
-- [Update](#update)
-- [alter table](#alter-table)
+  - [alter ... drop](#alter--drop)
+- [Update (cập nhật \& thay đổi)](#update-cập-nhật--thay-đổi)
+  - [alter ... modify](#alter--modify)
+  - [alter ... change](#alter--change)
 - [JOIN (nối bảng)](#join-nối-bảng)
   - [join (inner join)](#join-inner-join)
   - [left join](#left-join)
@@ -93,18 +90,6 @@ REFERENCES districts(id)
 ON UPDATE CASCADE
 ON DELETE RESTRICT;
 ```
-# Đổi kiểu dữ liệu cho một cột
-```bash
-ALTER TABLE ten_bang
-MODIFY COLUMN ten_cot KIEU_DU_LIEU_MOI;
-```
-
-# Đổi kiểu dữ liệu và thêm khóa chính
-```sql
-ALTER TABLE districts
-MODIFY COLUMN id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-ADD PRIMARY KEY (id);
-```
 # Delete
 ## TRUNCATE TABLE
 ```bash
@@ -126,42 +111,57 @@ TRUNCATE TABLE ten_bang;
 ```bash
 DROP TABLE Students;
 ```
-## drop column
+## alter ... drop
 ```bash
-Xóa một cột trong bảng
+- Dùng để:
+  + Xóa một cột trong bảng
+  + Xóa khóa ngoài
+  + Xóa khóa chính
 ```
 **Syn**
 ```bash
 ALTER TABLE ten_bang
 DROP COLUMN ten_cot;
 ```
-**Ex**
+**Ex1: Xóa cột**
 ```sql
 ALTER TABLE Students
 DROP COLUMN className,
 DROP COLUMN major;
 ```
-
-## Xóa khóa ngoài
-**Ex**
+**Ex2: Xóa khóa ngoài**
 ```sql
 alter table listings 
 drop foreign key fk_districts;
 ```
-
-## Xóa khóa chính
+**Ex3 Xóa khóa chính**
 ```sql
 ALTER TABLE districts
 DROP PRIMARY KEY;
 ```
-# Update
-# alter table
+# Update (cập nhật & thay đổi)
+## alter ... modify
+```bash
+Dùng để thay đổi định nghĩ một cột trong bảng
+```
+**Ex: Đổi kiểu dữ liệu cho một cột**
+```bash
+ALTER TABLE ten_bang
+MODIFY COLUMN ten_cot KIEU_DU_LIEU_MOI;
+```
+## alter ... change
+```bash
+Thường dùng để đổi tên cột
+```
 **Syn**
 ```bash
-ALTER TABLE ten_bang AUTO_INCREMENT = 1;
-
-- Bảng phải trống
-- Nếu vẫn còn record có id = 10 → AUTO_INCREMENT sẽ không về 1
+ALTER TABLE table_name
+CHANGE old_column_name new_column_name column_definition;
+```
+**Ex**
+```sql
+ALTER TABLE users
+CHANGE username user_name VARCHAR(100);
 ```
 # JOIN (nối bảng)
 ## join (inner join)

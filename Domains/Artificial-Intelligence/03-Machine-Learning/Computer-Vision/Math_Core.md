@@ -1,6 +1,12 @@
 - [Blur](#blur)
   - [Gussian Blur](#gussian-blur)
 - [Circle (thuật toán \& công thức đường tròn, hình tròn)](#circle-thuật-toán--công-thức-đường-tròn-hình-tròn)
+  - [Parametric](#parametric)
+- [Euclidean distance](#euclidean-distance)
+- [Cosine similarity](#cosine-similarity)
+- [Loss Function](#loss-function)
+  - [ArcFace](#arcface)
+---
 # Blur
 ## Gussian Blur
 **Cách hoạt động**
@@ -30,4 +36,65 @@ x=rcos(θ),y=rsin(θ)
   + θ (angle) = góc quay (tính bằng radian)
 - Output:
   + (x, y) = tọa độ điểm trên đường tròn
+```
+# Euclidean distance
+```bash
+- Đo khoảng cách thật giữa 2 điểm trong không gian
+- nhỏ -> gần nhau, lớn -> xa nhau
+```
+**Formula**
+```bash
+d(A,B) = sqrt((A1​−B1​)**2 + (A2​−B2​)**2 +...+ (An​−Bn​)**2)
+```
+**Ex**
+```bash
+A = [1, 1]
+B = [2, 2]
+C = [1, -1]
+
+d(A, B) = √((1-2)² + (1-2)²) = √(1+1) = √2 ≈ 1.41
+d(A, C) = √((1-1)² + (1-(-1))²) = √(0+4) = 2
+
+→ A gần B hơn C (Euclidean) ✅
+```
+# Cosine similarity
+```bash
+- Chỉ quan tâm hướng vector, bỏ qua độ dài
+  + 1 -> gần nhau hoàn toàn
+  + 0 -> hoàn toàn khác hướng
+  + -1 -> ngược hướng
+```
+**Formula**
+```bash
+cosine(A,B) = (A.B)/(∣∣A∣∣⋅∣∣B∣∣) ​= (A1.B1 ​+ ... + An.Bn​)/(sqrt(​A1**2 + ...).sqrt(​B1**2 ​+ ...))
+```
+**Ex**
+```bash
+A = [1, 1]
+B = [2, 2]
+C = [1, -1]
+
+A · B = 1*2 + 1*2 = 4
+||A|| = √(1²+1²) = √2 ≈ 1.41
+||B|| = √(2²+2²) = √8 ≈ 2.83
+cosine(A, B) = 4 / (1.41*2.83) ≈ 1 (gần giống hoàn toàn)
+A · C = 1*1 + 1*(-1) = 0
+||C|| = √(1²+(-1)²) = √2 ≈ 1.41
+cosine(A, C) = 0 / (1.41*1.41) = 0 (khác hoàn toàn)
+```
+# Loss Function
+## ArcFace
+```bash
+- ArcFace = một loại loss fuction đặc biệt cho face recognition
+- Nó không phải model riêng
+- Nó thay thế loss function khi train model
+- Mục tiêu: tạo embedding chất lượng hơn, các cụm vector tách rõ hơn
+```
+**Tại sao cần ArcFace?**
+```bash
+- Softmax hay Triplet Loss: 
+  + vector các người chưa tách đều → dễ nhầm
+  + Triplet Loss cần chọn bộ triplet “khó” → training chậm
+- ArcFace: thêm margin góc (angular margin) → ép vector của mỗi người phải cách nhau ít nhất m độ trên hình cầu cosine
+  + Kết quả: embedding rõ ràng, khó nhầm, nhận diện tốt hơn cả người chưa từng thấy
 ```

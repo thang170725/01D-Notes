@@ -111,25 +111,27 @@ print(df)
 - values    : Đưa một series, cột trong Dataframe về dạng list.
 - to_numpy  : Đưa một series, cột trong Dataframe về dạng numpy array.
 ```
-**Ex1: values**
+**Ex1: values với dict of list**
 ```python
-data = {
-        'size': [850, 900, 1200, 1500],
-        'bedrooms': [2, 3, 3, 4],
-        'age': [10, 15, 20, 5],
-        'price': [200000, 250000, 300000, 350000]
-    }
-df = pd.DataFrame(data)
-print(df['size'], df['size'].values)
+import pandas as pd
 
-# 0     850
-# 1     900
-# 2    1200
-# 3    1500
-# Name: size, dtype: int64 
-# [ 850  900 1200 1500]
+data = {
+    'size': [850, 900, 1200, 1500],
+    'bedrooms': [2, 3, 3, 4],
+    'age': [10, 15, 20, 5],
+    'price': [200000, 250000, 300000, 350000]
+}
+df = pd.DataFrame(data)
+
+print(df.values)
+# [[   850      2     10 200000]
+#  [   900      3     15 250000]
+#  [  1200      3     20 300000]
+#  [  1500      4      5 350000]]
+
+print(df["size"].values, df["size"].values[1]) # [ 850  900 1200 1500] 900
 ```
-**Ex2: values[]**
+**Ex2: values với key-value**
 ```python
 dataFrame = pd.read_csv("danhSach.csv")
 x = dataFrame.values[:, 0]

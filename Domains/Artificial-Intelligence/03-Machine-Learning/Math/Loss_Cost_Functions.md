@@ -1,16 +1,28 @@
-- [Mean Squared Error (MSE)](#mean-squared-error-mse)
+- [Loss\_Function](#loss_function)
+- [Cost\_Function](#cost_function)
+  - [Mean Squared Error (MSE)](#mean-squared-error-mse)
 - [Binary Cross-Entropy (Log Loss)](#binary-cross-entropy-log-loss)
   - [Demo về công thức BCE bằng math](#demo-về-công-thức-bce-bằng-math)
 ---
-# Mean Squared Error (MSE)
+# Loss_Function
+```bash
+Tính cho 1 sample (1 dòng).
+```
+# Cost_Function
+```bash
+Tính trên toàn bộ dataset
+```
+## Mean Squared Error (MSE)
 ```bash
 Công thức tính loss function thương dùng cho Regression (Linear, v.v).
 ```
 **Formula**
 ```bash
-MSE = 1/n . [(y1_true - y1_pred)^2 + (y2_true - y2_pred)^2 + … ]
-
-- Output: càng gần 0 càng tốt
+1. MSE = 1/n . [(y1_true - y1_pred)^2 + (y2_true - y2_pred)^2 + … ]
+  - Output: càng gần 0 càng 
+2.
+  - Gradient theo w: dL/dw = (−2/𝑚).𝑋𝑇.(𝑦−𝑦^)
+  - Gradient theo b: dL/db = (−2/𝑚).∑(𝑦−𝑦^)
 ```
 # Binary Cross-Entropy (Log Loss)
 ```bash

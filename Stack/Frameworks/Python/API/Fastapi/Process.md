@@ -361,7 +361,7 @@ print("RESPONSE JSON:", response.json())
 - Depends = cơ chế “nhờ FastAPI làm hộ việc chuẩn bị thứ mình cần”
 - Bạn không tự tạo nữa, FastAPI tiêm (inject) vào cho bạn.
 ```
-**Ex: quán cà phê**
+**Ex1: quán cà phê**
 **không dùng Depends**
 ```bash
 “Tôi muốn cà phê, đây là tiền điện, tiền nước, máy pha, nhân viên…”
@@ -406,7 +406,6 @@ def get_items(db: Session = Depends(get_db)):
 # Inject vào function
 # Xong request → tự đóng DB
 ```
-
 # Request Data
 ```bash
 - Nhóm này xử lý dữ liệu mà client gửi lên server, ví dụ JSON body hoặc file upload.

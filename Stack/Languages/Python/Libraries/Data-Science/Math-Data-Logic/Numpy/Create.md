@@ -6,7 +6,7 @@
 - [linspace()](#linspace)
 - [.tolist()](#tolist)
 - [Asarray()](#asarray)
-- [Random](#random)
+- [Random (Tạo ngẫu nhiên)](#random-tạo-ngẫu-nhiên)
   - [Rand()](#rand)
   - [Randint()](#randint)
 - [Uniform()](#uniform)
@@ -163,7 +163,7 @@ arr2 = np.asarray(arr1)
 print(arr1 is arr2)  # True -> cùng vùng nhớ
 np.asarray() không tạo copy → tiết kiệm bộ nhớ.
 ```
-# Random
+# Random (Tạo ngẫu nhiên)
 ## Rand()
 ```bash
 Dùng để sinh số ngẫu nhiên trong khoảng [0, 1). Theo phân phối đều.
@@ -189,7 +189,7 @@ np.random.randint(low, high=None, size=None, dtype=int)
 - dtype: Kiểu dữ liệu.
 ```
 **Ex**
-```bash
+```python
 r1 = np.random.randint(1, 10, size=5)
 
 print(r1) # [6 4 6 3 3]

@@ -1,7 +1,6 @@
 - [Install \& run .deb](#install--run-deb)
 - [Cài GIMP (remove background img)](#cài-gimp-remove-background-img)
 - [Installation LibreOffice](#installation-libreoffice)
-- [Tải video](#tải-video)
 - [Cài bộ gõ tiếng việt (linux)](#cài-bộ-gõ-tiếng-việt-linux)
 - [Gỡ, xóa phần mềm, …](#gỡ-xóa-phần-mềm-)
 - [Cách mở khóa Office 365](#cách-mở-khóa-office-365)
@@ -21,23 +20,6 @@ sudo dnf install gimp     # Fedora
 ```bash
 1. sudo apt update
 2. sudo apt install libreoffice
-```
-# Tải video
-**Step**
-```bash
-1. sudo apt update
-2. sudo apt install yt-dlp -y
-3.
-yt-dlp "https://www.youtube.com/watch?v=ABC123"
-yt-dlp -f best "https://www.youtube.com/watch?v=ABC123"
-yt-dlp -f bestaudio "https://www.youtube.com/watch?v=ABC123" -o "%(title)s.%(ext)s"
-yt-dlp -x --audio-format mp3 "https://www.youtube.com/watch?v=ABC123"
-yt-dlp -f best "https://www.youtube.com/playlist?list=PLxxxx"
-yt-dlp -o "%(title)s.%(ext)s" "https://www.youtube.com/watch?v=ABC123"
-python -m yt_dlp "https://www.youtube.com/watch?v=4ar4bwuJwLo"
-echo 'alias ytd="python -m yt_dlp --merge-output-format mp4"' >> ~/.bashrc
-source ~/.bashrc
-4. ytd https://www.youtube.com/shorts/4ar4bwuJwLo
 ```
 **Fix lỗi av1**
 ```bash

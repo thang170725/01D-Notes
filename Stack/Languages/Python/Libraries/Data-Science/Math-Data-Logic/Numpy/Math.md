@@ -2,11 +2,12 @@
 - [.sum()](#sum)
 - [std() \& var()](#std--var)
 - [Exp()](#exp)
-- [Power() \& Sqrt()](#power--sqrt)
+- [np.power() \& \*\*](#nppower--)
+- [Sqrt()](#sqrt)
   - [Pi](#pi)
 - [.mean() \& .median()](#mean--median)
 - [+ \& - \& \* \& /](#-------)
-- [Dot() \& @ \& matmul()](#dot----matmul)
+- [dot() \& @ \& matmul()](#dot----matmul)
 - [exp()](#exp-1)
 - [argsort()](#argsort)
 - [bincount()](#bincount)
@@ -131,7 +132,13 @@ value = [12,34,45,70,86]
 print(np.var(value)) # 683.8399999999999
 ```
 # Exp()
-# Power() & Sqrt()
+# np.power() & **
+```python
+a = np.array([1,2,3])
+    
+print(a**2, np.power(a, 2)) # [1 4 9] [1 4 9]
+```
+# Sqrt()
 ```bash
 - sqrt  : Để tính căn thức bậc 2.
 ```
@@ -191,7 +198,7 @@ print(arr*arr1)
 # [[10. 30.]
 #  [ 1.  4.]]
 ```
-# Dot() & @ & matmul()
+# dot() & @ & matmul()
 ```bash
 - Để nhân ma trận. 1 chiều hoặc n chiều.
 - mảng >2D (tensor) thì dot không hỗ trợ tốt, còn @, matmul hỗ trợ broadcasting – Tốt.

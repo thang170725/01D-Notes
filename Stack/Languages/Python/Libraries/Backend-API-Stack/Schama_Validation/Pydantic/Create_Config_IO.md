@@ -3,6 +3,7 @@
   - [Field()](#field)
   - [Literal](#literal)
 - [EmailStr](#emailstr)
+- [ConfigDict](#configdict)
 ---
 # BaseModel
 ```bash
@@ -122,4 +123,49 @@ user = User(
 )
 
 print(user)
+```
+# ConfigDict
+```bash
+- Mặc định Pydantic chỉ parse dữ liệu dạng dict (mapping). Nếu truyền vào một object (ví dụ SQLAlchemy model) thì cần cấu hình from_attributes=True để nó đọc từ attributes của object.
+```
+**Syn**
+```bash
+from pydantic import BaseModel, ConfigDict
+
+model_config = ConfigDict(
+    extra='forbid',
+    validate_assignment=True,
+    from_attributes=
+)
+
+- Bắt buộc: tên biến phải là model_config
+- extra            
+    + ignore    : bỏ qua filed dư (mặc định)
+    + allow     : cho phép field dư
+    + forbid    : ném lỗi nếu có field dư
+- from_attributes   : 
+    + True là đọc dữ liệu từ Object.attribute
+    + False chỉ nhận dict
+```
+**Sự khác biệt giữa dùng và không dùng ConfigDict**
+**Không dùng**
+```python
+class User(BaseModel):
+    id: int
+    name: str
+
+u = User(id=1, name="An", age=20)
+print(u)
+
+# Không lỗi, age bị bỏ qua (mặc định)
+```
+**Dùng**
+```python
+class User(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+
+    id: int
+    name: str
+
+User(id=1, name="An", age=20)
 ```

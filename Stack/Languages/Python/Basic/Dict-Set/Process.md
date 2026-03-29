@@ -1,12 +1,10 @@
 - [dictionary](#dictionary)
   - [{} \& dict](#--dict)
-    - [Tạo một dictionaries với keys là mã sinh viên, values là điểm trung bình](#tạo-một-dictionaries-với-keys-là-mã-sinh-viên-values-là-điểm-trung-bình)
-    - [Tạo một dictionaries với 2 keys là mã sinh viên, điểm trung bình, values lưu list giá trị của keys tương ứng](#tạo-một-dictionaries-với-2-keys-là-mã-sinh-viên-điểm-trung-bình-values-lưu-list-giá-trị-của-keys-tương-ứng)
 - [.pop() \& Del \& .clear()](#pop--del--clear)
 - [.get()](#get)
 - [.items()](#items)
 - [.copy()](#copy)
-- [.keys() \& # .values()](#keys---values)
+  - [.keys() \& .values()](#keys--values)
   - [\[\] \& .update()](#--update)
 - [.popitem()](#popitem)
   - [\*\* (unpack dict)](#-unpack-dict)
@@ -35,59 +33,6 @@ thisdict = {
 }
 
 print(thisdict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
-```
-### Tạo một dictionaries với keys là mã sinh viên, values là điểm trung bình
-**Comprehension**
-```bash
-- Comprehesion chỉ nên sử dụng khi dữ liệu sạch, chỉ cần biến đổi, vì rất khó bắt lỗi. 
-```
-```python
-n = int(input('Số lượng phần tử: '))
-
-dic = {
-    input(f'mã sinh viên thứ {i+1}: '): float(input('điểm tb: '))
-    for i in range(n)
-}
-
-print(dic)
-```
-**Try ... Except**
-```python
-while True:
-    try:
-        n = int(input('Số lượng sinh viên: '))
-        if n > 0:
-            break
-        print('Phải nhập số nguyên dương!')
-    except ValueError:
-        print('Không phải số nguyên!')
-
-def nhap_diem():
-    while True:
-        try:
-            d = float(input('Điểm trung bình: '))
-            if 0 <= d <= 10:
-                return d
-            print('Điểm phải từ 0 đến 10!')
-        except ValueError:
-            print('Phải nhập số!')
-
-dic = {
-    input(f'Mã sinh viên thứ {i+1}: '): nhap_diem()
-    for i in range(n)
-}
-```
-
-### Tạo một dictionaries với 2 keys là mã sinh viên, điểm trung bình, values lưu list giá trị của keys tương ứng
-```python
-n = int(input('Số lượng sinh viên: '))
-
-dic = {
-    'students_id': [input(f'mã sinh viên thứ {i+1}: ') for i in range(n)],
-    'means_point': [input(f'điểm trung bình thứ {i+1}: ') for i in range(n)],
-}
-
-print(dic)
 ```
 # .pop() & Del & .clear()
 ```bash
@@ -201,7 +146,7 @@ mydict = thisdict.copy()
 
 print(mydict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
 ```
-# .keys() & # .values()
+## .keys() & .values()
 ```bash
 - keys      : Để lấy ra tên các key.
 - values    : Trả về danh sách các giá trị của dictionary.
@@ -236,6 +181,18 @@ data = {
 }
 
 print(data.values()) # dict_values([['Thang', 'Minh', 'Nghia', 'Quy'], [18, 20, 23, 16], [10, 9, 6, 7]])
+```
+**Ex4: values**
+```python
+data = {
+    'size': 850,
+    'bedrooms': 2,
+    'age': 10,
+    'price': 200000
+}
+
+
+print(list(data.values())) # [850, 2, 10, 200000]
 ```
 ## [] & .update()
 ```bash
