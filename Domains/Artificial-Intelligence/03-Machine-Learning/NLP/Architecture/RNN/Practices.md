@@ -92,3 +92,54 @@ with torch.no_grad():
     predicted_idx = torch.argmax(out, dim=2).squeeze().tolist()
     predicted_chars = ''.join([idx2char[idx] for idx in predicted_idx])
     print("Dự đoán:", predicted_chars)
+# Demo RNN
+```python
+import torch
+import torch.nn as nn
+
+class SimpleRNN:
+    def __init__(self, input_dim=4, hidden_dim=3, output_dim=3):
+        self.Wxh = nn.Parameter(torch.randn(input_dim, hidden_dim))
+        self.Whh = nn.Parameter(torch.randn(hidden_dim, hidden_dim))
+        self.bh  = nn.Parameter(torch.zeros(hidden_dim))
+
+        self.Why = nn.Parameter(torch.randn(hidden_dim, output_dim))
+        self.by  = nn.Parameter(torch.zeros(output_dim))
+
+        self.parameters = [self.Wxh, self.Whh, self.bh, self.Why, self.by]
+        self.loss_fn = nn.CrossEntropyLoss()
+
+    def forward(self, X):
+        h_t = torch.zeros(1, self.Whh.shape[0])  # batch=1
+        for x_t in X:
+            x_t = x_t.unsqueeze(0)
+            h_t = torch.tanh(x_t @ self.Wxh + h_t @ self.Whh + self.bh)
+        logits = h_t @ self.Why + self.by
+        return logits  # shape: (1, output_dim)
+
+    def train_step(self, X, y, lr=0.1):
+        logits = self.forward(X)             # (1, output_dim)
+        loss = self.loss_fn(logits, y)       # y: (batch_size,)
+        loss.backward()
+
+        with torch.no_grad():
+            for p in self.parameters:
+                p -= lr * p.grad
+                p.grad.zero_()
+        return loss.item()
+
+# ================= DEMO =================
+embedding = nn.Embedding(num_embeddings=10, embedding_dim=4)
+inputs = torch.tensor([1,2,3])
+X = embedding(inputs)  # shape: (seq_len, emb_dim)
+
+y = torch.tensor([2])  # target class, not embedding
+
+rnn = SimpleRNN(input_dim=4, hidden_dim=3, output_dim=3)
+
+for epoch in range(100):
+    X = embedding(inputs)  # tạo lại mỗi epoch
+    loss = rnn.train_step(X, y)
+    if epoch % 20 == 0:
+        print(epoch, loss)
+```

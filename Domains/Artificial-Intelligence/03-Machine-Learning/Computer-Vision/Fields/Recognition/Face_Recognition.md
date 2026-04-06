@@ -1,4 +1,6 @@
 - [Introduction](#introduction)
+- [Pracices](#pracices)
+  - [Pipeline xác định danh tính](#pipeline-xác-định-danh-tính)
 ---
 # Introduction
 ```bash
@@ -15,4 +17,17 @@ Dù là model gì (FaceNet, ArcFace, VGGFace…), pipeline luôn là:
 (2) Face Alignment: Căn chỉnh mặt (mắt, mũi thẳng hàng)
 (3) Feature Extraction (QUAN TRỌNG NHẤT) → CNN/Transformer biến ảnh → vector (ví dụ 128-d, 512-d)
 (4) So sánh vector: Dùng cosine similarity hoặc Euclidean distance (Xem trong Math_Core)
+```
+# Pracices
+## Pipeline xác định danh tính
+```bash
+Input: ảnh khuôn mặt
+Output: người A / B / Unknown
+```
+```bash
+1. Chuẩn bị dataset (định dạng ảnh .jpg, ...)
+    + Ảnh người A: 100 ảnh 
+    + Ảnh người B: 100 
+2. Cho từng ảnh vào model -> embedding
+    + model có thể là CNN, ResNet, MobileNet, Vision Transformer, ...
 ```

@@ -277,21 +277,7 @@ def positional_encoding_fast(seq_len, d_model):
 
 PhoBERT
 
-BPTT (Backpropagation Through Time)
-    • Đây là kỹ thuật tính gradient cho RNN. Vì RNN có trạng thái ẩn h_t phụ thuộc vào tất cả các h_(t-1), h_(t-2), …, nên backprop bình thường không đủ, ta phải "trải graph ra theo thời gian" và tính gradient qua từng step.
-    • Về cơ bản: BPTT là backpropagation chuẩn, nhưng áp dụng lên graph được unfold theo time steps.
-    • Công thức: dL/dW = sum((dL/dh_t) . (dh_t/dW))
-Cú pháp:
-# Forward RNN qua seq_len steps
-h = torch.zeros(batch, hidden_dim)
-for t in range(seq_len):
-    h = torch.tanh(X[:, t, :] @ Wxh + h @ Whh + bh)
 
-# Loss dựa trên h cuối
-loss = cross_entropy(h @ Why + by, y)
-
-# BPTT
-loss.backward()  # PyTorch tự lan truyền qua tất cả h_t
 Bài tập
 Demo RNN bằng torch
 import torchimport torch.nn as nn

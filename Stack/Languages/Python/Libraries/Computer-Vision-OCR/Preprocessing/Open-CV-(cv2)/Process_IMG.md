@@ -30,7 +30,7 @@
 - [Filter](#filter)
   - [filter2D()](#filter2d)
   - [bilateralFilter()](#bilateralfilter)
-- [ROI Process](#roi-process)
+- [ROI Process (Nhóm xử lý roi)](#roi-process-nhóm-xử-lý-roi)
   - [PointPolygonTest()](#pointpolygontest)
   - [InRange()](#inrange)
   - [FindContours()](#findcontours)
@@ -775,7 +775,7 @@ cv2.bilateralFilter(src, d, sigmaColor, sigmaSpace)
 - sigmaColor: Độ nhạy với khác biệt màu. Càng lớn thì càng mịn, bỏ qua sự khác biệt màu nhỏ. - kiểm soát mức độ quan tâm đến độ khác biệt màu sắc. 
 - sigmaSpace: Độ nhay với khoảng cách không gian. Càng lớn thì ảnh hưởng pixel xa hơn càng nhiều - Kiểm soát khoảng cách không gian trong kernel.
 ```
-# ROI Process
+# ROI Process (Nhóm xử lý roi)
 ## PointPolygonTest()
 ```bash
 Kiểm tra điểm có nằm trong ROI không. Dùng để: Check bbox center có trong ROI không

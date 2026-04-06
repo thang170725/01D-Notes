@@ -34,6 +34,7 @@
 **Syn: DataFrame**
 ```bash
 df = pd.DataFrame(data, index=None, columns=None, dtype=None, copy=False)
+
 - data (dict, list, numpy array, …): Dữ liệu gốc tạo nên bảng.
 - index (list hoặc array): Nhãn cho các dòng, mặc địn là 0,1,2, …
 - columns (list hoặc array): Tên cho các cột (nếu không sẽ tự động lấy từ data).

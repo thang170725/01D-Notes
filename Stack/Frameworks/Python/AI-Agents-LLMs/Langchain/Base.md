@@ -1,8 +1,9 @@
-- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
+- [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
+- [Cấu trúc](#cấu-trúc)
 - [Installation](#installation)
 ---
-# Cấu trúc thư mục
+# Directory Structure
 ```bash
 LangChain/                  # mình dùng thư mục này để xem kiến thức về langchain
 ├── Base.md                 # mình dùng file này để xem kiến thức, tiện ích

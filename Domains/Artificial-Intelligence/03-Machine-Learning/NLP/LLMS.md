@@ -1,13 +1,5 @@
-- [mistral](#mistral)
 - [GPT (Generative Pre-trained Transformer)](#gpt-generative-pre-trained-transformer)
 ---
-# mistral
-**Installation**
-```bash
-1. ollama --version
-2. ollama pull mistral
-3. ollama run mistral (Chỉ trả về 1 dòng duy nhất, chỉ là TÊN MỘT MÓN ĂN. Nguyên liệu: thịt heo, hành tây, cà chua, trứng)
-```
 # GPT (Generative Pre-trained Transformer)
 ```bash
 - Là mô hình của OpenAI dùng decoder của Transformer để: Sinh văn bản (generate), chứ không phải hiểu như BERT.

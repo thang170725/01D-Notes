@@ -1,6 +1,9 @@
-- [with\_structured\_output (đúng chính tả là structured, không phải structure) dùng để ép model trả về kết quả theo một cấu trúc cố định (schema) thay vì trả về text tự do.](#with_structured_output-đúng-chính-tả-là-structured-không-phải-structure-dùng-để-ép-model-trả-về-kết-quả-theo-một-cấu-trúc-cố-định-schema-thay-vì-trả-về-text-tự-do)
+- [Data Type Coercion (Nhóm ép kiểu dữ liệu)](#data-type-coercion-nhóm-ép-kiểu-dữ-liệu)
+  - [with\_structured\_output()](#with_structured_output)
+  - [PydanticOutputParser](#pydanticoutputparser)
 ---
-# with_structured_output()
+# Data Type Coercion (Nhóm ép kiểu dữ liệu)
+## with_structured_output()
 ```bash
 - dùng để ép model trả về kết quả theo một cấu trúc cố định (schema) thay vì trả về text tự do.
 - Nó rất hữu ích khi bạn muốn:
@@ -25,3 +28,4 @@ print(result)
 # Kết quả luôn là object:
 # Person(name='Nam', age=25)
 ```
+## PydanticOutputParser

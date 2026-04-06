@@ -7,6 +7,7 @@
   - [groupby()](#groupby)
   - [.transform()](#transform)
   - [qcut()](#qcut)
+  - [.astype()](#astype)
 ---
 # Transformation (biến đổi cấu trúc dữ liệu)
 ## .rename()
@@ -275,4 +276,12 @@ df["income_group"] = pd.qcut(
 )
 
 print(df)
+```
+## .astype()
+```bash
+Chuyển đổi kiểu dữ liệu
+```
+**Ex: chuyển sang kiểu int**
+```python
+students['grade'] = students['grade'].astype("int")
 ```

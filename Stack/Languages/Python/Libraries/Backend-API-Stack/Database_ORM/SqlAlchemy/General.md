@@ -15,6 +15,8 @@
     - [.count()](#count)
     - [.now()](#now)
   - [.label()](#label)
+- [Insert](#insert)
+  - [commit](#commit)
 - [Process](#process)
   - [.execute()](#execute)
     - [.all()](#all)
@@ -329,6 +331,50 @@ Category.name.label("category_name")
 
 # Nó tương đương SQL: SELECT meal.name AS name, category.name AS category_name
 ```
+# Insert
+## commit    
+```bash
+- Thực sự insert vào db. nếu lỗi -> rollback
+- Dùng cho cả CORE và ORM.
+```
+**Ex1: commit bằng ORM**
+```python
+def create_user(db: Session):
+    user = User(name="Thang")
+
+    db.add(user)      # thêm vào session
+    db.commit()       # flush + commit
+
+    return user
+
+# Luồng xảy ra:
+# add() → đưa object vào session
+# commit(): tự gọi flush() → chạy INSERT rồi commit transaction
+```
+**Ex2: commit bằng Core (Connection.commit())**
+```python
+from sqlalchemy import insert
+
+def create_user_core(conn):
+    stmt = insert(users).values(name="Thang")
+
+    conn.execute(stmt)  # chạy SQL
+    conn.commit()       # commit transaction
+
+# Cách viết Core chuẩn hơn (hay dùng)
+from sqlalchemy import insert
+
+def create_user_core(engine):
+    with engine.begin() as conn:
+        conn.execute(
+            insert(users).values(name="Thang")
+        )
+
+#  engine.begin() sẽ:
+# tự BEGIN
+# tự COMMIT khi không lỗi
+# tự ROLLBACK nếu lỗi
+```
 # Process
 ```bash
 Các thao tác liên qua đến xử  lý
@@ -403,15 +449,6 @@ stmt = (
     .where(listings.c.id == 1)
     .values(price_total=58000000000)
 )
-
-with engine.begin() as conn:
-    conn.execute(stmt)
-```
-## DELETE
-```python
-from sqlalchemy import delete
-
-stmt = delete(listings).where(listings.c.id == 1)
 
 with engine.begin() as conn:
     conn.execute(stmt)

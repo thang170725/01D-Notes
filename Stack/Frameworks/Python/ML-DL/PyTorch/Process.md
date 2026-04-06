@@ -1,5 +1,5 @@
-- [Create](#create)
-  - [Tensor()](#tensor)
+- [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
+  - [.tensor()](#tensor)
   - [.clone()](#clone)
   - [Arange()](#arange)
   - [Zeros()](#zeros)
@@ -48,11 +48,11 @@
 - [Dataset](#dataset)
 - [DataLoader](#dataloader)
 ---
-# Create
+# Create (Nhóm khởi tạo)
 ```bash
 Các hàm để khởi tạo
 ```
-## Tensor()
+## .tensor()
 ```bash
 Để tạo tensor trong pytorch, giống với mảng số.
 ```

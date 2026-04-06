@@ -1,20 +1,22 @@
-- [Read (đọc, lấy)](#read-đọc-lấy)
-- [imread()](#imread)
-- [NameWindow()](#namewindow)
-- [Imshow() \& WaitKey() \& destroyAllWindows()](#imshow--waitkey--destroyallwindows)
-- [VideoCapture() \& .read() \& .release()](#videocapture--read--release)
+- [Read (Nhóm đọc, lấy)](#read-nhóm-đọc-lấy)
+  - [imread()](#imread)
+  - [VideoCapture() \& .read() \& .release()](#videocapture--read--release)
+- [Create \& Config (Nhóm tạo \& cấu hình)](#create--config-nhóm-tạo--cấu-hình)
+  - [NameWindow()](#namewindow)
+  - [FillPoly()](#fillpoly)
+  - [bitwise\_and()](#bitwise_and)
+- [Display (Nhóm hiển thị \& cung cấp thông tin)](#display-nhóm-hiển-thị--cung-cấp-thông-tin)
+  - [Imshow() \& WaitKey() \& destroyAllWindows()](#imshow--waitkey--destroyallwindows)
 - [Draw](#draw)
   - [.putText()](#puttext)
   - [.circle()](#circle)
   - [.rectangle()](#rectangle)
   - [.polylines()](#polylines)
-- [FillPoly()](#fillpoly)
-- [bitwise\_and()](#bitwise_and)
   - [imdecode](#imdecode)
   - [imencode](#imencode)
 ---
-# Read (đọc, lấy)
-# imread()
+# Read (Nhóm đọc, lấy)
+## imread()
 ```bash
 - Được sử dụng để đọc một hình ảnh từ ổ đĩa và lưu nó dưới dạng một mảng NumPy để xử lý trong các ứng dụng xử lý ảnh.
 ```
@@ -28,49 +30,7 @@ cv2.imread(filename, flags)
     + cv2.IMREAD_GRAYSCALE (hoặc 0): Đọc ảnh ở dạng grayscale (đen trắng).
     + cv2.IMREAD_UNCHANGED (hoặc -1): Giữ nguyên ảnh, kể cả kênh alpha nếu có.
 ```
-# NameWindow()
-```bash
-Tạo ra một cửa số có tên.
-```
-**Syn**
-```bash
-cv2.namedWindow("Get Tọa Độ")
-```
-# Imshow() & WaitKey() & destroyAllWindows()
-```bash
-- Nhóm dùng để hiển thị hình ảnh, frame.
-```
-**Syn: imshow()**
-```bash
-cv2.imshow(<mô tả>, <attribute>)
-```
-**Syn: Waitkey()**
-```bash
-cv2.waitKey(0)
-
-- 0: Dừng vô thời hạn – chờ đến khi người dùng bấm phím thì chương trình mới thoát. (1000: Dừng 1 giây). Đối với video waitkey để càng lớn tốc độ video sẽ càng chậm
-```
-**Syn: destroyAllWindows**
-```bash
-cv2.destroyAllWidows()
-```
-**Ex**
-```python
-import cv2
-def main():
-    image = cv2.imread('night.jpg', cv2.IMREAD_GRAYSCALE) # Load an image
-    
-    if image is None: # Check if the image was loaded successfully
-        print("Error: Could not load image.")
-    
-    cv2.imshow('Ảnh hạ long', image) # Display the image in a window
-
-    # Wait for a key press and close the window
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-main()
-```
-# VideoCapture() & .read() & .release()
+## VideoCapture() & .read() & .release()
 ```bash
 - Là một class được sử dụng để, mở video từ file (mp4, avi, …) truy cập webcam hoặc camera khác để chụp ảnh hoặc quay video trên thời gian thực.
 ```
@@ -105,6 +65,68 @@ main()
 
 # bạn không tự động thấy ảnh từ camera. Bạn phải liên tục lấy ảnh từ webcam – và mỗi lần chụp ra tại một thời điểm, người ta gọi là một frame (giống như một khung hình trong video)
 # webcam là nguồn video, và video thực ra là nhiều ảnh nối tiếp nhau gọi là các frame
+```
+# Create & Config (Nhóm tạo & cấu hình)
+## NameWindow()
+```bash
+Tạo ra một cửa số có tên.
+```
+**Syn**
+```bash
+cv2.namedWindow("Get Tọa Độ")
+```
+## FillPoly()
+```bash
+Dùng để tạo mask
+```
+**Ex**
+```bash
+mask = np.zeros(frame.shape[:2], dtype=np.uint8)
+
+cv2.fillPoly(mask, [pts], 255)
+```
+## bitwise_and()
+```bash
+Dùng để áp mask ROI
+```
+**Syn**
+```bash
+roi = cv2.bitwise_and(frame, frame, mask=mask)
+```
+# Display (Nhóm hiển thị & cung cấp thông tin)
+## Imshow() & WaitKey() & destroyAllWindows()
+```bash
+- Nhóm dùng để hiển thị hình ảnh, frame.
+```
+**Syn: imshow()**
+```bash
+cv2.imshow(<mô tả>, <attribute>)
+```
+**Syn: Waitkey()**
+```bash
+cv2.waitKey(0)
+
+- 0: Dừng vô thời hạn – chờ đến khi người dùng bấm phím thì chương trình mới thoát. (1000: Dừng 1 giây). Đối với video waitkey để càng lớn tốc độ video sẽ càng chậm
+```
+**Syn: destroyAllWindows**
+```bash
+cv2.destroyAllWidows()
+```
+**Ex**
+```python
+import cv2
+def main():
+    image = cv2.imread('night.jpg', cv2.IMREAD_GRAYSCALE) # Load an image
+    
+    if image is None: # Check if the image was loaded successfully
+        print("Error: Could not load image.")
+    
+    cv2.imshow('Ảnh hạ long', image) # Display the image in a window
+
+    # Wait for a key press and close the window
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+main()
 ```
 # Draw
 ## .putText()
@@ -163,24 +185,6 @@ pts = np.array([
 ], np.int32)
 
 cv2.polylines(frame, [pts], True, (255, 0, 0), 2)
-```
-# FillPoly()
-```bash
-Dùng để tạo mask
-```
-**Ex**
-```bash
-mask = np.zeros(frame.shape[:2], dtype=np.uint8)
-
-cv2.fillPoly(mask, [pts], 255)
-```
-# bitwise_and()
-```bash
-Dùng để áp mask ROI
-```
-**Syn**
-```bash
-roi = cv2.bitwise_and(frame, frame, mask=mask)
 ```
 ## imdecode
 **Syn**

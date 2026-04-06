@@ -1,4 +1,6 @@
 - [Demo cách hoạt động của MLP](#demo-cách-hoạt-động-của-mlp)
+- [Practices](#practices)
+  - [Demo MLP classificial](#demo-mlp-classificial)
 ---
 # Demo cách hoạt động của MLP
 Đề bài: Cho input là [1,2,3,4,5] và mạng nơ ron 2 lớp 3x2. Demo cách hoạt động của mạng nơ ron này
@@ -28,4 +30,160 @@
     8. Cập nhật lại trọng số và bias
        w := w -alpha*&w
        b := b – alpha*&b
-Xây dựng mạng neural 1 lớp 2 nơ ron
+# Practices
+## Demo MLP classificial
+```bash
+'''
+==============================
+====== PHÂN LOẠI CẢM XÚC =====
+==============================
+'''
+import torch
+import torch.optim as optim, torch.nn as nn
+from torch.utils.data import DataLoader, Dataset
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+import tqdm
+
+class MyDataset(Dataset):
+    def __init__(self, X, y):
+        super(MyDataset, self).__init__()
+
+        self.X = X
+        self.y = y
+    
+    def __len__(self):
+        return len(self.X)
+    
+    def __getitem__(self, idx):
+        return self.X[idx], self.y[idx]
+
+
+class SentimentClassification(nn.Module):
+    def __init__(self, input_size, num_classes):
+        super(SentimentClassification, self).__init__()
+
+        self.model = nn.Sequential(
+            nn.Linear(input_size, 128),
+            nn.ReLU(),
+            nn.Linear(128,64),
+            nn.ReLU(),
+            nn.Linear(64, num_classes)
+        )
+        return self.model
+    
+    def forward(self, x):
+        return self.model(x)
+
+class Model:
+    def __init__(self, df, lr=0.01, epochs=10):
+        X, input_size, _ = self.bow(df)
+        y, num_classes = self.label_encoder(df)
+
+        X_train, X_test, y_train, y_test = self.split(X, y)
+
+        train_dataset = MyDataset(X_train, y_train)
+        test_dataset = MyDataset(X_test, y_test)
+        self.train_loader = DataLoader(train_dataset, batch_size=1, shuffe=True)
+        self.test_loader = DataLoader(test_dataset, batch_size=1, shuffe=True)
+
+        self.model = SentimentClassification(input_size, num_classes)
+        self.optimizer = optim.Adam(model.parameters(), lr=lr)
+        self.criterion = nn.CrossEntropyLoss()
+
+        self.epochs = epochs
+        
+    def bow(self, df):
+        vectorizer = CountVectorizer()
+        X = vectorizer.fit_transform(self.df["texts"]).toarray()
+
+        input_size = self.X.shape[1]
+
+        feature_name = self.X.get_feature_names_out()
+        return X, input_size, feature_name
+    
+    def label_encoder(self, df):
+        le = LabelEncoder()
+        y = le.fit_transform(df["labels"]).toarray()
+
+        num_classes = y.class_
+        return y, num_classes
+
+    def split(self, X, y, test_size=0.2):
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size)
+        return X_train, X_test, y_train, y_test
+    
+    def train(self):
+        self.model.train()
+        for epoch in range(self.epochs):
+            total_loss = 0
+            for X_batch, y_batch in tqdm(self.train_loader, desc=f"Epoch {epoch+1}/{self.epochs}"):
+                X_batch, y_batch = X_batch.to(self.device), y_batch.to(self.device)
+                self.optimizer.zero_grad()
+                outputs = self.model(X_batch)
+                loss = self.criterion(outputs, y_batch)
+                loss.backward()
+                self.optimizer.step()
+                total_loss += loss.item()
+            print(f"Epoch {epoch+1}/{self.epochs} - Loss: {total_loss/len(self.train_loader):.4f}")
+
+    def evaluate(self):
+        self.model.eval()
+        y_true, y_pred = [], []
+        with torch.no_grad():
+            for X_batch, y_batch in self.test_loader:
+                X_batch = X_batch.to(self.device)
+                outputs = self.model(X_batch)
+                preds = torch.argmax(outputs, dim=1)
+                y_true.extend(y_batch.numpy())
+                y_pred.extend(preds.cpu().numpy())
+
+        acc = accuracy_score(y_true, y_pred)
+        print("=== ĐÁNH GIÁ MÔ HÌNH ===")
+        print("Độ chính xác:", acc)
+        print(classification_report(y_true, y_pred, target_names=self.label_encoder.classes_))
+
+    # ---------------- LƯU MÔ HÌNH ----------------
+    def save_model(self, model_path="intent_model.pt", vec_path="vectorizer.pkl", encoder_path="label_encoder.pkl"):
+        torch.save(self.model.state_dict(), model_path)
+        joblib.dump(self.vectorizer, vec_path)
+        joblib.dump(self.label_encoder, encoder_path)
+        print(f"✅ Đã lưu mô hình vào {model_path}")
+        print(f"✅ Các nhãn: {list(self.label_encoder.classes_)}")
+
+    # ---------------- DỰ ĐOÁN ----------------
+    def predict(self, text, model_path="intent_model.pt", vec_path="vectorizer.pkl", encoder_path="label_encoder.pkl"):
+        # Load model & encoder
+        self.model.load_state_dict(torch.load(model_path, map_location=self.device))
+        self.model.eval()
+        self.vectorizer = joblib.load(vec_path)
+        self.label_encoder = joblib.load(encoder_path)
+
+        x = self.vectorizer.transform([text]).toarray()
+        x_tensor = torch.tensor(x, dtype=torch.float32).to(self.device)
+
+        with torch.no_grad():
+            output = self.model(x_tensor)
+            pred_id = torch.argmax(output, dim=1).item()
+            intent = self.label_encoder.inverse_transform([pred_id])[0]
+
+        print(f"👉 Câu: {text}")
+        print(f"🎯 Ý định dự đoán: {intent}")
+        return intent
+
+
+
+if __name__ == "__main__":
+    # fake data
+    data = {
+        "texts": ["i am very happy", "i am bad today", "i am normal"],
+        "labels": ["happy", "bad", "normal"]
+    }
+    df = pd.DataFrame(data)
+    
+    model = Model(df)
+
+```

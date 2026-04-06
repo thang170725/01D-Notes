@@ -4,6 +4,8 @@
 - [insert](#insert)
   - [.values()](#values)
     - [Demo Insert 2 bảng trong 1 transaction (chuẩn)](#demo-insert-2-bảng-trong-1-transaction-chuẩn)
+- [Delete (Nhóm xóa)](#delete-nhóm-xóa)
+  - [delete()](#delete)
 ---
 # text()
 ```bash
@@ -66,4 +68,29 @@ with engine.begin() as conn:
             area=96
         )
     )
+```
+# Delete (Nhóm xóa)
+## delete()
+**Ex1**
+```python
+from sqlalchemy import delete
+from sqlalchemy.engine import Engine
+from models import User
+
+def delete_user_core(engine: Engine, user_id: int):
+    with engine.begin() as conn:  # auto commit/rollback
+        stmt = delete(User).where(User.id == user_id)
+
+        result = conn.execute(stmt)
+
+        return result.rowcount > 0
+```
+**Ex2**
+```python
+from sqlalchemy import delete
+
+stmt = delete(listings).where(listings.c.id == 1)
+
+with engine.begin() as conn:
+    conn.execute(stmt)
 ```

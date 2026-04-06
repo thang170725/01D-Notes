@@ -4,7 +4,7 @@
 - [.flatten()](#flatten)
 - [.ndim](#ndim)
 - [.ndmin](#ndmin)
-- [\[\]](#)
+- [\[\] (Scling)](#-scling)
 - [Clip()](#clip)
 - [.argmin() \& .argmax()](#argmin--argmax)
 ---
@@ -95,7 +95,18 @@ arr = np.array([1, 2, 3, 4], ndmin=2)
 print(arr) # [[1 2 3 4]]
 print('number of dimensions :', arr.ndim) # number of dimensions : 2
 ```
-# []
+# [] (Scling)
+```bash
+Có thể dùng để cắt mảng
+```
+**Syn**
+```bash
+arr[rows, cols]
+
+- Input:
+    + dấu ',': để tách chiều
+    + dấu ':': để cắt theo range
+```
 # Clip()
 ```bash
 Để giới hạn giá trị của các phần tử trong mảng trong một khoảng nhất định.

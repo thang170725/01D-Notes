@@ -38,6 +38,7 @@
   - [findLastIndex()](#findlastindex)
   - [toSorted()](#tosorted)
   - [ToReversed()](#toreversed)
+  - [map()](#map)
 ---
 # Create (tạo)
 ## new Array & []
@@ -432,3 +433,11 @@ Nối các phần tử của mảng con.
 ## findLastIndex()
 ## toSorted()
 ## ToReversed()
+## map()
+```js
+var a = [1,2,3,4];
+var c  = a.map(function (b){
+    return b+2;
+})
+console.log(c); # [3,4,5,6]
+```

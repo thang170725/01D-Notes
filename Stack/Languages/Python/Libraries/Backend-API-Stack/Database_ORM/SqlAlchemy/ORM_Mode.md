@@ -19,16 +19,19 @@
     - [Date \& TIMESTAMP](#date--timestamp)
     - [JSON](#json)
 - [Search](#search)
-  - [Query Engine](#query-engine)
-    - [.query()](#query)
-  - [Filtering (Bộ lọc)](#filtering-bộ-lọc)
-    - [.filter()](#filter)
+  - [.query()](#query)
+- [Filtering (Bộ lọc)](#filtering-bộ-lọc)
+  - [.filter()](#filter)
     - [like()](#like)
     - [filter\_by()](#filter_by)
   - [Logic Healers](#logic-healers)
 - [sa](#sa)
 - [Insert (thêm mới vào db)](#insert-thêm-mới-vào-db)
-  - [.add() \& .commit()](#add--commit)
+  - [.add()](#add)
+- [Update (Nhóm cập nhật)](#update-nhóm-cập-nhật)
+  - [.flush()](#flush)
+- [Delete (Nhóm xóa)](#delete-nhóm-xóa)
+  - [Session.delete()](#sessiondelete)
 ---
 # Create & Config (tạo & cấu hình hệ thống)
 ## Connection Setup
@@ -295,14 +298,13 @@ Enum('sedentary', 'light', "moderate", name='activity_level_role')
 ```bash
 - tìm kiếm đôi tượng
 ```
-## Query Engine
-### .query()
+## .query()
 **Syn: query**
 ```bash
 db.query(User) # SELECT * FROM users
 ```
-## Filtering (Bộ lọc)
-### .filter()
+# Filtering (Bộ lọc)
+## .filter()
 ```bash
 - “Lọc theo điều kiện”
 ```
@@ -348,10 +350,9 @@ def downgrade():
     op.drop_table("users")
 ```
 # Insert (thêm mới vào db)
-## .add() & .commit()
+## .add()
 ```bash
 - add       : đưa object vào session chưa ghi xuống db.
-- commit    : thực sự insert vào db. nếu lỗi -> rollback
 - Để insert data vào database bằng ORM của SQLAlchemy, bạn làm theo flow chuẩn: tạo model → tạo session → add → commit.
 ```
 **Ex: insert vào db bằng ORM**
@@ -397,4 +398,55 @@ users = [
 
 session.add_all(users)
 session.commit()
+```
+# Update (Nhóm cập nhật)
+## .flush() 
+```bash
+- Dùng để đẩy (sync) các thay đổi từ bộ nhớ (session) xuống database nhưng chưa commit transaction.
+- Hiểu đơn giản:
+    + Bạn thêm/sửa/xóa object trong Session
+    + → flush() sẽ generate và execute SQL (INSERT/UPDATE/DELETE)
+    + → nhưng chưa COMMIT, nên vẫn có thể rollback
+- ORM (chủ yếu dùng ở đây)
+```
+**Ex1: cần lấy id ngay sau khi insert**
+```python
+user = User(name="Thang")
+session.add(user)
+
+session.flush()  # gửi INSERT xuống DB
+
+print(user.id)  # lúc này đã có id
+
+# Nếu không flush(), user.id có thể vẫn là None
+```
+**Ex2: Đảm bảo dữ liệu đã tồn tại trong DB trước khi query tiếp**
+```python
+session.add(user)
+session.flush()
+
+result = session.query(User).filter_by(name="Thang").first()
+
+# Nếu không flush, query có thể không thấy dữ liệu mới
+```
+# Delete (Nhóm xóa)
+## Session.delete()
+```python
+from sqlalchemy.orm import Session
+from models import User
+
+def delete_user_orm(db: Session, user_id: int):
+    # 1. Lấy object
+    user = db.get(User, user_id)
+
+    if not user:
+        return False
+
+    # 2. Đánh dấu xóa
+    db.delete(user)
+
+    # 3. Commit (flush + delete + commit)
+    db.commit()
+
+    return True
 ```

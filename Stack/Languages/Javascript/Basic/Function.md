@@ -1,7 +1,6 @@
 - [functions](#functions)
   - [Tạo hàm tính tổng 2 số](#tạo-hàm-tính-tổng-2-số)
   - [Tạo một giao diện tính tổng 2 số](#tạo-một-giao-diện-tính-tổng-2-số)
-- [map()](#map)
 ---
 # functions
 ```bash
@@ -42,12 +41,4 @@ result[0].onclick = function (){
     var operand2 = parseFloat(operands[1].value);
     dis.innerHTML = operand1+operand2;
 }
-```
-# map()
-```js
-var a = [1,2,3,4];
-var c  = a.map(function (b){
-    return b+2;
-})
-console.log(c); # [3,4,5,6]
 ```

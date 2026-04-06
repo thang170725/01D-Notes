@@ -1,5 +1,9 @@
-- [List](#list)
-  - [list() \& len() \& in](#list--len--in)
+- [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
+  - [list() \& \[\]](#list--)
+- [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
+  - [len()](#len)
+- [Process (Nhóm xử lý list)](#process-nhóm-xử-lý-list)
+  - [in](#in)
   - [\* (unpack)](#-unpack)
   - [.count()](#count)
   - [.index()](#index)
@@ -10,29 +14,43 @@
   - [.sort() \& sorted()](#sort--sorted)
   - [sum()](#sum)
 ---
-# List
-## list() & len() & in
+# Create (Nhóm khởi tạo)
+## list() & []
 ```bash
-- list  : Ép kiểu khác về list thường.
-- len   : Trả về độ dài của một mảng.
-- in    : Lặp qua các phần tử trong một mảng, list.
+Dùng để tạo ra một list hoặc ép từ kiểu khác về list
 ```
-**Syn: list**
+**Syn**
 ```bash
-li = list(a) # 
+li = list(a) 
+
+- Input:
+    + a: là một kiểu nào đó muốn chuyển sang kiểu list (Ex: a = 3 - kiểu nguyên)
+- Output:
+    + li: Là biến chứa danh sách
+```
+**EX: Chuyển từ kiểu chuỗi sang kiểu list**
+```python
+a = "My name is " # str
+a = list(a) # chuyển sang kiểu list
+
+print(len(a)) # 12 - số phần tử trong list
+
+for character in a: # dùng vòng lặp để in từng phần tử trong list
+    print(character, end=' ') # M y   n a m e   i s  
+```
+# Display (Nhóm cung cấp thông tin)
+## len() 
+```bash
+Trả về độ dài của một mảng.
 ```
 **Syn: len**
 ```bash
 l = len(li)
 ```
-**EX**
-```python
-a = "My name is " # str
-a = list(a)
-
-print(len(a)) # 12
-for character in a:
-    print(character, end=' ') # M y   n a m e   i s  
+# Process (Nhóm xử lý list)
+## in
+```bash
+Lặp qua các phần tử trong một mảng, list hoặc tìm xem trong một mảng có phần tử nào đó hay không
 ```
 ## * (unpack)
 ```bash

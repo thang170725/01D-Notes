@@ -1,9 +1,12 @@
-- [Timeout \& Interval](#timeout--interval)
+- [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
+  - [Date](#date)
+- [Process (nhóm xử lý thời gian)](#process-nhóm-xử-lý-thời-gian)
   - [setTimeout() \& setInterval()](#settimeout--setinterval)
   - [clearTimeout() \& clearInterval()](#cleartimeout--clearinterval)
-- [Date](#date)
   - [toUTCString()](#toutcstring)
-  - [toLocaleDateString()](#tolocaledatestring)
+  - [.toLocaleDateString()](#tolocaledatestring)
+  - [Date.parse()](#dateparse)
+  - [Date.now()](#datenow)
   - [Get](#get)
   - [.getFullYear() \& .getHours()  \& .getMinutes() \& .getSeconds() \& .getMiliseconds() \& .getTime()](#getfullyear--gethours---getminutes--getseconds--getmiliseconds--gettime)
   - [.getDate()](#getdate)
@@ -12,7 +15,31 @@
   - [getTimezoneOffset()](#gettimezoneoffset)
   - [.setFullYear() \& setMonth() \& setDate() \& setHours() \& setMinutes() \& setSeconds()](#setfullyear--setmonth--setdate--sethours--setminutes--setseconds)
 ---
-# Timeout & Interval
+# Create (Nhóm khởi tạo)
+## Date
+```bash
+Nó sẽ lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy
+```
+**Syn**
+```bash
+var | let | const <variable> = new Date();
+
+- New date()
+- New date(date String)
+- New date(year, month)
+- New Date(year, month, day)
+- New Date(year, month, day, hours)
+- New Date(year, month, day, hours, minutes)
+- New Date(year, month, day, hours, minutes, seconds)
+- New Date(year, month, day, hours, minutes, seconds, ms)
+- New Date(miniseconds)
+```
+**Ex1**
+```js
+const d = new Date();
+console.log(d); // Wed Feb 05 2025 10:09:00 GMT+0700 (Indochina Time)
+```
+# Process (nhóm xử lý thời gian)
 ## setTimeout() & setInterval()
 ```bash
 - setTimeout  : Dùng để thực hiện một hàm sau một khoảng thời gian xác định. Chỉ chạy 1 lần.
@@ -66,35 +93,6 @@ document.getElementsByTagName("button")[0].onclick = function(){
     clearInterval(run);
 }
 ```
-# Date
-```bash
-Nó sẽ lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy
-```
-**Syn**
-```bash
-var | let | const <variable> = new Date();
-
-- New date()
-- New date(date String)
-- New date(year, month)
-- New Date(year, month, day)
-- New Date(year, month, day, hours)
-- New Date(year, month, day, hours, minutes)
-- New Date(year, month, day, hours, minutes, seconds)
-- New Date(year, month, day, hours, minutes, seconds, ms)
-- New Date(miniseconds)
-```
-**Ex1**
-```js
-const d = new Date();
-console.log(d); // Wed Feb 05 2025 10:09:00 GMT+0700 (Indochina Time)
-```
-toDateString()
-Chuyển đổi sang định dạng chuỗi dễ đọc hơn.
-let date = new Date()
-var result = date.toDateString()
-console.log(result, typeof result)
-[ 'Sat Feb 22 2025', 'string' ]
 ## toUTCString()
 ```bash
 Để chuyển đổi đối tượng Date thành một chuỗi biểu diễn thời gian theo giờ UTC.
@@ -121,24 +119,47 @@ function main(){
 main();
 '2025-02-24T13:59:40.389Z'
 'string'
-## toLocaleDateString()
+## .toLocaleDateString()
 ```bash
 dùng để chuyển đổi một đối tượng Date thành một chuỗi biểu diễn ngày tháng theo quy ước địa phương.
 ```
+**Syn**
+```bash
+const date = new Date()
+date.toLocaleDateString(locales, options)
+
+- Input:
+  + locales: 
+    - "vi-VN"  // Việt Nam
+    - "en-US"  // Mỹ
+    - "ja-JP"  // Nhật
+  + options: Obj để custom format (viết trong {})
+    - weekday: "long" | "short",
+    - year: "numeric" | "2-digit",
+    - month: "numeric" | "2-digit" | "long" | "short",
+    - day: "numeric" | "2-digit"
+```
 **Ex**
 ```js
-function main(){
-    let date = new Date();
-    console.log(date.toLocaleDateString("vi-VN"))
-    console.log(typeof date.toISOString())
-}
-main();
+const today = new Date();
 
-// '24/2/2025'
-// String
+const formatted = today.toLocaleDateString("vi-VN", {
+    weekday: "long",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+});
+
+console.log(formatted); // Thứ Tư, 01/04/2026
 ```
-Date.parse()
+## Date.parse()
+```bash
 Trả về giá trị mili giây khoảng cách từ ngày 1 tháng 1 năm 1970.
+```
+## Date.now()
+```js
+console.log(Date.now()); // 1711790000000
+```
 ## Get
 ```bash
 Trả về  giá trị thời gian
