@@ -13,6 +13,10 @@
 - [group\_by](#group_by)
 - [count](#count)
 - [DISTINCT](#distinct)
+- [Time (Nhóm thời gian)](#time-nhóm-thời-gian)
+  - [YEAR()](#year)
+  - [MONTH()](#month)
+- [COALESCE()](#coalesce)
 ---
 # Kiểu dữ liệu
 ```bash
@@ -193,4 +197,31 @@ SELECT DISTINCT subject_id FROM Teacher;
 -- 👉 Kết quả:
 -- Math
 -- Physics
+```
+# Time (Nhóm thời gian)
+## YEAR()
+```bash
+Lấy năm từ kiểu Lấy năm từ kiểu DATE, DATETIME, TIMESTAMP
+```
+**Ex**
+```sql
+SELECT YEAR('2026-04-11'); -- 2026
+```
+## MONTH() 
+```bash
+- lấy tháng từ ngày
+- Công dụng lấy tháng (1 → 12)
+```
+**Ex**
+```sql
+SELECT MONTH('2026-04-11'); -- 4
+```
+# COALESCE()
+```bash
+- xử lý NULL (cực quan trọng)
+- Công dụng trả về giá trị KHÔNG NULL đầu tiên
+```
+**Ex**
+```sql
+SELECT COALESCE(NULL, NULL, 10, 20); -- 10
 ```

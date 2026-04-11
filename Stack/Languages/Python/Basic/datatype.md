@@ -2,8 +2,6 @@
 - [Keyword Arguments](#keyword-arguments)
 - [Keyword-Only Arguments](#keyword-only-arguments)
 - [Tìm UCLN](#tìm-ucln)
-  - [Bài tập](#bài-tập)
-    - [Thuật toán tìm ước chung lớn nhất](#thuật-toán-tìm-ước-chung-lớn-nhất)
 
 ---
 
@@ -123,15 +121,4 @@ def UCLN(n1,n2):
 def main():
     print(UCLN(22, 18))
 main()
-```
-
-
-
-## Bài tập
-### Thuật toán tìm ước chung lớn nhất
-```python
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
 ```

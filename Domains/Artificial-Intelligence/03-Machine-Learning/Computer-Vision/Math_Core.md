@@ -1,6 +1,4 @@
-- [Blur](#blur)
-  - [Gussian Blur](#gussian-blur)
-- [Circle (thuật toán \& công thức đường tròn, hình tròn)](#circle-thuật-toán--công-thức-đường-tròn-hình-tròn)
+- [Circle (Hình tròn)](#circle-hình-tròn)
   - [Parametric](#parametric)
 - [Euclidean distance](#euclidean-distance)
 - [Cosine similarity](#cosine-similarity)
@@ -17,23 +15,18 @@
 - [𝑖](#𝑖)
 - [𝑖](#𝑖-1)
   - [thuật toán pooling như nào](#thuật-toán-pooling-như-nào)
+- [Rotation (Xoay)](#rotation-xoay)
+  - [Affine](#affine)
+- [𝑀](#𝑀)
+- [𝛼](#𝛼)
+- [𝛽](#𝛽)
+- [\]](#)
+- [Sharpen \& Blur](#sharpen--blur)
+  - [Kernel](#kernel)
+  - [Blur](#blur)
+    - [Gussian Blur](#gussian-blur)
 ---
-# Blur
-## Gussian Blur
-**Cách hoạt động**
-```bash
-Giả sử chúng ta muốn tính giá trị của pixel tại vị trí (1,1), giá trị 60 trong ví dụ. Chúng ta sẽ đặt môt kernel 3x3 lên ma trận ảnh sao cho trung tâm của kernel đó trùng với pixel(1,1).
-Các pixel xung quanh pixel (1,1) trong ma trận ảnh gốc sẽ là:
-```
-```bash
-Bây giờ, chúng ta sẽ thực hiện phép tích chập:
-Giá trị pixel mới tại (1,1) sẽ là: 
-= (10×0.0625)+(20×0.125)+(30×0.0625)+ (50×0.125)+(60×0.25)+(70×0.125)+ (90×0.0625)+(100×0.125)+(110×0.0625)
-= 0.625+2.5+1.875+ 6.25+15+8.75+ 5.625+12.5+6.875
-= 65
-Vậy, giá trị pixel mới tại vị trí (1,1) trong ma trận kết quả sẽ là 65.
-```
-# Circle (thuật toán & công thức đường tròn, hình tròn)
+# Circle (Hình tròn)
 ## Parametric
 ```bash
 Dùng để biểu diễn điểm chạy trên đường tròn theo góc
@@ -495,3 +488,235 @@ Nếu bạn muốn, mình có thể:
 
 so sánh pooling vs stride=2 conv (câu phỏng vấn hay)
 hoặc giải thích global average pooling (dùng trong ResNet) 🔥
+# Rotation (Xoay)
+## Affine
+Nó trả về một ma trận:
+
+𝑀
+=
+[
+𝛼
+	
+𝛽
+	
+(
+1
+−
+𝛼
+)
+⋅
+𝑐
+𝑥
+−
+𝛽
+⋅
+𝑐
+𝑦
+
+
+−
+𝛽
+	
+𝛼
+	
+𝛽
+⋅
+𝑐
+𝑥
++
+(
+1
+−
+𝛼
+)
+⋅
+𝑐
+𝑦
+]
+M=[
+α
+−β
+	​
+
+β
+α
+	​
+
+(1−α)⋅cx−β⋅cy
+β⋅cx+(1−α)⋅cy
+	​
+
+]
+
+Trong đó:
+
+(
+𝑐
+𝑥
+,
+𝑐
+𝑦
+)
+(cx,cy): tâm xoay (center)
+𝜃
+θ: góc xoay (đơn vị độ)
+𝑠
+𝑐
+𝑎
+𝑙
+𝑒
+scale: hệ số scale
+𝛼
+=
+𝑠
+𝑐
+𝑎
+𝑙
+𝑒
+⋅
+cos
+⁡
+(
+𝜃
+)
+α=scale⋅cos(θ)
+𝛽
+=
+𝑠
+𝑐
+𝑎
+𝑙
+𝑒
+⋅
+sin
+⁡
+(
+𝜃
+)
+β=scale⋅sin(θ)
+📌 Ý nghĩa
+
+Ma trận này dùng để biến đổi một điểm 
+(
+𝑥
+,
+𝑦
+)
+(x,y) thành 
+(
+𝑥
+′
+,
+𝑦
+′
+)
+(x
+′
+,y
+′
+):
+
+[
+𝑥
+′
+
+
+𝑦
+′
+]
+=
+𝑀
+⋅
+[
+𝑥
+
+
+𝑦
+
+
+1
+]
+[
+x
+′
+y
+′
+	​
+
+]=M⋅
+	​
+
+x
+y
+1
+	​
+
+	​
+
+
+👉 Tức là:
+
+Xoay quanh center
+Có thể scale
+Không cần dùng ma trận 3×3 (vì đây là affine)
+# Sharpen & Blur
+```bash
+- Ảnh = gồm:
+  + Low-frequency → vùng mượt (trời, da, nền)
+  + High-frequency → cạnh, chi tiết
+- Vì vậy:
+  + Blur (làm mờ)	Giữ low-frequency, loại high-frequency
+  + Sharpen (làm nét)	Tăng high-frequency (cạnh)
+  + Edge detection	Chỉ giữ high-frequency
+```
+## Kernel
+**Cách nhận biết kernel khi nào dùng để sharpen, blur, ...**
+```bash
+1. Kernel làm mờ (blur). Ví dụ:
+  [1 1 1
+   1 1 1
+   1 1 1] / 9
+  - Đặc điểm: Tất cả giá trị dương, Gần như giống nhau. Tổng ≈ 1
+  - Ý nghĩa: Lấy trung bình lân cận → ảnh mượt hơn → blur
+2. Kernel làm nét (sharpen). Ví dụ:
+  [ 0 -1  0
+   -1  5 -1
+    0 -1  0]
+  - Đặc điểm: Trung tâm lớn hơn 1. Xung quanh có giá trị âm. Tổng ≈ 1
+  - Ý nghĩa: Lấy pixel gốc. Trừ đi vùng xung quanh → làm nổi bật khác biệt → sắc nét hơn
+3. Kernel phát hiện cạnh (edge). Ví dụ:
+  [-1 -1 -1
+   -1  8 -1
+   -1 -1 -1]
+  - Đặc điểm: Tổng ≈ 0. Nhiều số âm + số dương lớn
+  - Ý nghĩa: Vùng phẳng → triệt tiêu (≈0). Vùng có cạnh → giữ lại mạnh → edge detection
+```
+**Quy tắc “nhìn phát biết luôn”**
+```bash
+Rule 1: Tổng kernel
+  - ≈ 1	giữ độ sáng → blur hoặc sharpen
+  - ≈ 0	chỉ giữ cạnh (edge)
+Rule 2: Dấu của phần tử
+  - toàn dương	blur
+  - center lớn + xung quanh âm	sharpen
+  - nhiều âm + tổng 0	edge
+Rule 3: So sánh center vs neighbors
+Center ≈ neighbors → blur
+Center >> neighbors → sharpen
+Center đối nghịch neighbors → edge
+```
+## Blur
+### Gussian Blur
+**Cách hoạt động**
+```bash
+Giả sử chúng ta muốn tính giá trị của pixel tại vị trí (1,1), giá trị 60 trong ví dụ. Chúng ta sẽ đặt môt kernel 3x3 lên ma trận ảnh sao cho trung tâm của kernel đó trùng với pixel(1,1).
+Các pixel xung quanh pixel (1,1) trong ma trận ảnh gốc sẽ là:
+```
+```bash
+Bây giờ, chúng ta sẽ thực hiện phép tích chập:
+Giá trị pixel mới tại (1,1) sẽ là: 
+= (10×0.0625)+(20×0.125)+(30×0.0625)+ (50×0.125)+(60×0.25)+(70×0.125)+ (90×0.0625)+(100×0.125)+(110×0.0625)
+= 0.625+2.5+1.875+ 6.25+15+8.75+ 5.625+12.5+6.875
+= 65
+Vậy, giá trị pixel mới tại vị trí (1,1) trong ma trận kết quả sẽ là 65.
+```

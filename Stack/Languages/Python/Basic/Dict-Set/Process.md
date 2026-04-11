@@ -10,9 +10,14 @@
   - [\*\* (unpack dict)](#-unpack-dict)
   - [Exercise 1](#exercise-1)
 - [set](#set)
-- [.clear()](#clear)
-- [.discard()](#discard)
+  - [.clear()](#clear)
+  - [del](#del)
+  - [.remove()](#remove)
+  - [.discard()](#discard)
+  - [.intersection()](#intersection)
 - [\&](#)
+  - [.union()](#union)
+  - [.add()](#add)
 - [.update()](#update)
 ---
 # dictionary
@@ -307,7 +312,7 @@ print(thisset)
 # {True, 2, 'apple', 'banana', 'cherry'}
 # 1 không xuất hiện vì nó coi 1 và true là phần tử trùng lặp.
 ```
-# .clear()
+## .clear()
 ```bash
 Để xóa toàn bộ set.
 ```
@@ -321,7 +326,8 @@ mySet= {"apple", "banana", "orange", "Lemon", "Passion"}
 mySet.clear()
 
 print(mySet) # set()
-```# del
+```
+## del
 ```bash
 Để xóa toàn bộ set. Del sẽ xóa cả giá trị set và biến set.
 ```
@@ -340,7 +346,8 @@ print(mySet)
 #    print(mySet)
 #     ^^^^^
 # NameError: name 'mySet' is not defined
-```# .remove()
+```
+## .remove()
 ```bash
 Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa từ ném ra lỗi.
 ```
@@ -354,8 +361,7 @@ mySet= {"apple", "banana"}
 mySet.remove("banana")
 print(mySet) # {'apple'}
 ```
-
-# .discard()
+## .discard()
 ```bash
 Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa thì bỏ qua lệnh này.
 ```
@@ -368,7 +374,8 @@ print(mySet) # {'apple'}
 mySet= {"apple", "banana"}
 mySet.discard("banana")
 print(mySet) # {'apple'}
-```# .intersection()
+```
+## .intersection()
 ```bash
 Trả về một set mới chỉ chứa các phần tử có trong cả 2 set cũ.
 ```
@@ -385,7 +392,6 @@ Set = mySet.intersection(orther)
 
 print(Set) # {'Lemon', 'orange'}
 ```
-
 # &
 **Ex2**
 ```python
@@ -394,7 +400,8 @@ orther = {"orange", "Lemon", "Passion"}
 Set = mySet & orther
 
 print(Set) # {'Lemon', 'orange'}
-```# .union()
+```
+## .union()
 ```bash
 Trả về một set mới với các giá trị phần tử là 2 set cũ.
 ```
@@ -416,7 +423,8 @@ mySet= {"apple", "banana", }
 orther = {"orange", "Lemon", "Passion"}
 Set = mySet | orther
 print(Set) # {'Passion', 'orange', 'Lemon', 'banana', 'apple'}
-```# .add()
+```
+## .add()
 ```bash
 Để thêm một phần tử vào trong một set. 
 ```

@@ -240,7 +240,6 @@ Trả về chỉ số các phần tử được sắp xếp theo cách tăng d�
 # Log2()
 # Concatenate
 # Stack
-# Hstack
 # Vstack
 # Split
 # Array_split

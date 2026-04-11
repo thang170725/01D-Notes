@@ -387,6 +387,27 @@ console.log(sum); // 15
 ```bash
 Công dụng giống reduce nhưng duyệt mảng từ phải qua trái.
 ```
+**Syn**
+```bash
+arr.reduceRight((acc, current) => {
+    return ...;
+}, initialValue)
+
+- Input:
+  + acc (accumulator): giá trị tích lũy
+  + current: phần tử hiện tại
+  + initialValue: giá trị ban đầu
+```
+**Ex**
+```js
+[1, 2, 3].reduceRight((acc, cur) => acc + cur, 0) // 👉 Kết quả: 6
+// Chạy như sau:
+// acc = 0
+
+// cur = 3 → acc = 0 + 3 = 3
+// cur = 2 → acc = 3 + 2 = 5
+// cur = 1 → acc = 5 + 1 = 6
+```
 ## .filter()
 ```bash
 Để lặp qua các phần tử trong mảng, dùng để lọc các phần tử trong mảng theo một điều kiện nào đó.

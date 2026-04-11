@@ -59,6 +59,9 @@ Save vào DB / gọi API / chain tiếp
 9. LangGraph 
 ```
 # Installation
+```bash
+1. pip install -U langchain # dùng để tải langchain
+```
 **Trả phí**
 ```bash
 1. pip install langchain langchain-openai

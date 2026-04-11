@@ -8,7 +8,8 @@
 ---
 # Quản lý sự kiện
 ```bash
-1. Tạo danh sách n phần tử (n>=5). Mỗi sự kiện là 1 dict gồm mã, tên, địa điểm, ngày, số người.
+1. Tạo danh sách n phần tử (n>=5) gồm mã, tên, địa chỉ, tiền lương.
+2. Tìm và in ra đầy đủ thông tin của người có tiền lương lớn nhất
 2. Viết hàm thêm chi phí nếu chưa có.
 3. Tính chi phí trung bình.
 4. sắp xếp theo số người tham gia.

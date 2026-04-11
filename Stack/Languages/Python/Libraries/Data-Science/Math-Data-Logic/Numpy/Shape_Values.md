@@ -7,6 +7,7 @@
 - [\[\] (Scling)](#-scling)
 - [Clip()](#clip)
 - [.argmin() \& .argmax()](#argmin--argmax)
+- [Hstack](#hstack)
 ---
 # .view() & .copy()
 ```bash
@@ -160,4 +161,41 @@ print(np.argmin(a, axis=1)) # Theo hàng
 # Kết quả
 # [1 0 1]
 # [1 2]
+```
+# Hstack
+```bash
+- Dùng để nối mảng theo chiều ngang. 
+    + 1D array -> nối thành 1 mảng dài hơn
+    + 2D array -> nối theo cột
+- Các mảng phải:
+    + Có cùng số hàng (rows) nếu là 2D
+    + Hoặc cùng shape phù hợp
+```
+**Syn**
+```bash
+np.hstack(tup)
+
+- Input:
+    + tup: list/tuple các mảng numpy
+```
+**Ex1**
+```python
+import numpy as np
+
+a = np.array([1, 2])
+b = np.array([3, 4])
+
+np.hstack((a, b)) # [1 2 3 4]
+```
+**Ex2: Ví dụ 2: 2D**
+```python
+a = np.array([[1, 2],
+              [3, 4]])
+
+b = np.array([[5, 6],
+              [7, 8]])
+
+np.hstack((a, b))
+# [[1 2 5 6]
+#  [3 4 7 8]]
 ```

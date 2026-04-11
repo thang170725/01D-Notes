@@ -17,7 +17,8 @@
 ```bash
 Computer-Vision           # mình dùng thư mục này để xem kiến thức về CV
 ├── Base.md               # mình dùng file này để xem kiến thức cơ bản và tiện ích
-├── Architecture/       # mình dùng file này để xem các kiến trúc model
+├── Dataset.md      # mình dùng file này đểthao tác liên quan đến tập dữ liệu mẫu
+├── Architecture/   # mình dùng file này để xem các kiến trúc model
 ├── Fields/               # mình dùng thư mục này để xem các lĩnh vực
 ├── Models.md             # mình dùng thư mục này để xem các model cụ thể
 ├── Process_IMG.md        # mình dùng thư mục này để xử lý ảnh

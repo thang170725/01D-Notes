@@ -27,7 +27,7 @@
 - [Color Process (Xử lý màu sắc)](#color-process-xử-lý-màu-sắc)
   - [.cvtColor()](#cvtcolor)
   - [divide()](#divide)
-- [Filter](#filter)
+- [Filter (Áp dụng kernel lên ảnh)](#filter-áp-dụng-kernel-lên-ảnh)
   - [filter2D()](#filter2d)
   - [bilateralFilter()](#bilateralfilter)
 - [ROI Process (Nhóm xử lý roi)](#roi-process-nhóm-xử-lý-roi)
@@ -35,6 +35,8 @@
   - [InRange()](#inrange)
   - [FindContours()](#findcontours)
 - [BoundingRect()](#boundingrect)
+- [Histogram](#histogram)
+  - [cv2.calcHist()](#cv2calchist)
 ---
 # Transform (làm ảnh mới khác ảnh gốc)
 ## [] (Crop ảnh)
@@ -42,9 +44,10 @@
 ```bash
 cropped = image[y1:y2, x1:x2]
 
-- x1, y1: tọa độ góc trên bên trái
-- x2, y2: tọa độ góc dưới bên phải
-- image: ảnh gốc (ma trận numpy)
+- Input:
+    + x1, y1: tọa độ góc trên bên trái
+    + x2, y2: tọa độ góc dưới bên phải
+    + image: ảnh gốc (ma trận numpy)
 ```
 **Ex**
 ```python
@@ -75,11 +78,23 @@ cv2.destroyAllWindows()
 M = cv2.getRotationMatrix2D(center, angle, scale)
 dst = cv2.warpAffine(src, M, (width, height))
 
-- center: tâm xoay (x, y)
-- angle: góc xoay (độ, dương = ngược chiều kim đồng hồ)
-- scale: tỉ lệ (1.0 = giữ nguyên)
+- Input:
+    + center: tâm xoay (x, y)
+    + angle: góc xoay (độ, dương = ngược chiều kim đồng hồ)
+    + scale: tỉ lệ (1.0 = giữ nguyên)
+- Output: Trả về ma trận biến đổi affine 2x3 dùng để xoay ảnh quanh một tâm
 ```
-**Ex1: demo xoay 45°**
+**Ex1**
+```python
+import cv2
+
+M = cv2.getRotationMatrix2D(center=(100, 100), angle=45, scale=1)
+print(M)
+
+# [[ 0.707  0.707  -41.421]
+#  [-0.707  0.707 100.000]]
+```
+**Ex2: demo xoay 45°**
 ```python
 import cv2
 
@@ -397,6 +412,7 @@ cv2.resize(
    dsize=(300, 200),
 )
 
+- Input:
     + src: Ảnh gốc
     + dsize: Kích thước đích dưới dạng (width, height) (bắt buộc nếu không dùng fx, fy)
 ```
@@ -649,8 +665,9 @@ cv2.destroyAllWindows()
 ```bash
 edges = cv2.Canny(image, threshold1, threshold2)
 
-- image: ảnh đầu vào (thường là ảnh xám – grayscale).
-- threshold1, threshold2: ngưỡng dưới và trên để xác định cạnh.
+- Input:
+    + image: ảnh đầu vào (thường là ảnh xám – grayscale).
+    + threshold1, threshold2: ngưỡng dưới và trên để xác định cạnh.
 ```
 **Ex**
 ```python
@@ -719,10 +736,13 @@ cv2.destroyAllWindows()
 
 # giống hiệu ứng nét bút chì
 ```
-# Filter
+# Filter (Áp dụng kernel lên ảnh)
 ## filter2D()
 ```bash
-Dùng để áp dụng để áp dụng bộ lọc tùy chỉnh lên ảnh – giúp làm mờ, làm sắc nét, phát hiện cạnh, …
+- Dùng để áp dụng bộ lọc tùy chỉnh lên ảnh giúp:
+    + làm mờ 
+    + làm sắc nét
+    + phát hiện cạnh
 ```
 **Syn** 
 ```bash
@@ -815,4 +835,43 @@ chuyển contour → ROI rectangle
 ```python
 x, y, w, h = cv2.boundingRect(cnt)
 roi = frame[y:y+h, x:x+w]
+```
+# Histogram
+## cv2.calcHist()
+```bash
+- Nó đếm xem:
+    + Có bao nhiêu pixel có giá trị 0, 1, 2, … 255 (ảnh xám)
+    + Hoặc phân bố màu trong ảnh RGB / HSV
+```
+**Syn**
+```bash
+cv2.calcHist(images, channels, mask, histSize, ranges)
+
+- Input:
+    + images	: list ảnh (thường là [img])
+    + channels	: kênh cần tính (0: Gray/B, 1: G, 2: R)
+    + mask	    : vùng cần tính (None = toàn ảnh)
+    + histSize	: số bins (ví dụ 256)
+    + ranges	: khoảng giá trị (thường [0,256])
+```
+**Ex: Biểu đồ  Grayscale histogram**
+```python
+from matplotlib import pyplot as plt
+import cv2 as cv
+
+img = cv.imread('lego.png')
+gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY)
+
+hist = cv.calcHist([gray], [0], None, [256], [0, 256])
+
+plt.figure()
+plt.title('Grayscale histogram')
+plt.xlabel('Bins')
+plt.ylabel('# of pixels')
+plt.plot(hist)
+plt.xlim([0, 256])
+plt.ylim([0, 2000])
+plt.show()
+
+cv.waitKey(0)
 ```

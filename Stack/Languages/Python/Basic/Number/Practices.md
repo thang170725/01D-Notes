@@ -1,4 +1,5 @@
 - [thuật toán chuyển từ hệ 10 sang hệ 2](#thuật-toán-chuyển-từ-hệ-10-sang-hệ-2)
+  - [Thuật toán tìm ước chung lớn nhất](#thuật-toán-tìm-ước-chung-lớn-nhất)
 ---
 # thuật toán chuyển từ hệ 10 sang hệ 2
 **Ex1**
@@ -25,4 +26,11 @@ while num:
     num >>= 1
 
 print(res)
+```
+## Thuật toán tìm ước chung lớn nhất
+```python
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
 ```
