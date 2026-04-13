@@ -30,6 +30,7 @@
 23. Biệt tri kỷ (dizi D, c5)	
 24. bến thượng hải (c5)	
 25. Phi điểu và ve sầu (c5)	
+25. Gặp em đúng lúc
 ```
 # Gutar
 ```bash

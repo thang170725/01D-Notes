@@ -18,7 +18,6 @@
 3. pip list                                     : kiểm tra tất cả các thư viện đã cài đặt.
 4. pip show numpy                               : kiểm tra thư viện numpy đã cài vào máy chưa.
 ```
-
 # Tạo môi trường ảo & activate
 **Tạo và kích hoạt**
 ```bash

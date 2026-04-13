@@ -16,9 +16,11 @@
 - [(0: xanh, nhỏ) (1: đỏ, to)](#0-xanh-nhỏ-1-đỏ-to)
 - [mean\_squared\_error()](#mean_squared_error)
 - [r2\_score](#r2_score)
-- [digits là một object chứa dữ liệu ảnh số viết tay](#digits-là-một-object-chứa-dữ-liệu-ảnh-số-viết-tay)
-- [đây là một dữ liệu nhỏ, mỗi ảnh có kích thước 8x8 pixel (nhỏ hơn MNIST 28x28)](#đây-là-một-dữ-liệu-nhỏ-mỗi-ảnh-có-kích-thước-8x8-pixel-nhỏ-hơn-mnist-28x28)
-- [ảnh số 0 sẽ hiện ra](#ảnh-số-0-sẽ-hiện-ra)
+- [Datasets (bộ dữ liệu có sẵn trong scikit-learn)](#datasets-bộ-dữ-liệu-có-sẵn-trong-scikit-learn)
+  - [load\_digits()](#load_digits)
+    - [.keys()](#keys)
+  - [.images\[\]](#images)
+  - [.reshape()](#reshape)
 - [Bootstrapping: lấy 1000 mẫu, mỗi mẫu có 20 phần tử](#bootstrapping-lấy-1000-mẫu-mỗi-mẫu-có-20-phần-tử)
 - [Tính khoảng tin cậy 80% (10% và 90% phân vị)](#tính-khoảng-tin-cậy-80-10-và-90-phân-vị)
 - [Vẽ đồ thị phân phối của các trung bình mẫu](#vẽ-đồ-thị-phân-phối-của-các-trung-bình-mẫu)
@@ -457,52 +459,73 @@ print(classification_report(y_true, y_pred))
 weighted avg       0.90      0.80      0.80         5
 
 
-14.7 Thư viện datasets 
-14.7.1 Giới thiệu
-14.7.2 Thư viện load_digits
-14.7.2.1 Giới thiệu
-Là một bộ dữ liệu datasets có sẵn trong thư viện scikit-learn, dùng để huấn luyện mô hình phân loại chữ số viết tay (0-9). Bộ dữ liệu này rất phù hợp để học máy vì nó có kích thước nhỏ, dễ thao tác và tiền xử lý tốt.
-14.7.2.2 Hàm, phương thức, lớp
-load_digits()
+# Datasets (bộ dữ liệu có sẵn trong scikit-learn) 
+## load_digits()
+```bash
+- Là một bộ dữ liệu datasets có sẵn trong thư viện scikit-learn.
+- Dùng để huấn luyện mô hình phân loại chữ số viết tay (0-9). Bộ dữ liệu này rất phù hợp để học máy vì nó có kích thước nhỏ, dễ thao tác và tiền xử lý tốt.
+```
+**Ex**
+```python
 from sklearn.datasets import load_digits
 digits = load_digits()
 
 # digits là một object chứa dữ liệu ảnh số viết tay
 # đây là một dữ liệu nhỏ, mỗi ảnh có kích thước 8x8 pixel (nhỏ hơn MNIST 28x28)
-keys()
-Để xem dữ liệu bên trong object digits.
+```
+### .keys()
+```bash
+- Để xem dữ liệu bên trong object digits.
+```
+**Ex**
+```python
 from sklearn.datasets import load_digits
 digits = load_digits()
-print(digits.keys())
-dict_keys(['data', 'target', 'frame', 'feature_names', 'target_names', 'images', 'DESCR'])
-images[]
-Danh sách ảnh dạng 2D (ma trận 8x8 pixels).
+
+print(digits.keys()) # dict_keys(['data', 'target', 'frame', 'feature_names', 'target_names', 'images', 'DESCR'])
+```
+## .images[]
+```bash
+- Danh sách ảnh dạng 2D (ma trận 8x8 pixels).
+```
+**Ex**
+```python
 from sklearn.datasets import load_digits
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as 
+
 digits = load_digits()
+
 plt.imshow(digits.images[0], cmap='gray')
 plt.title(f'{digits.target[0]}')
 plt.show()
 # ảnh số 0 sẽ hiện ra
-reshape()
-Mạng nơ ron không xử lý được ảnh 2d, nó cần một vector 1d. ta chuyển ảnh 8x8 thanhg vector có 64 phần tử.
+```
+## .reshape()
+```bash
+Mạng nơ ron không xử lý được ảnh 2d, nó cần một vector 1d. ta chuyển ảnh thành vector có 64 phần tử.
+```
+**Ex**
+```python
 from sklearn.datasets import load_digits
 import matplotlib.pyplot as plt
+
 digits = load_digits()
+
 X = digits.images.reshape((len(digits.images), -1))
 y = digits.target
+
 print(X)
 print(y.shape)
 
-[[ 0.  0.  5. ...  0.  0.  0.]
- [ 0.  0.  0. ... 10.  0.  0.]
- [ 0.  0.  0. ... 16.  9.  0.]
- ...
- [ 0.  0.  1. ...  6.  0.  0.]
- [ 0.  0.  2. ... 12.  0.  0.]
- [ 0.  0. 10. ... 12.  1.  0.]]
+# [[ 0.  0.  5. ...  0.  0.  0.]
+#  [ 0.  0.  0. ... 10.  0.  0.]
+#  [ 0.  0.  0. ... 16.  9.  0.]
+#  ...
+#  [ 0.  0.  1. ...  6.  0.  0.]
+#  [ 0.  0.  2. ... 12.  0.  0.]
+#  [ 0.  0. 10. ... 12.  1.  0.]]
 (1797,)
-
+```
 Target
 Nhãn tương ứng với từng ảnh (số 0 đến số 9).
 Data

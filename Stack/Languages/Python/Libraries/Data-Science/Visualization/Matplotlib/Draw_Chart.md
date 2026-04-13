@@ -38,19 +38,19 @@ plt.show() # một hình ảnh đen trắng số 0 kích thước 8x8 px sẽ đ
 ```
 # plot()
 ```bash
-- Được sử dụng để vẽ các điểm (điểm đánh dấu) trong sơ đồ nhưng thường được sử dụng để vẽ đường thẳng.
 - Theo mặc định, hàm plot() vẽ một đường thẳng từ điểm này đến điểm kia.
 ```
 **Syn**
 ```bash
-plt.plot(x,y, 'x', linestyle='dotted')
+plt.plot(x, y, 'x', linestyle='dotted')
 
-- linestyle: thay đổi kiểu hiển thị của đường biểu diễn đồ thị
-    + solid
-    + dotted
-    + dashed
-    + dashdot
-    + none
+- Input:
+    + linestyle: thay đổi kiểu hiển thị của đường biểu diễn đồ thị
+        - solid
+        - dotted
+        - dashed
+        - dashdot
+        - none
 ```
 **Ex**
 ```python
