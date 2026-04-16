@@ -7,6 +7,7 @@
   - [.toLocaleDateString()](#tolocaledatestring)
   - [Date.parse()](#dateparse)
   - [Date.now()](#datenow)
+- [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [Get](#get)
   - [.getFullYear() \& .getHours()  \& .getMinutes() \& .getSeconds() \& .getMiliseconds() \& .getTime()](#getfullyear--gethours---getminutes--getseconds--getmiliseconds--gettime)
   - [.getDate()](#getdate)
@@ -160,6 +161,7 @@ Trả về giá trị mili giây khoảng cách từ ngày 1 tháng 1 năm 1970.
 ```js
 console.log(Date.now()); // 1711790000000
 ```
+# Display (Nhóm cung cấp thông tin)
 ## Get
 ```bash
 Trả về  giá trị thời gian

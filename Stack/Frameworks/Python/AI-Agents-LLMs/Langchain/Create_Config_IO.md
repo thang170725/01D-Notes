@@ -1,9 +1,13 @@
+- [Langchain](#langchain)
+  - [Create (nhóm khởi tạo)](#create-nhóm-khởi-tạo)
+    - [create\_agent()](#create_agent)
+  - [Run (Nhóm chạy chương trình)](#run-nhóm-chạy-chương-trình)
+    - [.invoke()](#invoke)
 - [ChatOllama](#chatollama)
 - [PromptTemplate (Nhóm thiết lập khuôn mẫu)](#prompttemplate-nhóm-thiết-lập-khuôn-mẫu)
   - [.from\_template()](#from_template)
   - [.format()](#format)
 - [| (nối pipeline)](#-nối-pipeline)
-- [.invoke()](#invoke)
 - [RunnablePassthrough](#runnablepassthrough)
 - [RunnableParallel](#runnableparallel)
 - [RunnableLambda](#runnablelambda)
@@ -13,6 +17,132 @@
 - [RunnableWithMessageHistory](#runnablewithmessagehistory)
 - [Agent tạo nhanh](#agent-tạo-nhanh)
 ---
+# Langchain
+## Create (nhóm khởi tạo)
+### create_agent()
+**Syn**
+```bash
+agent = create_agent(
+    model="anthropic:claude-sonnet-4-6",
+    tools=[get_weather],
+    system_prompt="You are a helpful assistant",
+)
+```
+**Ex**
+```python
+# pip install -qU langchain "langchain[anthropic]"
+from langchain.agents import create_agent
+
+def get_weather(city: str) -> str:
+    """Get weather for a given city."""
+    return f"It's always sunny in {city}!"
+
+agent = create_agent(
+    model="anthropic:claude-sonnet-4-6",
+    tools=[get_weather],
+    system_prompt="You are a helpful assistant",
+)
+
+# Run the agent
+agent.invoke(
+    {"messages": [{"role": "user", "content": "what is the weather in sf"}]}
+)
+```
+## Run (Nhóm chạy chương trình)
+### .invoke()
+```bash
+- Đây là lệnh gửi prompt cho AI.
+- invoke() là API chuẩn của LangChain
+    + Input: string / message / prompt object
+    + Output: AIMessage
+```
+**Syn**
+```bash
+result = runnable.invoke(input, config=None)
+
+- Input:
+    + input: dữ liệu đầu vào (có thể là str, dict, list, messages…)
+    + config: optional (timeout, callbacks, metadata…)
+```
+**Ex: nhận list**
+```python
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
+
+llm = ChatOpenAI()
+
+response = llm.invoke([
+    HumanMessage(content="Hello")
+])
+
+#  Input: List[BaseMessage]
+#  Output: AIMessage
+```
+**Ex2: Nhận string**
+```bash
+from langchain_openai import OpenAI
+
+llm = OpenAI()
+
+response = llm.invoke("Write a poem about AI")
+
+# Input: str
+# Output: str
+```
+**Ex3: Nhận dict**
+```python
+from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template("Hello {name}")
+
+result = prompt.invoke({"name": "Thang"})
+
+# Input: dict
+# Output: PromptValue
+```
+**Ex4**
+```python
+chain = prompt | llm
+
+result = chain.invoke({"name": "Thang"})
+
+#  Input: dict (theo variables của prompt)
+```
+**Ex**
+```python
+chain.invoke(
+    {"topic": "AI"},
+    config={"tags": ["demo"]}
+)
+```
+**Ex**
+```python
+from langchain_ollama import ChatOllama
+from langchain_core.prompts import PromptTemplate
+
+# ========== LLM ==========
+llm = ChatOllama(
+    model="mistral",
+    temperature=0
+)
+
+prompt = PromptTemplate(
+    input_variables=["ingredients"],
+    template="""
+Bạn là trợ lý nấu ăn.
+Nguyên liệu có sẵn: {ingredients}
+Hãy gợi ý 1 món ăn phù hợp.
+"""
+)
+
+response = llm.invoke(
+    prompt.format(
+        ingredients="thịt lợn, cà chua, hành, trứng"
+    )
+)
+
+print(response.content)
+```
 # ChatOllama
 ```bash
 - khởi tạo một đối tượng LLM (Large Language Model).
@@ -204,100 +334,6 @@ print(result) # Hãy trả lời câu hỏi: AI là gì?
 ```bash
 chain = prompt | model | StrOutputParser()
 chain.invoke({"topic": "AI"})
-```
-# .invoke()
-```bash
-- Đây là lệnh gửi prompt cho AI.
-- invoke() là API chuẩn của LangChain
-    + Input: string / message / prompt object
-    + Output: AIMessage
-```
-**Syn**
-```bash
-result = runnable.invoke(input, config=None)
-
-- Input:
-    + input: dữ liệu đầu vào (có thể là str, dict, list, messages…)
-    + config: optional (timeout, callbacks, metadata…)
-```
-**Ex: nhận list**
-```python
-from langchain_openai import ChatOpenAI
-from langchain_core.messages import HumanMessage
-
-llm = ChatOpenAI()
-
-response = llm.invoke([
-    HumanMessage(content="Hello")
-])
-
-#  Input: List[BaseMessage]
-#  Output: AIMessage
-```
-**Ex2: Nhận string**
-```bash
-from langchain_openai import OpenAI
-
-llm = OpenAI()
-
-response = llm.invoke("Write a poem about AI")
-
-# Input: str
-# Output: str
-```
-**Ex3: Nhận dict**
-```python
-from langchain_core.prompts import PromptTemplate
-
-prompt = PromptTemplate.from_template("Hello {name}")
-
-result = prompt.invoke({"name": "Thang"})
-
-# Input: dict
-# Output: PromptValue
-```
-**Ex4**
-```python
-chain = prompt | llm
-
-result = chain.invoke({"name": "Thang"})
-
-#  Input: dict (theo variables của prompt)
-```
-**Ex**
-```python
-chain.invoke(
-    {"topic": "AI"},
-    config={"tags": ["demo"]}
-)
-```
-**Ex**
-```python
-from langchain_ollama import ChatOllama
-from langchain_core.prompts import PromptTemplate
-
-# ========== LLM ==========
-llm = ChatOllama(
-    model="mistral",
-    temperature=0
-)
-
-prompt = PromptTemplate(
-    input_variables=["ingredients"],
-    template="""
-Bạn là trợ lý nấu ăn.
-Nguyên liệu có sẵn: {ingredients}
-Hãy gợi ý 1 món ăn phù hợp.
-"""
-)
-
-response = llm.invoke(
-    prompt.format(
-        ingredients="thịt lợn, cà chua, hành, trứng"
-    )
-)
-
-print(response.content)
 ```
 # RunnablePassthrough
 ```bash

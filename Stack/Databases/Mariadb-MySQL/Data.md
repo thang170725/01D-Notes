@@ -14,6 +14,8 @@
 - [count](#count)
 - [DISTINCT](#distinct)
 - [Time (Nhóm thời gian)](#time-nhóm-thời-gian)
+  - [WEEK()](#week)
+  - [YEARWEEK()](#yearweek)
   - [YEAR()](#year)
   - [MONTH()](#month)
 - [COALESCE()](#coalesce)
@@ -199,6 +201,50 @@ SELECT DISTINCT subject_id FROM Teacher;
 -- Physics
 ```
 # Time (Nhóm thời gian)
+## WEEK()
+```bash
+- Để lấy số tuần trong năm từ một ngày.
+```
+**Syn**
+```bash
+WEEK(date, mode])
+
+- Input:
+  + date: ngày cần tính
+  + mode (tuỳ chọn): cách tính tuần
+    - 0	Chủ nhật	tuần có ngày 1/1
+    - 1	Thứ 2	tuần có ≥ 4 ngày (ISO gần chuẩn)
+    - 2	Chủ nhật	tuần có ≥ 4 ngày
+    - 3	Thứ 2	tuần có ngày 1/1
+    - 4–7	các biến thể khác
+```
+**Ex**
+```bash
+SELECT 
+  WEEK('2026-01-01', 0) AS mode0,
+  WEEK('2026-01-01', 1) AS mode1;
+```
+## YEARWEEK() 
+```bash
+Dùng để lấy năm + tuần (year + week number) từ một giá trị ngày (DATE, DATETIME).
+```
+**Syn**
+```bash
+YEARWEEK(date, mode)
+
+- Input:
+  + date: ngày cần xử lý
+  + mode (tùy chọn): quy định cách tính tuần (quan trọng)
+    - 0 (default)	Tuần bắt đầu CN
+    - 1	Tuần bắt đầu Thứ 2
+    - 2	ISO (tuần đầu tiên có ít nhất 4 ngày)
+    - 3	ISO + bắt đầu Thứ 2 (hay dùng nhất)
+```
+**Ex**
+```sql
+SELECT YEARWEEK('2026-04-15', 1); -- 202615
+-- → nghĩa là: tuần 15 của năm 2026
+```
 ## YEAR()
 ```bash
 Lấy năm từ kiểu Lấy năm từ kiểu DATE, DATETIME, TIMESTAMP

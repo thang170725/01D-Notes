@@ -1,4 +1,66 @@
-# Demo Pipeline RAG + Mistral LLMs
+- [Mô tả Pipeline Naive RAG](#mô-tả-pipeline-naive-rag)
+- [Demo Pipeline Naive RAG + Mistral LLMs](#demo-pipeline-naive-rag--mistral-llms)
+---
+# Mô tả Pipeline Naive RAG
+```bash
+Hệ thống hỏi đáp từ tài liệu PDF
+Giả sử bạn có: 1 file PDF: “Hướng dẫn sử dụng sản phẩm”
+Người dùng hỏi: “Sản phẩm này bảo hành bao lâu?”
+```
+```bash
+1. Load tài liệu:
+    - Đưa file pdf vào hệ thống => Lúc này hệ thống chỉ thấy: 1 đống text rất dài (có thể hàng chục trang)
+2. Chunking (chia nhỏ):
+    - Vì LLM không đọc nổi cả file → bạn phải chia nhỏ
+    - Sau khi chunk. Bạn sẽ có dạng:
+        Chunk 1: giới thiệu sản phẩm  
+        Chunk 2: thông số kỹ thuật  
+        Chunk 3: chính sách bảo hành (có câu trả lời)  
+        Chunk 4: hướng dẫn sử dụng  
+        ...
+    - Quan trọng: mỗi chunk = 1 đoạn nhỏ (200–500 tokens), có thể overlap (đè lên nhau một chút)
+3. Embedding
+    - Mỗi chunk sẽ được biến thành vector (dãy số)
+    - Ví dụ: Chunk 3 → [0.12, -0.98, 0.33, ...]
+    - Ý nghĩa: vector này đại diện cho “nghĩa” của đoạn text
+4. Lưu vào Vector Database
+    - Bạn lưu: nội dung chunk, vector của chunk
+    - Lúc này hệ thống đã “index xong dữ liệu”
+5. User đặt câu hỏi
+    - “Sản phẩm bảo hành bao lâu?”
+6. Embed câu hỏi
+    - Câu hỏi cũng được biến thành vector
+    - Query → [0.10, -0.95, 0.30, ...]
+7. Retrieve (tìm chunk liên quan)
+    - Hệ thống so sánh:
+        + vector câu hỏi
+        + vector các chunk
+    - Nó sẽ tìm ra: Top 3 chunk giống nhất:
+        1. Chunk 3 (bảo hành) ✅
+        2. Chunk 7 (chính sách đổi trả)
+        3. Chunk 2 (thông số kỹ thuật)
+    => Đây là bước QUAN TRỌNG NHẤT
+8. Tạo context
+    - Lấy nội dung của các chunk đó:
+    - Context:
+        + “Sản phẩm được bảo hành 24 tháng...”
+        + “Chính sách đổi trả trong 7 ngày...”
+        + ...
+9. Nhét vào prompt
+    - Hệ thống tạo prompt kiểu:
+        Dựa vào thông tin sau:
+        [chunk 1]
+        [chunk 2]
+        [chunk 3]
+        Hãy trả lời câu hỏi:
+        "Sản phẩm bảo hành bao lâu?"
+10. LLM trả lời
+    - LLM đọc context → trả lời: “Sản phẩm được bảo hành 24 tháng.”
+    - Quan trọng: 
+        + LLM KHÔNG tự nghĩ
+        + nó chỉ “viết lại” từ context
+```
+# Demo Pipeline Naive RAG + Mistral LLMs
 ```python
 # ==============================
 # STEP 1: IMPORT LIBRARIES

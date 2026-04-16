@@ -31,9 +31,8 @@ f(z) = 1 / (1+e**-z) # chỉ áp dụng lên 1 giá trị của z = W*x + b
 ```
 # Tanh
 ```bash
-- Làm phi tuyến hóa (non-linearity): Giống sigmoid, giúp mô hình học các quan hệ phi tuyến.
-- Zero-centered: giá trị nằm giữa -1 và 1 → giúp gradient descent ổn định hơn so với sigmoid (giảm bias về chiều dương).
-- Giúp mạng nơ-ron sâu học hiệu quả hơn nhờ đặc tính zero-centered.
+- Giống sigmoid, giúp mô hình học các quan hệ phi tuyến.
+- Giá trị nằm giữa -1 và 1 → giúp gradient descent ổn định hơn so với sigmoid (giảm bias về chiều dương).
 - Ứng dụng:
     1. Hidden layer trong mạng nơ-ron
         1. Trước đây, thường dùng trong MLP, RNN.
@@ -57,8 +56,8 @@ Thường được dùng ở output layer của mô hình phân loại nhiều l
 ```
 **Formula**
 ```bash
-Giả sử đầu ra của mô hình là một vector: z = [z1, z2, z3, z4, … , zn]
-→ softmax(zi) = e^zi / (e^zi + … + e^zn)
+# Giả sử đầu ra của mô hình là một vector: z = [z1, z2, z3, z4, … , zn]
+softmax(z1) = e^z1 / (e^z1 + … + e^zn)
 ```
 **Ex**
 ```python

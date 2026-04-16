@@ -59,16 +59,16 @@ Save vào DB / gọi API / chain tiếp
 9. LangGraph 
 ```
 # Installation
+**Requirement**
+```bash
+Python 3.10+
+```
 ```bash
 1. pip install -U langchain # dùng để tải langchain
-```
-**Trả phí**
-```bash
-1. pip install langchain langchain-openai
-```
-**Miến phí**
-```bash
-1. curl -fsSL https://ollama.com/install.sh | sh
-2. ollama pull llama3
-3. ollama run llama3
+2. pip install -U langchain-openai # Installing the OpenAI integration
+3. pip install -U langchain-anthropic # Installing the Anthropic integration
+4. Sử dụng Agent local
+    1. curl -fsSL https://ollama.com/install.sh | sh
+    2. ollama pull llama3
+    3. ollama run llama3
 ```
