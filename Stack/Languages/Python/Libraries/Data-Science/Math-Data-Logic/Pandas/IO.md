@@ -1,25 +1,42 @@
-- [.read\_csv() \& .to\_csv()](#read_csv--to_csv)
+- [Read (Nhóm lấy dữ liệu)](#read-nhóm-lấy-dữ-liệu)
+  - [.read\_csv()](#read_csv)
+- [.to\_csv()](#to_csv)
 - [pd.read\_sql()](#pdread_sql)
 - [DataFrame.to\_sql() (CỐT LÕI)](#dataframeto_sql-cốt-lõi)
 ---
-# .read_csv() & .to_csv()
+# Read (Nhóm lấy dữ liệu)
+## .read_csv()
 ```bash
-- read_csv  : Đọc từ file csv.
-- to_csv    : Ghi dữ liệu vào file csv.
+- Nó đọc delimited text files (file văn bản có cột ngăn cách bằng ký tự phân tách), ví dụ:
+    + .csv → phân tách bởi dấu phẩy ,
+    + .tsv → phân tách bởi tab \t
+    + .txt → có thể phân tách bởi ;, |, tab,... miễn là chỉ rõ sep=...
 ```
-**Syn: read_csv**
+**Syn**
 ```bash
+import pandas as pd
 li = pd.read_csv(
     "danhSach.csv", 
     sep=',',
+    decimal=','
     index=[], 
     encoding=’utf-8’,
     dtype=str,
-    na_values=["", "NULL", "None"]
+    na_values=["", "NULL", "None"],
+    parse_dates=[0]
 ) # dữ liệu hiển thị dưới dạng dataframe
 
-- sep   : Phân cách
+- Input:
+    + sep               : Phân cách
+    + decimal=','       : Nói cho Pandas dấu "," là dấu thập phân
+    + parse_dates=[0]   : Bảo Pandas cột số 0 (cột đầu tiên) hãy chuyển thành kiểu ngày giờ.
 ```
+# .to_csv()
+```bash
+
+- to_csv    : Ghi dữ liệu vào file csv.
+```
+
 # pd.read_sql()
 ```bash
 - pandas.read_sql dùng để chạy SQL và trả kết quả về DataFrame.

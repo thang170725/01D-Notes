@@ -3,6 +3,8 @@
   - [.seed()](#seed)
   - [Randint()](#randint)
   - [.uniform()](#uniform)
+  - [.gauss](#gauss)
+  - [random.choice()](#randomchoice)
 ---
 # Random
 ```bash
@@ -65,4 +67,31 @@ import random
 
 x = random.gauss(0, 1)
 print(x)
+```
+## random.choice()
+```bash
+chọn ngẫu nhiên 1 phần tử từ một list / string
+```
+**Syn**
+```bash
+import random
+random.choice(sequence)
+
+- Input:
+  + sequence có thể là:
+    - list
+    - string
+    - tuple
+```
+**Ex: Chọn ngẫu nhiên 1 ký tự**
+```bash
+import random
+
+chars = "abcXYZ123"
+print(random.choice(chars)) # X
+```
+**Ex2: Chọn ngẫu nhiên trong list**
+```python
+colors = ["red", "blue", "green"]
+print(random.choice(colors)) # green
 ```

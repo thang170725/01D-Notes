@@ -299,9 +299,20 @@ Enum('sedentary', 'light', "moderate", name='activity_level_role')
 - tìm kiếm đôi tượng
 ```
 ## .query()
+```bash
+Là select kiểu cũ, giờ đổi thành select() - select là chuẩn mới dùng cho cả CORE + ORM.
+```
 **Syn: query**
 ```bash
 db.query(User) # SELECT * FROM users
+```
+**Ex: query full model**
+```python
+users = session.query(User).all() # [User(...), User(...)] → List object ORM
+```
+**Ex2: query vài cột**
+```python
+rows = session.query(User.id, User.name).all() # [(1, 'Alice'), (2, 'Bob')] → List tuple
 ```
 # Filtering (Bộ lọc)
 ## .filter()

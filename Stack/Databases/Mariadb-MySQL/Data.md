@@ -1,18 +1,21 @@
 - [Kiểu dữ liệu](#kiểu-dữ-liệu)
   - [JSON](#json)
+  - [unique key](#unique-key)
+  - [index](#index)
 - [insert into](#insert-into)
 - [delete](#delete)
   - [Xóa dữ liệu một hoặc nhiều hàng](#xóa-dữ-liệu-một-hoặc-nhiều-hàng)
   - [on delete cascade](#on-delete-cascade)
 - [Update](#update)
   - [update](#update-1)
-- [Select](#select)
-  - [Hiển thị nhiều field của nhiều bảng](#hiển-thị-nhiều-field-của-nhiều-bảng)
-  - [Hiển thị nhiều field của nhiều bảng có điều kiện](#hiển-thị-nhiều-field-của-nhiều-bảng-có-điều-kiện)
+- [Select (xem dữ liệu trong bảng)](#select-xem-dữ-liệu-trong-bảng)
+  - [select ... limit](#select--limit)
+  - [select ... order by](#select--order-by)
 - [like](#like)
 - [group\_by](#group_by)
-- [count](#count)
-- [DISTINCT](#distinct)
+- [Process (Nhóm xử lý tính toán)](#process-nhóm-xử-lý-tính-toán)
+  - [count](#count)
+  - [DISTINCT](#distinct)
 - [Time (Nhóm thời gian)](#time-nhóm-thời-gian)
   - [WEEK()](#week)
   - [YEARWEEK()](#yearweek)
@@ -44,6 +47,33 @@ IMAGE           :
 **Ex**
 ```bash
 '{"title":"Buổi tập chân + mông","muscle_group":["Đùi trước","Đùi sau","Mông","Bắp chân"],"suggested_exercises":["Barbell Squat","Leg Press","Lunges","Standing Calf Raise"]}'
+```
+## unique key
+**Ex**
+```sql
+CREATE TABLE likes (
+    user_id INT,
+    post_id INT,
+
+    UNIQUE KEY uk_user_post (user_id, post_id)
+);
+
+INSERT INTO likes VALUES (1, 100); -- OK
+INSERT INTO likes VALUES (1, 101); -- OK
+INSERT INTO likes VALUES (2, 100); -- OK
+INSERT INTO likes VALUES (1, 100); -- ❌
+```
+## index
+**Ex**
+```sql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100),
+    name VARCHAR(50),
+
+    UNIQUE KEY uk_email (email), -- chống trùng + nhanh
+    INDEX idx_name (name)        -- chỉ để search nhanh
+);
 ```
 # insert into
 ```bash
@@ -101,17 +131,22 @@ UPDATE workout_plans
 SET note = 'Chest and Triceps workout'
 WHERE id = 5;
 ```
-# Select
-```bash
-Dùng để xem dữ liệu trong bảng.
-```
+# Select (xem dữ liệu trong bảng)
+## select ... limit
 ```bash
 SELECT * FROM Students limit 50;
 
 - limit: số dòng cần xem.
 ```
-## Hiển thị nhiều field của nhiều bảng
-**Ex1**
+## select ... order by
+```bash
+Xem dữ liệu được sắp xếp có thứ tự
+```
+**Syn**
+```bash
+SELECT * FROM your_table ORDER BY name ASC;
+```
+**Hiển thị nhiều field của nhiều bảng**
 ```sql
 SELECT
     s.studentId,
@@ -123,7 +158,7 @@ SELECT
 FROM Students s
 JOIN Users u ON s.userId = u.userId;
 ```
-## Hiển thị nhiều field của nhiều bảng có điều kiện
+**Hiển thị nhiều field của nhiều bảng có điều kiện**
 ```sql
 SELECT
     c.courseName,
@@ -145,7 +180,8 @@ SELECT * FROM exercises WHERE name LIKE '%Mountain%'
 ```bash
 Dùng để gom các dòng có cùng giá trị lại thành một nhóm
 ```
-# count
+# Process (Nhóm xử lý tính toán)
+## count
 ```bash
 Dùng để đếm số dòng trong mỗi nhóm
 ```
@@ -169,9 +205,9 @@ GROUP BY department;
 | IT         | 3     |
 | HR         | 2     |
 ```
-# DISTINCT 
+## DISTINCT 
 ```bash
-dùng để loại bỏ các giá trị trùng lặp trong kết quả query.
+ùng để loại bỏ các giá trị trùng lặp trong kết quả query.
 ```
 **Ex1: Dùng DISTINCT cơ bản**
 ```bash

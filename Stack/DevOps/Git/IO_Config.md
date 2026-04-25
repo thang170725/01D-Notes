@@ -2,6 +2,7 @@
 - [git clone](#git-clone)
 - [git pull](#git-pull)
 - [git init](#git-init)
+- [.gitignore](#gitignore)
 ---
 # git config
 **Syn**
@@ -11,8 +12,10 @@
 3. git config –-global user.email “Le Duc Thang“ (Cấu hình email của người dùng là Le Duc Thang)
 4. git config –-local user.name “Le Duc Thang“ (Cấu hình tên của người dùng là Le Duc Thang)
 5. git config –-local user.email “Le Duc Thang“ (Cấu hình email của người dùng là Le Duc Thang)
-6. git config –l -–global (Xem thông tin cấu hình của global)
-7. git config –l –-local (Xem thông tin cấu hình của local)
+6. Xem thông tin cấu hình 
+    - git config –l -–global (Xem thông tin cấu hình của global)
+    - git config –l –-local (Xem thông tin cấu hình của local)
+    - git config --list                              
 ```
 # git clone 
 ```bash
@@ -22,6 +25,7 @@ Lệnh này giúp bạn sao chép toàn bộ mã nguồn, lịch sử thay đổ
 ```bash
 1. Sao chép ma nguồn từ gitHub vào thư mục dev1
     git clone https://github.com/thang1707/lesson1.git dev1
+2. git clone https://github.com/thang1707/lesson1.git .
 2. clone nhánh cụ thể về máy tính
     git clone --branch khue --single-branch https://github.com/thang170725/elgamal.git
 ```
@@ -37,11 +41,52 @@ Lệnh này giúp bạn sao chép toàn bộ mã nguồn, lịch sử thay đổ
 2. git pull --no-rebase origin main
 ```
 # git init
+```bash
+- Dùng để:
     1. Tạo ra một kho lưu trữ repo. Tạo ra thư mục ẩn “.git” chứa tất cả các thông tin cần thiết để git theo dõi các thay đổi của dự án.
     2. Hiểu đơn giản là bất đầu nói với git theo dõi sự thay đổi của dự án.
-git init EX1
-Git sẽ tạo ra một thư mục EX1 mới và nó sẽ trở thành kho lưu trữ repo
-(là nơi để quản lý file)
-cd vào thư mục a
-git init
-Thư mục a sẽ trở thành kho lưu trữ repo
+```
+**Ex1**
+```bash
+git init EX1 # Git sẽ tạo ra một thư mục EX1 mới và nó sẽ trở thành kho lưu trữ repo (là nơi để quản lý file)
+```
+**Ex2**
+```bash
+1. cd vào thư mục a
+2. git init # Thư mục a sẽ trở thành kho lưu trữ repo
+```
+# .gitignore
+**Hạn chế thư mục push lên gitHub**
+```bash
+~/workspace/lightgbm
+├── backend
+│   └── dataset
+├── docs
+├── frontend
+└── README.md
+```
+```bash
+Muốn backend/dataset không push lên Git.
+
+Bước 1: đứng ở root project
+    - cd ~/workspace/lightgbm
+Bước 2: tạo .gitignore
+    - touch .gitignore
+Bước 3: mở file .gitignore
+    1. nano .gitignore
+    2.  thêm dòng này: backend/dataset/
+    3.  Lưu: Ctrl + O → Enter, Ctrl + X
+Bước 4: kiểm tra
+    - cat .gitignore
+    - phải ra: backend/dataset/
+Bước 5: add code
+    - git add .
+    - dataset sẽ bị bỏ qua.
+    - Kiểm tra: git status (sẽ không thấy backend/dataset)
+    - .gitignore cho project bạn có thể sau này mở rộng:
+        backend/dataset/
+        __pycache__/
+        *.pyc
+        .env
+        venv/
+```

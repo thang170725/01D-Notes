@@ -1,9 +1,10 @@
+- [.content](#content)
 - [Langchain](#langchain)
-  - [Create (nhóm khởi tạo)](#create-nhóm-khởi-tạo)
+  - [Create \& Config (Nhóm khởi tạo \& cấu hình)](#create--config-nhóm-khởi-tạo--cấu-hình)
     - [create\_agent()](#create_agent)
+    - [ChatOllama()](#chatollama)
   - [Run (Nhóm chạy chương trình)](#run-nhóm-chạy-chương-trình)
     - [.invoke()](#invoke)
-- [ChatOllama](#chatollama)
 - [PromptTemplate (Nhóm thiết lập khuôn mẫu)](#prompttemplate-nhóm-thiết-lập-khuôn-mẫu)
   - [.from\_template()](#from_template)
   - [.format()](#format)
@@ -17,8 +18,23 @@
 - [RunnableWithMessageHistory](#runnablewithmessagehistory)
 - [Agent tạo nhanh](#agent-tạo-nhanh)
 ---
+- [.content](#content)
+---
+# .content
+**Ex**
+```python
+from langchain_community.chat_models import ChatOllama
+
+llm = ChatOllama(
+    model="llama3",
+    temperature=0
+)
+
+response = llm.invoke("Giải thích LangChain trong 1 câu")
+print(response.content)
+```
 # Langchain
-## Create (nhóm khởi tạo)
+## Create & Config (Nhóm khởi tạo & cấu hình)
 ### create_agent()
 **Syn**
 ```bash
@@ -47,6 +63,47 @@ agent = create_agent(
 agent.invoke(
     {"messages": [{"role": "user", "content": "what is the weather in sf"}]}
 )
+```
+### ChatOllama()
+```bash
+- khởi tạo một đối tượng LLM (Large Language Model).
+- cần tải và import thư viện:
+    + pip install langchain_community | pip install langchain_ollama
+    + from langchain_community.chat_models import ChatOllama
+    + from langchain_ollama import ChatOllama
+    + langchain_community (cách cũ): Là nơi chứa các integration “gom chung” (Ollama, HuggingFace, v.v.)
+        - Đang bị deprecate dần
+        - Update chậm hơn
+        - Code đôi khi không tối ưu
+    + langchain_ollama (cách mới): Là package tách riêng chính thức cho Ollama
+        - Được maintain riêng → cập nhật nhanh hơn
+        - Tương thích tốt với API mới của Ollama
+```
+**Syn**
+```bash
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(
+    model="llama3",
+    temperature=0,
+    client_kwargs={
+        "timeout": 30
+    }
+
+)
+
+- Input:
+    + model         : tên của model llm, phải đúng tên model bạn đã pull bằng Ollama
+    + temperature   : độ sáng tạo của AI
+        - 0: ít sáng tạo
+        - 0.7: cân bằng
+        - 1+: sáng tạo hơn
+    + base_url: 
+        - Mặc định: Ollama chạy ở port 11434
+        - Nếu bạn chạy Docker / server khác → bắt buộc set
+    + num_predict: giới hạn số token output
+        - Tránh output quá dài hoặc tốn tài nguyên
+    + repeat_penalty: giảm lặp từ
 ```
 ## Run (Nhóm chạy chương trình)
 ### .invoke()
@@ -142,47 +199,6 @@ response = llm.invoke(
 )
 
 print(response.content)
-```
-# ChatOllama
-```bash
-- khởi tạo một đối tượng LLM (Large Language Model).
-- cần tải và import thư viện:
-    + pip install langchain_community | pip install langchain_ollama
-    + from langchain_community.chat_models import ChatOllama
-    + from langchain_ollama import ChatOllama
-    + langchain_community (cách cũ): Là nơi chứa các integration “gom chung” (Ollama, HuggingFace, v.v.)
-        - Đang bị deprecate dần
-        - Update chậm hơn
-        - Code đôi khi không tối ưu
-    + langchain_ollama (cách mới): Là package tách riêng chính thức cho Ollama
-        - Được maintain riêng → cập nhật nhanh hơn
-        - Tương thích tốt với API mới của Ollama
-```
-**Syn**
-```bash
-from langchain_ollama import ChatOllama
-
-llm = ChatOllama(
-    model="llama3",
-    temperature=0,
-    client_kwargs={
-        "timeout": 30
-    }
-
-)
-
-- Input:
-    + model         : tên của model llm, phải đúng tên model bạn đã pull bằng Ollama
-    + temperature   : độ sáng tạo của AI
-        - 0: ít sáng tạo
-        - 0.7: cân bằng
-        - 1+: sáng tạo hơn
-    + base_url: 
-        - Mặc định: Ollama chạy ở port 11434
-        - Nếu bạn chạy Docker / server khác → bắt buộc set
-    + num_predict: giới hạn số token output
-        - Tránh output quá dài hoặc tốn tài nguyên
-    + repeat_penalty: giảm lặp từ
 ```
 # PromptTemplate (Nhóm thiết lập khuôn mẫu)
 ```bash
@@ -430,81 +446,3 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.agents import create_openai_tools_agent
 from langchain.agents import AgentExecutor
 ```
-SystemMessage là gì?
-👉 Mục đích
-Dùng để thiết lập “luật chơi” / ngữ cảnh chung cho model.
-Định nghĩa: vai trò, phong cách, quy tắc trả lời.
-🧾 Ví dụ
-from langchain_core.messages import SystemMessage
-
-system_msg = SystemMessage(
-    content="You are a helpful assistant that explains code clearly."
-)
-📌 Khi nào dùng?
-Muốn model:
-trả lời theo phong cách cụ thể (giáo viên, chuyên gia…)
-hạn chế/tuân thủ quy tắc
-định hướng toàn bộ cuộc hội thoại
-👤 2. HumanMessage là gì?
-👉 Mục đích
-Đại diện cho input của người dùng (user prompt).
-🧾 Ví dụ
-from langchain_core.messages import HumanMessage
-
-human_msg = HumanMessage(
-    content="Explain what a Python decorator is."
-)
-🤖 3. Cách dùng chung với Chat Model
-🧾 Ví dụ đầy đủ
-from langchain_core.messages import SystemMessage, HumanMessage
-from langchain_openai import ChatOpenAI
-
-llm = ChatOpenAI(model="gpt-4o-mini")
-
-messages = [
-    SystemMessage(content="You are a strict Python teacher."),
-    HumanMessage(content="Explain list comprehension.")
-]
-
-response = llm.invoke(messages)
-
-print(response.content)
-🔄 4. Luồng hoạt động
-
-Model sẽ đọc theo thứ tự:
-
-SystemMessage → hiểu vai trò
-HumanMessage → hiểu câu hỏi
-(có thể có thêm AIMessage nếu multi-turn)
-
-👉 Sau đó sinh ra câu trả lời.
-
-⚖️ 5. So sánh nhanh
-Loại message	Vai trò	Dùng khi nào
-SystemMessage	Setup global behavior	Luôn nên có
-HumanMessage	Input user	Bắt buộc
-AIMessage	Output model	Multi-turn chat
-⚡ 6. Ví dụ nâng cao (multi-turn)
-from langchain_core.messages import SystemMessage, HumanMessage, AIMessage
-
-messages = [
-    SystemMessage(content="You are a coding assistant."),
-    HumanMessage(content="What is recursion?"),
-    AIMessage(content="Recursion is when a function calls itself."),
-    HumanMessage(content="Give me an example in Python.")
-]
-🚀 7. Best practices
-✅ Luôn đặt SystemMessage ở đầu
-✅ Viết rõ ràng, cụ thể (prompt engineering)
-❌ Không nhồi quá nhiều rules → model dễ bị nhiễu
-✅ Giữ HumanMessage ngắn gọn, đúng trọng tâm
-🔚 Tóm lại
-SystemMessage = thiết lập cách model suy nghĩ
-HumanMessage = câu hỏi của người dùng
-Kết hợp lại → tạo thành context hội thoại chuẩn cho LLM
-
-Nếu bạn muốn, mình có thể giải thích thêm:
-
-PromptTemplate vs Messages
-ChatPromptTemplate (rất quan trọng trong LangChain)
-hoặc debug lỗi khi dùng LangChain 👀

@@ -33,6 +33,7 @@
   - [at()](#at)
   - [flat()](#flat)
   - [toSpliced()](#tospliced)
+- [Check (Nhóm kiểm tra)](#check-nhóm-kiểm-tra)
   - [includes()](#includes)
   - [findLast()](#findlast)
   - [findLastIndex()](#findlastindex)
@@ -449,7 +450,32 @@ Trả vể một phần tử được lập chỉ mục từ một mảng. Giố
 Nối các phần tử của mảng con.
 ```
 ## toSpliced()
+# Check (Nhóm kiểm tra)
 ## includes()
+```bash
+Dùng để kiểm tra một giá trị có tồn tại trong chuỗi hoặc mảng hay không. Nó trả về true hoặc false.
+```
+**Syn**
+```bash
+str.includes(searchValue, startIndex)
+```
+**Ex**
+```js
+const text = "Hello world";
+
+console.log(text.includes("Hello")); // true
+console.log(text.includes("world")); // true
+console.log(text.includes("hi"));    // false
+console.log(text.includes("o", 5)); // true (tìm từ index 5)
+```
+**Ex2**
+```js
+const arr = [1, 2, 3, 4];
+
+console.log(arr.includes(2)); // true
+console.log(arr.includes(5)); // false
+console.log(arr.includes(2, 2)); // false (bắt đầu tìm từ index 2)
+```
 ## findLast()
 ## findLastIndex()
 ## toSorted()

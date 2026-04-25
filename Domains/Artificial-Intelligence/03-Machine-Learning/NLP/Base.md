@@ -158,122 +158,13 @@ Giống như ép các trọng số về đúng không, chỉ giữ lại đặc 
 Dùng khi muốn chọn lọc đặc trưng tự động (ví dụ mô hình có quá nhiều đặc trưng).
 Giảm nhẹ tất cả trọng số, giúp mô hình ổn định hơn, tránh quá nhạy.
 Dùng khi muốn giảm độ phức tạp chung của mô hình mà vẫn giữ lại toàn bộ đặc trưng.
-Precision & recall
-Precision
-recall
-Là độ chính xác của positive
-precision = TP / (TP + FP) => trong số các dự đoán là positive (tích cực) có bao nhiêu cái đúng thật.
-precision cao nghĩa là ít cảnh báo sai. Dùng khi chi phí của dự đoán sai là cao.
-Nếu tăng Precision => dễ giảm recall (mô hình dè dặt hơn khi dự đoán positive)
-Recall = TP / (TP + FN) => trong số các trường hợp thật sự là positive, mô hình bắt được bao nhiêu
-Recall cao nghĩa là ít bị bỏ sót
-Dùng khi cần bắt hết các trường hợp dương tính
-Nếu tăng Recall => dễ gaimr Precision (mô hình mạnh tay dự đoán Positive nhưng dễ sai hơn)
-Ví dụ: Hệ thống kiểm tra ung thư
-Nếu precision cao tức hạn chế cảnh báo nhầm tới người khỏe mạnh còn recall cao sẽ hạn chế bỏ sót bệnh nhân thật sự. 
-Nên sử dụng F1-Score (2x(PrecisionxRecall)/(Precision+Recall) => thích hợp khi cần cân bằng giữa Precision và recall
-Xử lý token sau khi tách
-Stopwords removal
-    • Ý tưởng: danh sách các từ “không mang nhiều ý nghĩa” như “và”, “là”, “the”, “a” — thường loại bỏ trước khi xử lý để giảm noise và kích thước feature.
-    • Tiền xử lý — giảm kích thước bộ từ và tăng chất lượng feature cho TF/Count.
-    • Lưu ý: với một số tác vụ (ví dụ sentiment, questions), stopwords có thể mang thông tin (ví dụ “not” cực kỳ quan trọng) → cẩn thận khi loại.
-Stemming
-    • Ý tưởng: Cắt đuôi từ để đưa về dạng gốc thô bằng cách dùng rule cứng (heuristics). Không quan tâm ngữ pháp. Không đảm bảo trả về từ có nghĩa.
-    • Cách làm: cắt suffix kiểu “ing”, “ed”, “ly”, “s”, …
-    • Dùng để làm gì: giảm số lượng dạng của từ, đơn giản hoá văn bản để dùng cho TF-IDF, bag-of-words, search,…
-Lemmatization
-    • Ý tưởng: đưa từ về dạng nguyên mẫu có nghĩa (lemma) dựa trên từ điển + phân tích ngữ pháp. Dùng mô hình ngôn ngữ / từ điển. Trả về từ hợp lệ của ngôn ngữ. Hiểu ngữ cảnh của từ trong câu.
-    • xử lý NLP có yêu cầu ngữ nghĩa tốt hơn information extraction, question answering, machine translation
+
 
 sentence segmentation
 Embedding & Vector Representation
 CBOW
 Skip-gram
 Glove
-Transformer embedding
-Luồng hoạt động:
-raw text → token → token_id → padding → attention mask → embedding lookup → positional encoding → final transformer embedding
-
-Positional Encoding
-    • Với câu “tôi ăn cơm” Token embedding của Transformer không biết 3 từ này đang ở vị trí 1–2–3 hay 3–2–1, vì attention không có tính tuần tự như RNN. Ta phải cộng thêm 1 vectơ đại diện cho “vị trí số mấy trong câu” → Đó là positional encoding.
-    • Ví dụ:
-        1. Token IDs: 
-           [1, 2, 3, 4]
-        2. Lookup embedding → mỗi token thành vector 3 chiều
-           token embeddings = [
-               [1, 2, 3],      # token 1
-               [4, 5, 6],      # token 2
-               [7, 8, 9],      # token 3
-               [10,11,12]      # token 4
-           ]
-           → Đây là Embedding → học được ý nghĩa của từ.
-        3. Positional Encoding (PE):
-           PE = [
-               [0,    0,    0   ],   # vị trí 0
-               [1,    1,    1   ],   # vị trí 1
-               [2,    2,    2   ],   # vị trí 2
-               [3,    3,    3   ],   # vị trí 3
-           ]
-        4. Cộng embedding + positional encoding theo từng vị trí
-           [
-               [1,  2,  3 ],
-               [5,  6,  7 ],
-               [9, 10, 11 ],
-               [13,14, 15 ]
-           ]
-
-Công thức:
-Với vị trí pos và chiều vector I
-    • PE(pos, 2i) = sin(pos/10000**(2i/d))
-    • PE(pos, 2i+1) = cos(pos/10000**(2i/d)
-Tức là token ở vị trí 0,1,2,3,… sẽ có vector chứa sin/cos có tần số khác nhau. Mỗi chiều dùng tần số khác nhau → mô hình phân biệt được vị trí.
-Công thức nâng cao chunt Hugging Face:
-    • a**b = e**(b.ln(a)) → 10000**(2i/d) = e**(ln(10000) . (2i/d))
-Ví dụ:
-Giả sử embedding size = 4 (d = 4)
-Vị trí token = 2
-Ta tính:
-Với i = 0:
-    • chiều 0 (even): PE(2,0)=sin⁡(2 / (10000**(0/4))=sin⁡(2)=0.9093
-    • chiều 1 (odd): PE(2,1)=cos⁡(2 / (10000**(0/4))=cos⁡(2)=−0.4161
-Với i = 1:
-    • chiều 2 (even): PE(2,2)=sin⁡(2/100001/4)≈sin⁡(2/10)=sin⁡(0.2)=0.1987
-    • chiều 3 (odd): PE(2,3)=cos⁡(2/100001/4)=cos⁡(0.2)=0.9801
-Positional embedding cho vị trí 2: [ 0.9093,  -0.4161,  0.1987,  0.9801 ]
-Cú pháp:
-import torch
-import math
-
-def positional_encoding(seq_len, d_model):
-    PE = torch.zeros(seq_len, d_model)
-    
-    for pos in range(seq_len):
-        for i in range(d_model):
-            angle = pos / (10000 ** (2 * (i // 2) / d_model))
-            if i % 2 == 0:
-                PE[pos, i] = math.sin(angle)
-            else:
-                PE[pos, i] = math.cos(angle)
-
-    return PE
-
-
-pe = positional_encoding(seq_len=5, d_model=8)
-print(pe)
-tensor([
- [0.0000, 1.0000, 0.0000, 1.0000, ...],  # pos=0
- [0.8415, 0.5403, 0.0100, 1.0000, ...],  # pos=1
- [0.9093,-0.4161, 0.0200, 0.9998, ...],  # pos=2
- ...
-])
-def positional_encoding_fast(seq_len, d_model):
-    position = torch.arange(seq_len).unsqueeze(1)
-    div_term = torch.exp(torch.arange(0, d_model, 2) * (-math.log(10000.0) / d_model))
-
-    PE = torch.zeros(seq_len, d_model)
-    PE[:, 0::2] = torch.sin(position * div_term)
-    PE[:, 1::2] = torch.cos(position * div_term)
-    return PE
 
 PhoBERT
 
@@ -304,28 +195,3 @@ target_seq = target_seq.unsqueeze(0)
 vocab_size = len(chars)
 embedding_dim = 10
 hidden_dim = 20
-
-
-
-
-
-BERT (Bidirectional Encoder Representations from Transformers)
-    • Là một mô hình ngôn ngữ do Google phát triển (2018), dùng để hiểu ngữ cảnh của câu theo cả hai chiều (trái → phải và phải → trái) và được xây dựng chỉ dùng phần encoder của transformer.
-    • BERT không tạo văn bản mới (như GPT), mà hiểu và biểu diễn ngữ nghĩa câu chữ. Nó được dùng như "bộ não ngôn ngữ" trong các bài toán hiểu ngôn ngữ tự nhiên (NLU).
-Nhiệm cụ của BERT:
-    • BERT chỉ là một bộ biểu diễn ngữ nghĩa. BERT mã hóa câu hoặc từ thành vector chứa ngữ cảnh 2 chiều. 
-    • Ví dụ với hai câu: "Tôi ăn no rồi", "Tôi đã no bụng" → BERT sẽ biến mỗi câu thành một vector 768 chiều (nếu dùng bert-base), và vì nghĩa tương tự → 2 vector gần nhau trong không gian embedding.
-Pipeline hoạt động của BERT:
-Inputs → input Embedding + Positional Encoding → Multi-head Attention → Add & Norm → Feed Forward → Add & Norm → Linear → Softmax → Output
-
-4. AI
-Math (Toán học)
-Đạo hàm
-Đạo hàm là “tốc độ thay đổi” của một đại lượng.
-    • Tối ưu hóa: Tìm điểm nhỏ nhất, lớn nhất trong hàm (mất mát trong ML).
-    • Kinh tế: Tối đa hóa lợi nhuận, tối thiểu hóa chi phí.
-    • Vật lý: Mối liên hệ giữa vị trí - vận tốc - gia tốc.
-    • ML/DL: Sử dụng tính toán hàm mất mát (gradient descent).Nếu không có đạo hàm → máy không biết “học” thế nào để tốt hơn.
-    • Game: Mô phỏng chuyển động, ánh sáng, âm thanh.
-    • Sinh học/Hóa học: Mô hình hóa phản ứng, lan truyền, tăng trưởng, …
-

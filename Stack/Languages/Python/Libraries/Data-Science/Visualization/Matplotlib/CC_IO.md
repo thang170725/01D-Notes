@@ -6,6 +6,8 @@
 - [figure()](#figure)
 - [tight\_layout()](#tight_layout)
 - [.colorbar()](#colorbar)
+- [Save (Nhóm lưu)](#save-nhóm-lưu)
+  - [plt.savefig()](#pltsavefig)
 ---
 # Title() & set_title() 
 ```bash
@@ -141,4 +143,16 @@ plt.xticks(rotation=45)
     + debug ảnh
     + xem khoảng giá trị pixel
     + xử lý ảnh / heatmap / ma trận
+```
+# Save (Nhóm lưu)
+## plt.savefig()
+**Syn**
+```bash
+plt.savefig(
+    "ten_file.png",
+    dpi=300
+)
+
+- Input:
+    + dpi   : Chỉ định độ phân giải (tốt cho báo cáo/paper)
 ```

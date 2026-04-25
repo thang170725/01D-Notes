@@ -1,212 +1,71 @@
 - [Logistic Regression](#logistic-regression)
   - [Demo Pipeline Logistic](#demo-pipeline-logistic)
-- [𝑦](#𝑦)
-- [)](#)
-- [1](#1)
-- [2](#2)
-- [3](#3)
   - [Demo logistic với numpy](#demo-logistic-với-numpy)
   - [Demo Logistic với pytorch](#demo-logistic-với-pytorch)
 ---
 # Logistic Regression
 ## Demo Pipeline Logistic
+```bash
 Bài toán: Dự đoán đậu/rớt phỏng vấn
-
 Một công ty muốn dự đoán xem ứng viên có đậu phỏng vấn (1) hay rớt (0) dựa trên 3 đặc trưng:
+    - 𝑥1: Số năm kinh nghiệm
+    - 𝑥2: Điểm test kỹ thuật (0–10)
+    - 𝑥3: Số dự án đã làm
 
-𝑥
-1
-x
-1
-	​
+Dataset mẫu
+Ứng viên    𝑥1(exp)    𝑥2(score)    𝑥3(projects)    y(kết quả)
+1	        1	        5	        2	            0
+2	        2	        6	        3	            0
+3	        3	        7	        4	            1
+4	        4	        8	        5	            1
+5	        5	        6	        6	            1
+6	        1	        4	        1	            0
 
-: Số năm kinh nghiệm
-𝑥
-2
-x
-2
-	​
-
-: Điểm test kỹ thuật (0–10)
-𝑥
-3
-x
-3
-	​
-
-: Số dự án đã làm
-📊 Dataset mẫu
-Ứng viên	
-𝑥
-1
-x
-1
-	​
-
- (exp)	
-𝑥
-2
-x
-2
-	​
-
- (score)	
-𝑥
-3
-x
-3
-	​
-
- (projects)	y (kết quả)
-1	1	5	2	0
-2	2	6	3	0
-3	3	7	4	1
-4	4	8	5	1
-5	5	6	6	1
-6	1	4	1	0
-🧠 Mô hình logistic regression
-
-Xác suất đậu được tính bằng:
-
-𝑃
-(
-𝑦
-=
-1
-∣
-𝑥
-)
-=
-1
-1
-+
-𝑒
-−
-(
-𝑤
-0
-+
-𝑤
-1
-𝑥
-1
-+
-𝑤
-2
-𝑥
-2
-+
-𝑤
-3
-𝑥
-3
-)
-P(y=1∣x)=
-1+e
-−(w
-0
-	​
-
-+w
-1
-	​
-
-x
-1
-	​
-
-+w
-2
-	​
-
-x
-2
-	​
-
-+w
-3
-	​
-
-x
-3
-	​
-
-)
-1
-	​
-
-
-🎯 Yêu cầu bài toán
-Huấn luyện mô hình logistic regression với dataset trên
-Tìm các trọng số 
-𝑤
-0
-,
-𝑤
-1
-,
-𝑤
-2
-,
-𝑤
-3
-w
-0
-	​
-
-,w
-1
-	​
-
-,w
-2
-	​
-
-,w
-3
-	​
-
-Dự đoán cho ứng viên mới:
-𝑥
-1
-=
-2
-x
-1
-	​
-
-=2, 
-𝑥
-2
-=
-7
-x
-2
-	​
-
-=7, 
-𝑥
-3
-=
-3
-x
-3
-	​
-
-=3
-Xác định:
-Xác suất đậu
-Nhãn dự đoán (ngưỡng 0.5)
-💡 Gợi ý
-Có thể dùng:
-Gradient Descent (tự code)
-Hoặc sklearn.linear_model.LogisticRegression
-Chuẩn hóa dữ liệu sẽ giúp học nhanh hơn
-
-Nếu bạn muốn, mình có thể:
-
-Giải tay từng bước (gradient descent)
-Hoặc viết code PyTorch / NumPy / sklearn cho bài này 🚀 
+Yêu cầu bài toán: Huấn luyện mô hình logistic regression với dataset trên
+Tìm các trọng số: 𝑤0, 𝑤1, 𝑤2, 𝑤3
+```
+```bash
+Bước 1: Khởi tạo trọng số:
+    - w1 = 0.1, w2 = 0.1, w3 = 0.1, b=0
+Bước 2: Forward (tính dự đoán)
+    - Ứng viện 1: (1, 5, 2), y = 0
+        + z1 = w1.x1 + w2.x2 + w3.x3 + b = 0.1(1) + 0.1(5) + 0.1(2) = 0.8
+        + y_pred = σ(z1​) = 1/(1+e^-z1) = 1/(1+e^-0.8) ≈ 0.69
+    - Ứng viên 2: (2, 6, 3), y = 0    
+        + z2 = 1.1 ⇒ y_pred ≈ 0.75
+    - Ứng viên 3: (3, 7, 4), y = 1
+        + z3 = 1.4 ⇒ y_pred ≈ 0.80
+    - ...
+Bước 3: Tính Loss (BCE – giả định)
+    - L1 = −(ylog(y_pred))+(1−y)log(1−y_pred)) = −(0⋅log(0.69)+(1−0)log(1−0.69))=−log(0.31) ⇒ L1≈1.17
+    - ...
+    => Loss = 1/6 . (L1 + L2 + ... + L6) = 0.69
+    - Nhận xét: Model đang đoán quá cao cho các mẫu rớt (0) → sai khá nhiều
+Bước 4: Backprop (đạo hàm – giả định)
+    - Tính cho Ứng viên 1:
+        + ∂L1/∂z1 = y_pred1 - y1 = 0.69−0 = 0.69
+        + Gradient theo từng trọng số:
+            - ∂L/∂w1 = (y_pred1 - y)⋅x1
+            - ∂L/∂w2 = (y_pred1 − y)⋅x2
+	​        - ∂L/∂w3 = (y_pred1 − y)⋅x3
+	​        - ∂L/∂b = (y_pred1 − y)
+        + Thay số cho Ứng viên 1:
+            - dL/dw1 = 0.69⋅1 = 0.69
+            - dL/dw2 = 0.69⋅5 = 3.45
+            - dL/dw3 = 0.69⋅2 = 1.38
+            - dL/db=0.69
+    => Tổng gradient (trung bình toàn bộ dataset – giả định)
+        + dL/dw1≈0.9
+        + dL/dw2≈1.5
+        + dL/dw3≈1.0
+        + dL/db≈0.8
+Bước 5: Update (Learning rate = 0.05)
+    - w1 = 0.1 − 0.05(0.9)=0.055
+    - w2 = 0.1 − 0.05(1.5)=0.025
+    - w3 = 0.1 − 0.05(1.0)=0.05
+    - b = 0−0.05(0.8)=−0.04
+Bước 6: Quay lại bước 1
+```
 ## Demo logistic với numpy
 ```python
 import numpy as np

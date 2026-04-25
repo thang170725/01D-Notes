@@ -4,7 +4,7 @@
     - [.create\_all()](#create_all)
   - [Table](#table)
     - [Column()](#column)
-- [Search](#search)
+- [Search (Nhóm tìm kiếm để lấy dữ liệu)](#search-nhóm-tìm-kiếm-để-lấy-dữ-liệu)
   - [select()](#select)
   - [.where()](#where)
   - [.join()](#join)
@@ -24,7 +24,6 @@
     - [.mappings()](#mappings)
     - [.first() \& .all()](#first--all)
   - [.update()](#update)
-  - [DELETE](#delete)
 ---
 # Create
 ```bash
@@ -173,12 +172,12 @@ Column(
     foreign_key=...
 )
 ```
-# Search
-```bash
-Nhóm tìm kiếm, truy vấn (sử dụng câu lệnh để lấy dữ liệu)
-```
+# Search (Nhóm tìm kiếm để lấy dữ liệu)
 ## select()
-**Ex**
+```bash
+Là các mới của query dùng được cho cả CORE + ORM.
+```
+**Ex1**
 ```python
 from sqlalchemy import select
 
@@ -189,6 +188,19 @@ with engine.connect() as conn:
 
 for row in rows:
     print(row.id, row.name, row.city)
+```
+**Ex2: select một vài cột**
+```python
+stmt = select(User.id, User.name)
+result = session.execute(stmt)
+
+result.all() # [(1, 'Alice'), (2, 'Bob')]
+```
+**Ex3: Muốn lấy dạng dict**
+```python
+result = session.execute(stmt).mappings().all()
+
+[{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
 ```
 ## .where()
 ## .join()

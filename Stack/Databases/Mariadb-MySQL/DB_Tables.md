@@ -12,6 +12,7 @@
 - [Update (cập nhật \& thay đổi)](#update-cập-nhật--thay-đổi)
   - [alter ... modify](#alter--modify)
   - [alter ... change](#alter--change)
+  - [alter ... rename to](#alter--rename-to)
 - [JOIN (nối bảng)](#join-nối-bảng)
   - [join (inner join)](#join-inner-join)
   - [left join](#left-join)
@@ -162,6 +163,14 @@ CHANGE old_column_name new_column_name column_definition;
 ```sql
 ALTER TABLE users
 CHANGE username user_name VARCHAR(100);
+```
+## alter ... rename to
+```bash
+Thường dùng để thay đổi tên bảng
+```
+**Ex**
+```sql
+alter table meals rename to food_library; -- đổi tên bảng từ meals thành food_library
 ```
 # JOIN (nối bảng)
 ## join (inner join)

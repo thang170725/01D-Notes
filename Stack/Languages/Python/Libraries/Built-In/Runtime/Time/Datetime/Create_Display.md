@@ -47,7 +47,6 @@ Chỉ lấy ngày
 today = date.today()
 print(today) # 2026-01-12
 ```
-
 ## timezone.utc
 ```bash
 Lấy thời gian theo timezone

@@ -398,21 +398,35 @@ with torch.no_grad():
 # Cuda
 ## device()
 ## is_available()
+```bash
 Trả về True/False. True là máy tính có thể chạy gpu.
-Cú pháp:
+```
+**Syn**
+```bash
+import torch
 torch.cuda.is_available()
+```
 ## get_device_name()
+```bash
 Trả về tên của gpu đang sử dụng.
-Cú pháp:
+```
+**Ex**
+```bash
 print(torch.cuda.get_device_name(0))
+```
 ## .to()
+```bash
 Thiết lập chế độ chạy GPU hay CPU.
-Cú pháp:
+```
+**Ex**
+```python
 import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
 a = torch.tensor([1,2]).to(device)
-print(a.device) # cuda:0
+
+print(a.device) # cuda:
+```
 ## Utils
 # Dataset
 ```bash

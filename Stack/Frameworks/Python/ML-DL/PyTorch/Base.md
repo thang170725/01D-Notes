@@ -18,5 +18,5 @@ PyTorch/
 ```
 # Installation
 ```bash
-pip install torch
+pip install torch torchvision
 ```

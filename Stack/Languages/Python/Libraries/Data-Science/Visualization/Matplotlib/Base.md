@@ -5,9 +5,9 @@
 ---
 # Directory Structure
 ```bash
-Matplotlib                  # mình dùng thư mục này để vẽ trực quan 2d
-├── Base.md                 # mình dùng file này để xem lý thuyết cột lõi và tiện ích
-├── Config.md               # mình dùng file này để cấu hình, setup trước khi thao tác với biểu đồ
+Matplotlib/         # mình dùng thư mục này để vẽ trực quan 2d
+├── Base.md         # mình dùng file này để xem lý thuyết cột lõi và tiện ích
+├── CC_IO.md        # mình dùng file này để tạo, cấu hình, nhập, xuất (Create, Config, Input, Output)
 ├── Practices.md            # mình dùng file này để xem code mẫu, bài tập
 └── Draw_Chart.md           # mình dùng file này để thực hiện các thao tác với biểu đồ, vẽ biểu đồ
 ```

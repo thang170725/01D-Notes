@@ -1,8 +1,9 @@
-Phần 4: Làm việc với nhánh
-
-
-git branch -m master main
-Đổi tên nhánh hiện tại từ master -> main.
+- [git branch](#git-branch)
+---
+# git branch
+**Ex**
+```bash
+1. git branch -m master main # Đổi tên nhánh hiện tại từ master -> main.
 
 Lấy code từ 1 nhánh về máy
     1. git checkout khue 

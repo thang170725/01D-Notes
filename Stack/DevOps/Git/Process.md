@@ -1,4 +1,6 @@
 - [git remote](#git-remote)
+- [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
+  - [git status](#git-status)
 ---
 # git remote
 ```bash
@@ -42,3 +44,5 @@ Tạo một central repo hay là remote repo.
 
 git remote remove origin
 Khi bạn muốn xóa rồi thêm lại remote origin
+# Display (Nhóm cung cấp thông tin)
+## git status

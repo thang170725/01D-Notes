@@ -12,6 +12,5 @@ SqlAlchemy/                     # mình dùng thư mục này để xem kiến t
 ```
 # Installation
 ```bash
-1. pip install sqlalchemy
-2. pip install pymysql
+1. pip install sqlalchemy pymysql
 ```

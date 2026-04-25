@@ -1,9 +1,42 @@
+- [Boosting](#boosting)
 - [Decision Tree](#decision-tree)
 - [Random Forest](#random-forest)
 - [XGBoost](#xgboost)
-- [LightGBM](#lightgbm)
 - [CatBoost](#catboost)
 ---
+# Boosting
+**Boosting là gì**
+```bash
+- Boosting là một kỹ thuật trong machine learning dùng để kết hợp nhiều mô hình yếu (weak learners) lại thành một mô hình mạnh hơn.
+- Nói đơn giản: Thay vì cố tạo 1 model thật xịn ngay từ đầu, boosting sẽ học dần dần, mỗi bước sửa lỗi của bước trước.
+```
+**Ex1**
+```bash
+Giả sử bạn đang học toán:
+
+Lần 1: bạn làm bài → sai nhiều chỗ
+Lần 2: bạn tập trung sửa những chỗ sai đó
+Lần 3: tiếp tục sửa những lỗi còn lại
+...
+
+=> Cuối cùng bạn giỏi lên vì luôn tập trung vào lỗi trước đó
+=> Boosting = học từ sai lầm
+```
+**Ex2**
+```bash
+Giả sử bạn có bài toán phân loại: Nhìn ảnh và đoán: đây là mèo hay chó
+
+Bước 1: Model 1 đoán:
+    - đúng 70%
+    - sai 30% (ví dụ nhầm chó thành mèo)
+Bước 2: Model 2 sẽ:
+    - chú ý nhiều hơn vào 30% dữ liệu bị sai
+    - cố sửa lỗi đó
+Bước 3:
+    - Model 3 tiếp tục:
+    - sửa các lỗi còn lại
+=> Cuối cùng: kết hợp 3 model → độ chính xác cao hơn nhiều
+```
 # Decision Tree
 ```bash
 - Decision Tree (ví dụ: CART) là một cây duy nhất chia dữ liệu theo rule.
@@ -51,53 +84,7 @@ Random Forest tốt cho:
     3. Feature engineering chưa hoàn hảo. Boosting có thể học interaction tốt hơn.
     4. Tabular data structured. Trong 80% bài toán tabular → XGBoost thường thắng RF.
 ```
-# LightGBM
-LightGBM (Light Gradient Boosting Machine) là một thư viện gradient boosting dựa trên decision tree, do Microsoft phát triển.
 
-Nó cùng “họ” với:
-
-XGBoost
-
-CatBoost
-
-⚙️ LightGBM khác XGBoost ở điểm nào?
-1️⃣ Cách xây cây
-
-XGBoost: grow theo level-wise (từng tầng một)
-
-LightGBM: grow theo leaf-wise (chọn leaf có gain lớn nhất để tách tiếp)
-
-👉 Leaf-wise thường:
-
-Giảm loss nhanh hơn
-
-Có thể chính xác hơn
-
-Nhưng dễ overfit nếu dataset nhỏ
-
-2️⃣ Tốc độ
-
-LightGBM:
-
-Dùng histogram-based algorithm
-
-Thường train nhanh hơn XGBoost
-
-Tốn ít memory hơn
-
-❓ LightGBM có mạnh hơn XGBoost trong đa số trường hợp?
-
-Câu trả lời trung thực:
-
-👉 Không có cái nào luôn thắng.
-
-Thực tế:
-
-Dataset lớn (100k+ rows): LightGBM thường nhanh và có thể tốt hơn
-
-Dataset nhỏ – vừa (vài nghìn → vài chục nghìn): XGBoost thường ổn định hơn
-
-Nhiều categorical feature: CatBoost có thể thắng cả hai
 # CatBoost
 CatBoost là gì?
 

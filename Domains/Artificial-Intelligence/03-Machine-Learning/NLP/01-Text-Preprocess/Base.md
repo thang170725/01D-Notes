@@ -1,4 +1,15 @@
-Token
+
+Stopwords removal
+    • Ý tưởng: danh sách các từ “không mang nhiều ý nghĩa” như “và”, “là”, “the”, “a” — thường loại bỏ trước khi xử lý để giảm noise và kích thước feature.
+    • Tiền xử lý — giảm kích thước bộ từ và tăng chất lượng feature cho TF/Count.
+    • Lưu ý: với một số tác vụ (ví dụ sentiment, questions), stopwords có thể mang thông tin (ví dụ “not” cực kỳ quan trọng) → cẩn thận khi loại.
+Stemming
+    • Ý tưởng: Cắt đuôi từ để đưa về dạng gốc thô bằng cách dùng rule cứng (heuristics). Không quan tâm ngữ pháp. Không đảm bảo trả về từ có nghĩa.
+    • Cách làm: cắt suffix kiểu “ing”, “ed”, “ly”, “s”, …
+    • Dùng để làm gì: giảm số lượng dạng của từ, đơn giản hoá văn bản để dùng cho TF-IDF, bag-of-words, search,…
+Lemmatization
+    • Ý tưởng: đưa từ về dạng nguyên mẫu có nghĩa (lemma) dựa trên từ điển + phân tích ngữ pháp. Dùng mô hình ngôn ngữ / từ điển. Trả về từ hợp lệ của ngôn ngữ. Hiểu ngữ cảnh của từ trong câu.
+    • xử lý NLP có yêu cầu ngữ nghĩa tốt hơn information extraction, question answering, machine translationToken
 Là một đơn vị nhỏ mà mô hình NLP sử dụng để xử lý văn bản. Nó không nhất thiết phải là một từ:
     • Một từ: ví dụ "bật", "nhạc"
     • Một từ gốc: "chơi" từ "chơi nhạc"
