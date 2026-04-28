@@ -1,4 +1,5 @@
 - [Show()](#show)
+- [plt.close()](#pltclose)
 - [imshow()](#imshow)
 - [matshow()](#matshow)
 - [plot()](#plot)
@@ -14,6 +15,50 @@
 # Show()
 ```bash
 Để hiển thị chart
+```
+# plt.close() 
+```bash
+Nó dùng để đóng figure (biểu đồ).
+```
+**Syn**
+```bash
+import matplotlib.pyplot as plt
+
+plt.close()
+```
+**Ex1: Đóng figure hiện tại**
+```python
+import matplotlib.pyplot as plt
+
+plt.plot([1,2,3],[4,5,6])
+plt.show()
+
+plt.close()
+```
+**Ex2: Đóng một figure cụ thể**
+```python
+fig = plt.figure()
+
+plt.plot([1,2,3])
+
+plt.close(fig)
+```
+**Ex3: Đóng tất cả figure**
+```python
+plt.close('all') # Rất hay dùng.
+```
+**Tại sao phải dùng?**
+```bash
+- Tránh tốn bộ nhớ. Nếu loop vẽ hàng trăm biểu đồ:
+    for col in df.columns:
+
+        plt.plot(df[col])
+        plt.savefig(f"{col}.png")
+
+        plt.close()
+- Nếu không close():
+    + figure chồng chất trong memory
+    + có thể warning:
 ```
 # imshow()
 ```bash

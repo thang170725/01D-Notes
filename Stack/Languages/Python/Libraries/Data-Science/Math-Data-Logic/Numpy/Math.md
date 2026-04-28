@@ -14,7 +14,6 @@
 - [Log2()](#log2)
 - [Concatenate](#concatenate)
 - [Stack](#stack)
-- [Hstack](#hstack)
 - [Vstack](#vstack)
 - [Split](#split)
 - [Array\_split](#array_split)
@@ -47,13 +46,16 @@ print(np.max(a)) # 4
 ```bash
 numpy.sum(a, axis=None, dtype=None, out=None, keepdims=False, initial=0, where=True)
 
-- a         : Mảng đầu vào (array-like)
-- axis:	    : Trục cần tính tổng (None, 0, 1, tuple…)
-- dtype:	: Kiểu dữ liệu của kết quả
-- out	    : Mảng để lưu kết quả
-- keepdims	: Giữ nguyên số chiều sau khi sum
-- initial	: Giá trị khởi tạo cho phép cộng
--where	    : Điều kiện để chọn phần tử khi tính tổng
+- Input:
+  + a         : Mảng đầu vào (array-like)
+  + axis      : Trục cần tính tổng (None, 0, 1, tuple…)
+    - 0: là tính tổng cột
+    - 1: là tính tổng hàng
+  + dtype     : Kiểu dữ liệu của kết quả
+  + out	      : Mảng để lưu kết quả
+  + keepdims	: Giữ nguyên số chiều sau khi sum
+  + initial	  : Giá trị khởi tạo cho phép cộng
+  + where	    : Điều kiện để chọn phần tử khi tính tổng
 ```
 **Ex1: Sum toàn bộ mảng**
 ```python

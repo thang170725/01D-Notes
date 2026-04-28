@@ -36,3 +36,10 @@ touch listName.txt
 Tạo ra một file tên là listName.txt
 cat
 Để hiển thị nội dung của một hoạc nhiều file ra màn hình.
+touch .gitignore
+tạo ra file .gitignore
+cat .gitignore
+hiển thị dữ liệu trong file ra màn hình
+echo “2/” >> .gitignore
+bỏ qua giám sát các file ở folder 2
+Xử lý xung đột trong git – Merge Conflict 

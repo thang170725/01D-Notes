@@ -1,3 +1,6 @@
+- [Directory Structure](#directory-structure)
+- [line cotinution](#line-cotinution)
+---
 # Directory Structure
 ```bash
 Basic                           # mình dùng thư mục này để xem kiến thức python core
@@ -14,4 +17,8 @@ Basic                           # mình dùng thư mục này để xem kiến t
 ├── Practices/                  # mình dùng thư mục này để xem code mẫu, bài tập
 ├── strings.md
 └── tuples_zip_map_filter.md
+```
+# line cotinution
+```bash
+Báo cho python biết câu lệnh chưa kết thúc vẫn còn ở dòng sau
 ```

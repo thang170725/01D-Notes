@@ -44,6 +44,7 @@ sns.lineplot(
     data=None,
     x=None,
     y=None,
+    ax=axes[i],
     hue=None,
     style=None,
     size=None,
@@ -57,6 +58,7 @@ sns.lineplot(
     + data  : Nguồn dữ liệu (DataFrame)
     + x     : Biến trục X
     + y     : Biến trục Y
+    + ax    : trong seaborn dùng để chỉ vẽ vào đâu. ax=axes[i] nghĩa là: "Vẽ lineplot này vào subplot số i"
 ```
 **Ex: Với dữ liệu dạng time series điện năng**
 ```python

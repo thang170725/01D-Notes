@@ -16,6 +16,8 @@
 - [JOIN (nối bảng)](#join-nối-bảng)
   - [join (inner join)](#join-inner-join)
   - [left join](#left-join)
+- [Transform (Nhóm làm thay đổi hình dạng bảng)](#transform-nhóm-làm-thay-đổi-hình-dạng-bảng)
+  - [group by](#group-by)
 ---
 # Create & Use
 ## create database
@@ -218,4 +220,9 @@ ON students.id = scores.student_id;
 -- Bình	9
 -- Cường	NULL
 -- Cường vẫn còn dù không có điểm.
+```
+# Transform (Nhóm làm thay đổi hình dạng bảng)
+## group by
+```bash
+Dùng để gom các dòng có cùng giá trị lại thành một nhóm
 ```

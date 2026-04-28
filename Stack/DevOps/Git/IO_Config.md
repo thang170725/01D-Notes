@@ -1,8 +1,14 @@
 - [git config](#git-config)
 - [git clone](#git-clone)
 - [git pull](#git-pull)
+  - [--no-rebase](#--no-rebase)
+- [git push](#git-push)
+  - [-u](#-u)
+  - [-f](#-f)
+  - [--delete](#--delete)
 - [git init](#git-init)
 - [.gitignore](#gitignore)
+- [.git](#git)
 ---
 # git config
 **Syn**
@@ -38,7 +44,59 @@ Lệnh này giúp bạn sao chép toàn bộ mã nguồn, lịch sử thay đổ
 ```bash
 1. pull từ nhánh main
     git pull origin main
-2. git pull --no-rebase origin main
+```
+## --no-rebase
+**Ex**
+```bash
+git pull --no-rebase origin feature/profile
+
+- --no-rebase: Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge)
+```
+# git push
+## -u
+**Ex**
+```bash
+git push -u origin feature/login
+
+- origin    : Là remote repo (thường là GitHub).
+    + origin chỉ là nickname, có thể đổi tên khác được.
+- feature/login : Branch local bạn muốn push lên remote.
+- -u    : -u = --set-upstream
+    + Nó thiết lập branch local theo dõi branch remote tương ứng:
+    + feature/login  ---> origin/feature/login
+    + Sau đó Git nhớ:
+        - pull từ đâu
+        - push tới đâu
+
+# Lần đầu: git push -u origin feature/login
+# Các lần sau chỉ cần: git push hoặc git pull
+# không cần ghi lại origin + branch.
+```
+**Nếu không có -u**
+```bash
+git push origin feature/login
+
+# vẫn push được. Nhưng lần sau: git push có thể Git báo: no upstream branch vì chưa liên kết tracking branch.
+```
+**Có bỏ origin được không?**
+```bash
+Lần đầu thường không nên bỏ.
+
+git push -u origin feature/login # rõ ràng nhất.
+
+# Sau khi set upstream rồi:
+# Có thể: git push không cần origin.
+# Tư duy Lần đầu: git push -u origin feature/login = "Đẩy branch này lên GitHub và nhớ đây là branch remote của tôi."
+# Sau đó: git pushgit pull là đủ.
+```
+## -f
+**Ex**
+```bash
+git push -f origin main # force push đè GitHub
+```
+## --delete
+```bash
+git push origin --delete feature/login # xóa branch trên gitHub
 ```
 # git init
 ```bash
@@ -89,4 +147,14 @@ Bước 5: add code
         *.pyc
         .env
         venv/
+```
+# .git
+**Ex: Xóa .git và init lại từ đầu để xóa toàn bộ lịch sử repo**
+```bash
+rm -rf .git
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin <repo-url>
+git push -f origin main
 ```

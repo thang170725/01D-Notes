@@ -12,9 +12,9 @@
   - [select ... limit](#select--limit)
   - [select ... order by](#select--order-by)
 - [like](#like)
-- [group\_by](#group_by)
 - [Process (Nhóm xử lý tính toán)](#process-nhóm-xử-lý-tính-toán)
   - [count](#count)
+  - [sum](#sum)
   - [DISTINCT](#distinct)
 - [Time (Nhóm thời gian)](#time-nhóm-thời-gian)
   - [WEEK()](#week)
@@ -176,10 +176,6 @@ SELECT * FROM Courses WHERE courseId = '2';
 ```sql
 SELECT * FROM exercises WHERE name LIKE '%Mountain%'
 ```
-# group_by
-```bash
-Dùng để gom các dòng có cùng giá trị lại thành một nhóm
-```
 # Process (Nhóm xử lý tính toán)
 ## count
 ```bash
@@ -204,6 +200,42 @@ GROUP BY department;
 | ---------- | ----- |
 | IT         | 3     |
 | HR         | 2     |
+```
+## sum
+```bash
+Để cộng tổng các giá trị trong 1 cột hoặc khác cột
+```
+**Ex1: Tính tổng các giá trị trong 1 cột**
+```sql
+Employees table:
+| emp_id | event_day  | in_time | out_time |
+| ------ | ---------- | ------- | -------- |
+| 1      | 2020-11-28 | 4       | 32       |
+| 1      | 2020-11-28 | 55      | 200      |
+| 1      | 2020-12-3  | 1       | 42       |
+| 2      | 2020-11-28 | 3       | 33       |
+| 2      | 2020-12-9  | 47      | 74       |
+
+select sum(in_time) from Employees
+-- | sum(in_time) |
+-- | ------------ |
+-- | 110          |
+```
+**Ex2: Tính tổng các giá trị khác cột**
+```sql
+Employees table:
+| emp_id | event_day  | in_time | out_time |
+| ------ | ---------- | ------- | -------- |
+| 1      | 2020-11-28 | 4       | 32       |
+| 1      | 2020-11-28 | 55      | 200      |
+| 1      | 2020-12-3  | 1       | 42       |
+| 2      | 2020-11-28 | 3       | 33       |
+| 2      | 2020-12-9  | 47      | 74       |
+
+select sum(output - in_time) from Employees
+-- | sum(out_time - in_time) |
+-- | ----------------------- |
+-- | 271                     |
 ```
 ## DISTINCT 
 ```bash

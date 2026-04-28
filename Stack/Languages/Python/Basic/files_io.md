@@ -1,5 +1,16 @@
+- [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
+  - [__file__](#file)
+- [.readline()](#readline)
+- [.readlines()](#readlines)
+---
+# Display (Nhóm cung cấp thông tin)
+## __file__
 ```bash
-- Đây nơi chứa các hàm, phương thức về xử lý file.
+Biến đặc biệt chứa đường dẫn file python hiện tại
+```
+**Ex**
+```python
+print(__file__) # /home/thang/projects/tri_tue_nhan_tao/backend/visualizations/check_dataset.py (đường dẫn chạy file hiện tại)
 ```
 
 JSON

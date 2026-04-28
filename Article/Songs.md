@@ -31,6 +31,10 @@
 24. bến thượng hải (c5)	
 25. Phi điểu và ve sầu (c5)	
 25. Gặp em đúng lúc
+26. Thiên sơn vạn thủy của em (C5)
+27. Proud of you (C5)
+28. windy hill (c5)
+29. Phi điểu và ve sầu (c5)
 ```
 # Gutar
 ```bash

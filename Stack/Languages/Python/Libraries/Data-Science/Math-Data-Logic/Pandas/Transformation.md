@@ -8,6 +8,8 @@
   - [.transform()](#transform)
   - [qcut()](#qcut)
   - [.astype()](#astype)
+  - [set\_index()](#set_index)
+  - [reset\_index()](#reset_index)
 ---
 # Transformation (biến đổi cấu trúc dữ liệu)
 ## .rename()
@@ -202,8 +204,22 @@ df.sort_values(
 ```bash
 df.groupby(by)[col]
 
-- by : cột để group
-- col : cột cần tính
+- Input:
+    + by : cột để group
+    + col : cột cần tính
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "person": ["An","An","Binh","Binh","An"],
+    "electric": [10,15,20,25,5]
+})
+
+print(df.groupby("person")["electric"].sum())
+# An      30
+# Binh    45
 ```
 ## .transform()
 ```bash
@@ -285,3 +301,5 @@ Chuyển đổi kiểu dữ liệu
 ```python
 students['grade'] = students['grade'].astype("int")
 ```
+## set_index()
+## reset_index()

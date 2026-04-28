@@ -1,13 +1,20 @@
-- [Read (Nhóm lấy dữ liệu)](#read-nhóm-lấy-dữ-liệu)
-  - [.read\_csv()](#read_csv)
-- [.to\_csv()](#to_csv)
-- [pd.read\_sql()](#pdread_sql)
-- [DataFrame.to\_sql() (CỐT LÕI)](#dataframeto_sql-cốt-lõi)
+- [File (Nhóm xử lý file)](#file-nhóm-xử-lý-file)
+  - [Read (Nhóm lấy dữ liệu)](#read-nhóm-lấy-dữ-liệu)
+    - [.read\_csv()](#read_csv)
+  - [Write (Nhóm ghi dữ liệu)](#write-nhóm-ghi-dữ-liệu)
+    - [.to\_csv()](#to_csv)
+- [SQL (Nhóm xử lý sql)](#sql-nhóm-xử-lý-sql)
+  - [Read (Nhóm đọc, lấy thông tin)](#read-nhóm-đọc-lấy-thông-tin)
+    - [pd.read\_sql()](#pdread_sql)
+  - [Write (Nhóm ghi dữ liệu)](#write-nhóm-ghi-dữ-liệu-1)
+    - [DataFrame.to\_sql()](#dataframeto_sql)
 ---
-# Read (Nhóm lấy dữ liệu)
-## .read_csv()
+# File (Nhóm xử lý file)
+## Read (Nhóm lấy dữ liệu)
+### .read_csv()
 ```bash
-- Nó đọc delimited text files (file văn bản có cột ngăn cách bằng ký tự phân tách), ví dụ:
+- Nó đọc delimited text files (file văn bản có cột ngăn cách bằng ký tự phân tách)
+- ví dụ:
     + .csv → phân tách bởi dấu phẩy ,
     + .tsv → phân tách bởi tab \t
     + .txt → có thể phân tách bởi ;, |, tab,... miễn là chỉ rõ sep=...
@@ -27,17 +34,18 @@ li = pd.read_csv(
 ) # dữ liệu hiển thị dưới dạng dataframe
 
 - Input:
-    + sep               : Phân cách
+    + sep=';'           : Phân cách
     + decimal=','       : Nói cho Pandas dấu "," là dấu thập phân
     + parse_dates=[0]   : Bảo Pandas cột số 0 (cột đầu tiên) hãy chuyển thành kiểu ngày giờ.
 ```
-# .to_csv()
+## Write (Nhóm ghi dữ liệu)
+### .to_csv()
 ```bash
-
-- to_csv    : Ghi dữ liệu vào file csv.
+Ghi dữ liệu vào file csv.
 ```
-
-# pd.read_sql()
+# SQL (Nhóm xử lý sql)
+## Read (Nhóm đọc, lấy thông tin)
+### pd.read_sql()
 ```bash
 - pandas.read_sql dùng để chạy SQL và trả kết quả về DataFrame.
 - Nó là cầu nối giữa:
@@ -157,28 +165,8 @@ print(df.head())
 # read_sql nhận trực tiếp Select object
 # Không cần convert sang string
 ```
-1. Ví dụ 4 – Đặt index cho DataFrame
-df = pd.read_sql(
-    "SELECT id, name FROM districts",
-    con=engine,
-    index_col="id"
-)
-
-
-Kết quả:
-
-id trở thành index
-
-7. Ví dụ 5 – Parse datetime
-df = pd.read_sql(
-    "SELECT id, created_at FROM districts",
-    con=engine,
-    parse_dates=["created_at"]
-)
-
-
-👉 created_at thành datetime64[ns]
-# DataFrame.to_sql() (CỐT LÕI)
+## Write (Nhóm ghi dữ liệu)
+### DataFrame.to_sql()
 ```bash
 - to_sql dùng để:
     + Tạo bảng mới trong database từ DataFrame
@@ -208,10 +196,9 @@ DataFrame.to_sql(
     + 'append' → ghi thêm dữ liệu
 - index 	: Có ghi index của DataFrame vào DB không
 ```
-**Ex**
+**Ex1: SQLite – đơn giản nhất**
 ```python
-Ví dụ dễ hiểu (SQLite – đơn giản nhất)
-Bước 1: Tạo DataFrame
+# Bước 1: Tạo DataFrame
 import pandas as pd
 
 df = pd.DataFrame({
@@ -220,17 +207,12 @@ df = pd.DataFrame({
     "age": [20, 21, 22]
 })
 
-DataFrame nhìn như sau:
-idnameage1An202Bình213Chi22
-
-Bước 2: Kết nối database (SQLite)
+# Bước 2: Kết nối database (SQLite)
 from sqlalchemy import create_engine
 
-engine = create_engine("sqlite:///students.db")
+engine = create_engine("sqlite:///students.db") # File students.db sẽ được tạo nếu chưa tồn tại.
 
-📌 File students.db sẽ được tạo nếu chưa tồn tại.
-
-Bước 3: Ghi DataFrame vào SQL bằng to_sql
+# Bước 3: Ghi DataFrame vào SQL bằng to_sql
 df.to_sql(
     name="students",
     con=engine,
@@ -238,78 +220,5 @@ df.to_sql(
     index=False
 )
 
-
-4. Kết quả giả định trong database
-Bảng students được tạo
-SELECT * FROM students;
-
-Kết quả:
-idnameage1An202Bình213Chi22
-
-Kiểu bảng SQL (giả định)
-CREATE TABLE students (
-    id INTEGER,
-    name TEXT,
-    age INTEGER
-);
-
-
-5. Ví dụ ghi thêm dữ liệu (append)
-df_new = pd.DataFrame({
-    "id": [4],
-    "name": ["Dũng"],
-    "age": [23]
-})
-
-df_new.to_sql(
-    name="students",
-    con=engine,
-    if_exists="append",
-    index=False
-)
-
-Kết quả sau khi append
-idnameage1An202Bình213Chi224Dũng23
-
-6. Lỗi thường gặp ⚠️
-❌ Sai tên cột khi append
-→ Cột DataFrame phải khớp với cột bảng SQL
-❌ Ghi index không mong muốn
-index=True
-
-→ tạo thêm cột index trong DB
-➡️ thường nên dùng index=False
-
-7. Tóm tắt nhanh
-✔ to_sql = ghi DataFrame → SQL table
-✔ Hay dùng trong data pipeline
-✔ Quan trọng nhất:
-
-
-name
-
-
-con
-
-
-if_exists
-
-
-index
-
-
-
-Nếu bạn muốn:
-
-
-Ví dụ với MySQL / PostgreSQL
-
-
-So sánh to_sql vs execute INSERT
-
-
-Cách đọc ngược lại bằng read_sql
-
-
-👉 cứ nói, mình làm tiếp cho bạn 👍
+# Bảng students được tạo: SELECT * FROM students;
 ```

@@ -1,4 +1,8 @@
-- [Create \& Config (Tạo \& Cấu hình)](#create--config-tạo--cấu-hình)
+- [os.path (Nhóm làm việc với đường dẫn)](#ospath-nhóm-làm-việc-với-đường-dẫn)
+  - [.dirname()](#dirname)
+  - [.abspath()](#abspath)
+  - [.join()](#join)
+- [Create \& Config (Nhóm tạo \& cấu hình)](#create--config-nhóm-tạo--cấu-hình)
   - [.mkdir()](#mkdir)
   - [getenv](#getenv)
 - [Check](#check)
@@ -6,13 +10,10 @@
   - [.path.isdir()](#pathisdir)
   - [.path.exists()](#pathexists)
 - [Search](#search)
-- [Display](#display)
+- [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.listdir()](#listdir)
   - [.getcwd()](#getcwd)
-  - [__file__](#file)
-  - [.path.dirname()](#pathdirname)
 - [Process](#process)
-  - [.join()](#join)
   - [.chdir()](#chdir)
   - [splitext()](#splitext)
   - [relpath()](#relpath)
@@ -21,7 +22,64 @@
   - [sep](#sep)
   - [pathsep](#pathsep)
 ---
-# Create & Config (Tạo & Cấu hình)
+# os.path (Nhóm làm việc với đường dẫn)
+## .dirname()
+```bash
+Lấy thư mục chứa file.
+```
+**Ex1**
+```python
+print(os.path.dirname("/data/images/cat.jpg")) # /data/images
+```
+**Ex: Lấy đường dẫn thư mục gốc**
+```python
+BASE_DIR = os.path.dirname(os.path.dirname(__file__)) 
+
+print(BASE_DIR) # /home/thang/projects/tri_tue_nhan_tao/backend
+
+# Ví dụ path = "/home/thang/projects/tri_tue_nhan_tao/backend/app.py"
+# Lần 1: os.path.dirname(path) -> /home/thang/projects/tri_tue_nhan_tao/backend
+# Lần 2: -> /home/thang/projects/tri_tue_nhan_tao
+```
+## .abspath()
+```bash
+Dùng để đổi đường dẫn đó thành đường dẫn tuyệt đối (absolute path).
+```
+**Syn**
+```bash
+os.path.abspath(path)
+
+- Input:
+  + path  : đường dẫn tương đối hoặc file
+```
+**Ex1: chuyển 1 đường dẫn tương đối thành đường dẫn tuyệt đối**
+```python
+import os
+
+print(os.path.abspath("backend/utils.py")) # /home/thang/workspace/lightgbm/backend/utils.py
+```
+**Ex2: Lưu ý abspath gặp / thì giữ nguyên**
+```python
+import os
+
+print(os.path.abspath("/backend/utils.py")) # /backend/utils.py
+```
+## .join()
+```bash
+- Dùng để ghép đường dẫn.
+```
+**Syn**
+```bash
+img_path = os.path.join(input_folder, img_name)
+```
+**Ex**
+```python
+import os
+
+base_url = os.path.dirname(__file__)
+print(os.path.join(base_url, "docs/dataset.txt")) # /home/thang/workspace/lightgbm/backend/docs/dataset.txt
+```
+# Create & Config (Nhóm tạo & cấu hình)
 ## .mkdir()
 **Ex: Tạo file/thư mục nếu chưa tồn tại**
 ```python
@@ -110,7 +168,7 @@ if os.path.exists("logs"):
 ```
 # Search
 
-# Display
+# Display (Nhóm cung cấp thông tin)
 ```bash
 dùng để  hiển thị nhằm cung cấp thêm thông tin.
 ``` 
@@ -138,34 +196,7 @@ Trả về đường dẫn hiện tại
 ```bash
 os.getcwd()
 ```
-## __file__
-**Ex**
-```python
-print(__file__) # /home/thang/projects/tri_tue_nhan_tao/backend/visualizations/check_dataset.py (đường dẫn chạy file hiện tại)
-```
-## .path.dirname()
-```bash
-Lấy thư mục chứa file.
-```
-**Ex**
-```python
-print(os.path.dirname("/data/images/cat.jpg")) # /data/images
-```
-**Ex: Lấy đường dẫn thư mục gốc**
-```python
-BASE_DIR = os.path.dirname(os.path.dirname(__file__)) 
-
-print(BASE_DIR) # /home/thang/projects/tri_tue_nhan_tao/backend
-```
 # Process
-## .join()
-```bash
-- Ghép đường dẫn.
-```
-**Syn**
-```bash
-img_path = os.path.join(input_folder, img_name)
-```
 ## .chdir()
 ```bash
 Chuyển đến thư mục khác

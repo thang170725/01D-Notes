@@ -9,50 +9,66 @@
 - [Random (Tạo ngẫu nhiên)](#random-tạo-ngẫu-nhiên)
   - [Rand()](#rand)
   - [Randint()](#randint)
-- [Uniform()](#uniform)
+  - [Uniform()](#uniform)
   - [.seed()](#seed)
   - [randn()](#randn)
   - [normal()](#normal)
   - [binomial()](#binomial)
+  - [.choice()](#choice)
+
 ---
+
 # np.array() & empty & .zeros()
+
 ```bash
 - array     : Tạo mảng có sẵn giá trị.
 - empty     : Tạo mảng không quan tâm giá trị (rất nhanh).
 - zeros     : Tạo mảng có kích thước có sẵn.
 ```
+
 **Syn: array**
+
 ```bash
 arr = np.array([1,2,3,4,5], dtype=float)
 
 - dtype: chỉ định kiểu dữ liệu của mảng
     + i4 : là kiểu dữ liệu integer có kích thước 4 bytes
 ```
+
 **Syn: empty**
+
 ```bash
 import numpy as np
 
 arr = np.empty((h, w))   # h, w là kích thước đã biết
 ```
+
 **Syn: zeros**
+
 ```bash
 out = np.zeros(
    (out_h, out_w, chanels),
    dtype=np.uint8
 )
 ```
+
 # .zeros_like()
+
 ```bash
 - Để tạo một mảng mới có cùng hình dạng (shape) và kiểu dữ liệu (dtype) với mảng gốc, nhưng tất cả các phần tử đều bằng 0.
 ```
+
 **Syn**
+
 ```bash
 np.zeros_like(a, dtype=None)
 
 - a: mảng gốc muốn “bắt chước” shape và dtype.
 - dtype: (tuỳ chọn) nếu muốn đổi kiểu dữ liệu, có thể truyền thêm vào.
 ```
+
 **Ex**
+
 ```python
 a = np.array([[1, 2, 3], [4, 5, 6]])
 b = np.zeros_like(a)
@@ -67,61 +83,83 @@ print("b:\n", b)
 #  [[0 0 0]
 #   [0 0 0]]
 ```
+
 # .astype()
+
 ```bash
 - Dùng để chuyển kiểu dữ liệu của mảng sang kiểu khác.
 ```
+
 **Syn**
+
 ```bash
 a = array.astype(dtype)
 
 - dtype: là kiểu dữ liệu bạn muốn chuyển sang, ví dụ: int, float, bool, str, np.int32, np.float64, …
 ```
+
 **Ex1**
+
 ```python
 arr = np.array([1.1, 2.1, 3.1])
 newarr = arr.astype('i')
 print(newarr) # [1 2 3]
 print(newarr.dtype) # int32
 ```
+
 **Ex2**
+
 ```python
 arr = np.array([1.1, 2.1, 3.1])
 newarr = arr.astype(int)
 print(newarr) # [1 2 3]
 print(newarr.dtype) # int64
 ```
+
 **Ex3**
+
 ```python
 arr = np.array([1, 0, 3])
 newarr = arr.astype(bool)
 print(newarr) # [ True False True]
 print(newarr.dtype) # bool
 ```
+
 # frombuffer
+
 - Chuyển bytes → numpy array 1 chiều.
 - Thường dùng kèm với cv2.imdecode
 **Syn**
+
 ```bash
 np.frombuffer(buffer, dtype=np.uint8, count=-1, offset=0)
 ```
+
 **Ex**
+
 ```python
 np_arr = np.frombuffer(image_bytes, np.uint8)
 # np_arr = [137, 80, 78, 71, ...]
 # CHƯA phải ảnh, chỉ là byte stream
 ```
+
 # .tobytes()
+
 Chuyển np.ndarray → bytes (gửi HTTP)
 **Syn**
+
 ```bash
 ndarray.tobytes(order='C')
 ```
+
 # linspace()
+
 ```bash
 Để tạo một mảng số cách đều nhau trên một khoảng xác định.
 ```
+
 **Syn** 
+
 ```bash
 numpy.linspace(start, stop, num=50, endpoint=True, retstep=False, dtype=None, axis=0)
 
@@ -204,7 +242,7 @@ print(r2)
 #  [7 4 4 1 6]
 #  [9 7 2 2 7]]
 ```
-# Uniform()
+## Uniform()
 ```bash
 Thường dùng để tạo ra các tập dữ liệu lớn để thử nghiệm (tập dữ liệu ngẫu nhiên ở bất kỳ kích thước nào).
 ```
@@ -262,4 +300,48 @@ numpy.random.binomial(n, p, size=None)
 import numpy as np
 result = np.random.binomial(n=10, p=1/6, size=5)
 print(result) # [2 3 6 2 1]
+```
+## .choice()
+```bash
+Dùng để chọn ngẫu nhiên phần tử từ một tập hợp.
+```
+**Syn**
+```bash
+np.random.choice(a, size=None, replace=True, p=None)
+
+- Input:
+  + a:
+    - Nếu là số nguyên n → chọn từ 0 đến n-1
+    - Nếu là list/array → chọn từ các phần tử đó
+  + size: Số lượng phần tử muốn lấy
+  + replace=True:
+    - True: lấy có hoàn lại (có thể trùng)
+    - False: không hoàn lại (không trùng)
+  + p: Xác suất chọn từng phần tử
+```
+**Ex1: Chọn 1 phần tử ngẫu nhiên**
+```python
+import numpy as np
+
+x = np.random.choice([10,20,30,40])
+print(x) # 30
+```
+**Ex2: Chọn nhiều phần tử**
+```python
+np.random.choice([10,20,30,40], size=3) ## array([20, 20, 40]) (vì mặc định cho phép lặp)
+
+# Không cho trùng
+np.random.choice([10,20,30,40], size=3, replace=False) # array([40,10,30])
+```
+**Ex3: Chọn theo xác suất**
+
+```python
+np.random.choice(
+    ['A','B','C'],
+    size=10,
+    p=[0.7,0.2,0.1]
+)
+
+# A có 70% khả năng xuất hiện.
+# Ví dụ: ['A' 'A' 'B' 'A' ...]
 ```

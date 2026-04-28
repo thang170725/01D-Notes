@@ -7,23 +7,32 @@
   - [.tail()](#tail)
   - [.value\_counts()](#value_counts)
   - [pd.options.display.max\_rows](#pdoptionsdisplaymax_rows)
+  - [unique()](#unique)
   - [.nunique()](#nunique)
 - [Tạo thêm cột mới trong dataframe](#tạo-thêm-cột-mới-trong-dataframe)
   - [pd.notnull()](#pdnotnull)
   - [.isna() \& .isnull()](#isna--isnull)
 - [Search (nhóm tìm kiếm, lọc)](#search-nhóm-tìm-kiếm-lọc)
   - [loc](#loc)
+  - [iloc](#iloc)
   - [.notna()](#notna)
   - [.where()](#where)
-- [Math (tính toán số học)](#math-tính-toán-số-học)
-  - [.sum()](#sum)
-  - [.mean()](#mean)
 - [Process (thao tác xử lý)](#process-thao-tác-xử-lý)
   - [Basic Process (xử lý dữ liệu cơ bản)](#basic-process-xử-lý-dữ-liệu-cơ-bản)
     - [.drop() \& .dropna()](#drop--dropna)
   - [Duplicate Process (xử lý dữ liệu trùng)](#duplicate-process-xử-lý-dữ-liệu-trùng)
     - [.duplicated()](#duplicated)
     - [.drop\_duplicates()](#drop_duplicates)
+- [Time (Nhóm xử lý ngày giờ)](#time-nhóm-xử-lý-ngày-giờ)
+  - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin-1)
+    - [.dt.date](#dtdate)
+    - [.dt.hour](#dthour)
+    - [.dt.minute](#dtminute)
+    - [.dt.day\_name()](#dtday_name)
+    - [.dt.dayofweek](#dtdayofweek)
+  - [Transform (Nhóm biển đổi dữ liệu, cấu trúc dữ liệu)](#transform-nhóm-biển-đổi-dữ-liệu-cấu-trúc-dữ-liệu)
+    - [to\_datetime()](#to_datetime)
+    - [resample()](#resample)
 ---
 # Create (Nhóm khởi tạo)
 ## DataFrame & Series
@@ -179,6 +188,49 @@ main()
 
 # [3 rows x 2 columns]
 ```
+## unique()
+unique() dùng để lấy các giá trị không trùng lặp trong một Series/cột.
+
+Cú pháp
+df["column"].unique()
+Ví dụ đơn giản
+import pandas as pd
+
+df = pd.DataFrame({
+    "city": [
+        "Ha Noi",
+        "Da Nang",
+        "Ha Noi",
+        "HCM",
+        "Da Nang"
+    ]
+})
+
+print(df["city"].unique())
+Kết quả giả định
+['Ha Noi' 'Da Nang' 'HCM']
+
+Chỉ giữ giá trị duy nhất, bỏ trùng.
+
+Với số
+df = pd.DataFrame({
+ "hour":[8,8,9,10,10,10]
+})
+
+print(df["hour"].unique())
+
+Kết quả:
+
+[8 9 10]
+Đếm số giá trị unique
+
+Dùng:
+
+df["city"].nunique()
+
+Kết quả:
+
+3
 ## .nunique()
 ```bash
 - Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó.
@@ -340,6 +392,39 @@ df = pd.DataFrame(data)
 df.loc[df['country'] == 'Viet Nam', 'salary'] += 10
 print(df)
 ```
+## iloc 
+```bash
+dùng để truy cập dữ liệu theo vị trí chỉ số (index số nguyên) trong pandas.
+```
+**Syn**
+```bash
+df.iloc[hàng, cột]
+```
+**Ex1: Lấy 1 ô**
+```python
+import pandas as pd
+
+data = {
+    'name': ['thang', 'minh', 'long', 'quyen', 'hue'],
+    'age': [18,19,20,21,22]
+}
+df = pd.DataFrame(data)
+
+print(df.iloc[0,1]) # lấy hàng 0 cột 1
+# 18
+
+print(df.iloc[0:3,0:1]) # lấy hàng 0 -> 2, cột 0
+#     name
+# 0  thang
+# 1   minh
+# 2   long
+
+print(df.iloc[::2]) # lấy theo hàng bước nhảy 2. nó bằng với print(df.iloc[::2, :])
+#     name  age
+# 0  thang   18
+# 2   long   20
+# 4    hue   22
+```
 ## .notna()
 **Ex: tìm người đã có lương**
 ```python
@@ -402,9 +487,6 @@ print(df_new)
 # 1  Bình 12000000
 # 2  Chi  15000000
 ```
-# Math (tính toán số học)
-## .sum() 
-## .mean()
 # Process (thao tác xử lý)
 ## Basic Process (xử lý dữ liệu cơ bản)
 ### .drop() & .dropna()
@@ -536,4 +618,222 @@ print(df)
 # 3   3  Cường
 # 4   4   Dũng
 # 7   5     Hà
+```
+# Time (Nhóm xử lý ngày giờ)
+## Display (Nhóm cung cấp thông tin)
+### .dt.date 
+```bash
+dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây.
+```
+**Syn**
+```bash
+df["col"].dt.date
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "time": pd.to_datetime([
+        "2024-01-10 08:30:00",
+        "2024-01-10 14:45:00",
+        "2024-01-11 09:15:00"
+    ])
+})
+
+df["date_only"] = df["time"].dt.date
+
+print(df)
+#                  time   date_only
+# 0 2024-01-10 08:30:00  2024-01-10
+# 1 2024-01-10 14:45:00  2024-01-10
+# 2 2024-01-11 09:15:00  2024-01-11
+```
+### .dt.hour
+```bash
+Lấy giờ
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "time": [
+        "2024-05-01 08:30:00",
+        "2024-05-02 14:45:00",
+        "2024-05-03 21:15:00"
+    ]
+})
+
+df["time"] = pd.to_datetime(df["time"])
+df["hour"] = df["time"].dt.hour
+
+print(df)
+#                  time  hour
+# 0 2024-05-01 08:30:00     8
+# 1 2024-05-02 14:45:00    14
+# 2 2024-05-03 21:15:00    21
+```
+### .dt.minute
+### .dt.day_name()
+```bash
+Lấy tên thứ
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "time": [
+        "2024-05-01 08:30:00",
+        "2024-05-02 14:45:00",
+        "2024-05-03 21:15:00"
+    ]
+})
+
+df["time"] = pd.to_datetime(df["time"])
+df["day_name"] = df["time"].dt.day_name()
+
+print(df)
+#                  time   day_name
+# 0 2024-05-01 08:30:00  Wednesday
+# 1 2024-05-02 14:45:00   Thursday
+# 2 2024-05-03 21:15:00     Friday
+```
+### .dt.dayofweek
+```bash
+Lấy số thứ trong tuần
+```
+**Syn**
+```bash
+df["time"].dt.dayofweek
+
+- Output:
+    + Monday    = 0
+    + Tuesday   = 1
+    + Wednesday = 2
+    + Thursday  = 3
+    + Friday    = 4
+    + Saturday  = 5
+    + Sunday    = 6
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "time": [
+        "2024-05-01 08:30:00",
+        "2024-05-02 14:45:00",
+        "2024-05-03 21:15:00"
+    ]
+})
+
+df["time"] = pd.to_datetime(df["time"])
+df["day_num"] = df["time"].dt.dayofweek
+
+print(df)
+#                  time  day_num
+# 0 2024-05-01 08:30:00        2
+# 1 2024-05-02 14:45:00        3
+# 2 2024-05-03 21:15:00        4
+```
+## Transform (Nhóm biển đổi dữ liệu, cấu trúc dữ liệu)
+### to_datetime() 
+```bash
+- dùng để chuyển dữ liệu thành kiểu ngày giờ (datetime).
+- Rất hay dùng khi cột ngày đang là string: "2024-01-15"
+    + chuyển thành datetime để:
+        - lọc theo ngày
+        - resample time series
+        - trích xuất năm/tháng/ngày
+        - vẽ time series
+        - forecast
+```
+**Syn**
+```bash
+pd.to_datetime(
+    arg,
+    format=None,
+    errors='raise',
+    dayfirst=False
+)
+
+- Input: 
+    + arg           : Dữ liệu đầu vào (string, list, series, cột dataframe)
+    + format        : Định dạng ngày, ví dụ "%Y-%m-%d"
+        | `%Y` | năm 4 số |
+        | `%m` | tháng    |
+        | `%d` | ngày     |
+        | `%H` | giờ      |
+        | `%M` | phút     |
+        | `%S` | giây     |
+    + error         : Xử lý lỗi, sai thì thành NaT
+    + dayfirst=True : Cho định dạng kiểu 15/01/2024
+```
+**Ex1: chuyển cột dataframe**
+```python
+df = pd.DataFrame({"date":["2024-01-01", "2024-01-02"]})
+
+df["date"] = pd.to_datetime(df["date"])
+
+# print(df)
+
+#         date
+# 0 2024-01-01
+# 1 2024-01-02
+```
+**Ex2: Có format**
+```python
+print(pd.to_datetime(
+    "26-04-2026",
+    format="%d-%m-%Y"
+)) # 2026-04-26
+```
+### resample()
+```bash
+- resample() = đổi tần suất thời gian.
+- Ví dụ:
+    + dữ liệu 15 phút → theo giờ
+    + theo ngày
+    + theo tháng
+- Giống groupby cho thời gian
+```
+**Syn**
+```bash
+df.resample(rule).mean()
+
+- Input:
+    + rule:
+        - "D": ngày
+        - "H" giờ
+        - "W" tuần
+        - "M" tháng
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame(
+    {
+      "load":[10,20,30,40]
+    },
+    index=pd.date_range(
+       "2024-01-01",
+       periods=4,
+       freq="H"
+    )
+)
+
+print(df)
+#                      load
+# 2024-01-01 00:00      10
+# 2024-01-01 01:00      20
+# 2024-01-01 02:00      30
+# 2024-01-01 03:00      40
+
+df.resample("2H").sum()
+#                      load
+# 00:00                30
+# 02:00                70
 ```
