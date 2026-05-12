@@ -3,6 +3,27 @@
 - [.mean()](#mean)
 ---
 # .sum() 
+**Syn**
+```bash
+
+- Input:
+    + axis=:
+        - 0: tính theo cột
+        - 1: tính theo hàng
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "A": [1,2,3],
+    "B": [4,5,6]
+})
+
+print(df.sum())
+A     6
+B    15
+```
 # .cumsum() (cumulative sum)
 ```bash
 - Là tổng tích lũy / cộng dồn. Nó không cộng tất cả một lần như sum(), mà cộng dồn từng bước.

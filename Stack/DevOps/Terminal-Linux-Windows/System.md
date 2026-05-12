@@ -16,9 +16,9 @@
 - [Remove \& Close (Nhóm xóa \& dừng)](#remove--close-nhóm-xóa--dừng)
   - [sudo systemctl stop](#sudo-systemctl-stop)
   - [sudo systemctl disable](#sudo-systemctl-disable)
-- [clear](#clear)
-- [sudo apt clean](#sudo-apt-clean)
-- [sudo apt autoclean](#sudo-apt-autoclean)
+  - [clear](#clear)
+  - [sudo apt clean](#sudo-apt-clean)
+  - [sudo apt autoclean](#sudo-apt-autoclean)
   - [sudo apt autoremove](#sudo-apt-autoremove)
 - [Mount disk (mount ổ cứng)](#mount-disk-mount-ổ-cứng)
 - [Sửa lỗi 2 màn](#sửa-lỗi-2-màn)
@@ -217,15 +217,15 @@ Dùng khi muốn tắt hẳn service
 ```bash
 sudo systemctl disable <service>
 ```
-# clear
+## clear
 ```bash
 Xóa hết các dòng lệnh.
 ```
-# sudo apt clean
+## sudo apt clean
 ```bash
 Xóa toàn bộ file .deb đã tải
 ```
-# sudo apt autoclean
+## sudo apt autoclean
 ```bash
 Chỉ xóa các gói cũ, không còn dùng.
 ```

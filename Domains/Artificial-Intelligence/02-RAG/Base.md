@@ -1,6 +1,10 @@
 - [Introduction](#introduction)
   - [Pipeline chuẩn (production mindset)](#pipeline-chuẩn-production-mindset)
   - [Phân loại RAG](#phân-loại-rag)
+- [Retrieval](#retrieval)
+  - [Sparse retrieval](#sparse-retrieval)
+  - [Dense Retrieval (tìm theo “nghĩa”)](#dense-retrieval-tìm-theo-nghĩa)
+  - [Hybrid Retrieval (kết hợp 2 cái)](#hybrid-retrieval-kết-hợp-2-cái)
 ---
 # Introduction
 ```bash
@@ -72,4 +76,68 @@ Cách 2: Phân loại theo kiến trúc RAG (pipeline)
     1. Naive RAG
     2. Advanced RAG
     3. Modular / Agentic RAG
+```
+# Retrieval
+## Sparse retrieval
+**Ex**
+```bash
+Tưởng tượng bạn đang tìm tài liệu. Bạn có 1 “database” gồm các câu:
+    1. "Hà Nội hôm nay trời mưa"
+    2. "Thời tiết ở Hà Nội rất đẹp"
+    3. "Tôi thích ăn phở bò"
+❓ Bạn hỏi: “Hà Nội hôm nay thời tiết thế nào?” thì Sparse Retrieval (tìm theo từ khóa)
+👉 Cách nó hoạt động:
+    - nhìn vào từng từ trong câu hỏi
+    - so với từng từ trong document
+    - Ví dụ: Hà Nội hôm nay thời tiết
+        + So sánh:
+            1	Hà Nội, hôm nay
+            2	Hà Nội, thời tiết
+            3	❌ không match
+    👉 kết quả: câu 1 và 2 đều được chọn
+🧠 Bản chất: so khớp keyword (exact match)
+👍 Ưu điểm:
+    - chính xác khi từ giống nhau
+    - dễ hiểu
+👎 Nhược điểm:
+    - không hiểu nghĩa
+# ❌ Ví dụ fail:
+# Query: “thời tiết thủ đô”
+# 👉 nhưng document viết: “Hà Nội”
+# → ❌ không match
+```
+## Dense Retrieval (tìm theo “nghĩa”)
+```bash
+- Cách nó hoạt động: biến câu thành vector (embedding) và so sánh ý nghĩa.
+```
+**Ex**
+```bash
+Query: “thời tiết thủ đô”
+Model hiểu: “thủ đô” ≈ “Hà Nội”
+👉 nó sẽ chọn: "Hà Nội hôm nay trời mưa"
+🧠 Bản chất:
+    - so sánh semantic (ngữ nghĩa)
+    👍 Ưu điểm:
+        + hiểu nghĩa
+        + không cần trùng từ
+    👎 Nhược điểm:
+        + đôi khi “đoán sai”
+        + có thể chọn câu không liên quan
+# ❌ Ví dụ fail:
+# Query: “tôi thích ăn”
+# 👉 nó có thể chọn: “tôi thích đi du lịch” 😄 → vì “semantic gần”
+```
+## Hybrid Retrieval (kết hợp 2 cái)
+```bash
+👉 dùng cả:
+    + sparse (keyword)
+    + dense (semantic)
+```
+**Ex**
+```bash
+Query: “thời tiết Hà Nội”
+👉 hệ thống sẽ:
+    + check keyword: “Hà Nội”
+    + check meaning: “thời tiết”
+👉 kết quả chính xác hơn
 ```

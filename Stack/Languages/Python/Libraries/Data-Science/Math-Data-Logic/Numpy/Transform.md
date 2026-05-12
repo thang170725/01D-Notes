@@ -1,4 +1,4 @@
-- [.view() \& .copy()](#view--copy)
+- [.tolist()](#tolist)
 - [.Shape \& .shape() \& .size()](#shape--shape--size)
 - [.reshape()](#reshape)
 - [.flatten()](#flatten)
@@ -9,28 +9,13 @@
 - [.argmin() \& .argmax()](#argmin--argmax)
 - [Hstack](#hstack)
 ---
-# .view() & .copy()
+# .tolist()
 ```bash
-- view  : Tạo một chế độ xem focus vào mảng gốc.
-- copy  : Để sao chép một mảng.
+Để chuyển từ mảng numpy sang mảng thường.
 ```
-**Ex1: view**
-```python
-arr = np.array([1, 2, 3, 4, 5])
-x = arr.view()
-
-arr[0] = 42
-
-print(arr) # [42 2 3 4 5]
-print(x) # [42 2 3 4 5]
-```
-**Ex2: copy**
-```python
-arr = np.array([1, 2, 3, 4, 5])
-x = arr.copy()
-arr[0] = 42
-print(arr) # [42 2 3 4 5]
-print(x) # [1 2 3 4 5]
+**Syn**
+```bash
+arr.tolist()
 ```
 # .Shape & .shape() & .size()
 ```bash

@@ -3,18 +3,21 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.head()](#head)
   - [.shape](#shape)
-  - [.colums](#colums)
+  - [.columns](#columns)
   - [.tail()](#tail)
   - [.value\_counts()](#value_counts)
   - [pd.options.display.max\_rows](#pdoptionsdisplaymax_rows)
   - [unique()](#unique)
   - [.nunique()](#nunique)
+  - [.index()](#index)
+  - [.info()](#info)
+  - [.describe()](#describe)
 - [Tạo thêm cột mới trong dataframe](#tạo-thêm-cột-mới-trong-dataframe)
   - [pd.notnull()](#pdnotnull)
   - [.isna() \& .isnull()](#isna--isnull)
 - [Search (nhóm tìm kiếm, lọc)](#search-nhóm-tìm-kiếm-lọc)
   - [loc](#loc)
-  - [iloc](#iloc)
+  - [iloc (integer location)](#iloc-integer-location)
   - [.notna()](#notna)
   - [.where()](#where)
 - [Process (thao tác xử lý)](#process-thao-tác-xử-lý)
@@ -33,6 +36,11 @@
   - [Transform (Nhóm biển đổi dữ liệu, cấu trúc dữ liệu)](#transform-nhóm-biển-đổi-dữ-liệu-cấu-trúc-dữ-liệu)
     - [to\_datetime()](#to_datetime)
     - [resample()](#resample)
+    - [pd.Timedelta()](#pdtimedelta)
+- [Compare Function (Nhóm chức năng so sánh)](#compare-function-nhóm-chức-năng-so-sánh)
+  - [.eq()](#eq)
+- [shift() — lấy giá trị trong quá khứ (lag)](#shift--lấy-giá-trị-trong-quá-khứ-lag)
+- [rolling() — cửa sổ trượt](#rolling--cửa-sổ-trượt)
 ---
 # Create (Nhóm khởi tạo)
 ## DataFrame & Series
@@ -130,9 +138,12 @@ print(df.head()) # tự động lấy ra 5 dòng đầu tiên (mặc địch)
 ```python
 print(df.shape)
 ```
-## .colums
+## .columns
 ```bash
-Là một thuộc tính kiểu index. Nó chứa danh sách tên các cột của dataframe.
+- Là một thuộc tính kiểu index. Nó chứa danh sách tên các cột của dataframe.
+- Có thể dùng để:
+    + xem danh sách tên cột
+    + đổi tên cột
 ```
 **Ex** 
 ```python
@@ -143,19 +154,65 @@ print(df.columns)
 ```bash
 Để xem các hàng cuối cùng cùng của DataFrame. Trả về tiêu đề và số lượng hàng được chỉ định bắt đầu từ dưới cùng.
 ```
+**Syn**
+```bash
+df.tail(n)
+
+- Input:
+    + n: số dòng muốn lấy từ cuối lên. Nếu không truyền n, mặc định là 5
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "Tên": ["A","B","C","D","E","F"],
+    "Điểm": [7,8,9,6,10,5]
+})
+
+print(df)
+#   Tên  Điểm
+# 0 A    7
+# 1 B    8
+# 2 C    9
+# 3 D    6
+# 4 E   10
+# 5 F    5
+
+df.tail(2)
+#   Tên  Điểm
+# 4 E   10
+# 5 F    5
+```
 ## .value_counts()
 ```bash
-Đếm số lượng giá trị trong một cột.
+Dùng để đếm tần suât xuất hiện của các các giá trị trong một Series (hoặc cột của Dataframe).
 ```
 **Syn**
+```bash
+Series.value_counts(
+    normalize=False,
+    sort=True,
+    ascending=False,
+    bins=None,
+    dropna=True
+)
+
+- Input:
+    + normalize: True là trả về tỷ lệ (%) thay vì số lượng.
+    + sort: 
+        - True: (mặc định sắp xếp theo tần suất)
+        - False: giữ nguyên thứ tự xuất hiện
+    + ascending: True là sắp xếp tăng dần
+    + dropna: Có tính NaN không. False là có tính
+```
+**Ex**
 ```python
-c = self.df[column].value_counts()
 df = pd.DataFrame({
     "Color": ["Red", "Blue", "Red", "Green", "Blue", "Yellow", "Red"]
 })
 
-# Đếm số lần xuất hiện mỗi giá trị
-# print(df["Color"].value_counts())
+print(df["Color"].value_counts())
 # Red       3
 # Blue      2
 # Green     1
@@ -243,6 +300,65 @@ df = pd.DataFrame({
 
 print(df["Color"].nunique()) # 4
 ```
+## .index()
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    'name': ['thang', 'minh'],
+    'age': [12,15]
+})
+
+print(df.index)
+# RangeIndex(start=0, stop=2, step=1)
+```
+## .info()
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    'name': ['thinh', 'thang', 'tu'],
+    'age': [18,None,21]
+})
+
+print(df.info())
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 3 entries, 0 to 2
+Data columns (total 2 columns):
+ #   Column  Non-Null Count  Dtype  
+---  ------  --------------  -----  
+ 0   name    3 non-null      object 
+ 1   age     2 non-null      float64
+dtypes: float64(1), object(1)
+memory usage: 176.0+ bytes
+None
+```
+## .describe()
+```python
+df = pd.DataFrame({    
+    'name': ['thinh', 'thang', 'tu', 'thang', 'thinh'],    
+    'age': [18,None,21,20,18]
+})
+        age
+count   4.00
+mean   19.25
+std     1.50
+min    18.00
+25%    18.00
+50%    19.00
+75%    20.25
+max    21.00
+
+count = 4 → có 4 giá trị hợp lệ (bỏ qua None)
+mean = 19.25 → trung bình: (18 + 21 + 20 + 18) / 4
+std = 1.50 → độ lệch chuẩn (mức độ phân tán)
+min = 18 → nhỏ nhất
+25% = 18 → Q1 (phần tư thứ 1)
+50% = 19 → median (trung vị)
+75% = 20.25 → Q3
+max = 21 → lớn nhất
+```
 # Tạo thêm cột mới trong dataframe
 ```python
 import pandas as pd
@@ -305,7 +421,7 @@ print(check)
 ```bash
 Dùng để tìm giá trị NaN trong một cột dữ liệu, thường để lọc data.
 ```
-**Ex**
+**Ex1: dùng với series**
 ```python
 import pandas as pd
 
@@ -326,6 +442,27 @@ print(non_salary)
 # 4    False
 # 5    False
 # Name: salary, dtype: bool
+```
+**Ex2: Dùng với Dataframe**
+```python
+import pandas as pd
+
+data = {
+    'name': ['thang', 'minh', 'nghia', 'thinh', 'thanh', 'tu'],
+    'salary': [20, 12, 10, None , 7, 5],
+    'city': ['hanoi', 'hcm', 'danang', 'canthoi', 'hanoi', 'haiphong']
+}
+df = pd.DataFrame(data)
+non_salary = df.isnull()
+
+print(non_salary)
+#     name  salary   city
+# 0  False   False  False
+# 1  False   False  False
+# 2  False   False  False
+# 3  False    True  False
+# 4  False   False  False
+# 5  False   False  False
 ```
 # Search (nhóm tìm kiếm, lọc)
 ## loc
@@ -392,7 +529,7 @@ df = pd.DataFrame(data)
 df.loc[df['country'] == 'Viet Nam', 'salary'] += 10
 print(df)
 ```
-## iloc 
+## iloc (integer location)
 ```bash
 dùng để truy cập dữ liệu theo vị trí chỉ số (index số nguyên) trong pandas.
 ```
@@ -554,11 +691,12 @@ print(newDf1)
 ```bash
 df.duplicated(subset=None, keep='first')
 
-- subset: (tùy chọn) — cột hoặc danh sách cột để kiểm tra trùng (mặc định kiểm tất cả cột)
-- keep:
-    + 'first': đánh dấu True từ dòng trùng thứ 2 trở đi
-    + 'last': đánh dấu True trừ dòng cuối cùng
-    + False: tất cả các dòng trùng đều được đánh dấu T
+- Input:
+    + subset: cột hoặc danh sách cột để kiểm tra trùng. mặc định kiểm tất cả cột.
+    + keep:
+        - 'first': đánh dấu True từ dòng trùng thứ 2 trở đi
+        - 'last': đánh dấu True trừ dòng cuối cùng
+        - False: tất cả các dòng trùng đều được đánh dấu T
 ```
 **Ex**
 ```python
@@ -837,3 +975,137 @@ df.resample("2H").sum()
 # 00:00                30
 # 02:00                70
 ```
+### pd.Timedelta()
+```bash
+- pd.Timedelta trong pandas rất giống timedelta của module datetime, nhưng được tối ưu để làm việc với:
+    + Series
+    + DataFrame
+    + Timestamp
+    + vectorized operation trong pandas.
+```
+**Syn**
+```bash
+pd.Timedelta(
+    days=1,
+    hours=2,
+    minutes=30,
+    seconds=, # giây
+    milliseconds=, # mili giây
+    microseconds=, # micro giây
+    weeks=, # tuần
+)
+```
+**Ex1**
+```python
+import pandas as pd
+
+delta = pd.Timedelta(hours=1)
+print(delta) # 01:00:00
+```
+**Ex2: có thể parse string, Đây là điểm mạnh của pandas**
+```python
+import pandas as pd
+
+print(pd.Timedelta("1D"))
+print(pd.Timedelta("2H"))
+print(pd.Timedelta("30min"))
+# 1 days 00:00:00
+# 0 days 02:00:00
+# 0 days 00:30:00
+```
+# Compare Function (Nhóm chức năng so sánh)
+## .eq() 
+```bash
+dùng để so sánh bằng (==) giữa các phần tử, nhưng có một số điểm tiện hơn so với dùng == trực tiếp.
+```
+**Syn**
+```bash
+df['col'].eq(value) # 👉 Tương đương: df['col'] == value
+```
+**Ex1**
+```python
+import pandas as pd
+
+df = pd.DataFrame({    
+    'A': [1, 2, 3, 2]
+})
+
+df['A'].eq(2)
+# 0    False
+# 1     True
+# 2    False
+# 3     True
+# Name: A, dtype: bool
+```
+**Ex2: So sánh giữa 2 cột**
+```python
+df = pd.DataFrame({    
+    'A': [1, 2, 3],    
+    'B': [1, 0, 3]
+})
+
+df['A'].eq(df['B'])
+# 0     True
+# 1    False
+# 2     True
+```
+# shift() — lấy giá trị trong quá khứ (lag)
+👉 Ý tưởng:
+
+“Lấy giá trị của n bước trước”
+
+📌 Cách dùng
+df['power_shift_1'] = df['power'].shift(1)
+
+👉 nghĩa là:
+
+giá trị hiện tại ← giá trị của 1 giờ trước
+📊 Ví dụ
+time        power
+00:00       10
+01:00       20
+02:00       30
+df['shift_1'] = df['power'].shift(1)
+
+👉 kết quả:
+
+time        power   shift_1
+00:00       10      NaN
+01:00       20      10
+02:00       30      20
+🔥 Dùng để làm gì?
+Feature cực quan trọng:
+df['lag_1'] = df['power'].shift(1)
+df['lag_24'] = df['power'].shift(24)
+
+👉 model học được:
+
+hôm nay phụ thuộc hôm qua
+giờ này phụ thuộc giờ hôm qua
+# rolling() — cửa sổ trượt
+👉 Ý tưởng:
+
+“Nhìn lại N điểm gần nhất rồi tính toán”
+
+📌 Cách dùng
+df['rolling_mean_3'] = df['power'].rolling(3).mean()
+
+👉 nghĩa là:
+
+lấy 3 giá trị gần nhất
+tính trung bình
+📊 Ví dụ
+time        power
+00:00       10
+01:00       20
+02:00       30
+03:00       40
+df['roll_mean'] = df['power'].rolling(3).mean()
+
+👉 kết quả:
+
+time        power   roll_mean
+00:00       10      NaN
+01:00       20      NaN
+02:00       30      20   (10+20+30)/3
+03:00       40      30   (20+30+40)/3

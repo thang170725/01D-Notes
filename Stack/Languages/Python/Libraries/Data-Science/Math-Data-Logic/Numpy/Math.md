@@ -8,10 +8,14 @@
 - [.mean() \& .median()](#mean--median)
 - [+ \& - \& \* \& /](#-------)
 - [dot() \& @ \& matmul()](#dot----matmul)
-- [exp()](#exp-1)
+- [Exp](#exp-1)
+- [exp()](#exp-2)
+  - [.expm1()](#expm1)
 - [argsort()](#argsort)
 - [bincount()](#bincount)
-- [Log2()](#log2)
+- [Logarit](#logarit)
+  - [Log2()](#log2)
+  - [np.log1p()](#nplog1p)
 - [Concatenate](#concatenate)
 - [Stack](#stack)
 - [Vstack](#vstack)
@@ -226,6 +230,7 @@ print(res)
 #  [ 7  7  6]
 #  [23 22 17]]
 ```
+# Exp
 # exp()
 ```bash
 Để tính e mũ n
@@ -234,12 +239,91 @@ print(res)
 ```bash
 np.exp(2) # e**2
 ```
+## .expm1()
+```bash
+- expm1 trong NumPy là hàm tính: exp(x)−1 nhưng được viết riêng để chính xác hơn khi x rất nhỏ.
+- Khi nào dùng expm1?
+  ✔ Logistic regression / sigmoid khi x nhỏ
+  ✔ Xác suất log-transform
+  ✔ Deep learning (numerical stability)
+  ✔ Các bài toán exponential growth nhỏ
+```
+**Syn**
+```bash
+import numpy as np
+np.expm1(x)
+```
+**Ex1**
+```python
+import numpy as np
+
+x = 1
+
+print(np.expm1(x)) # 1.718281828459045
+Vì: e^1 − 1 ≈ 2.718−1 = 1.718
+```
+**Ex2: Ví dụ quan trọng (x rất nhỏ)**
+```python
+import numpy as np
+
+x = 1e-6
+
+print(np.exp(x) - 1)
+print(np.expm1(x))
+# np.exp(x) - 1 → có thể bị sai số (0 hoặc lệch nhẹ)
+# np.expm1(x) → chính xác hơn
+```
+**Vì sao cần expm1?**
+```bash
+Khi x rất nhỏ: e^x ≈ 1+x
+nên: e^x − 1 ≈ x
+👉 Nhưng máy tính có thể bị: mất độ chính xác (floating point error)
+```
+```python
+x = 1e-10
+
+print(np.exp(x) - 1)
+print(np.expm1(x))
+# cách 1: sai số do trừ 2 số gần nhau
+# cách 2: ổn định hơn
+```
 # argsort()
 ```bash
 Trả về chỉ số các phần tử được sắp xếp theo cách tăng dần.
 ```
 # bincount()
-# Log2()
+# Logarit
+## Log2()
+## np.log1p()
+```bash
+- np.log1p(x) nghĩa là: log(1 + x) log là logarit cơ số e
+- Khi nào nên dùng log1p?
+  1. Dữ liệu skew (lệch phải)
+    + Ví dụ điện năng: 0, 0, 1, 2, 3, 1000 👉 bị lệch rất mạnh
+    + np.log1p(x) → làm dữ liệu “gọn” lại: 0, 0.69, 1.38, 6.9
+  2. Có nhiều giá trị = 0
+  3. Trước khi train model → giúp:
+    + giảm ảnh hưởng outlier
+    + model học tốt hơn
+⚠️ Lưu ý quan trọng
+  ❌ Không dùng khi có số âm. np.log1p(-1)  # = log(0) → -infnp.log1p(< -1)  # lỗi
+```
+**Sao không dùng luôn np.log(x)?**
+```bash
+Vì 2 lý do quan trọng:
+  1. Tránh lỗi với số 0. np.log(0)   # ❌ -inf (lỗi)np.log1p(0) # ✅ log(1) = 0
+  2. Chính xác hơn với số nhỏ
+    Với x rất nhỏ: np.log(1 + x) → có thể bị sai số floating point
+    log1p(x) được tối ưu để chính xác hơn
+```
+**Ex1: Ví dụ cơ bản**
+```python
+import numpy as np
+
+x = np.array([0, 1, 10, 100])
+np.log1p(x)
+# [0.         0.693      2.397      4.615]
+```
 # Concatenate
 # Stack
 # Vstack

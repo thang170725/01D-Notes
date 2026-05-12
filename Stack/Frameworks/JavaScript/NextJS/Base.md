@@ -1,36 +1,27 @@
-Bạn đã có base JavaScript rồi, nên tôi sẽ thiết kế lộ trình học Next.js trong 1 giờ giống cách tôi đã hướng dẫn TypeScript:
-👉 mục tiêu hiểu core concept + có thể bắt đầu code project ngay.
-
-🚀 Lộ trình học Next.js trong 1 giờ
-Thời gian	Nội dung	Mục tiêu
-0–5 phút	Next.js là gì	Hiểu framework
-5–15 phút	Routing	Tạo page
-15–25 phút	Layout + component	Tổ chức UI
-25–40 phút	Data fetching	Lấy dữ liệu
-40–50 phút	API routes	Viết backend
-50–60 phút	Build mini project	Hiểu workflow
-⏱️ 0–5 phút: Next.js là gì
-
-Next.js là framework fullstack dựa trên React.
-
-Nó cung cấp sẵn:
-
-routing
-
-server rendering
-
-API backend
-
-SEO
-
-build optimization
-
+- [Introduction](#introduction)
+- [Installation](#installation)
+  - [Routing](#routing)
+---
+# Introduction
+```bash
+- Next.js là framework fullstack dựa trên React.
+- Nó cung cấp sẵn:
+  + routing
+  + server rendering
+  + API backend
+  + SEO
+  + build optimization
 👉 Có thể viết frontend + backend trong cùng project.
-
-5–15 phút: Routing (cực quan trọng)
-
+```
+# Installation
+```bash
+1. npx create-next-app@latest my-app
+2. npx create-next-app@latest . # tạo dự án next trong thư mục hiện tại
+```
+## Routing 
+```bash
 Next.js tạo route từ file.
-
+```
 Ví dụ structure:
 
 app/

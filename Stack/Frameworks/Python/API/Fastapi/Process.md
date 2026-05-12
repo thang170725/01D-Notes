@@ -14,9 +14,11 @@
   - [OAuth2PasswordBearer()](#oauth2passwordbearer)
 - [Dependency Injection](#dependency-injection)
   - [Depends](#depends)
-- [Request Data](#request-data)
+- [File (Nhóm xử lý file)](#file-nhóm-xử-lý-file)
+  - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
   - [UploadFile \& File()](#uploadfile--file)
-  - [.filename](#filename)
+  - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
+    - [.filename](#filename)
   - [.content\_type](#content_type)
   - [.file](#file)
   - [await file.read()](#await-fileread)
@@ -406,14 +408,8 @@ def get_items(db: Session = Depends(get_db)):
 # Inject vào function
 # Xong request → tự đóng DB
 ```
-# Request Data
-```bash
-- Nhóm này xử lý dữ liệu mà client gửi lên server, ví dụ JSON body hoặc file upload.
-- Mục đích chính:
-    + đọc dữ liệu JSON từ request
-    + nhận file upload
-    + truy cập thông tin file
-```
+# File (Nhóm xử lý file)
+## Create (Nhóm khởi tạo)
 ## UploadFile & File()
 **Syn**
 ```bash
@@ -426,7 +422,8 @@ async def upload_file(file: UploadFile = File(...)):
     return {"filename": file.filename}
 
 ```
-## .filename
+## Display (Nhóm cung cấp thông tin)
+### .filename
 ```bash
 Tên file
 ```

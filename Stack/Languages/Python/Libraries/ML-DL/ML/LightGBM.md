@@ -10,17 +10,60 @@ Dùng cho regression
 **Syn**
 ```bash
 model = lgb.LGBMRegressor(
+    objective="regression"
     n_estimators=100,
     learning_rate=0.1,
     max_depth=-1,
-    num_leaves=31
+    num_leaves=31,
+    subsample=
 )
 
 - Input:
-    + n_estimators  : Số cây booosting
+    + objective     : xác định loại bài toán
+        - 'regression'  : dự đoán hồi quy
+    + n_estimators  : Số cây 
+        - mỗi cây = 1 "bước học"
+        - càng nhiều -> model càng mạnh nhưng dễ overfitting
+        - thường: 100 -> 1000
+        
     + learning_rate : Tốc độ học
+        - nhỏ   : học chậm nhưng ổn định
+        - lớn   : học nhanh nhưng dễ sai
     + max_depth     : Giới hạn độ sâu của cây
-    + num_leaves    : số lá tối đa mỗi cây
+    + num_leaves    : Số lượng lá tối đa của mỗi cây (tree)
+        - Càng lớn → model càng phức tạp, học được pattern chi tiết hơn
+            + Nhưng dễ overfit
+            💡 Quy tắc quan trọng: num_leaves <= 2^(max_depth) (dù LightGBM không bắt buộc max_depth, nhưng vẫn nên nhớ quan hệ này)
+        - Khoảng nên thử:
+            + Nhỏ: 15 – 31 → an toàn, ít overfit
+            + Trung bình: 31 – 127 → phổ biến nhất
+            + Lớn: 127 – 255+ → khi dữ liệu rất lớn
+        👉 Thực tế:
+            + Dataset nhỏ → giữ ~31
+            + Dataset lớn → tăng dần
+    + subsample: Tỷ lệ sample (row) dùng cho mỗi cây
+        - < 1 → mỗi cây chỉ học trên một phần dữ liệu → giảm overfitting
+        - = 1 → dùng toàn bộ dữ liệu
+        - Khoảng nên thử: 0.6 – 1.0 👉 Thực tế: 0.7 – 0.9 là sweet spot
+        - nếu overfit → giảm xuống (0.6–0.8)
+    + colsample_bytree: Tỷ lệ feature dùng cho mỗi cây
+        - giống Random Forest: mỗi cây chỉ nhìn một phần feature giúp:
+            + giảm overfit
+            + tăng diversity
+        - Khoảng nên thử: 0.6 – 1.0 👉 Thực tế: 0.7 – 0.9 thường tốt
+        - nhiều feature → nên giảm
+    + random_state: Seed để kết quả reproducible
+        - Không ảnh hưởng đến performance trực tiếp
+        - Chỉ giúp:
+            + debug dễ hơn
+            + chạy lại ra cùng kết quả
+        - Thực tế: random_state=42  # standard luôn 😄 👉 Bạn có thể đổi số khác, không quan trọng
+    + n_jobs: Số core CPU dùng để train
+        - -1 → dùng toàn bộ CPU
+        - số dương → giới hạn số core
+        - Thực tế:
+            + Local machine → -1
+            + Server shared → set cụ thể (vd: 4, 8)
 ```
 ## .fit()
 ```bash

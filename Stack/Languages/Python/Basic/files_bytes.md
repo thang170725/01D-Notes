@@ -2,6 +2,8 @@
   - [__file__](#file)
 - [.readline()](#readline)
 - [.readlines()](#readlines)
+- [bytes (kiểu dữ liệu bytes)](#bytes-kiểu-dữ-liệu-bytes)
+  - [.encode() \& .decode()](#encode--decode)
 ---
 # Display (Nhóm cung cấp thông tin)
 ## __file__
@@ -184,4 +186,15 @@ else:
         out.write(f"Number of words: {num_words}\n")
         out.write(f"Occurrences of 'hello': {hello_count}\n")
         out.write('-' * 30 + '\n')
+```
+# bytes (kiểu dữ liệu bytes)
+## .encode() & .decode()
+**Ex**
+```python
+a = "hello"
+encoded = a.encode()
+decoded = encoded.decode()
+
+print(a, encoded, decoded) # hello b'hello' hello
+# b"hello" chính là chuỗi nhị phân nhưng python hiển thị dưới dạng dễ đọ
 ```

@@ -4,8 +4,8 @@
 - [frombuffer](#frombuffer)
 - [.tobytes()](#tobytes)
 - [linspace()](#linspace)
-- [.tolist()](#tolist)
 - [Asarray()](#asarray)
+- [.view() \& .copy()](#view--copy)
 - [Random (Tạo ngẫu nhiên)](#random-tạo-ngẫu-nhiên)
   - [Rand()](#rand)
   - [Randint()](#randint)
@@ -178,14 +178,6 @@ import numpy as np
 res = np.linspace(0, 10, num=10, endpoint=False)
 print(res) # [0. 1. 2. 3. 4. 5. 6. 7. 8. 9.]
 ```
-# .tolist()
-```bash
-Để chuyển từ mảng numpy sang mảng thường.
-```
-**Syn**
-```bash
-arr.tolist()
-```
 # Asarray()
 ```bash
 Dùng để chuyển dữ liệu bất kỳ (list, tuple, list lồng nhau, …) thành mảng NumPy (ndarray) nhưng không tạo bản sao (copy) nếu không cần thiết — tức là nếu đầu vào đã là ndarray rồi thì nó trả về chính nó, không tạo mảng mới.
@@ -200,6 +192,29 @@ arr2 = np.asarray(arr1)
 
 print(arr1 is arr2)  # True -> cùng vùng nhớ
 np.asarray() không tạo copy → tiết kiệm bộ nhớ.
+```
+# .view() & .copy()
+```bash
+- view  : Tạo một chế độ xem focus vào mảng gốc.
+- copy  : Để sao chép một mảng.
+```
+**Ex1: view**
+```python
+arr = np.array([1, 2, 3, 4, 5])
+x = arr.view()
+
+arr[0] = 42
+
+print(arr) # [42 2 3 4 5]
+print(x) # [42 2 3 4 5]
+```
+**Ex2: copy**
+```python
+arr = np.array([1, 2, 3, 4, 5])
+x = arr.copy()
+arr[0] = 42
+print(arr) # [42 2 3 4 5]
+print(x) # [1 2 3 4 5]
 ```
 # Random (Tạo ngẫu nhiên)
 ## Rand()

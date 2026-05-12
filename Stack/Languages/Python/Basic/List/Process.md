@@ -76,6 +76,13 @@ x = fruits.count("cherry") # 1
 ```bash
 - Trả về vị trí đầu tiên xuất hiện của giá trị được chỉ định.
 ```
+**Syn**
+```bash
+x = nums.index(value)
+
+- Input:
+  + value: là giá trị trong 1 mảng
+```
 **Ex**
 ```python
 fruits = ['apple', 'banana', 'cherry']

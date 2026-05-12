@@ -3,7 +3,8 @@
 ---
 # Introduction
 ```bash
-- YOLO là một mô hình mạng nơ-ron tích chập (CNN) được thiết kế để thực hiện tác vụ phát hiện vật thể (Object Detection) trong thời gian thực. Cái tên "You Only Look Once" nói lên điểm cốt lõi: nó xử lý toàn bộ hình ảnh chỉ trong một lần duy nhất.
+- YOLO là một kiến trúc được thiết kế để thực hiện tác vụ phát hiện vật thể (Object Detection) trong thời gian thực. Cái tên "You Only Look Once" nói lên điểm cốt lõi: nó xử lý toàn bộ hình ảnh chỉ trong một lần duy nhất.
+- Các version YOLOv1 -> YOLOv8 là các model cụ thể.
 ```
 # Architecture
 ```bash

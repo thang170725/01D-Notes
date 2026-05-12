@@ -1,6 +1,12 @@
 - [Overfitting \& Underfitting](#overfitting--underfitting)
 - [Vanishing Gradient \& Exploding Gradient](#vanishing-gradient--exploding-gradient)
 - [Precision \& Recall](#precision--recall)
+- [Mean Absolute Error (MAE)](#mean-absolute-error-mae)
+- [Mean Absolute Percentage Error (MAPE)](#mean-absolute-percentage-error-mape)
+- [Mean Squared Error (MSE)](#mean-squared-error-mse)
+- [Root Mean Squared Error (RMSE)](#root-mean-squared-error-rmse)
+- [R2 Score (r2)](#r2-score-r2)
+- [Binary Cross-Entropy (Log Loss)](#binary-cross-entropy-log-loss)
 ---
 # Overfitting & Underfitting
 ```bash
@@ -62,4 +68,188 @@ Underfitting xảy ra khi mô hình quá đơn giản hoặc thiếu dữ liệu
     + Tăng precision → giảm recall
     + Tăng recall → giảm precision
 => Vì vậy người ta hay dùng thêm: F1-score = trung bình điều hòa của precision & recall
+```
+# Mean Absolute Error (MAE)
+```bash
+- MAE là một metric dùng để đánh giá mô hình hồi quy (regression).
+- MAE (Mean Absolute Error) = Sai số tuyệt đối trung bình
+- Nó đo xem dự đoán của mô hình lệch trung bình bao nhiêu so với giá trị thật.
+- MAE trả lời câu hỏi: “Trung bình mỗi dự đoán của mô hình sai khoảng bao nhiêu đơn vị?”
+    + Ví dụ: MAE = 5 → trung bình dự đoán lệch 5 đơn vị so với thực tế
+```
+**Formula**
+```bash
+MAE = (1/n).(|y1-y_pred1| + |y2-y_pred2| + ... + |yn-y_predn|)
+
+- y             : giá trị thật
+- y_pred        : giá trị dự đoán
+- |y - y_pred|  : sai số tuyệt đối
+```
+**Ex**
+```bash
+y_true = [100, 200, 300]
+y_pred = [90, 220, 280]
+Sai số từng điểm: e = y_true - y_pred = [10, -20, 20]
+=> MAE = (10+20+20)/3 = 16.67
+```
+# Mean Absolute Percentage Error (MAPE)
+```bash
+- (Trung bình sai số phần trăm tuyệt đối)
+- Nó là một metric dùng để đánh giá độ chính xác của mô hình dự đoán, đặc biệt trong bài toán regression / forecasting (ví dụ dự đoán điện năng mà bạn đang làm với LightGBM).
+- Nó trả lời câu hỏi: Trung bình mô hình dự đoán lệch bao nhiêu % so với giá trị thật?
+- Càng nhỏ càng tốt.
+    + < 10% → rất tốt
+    + 10–20% → khá ổn
+    + 20–50% → tạm được
+    + > 50% → mô hình kém
+    (chỉ là rule of thumb, tùy domain; dự báo thời tiết / điện năng tương lai thường chấp nhận cao hơn)
+```
+**Formula**
+```bash
+MAPE = (1/n)*|(y1 - y_pred1)/y1 + (y2 - y_pred2)/y2 + ...|*100
+	​
+- y1 -> yn  : giá trị thật
+- y_pred    : giá trị dự đoán
+- n         : số mẫu
+- ∣...∣     : lấy trị tuyệt đối (bỏ dấu âm)
+**Ex**
+```bash
+Giá trị thật y  	Dự đoán p_pred  	Sai số %
+100	                    90	            (\frac{
+200	                    220         	(\frac{
+50	                    40	            (\frac{
+
+MAPE = (10+10+20)/3 = 13.33% => Mô hình sai trung bình 13.33%
+```
+```python
+from sklearn.metrics import mean_absolute_percentage_error
+
+y_true = [100, 200, 50]
+y_pred = [90, 220, 40]
+
+mape = mean_absolute_percentage_error(y_true, y_pred)
+
+print(mape)        # 0.1333
+print(mape * 100)  # 13.33%
+
+# sklearn trả về dạng thập phân
+```
+**Điểm khác nhau giữa MAE và MAPE**
+```bash
+- MAE phụ thuộc scale dữ liệu
+- Ví dụ: Sai 10 đơn vị:
+    + với giá trị 100 → sai 10%
+    + với giá trị 10,000 → sai 0.1%
+    + Nhưng MAE đều coi là “10”.
+- MAPE chuẩn hóa theo %
+    + Nó quan tâm: “Sai này lớn bao nhiêu so với giá trị thật?”
+    + Nên cùng sai 10 => MAPE thấy 2 trường hợp này rất khác nhau.
+```
+# Mean Squared Error (MSE)
+```bash
+Bình phương sai số trung bình -> Ý nghĩa: Phạt lỗi lớn mạnh
+```
+**Formula**
+```bash
+1. MSE = 1/n . [(y1_true - y1_pred)^2 + (y2_true - y2_pred)^2 + … ]
+  - Output: càng gần 0 càng 
+2.
+  - Gradient theo w: dL/dw = (−2/𝑚).𝑋𝑇.(𝑦−𝑦^)
+  - Gradient theo b: dL/db = (−2/𝑚).∑(𝑦−𝑦^)
+```
+**Tại sao trong công thức mse là có bình phương**
+```bash
+- y_true − y_pred: đúng là “sai số” (error) nhưng chưa đủ để đo độ sai tốt
+- Vấn đề nếu KHÔNG bình phương. Nếu bạn dùng:
+  + y_true − y_pred thì sẽ có chuyện:
+    - Sai dương: +10
+    - Sai âm: -10
+    👉 Cộng lại = 0 ➡️ Model sai rất nhiều nhưng lại nhìn như “không sai” 😅
+✅ Vì vậy mới cần bình phương Ý nghĩa:
+  - Bình phương → mọi sai số đều dương
+  - Không bị triệt tiêu nhau. Đo được “độ lớn sai số” thật
+🔥 Lý do quan trọng hơn (ít người để ý)
+  1. Phạt mạnh lỗi lớn
+    - Sai 1 → 1**2 = 1
+    - Sai 10 → 10**2 = 100
+    👉 lỗi lớn bị phạt nặng hơn nhiều ➡️ Model sẽ cố tránh sai lớn
+  2. Dễ tối ưu (rất quan trọng)
+    - Hàm bình phương:
+      + smooth (trơn)
+      + có đạo hàm đẹp
+      👉 dùng được với gradient descent (cực kỳ quan trọng cho ML)
+```
+**Ex: bình phương và không bình phương**
+```bash
+y_true	y_pred	error
+10	    8	      +2
+10	    12      -2
+❌ Không bình phương: 2+(−2)=0 → tưởng model hoàn hảo 😑
+✅ Có bình phương: 2**2+(−2)**2 = 4+4 = 8 → phản ánh đúng là đang sai
+```
+# Root Mean Squared Error (RMSE)
+**Vì sao dùng RMSE**
+```bash
+- Vì mse là đơn vị bình phương gây khó hiểu
+- Ví dụ: MSE = kWh² cần chuyển sang RMSE = kWh (quay lại đơn vị gốc)
+```
+```bash
+RMSE = sqrt((1/n).((y1-y_pred1)**2 + ... + (yn-y_predn)))
+```
+# R2 Score (r2)
+```bash
+- Là hệ số xác định dùng cho regression. 
+- Model giải thích được bao nhiêu % biến thiên của dữ liệu 
+    + Ví dụ:
+        | Nhà | Giá thật |
+        | --- | -------- |
+        | A   | 1 tỷ     |
+        | B   | 2 tỷ     |
+        | C   | 3 tỷ     |
+    => Dữ liệu thật dao động mạnh (1 → 3 tỷ) → đó là “biến thiên
+- Có 2 cách đoán
+    Cách 1: mô hình tốt. Dự đoán:
+        1.1
+        1.9
+        3.1
+    → nó “bắt được xu hướng tăng giảm”
+    Cách 2: mô hình tệ. Dự đoán:
+        2
+        2
+        2
+    → chỉ đoán trung bình, không quan tâm gì cả
+- R² đang đo cái gì?
+    + Nó hỏi: “Model của bạn giải thích được bao nhiêu phần sự lên xuống (dao động) của giá thật?”
+- Trực giác dễ hiểu nhất
+    + Nếu R² = 0 → model không hiểu gì cả
+        → chỉ đoán trung bình
+        📌 Nếu R² = 1
+        → model hiểu toàn bộ xu hướng tăng giảm
+    + Nếu R² = 0.8 → model hiểu được 80% sự dao động, còn 20% là sai số
+- Một cách nói “đời thường hơn”
+- Câu đó có thể hiểu lại thành: “Model của bạn bắt được bao nhiêu % pattern của dữ liệu thật”
+    + Ví dụ trực giác mạnh
+        - Giả sử dữ liệu thật lên xuống như sóng:
+            + Model tốt: vẽ lại gần giống sóng thật → R² cao
+            + Model tệ: đường thẳng ngang → R² thấp
+```
+**Formula**
+```bash
+R2 = 1 - ((y1-y_pred1)**2 + ... + (yn-y_predn)**2)/((y1-y_tb)**2 + ... + (yn-y_tb)**2)
+
+- Input: 
+    + y1 -> yn  : giá trị thật
+    + y_pred    : giá trị dự đoán
+    + y_tb  : Giá trị trung bình của toàn bộ y thật
+```
+# Binary Cross-Entropy (Log Loss)
+```bash
+Dùng cho phân loại nhị phân.
+```
+**Syn**
+```bash
+1. Công thức cho 1 mẫu: BCE(y_true, y_pred) = −[y_true.log(y_pred) + (1-y_true).log(1−y_pred)]
+2. Công thức cho batch (N mẫu): BCE = −(1/n) . [yi_true . log(yi_pred) + (1-yi_true) . log(1−yi_pred)]
+3. dL/dw = (y-pred – y_true).x
+4. dL/db = (y_pred - y_true)
 ```

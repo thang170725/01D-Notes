@@ -1,6 +1,7 @@
 - [Introduction](#introduction)
+- [Regression (nhóm mô hình hồi quy)](#regression-nhóm-mô-hình-hồi-quy)
 - [mean\_squared\_error()](#mean_squared_error)
-- [r2\_score](#r2_score)
+  - [r2\_score](#r2_score)
 - [Classifier (Nhóm mô hình phân loại)](#classifier-nhóm-mô-hình-phân-loại)
   - [accuracy\_score()](#accuracy_score)
   - [classification\_report](#classification_report)
@@ -10,6 +11,7 @@
 - Khi bạn gọi .predict() của các mô hình ML, nó chỉ dự đoán ra kết quả y_pred thôi. Nhưng để đánh giá mô hình có tốt hay không, bạn cần so sánh y_pred (dự đoán) với y_test (giá trị thật) và tính ra sai số như MSE, MAE, r2 score.
 - Nếu chỉ .predict() mà không tính toán gì, thì chỉ thấy ra một mớ số dự đoán, không biết mô hình giỏi hay dở, không đủ chứng minh cho người khác là mô hình mình tốt hay xấu.
 ```
+# Regression (nhóm mô hình hồi quy)
 # mean_squared_error()
 ```bash
 - Là một hàm đánh giá sai số phổ biến trong học máy, đặc biệt dùng trong các bài toán hồi quy (regression).
@@ -24,7 +26,7 @@ mse = mean_squared_error(y_true, y_pred)
 - ytrue: Giá trị thực tế
 - ypred: giá trị dự đoán
 ```
-# r2_score
+## r2_score
 ```bash
 - Đánh giá độ phù hợp của mô hình hồi quy, còn được gọi là hệ số xác định (coefficient of determination).
 - r-squared đo mức độ mà mô hình giải thích được phương sai của dữ liệu thực tế.

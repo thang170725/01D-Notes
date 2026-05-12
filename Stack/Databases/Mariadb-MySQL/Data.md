@@ -11,6 +11,7 @@
 - [Select (xem dữ liệu trong bảng)](#select-xem-dữ-liệu-trong-bảng)
   - [select ... limit](#select--limit)
   - [select ... order by](#select--order-by)
+  - [union all](#union-all)
 - [like](#like)
 - [Process (Nhóm xử lý tính toán)](#process-nhóm-xử-lý-tính-toán)
   - [count](#count)
@@ -22,6 +23,7 @@
   - [YEAR()](#year)
   - [MONTH()](#month)
 - [COALESCE()](#coalesce)
+- [char\_length()](#char_length)
 ---
 # Kiểu dữ liệu
 ```bash
@@ -170,6 +172,35 @@ JOIN Students s ON c.studentId = s.studentId
 JOIN Teachers t ON c.teacherId = t.teacherId;
 Xem danh sách gắn với một điều kiện nào đó:
 SELECT * FROM Courses WHERE courseId = '2';
+```
+## union all
+```bash
+UNION ALL = nối kết quả của nhiều câu SELECT lại với nhau (giữ nguyên tất cả dữ liệu)
+```
+**Ex**
+```bash
+bảng A:
+| name |
+| ---- |
+| An   |
+| Bình |
+
+bảng B:
+| name  |
+| ----- |
+| Bình  |
+| Cường |
+```
+```sql
+SELECT name FROM A
+UNION ALL
+SELECT name FROM B;
+-- | name  |
+-- | ----- |
+-- | An    |
+-- | Bình  |
+-- | Bình  |
+-- | Cường |
 ```
 # like
 **Ex: truy vấn dữ liệu theo điều kiện**
@@ -338,4 +369,14 @@ SELECT MONTH('2026-04-11'); -- 4
 **Ex**
 ```sql
 SELECT COALESCE(NULL, NULL, 10, 20); -- 10
+```
+# char_length()
+```bash
+Trả về số ký tự trong chuỗi
+```
+**Ex**
+```sql
+SELECT tweet_id
+FROM Tweets
+WHERE CHAR_LENGTH(content) > 15;
 ```

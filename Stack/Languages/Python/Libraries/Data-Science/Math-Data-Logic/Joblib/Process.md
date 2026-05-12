@@ -9,8 +9,9 @@
 ```bash
 joblib.dump(object, filename)
 
-- object → model cần lưu
-- filename → tên file (thường .pkl hoặc .joblib)
+- Input: 
+    + object → model cần lưu
+    + filename → tên file (thường .pkl hoặc .joblib)
 ```
 **Ex**
 ```python

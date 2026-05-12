@@ -35,6 +35,11 @@
 27. Proud of you (C5)
 28. windy hill (c5)
 29. Phi điểu và ve sầu (c5)
+30. Kiếp sau vẫn muốn lập gia đình với em (C5, D)
+31. futari no kimochi (c5)
+32. yến vô hiết
+33. thiên sơn vạn thủy của em (c5)
+34. quê tôi (c5)
 ```
 # Gutar
 ```bash
@@ -48,6 +53,9 @@
 8. Quên người đã quá yêu
 9. Tình sầu thiên thu muôn lối
 10. Việt nam những chuyến đi
+11. Bạc phận
+12. một nhà
+13. có sao cũng đành
 ```
 # Karaoke
 ```bash

@@ -10,6 +10,8 @@
   - [.astype()](#astype)
   - [set\_index()](#set_index)
   - [reset\_index()](#reset_index)
+  - [.pivot()](#pivot)
+  - [melt()](#melt)
 ---
 # Transformation (biến đổi cấu trúc dữ liệu)
 ## .rename()
@@ -22,17 +24,21 @@ DataFrame.rename(
     mapper=None,
     *,
     index=None,
-    columns=None,
+    columns={},
     axis=None,
     copy=None,
     inplace=False,
     level=None,
     errors='ignore'
-
-- errors
-    + ignore' (mặc định): không lỗi nếu tên không tồn tại
-    + 'raise': báo lỗi nếu không tìm thấy tên cần đổi
 )
+
+- Input:
+    + inplace=:
+        - True  : sửa trực tiếp vào df
+        - False : (mặc định) → trả về DataFrame mới
+    + errors
+        - 'ignore'  : (mặc định): không lỗi nếu tên không tồn tại
+        - 'raise'   : báo lỗi nếu không tìm thấy tên cần đổi
 ```
 **Ex**
 ```python
@@ -302,4 +308,171 @@ Chuyển đổi kiểu dữ liệu
 students['grade'] = students['grade'].astype("int")
 ```
 ## set_index()
+```bash
+Đặt cột làm index
+```
+**Syn**
+```bash
+df.set_index(
+        "timestamp",
+        inplace=True
+    )
+```
+**Ex**
+```python
+df.set_index(
+    "timestamp",
+    inplace=True
+)
+# Trước:
+#    timestamp   A   B
+# 0  2024-01-01  10  20
+# 1  2024-01-02  11  21
+
+# Sau:
+#             A   B
+# timestamp        
+# 2024-01-01  10  20
+# 2024-01-02  11  21
+```
 ## reset_index()
+```bash
+- reset_index() trong pandas dùng để đưa index hiện tại trở lại thành cột bình thường, đồng thời tạo lại index mới mặc định 0,1,2,....
+- Nó thường dùng sau các thao tác như:
+    + groupby()
+    + resample()
+    + pivot_table()
+    + khi bạn tự set index bằng set_index()
+```
+**Syn**
+```bash
+df.reset_index(drop=False, inplace=False)
+
+- Input:
+    + drop=False (mặc định) : Giữ index cũ thành một cột.
+    + drop=True             : Bỏ luôn index cũ, chỉ tạo lại index mới.
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "name": ["A","B","C"],
+    "score": [8,9,7]
+})
+
+print(df)
+#   name  score
+# 0   A      8
+# 1   B      9
+# 2   C      7
+
+df2 = df.set_index("name")
+print(df2)   
+# name    score
+# A         8
+# B         9
+# C         7
+
+df2.reset_index()
+#   name  score
+# 0  A      8
+# 1  B      9
+# 2  C      7
+```
+## .pivot()
+```bash
+- pivot() trong pandas dùng để xoay dữ liệu (reshape) từ dạng "dài" (long format) thành dạng "rộng" (wide format).
+- Hay dùng cho:
+    + tạo bảng tổng hợp
+    + chuẩn bị dữ liệu cho heatmap
+    + chuyển hàng thành cột
+```
+**Syn**
+```bash
+df.pivot(index=..., columns=..., values=...)
+
+- Input:
+    + index=    : hàng (rows)
+    + columns=  : cột mới tạo ra
+    + values=   : giá trị điền vào ô
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "Name":["An","An","Bình","Bình"],
+    "Subject":["Math","English","Math","English"],
+    "Score":[8,9,7,10]
+})
+
+print(df)
+# | Name | Subject | Score |
+# | ---- | ------- | ----- |
+# | An   | Math    | 8     |
+# | An   | English | 9     |
+# | Bình | Math    | 7     |
+# | Bình | English | 10    |
+
+pivot_df = df.pivot(
+    index="Name",
+    columns="Subject",
+    values="Score"
+)
+
+print(pivot_df)
+# Subject  English  Math
+# Name
+# An          9      8
+# Bình       10      7
+```
+## melt() 
+```bash
+- dùng để chuyển dữ liệu từ wide format (dạng nhiều cột) sang long format (dạng dài).
+- Rất hay dùng trong:
+    + Data cleaning
+    + Time series
+    + Machine Learning preprocessing
+    + Vẽ biểu đồ (seaborn rất thích long format)
+```
+**Syn**
+```bash
+pd.melt(df, id_vars=?, value_vars=?, var_name=?, value_name=?) # Hoặc: df.melt(...)
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({    
+    "Tên": ["An", "Bình"],    
+    "Toán": [8,9],    
+    "Lý": [7,8],    
+    "Hóa": [9,10]
+})
+    
+print(df)
+#     Tên  Toán  Lý  Hóa
+# 0   An    8    7    9
+# 1  Bình   9    8   10
+
+df_long = df.melt(    
+    id_vars="Tên",    
+    var_name="Môn",    
+    value_name="Điểm"
+)
+
+print(df_long)
+#     Tên   Môn  Điểm
+# 0   An    Toán   8
+# 1 Bình   Toán   9
+# 2   An     Lý    7
+# 3 Bình    Lý    8
+# 4   An    Hóa    9
+# 5 Bình   Hóa   10
+
+# Giải thích
+# id_vars="Tên"     : Tên học sinh không thay đổi.
+# var_name="Môn"    : Tạo cột: Toán, Lý, Hóa
+# value_name="Điểm":
+```

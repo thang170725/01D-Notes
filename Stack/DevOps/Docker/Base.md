@@ -1,8 +1,15 @@
 - [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
+- [Component (Thành phần)](#component-thành-phần)
+  - [Docker Client](#docker-client)
+  - [Docker Daemon (dockerd)](#docker-daemon-dockerd)
+  - [Docker Engine](#docker-engine)
   - [Image](#image)
   - [Container](#container)
-  - [Docker Engine](#docker-engine)
+  - [Dockerfile](#dockerfile)
+  - [Docker Registry](#docker-registry)
+  - [Volume](#volume)
+  - [Network](#network)
 - [Installation](#installation)
 ---
 # Directory Structure
@@ -25,20 +32,71 @@ Giả sử em viết một app:
     + Thành một gói duy nhất gọi là container
     + Chạy giống hệt nhau ở mọi nơi
 ```
-## Image
+# Component (Thành phần)
+## Docker Client
 ```bash
-→ Một “khuôn mẫu” để tạo container
-→ Không chạy, chỉ là file
+- Là CLI
+- Client không chạy container trực tiếp mà nó gửi request tới Docker Daemon 
 ```
-## Container
+## Docker Daemon (dockerd)
 ```bash
-→ Image + đang chạy
-→ Giống như process
+- Đây là process chạy nền
+- Nhiệm vụ:
+    + build image
+    + start/stop container
+    + quản lý network
+    + quản lý volume
+- Giống bộ não điều khiển của Docker
 ```
 ## Docker Engine
 ```bash
-→ Phần mềm chạy container
+- Bao gồm:
+    + Docker Client + Docker Daemon + REST API
+    + Đây là platform hoàn chỉnh
 ```
+## Image
+```bash
+- Một “khuôn mẫu” để tạo container
+- Không chạy, chỉ là file
+- Image chứa:
+    + OS filesystem
+    + libraries
+    + app code
+    + dependencies
+```
+## Container
+```bash
+- Image + đang chạy → Giống như process
+- Ví dụ: 
+    + Image giống Class
+    + Container gống Object
+```
+## Dockerfile
+```bash
+Dockerfile là file mô tả cách build image
+```
+**Ex**
+```bash
+FROM python:3.11
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "main.py"]
+```
+## Docker Registry
+```bash
+- Nơi lưu images
+- Ví dụ:
+    + Docker Hub
+    + Github Container Registry
+    + AWS ECR
+```
+## Volume
+## Network
 # Installation
 ```bash
 1. gỡ bản docker cũ nếu có
