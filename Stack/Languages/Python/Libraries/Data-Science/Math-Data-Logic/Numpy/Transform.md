@@ -184,3 +184,49 @@ np.hstack((a, b))
 # [[1 2 5 6]
 #  [3 4 7 8]]
 ```
+# .pad() (Thêm phần đệm)
+```bash
+- Trong NumPy, hàm numpy.pad() dùng để thêm phần đệm (padding) vào mảng.
+    + ví dụ thêm số 0 quanh ma trận, thêm giá trị ở đầu/cuối vector, hoặc mở rộng ảnh.
+```
+**Syn**
+```bash
+numpy.pad(array, pad_width, mode='constant', **kwargs)
+
+- Input:
+    + array     : mảng cần pad
+    + pad_width : số lượng phần tử thêm
+    + mode	    : cách thêm
+```
+**Ex1: Ví dụ cơ bản**
+```python
+import numpy as np
+
+a = np.array([1, 2, 3])
+b = np.pad(a, pad_width=2) # thêm 2 số ở đầu, thêm 2 số ở cuối, mặc định thêm số 0
+
+print(b) # [0 0 1 2 3 0 0]
+```
+**Ex2: Padding khác nhau cho từng chiều**
+```python
+b = np.pad(a,
+           ((1, 2),
+            (3, 4)))
+print(b)
+# trên: 1 hàng
+# dưới: 2 hàng
+# trái: 3 cột
+# phải: 4 cột
+```
+
+np.pad(a, 2, mode='edge')
+
+→ lặp giá trị biên
+
+np.pad(a, 2, mode='reflect')
+
+→ phản chiếu
+
+np.pad(a, ((1,1),(2,2)))
+
+→ pad ma trận 2D
