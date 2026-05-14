@@ -120,84 +120,91 @@ Gray = 0.299 * R + 0.587 * G + 0.114 * B
 import numpy as np
 
 def conv2d(image, kernel, padding=1, stride=1):
-    # image: ma trận 2D (H x W)
-    # kernel: ma trận 2D (K x K)
+  '''
+    image: ma trận 2D (H x W)
+    kernel: ma trận 2D (K x K)
+  '''
+  H, W = image.shape           # chiều cao & rộng ảnh
+  K = kernel.shape[0]          # giả sử kernel vuông (3x3)
+  print(f"(H,W)=({H,W})", f"K={K}")
 
-    H, W = image.shape           # chiều cao & rộng ảnh
-    K = kernel.shape[0]          # giả sử kernel vuông (3x3)
+  # === 1. Padding (Thêm viền 0 xung quanh ảnh) === 
+  # Ví dụ padding=1: (100x100) -> (102x102)
+  padded = np.pad(
+      image,
+      ((padding, padding), (padding, padding)),
+      mode='constant'          # điền 0
+  )
+  print("Shape Image Pad: ", padded.shape)
 
-    # --------------------------------------------------
-    # 1. Padding
-    # --------------------------------------------------
-    # Thêm viền 0 xung quanh ảnh
-    # Ví dụ padding=1: (100x100) -> (102x102)
-    padded = np.pad(
-        image,
-        ((padding, padding), (padding, padding)),
-        mode='constant'          # điền 0
-    )
+  # === 2. Tính kích thước output và tạo ma trận output ===
+  # Công thức: (H + 2P - K) / S + 1
+  out_h = (H + 2 * padding - K) // stride + 1
+  out_w = (W + 2 * padding - K) // stride + 1
+  print(f"Shape output: (H,W)=({out_h, out_w})")
 
-    # --------------------------------------------------
-    # 2. Tính kích thước output
-    # --------------------------------------------------
-    # Công thức:
-    # (H + 2P - K) / S + 1
-    out_h = (H + 2 * padding - K) // stride + 1
-    out_w = (W + 2 * padding - K) // stride + 1
+  output = np.zeros((out_h, out_w)) # Tạo ma trận output (ban đầu toàn 0)
 
-    # Tạo ma trận output (ban đầu toàn 0)
-    output = np.zeros((out_h, out_w))
+  # === 3. Sliding window + convolution ===
+  # Duyệt từng vị trí trên output
+  for i in range(out_h):
+      for j in range(out_w):
+        # === 3.1 Xác định vùng window trên ảnh đã padding ===
+        # i*stride    : vị trí bắt đầu theo chiều cao
+        # i*stride + K: vị trí kết thúc (lấy K phần tử)
+        row_start = i * stride
+        row_end   = row_start + K
 
-    # --------------------------------------------------
-    # 3. Sliding window + convolution
-    # --------------------------------------------------
-    # Duyệt từng vị trí trên output
-    for i in range(out_h):
-        for j in range(out_w):
+        col_start = j * stride
+        col_end   = col_start + K
 
-            # --------------------------------------------------
-            # 3.1 Xác định vùng window trên ảnh đã padding
-            # --------------------------------------------------
-            # i*stride: vị trí bắt đầu theo chiều cao
-            # i*stride + K: vị trí kết thúc (lấy K phần tử)
-            row_start = i * stride
-            row_end   = row_start + K
+        window = padded[row_start:row_end, col_start:col_end] # Lấy window KxK từ ảnh
+    
+        # === 3.2 Nhân element-wise và cộng lại ===
+        # window * kernel: nhân từng phần tử
+        # np.sum(...): cộng tất cả lại thành 1 số
+        output[i, j] = np.sum(window * kernel)
 
-            col_start = j * stride
-            col_end   = col_start + K
-
-            # Lấy window KxK từ ảnh
-            window = padded[row_start:row_end, col_start:col_end]
-
-            # --------------------------------------------------
-            # 3.2 Nhân element-wise và cộng lại
-            # --------------------------------------------------
-            # window * kernel: nhân từng phần tử
-            # np.sum(...): cộng tất cả lại thành 1 số
-            output[i, j] = np.sum(window * kernel)
-
-    return output
-
+  return output
 
 # --------------------------------------------------
 # 🔥 DEMO
 # --------------------------------------------------
-
-# Tạo ảnh grayscale 100x100 (giá trị 0-255)
+# === 1. Tạo ảnh grayscale 100x100 (giá trị 0-255) ===
+np.random.seed(42)
 image = np.random.randint(0, 256, (100, 100))
+print("Image grayscale original: ", image)
 
-# Kernel 3x3 (ví dụ: phát hiện cạnh dọc)
+# === 2. Tạo Kernel 3x3 (ví dụ: phát hiện cạnh dọc)
 kernel = np.array([
     [ 1,  0, -1],
     [ 1,  0, -1],
     [ 1,  0, -1]
 ])
 
-# Chạy convolution
+# === 3. Chạy convolution ===
 result = conv2d(image, kernel, padding=1, stride=1)
-
-print("Input shape :", image.shape)
+print("Output Image Con2d: ", result)
 print("Output shape:", result.shape)
+
+# Image grayscale original:  [[102 179  92 ...   3  53 220]
+# [190 145 217 ... 123 204 178]
+# [ 62  95 230 ...  86 228 223]
+# ...
+# [ 86  37 118 ... 215 228  56]
+# [129  95 120 ... 151 188  53]
+# [ 61 128  48 ... 245 221 116]]
+# (H,W)=((100, 100)) K=3
+# Shape Image Pad:  (102, 102)
+# Shape output: (H,W)=((100, 100))
+# Output Image Con2d:  [[-324.  -17.  267. ... -111. -272.  257.]
+# [-419. -185.  122. ... -286. -409.  485.]
+# [-368. -117.  -40. ... -306. -299.  551.]
+# ...
+# [-188.  -48. -495. ... -171.  299.  512.]
+# [-260.  -10. -222. ... -228.  386.  637.]
+# [-223.   22.  -52. ... -144.  227.  409.]]
+# Output shape: (100, 100)
 ```
 ## BatchNorm
 thuật toán BatchNorm trong CNN như nào
