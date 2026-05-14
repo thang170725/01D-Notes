@@ -9,11 +9,6 @@
 - [CNN (Toán học trong CNN)](#cnn-toán-học-trong-cnn)
   - [Convolution](#convolution)
   - [BatchNorm](#batchnorm)
-- [𝜇](#𝜇)
-- [2](#2)
-- [2](#2-1)
-- [𝑖](#𝑖)
-- [𝑖](#𝑖-1)
   - [thuật toán pooling như nào](#thuật-toán-pooling-như-nào)
 - [Rotation (Xoay)](#rotation-xoay)
   - [Affine](#affine)
@@ -200,138 +195,68 @@ print("Input shape :", image.shape)
 print("Output shape:", result.shape)
 ```
 ## BatchNorm
-thuật toán BatchNorm trong CNN như nào
+```bash
+- BatchNorm là một trong những “vũ khí” quan trọng trong CNN — nếu hiểu đúng thì bạn nắm được cách ổn định training luôn 👍
+- Ý tưởng chính
+  👉 Chuẩn hóa dữ liệu ngay trong mạng theo từng mini-batch:
+  + đưa output về phân phối “chuẩn hơn” → học nhanh, ổn định 
+- Tại sao cần BatchNorm?
+  1. Training nhanh hơn: giảm “internal covariate shift”
+  2. Gradient ổn định: tránh exploding / vanishing
+  3. Regularization nhẹ: giống noise → đỡ overfit
+👉 BatchNorm làm 3 việc:
+  + chuẩn hóa (mean = 0, var = 1)
+  + scale lại (gamma)
+  + shift lại (beta)
+```
+**Luồng hoạt động của BatchNorm**
+```bash
+- Giả sử output của một lớp convolution trong CNN có shape: (batch, height, width, channels)=(16, 1000, 1000, 32)
+- Tức là:
+  + batch size = 16
+  + ảnh feature map = 1000×1000
+  + có 32 channels
+```
+```bash
+Ta xét channel số 7
+1. Tensor đầu vào:
+  - Giả sử vài giá trị đầu của channel 7 là:
+    Batch 1:
+    [[2, 4, 3, ...],
+     [5, 6, 7, ...],
+     ...]
 
-BatchNorm là một trong những “vũ khí” quan trọng trong CNN — nếu hiểu đúng thì bạn nắm được cách ổn định training luôn 👍
+    Batch 2:
+    [[1, 2, 3, ...],
+     ...]
 
-🧠 1. Ý tưởng chính
+    ...
+  - Tổng cộng: 16000000 giá trị
+  - Tổng toàn bộ giá trị của channel 7 là: ∑xi = 80000000 (x1 + x2 + ...)
+2. Tính mean:
+  - Công thức: μB​ = (1/m)​∑xi (m=16000000) = 80000000/16000000 = 5
+3. Tính variance
+  - Giả sử: ∑(xi​−μB​)**2 = 144,000,000
+  - variance: σB**2 = 144,000,000/16,000,000 = 9
+4. Chuẩn hóa từng phần tử:
+  - x_outi = (xi - μB)/sqrt(σB**2 + ϵ)
+  - giả sử: ϵ = 0.00001 => x_outi = 3
+5. Scale & Shift
+  - BatchNorm có tham số học được:
+    + γ
+    + β
+  - giả sử:
+    + γ = 1.5
+    + β = 0.
+  - Output cuối: yi = γ.x_outi + β
 
-👉 Chuẩn hóa dữ liệu ngay trong mạng theo từng mini-batch:
-
-đưa output về phân phối “chuẩn hơn” → học nhanh, ổn định hơn
-
-📐 2. Công thức
-
-Cho 1 batch giá trị 
-𝑥
-x:
-
-Bước 1: tính mean & variance
-𝜇
-=
-1
-𝑚
-∑
-𝑥
-𝑖
-μ=
-m
-1
-	​
-
-∑x
-i
-	​
-
-𝜎
-2
-=
-1
-𝑚
-∑
-(
-𝑥
-𝑖
-−
-𝜇
-)
-2
-σ
-2
-=
-m
-1
-	​
-
-∑(x
-i
-	​
-
-−μ)
-2
-Bước 2: chuẩn hóa
-𝑥
-^
-𝑖
-=
-𝑥
-𝑖
-−
-𝜇
-𝜎
-2
-+
-𝜖
-x
-^
-i
-	​
-
-=
-σ
-2
-+ϵ
-	​
-
-x
-i
-	​
-
-−μ
-	​
-
-Bước 3: scale & shift (learnable)
-𝑦
-𝑖
-=
-𝛾
-𝑥
-^
-𝑖
-+
-𝛽
-y
-i
-	​
-
-=γ
-x
-^
-i
-	​
-
-+β
-📦 3. Áp dụng trong CNN (quan trọng)
-
-👉 Với tensor:
-
-(N, H, W, C)
-
-BatchNorm sẽ:
-
-tính mean & var theo từng channel
-trên toàn bộ:
-N × H × W
-🔥 Nghĩa là:
-
-👉 mỗi channel có:
-
-1 mean
-1 variance
-1 gamma
-1 beta
-🔍 4. Flow trong CNN
-Conv → BatchNorm → ReLU
+- Sau khi xử lý
+  + Input shape: (16, 1000, 1000, 32)
+  + Output shape vẫn là: (16, 1000, 1000, 32)
+- BatchNorm:
+  + KHÔNG đổi kích thước tensor
+  + chỉ đổi phân phối dữ liệu
+```
 💻 5. Code đơn giản (numpy)
 import numpy as np
 
@@ -354,33 +279,7 @@ def batchnorm(x, eps=1e-5):
     out = gamma * x_hat + beta
     
     return out
-⚡ 6. Tại sao cần BatchNorm?
-✅ 1. Training nhanh hơn
-giảm “internal covariate shift”
-✅ 2. Gradient ổn định
-tránh exploding / vanishing
-✅ 3. Regularization nhẹ
-giống noise → đỡ overfit
-❗ 7. Khác nhau train vs inference
-🔥 Train:
-dùng mean/var của batch
-🔥 Test:
-dùng running mean/var (đã tích lũy)
-🚀 Tóm gọn
 
-👉 BatchNorm làm 3 việc:
-
-chuẩn hóa (mean = 0, var = 1)
-scale lại (gamma)
-shift lại (beta)
-💡 Mental model
-
-“Mỗi channel được chuẩn hóa riêng để phân phối ổn định hơn”
-
-Nếu bạn muốn, mình có thể:
-
-giải thích tại sao BN đặt trước hay sau ReLU
-hoặc so sánh BatchNorm vs LayerNorm vs GroupNorm (rất hay hỏi)
 ## thuật toán pooling như nào
 
 Pooling là bước giảm kích thước (downsampling) trong CNN — cực kỳ giống sliding window bạn đã học 👍

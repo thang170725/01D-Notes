@@ -40,6 +40,7 @@
 32. yến vô hiết
 33. thiên sơn vạn thủy của em (c5)
 34. quê tôi (c5)
+35. kiếp sau vấn muốn lập gia đình vói em (c5)
 ```
 # Gutar
 ```bash
@@ -56,6 +57,7 @@
 11. Bạc phận
 12. một nhà
 13. có sao cũng đành
+14. gió
 ```
 # Karaoke
 ```bash
@@ -98,6 +100,7 @@
 37. Cẩm tú cầu		
 38. Anh vẫn ở đây	
 39. Đâu phải cho anh	
+40. Đớn đau vô cùng
 ```
 # Karaoke & Guitar
 ```bash

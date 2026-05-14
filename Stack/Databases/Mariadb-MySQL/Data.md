@@ -366,6 +366,10 @@ SELECT MONTH('2026-04-11'); -- 4
 - xử lý NULL (cực quan trọng)
 - Công dụng trả về giá trị KHÔNG NULL đầu tiên
 ```
+**Syn**
+```bash
+COALESCE(value1, value2, value3, ...)
+```
 **Ex**
 ```sql
 SELECT COALESCE(NULL, NULL, 10, 20); -- 10

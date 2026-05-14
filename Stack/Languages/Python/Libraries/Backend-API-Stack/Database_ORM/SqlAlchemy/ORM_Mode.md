@@ -21,7 +21,7 @@
 - [Search](#search)
   - [.query()](#query)
 - [Filtering (Bộ lọc)](#filtering-bộ-lọc)
-  - [.filter()](#filter)
+  - [.filter() (Lọc theo điều kiện)](#filter-lọc-theo-điều-kiện)
     - [like()](#like)
     - [filter\_by()](#filter_by)
   - [Logic Healers](#logic-healers)
@@ -315,9 +315,11 @@ users = session.query(User).all() # [User(...), User(...)] → List object ORM
 rows = session.query(User.id, User.name).all() # [(1, 'Alice'), (2, 'Bob')] → List tuple
 ```
 # Filtering (Bộ lọc)
-## .filter()
+## .filter() (Lọc theo điều kiện)
 ```bash
-- “Lọc theo điều kiện”
+- filter có cần import không?
+    + filter không cần import vì nó là phương thức của class
+- filter thường dùng cho ORM. Đây là style ORM cũ. where được recommanded
 ```
 **Syn: filter**
 ```bash

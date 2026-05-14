@@ -1,11 +1,12 @@
 - [Overfitting \& Underfitting](#overfitting--underfitting)
 - [Vanishing Gradient \& Exploding Gradient](#vanishing-gradient--exploding-gradient)
 - [Precision \& Recall](#precision--recall)
-- [Mean Absolute Error (MAE)](#mean-absolute-error-mae)
-- [Mean Absolute Percentage Error (MAPE)](#mean-absolute-percentage-error-mape)
-- [Mean Squared Error (MSE)](#mean-squared-error-mse)
-- [Root Mean Squared Error (RMSE)](#root-mean-squared-error-rmse)
-- [R2 Score (r2)](#r2-score-r2)
+- [Evaluate Regression (đánh giá mô hình hồi quy)](#evaluate-regression-đánh-giá-mô-hình-hồi-quy)
+  - [Mean Absolute Error (MAE) (sai số tuyệt đối trung bình)](#mean-absolute-error-mae-sai-số-tuyệt-đối-trung-bình)
+  - [Mean Absolute Percentage Error (MAPE) (Trung bình sai số phần trăm tuyệt đối)](#mean-absolute-percentage-error-mape-trung-bình-sai-số-phần-trăm-tuyệt-đối)
+  - [Mean Squared Error (MSE) (Bình phương sai số trung bình)](#mean-squared-error-mse-bình-phương-sai-số-trung-bình)
+  - [Root Mean Squared Error (RMSE)](#root-mean-squared-error-rmse)
+  - [R2 Score (r2)](#r2-score-r2)
 - [Binary Cross-Entropy (Log Loss)](#binary-cross-entropy-log-loss)
 ---
 # Overfitting & Underfitting
@@ -69,7 +70,8 @@ Underfitting xảy ra khi mô hình quá đơn giản hoặc thiếu dữ liệu
     + Tăng recall → giảm precision
 => Vì vậy người ta hay dùng thêm: F1-score = trung bình điều hòa của precision & recall
 ```
-# Mean Absolute Error (MAE)
+# Evaluate Regression (đánh giá mô hình hồi quy)
+## Mean Absolute Error (MAE) (sai số tuyệt đối trung bình)
 ```bash
 - MAE là một metric dùng để đánh giá mô hình hồi quy (regression).
 - MAE (Mean Absolute Error) = Sai số tuyệt đối trung bình
@@ -92,9 +94,8 @@ y_pred = [90, 220, 280]
 Sai số từng điểm: e = y_true - y_pred = [10, -20, 20]
 => MAE = (10+20+20)/3 = 16.67
 ```
-# Mean Absolute Percentage Error (MAPE)
+## Mean Absolute Percentage Error (MAPE) (Trung bình sai số phần trăm tuyệt đối)
 ```bash
-- (Trung bình sai số phần trăm tuyệt đối)
 - Nó là một metric dùng để đánh giá độ chính xác của mô hình dự đoán, đặc biệt trong bài toán regression / forecasting (ví dụ dự đoán điện năng mà bạn đang làm với LightGBM).
 - Nó trả lời câu hỏi: Trung bình mô hình dự đoán lệch bao nhiêu % so với giá trị thật?
 - Càng nhỏ càng tốt.
@@ -112,6 +113,7 @@ MAPE = (1/n)*|(y1 - y_pred1)/y1 + (y2 - y_pred2)/y2 + ...|*100
 - y_pred    : giá trị dự đoán
 - n         : số mẫu
 - ∣...∣     : lấy trị tuyệt đối (bỏ dấu âm)
+```
 **Ex**
 ```bash
 Giá trị thật y  	Dự đoán p_pred  	Sai số %
@@ -145,9 +147,9 @@ print(mape * 100)  # 13.33%
     + Nó quan tâm: “Sai này lớn bao nhiêu so với giá trị thật?”
     + Nên cùng sai 10 => MAPE thấy 2 trường hợp này rất khác nhau.
 ```
-# Mean Squared Error (MSE)
+## Mean Squared Error (MSE) (Bình phương sai số trung bình)
 ```bash
-Bình phương sai số trung bình -> Ý nghĩa: Phạt lỗi lớn mạnh
+Ý nghĩa: Phạt lỗi lớn mạnh
 ```
 **Formula**
 ```bash
@@ -187,7 +189,7 @@ y_true	y_pred	error
 ❌ Không bình phương: 2+(−2)=0 → tưởng model hoàn hảo 😑
 ✅ Có bình phương: 2**2+(−2)**2 = 4+4 = 8 → phản ánh đúng là đang sai
 ```
-# Root Mean Squared Error (RMSE)
+## Root Mean Squared Error (RMSE)
 **Vì sao dùng RMSE**
 ```bash
 - Vì mse là đơn vị bình phương gây khó hiểu
@@ -196,7 +198,7 @@ y_true	y_pred	error
 ```bash
 RMSE = sqrt((1/n).((y1-y_pred1)**2 + ... + (yn-y_predn)))
 ```
-# R2 Score (r2)
+## R2 Score (r2)
 ```bash
 - Là hệ số xác định dùng cho regression. 
 - Model giải thích được bao nhiêu % biến thiên của dữ liệu 

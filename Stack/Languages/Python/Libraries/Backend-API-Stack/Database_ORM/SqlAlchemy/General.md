@@ -14,6 +14,7 @@
   - [func](#func)
     - [.count()](#count)
     - [.now()](#now)
+    - [.coalesce()](#coalesce)
   - [.label()](#label)
 - [Insert](#insert)
   - [commit](#commit)
@@ -203,6 +204,27 @@ result = session.execute(stmt).mappings().all()
 [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
 ```
 ## .where()
+```bash
+- where() dùng được cho cả Core và ORM trong SQLAlchemy mới (2.0 style).
+- Thực tế hiện nay:
+    + where() = style chuẩn mới
+    + filter() = style ORM cũ (session.query())
+```
+**Syn**
+```bash
+select(TableOrModel).where(condition, ...)
+```
+**Ex: Ví dụ về or**
+```python
+from sqlalchemy import or_
+
+stmt = select(User).where(
+    or_(
+        User.age < 18,
+        User.age > 60
+    )
+)
+```
 ## .join()
 **Ex**
 ```python
@@ -331,6 +353,19 @@ with Session(engine) as session:
     print(result)
 
 # 2026-03-01 10:42:15
+```
+### .coalesce()
+**Syn**
+```bash
+from sqlalchemy import func
+
+func.coalesce(column, 0)
+```
+**Ex**
+```sql
+stmt = select(
+    func.coalesce(User.nickname, "Anonymous")
+)
 ```
 ## .label()
 ```bash

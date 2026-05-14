@@ -1,13 +1,15 @@
-- [Asynchronous](#asynchronous)
-  - [Promise](#promise)
+- [Promise](#promise)
     - [Promise.resolve()](#promiseresolve)
     - [Promise.reject()](#promisereject)
     - [Promise.all()](#promiseall)
     - [Promise.race()	lấy promise xong đầu](#promiseracelấy-promise-xong-đầu)
-- [async \& fetch](#async--fetch)
+- [async \& fetch() (gửi nhận yêu cầu và xử lý kết quả trả về)](#async--fetch-gửi-nhận-yêu-cầu-và-xử-lý-kết-quả-trả-về)
+  - [response.ok](#responseok)
+  - [response.status](#responsestatus)
+  - [.json()](#json)
   - [GET data JSON bằng async + fetch](#get-data-json-bằng-async--fetch)
   - [POST data JSON bằng async + fetch](#post-data-json-bằng-async--fetch)
-- [FormData()](#formdata)
+- [FormData() (gửi file)](#formdata-gửi-file)
   - [.append() \& .entries()](#append--entries)
   - [set(name, value)	Ghi đè dữ liệu](#setname-valueghi-đè-dữ-liệu)
   - [get(name)	Lấy 1 giá trị](#getnamelấy-1-giá-trị)
@@ -19,8 +21,7 @@
 - [FileReader](#filereader)
   - [.readAsText() \& .readAsDataURL \& .readAsArrayBuffer() \& \& .readAsBinary()](#readastext--readasdataurl--readasarraybuffer---readasbinary)
 ---
-# Asynchronous
-## Promise
+# Promise
 ```bash
 - Promise được dùng để xử lý các tác vụ bất đồng bộ (asynchronous) trong JavaScript.
 - Ví dụ các việc mất thời gian:
@@ -116,13 +117,20 @@ Promise.all([p1, p2, p3])
 // [10, 20, 30]
 ```
 ### Promise.race()	lấy promise xong đầu
-# async & fetch
+# async & fetch() (gửi nhận yêu cầu và xử lý kết quả trả về)
 ```bash
 - fetch : Là một API dùng để gửi các yêu cầu HTTP (GET, POST, PUT, DELETE, …) đến server và xử lý kết quả trả về. 
+- Những lỗi người mới hay gặp ⚠️
+  ❌ Quên JSON.stringify
+    body: { username, password } # SAI
+  ❌ Gửi body với GET
+    fetch("/users", { body: "{}" }) // SAI
+  ❌ Quên check response.ok
+    await response.json() // có thể crash
 ```
 **Syn**
 ```bash
-fetch("https://api.example.com/users", {
+const res = await fetch("https://api.example.com/users", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
@@ -131,76 +139,42 @@ fetch("https://api.example.com/users", {
   body: JSON.stringify({ name: "Thắng" }),
 })
 
-- method
-  + "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
-  + Mặc định: "GET"
-  + Quyết định bạn đang làm gì với server
-- headers
-  + Là metadata của request → cho server biết: Dữ liệu kiểu gì. Ai gửi, Quyền hạn gì, Header là key – value (string)
-  + scheme  : Bearer là chuẩn Rest API
-- body
-  + Dữ liệu gửi lên server
-  + Chỉ dùng với POST / PUT / PATCH. Không dùng với GET (chuẩn REST)
-
-4. credentials
-credentials: "include"
-
-Giá trị	Ý nghĩa
-"omit"	Không gửi cookie
-"same-origin"	Chỉ gửi cookie cùng domain
-"include"	Luôn gửi cookie
-
-📌 Dùng khi:
-
-login bằng cookie
-
-session-based auth
-
-5. mode
-mode: "cors"
-
-Giá trị	Khi nào
-"cors"	Gọi API khác domain
-"same-origin"	Cùng domain
-"no-cors"	Gần như không dùng
-6. cache
-cache: "no-cache"
-
-
-Điều khiển cache của browser
-
-7. signal (huỷ request)
-const controller = new AbortController()
-
-fetch(url, {
-  signal: controller.signal
-})
-
-controller.abort()
-
-
-👉 Dùng khi:
-
-user rời trang
-
-search realtime
-
-5️⃣ Xử lý response từ fetch
-const response = await fetch(url)
-
-response có gì?
-Thuộc tính	Ý nghĩa
-response.ok	status 200–299
-response.status	HTTP status
-response.headers	headers trả về
-Đọc body response
-JSON
-const data = await response.json()
-
-Text
-const text = await response.text()
-
-6️⃣ Ví dụ THỰC TẾ HOÀN CHỈNH
+- Input:
+  + method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE". Mặc định: "GET"
+    - Quyết định bạn đang làm gì với server
+  + headers: Là metadata của request → cho server biết: Dữ liệu kiểu gì. Ai gửi, Quyền hạn gì, Header là key – value (string)
+    - "application/json": chỉ dùng cho dữ liệu kiểu json
+    - scheme  : Bearer là chuẩn Rest API
+  + body: Dữ liệu gửi lên server
+    - Chỉ dùng với POST / PUT / PATCH. Không dùng với GET (chuẩn REST)
+  + credentials:
+    - "omit"	Không gửi cookie
+    - "same-origin"	Chỉ gửi cookie cùng domain
+    - "include"	Luôn gửi cookie
+    - Dùng khi:
+      + login bằng cookie
+      + session-based auth
+  + mode
+    - "cors"	      : Gọi API khác domain
+    - "same-origin"	: Cùng domain
+    - "no-cors"	    : Gần như không dùng
+  + cache: Điều khiển cache của browser
+  + signal (huỷ request)
+    👉 Dùng khi:
+      + user rời trang
+      + search realtime
+```
+## response.ok	
+```bash
+status 200–299
+```
+## response.status	
+```bash
+HTTP status
+```
+## .json()
+**Ex**
+```js
 async function login(username, password) {
   const response = await fetch("/login", {
     method: "POST",
@@ -216,34 +190,6 @@ async function login(username, password) {
 
   return response.json()
 }
-
-7️⃣ Những lỗi người mới hay gặp ⚠️
-❌ Quên JSON.stringify
-body: { username, password } // SAI
-
-❌ Gửi body với GET
-fetch("/users", { body: "{}" }) // SAI
-
-❌ Quên check response.ok
-await response.json() // có thể crash
-
-8️⃣ Nếu bạn chỉ nhớ 3 điều
-
-1️⃣ fetch(url, options)
-2️⃣ method + headers + body là 3 cái quan trọng nhất
-3️⃣ fetch KHÔNG tự báo lỗi HTTP
-
-Nếu bạn muốn, mình có thể:
-
-🧠 Vẽ sơ đồ request–response
-
-🔥 So sánh fetch vs axios
-
-🧪 Viết wrapper fetch chuẩn production
-
-⚠️ Chỉ ra bug thường gặp khi dùng fetch
-
-Bạn muốn tiếp hướng nào?
 ```
 ## GET data JSON bằng async + fetch
 ```js
@@ -297,7 +243,7 @@ aasync function createUser() {
 
 createUser()
 ```
-# FormData()
+# FormData() (gửi file)
 ```bash
 - Là một API dùng để
   + Gửi dữ liệu dạng form HTML

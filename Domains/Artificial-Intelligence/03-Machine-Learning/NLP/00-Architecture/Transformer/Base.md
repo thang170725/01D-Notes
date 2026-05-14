@@ -1,6 +1,7 @@
 - [Intronduction](#intronduction)
   - [Architecture Encoder and Decoder](#architecture-encoder-and-decoder)
     - [Positional Encoding](#positional-encoding)
+    - [multi-head self-attention](#multi-head-self-attention)
 ---
 # Intronduction
 ```bash
@@ -71,12 +72,12 @@ Tokenization
       ↓
 Embedding + Positional Encoding
       ↓
-┌──────────────────────────────┐
-│ Encoder (N layers)           │
-│  ├─ Self-Attention           │
-│  ├─ FFN                      │
-│  └─ Add & Norm              │
-└──────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ Encoder (N layers)                      │
+│  ├─ multi-head Self-Attention           │
+│  ├─ FFN                                 │
+│  └─ Add & Norm                          │
+└─────────────────────────────────────────┘
       ↓
 Encoder Output (context vector)
       ↓
@@ -176,4 +177,46 @@ def positional_encoding_fast(seq_len, d_model):
     PE[:, 0::2] = torch.sin(position * div_term)
     PE[:, 1::2] = torch.cos(position * div_term)
     return PE
+```
+### multi-head self-attention
+```bash
+- Trong self-attention, mỗi từ sẽ nhìn các từ khác để quyết định:
+    + “Thông tin nào trong câu là quan trọng với tôi?”
+- Trong multi-head self-attention, thay vì chỉ có 1 cách nhìn, model dùng nhiều head song song.
+    + Mỗi head học một kiểu quan hệ khác nhau:
+        - head học ngữ pháp
+        - head học ngữ nghĩa
+        - head học vị trí
+        - head học quan hệ chủ ngữ–động từ
+        - v.v.
+- Tại sao cần nhiều head?
+    + Nếu chỉ có 1 attention:
+        - model phải nhồi mọi loại thông tin vào cùng một không gian
+    + Nhiều heads giúp:
+        - học nhiều quan hệ cùng lúc
+        - biểu diễn phong phú hơn
+        - tăng khả năng hiểu ngữ cảnh
+```
+**Ex**
+```bash
+Ví dụ câu đơn giản: "The animal didn't cross the street because it was too tired"
+- Khi model xử lý từ: it
+    + thì cần biết "it" ám chỉ cái gì.
+    + Nếu chỉ dùng 1 self-attention
+    + Model chỉ có một ma trận attention:
+        - it → animal : 0.7
+        - it → street : 0.2
+        - it → tired  : 0.1
+- Model học được rằng "it" liên quan mạnh tới "animal".
+- Multi-head Self-Attention: Giả sử có 3 heads.
+    + Head 1 — học ngữ pháp
+        - Nó tập trung vào chủ ngữ:
+            + it → animal
+    + Head 2 — học ngữ nghĩa
+        - Nó nhận ra "tired" liên quan tới sinh vật sống:
+            + it → tired
+    + Head 3 — học vị trí / cấu trúc câu
+        - Nó chú ý các từ gần "it":
+            + it → because
+            + it → was
 ```
