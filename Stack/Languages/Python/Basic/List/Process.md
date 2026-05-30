@@ -11,7 +11,7 @@
   - [.clear() \& del \& .remove() \& .pop()](#clear--del--remove--pop)
   - [max()](#max)
   - [\[\]](#)
-  - [.sort() \& sorted()](#sort--sorted)
+  - [.sort() \& sorted() (sắp xếp)](#sort--sorted-sắp-xếp)
   - [sum()](#sum)
 ---
 # Create (Nhóm khởi tạo)
@@ -180,16 +180,17 @@ a.reverse()
 
 print(a)
 ```
-## .sort() & sorted()
+## .sort() & sorted() (sắp xếp)
 ```bash
 Sắp xếp các phần tử trong mảng. Nếu là chuỗi thì sắp xếp theo thứ tự alphabet.
 ```
 **Syn**
 ```bash
-a.sort(reverse=True)
+a.sort(key=, reverse=True)
 
-- a: Là tên biến
-- reverse=True: Sắp giảm. Mặc định là False
+- Input:
+  + a: Là tên biến
+  + reverse=True: Sắp giảm. Mặc định là False
 ```
 **Ex1: Sắp xếp list dict**
 ```python

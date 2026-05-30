@@ -1,9 +1,18 @@
-- [react](#react)
-  - [Suspense \& Lazy](#suspense--lazy)
+- [Introduction](#introduction)
+- [Suspense \& Lazy](#suspense--lazy)
 ---
-# react
-`
-## Suspense & Lazy
+# Introduction
+```bash
+- import React from "react" nghĩa là: “Lấy bộ công cụ React để dùng”.
+- Ví dụ như bạn chơi LEGO:
+  + React = hộp đồ nghề LEGO
+  + Trong hộp có:
+    - cách tạo khối
+    - cách ghép khối
+    - cách cập nhật khối
+    - cách quản lý trạng thái
+```
+# Suspense & Lazy
 ```bash
 - Lazy dùng để load component một cách động (lazy load)
   + component chỉ được tải khi thực sự cần, thay vì tải toàn bộ ngay từ đầu.

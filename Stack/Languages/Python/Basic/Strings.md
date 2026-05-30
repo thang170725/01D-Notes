@@ -263,7 +263,7 @@ print("thang" in a) # True
 a = "le duc thang"
 print("thang" not in a) # False
 ```
-## .join()
+## .join() (nối chuỗi)
 ```bash
 Lấy tất cả các mục trong một iterable và nối chúng thành một chuỗi. Một chuỗi phải được chỉ định làm dấu phân cách.
 ```

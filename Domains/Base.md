@@ -1,3 +1,6 @@
+- [Directory Structure](#directory-structure)
+- [Instroduction](#instroduction)
+---
 # Directory Structure
 ```bash
 Domains/                          # mình dùng thư mục này để xem kiến thức của các lĩnh vực trong CNTT 
@@ -6,4 +9,10 @@ Domains/                          # mình dùng thư mục này để xem kiến
  ├── RAG.md
  ├── text_embedding.md
  └── Text_Preprocessing.md
+```
+# Instroduction
+```bash
+- Có 2 loại trí tuệ nhân tạo
+    + Trí tuệ nhân tạo hẹp
+    + Trí tuệ nhân tạo tổng 
 ```

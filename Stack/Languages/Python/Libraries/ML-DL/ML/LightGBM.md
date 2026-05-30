@@ -24,8 +24,7 @@ model = lgb.LGBMRegressor(
     + n_estimators  : Số cây 
         - mỗi cây = 1 "bước học"
         - càng nhiều -> model càng mạnh nhưng dễ overfitting
-        - thường: 100 -> 1000
-        
+        - thường: 100 -> 1000      
     + learning_rate : Tốc độ học
         - nhỏ   : học chậm nhưng ổn định
         - lớn   : học nhanh nhưng dễ sai

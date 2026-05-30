@@ -12,7 +12,7 @@
   - [.find()](#find)
   - [.filter()](#filter)
 - [Shape (xử lý hình dạng)](#shape-xử-lý-hình-dạng)
-  - [.push()](#push)
+  - [.push() (thêm phần tử vào cuối mảng)](#push-thêm-phần-tử-vào-cuối-mảng)
   - [.pop()](#pop)
   - [shift()](#shift)
   - [unshift()](#unshift)
@@ -220,10 +220,7 @@ console.log(result);
 */
 ```
 # Shape (xử lý hình dạng)
-## .push()
-```bash
-Hàm này sẽ thêm phần tử vào cuối mảng.
-```
+## .push() (thêm phần tử vào cuối mảng)
 **Ex**
 ```js
 let a = [1,2,3,4,5,6,7];

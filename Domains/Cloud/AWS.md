@@ -9,6 +9,7 @@
 - [Command line](#command-line)
   - [aws s3 mb s3://cloudemindawsconfiguredemo](#aws-s3-mb-s3cloudemindawsconfiguredemo)
   - [aws s3 ls](#aws-s3-ls)
+- [VPC (Mạng ảo cloud)](#vpc-mạng-ảo-cloud)
 ---
 # AWS (Amazon Web Services)
 ```bash
@@ -207,4 +208,109 @@
 ## aws s3 ls
 ```bash
 Xem các package trong s3
+```
+# VPC (Mạng ảo cloud)
+```bash
+- VPC là lớp mạng riêng trên cloud dùng để:
+    + Cô lập tài nguyên khỏi Internet.
+    + Chia mạng thành các subnet.
+    + Kiểm soát lưu lượng bằng firewall/routing.
+    + Kết nối cloud với mạng nội bộ doanh nghiệp.
+    + Xây dựng kiến trúc bảo mật và mở rộng cho ứng dụng.
+- Có thể hình dung đơn giản: Cloud là một tòa nhà lớn, còn VPC là văn phòng riêng của bạn trong tòa nhà đó. Bạn tự quyết định ai được vào, các phòng ban được kết nối thế nào và dữ liệu đi theo đường nào.
+- VPC (Virtual Private Cloud) là một mạng riêng ảo được tạo bên trong hạ tầng của nhà cung cấp cloud. Nó cho phép bạn xây dựng một môi trường mạng gần giống như một mạng nội bộ (on-premise) nhưng chạy trên cloud.
+- Các nhà cung cấp lớn đều có dịch vụ này, ví dụ:
+    + Amazon Web Services → VPC
+    + Google Cloud → VPC Network
+    + Microsoft Azure → Virtual Network (VNet)
+- VPC dùng để làm gì?
+    1. Cô lập hệ thống khỏi Internet công cộng
+        - Bạn có thể tạo các máy chủ (VM, container, database) chỉ giao tiếp trong mạng nội bộ.
+        - Ví dụ:
+            + Web Server: có IP public
+            + Database Server: không có IP public
+            + Chỉ Web Server mới truy cập được Database
+                Internet
+                    |
+                Web Server (Public Subnet)
+                    |
+                Database (Private Subnet)
+
+                Điều này giúp tăng bảo mật đáng kể. 
+    2. Chia mạng thành nhiều subnet
+        - Trong VPC bạn có thể tạo:
+            + Public Subnet
+            + Private Subnet
+            + Subnet cho Database
+            + Subnet cho Backend Service
+        - Ví dụ: VPC 10.0.0.0/16
+            ├── Public Subnet
+            │   └── Web Server
+            │
+            ├── App Subnet
+            │   └── API Server
+            │
+            └── DB Subnet
+                └── MySQL/PostgreSQL
+        - Giúp quản lý và kiểm soát truy cập dễ dàng.
+    3. Kiểm soát traffic bằng firewall
+        - Bạn có thể định nghĩa:
+            + Ai được truy cập vào server
+            + Cổng nào được mở
+            + Server nào được nói chuyện với server nào
+        - Ví dụ:
+            Allow:
+            Internet -> Web : 80,443
+
+            Allow:
+            Web -> App : 8080
+
+            Allow:
+            App -> DB : 3306
+
+            Deny:
+            Internet -> DB
+    4. Kết nối cloud với mạng công ty
+        - VPC có thể kết nối với datacenter hoặc văn phòng thông qua:
+            + VPN Site-to-Site
+            + Dedicated Connection (Direct Connect, ExpressRoute...)
+        - Kết quả:
+            Office Network
+                  |
+                 VPN
+                  |
+                 VPC
+                  |
+            Cloud Resources
+        - Người dùng có cảm giác như tài nguyên cloud đang nằm trong mạng nội bộ công ty.
+    5. Kết nối nhiều hệ thống với nhau
+        - Bạn có thể kết nối:
+            + Nhiều VPC
+            + Nhiều region
+            + Nhiều tài khoản cloud
+        - Ví dụ một công ty có:
+            + Production VPC
+            + Development VPC
+            + Testing VPC
+            + và vẫn cho phép chúng giao tiếp theo các quy tắc nhất định.
+```
+**Ex: Ví dụ thực tế**
+```bash
+Một ứng dụng thương mại điện tử có thể được triển khai như sau:
+
+VPC
+│
+├── Public Subnet
+│   ├── Load Balancer
+│   └── Bastion Host
+│
+├── Private Subnet
+│   ├── Backend Service
+│   └── Redis
+│
+└── Database Subnet
+    └── PostgreSQL
+Người dùng chỉ thấy Load Balancer.
+Backend không truy cập trực tiếp từ Internet.
+Database hoàn toàn nằm trong mạng riêng.
 ```

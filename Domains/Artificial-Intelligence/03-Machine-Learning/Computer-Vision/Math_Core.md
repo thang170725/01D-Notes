@@ -9,7 +9,7 @@
 - [CNN (Toán học trong CNN)](#cnn-toán-học-trong-cnn)
   - [Convolution](#convolution)
   - [BatchNorm](#batchnorm)
-  - [thuật toán pooling như nào](#thuật-toán-pooling-như-nào)
+  - [pooling](#pooling)
 - [Rotation (Xoay)](#rotation-xoay)
   - [Affine](#affine)
 - [𝑀](#𝑀)
@@ -264,7 +264,8 @@ Ta xét channel số 7
   + KHÔNG đổi kích thước tensor
   + chỉ đổi phân phối dữ liệu
 ```
-💻 5. Code đơn giản (numpy)
+**Ex: Code demo batchnorm)**
+```python
 import numpy as np
 
 def batchnorm(x, eps=1e-5):
@@ -286,62 +287,54 @@ def batchnorm(x, eps=1e-5):
     out = gamma * x_hat + beta
     
     return out
+```
+## pooling 
+```bash
+- Pooling là bước giảm kích thước (downsampling) trong CNN — cực kỳ giống sliding window bạn đã học 👍
+- Ý tưởng chính
+  👉 Trượt một cửa sổ (window) trên ảnh
+  → nhưng không nhân kernel như conv
+  → chỉ lấy 1 giá trị đại diện
+- Các loại phổ biến:
+  1. Max Pooling (dùng nhiều nhất): output = max(window) 👉 lấy giá trị lớn nhất
+  2. Average Pooling: output = mean(window) 👉 lấy trung bình
+- Tại sao dùng pooling?
+  1. Giảm kích thước: nhanh hơn, ít memory
+  2. Giữ feature quan trọng: maxpool → giữ điểm nổi bật
+  3. Tăng robustness: ít nhạy với dịch chuyển nhỏ
+- Lưu ý
+  + pooling không có tham số học
+  + chỉ là phép toán cố định
+```
+**Cách hoạt động**
+```bash
+- Giống conv:
+  + kernel size (ví dụ 2×2)
+  + stride (thường = kernel size)
+- Ví dụ:
+  Input:
+    1 3 2 4
+    5 6 1 2
+    7 8 3 1
+    2 4 6 5
+    MaxPool 2×2, stride = 2
+  - Các window:
+    [1 3      [2 4
+     5 6]      1 2]
 
-## thuật toán pooling như nào
-
-Pooling là bước giảm kích thước (downsampling) trong CNN — cực kỳ giống sliding window bạn đã học 👍
-
-🧠 1. Ý tưởng chính
-
-👉 Trượt một cửa sổ (window) trên ảnh
-→ nhưng không nhân kernel như conv
-→ chỉ lấy 1 giá trị đại diện
-
-🔥 2. Các loại phổ biến
-✅ 1. Max Pooling (dùng nhiều nhất)
-output = max(window)
-
-👉 lấy giá trị lớn nhất
-
-✅ 2. Average Pooling
-output = mean(window)
-
-👉 lấy trung bình
-
-📦 3. Cách hoạt động
-
-Giống conv:
-
-kernel size (ví dụ 2×2)
-stride (thường = kernel size)
-📌 Ví dụ
-
-Input:
-
-1 3 2 4
-5 6 1 2
-7 8 3 1
-2 4 6 5
-MaxPool 2×2, stride = 2
-Các window:
-[1 3      [2 4
- 5 6]      1 2]
-
-[7 8      [3 1
- 2 4]      6 5]
-Output:
-6 4
-8 6
-📐 4. Công thức size
-
-Giống conv:
-
-H_out = (H - K) / S + 1
-W_out = (W - K) / S + 1
-
-(thường không padding)
-
-💻 5. Code demo (numpy)
+    [7 8      [3 1
+     2 4]      6 5]
+  - Output:
+    6 4
+    8 6
+- Công thức size
+  + Giống conv:
+    - H_out = (H - K) / S + 1
+    - W_out = (W - K) / S + 1
+  (thường không padding)
+```
+**Ex: Code demo (numpy)**
+```python
 import numpy as np
 
 def maxpool2d(image, k=2, stride=2):
@@ -359,41 +352,8 @@ def maxpool2d(image, k=2, stride=2):
             
             output[i, j] = np.max(window)
     
-    return output
-🧠 6. Với CNN (multi-channel)
-
-👉 mỗi channel xử lý độc lập
-
-Input:  (H, W, C)
-Output: (H_out, W_out, C)
-
-👉 số channel không đổi
-
-⚡ 7. Tại sao dùng pooling?
-✅ 1. Giảm kích thước
-nhanh hơn
-ít memory
-✅ 2. Giữ feature quan trọng
-maxpool → giữ điểm nổi bật
-✅ 3. Tăng robustness
-ít nhạy với dịch chuyển nhỏ
-❗ 8. Lưu ý
-pooling không có tham số học
-chỉ là phép toán cố định
-🚀 Tóm gọn
-
-👉 Pooling =
-
-sliding window + lấy max/mean
-
-💡 Mental model
-Conv: “học feature”
-Pooling: “nén feature”
-
-Nếu bạn muốn, mình có thể:
-
-so sánh pooling vs stride=2 conv (câu phỏng vấn hay)
-hoặc giải thích global average pooling (dùng trong ResNet) 🔥
+    return 
+```
 # Rotation (Xoay)
 ## Affine
 Nó trả về một ma trận:

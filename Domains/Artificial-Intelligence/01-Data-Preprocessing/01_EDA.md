@@ -5,6 +5,12 @@
   - [Duplicates (kiểm tra dữ liệu trùng lặp)](#duplicates-kiểm-tra-dữ-liệu-trùng-lặp)
   - [Outliers (Giá trị ngoại lai)](#outliers-giá-trị-ngoại-lai)
   - [Statistical Check (Kiểm tra phân phối và thống kê)](#statistical-check-kiểm-tra-phân-phối-và-thống-kê)
+- [Visualization (Trực quan dữ liệu)](#visualization-trực-quan-dữ-liệu)
+  - [Line Plot (Biểu đồ đường)](#line-plot-biểu-đồ-đường)
+  - [Histogram (Biểu đồ phân phối)](#histogram-biểu-đồ-phân-phối)
+  - [Heatmap (Bản đồ nhiệt)](#heatmap-bản-đồ-nhiệt)
+  - [Boxplot (Biểu đồ hộp)](#boxplot-biểu-đồ-hộp)
+  - [ACF](#acf)
 ---
 # Introduction
 ```bash
@@ -97,4 +103,75 @@ print(df.isnull().mean() * 100)
 - Bước này giúp bạn hiểu về đặc tính của từng biến số:
     + Đối với biến số (Numerical): Xem giá trị trung bình (mean), trung vị (median), giá trị lớn nhất, nhỏ nhất và độ lệch chuẩn. (Sử dụng df.describe()).
     + Đối với biến phân loại (Categorical): Xem mỗi nhóm có bao nhiêu quan sát. Dữ liệu có bị mất cân bằng không? (Ví dụ: Dự đoán bệnh nhưng 99% dữ liệu là người khỏe). (Sử dụng df['column'].value_counts()).
+```
+# Visualization (Trực quan dữ liệu)
+## Line Plot (Biểu đồ đường)
+## Histogram (Biểu đồ phân phối)
+```bash
+- Histogram là biểu đồ cột dùng để xem:
+    + dữ liệu tập trung ở đâu
+    + phân phối như thế nào
+    + có lệch hay không
+- Nó chia dữ liệu thành các “khoảng” (bins).
+- Dùng để làm gì?
+    + xem dữ liệu có: phân phối chuẩn không, lệch trái/phải không, nhiều cụm không
+    + phát hiện outlier
+    + hiểu đặc tính dữ liệu trước khi train model
+- Khi nào dùng?
+    + dữ liệu số liên tục: tuổi, lương, doanh thu, nhiệt độ
+```
+**Ex**
+```bash
+- Điểm thi: 4 5 5 6 6 6 7 7 8 9
+- Histogram sẽ cho thấy:
+    + nhiều điểm nằm quanh 6–7
+    + ít điểm quá thấp hoặc quá cao
+```
+## Heatmap (Bản đồ nhiệt)
+```bash
+- Heatmap dùng màu sắc để biểu diễn độ mạnh/yếu của giá trị.
+    + màu đậm → giá trị lớn
+    + màu nhạt → giá trị nhỏ
+- Dùng để làm gì?
+    + ma trận tương quan (correlation matrix) (Phổ biến nhất)
+    + Ví dụ: tuổi và lương tương quan mạnh. chiều cao và điểm toán gần như không liên quan
+    + Ứng dụng khác
+        - AI/computer vision theo dõi click website
+        - phân tích dữ liệu lớn
+        - attention map trong deep learning
+- Khi nào dùng?
+    + Khi dữ liệu có dạng: ma trận, nhiều biến, muốn nhìn pattern nhanh
+```
+## Boxplot (Biểu đồ hộp)
+```bash
+- Boxplot tóm tắt phân phối dữ liệu bằng:
+    + median (trung vị)
+    + quartiles
+    + outlier
+- Nó cho biết:
+    + dữ liệu trải rộng bao nhiêu
+    + có lệch không
+    + có outlier không
+- Thành phần chính: Q1 ≤ Median ≤ Q3
+    + đường giữa = median
+    + hộp = 50% dữ liệu trung tâm
+    + “râu” = phạm vi bình thường
+    + điểm lẻ = outlier
+- Dùng để làm gì?
+    + phát hiện outlier cực mạnh
+    + so sánh nhiều nhóm dữ liệu    
+    + xem độ phân tán
+```
+## ACF 
+```bash
+- AutoCorrelation Function đo: dữ liệu hiện tại liên quan bao nhiêu với dữ liệu trong quá khứ.
+- Dùng chủ yếu cho: chuỗi thời gian (time series)
+- Ý tưởng
+    + Ví dụ:
+        - nhiệt độ hôm nay thường giống hôm qua
+        - giá cổ phiếu hôm nay liên quan vài ngày trước
+```
+**Ex**
+```bash 
+Nếu: ACF cao ở lag 24 → có thể dữ liệu lặp theo 24 giờ
 ```

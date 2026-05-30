@@ -1,20 +1,20 @@
 - [Transformation (biến đổi cấu trúc dữ liệu)](#transformation-biến-đổi-cấu-trúc-dữ-liệu)
-  - [.rename()](#rename)
+  - [.rename() (đổi tên cột | chỉ mục)](#rename-đổi-tên-cột--chỉ-mục)
   - [.concat()](#concat)
   - [fillna()](#fillna)
   - [.values \& to\_numpy()](#values--to_numpy)
   - [.sort\_values()](#sort_values)
-  - [groupby()](#groupby)
+  - [.groupby() (dùng để nhóm dữ liệu)](#groupby-dùng-để-nhóm-dữ-liệu)
   - [.transform()](#transform)
   - [qcut()](#qcut)
-  - [.astype()](#astype)
-  - [set\_index()](#set_index)
-  - [reset\_index()](#reset_index)
-  - [.pivot()](#pivot)
-  - [melt()](#melt)
+  - [.astype() (Chuyển đổi kiểu dữ liệu)](#astype-chuyển-đổi-kiểu-dữ-liệu)
+  - [set\_index() (Đặt cột làm index)](#set_index-đặt-cột-làm-index)
+  - [.reset\_index() (đưa index hiện tại trở lại thành cột bình thường)](#reset_index-đưa-index-hiện-tại-trở-lại-thành-cột-bình-thường)
+  - [.pivot() (xoay dữ liệu từ dạng "dài" -\> "rộng")](#pivot-xoay-dữ-liệu-từ-dạng-dài---rộng)
+  - [melt() (chuyển dữ liệu từ wide format sang long format)](#melt-chuyển-dữ-liệu-từ-wide-format-sang-long-format)
 ---
 # Transformation (biến đổi cấu trúc dữ liệu)
-## .rename()
+## .rename() (đổi tên cột | chỉ mục)
 ```bash
 - Dùng để đổi tên cột hoặc chỉ mục của dataframe.
 ```
@@ -24,7 +24,7 @@ DataFrame.rename(
     mapper=None,
     *,
     index=None,
-    columns={},
+    columns={"Unnamed: 0": "timestamp"},    # đổi tên cột từ Unnamed: 0 -> timestamp
     axis=None,
     copy=None,
     inplace=False,
@@ -201,9 +201,8 @@ df.sort_values(
 # Sắp theo sum_salary giảm dần
 # Nếu trùng lương → sắp theo name tăng dần
 ```
-## groupby()
+## .groupby() (dùng để nhóm dữ liệu)
 ```bash
-- Là bước biến đổi dữ liệu dạng bảng thô sang dạng các nhóm dữ liệu.
 - Nó thay đổi cách nhìn nhận cấu trúc dữ liệu.
 ```
 **Syn**
@@ -223,7 +222,8 @@ df = pd.DataFrame({
     "electric": [10,15,20,25,5]
 })
 
-print(df.groupby("person")["electric"].sum())
+sum_electirc = df.groupby("person")["electric"].sum()
+print()
 # An      30
 # Binh    45
 ```
@@ -299,24 +299,18 @@ df["income_group"] = pd.qcut(
 
 print(df)
 ```
-## .astype()
-```bash
-Chuyển đổi kiểu dữ liệu
-```
+## .astype() (Chuyển đổi kiểu dữ liệu)
 **Ex: chuyển sang kiểu int**
 ```python
 students['grade'] = students['grade'].astype("int")
 ```
-## set_index()
-```bash
-Đặt cột làm index
-```
+## set_index() (Đặt cột làm index)
 **Syn**
 ```bash
 df.set_index(
-        "timestamp",
-        inplace=True
-    )
+    "timestamp",
+    inplace=True
+)
 ```
 **Ex**
 ```python
@@ -324,6 +318,7 @@ df.set_index(
     "timestamp",
     inplace=True
 )
+
 # Trước:
 #    timestamp   A   B
 # 0  2024-01-01  10  20
@@ -335,7 +330,7 @@ df.set_index(
 # 2024-01-01  10  20
 # 2024-01-02  11  21
 ```
-## reset_index()
+## .reset_index() (đưa index hiện tại trở lại thành cột bình thường)
 ```bash
 - reset_index() trong pandas dùng để đưa index hiện tại trở lại thành cột bình thường, đồng thời tạo lại index mới mặc định 0,1,2,....
 - Nó thường dùng sau các thao tác như:
@@ -380,9 +375,8 @@ df2.reset_index()
 # 1  B      9
 # 2  C      7
 ```
-## .pivot()
+## .pivot() (xoay dữ liệu từ dạng "dài" -> "rộng")
 ```bash
-- pivot() trong pandas dùng để xoay dữ liệu (reshape) từ dạng "dài" (long format) thành dạng "rộng" (wide format).
 - Hay dùng cho:
     + tạo bảng tổng hợp
     + chuẩn bị dữ liệu cho heatmap
@@ -427,9 +421,8 @@ print(pivot_df)
 # An          9      8
 # Bình       10      7
 ```
-## melt() 
+## melt() (chuyển dữ liệu từ wide format sang long format)
 ```bash
-- dùng để chuyển dữ liệu từ wide format (dạng nhiều cột) sang long format (dạng dài).
 - Rất hay dùng trong:
     + Data cleaning
     + Time series

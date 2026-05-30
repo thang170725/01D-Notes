@@ -1,4 +1,6 @@
 - [Directory Structure](#directory-structure)
+- [Fields](#fields)
+  - [Bài toán mức thấp (Low-level Vision)](#bài-toán-mức-thấp-low-level-vision)
   - [Bài toán phát hiện \& định vị (Detection \& Localization)](#bài-toán-phát-hiện--định-vị-detection--localization)
   - [Bài toán phân vùng (Segmentation)](#bài-toán-phân-vùng-segmentation)
   - [Bài toán nhận dạng (Recognition)](#bài-toán-nhận-dạng-recognition)
@@ -23,6 +25,7 @@ Computer-Vision           # mình dùng thư mục này để xem kiến thức 
 ├── Models.md             # mình dùng thư mục này để xem các model cụ thể
 ├── Process_IMG.md        # mình dùng thư mục này để xử lý ảnh
 └── Practices.md          # mình dùng file này để xem code mẫu, bài tập
+```
 # Fields
 ## Bài toán mức thấp (Low-level Vision)
 ```bash

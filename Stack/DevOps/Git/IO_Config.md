@@ -4,11 +4,12 @@
   - [--no-rebase](#--no-rebase)
 - [git push](#git-push)
   - [-u](#-u)
-  - [-f](#-f)
+  - [-f \& --force](#-f----force)
   - [--delete](#--delete)
 - [git init](#git-init)
 - [.gitignore](#gitignore)
 - [.git](#git)
+- [git reset](#git-reset)
 ---
 # git config
 **Syn**
@@ -89,7 +90,7 @@ git push -u origin feature/login # rõ ràng nhất.
 # Tư duy Lần đầu: git push -u origin feature/login = "Đẩy branch này lên GitHub và nhớ đây là branch remote của tôi."
 # Sau đó: git pushgit pull là đủ.
 ```
-## -f
+## -f & --force
 **Ex**
 ```bash
 git push -f origin main # force push đè GitHub
@@ -157,4 +158,46 @@ git add .
 git commit -m "Initial commit"
 git remote add origin <repo-url>
 git push -f origin main
+```
+# git reset 
+```bash
+- dùng để đưa HEAD / branch / staging area quay về commit cũ hoặc trạng thái khác.
+```
+**Ex**
+```bash
+Bạn có 3 commit:
+A --- B --- C   (main)
+Hiện tại đang ở commit C.
+Nếu chạy:
+git reset --hard B
+thì branch main sẽ quay lại:
+A --- B   (main)
+Commit C coi như bị bỏ khỏi branch hiện tại.
+```
+**Ex2**
+```bash
+Bạn code:
+git add .git commit -m "bug code"
+Sau đó phát hiện commit này phá project.
+Bạn muốn quay về commit trước:
+git reset --hard HEAD~1
+Ý nghĩa:
+HEAD = commit hiện tại
+HEAD~1 = commit trước đó
+Kết quả:
+commit lỗi biến mất
+code trong folder cũng quay lại như trước
+```
+**Ex3**
+```bash
+Bạn đang ở nhánh:
+main  -> code mớithang -> code cũ
+Bạn chạy:
+git checkout thang
+git reset --hard main
+Nghĩa là: "hãy làm cho nhánh thang giống y hệt commit hiện tại của main"
+Sau đó: 
+main  -> A B C
+thang -> A B C
+Code cũ trên thang biến mất.
 ```

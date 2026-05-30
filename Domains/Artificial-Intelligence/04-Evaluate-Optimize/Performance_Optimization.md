@@ -136,3 +136,5 @@ GIL (Global Interpreter Lock)
     • Ví dụ:
         ◦ Thread: 1 người cầm chìa khóa (GIL), nhiều người xếp hàng
         ◦ Process: mỗi người có chìa khóa riêng chạy độc lập
+# Mini-Batch
+# Batch
