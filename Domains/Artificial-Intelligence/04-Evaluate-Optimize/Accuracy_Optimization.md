@@ -9,6 +9,7 @@
   - [Root Mean Squared Error (RMSE)](#root-mean-squared-error-rmse)
   - [R2 Score (r2)](#r2-score-r2)
 - [Binary Cross-Entropy (Log Loss)](#binary-cross-entropy-log-loss)
+  - [Demo về công thức BCE bằng math](#demo-về-công-thức-bce-bằng-math)
 ---
 # Overfitting & Underfitting
 ```bash
@@ -137,19 +138,21 @@ Hiểu được bản chất RMAE giúp bạn nắm đằng chuôi vũ khí lý 
 ```
 **Formula**
 ```bash
-MAPE = (1/n)*|(y1 - y_pred1)/y1 + (y2 - y_pred2)/y2 + ...|*100
+MAPE = (1/n)*(|(y1 - y_pred1)/y1|+ |(y2 - y_pred2)/y2| + |...|)*100
 	​
-- y1 -> yn  : giá trị thật
-- y_pred    : giá trị dự đoán
-- n         : số mẫu
-- ∣...∣     : lấy trị tuyệt đối (bỏ dấu âm)
+- Input:
+    + y1 -> yn  : giá trị thật
+    + y_pred    : giá trị dự đoán
+    + n         : số mẫu
+    + ∣...∣     : lấy trị tuyệt đối (bỏ dấu âm)
+- Output: Một số float, đơn vị %
 ```
 **Ex**
 ```bash
 Giá trị thật y  	Dự đoán p_pred  	Sai số %
-100	                    90	            (\frac{
-200	                    220         	(\frac{
-50	                    40	            (\frac{
+100	                    90	            +10
+200	                    220         	-20
+50	                    40	            +10
 
 MAPE = (10+10+20)/3 = 13.33% => Mô hình sai trung bình 13.33%
 ```
@@ -163,7 +166,6 @@ mape = mean_absolute_percentage_error(y_true, y_pred)
 
 print(mape)        # 0.1333
 print(mape * 100)  # 13.33%
-
 # sklearn trả về dạng thập phân
 ```
 **Điểm khác nhau giữa MAE và MAPE**
@@ -276,12 +278,35 @@ R2 = 1 - ((y1-y_pred1)**2 + ... + (yn-y_predn)**2)/((y1-y_tb)**2 + ... + (yn-y_t
 ```
 # Binary Cross-Entropy (Log Loss)
 ```bash
-Dùng cho phân loại nhị phân.
+BCE (Binary Cross Entropy) là hàm mất mát (loss function) phổ biến nhất cho bài toán phân loại nhị phân (0 hoặc 1).
 ```
 **Syn**
 ```bash
 1. Công thức cho 1 mẫu: BCE(y_true, y_pred) = −[y_true.log(y_pred) + (1-y_true).log(1−y_pred)]
-2. Công thức cho batch (N mẫu): BCE = −(1/n) . [yi_true . log(yi_pred) + (1-yi_true) . log(1−yi_pred)]
-3. dL/dw = (y-pred – y_true).x
-4. dL/db = (y_pred - y_true)
+    - với log cơ số e
+2. Công thức cho batch (N mẫu): BCE = −(1/n).∑[yi_true . log(yi_pred) + (1-yi_true) . log(1−yi_pred)]
+```
+**Đạo hàm BCE**
+```bash
+L = BCE = −[y_true.log(y_pred) + (1-y_true).log(1−y_pred)]
+    dL/dy_pred = -y_true/y_pred + (1-y_true)/(1-y_pred) = (y_pred-y_true)/(y_pred.(1-y_pred))
+
+Đạo hàm sigmoid
+    dy_pred/dz = y_pred.(1-y_pred)
+
+Đạo hàm BCE theo z
+    dL/dz = (dL/dy_pred).(dy_pred/dz) = (y_pred-y_true)/(y_pred.(1-y_pred)).y_pred.(1-y_pred) = y_pred - y_true
+
+=> dL/dw = (y-pred – y_true).x
+=> dL/db = (y_pred - y_true)
+```
+## Demo về công thức BCE bằng math
+```python
+import math
+
+def bce(y, y_hat):
+    return -(y*math.log(y_hat) + (1-y)*math.log(1-y_hat))
+
+print(bce(1, 0.9))
+print(bce(1, 0.1))
 ```

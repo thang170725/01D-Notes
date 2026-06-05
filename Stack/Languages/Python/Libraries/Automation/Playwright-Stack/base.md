@@ -14,7 +14,6 @@
   - [search google](#search-google)
   - [Mở youtube -\> search -\> click -\> skip ads](#mở-youtube---search---click---skip-ads)
 - [page.mouse.wheel()](#pagemousewheel)
-
 ---
 # Directory structure
 ```bash
@@ -34,7 +33,6 @@ Browser-Automation/
 pip install playwright
 playwright install
 ```
-
 # gencode
 ```bash
 - playwright codegen https://example.com

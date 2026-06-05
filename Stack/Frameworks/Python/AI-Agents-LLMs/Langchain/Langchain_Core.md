@@ -2,6 +2,16 @@
 - [langchain\_core.messages](#langchain_coremessages)
   - [SystemMessage](#systemmessage)
   - [HumanMessage()](#humanmessage)
+- [PydanticOutputParser()](#pydanticoutputparser)
+- [RunnableWithMessageHistory](#runnablewithmessagehistory)
+- [RunnableLambda](#runnablelambda)
+- [RunnableParallel](#runnableparallel)
+- [PromptTemplate (Nhóm thiết lập khuôn mẫu)](#prompttemplate-nhóm-thiết-lập-khuôn-mẫu)
+  - [.from\_template()](#from_template)
+- [Run (Nhóm chạy chương trình)](#run-nhóm-chạy-chương-trình)
+  - [.invoke()](#invoke)
+  - [.format()](#format)
+- [| (nối pipeline)](#-nối-pipeline)
 ---
 # Introduction
 ```bash
@@ -58,4 +68,308 @@ print(response.content)
 # SystemMessage → hiểu vai trò
 # HumanMessage → hiểu câu hỏi
 # Sau đó sinh ra câu trả lời.
+```
+# PydanticOutputParser()
+```bash
+dùng khi muốn output chuẩn JSON
+```
+**Ex**
+```bash
+from pydantic import BaseModel
+from langchain_core.output_parsers import PydanticOutputParser
+
+class Answer(BaseModel):
+    explanation: str
+    example: str
+
+parser = PydanticOutputParser(pydantic_object=Answer)
+
+chain = prompt | model | parser
+```
+# RunnableWithMessageHistory
+```bash
+Dùng khi làm chatbot có session.
+```
+**Syn**
+```bash
+from langchain_core.runnables.history import RunnableWithMessageHistory
+```
+# RunnableLambda
+```bash
+Cho phép chèn hàm python vào pipeline
+```
+**Syn**
+```bash
+from langchain_core.runnables import RunnableLambda
+
+def upper(text):
+    return text.upper()
+
+chain = prompt | model | RunnableLambda(upper)
+```
+# RunnableParallel
+```bash
+- Chạy song song
+```
+**Syn**
+```bash
+from langchain_core.runnables import RunnableParallel
+
+chain = RunnableParallel(
+    vi=prompt_vi | model,
+    en=prompt_en | model
+)
+
+chain.invoke({"topic": "AI"})
+
+# {
+#   "vi": "...",
+#   "en": "..."
+# }
+```
+# PromptTemplate (Nhóm thiết lập khuôn mẫu)
+```bash
+- PromptTemplate là một template (khuôn mẫu) để tạo prompt động cho LLM
+- Nó giống:
+    + f-string trong Python
+    + nhưng có cấu trúc + quản lý tốt hơn
+- Dùng để làm gì?
+    1. Truyền biến vào prompt. Thay vì viết cứng: "Hãy trả lời câu hỏi: AI là gì?". Bạn làm: "Hãy trả lời câu hỏi: {question}"
+    2. Tái sử dụng prompt: Viết 1 lần. Dùng nhiều lần với dữ liệu khác nhau
+    3. Build hệ thống LLM (RAG, chatbot, agent). Ví dụ:
+        + {context} → dữ liệu từ vector DB
+        + {question} → câu hỏi user
+    4. Kết hợp với pipeline (|): prompt | llm
+```
+**Syn**
+```bash
+prompt = PromptTemplate(
+    input_variables=["topic"],
+    template="Giải thích {topic} trong 1 câu ngắn gọn"
+)
+
+- input_variables   : danh sách biến được phép truyền vào
+```
+**Ex**
+```python
+from langchain_community.chat_models import ChatOllama
+from langchain_core.prompts import PromptTemplate
+
+llm = ChatOllama(model="llama3", temperature=0)
+
+prompt = PromptTemplate(
+    input_variables=["topic"],
+    template="Giải thích {topic} trong 1 câu ngắn gọn"
+)
+
+response = llm.invoke(prompt.format(topic="LangChain"))
+print(response.content)
+```
+**Ex: Gợi ý nấu ăn**
+```python
+prompt = PromptTemplate(
+    input_variables=["ingredients"],
+    template="""
+Bạn là trợ lý nấu ăn.
+Nguyên liệu có sẵn: {ingredients}
+Hãy gợi ý 1 món ăn phù hợp.
+"""
+)
+
+llm.invoke(
+    prompt.format(
+        ingredients="trứng, cà chua, hành"
+    )
+)
+```
+**Ex3: PromptTemplate + dic**
+```python
+prompt.invoke({
+    "ingredients": "trứng, cà chua"
+})
+```
+**Ex: gợi ý tên món ăn**
+```python
+from langchain_community.chat_models import ChatOllama
+from langchain_core.prompts import PromptTemplate
+
+llm = ChatOllama(
+    model="llama3",
+    temperature=0
+)
+
+prompt = PromptTemplate(
+    input_variables=["ingredients"],
+    template="""
+Bạn là backend AI cho ứng dụng Smart-Recipe.
+
+Nhiệm vụ:
+- CHỈ trả về TÊN MỘT MÓN ĂN DUY NHẤT
+- KHÔNG mô tả
+- KHÔNG liệt kê nguyên liệu
+- KHÔNG hướng dẫn nấu
+- KHÔNG thêm giải thích
+
+Ràng buộc BẮT BUỘC:
+- Chỉ đề xuất món ăn có thể chế biến từ TẤT CẢ nguyên liệu đã cho
+- KHÔNG được bỏ qua nguyên liệu chính
+
+Nguyên liệu chính: {ingredients}
+
+Trả lời đúng 1 dòng, chỉ chứa tên món.
+"""
+)
+
+response = llm.invoke(
+    prompt.format(
+        ingredients="thịt heo, hành tây, cà chua, mực"
+    )
+)
+
+print(response.content)
+```
+## .from_template()
+```bash
+- Dùng để tạo một PromptTemplate từ chuỗi template
+```
+**Syn**
+```bash
+PromptTemplate.from_template(template_string)
+
+- Input:
+    + template_string: chuỗi có chứa biến {}
+```
+**Ex**
+```python
+from langchain.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template(
+    "Hãy trả lời câu hỏi: {question}"
+)
+
+# prompt = một object template. CHƯA có giá trị thật
+# from_template = khai báo khuôn mẫu
+```
+# Run (Nhóm chạy chương trình)
+## .invoke()
+```bash
+- Đây là lệnh gửi prompt cho AI.
+- invoke() là API chuẩn của LangChain
+    + Input: string / message / prompt object
+    + Output: AIMessage
+```
+**Syn**
+```bash
+result = runnable.invoke(input, config=None)
+
+- Input:
+    + input: dữ liệu đầu vào (có thể là str, dict, list, messages…)
+    + config: optional (timeout, callbacks, metadata…)
+```
+**Ex: nhận list**
+```python
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage
+
+llm = ChatOpenAI()
+
+response = llm.invoke([
+    HumanMessage(content="Hello")
+])
+
+#  Input: List[BaseMessage]
+#  Output: AIMessage
+```
+**Ex2: Nhận string**
+```bash
+from langchain_openai import OpenAI
+
+llm = OpenAI()
+
+response = llm.invoke("Write a poem about AI")
+
+# Input: str
+# Output: str
+```
+**Ex3: Nhận dict**
+```python
+from langchain_core.prompts import PromptTemplate
+
+prompt = PromptTemplate.from_template("Hello {name}")
+
+result = prompt.invoke({"name": "Thang"})
+
+# Input: dict
+# Output: PromptValue
+```
+**Ex4**
+```python
+chain = prompt | llm
+
+result = chain.invoke({"name": "Thang"})
+
+#  Input: dict (theo variables của prompt)
+```
+**Ex**
+```python
+chain.invoke(
+    {"topic": "AI"},
+    config={"tags": ["demo"]}
+)
+```
+**Ex**
+```python
+from langchain_ollama import ChatOllama
+from langchain_core.prompts import PromptTemplate
+
+# ========== LLM ==========
+llm = ChatOllama(
+    model="mistral",
+    temperature=0
+)
+
+prompt = PromptTemplate(
+    input_variables=["ingredients"],
+    template="""
+Bạn là trợ lý nấu ăn.
+Nguyên liệu có sẵn: {ingredients}
+Hãy gợi ý 1 món ăn phù hợp.
+"""
+)
+
+response = llm.invoke(
+    prompt.format(
+        ingredients="thịt lợn, cà chua, hành, trứng"
+    )
+)
+
+print(response.content)
+```
+## .format()
+```bash
+- Dùng để điền dữ liệu vào template → tạo prompt hoàn chỉnh
+```
+**Syn**
+```bash
+prompt.format(variable_name=value)
+
+- Input:
+    + variable_name: tên biến trong prompt
+```
+**Ex**
+```python
+result = prompt.format(
+    question="AI là gì?"
+)
+
+print(result) # Hãy trả lời câu hỏi: AI là gì?
+```
+# | (nối pipeline)
+```bash
+Để nối pipeline.
+```
+**Ex**
+```bash
+chain = prompt | model | StrOutputParser()
+chain.invoke({"topic": "AI"})
 ```

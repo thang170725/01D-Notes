@@ -43,6 +43,16 @@ li = pd.read_csv(
 ```bash
 Ghi dữ liệu vào file csv.
 ```
+**Syn**
+```bash
+df.to_csv(
+    "file.csv",
+    index=True
+)
+
+- Input:
+    + index: Có ghi cột index của DataFrame ra file CSV hay không.
+```
 # SQL (Nhóm xử lý sql)
 ## Read (Nhóm đọc, lấy thông tin)
 ### pd.read_sql()

@@ -1,7 +1,11 @@
 - [NVIDIA Container Toolkit (Docker)](#nvidia-container-toolkit-docker)
   - [Installation (cài đặt)](#installation-cài-đặt)
-- [docker-compose.yml (cấu hình file .yml)](#docker-composeyml-cấu-hình-file-yml)
+- [docker-compose.yml \& compose.yaml (cấu hình file .yml)](#docker-composeyml--composeyaml-cấu-hình-file-yml)
+  - [Những thứ thường có trong docker-compose.yml](#những-thứ-thường-có-trong-docker-composeyml)
+    - [Volume (Cho container nhìn thấy thư mục trên máy)](#volume-cho-container-nhìn-thấy-thư-mục-trên-máy)
 - [Dockerfile (cấu hình Dockerfile)](#dockerfile-cấu-hình-dockerfile)
+- [systemctl is-enabled docker (kiểm tra tại sao bật máy Docker tự chạy?)](#systemctl-is-enabled-docker-kiểm-tra-tại-sao-bật-máy-docker-tự-chạy)
+- [.dockerignore](#dockerignore)
 ---
 # NVIDIA Container Toolkit (Docker)
 ```bash
@@ -57,7 +61,188 @@ Sun Mar 22 10:45:29 2026
 thang@PhatToNhuLai:~$ 
 
 ```
-# docker-compose.yml (cấu hình file .yml)
+# docker-compose.yml & compose.yaml (cấu hình file .yml)
+```bash
+docker-compose.yml (hiện nay thường gọi là compose.yaml) là file dùng để khai báo và chạy nhiều container Docker cùng lúc.
+
+Thay vì phải gõ từng lệnh Docker dài dòng:
+  docker run ...
+  docker run ...
+  docker run ...
+Bạn mô tả toàn bộ hệ thống trong một file YAML, sau đó chỉ cần: docker compose up
+  Docker sẽ tự tạo và kết nối các container.
+
+Tóm lại:
+  - Dockerfile = cách tạo 1 image
+  - docker-compose.yml = cách chạy nhiều container/service cùng nhau
+Trong đồ án AI/FastAPI/React, file này thường dùng để chạy đồng thời:
+  Frontend
+  Backend
+  Database (PostgreSQL/MySQL)
+  Redis (nếu có)
+  Nginx (nếu có)
+chỉ với một lệnh:
+  docker compose up
+```
+**Ex: Ví dụ đơn giản**
+```bash
+Giả sử project của bạn có:
+  - Frontend React
+  - Backend FastAPI
+  - Database PostgreSQL
+
+Thì docker-compose.yml có thể như:
+
+services:  
+  frontend:    
+    build: ./frontend    
+    ports:      
+      - "3000:3000"  
+
+  backend:    
+    build: ./backend    
+    ports:      
+      - "8000:8000"  
+  
+  postgres:    
+    image: postgres:16    
+    environment:      
+      POSTGRES_USER: admin      
+      POSTGRES_PASSWORD: 123456      
+      POSTGRES_DB: mydb
+
+Chạy: docker compose up
+  - Docker sẽ tạo 3 container:
+    frontend
+    backend
+    postgres
+
+Nếu không dùng docker-compose thì Bạn phải chạy từng lệnh:
+  docker run postgres ...
+  docker run backend ...
+  docker run frontend ...
+Ngoài ra còn phải:
+  - tạo network
+  - map port
+  - mount volume
+  - truyền biến môi trường
+```
+## Những thứ thường có trong docker-compose.yml
+```bash
+1. Service
+  Mỗi service = một container
+  services:  backend:
+
+2. Build image
+  Build từ Dockerfile
+    backend:  build: .
+    hoặc
+    backend:  build: ./backend
+
+3. Image
+  Dùng image có sẵn
+  redis:  image: redis:7
+
+4. Port Mapping
+  ports:  - "8000:8000"
+  nghĩa là:
+  máy thật:8000   ↓container:8000
+
+5. Environment Variables
+  environment:  DB_HOST: postgres  DB_PORT: 5432
+  Trong code:
+    os.getenv("DB_HOST")
+    sẽ nhận:
+    postgres
+```
+### Volume (Cho container nhìn thấy thư mục trên máy)
+```bash
+  Để lưu dữ liệu
+  volumes:  - postgres_data:/var/lib/postgresql/data
+  Nếu container bị xoá thì dữ liệu vẫn còn.
+
+  Ví dụ:
+    Máy thật:
+      project/
+      ├── backend/
+      ├── frontend/
+
+    Compose:
+      volumes:
+        - ./backend:/app
+
+    thì:
+      Máy thật                  Container
+      ./backend    --->         /app
+```
+**Syn**
+```bash
+volumes:
+  - host_path:container_path
+```
+**Ex**
+```bash
+volumes:
+  - ./backend:/app
+
+Ví dụ dataset
+backend:
+  volumes:
+    - ./dataset:/app/dataset
+
+Máy:
+
+dataset/train.csv
+
+Container:
+
+/app/dataset/train.csv
+```
+```bash
+1. restart
+2. depends_on
+```
+**Ví dụ**
+```bash
+project/
+├─ backend/│  
+  ├─ main.py│  
+  ├─ models/│  
+  └─ Dockerfile
+├─ frontend/│  
+  └─ Dockerfile
+└─ docker-compose.yml
+
+File:
+services:
+  backend:    build: ./backend
+    ports:
+      - "8000:8000"
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+Chạy:
+  docker compose up --build
+  là:
+    - Frontend   
+    - ↓Backend (FastAPI)
+  được chạy cùng lúc.
+
+Các lệnh thường dùng
+Khởi động:
+  docker compose up
+Build lại:
+  docker compose up --build
+Chạy nền:
+  docker compose up -d
+Xem log:
+  docker compose logs
+Dừng:
+  docker compose down
+Xem container:
+  docker compose ps
+```
 **Syn**
 ```bash
 # Đây là phiên bản của ngôn ngữ Docker Compose.
@@ -142,15 +327,16 @@ volumes:
 ```
 # Dockerfile (cấu hình Dockerfile)
 ```bash
-- Dockerfile là một file văn bản chứa các chỉ thị (instructions) để Docker tự động tạo ra một Docker image.
-- Dockerfile dùng để :
-    + Tự động tạo môi trường chạy ứng dụng
-    + Đóng gói ứng dụng thành image
-    + Giúp triển khai (deploy) dễ dàng
-        - Chỉ cần:
-            docker build -t myapp .
-            docker run myapp
-        Là ứng dụng chạy được ngay, không cần cài đặt thủ công.
+Dockerfile là một file văn bản chứa các chỉ thị (instructions) để Docker tự động tạo ra một Docker image.
+
+Dockerfile dùng để :
+  - Tự động tạo môi trường chạy ứng dụng
+  - Đóng gói ứng dụng thành image
+  - Giúp triển khai (deploy) dễ dàng
+    + Chỉ cần:
+      docker build -t myapp .
+      docker run myapp
+  - Là ứng dụng chạy được ngay, không cần cài đặt thủ công.
 ```
 **Syn**
 ```bash
@@ -168,10 +354,46 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
         - python:3.11-slim      : ~120–200MB. Chỉ những thứ cần thiết để chạy Python
         - python:3.11-alpine    : ~50MB. Nhẹ nhất nhưng dễ lỗi build
 - WORKDIR   : thư mục làm việc
+  không phải thư mục trên máy. Là thư mục bên trong container
+  
+  Ví dụ:
+    WORKDIR /app
+
+    Docker tạo:
+      (container)
+      /app
+
+    Giống như:
+      mkdir /app
+      cd /app
 - COPY      : copy file vào container
 - RUN       : CHẠY lệnh khi build
 - EXPOSE    : Container này sẽ chạy service ở port 8000.
     + Không mở port ra ngoài máy bạn
     + muốn truy cập được phải chạy docker run -p 8000:8000 image_name
 - CMD       : lệnh chạy khi container start
+```
+# systemctl is-enabled docker (kiểm tra tại sao bật máy Docker tự chạy?)
+```bash
+Trên Linux thường có service:
+  docker.service
+  - được bật auto start.
+
+Kiểm tra:
+  systemctl is-enabled docker
+Nếu ra:
+  enabled
+thì Docker daemon sẽ tự chạy khi boot máy.
+
+Tắt:
+  sudo systemctl disable docker
+Dừng ngay:
+  sudo systemctl stop docker
+
+Muốn chạy lại:
+  sudo systemctl start docker
+```
+# .dockerignore
+```bash
+Giống .gitignore
 ```

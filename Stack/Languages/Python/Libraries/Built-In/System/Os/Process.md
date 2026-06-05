@@ -1,14 +1,15 @@
 - [os.path (Nhóm làm việc với đường dẫn)](#ospath-nhóm-làm-việc-với-đường-dẫn)
   - [.dirname()](#dirname)
   - [.abspath()](#abspath)
-  - [.join()](#join)
+  - [.join() (Ghép đường dẫn)](#join-ghép-đường-dẫn)
 - [Create \& Config (Nhóm tạo \& cấu hình)](#create--config-nhóm-tạo--cấu-hình)
   - [.mkdir()](#mkdir)
+  - [.path.exists()](#pathexists)
+  - [os.makedirs() (Tạo thư mục, kể cả khi các thư mục cha chưa tồn tại)](#osmakedirs-tạo-thư-mục-kể-cả-khi-các-thư-mục-cha-chưa-tồn-tại)
   - [getenv](#getenv)
 - [Check](#check)
   - [.path.isfile()](#pathisfile)
   - [.path.isdir()](#pathisdir)
-  - [.path.exists()](#pathexists)
 - [Search](#search)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.listdir()](#listdir)
@@ -21,6 +22,8 @@
   - [name](#name)
   - [sep](#sep)
   - [pathsep](#pathsep)
+- [Remove (Thao tác xóa)](#remove-thao-tác-xóa)
+  - [os.remove() (xóa file)](#osremove-xóa-file)
 ---
 # os.path (Nhóm làm việc với đường dẫn)
 ## .dirname()
@@ -64,10 +67,7 @@ import os
 
 print(os.path.abspath("/backend/utils.py")) # /backend/utils.py
 ```
-## .join()
-```bash
-- Dùng để ghép đường dẫn.
-```
+## .join() (Ghép đường dẫn)
 **Syn**
 ```bash
 img_path = os.path.join(input_folder, img_name)
@@ -87,6 +87,68 @@ import os
 
 if not os.path.exists("output"):
     os.mkdir("output")
+```
+## .path.exists()
+```bash
+- Dùng để kiểm tra xem một đường dẫn (file hoặc thư mục) có tồn tại hay không.
+```
+**Syn**
+```bash
+import os
+
+os.path.exists(path)
+```
+**Ex1: Kiểm tra file**
+```python
+import os
+
+if os.path.exists("data.txt"):
+    print("File tồn tại")
+else:
+    print("File không tồn tại")
+```
+**Ex2: Kiểm tra thư mục**
+```python
+import os
+
+if os.path.exists("logs"):
+    print("Thư mục tồn tại")
+```
+## os.makedirs() (Tạo thư mục, kể cả khi các thư mục cha chưa tồn tại)
+**Syn**
+```bash
+os.makedirs(name, mode=0o777, exist_ok=False)
+
+- Input:
+  + name	    : Đường dẫn thư mục cần tạo
+  + mode	    : Quyền truy cập (Linux/macOS)
+  + exist_ok	: Có báo lỗi nếu thư mục đã tồn tại không
+    - Lỗi thường gặp
+      os.makedirs("output")
+      os.makedirs("output")
+      Lần thứ hai sẽ lỗi: FileExistsError: [Errno 17] File exists: 'output'
+    - Cách xử lý bằng exist_ok=True. os.makedirs("output", exist_ok=True)
+      Lúc này:
+        Chưa có → tạo.
+        Đã có → bỏ qua.
+```
+**Ex1: Tạo một thư mục**
+```python
+import os
+
+os.makedirs("output")
+# project/
+# └── output/
+```
+**Ex2: Tạo nhiều cấp thư mục**
+```python
+import os
+
+os.makedirs("build/pdf/output")
+# build/
+# └── pdf/
+#     └── output/
+# Nếu build và pdf chưa tồn tại thì Python sẽ tự tạo.
 ```
 ## getenv
 ```bash
@@ -140,32 +202,6 @@ if os.path.exists(path):
     elif os.path.isdir(path):
         print("Là thư mục")
 ```
-## .path.exists()
-```bash
-- Dùng để kiểm tra xem một đường dẫn (file hoặc thư mục) có tồn tại hay không.
-```
-**Syn**
-```bash
-import os
-
-os.path.exists(path)
-```
-**Ex1: Kiểm tra file**
-```python
-import os
-
-if os.path.exists("data.txt"):
-    print("File tồn tại")
-else:
-    print("File không tồn tại")
-```
-**Ex2: Kiểm tra thư mục**
-```python
-import os
-
-if os.path.exists("logs"):
-    print("Thư mục tồn tại")
-```
 # Search
 
 # Display (Nhóm cung cấp thông tin)
@@ -208,7 +244,6 @@ os.chdir("C:/Users/Thang/Documents")
 makefirs()
 rmdir()
 removedirs()
-Remove()
 Rename()
 Stat()
 path
@@ -219,3 +254,5 @@ Basename()
 ## name
 ## sep
 ## pathsep
+# Remove (Thao tác xóa)
+## os.remove() (xóa file)

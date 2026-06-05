@@ -5,7 +5,7 @@
 ---
 # Introduction 
 - LightGBM (Light Gradient Boosting Machine) là một model machine learning. Cụ thể hơn nó là dạng ensemble model (kết hợp nhiều mô hình nhỏ)
-- Nó cùng “họ” XGBoost, CatBoost và được huấn luyện theo các **[boosting](./Base.md#Boosting)**
+- Nó cùng “họ” XGBoost, CatBoost và được huấn luyện theo **[boosting](./Base.md#Boosting)**
 
 **Lịch sử ra đời**
 ```bash
@@ -36,19 +36,112 @@
 | -------- | ------------- | ----------------------------------- |
 | Tree đơn | Decision Tree | 1 cây duy nhất                      |
 | Ensemble | Random Forest | nhiều cây, train độc lập            |
-| Boosting | **LightGBM**  | nhiều cây, train tuần tự để sửa lỗi |
+| Boosting | LightGBM      | nhiều cây, train tuần tự để sửa lỗi |
 ```
 **LightGBM khác XGBoost ở điểm nào?**
 ```bash
-1. Cách xây cây
-    - XGBoost: grow theo level-wise (từng tầng một)
-    - LightGBM: grow theo leaf-wise (chọn leaf có gain lớn nhất để tách tiếp)
-        + Leaf-wise thường:
-            - Giảm loss nhanh hơn
-            - Có thể chính xác hơn
-            - Nhưng dễ overfit nếu dataset nhỏ
-2. Tốc độ
-    - LightGBM: Dùng histogram-based algorithm. Thường train nhanh hơn XGBoost. Tốn ít memory hơn
+1. XGBoost: Level-wise growth
+    Giả sử ban đầu cây chỉ có một node gốc:
+            Root
+    Sau lần tách đầu tiên:
+            Root
+           /    \
+          A      B
+    XGBoost sẽ phát triển theo từng tầng (level).
+        Nghĩa là trước khi xuống sâu hơn, nó sẽ tách tất cả node ở cùng tầng.
+            Ví dụ:
+                Bước 1
+                        Root
+                       /    \
+                      A      B
+                Bước 2: Tách cả A và B
+                       Root
+                      /    \
+                     A      B
+                    / \    / \
+                  A1  A2 B1  B2
+                Bước 3: Tách tiếp tất cả node tầng dưới
+                         Root
+                       /      \
+                      A        B
+                    /  \      /  \
+                  A1   A2   B1   B2
+                 / \   / \  / \  / \
+    Ưu điểm
+        - Cây khá cân bằng:
+                 O
+               /   \
+              O     O
+             / \   / \
+            O   O O   O
+            => ít nguy cơ overfit hơn
+    Nhược điểm
+        - Có nhiều node không đáng để tách nhưng vẫn phải xét.
+            Ví dụ:
+                   Root
+                  /    \
+                 A      B
+                Giả sử:
+                    - Tách A giúp giảm loss 100 điểm
+                    - Tách B chỉ giảm loss 1 điểm
+                    XGBoost vẫn phải tách cả A lẫn B vì chúng cùng tầng.
+
+2. LightGBM: Leaf-wise growth
+    LightGBM không quan tâm tầng.
+        Nó luôn hỏi: "Trong toàn bộ cây hiện tại, lá nào nếu tách sẽ làm giảm loss nhiều nhất?" => Sau đó chỉ tách lá đó.
+    
+    Ví dụ
+        Ban đầu: 
+            Root
+        Tách lần đầu:
+                Root
+               /    \
+              A      B
+        Giả sử:
+            - Gain(A) = 100
+            - Gain(B) = 5
+            LightGBM chọn A.
+        Kết quả:
+                Root
+               /    \
+              A      B
+             / \
+           A1  A2
+        Lần tiếp theo:
+            - Gain(A1)=80
+            - Gain(A2)=30
+            - Gain(B)=5
+        LightGBM lại chọn A1.
+                Root
+               /    \
+              A      B
+             / \
+           A1  A2
+          / \
+        A11 A12
+
+```
+**Tại sao dễ overfit hơn?**
+```bash
+Giả sử dữ liệu chỉ có 100 mẫu.
+
+LightGBM có thể tạo cây như:
+            Root
+           /
+          O
+         /
+        O
+       /
+      O
+     /
+    O
+
+Mỗi lần tách chỉ tập trung vào một vùng nhỏ của dữ liệu.
+    Cuối cùng có thể xuất hiện lá chỉ chứa:
+        3 mẫu hoặc 1 mẫu
+    Lúc này cây đang học thuộc dữ liệu train.
+
+Đó chính là overfitting.
 ```
 **Ý tưởng cốt lõi của model LightGBM**
 ```bash

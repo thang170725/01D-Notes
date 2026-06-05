@@ -13,6 +13,8 @@
   - [\[\]](#)
   - [.sort() \& sorted() (sắp xếp)](#sort--sorted-sắp-xếp)
   - [sum()](#sum)
+- [Transform (Xử lý biến dạng cấu trúc mảng)](#transform-xử-lý-biến-dạng-cấu-trúc-mảng)
+  - [.append()](#append)
 ---
 # Create (Nhóm khởi tạo)
 ## list() & []
@@ -235,3 +237,5 @@ max_value = my_dict[max_key] # Lấy Value tương ứng
 
 print(f"Key lớn nhất là: {max_key}, Value là: {max_value}") # Kết quả: Key lớn nhất là: b, Value là: 50
 ```
+# Transform (Xử lý biến dạng cấu trúc mảng)
+## .append()

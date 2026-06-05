@@ -1,5 +1,7 @@
 - [Giải tích](#giải-tích)
   - [Đạo hàm](#đạo-hàm)
+  - [Gradient (gom tất cả đạo hàm thành một mũi tên)](#gradient-gom-tất-cả-đạo-hàm-thành-một-mũi-tên)
+  - [Gradient descent](#gradient-descent)
 - [Xác suất thống kê](#xác-suất-thống-kê)
   - [Định lý Bayes (cập nhật xác suất khi có thêm thông tin mới)](#định-lý-bayes-cập-nhật-xác-suất-khi-có-thêm-thông-tin-mới)
   - [Phân phối xác suất](#phân-phối-xác-suất)
@@ -23,12 +25,52 @@
 ## Đạo hàm
 ```bash
 - Đạo hàm là “tốc độ thay đổi” của một đại lượng.
+- Đạo hàm cho biết độ dốc và hướng thay đổi của một hàm số. Gradient Descent dùng thông tin này để biết phải đi theo hướng nào để làm cho giá trị hàm nhỏ nhất
 - Tối ưu hóa: Tìm điểm nhỏ nhất, lớn nhất trong hàm (mất mát trong ML).
 - Kinh tế: Tối đa hóa lợi nhuận, tối thiểu hóa chi phí.
 - Vật lý: Mối liên hệ giữa vị trí - vận tốc - gia tốc.
 - ML/DL: Sử dụng tính toán hàm mất mát (gradient descent).Nếu không có đạo hàm → máy không biết “học” thế nào để tốt hơn.
 - Game: Mô phỏng chuyển động, ánh sáng, âm thanh.
 - Sinh học/Hóa học: Mô hình hóa phản ứng, lan truyền, tăng trưởng, …
+```
+**Đạo hàm riêng là gì?**
+```bash
+Khi hàm phụ thuộc vào nhiều biến, ví dụ: f(x,y)=x^2+y^2
+
+Ta có thể hỏi:
+    1. Nếu chỉ thay đổi x và giữ y cố định thì hàm đổi thế nào?
+    2. Nếu chỉ thay đổi y và giữ x cố định thì hàm đổi thế nào?
+
+=> Đó chính là đạo hàm riêng.
+```
+**Ex**
+```bash
+f(x,y)=x^2+y^2
+
+Tại điểm (x,y)=(3,4):
+    - df/dx = 6
+    - df/dy = 8
+Điều này nghĩa là: tăng x một chút làm hàm tăng khoảng 6 lần mức thay đổi; tăng y một chút làm hàm tăng khoảng 8 lần mức thay đổi.
+```
+## Gradient (gom tất cả đạo hàm thành một mũi tên)
+```bash
+∇L = [dL/dw1, dL/dw2, ..., dL/dwn]
+    - Nó là một vector mũi tên cho biết:
+        + Hướng tăng nhanh nhất của loss. Gradient chỉ “đi hướng này thì loss tăng mạnh nhất”.
+    - Mức độ dốc theo từng tham số.
+        + Thành phần nào lớn → tham số đó đang làm loss nhạy hơn.
+    - Mẹo nhớ 5 giây
+        + Gradient = mũi tên chỉ lên dốc. Muốn giảm loss thì đừng đi theo gradient. Hãy đi ngược lại.
+```
+## Gradient descent
+**Formula**
+```bash
+w_t+1 = w_t - lambda*lr
+    - Đứng tại bộ tham số hiện tại, w_t
+	​- Tính gradient ∇L(wt) (độ dốc và hướng lên dốc).
+    - Đi ngược lại nên có dấu −.
+    - Bước một đoạn nhỏ. η (learning rate).
+    - Lặp lại cho đến khi loss không giảm đáng kể nữa.
 ```
 # Xác suất thống kê
 ## Định lý Bayes (cập nhật xác suất khi có thêm thông tin mới)
@@ -68,7 +110,29 @@ P(A|B) = (P(B|A).P(A))/P(B)
     + P(B|A): xác suất thấy B nếu A đúng
     + P(B)  : xác suất xảy ra B
 - Output:
-    + P(A|B): xác suất A đúng sau khi thấy B (posterior)
+    + P(A|B): xác suất A đúng sau khi đã biết B xảy ra
+```
+**Ex1: Hộp bi**
+```bash
+Có 2 hộp:
+    - Hộp A: 9 đỏ, 1 xanh
+    - Hộp B: 1 đỏ, 9 xanh
+Chọn ngẫu nhiên một hộp. Xác suất ban đầu:
+    - P(A) = 50%
+    - P(B) = 50%
+Đây gọi là prior probability (niềm tin ban đầu). Bây giờ bạn rút được một viên bi đỏ.
+Câu hỏi: Khả năng bạn đang cầm hộp A là bao nhiêu?
+Trước khi nhìn màu bi:
+    - A: 50%
+    - B: 50%
+Sau khi thấy bi đỏ:
+    - A có vẻ hợp lý hơn vì:
+        + P(đỏ | A) = 90%
+        + P(đỏ | B) = 10%
+Nói cách khác:
+    + Nếu hộp A là thật thì việc nhìn thấy bi đỏ rất bình thường.
+    + Nếu hộp B là thật thì việc nhìn thấy bi đỏ khá bất thường.
+    + Do đó ta tăng niềm tin vào A.
 ```
 **Ex: Ví dụ Bayes trong xét nghiệm bệnh**
 ```bash

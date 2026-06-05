@@ -6,7 +6,7 @@ project-root/
 ├── frontend/
 └── backend/
 ```
-**Step 1: Tạo backend/Dockerfile & frontend/Docerfile** 
+**Step 1: Tạo backend/Dockerfile & frontend/Dockerfile** 
 ```bash
 FROM python:3.11-slim
 

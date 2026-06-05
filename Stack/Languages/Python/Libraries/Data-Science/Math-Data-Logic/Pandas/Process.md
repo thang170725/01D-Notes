@@ -41,6 +41,7 @@
   - [.eq()](#eq)
 - [shift() — lấy giá trị trong quá khứ (lag)](#shift--lấy-giá-trị-trong-quá-khứ-lag)
 - [rolling() — cửa sổ trượt](#rolling--cửa-sổ-trượt)
+- [autocorrelation\_plot()](#autocorrelation_plot)
 ---
 # Create (Nhóm khởi tạo)
 ## DataFrame & Series
@@ -1109,3 +1110,49 @@ time        power   roll_mean
 01:00       20      NaN
 02:00       30      20   (10+20+30)/3
 03:00       40      30   (20+30+40)/3
+# autocorrelation_plot() 
+```bash
+- Là một hàm trong thư viện pandas dùng để vẽ đồ thị tự tương quan (autocorrelation) của chuỗi thời gian (time series).
+- Autocorrelation (tự tương quan) đo mức độ tương quan giữa:
+    + X(t) và X(t-k)
+        - t: thời điểm hiện tại
+        - k: độ trễ (lag)
+- Dùng để làm gì?
+    + Phát hiện seasonality
+        - Ví dụ doanh số:
+            + Mỗi thứ Hai đều bán cao
+            + thì: lag = 7 sẽ có tương quan mạnh.
+    + Kiểm tra dữ liệu có phụ thuộc quá khứ không
+        - Ví dụ: x(t) ≈ x(t-1) thì lag 1 sẽ có autocorrelation cao.
+    + Hỗ trợ xây dựng mô hình ARIMA Trong phân tích chuỗi thời gian:
+        - ACF (AutoCorrelation Function)
+        - PACF (Partial AutoCorrelation Function)
+        - được dùng để chọn tham số của mô hình.
+- Tóm lại:
+    + Sóng lặp lại đều đặn → có chu kỳ/seasonality.
+    + Sóng lặp lại nhưng đỉnh thấp dần → có chu kỳ nhưng bị nhiễu hoặc mất dần ảnh hưởng.
+    + Chỉ giảm dần về 0, không có sóng → phụ thuộc quá khứ nhưng không có chu kỳ rõ.
+    + Quanh 0 ngay từ đầu → gần như ngẫu nhiên.
+- Đây cũng là lý do khi nhìn ACF, người làm time series thường quan tâm:
+    + Có đỉnh lặp lại theo chu kỳ nào không?
+    + ACF giảm nhanh hay chậm?
+    + Có đổi dấu (+/-) theo dạng sóng không?
+    + Ba đặc điểm đó cho biết rất nhiều về cấu trúc của chuỗi thời gian.
+```
+**Ex**
+```bash
+Ngày hôm nay ↔ ngày hôm qua      (lag = 1)
+Ngày hôm nay ↔ 7 ngày trước      (lag = 7)
+Ngày hôm nay ↔ 30 ngày trước     (lag = 30)
+
+Nếu dữ liệu có tính chu kỳ hoặc mùa vụ thì autocorrelation thường cao ở một số lag nhất định.
+```
+**Syn**
+```bash
+from pandas.plotting import autocorrelation_plot
+
+autocorrelation_plot(series)
+
+- Input:
+    + series: là một pandas series
+```

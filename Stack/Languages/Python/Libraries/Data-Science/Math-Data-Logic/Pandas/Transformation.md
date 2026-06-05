@@ -428,10 +428,21 @@ print(pivot_df)
     + Time series
     + Machine Learning preprocessing
     + Vẽ biểu đồ (seaborn rất thích long format)
+- Nó thường được dùng khi:
+    + Dữ liệu có nhiều cột biểu diễn cùng một loại biến.
+    + Muốn đưa dữ liệu về dạng "tidy data" để dễ phân tích hoặc vẽ biểu đồ.
 ```
 **Syn**
 ```bash
-pd.melt(df, id_vars=?, value_vars=?, var_name=?, value_name=?) # Hoặc: df.melt(...)
+pd.melt(df, id_vars=?, 
+    value_vars=["Math", "English"], # nếu chỉ có một giá trị có thể viết dạng chuỗi
+    var_name=?, # tên cột mới
+    value_name=?, # tên cột mới chứa giá trị
+    ignore_index=True
+) # Hoặc: df.melt(...)
+
+- Input:
+    + id_vars: những cột được giữ nguyên
 ```
 **Ex**
 ```python

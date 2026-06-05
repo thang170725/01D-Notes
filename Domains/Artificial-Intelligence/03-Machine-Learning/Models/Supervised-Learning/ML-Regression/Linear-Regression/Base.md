@@ -38,3 +38,8 @@ Step 3: Update (cập nhật trọng số)
 ---- Loop 2 -----
 ...
 ```
+**Đạo hàm loss MSE**
+```bash
+MSE = (1/n) [(y1_true - y2_pred)**2 + ...] = (1/n)*(Y-(WX+b))**2)
+MSE' = (-2/n)*(Y-(W.X+b))*X
+```
