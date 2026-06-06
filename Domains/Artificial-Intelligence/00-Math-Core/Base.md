@@ -370,53 +370,45 @@ Ví dụ:
 ### Định thức của ma trận (det)
 ## Eigenvalue & Eigenvector (những hướng đặc biệt của vũ trụ)
 ```bash
-- Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại.Đó là eigenvector.
+- Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại. Đó là eigenvector.
+
+Ý nghĩa vật lý
+	Eigenvector là:
+		“trục tự nhiên” của phép biến đổi.
+	Eigenvalue là:
+		mức độ kéo dãn theo trục đó.
 ```
 **Formula**
 ```bash
 A.v_vector = λ.v_vertor
+
 - v_vertor: eigenvector
 - λ: eigenvalue
-Ý nghĩa vật lý
-
-Eigenvector là:
-
-“trục tự nhiên” của phép biến đổi.
-
-Eigenvalue là:
-
-mức độ kéo dãn theo trục đó.
-
-Ví dụ vật lý thực sự
+```
+**Ex: Ví dụ vật lý thực sự**
+```bash
 Dao động cơ học
-
-Khi cây cầu rung:
-
-có những mode rung tự nhiên
-
-Đó là eigenvectors.
-
-Tần số rung tương ứng là eigenvalues.
+	Khi cây cầu rung:
+		- có những mode rung tự nhiên => Đó là eigenvectors.
+		- Tần số rung tương ứng là eigenvalues.
 
 Trong lượng tử
+	Toán tử Hamiltonian:
+		- eigenvector = trạng thái lượng tử ổn định
+		- eigenvalue = mức năng lượng
 
-Toán tử Hamiltonian:
-
-eigenvector = trạng thái lượng tử ổn định
-eigenvalue = mức năng lượng
 Trong AI / PCA
-
-Eigenvectors cho biết:
-
-hướng dữ liệu biến thiên mạnh nhất.
+	- Eigenvectors cho biết: hướng dữ liệu biến thiên mạnh nhất.
 
 Trực giác hình học
+	Một hình tròn bị biến thành ellipse.
+	Các trục chính của ellipse: chính là eigenvectors.
+```
+**Ex**
+```bash
+A = [[1, 2], [4, 3]]
 
-Một hình tròn bị biến thành ellipse.
-
-Các trục chính của ellipse:
-
-chính là eigenvectors.
+x = [1,2], lamda=5, lamda=-1
 ```
 ## SVD (giải phẫu mọi phép biến đổi)
 ```bash
