@@ -649,3 +649,199 @@ x' = (x - median) / IQR
     + Q3: 75th percentile
     + x′: giá trị sau scaling
 ```
+Cứ tưởng tượng bạn có một cột dữ liệu dạng chữ:
+
+Màu sắc
+Đỏ
+Xanh
+Vàng
+
+Máy học không hiểu chữ, nên phải biến thành số. Có 3 cách phổ biến:
+
+1. One-Hot Encoding
+
+Biến mỗi giá trị thành một cột riêng.
+
+Màu	Đỏ	Xanh	Vàng
+Đỏ	1	0	0
+Xanh	0	1	0
+Vàng	0	0	1
+Dùng khi nào?
+
+Khi các giá trị không có thứ tự.
+
+Ví dụ:
+
+Giới tính
+Thành phố (ít loại)
+Màu sắc
+Hãng xe
+
+Vì:
+
+Đỏ không lớn hơn Xanh
+Toyota không lớn hơn Honda
+Nhược điểm
+
+Nếu có 1000 thành phố:
+
+→ tạo ra 1000 cột.
+
+Đó là cái gọi là "tăng chiều dữ liệu vô tội vạ".
+
+2. Label Encoding
+
+Gán số cho từng giá trị.
+
+Màu
+Đỏ → 0
+Xanh → 1
+Vàng → 2
+Dùng khi nào?
+
+Khi dữ liệu có thứ tự thật sự.
+
+Ví dụ:
+
+Mức độ
+Thấp
+Trung bình
+Cao
+
+Encode:
+
+Thấp = 0
+Trung bình = 1
+Cao = 2
+
+Điều này hợp lý vì:
+
+Cao>Trung b
+ı
+ˋ
+nh>Th
+a
+^
+ˊ
+p
+Không nên dùng cho dữ liệu không có thứ tự
+
+Ví dụ:
+
+Hà Nội = 0
+Đà Nẵng = 1
+TP.HCM = 2
+
+Máy có thể hiểu nhầm:
+
+TP.HCM>Đ
+a
+ˋ
+ N
+a
+˘
+~
+ng>H
+a
+ˋ
+ Nội
+
+Trong thực tế điều này vô nghĩa.
+
+3. Target Encoding
+
+Thay mỗi giá trị bằng trung bình của biến mục tiêu (target).
+
+Ví dụ dự đoán khách có mua hàng hay không.
+
+Thành phố	Tỷ lệ mua
+Hà Nội	80%
+TP.HCM	60%
+Đà Nẵng	30%
+
+Encode thành:
+
+Thành phố
+Hà Nội → 0.8
+TP.HCM → 0.6
+Đà Nẵng → 0.3
+Dùng khi nào?
+
+Khi có rất nhiều category.
+
+Ví dụ:
+
+10.000 sản phẩm
+5.000 mã bưu điện
+20.000 user ID
+
+Nếu One-Hot:
+
+→ hàng nghìn cột.
+
+Nếu Target Encoding:
+
+→ chỉ 1 cột.
+
+Nhược điểm
+
+Dễ bị data leakage.
+
+Ví dụ bạn dùng toàn bộ dữ liệu để tính tỷ lệ mua rồi train.
+
+Mô hình đã "nhìn trước đáp án".
+
+Vì vậy thường phải:
+
+K-Fold Target Encoding
+Leave-One-Out Encoding
+CatBoost Encoding
+Quy tắc nhớ cực ngắn
+Có thứ tự?
+
+Ví dụ:
+
+Nhỏ / Vừa / Lớn
+Junior / Mid / Senior
+
+👉 Label Encoding
+
+Không có thứ tự và số category ít?
+
+Ví dụ:
+
+Màu sắc
+Giới tính
+Hãng xe
+
+👉 One-Hot Encoding
+
+Không có thứ tự nhưng category rất nhiều?
+
+Ví dụ:
+
+Zip code
+Product ID
+User ID
+Thành phố (hàng nghìn loại)
+
+👉 Target Encoding
+
+Mẹo thực tế khi đi làm
+
+Nếu số category:
+
+< 10 → thường One-Hot
+10–50 → cân nhắc One-Hot
+
+100 → bắt đầu xem xét Target Encoding
+
+1000 → gần như không muốn One-Hot nữa
+
+Tóm lại:
+
+One-Hot cho ít category.
+
+Label Encoding cho dữ liệu có thứ tự.
+
+Target Encoding cho category nhiều và muốn tránh bùng nổ số cột.
