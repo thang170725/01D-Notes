@@ -17,58 +17,59 @@
   - [.choice()](#choice)
 
 ---
-
-# np.array() & empty & .zeros()
-
-```bash
-- array     : Tạo mảng có sẵn giá trị.
-- empty     : Tạo mảng không quan tâm giá trị (rất nhanh).
-- zeros     : Tạo mảng có kích thước có sẵn.
-```
-
+# Numpy Array (Mảng trong numpy)
+## np.array() (Tạo mảng có sẵn giá trị, không tạo mảng rỗng được)
 **Syn: array**
-
 ```bash
 arr = np.array([1,2,3,4,5], dtype=float)
 
-- dtype: chỉ định kiểu dữ liệu của mảng
-    + i4 : là kiểu dữ liệu integer có kích thước 4 bytes
+- Input:
+  + dtype: chỉ định kiểu dữ liệu của mảng
+    - i4     : là kiểu dữ liệu integer có kích thước 4 bytes
+    - float  : kiểu thực
 ```
+**Ex: Numpy với dict**
+```python
+import numpy as np
 
+a = np.array({
+    'name': ["thang", "thinh"],
+    'age': [1,2]
+})
+
+print(type(a), a) # <class 'numpy.ndarray'> {'name': ['thang', 'thinh'], 'age': [1, 2]}
+```
+## .arrange()
+## .empty & .zeros()
+```bash
+- empty     : Tạo mảng không quan tâm giá trị (rất nhanh).
+- zeros     : Tạo mảng có kích thước có sẵn.
+```
 **Syn: empty**
-
 ```bash
 import numpy as np
 
 arr = np.empty((h, w))   # h, w là kích thước đã biết
 ```
-
 **Syn: zeros**
-
 ```bash
 out = np.zeros(
    (out_h, out_w, chanels),
    dtype=np.uint8
 )
 ```
-
 # .zeros_like()
-
 ```bash
 - Để tạo một mảng mới có cùng hình dạng (shape) và kiểu dữ liệu (dtype) với mảng gốc, nhưng tất cả các phần tử đều bằng 0.
 ```
-
 **Syn**
-
 ```bash
 np.zeros_like(a, dtype=None)
 
 - a: mảng gốc muốn “bắt chước” shape và dtype.
 - dtype: (tuỳ chọn) nếu muốn đổi kiểu dữ liệu, có thể truyền thêm vào.
 ```
-
 **Ex**
-
 ```python
 a = np.array([[1, 2, 3], [4, 5, 6]])
 b = np.zeros_like(a)
@@ -83,41 +84,31 @@ print("b:\n", b)
 #  [[0 0 0]
 #   [0 0 0]]
 ```
-
 # .astype()
-
 ```bash
 - Dùng để chuyển kiểu dữ liệu của mảng sang kiểu khác.
 ```
-
 **Syn**
-
 ```bash
 a = array.astype(dtype)
 
 - dtype: là kiểu dữ liệu bạn muốn chuyển sang, ví dụ: int, float, bool, str, np.int32, np.float64, …
 ```
-
 **Ex1**
-
 ```python
 arr = np.array([1.1, 2.1, 3.1])
 newarr = arr.astype('i')
 print(newarr) # [1 2 3]
 print(newarr.dtype) # int32
 ```
-
 **Ex2**
-
 ```python
 arr = np.array([1.1, 2.1, 3.1])
 newarr = arr.astype(int)
 print(newarr) # [1 2 3]
 print(newarr.dtype) # int64
 ```
-
 **Ex3**
-
 ```python
 arr = np.array([1, 0, 3])
 newarr = arr.astype(bool)
@@ -193,10 +184,9 @@ arr2 = np.asarray(arr1)
 print(arr1 is arr2)  # True -> cùng vùng nhớ
 np.asarray() không tạo copy → tiết kiệm bộ nhớ.
 ```
-# .view() & .copy()
+## .view() 
 ```bash
-- view  : Tạo một chế độ xem focus vào mảng gốc.
-- copy  : Để sao chép một mảng.
+Tạo một chế độ xem focus vào mảng gốc.
 ```
 **Ex1: view**
 ```python
@@ -208,11 +198,15 @@ arr[0] = 42
 print(arr) # [42 2 3 4 5]
 print(x) # [42 2 3 4 5]
 ```
-**Ex2: copy**
+## .copy() (Để sao chép một mảng)
+**Ex**
 ```python
 arr = np.array([1, 2, 3, 4, 5])
+
 x = arr.copy()
+
 arr[0] = 42
+
 print(arr) # [42 2 3 4 5]
 print(x) # [1 2 3 4 5]
 ```
