@@ -251,6 +251,38 @@ y = e**(-x**2)
     + đi lên 2
 => Tức là một mũi tên trong không gian 2D.
 ```
+### Tính vô hướng
+**Fomula**
+```bash
+xy = x1.y1 + ... + xn.yn hoặc <x, y> = x**T * y
+
+- Output: 1 số
+```
+**Fomula**
+```bash
+x.y = ||x||.||y||.cos(x,y) # với ||...|| được xác định là chuẩn 2
+```
+## Norm 1 (Chuẩn 1)
+**Ex**
+```bash
+||x||1 = |x1| + |x2| + ... + |xn|
+```
+**Tính chất**
+```bash
+1. ||u|| >= 0
+2. ||au|| = |a|.||u||
+3. ||u+v|| <= ||u|| + ||v||
+4. ||u|| = 0 only when u = 0
+```
+## Norm 2 (Chuẩn 2)
+**Ex**
+```bash
+x = (1,2) y = (3,6)
+
+||x-y||2 = sqrt((x1-y1)**2 + (x2-y2)**2) = sqrt(20)
+cos(x,y) = x.y/(||x||.||y||) =  15/(sqrt(5)+sqrt(45)) = 1
+=> đây là 2 vector cùng hướng y dài hơn 3 lần so với x
+```
 ## Ma trận (một cỗ máy biến đổi không gian)
 ```bash
 - Nhiều người nghĩ ma trận chỉ là “bảng số”. Không.
@@ -316,55 +348,67 @@ Tức là:
 - Trực giác AI
     + Trong backpropagation: W**T xuất hiện vì: gradient phải “đi ngược” phép biến đổi ban đầu.
 ```
+### Ma trận nghịch đảo
+**Trường hợp ma trận 2×2**
+```bash
+Nếu A = [[a, c], [b, d]] (2x2)
+	​- det(A) = ad−bc
+=> A^−1 = (1/ad−bc)*[[d, -b], [-c a]] # với điều kiện ad−bc != 0
+
+Ví dụ:
+	A = [[1,2],[3,4]]
+	=> A**−1 = (1/-2)*[[4, -2], [-3, 1]]
+```
+**Thực tế khi tính tay**
+```bash
+Đối với ma trận 3×3 trở lên, người ta thường dùng:
+	- Khử Gauss–Jordan trên [A∣I].
+	- Phân tích LU.
+	- Các thư viện số học (NumPy, Eigen, MATLAB, v.v.).
+Ít khi tính trực tiếp bằng công thức A
+```
+### Định thức của ma trận (det)
 ## Eigenvalue & Eigenvector (những hướng đặc biệt của vũ trụ)
 ```bash
-- Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại.Đó là eigenvector.
+- Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại. Đó là eigenvector.
+
+Ý nghĩa vật lý
+	Eigenvector là:
+		“trục tự nhiên” của phép biến đổi.
+	Eigenvalue là:
+		mức độ kéo dãn theo trục đó.
 ```
 **Formula**
 ```bash
 A.v_vector = λ.v_vertor
+
 - v_vertor: eigenvector
 - λ: eigenvalue
-Ý nghĩa vật lý
-
-Eigenvector là:
-
-“trục tự nhiên” của phép biến đổi.
-
-Eigenvalue là:
-
-mức độ kéo dãn theo trục đó.
-
-Ví dụ vật lý thực sự
+```
+**Ex: Ví dụ vật lý thực sự**
+```bash
 Dao động cơ học
-
-Khi cây cầu rung:
-
-có những mode rung tự nhiên
-
-Đó là eigenvectors.
-
-Tần số rung tương ứng là eigenvalues.
+	Khi cây cầu rung:
+		- có những mode rung tự nhiên => Đó là eigenvectors.
+		- Tần số rung tương ứng là eigenvalues.
 
 Trong lượng tử
+	Toán tử Hamiltonian:
+		- eigenvector = trạng thái lượng tử ổn định
+		- eigenvalue = mức năng lượng
 
-Toán tử Hamiltonian:
-
-eigenvector = trạng thái lượng tử ổn định
-eigenvalue = mức năng lượng
 Trong AI / PCA
-
-Eigenvectors cho biết:
-
-hướng dữ liệu biến thiên mạnh nhất.
+	- Eigenvectors cho biết: hướng dữ liệu biến thiên mạnh nhất.
 
 Trực giác hình học
+	Một hình tròn bị biến thành ellipse.
+	Các trục chính của ellipse: chính là eigenvectors.
+```
+**Ex**
+```bash
+A = [[1, 2], [4, 3]]
 
-Một hình tròn bị biến thành ellipse.
-
-Các trục chính của ellipse:
-
-chính là eigenvectors.
+x = [1,2], lamda=5, lamda=-1
 ```
 ## SVD (giải phẫu mọi phép biến đổi)
 ```bash
