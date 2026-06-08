@@ -7,6 +7,8 @@
   - [bg-cover](#bg-cover)
   - [bg-no-repeat](#bg-no-repeat)
   - [bg-center](#bg-center)
+- [Backdrop (Chỉnh style đằng sau)](#backdrop-chỉnh-style-đằng-sau)
+  - [backdrop-blur](#backdrop-blur)
 ---
 # rounded
 ```bash
@@ -111,3 +113,5 @@ border-double
 ## bg-cover
 ## bg-no-repeat
 ## bg-center
+# Backdrop (Chỉnh style đằng sau)
+## backdrop-blur

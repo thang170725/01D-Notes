@@ -1,7 +1,8 @@
-- [dictionary](#dictionary)
+- [Dictionary (từ điển)](#dictionary-từ-điển)
   - [{} \& dict](#--dict)
 - [.pop() \& Del \& .clear()](#pop--del--clear)
-- [.get()](#get)
+  - [Display (hiển thị, cung cấp thông tin)](#display-hiển-thị-cung-cấp-thông-tin)
+    - [.get() (trả về value của một key nào đó)](#get-trả-về-value-của-một-key-nào-đó)
 - [.items()](#items)
 - [.copy()](#copy)
   - [.keys() \& .values()](#keys--values)
@@ -20,7 +21,7 @@
   - [.add()](#add)
 - [.update()](#update)
 ---
-# dictionary
+# Dictionary (từ điển)
 ## {} & dict
 ```bash
 - Để tạo dict.
@@ -81,14 +82,11 @@ thisdict.clear()
 
 print(thisdict) # {}
 ```
-
-# .get()
-```bash
-Để trả về value của một key nào đó.
-```
+## Display (hiển thị, cung cấp thông tin)
+### .get() (trả về value của một key nào đó)
 **Syn**
 ```bash
-<variable>.get(<key>, default)
+a = <variable>.get(<key>, default)
 
 - Nếu key chưa có thì trả về giá trị defaule
 ```

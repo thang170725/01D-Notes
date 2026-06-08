@@ -18,8 +18,9 @@ print(b)   # 1010
 # Operator (Toán tử)
 ## ^ (XOR)
 ```bash
-- Kết quả ĐÚNG (1) khi 2 toán hạng KHÁC nhau
-- Kết quả SAI (0) khi 2 toán hạng GIỐNG nhau
+Kết quả 
+  - ĐÚNG (1) khi 2 toán hạng KHÁC nhau
+  - SAI (0) khi 2 toán hạng GIỐNG nhau
 ```
 **Formula**
 ```bash

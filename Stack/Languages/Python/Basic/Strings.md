@@ -20,7 +20,7 @@
   - [.center()](#center)
 - [Process (xử lý chuỗi)](#process-xử-lý-chuỗi)
   - [in \& not in](#in--not-in-1)
-  - [.join()](#join)
+  - [.join() (nối chuỗi)](#join-nối-chuỗi)
   - [.split()](#split)
   - [.strip() \& .rstrip() \& .lstrip()](#strip--rstrip--lstrip)
   - [.title()](#title)

@@ -2,13 +2,15 @@
   - [list() \& \[\]](#list--)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [len()](#len)
+  - [.index() (Trả về vị trí đầu tiên xuất hiện của giá trị được chỉ định)](#index-trả-về-vị-trí-đầu-tiên-xuất-hiện-của-giá-trị-được-chỉ-định)
 - [Process (Nhóm xử lý list)](#process-nhóm-xử-lý-list)
   - [in](#in)
   - [\* (unpack)](#-unpack)
   - [.count()](#count)
-  - [.index()](#index)
   - [.insert()](#insert)
-  - [.clear() \& del \& .remove() \& .pop()](#clear--del--remove--pop)
+  - [.pop() (Lấy phần tử ra khỏi mảng)](#pop-lấy-phần-tử-ra-khỏi-mảng)
+- [Remove (Xóa)](#remove-xóa)
+  - [.clear() \& del \& .remove()](#clear--del--remove)
   - [max()](#max)
   - [\[\]](#)
   - [.sort() \& sorted() (sắp xếp)](#sort--sorted-sắp-xếp)
@@ -49,6 +51,21 @@ Trả về độ dài của một mảng.
 ```bash
 l = len(li)
 ```
+## .index() (Trả về vị trí đầu tiên xuất hiện của giá trị được chỉ định)
+**Syn**
+```bash
+x = nums.index(value)
+
+- Input:
+  + value: là giá trị trong 1 mảng
+```
+**Ex**
+```python
+fruits = ['apple', 'banana', 'cherry']
+x = fruits.index("cherry")
+
+print(x) # 2
+```
 # Process (Nhóm xử lý list)
 ## in
 ```bash
@@ -74,23 +91,6 @@ print(*row) # 1 2 3. Đúng định dạng mỗi phần tử cách nhau bằng d
 fruits = ["apple", "banana", "cherry"]
 x = fruits.count("cherry") # 1
 ```
-## .index()
-```bash
-- Trả về vị trí đầu tiên xuất hiện của giá trị được chỉ định.
-```
-**Syn**
-```bash
-x = nums.index(value)
-
-- Input:
-  + value: là giá trị trong 1 mảng
-```
-**Ex**
-```python
-fruits = ['apple', 'banana', 'cherry']
-x = fruits.index("cherry")
-print(x) # 2
-```
 ## .insert()
 ```bash
 - Để thêm phần tử vào một vị trí nào đó trong mảng.
@@ -102,12 +102,13 @@ fruits.insert(1, "orange")
 
 print(fruits) # ['apple', 'orange', 'banana', 'cherry']
 ```
-## .clear() & del & .remove() & .pop()
+## .pop() (Lấy phần tử ra khỏi mảng)
+# Remove (Xóa)
+## .clear() & del & .remove()
 ```bash
 - clear     : Xóa toàn bộ list. List vẫn tồn tại, chỉ trở thành list rỗng.
 - del       : Xóa phần tử theo scling (lát cắt).
 - remove    : Xóa phần tử đầu tiên có giá trị = value.
-- pop       : Lấy phần tử  ra khỏi mảng.
 ```
 **Syn: clear**
 ```bash
