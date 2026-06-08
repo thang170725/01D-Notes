@@ -36,22 +36,20 @@ Lệnh này giúp bạn sao chép toàn bộ mã nguồn, lịch sử thay đổ
 2. clone nhánh cụ thể về máy tính
     git clone --branch khue --single-branch https://github.com/thang170725/elgamal.git
 ```
-# git pull
+# git pull (Lấy dữ liệu & hợp nhất)
 ```bash
-- Lấy dữ liệu và hợp nhất (merge) những thay đổi đó vào nhánh hiện tại của bạn. 
-- Lệnh này là sự kết hợp của 2 lệnh git fetch (lấy các thay đổi từ kho lưu trữ từ xa) và git merge (hợp nhất các thay đổi vào nhánh hiện tại)
+Lệnh này là sự kết hợp của 2 lệnh:
+  - git fetch (lấy các thay đổi từ kho lưu trữ từ xa)
+  - git merge (hợp nhất các thay đổi vào nhánh hiện tại)
 ```
-**Syn**
+**Ex: pull từ nhánh main**
 ```bash
-1. pull từ nhánh main
-    git pull origin main
+git pull origin main
 ```
-## --no-rebase
+## --no-rebase (Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge))
 **Ex**
 ```bash
-git pull --no-rebase origin feature/profile
-
-- --no-rebase: Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge)
+git pull --no-rebase origin feature/profile 
 ```
 # git push
 ## -u
