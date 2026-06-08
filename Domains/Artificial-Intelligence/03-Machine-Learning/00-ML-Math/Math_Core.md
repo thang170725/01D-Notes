@@ -694,7 +694,137 @@ Random Forest → nhiều cây độc lập rồi lấy trung bình.
 
 Gradient Boosting → nhiều cây nối tiếp nhau, cây sau sửa lỗi cây trước.
 
+Gini Index (hay Gini Impurity) là một thước đo dùng trong Decision Tree để đánh giá một nút có "lẫn lộn" các loại dữ liệu hay không.
 
+Ý tưởng rất đơn giản:
+
+Nếu một nút chỉ chứa 1 loại dữ liệu → nút đó rất "sạch" → Gini = 0.
+Nếu một nút chứa nhiều loại dữ liệu trộn lẫn → Gini lớn hơn.
+Khi xây cây, thuật toán sẽ chọn cách chia làm cho các nút con sạch nhất có thể (Gini nhỏ nhất).
+Ví dụ dễ hiểu
+
+Giả sử bạn có một nút gồm 10 quả:
+
+10 quả táo 🍎
+0 quả cam 🍊
+
+Nếu nhắm mắt bốc ngẫu nhiên một quả thì chắc chắn là táo.
+
+=> Nút hoàn toàn thuần nhất.
+
+Gini = 0
+
+Bây giờ có:
+
+5 táo 🍎
+5 cam 🍊
+
+Xác suất:
+
+Táo = 0.5
+Cam = 0.5
+
+Đây là trạng thái lẫn lộn nhất vì bạn khó đoán được loại quả.
+
+Gini = 0.5 (cao nhất với bài toán 2 lớp)
+
+Công thức
+
+Với k lớp:
+
+Gini=1−∑p
+i
+2
+	​
+
+
+Trong đó:
+
+p
+i
+	​
+
+ là tỷ lệ của lớp i.
+
+Ví dụ:
+
+5 táo, 5 cam:
+
+p
+tao
+	​
+
+=0.5,p
+cam
+	​
+
+=0.5
+Gini=1−(0.5
+2
++0.5
+2
+)
+=1−(0.25+0.25)
+=0.5
+Decision Tree dùng Gini như thế nào?
+
+Giả sử bạn muốn dự đoán khách hàng có mua sản phẩm hay không.
+
+Có hai cách chia:
+
+Cách chia A
+
+Nhóm 1:
+
+9 mua
+1 không mua
+
+Nhóm 2:
+
+8 không mua
+2 mua
+
+Hai nhóm khá "sạch".
+
+=> Gini thấp.
+
+Cách chia B
+
+Nhóm 1:
+
+5 mua
+5 không mua
+
+Nhóm 2:
+
+4 mua
+6 không mua
+
+Hai nhóm vẫn rất lẫn lộn.
+
+=> Gini cao.
+
+Thuật toán sẽ chọn Cách chia A vì sau khi chia, các nhóm con dễ phân loại hơn.
+
+Trực giác quan trọng nhất
+
+Bạn có thể hiểu Gini là:
+
+"Nếu tôi chọn ngẫu nhiên một mẫu trong nút này, khả năng tôi gán nhầm nhãn cho nó là bao nhiêu?"
+
+Gini = 0 → không thể nhầm.
+Gini càng lớn → dữ liệu càng lẫn lộn.
+Decision Tree luôn tìm cách chia để giảm Gini nhiều nhất.
+
+Ví dụ nhanh:
+
+Thành phần trong nút	Gini
+100% Táo	0
+90% Táo, 10% Cam	0.18
+80% Táo, 20% Cam	0.32
+50% Táo, 50% Cam	0.50
+
+Nhìn bảng này có thể thấy: càng gần 50-50 thì Gini càng cao, vì dữ liệu càng khó phân biệt.
 XGBoost / LightGBM / CatBoost → các phiên bản tối ưu của Gradient Boosting.
 
 
