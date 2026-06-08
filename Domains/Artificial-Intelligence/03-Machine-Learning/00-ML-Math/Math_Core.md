@@ -12,6 +12,110 @@
   - [Bagging (Bootstrap Aggregating)](#bagging-bootstrap-aggregating)
   - [Gradient Boosting](#gradient-boosting)
 ---
+Có lẽ bạn đang hỏi khoảng cách Minkowski (Minkowski Distance).
+
+Đây là một cách đo "độ xa" giữa hai điểm, và nó là công thức tổng quát bao gồm nhiều loại khoảng cách quen thuộc khác.
+
+Công thức:
+
+d(x,y)=(∑
+i=1
+n
+	​
+
+∣x
+i
+	​
+
+−y
+i
+	​
+
+∣
+p
+)
+1/p
+
+Trong đó:
+
+x, y: hai điểm dữ liệu.
+p: tham số quyết định cách đo khoảng cách.
+Hình dung đơn giản
+
+Giả sử bạn có hai điểm:
+
+A = (1, 1)
+B = (4, 5)
+
+Tùy chọn giá trị p, bạn sẽ có các kiểu khoảng cách khác nhau.
+
+1. p = 1 → Manhattan Distance
+
+Tên gọi xuất phát từ việc đi trên các ô phố vuông góc như ở Manhattan.
+
+Bạn chỉ được đi ngang và dọc:
+
+∣4−1∣+∣5−1∣=3+4=7
+
+Giống như phải đi theo đường phố chứ không được cắt ngang qua các tòa nhà.
+
+2. p = 2 → Euclidean Distance
+
+Đây là khoảng cách "đường chim bay".
+
+d=
+(4−1)
+2
++(5−1)
+2
+	​
+
+
+Kết quả:
+
+d=5
+
+Đây là khoảng cách quen thuộc nhất trong hình học.
+
+3. p → ∞ → Chebyshev Distance
+
+Chỉ quan tâm đến độ lệch lớn nhất giữa các chiều.
+
+Ví dụ:
+
+lệch theo x = 3
+lệch theo y = 4
+
+Khoảng cách = 4.
+
+Giống như quân vua trong cờ vua cần bao nhiêu bước tối thiểu để tới đích.
+
+Tại sao cần Minkowski?
+
+Vì nhiều thuật toán cần đo khoảng cách:
+
+K-Nearest Neighbors (KNN)
+K-Means
+Phân cụm dữ liệu
+Tìm điểm tương tự
+
+Thay vì viết riêng từng công thức, người ta dùng Minkowski và chọn giá trị p:
+
+p	Loại khoảng cách
+1	Manhattan
+2	Euclidean
+∞	Chebyshev
+Cách nhớ nhanh
+
+Hãy coi Minkowski như một "hộp công thức khoảng cách":
+
+p = 1 → đi theo đường phố → Manhattan.
+p = 2 → đi thẳng → Euclidean.
+p rất lớn → chỉ nhìn độ lệch lớn nhất → Chebyshev.
+
+Nói ngắn gọn:
+
+Minkowski Distance là công thức tổng quát sinh ra nhiều loại khoảng cách khác nhau bằng cách thay đổi tham số p.
 # Phương sai
 ```bash
 Phương sai là một số đo cho biết mức độ phân tán của các giá trị trong tập dữ liệu so với giá trị trung bình của tập dữ liệu đó. Phương sai cho biết các giá trị trong tập dữ liệu “lan rộng” ra sao xung quanh giá trị trung bình.
