@@ -14,6 +14,9 @@
   - [Bagging (Bootstrap Aggregating)](#bagging-bootstrap-aggregating)
   - [Boosting](#boosting)
   - [Gradient Boosting](#gradient-boosting)
+  - [Entropy (độ hỗn loạn)](#entropy-độ-hỗn-loạn)
+  - [Information Gain (độ tăng thông tin):](#information-gain-độ-tăng-thông-tin)
+  - [Thuật toán ID3 (Iterative Dichotomiser 3)](#thuật-toán-id3-iterative-dichotomiser-3)
 ---
 # Parameter (tham số mô hình)
 ```bash
@@ -347,26 +350,6 @@ Dùng kernel làm nổi bật cạnh, tăng tương phản cục bộ.
 ```bash
 Dùng để phát hiện biên cạnh – áp kernel đạo hàm.
 ```
-Thuật toán ID3 (Iterative Dichotomiser 3)
-    • Là thuật toán xây dựng cây quyết định bằng cách chọn thuộc tính “tốt nhất” để chia dữ liệu tại mỗi bước.
-    • Thuộc tính “tốt nhất” được chọn dựa trên việc giảm độ hỗn loạn (entropy) nhiều nhất → nghĩa là giúp dữ liệu trở nên “thuần” nhất có thể.
-Entropy (độ hỗn loạn):
-Cho biết một tập dữ liệu có lẫn lộn hay không. (Khi chia dữ liệu theo thuộc tính A thì độ hỗn loạn mới là bao nhiêu)
-Công thức:
-Entropy(S) = -[p1.log2(p1) + p2.log2(p2) + … ]
-    • pi: phần trăm mẫu thuộc lớp i (ví dụ: [‘no’, ‘no’, ‘yes’, ‘yes’, ‘yes’] thì p_no = 2/5). Nếu tập đã thuần (100% Yes) → entropy = 0 (không hỗn loạn).
-    • Nếu chia đều (50% Yes - 50% No) → entropy = 1 (hỗn loạn tối đa).
-EntropyA(S) = [(|Sv1| / S) * Entropy(Sv1) + (|Sv2| / S) * Entropy(Sv2) + ...]
-    • Chia dữ liệu theo thuộc tính A → thành nhiều nhóm (ví dụ “Weather” → Sunny/Rain/Windy…)
-    • Tính entropy của từng nhóm.
-    • Lấy trung bình theo trọng số số lượng mẫu.
-Information Gain (độ tăng thông tin):
-Sự giảm hỗn loạn khi chia theo thuộc tính. Thuộc tính có Information Gain cao nhất → chọn làm node.
-Gain(S,A)=Entropy(S)−EntropyA(S)
-    • Gain = mức giảm độ hỗn loạn khi chia bằng A.
-    • A càng làm tập “thuần” hơn → Gain càng lớn → được chọn.
-Bài tập
-Demo cây quyết định với thuật toán id3
 # clustering (gom cụm)
 **Gom cụm cứng và gom cụm mềm**
 ```bash
@@ -823,4 +806,180 @@ XGBoost / LightGBM / CatBoost → các phiên bản tối ưu của Gradient Boo
 
 
 Nói ngắn gọn: Gradient Boosting là một thuật toán học tăng cường theo kiểu ensemble, không phải một mô hình cụ thể. Kết quả cuối cùng là một mô hình gồm nhiều cây quyết định được cộng lại với nhau.
+```
+## Entropy (độ hỗn loạn)
+```bash
+Cho biết một tập dữ liệu có lẫn lộn hay không. (Khi chia dữ liệu theo thuộc tính A thì độ hỗn loạn mới là bao nhiêu)
+```
+**Formula**
+```bash
+Entropy(S) = -[p1.log2(p1) + p2.log2(p2) + … ]
+
+- pi: phần trăm mẫu thuộc lớp i 
+    + ví dụ: [‘no’, ‘no’, ‘yes’, ‘yes’, ‘yes’] thì p_no = 2/5). 
+    + Nếu tập đã thuần (100% Yes) → entropy = 0 (không hỗn loạn).
+    + Nếu chia đều (50% Yes - 50% No) → entropy = 1 (hỗn loạn tối đa).
+
+EntropyA(S) = [(|Sv1| / S) * Entropy(Sv1) + (|Sv2| / S) * Entropy(Sv2) + ...]
+    + Chia dữ liệu theo thuộc tính A → thành nhiều nhóm (ví dụ “Weather” → Sunny/Rain/Windy…)
+    + Tính entropy của từng nhóm.
+    + Lấy trung bình theo trọng số số lượng mẫu.
+```
+## Information Gain (độ tăng thông tin):
+```bash
+Sự giảm hỗn loạn khi chia theo thuộc tính. Thuộc tính có Information Gain cao nhất → chọn làm node.
+```
+**Formular**
+```bash
+Gain(S,A)=Entropy(S)−EntropyA(S)
+
+- Gain = mức giảm độ hỗn loạn khi chia bằng A.
+- A càng làm tập “thuần” hơn → Gain càng lớn → được chọn.
+```
+## Thuật toán ID3 (Iterative Dichotomiser 3)
+```bash
+Là thuật toán xây dựng cây quyết định (decision tree) bằng cách chọn thuộc tính “tốt nhất” để chia dữ liệu tại mỗi bước.
+    Thuộc tính “tốt nhất” được chọn dựa trên việc giảm độ hỗn loạn (entropy) nhiều nhất → nghĩa là giúp dữ liệu trở nên “thuần” nhất có thể.
+```
+**Ex: Workflow**
+```bash
+Giả sử ta muốn dự đoán: Có đi chơi không?
+
+Dữ liệu huấn luyện:
+| Outlook  | Windy | Play |
+| -------- | ----- | ---- |
+| Sunny    | False | No   |
+| Sunny    | True  | No   |
+| Overcast | False | Yes  |
+| Rain     | False | Yes  |
+| Rain     | True  | No   |
+| Overcast | True  | Yes  |
+Trong đó:
+- Outlook = Sunny, Overcast, Rain
+- Windy = True, False
+- Play = Yes hoặc No (label)
+```
+```bash
+Step 1: Thử chia theo Outlook
+    Tách dữ liệu:
+        Sunny
+            Outlook	Windy	Play
+            Sunny	False	No
+            Sunny	True	No
+
+            Toàn bộ đều: No => Entropy: 0
+
+        Overcast
+            Outlook	Windy	Play
+            Overcast	False	Yes
+            Overcast	True	Yes
+
+            Toàn bộ: Yes => Entropy: 0
+
+        Rain
+            Outlook	Windy	Play
+            Rain	False	Yes
+            Rain	True	No
+
+            Entropy: 1
+    
+    Entropy sau khi chia: (2/6)*0 + (2/6)*0 +(2/6)*1 = 0.333
+    
+    Information Gain Với Outlook: Gain = 1 - 0.333 = 0.667
+
+Bước 2: Thử chia theo Windy
+    Windy=False
+        Windy	Play
+        False	No
+        False	Yes
+        False	Yes
+        
+        Entropy ≈ 0.918
+
+    Windy=True
+        Windy	Play
+        True	No
+        True	No
+        True	Yes
+
+        Entropy ≈ 0.918
+
+    Entropy sau khi chia: (3/6)*0.918 + (3/6)*0.918 = 0.918
+    Gain: 1 - 0.918 = 0.082
+
+Bước 3: Chọn thuộc tính tốt nhất
+    ID3 chọn: Outlook làm node gốc.
+
+    Cây hiện tại
+            Outlook
+          /    |     \      
+    Sunny Overcast  Rain
+                    No    Yes     ?
+
+Bước 4: Xử lý nhánh Rain
+    Nhánh Rain vẫn chưa thuần:
+    | Outlook | Windy | Play |
+    | ------- | ----- | ---- |
+    | Rain    | False | Yes  |
+    | Rain    | True  | No   |
+
+    Thuộc tính còn lại: Windy
+    Chia tiếp:
+        Rain
+          |
+         Windy
+         /   \
+        F     T
+        Yes   No
+
+    Cây cuối cùng
+                Outlook
+             /     |      \
+         Sunny  Overcast  Rain
+           No      Yes      |
+                           Windy
+                          /     \
+                      False     True
+                       Yes       No
+
+Khi dự đoán
+Ví dụ mẫu mới:
+    Outlook = Rain
+    Windy = False
+Đi qua cây:
+    Outlook = Rain
+            ↓
+    Windy = False
+            ↓
+    Play = Yes
+
+Workflow của ID3
+    Dataset
+       |
+       v
+    Tính Entropy hiện tại
+       |
+       v
+    Thử từng thuộc tính
+       |
+       v
+    Tính Information Gain
+       |
+       v
+    Chọn Gain lớn nhất
+       |
+       v
+    Tạo node mới
+       |
+       v
+    Chia dữ liệu thành các tập con
+       |
+       v
+    Lặp lại trên từng tập con
+       |
+       v
+    Dừng khi:
+    - Tất cả mẫu cùng nhãn
+    hoặc
+    - Không còn thuộc tính
 ```
