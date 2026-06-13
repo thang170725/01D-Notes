@@ -24,45 +24,34 @@
   - [Color()](#color)
   - [canvas.bgcolor()](#canvasbgcolor)
 ---
-# Create & Config # Run (tạo & cấu hình & Chạy)
-## vispy.app
-```bash
-- Thành phần này quản lý vòng lặp sự kiện (event loop) và hiển thị cửa sổ
-- Giống game loop
-```
-### use_app()
+# app (Thành phần này quản lý vòng lặp sự kiện (event loop) và hiển thị cửa sổ)
+## .use_app()
 **Ex**
 ```python
 from vispy import app
-
-app.use_app('pyqt5')
-
 import numpy as np
 from vispy import scene
 
-app.use_app('pyqt5')
-# Vispy cần một cửa sổ để hiển thị. Ở đây nó ép buộc sử dụng PyQt5 (một thư viện giao diện mạnh mẽ) làm nền tảng hiển thị cửa sổ.
+app.use_app('pyqt5') # Vispy cần một cửa sổ để hiển thị. Ở đây nó ép buộc sử dụng PyQt5 (một thư viện giao diện mạnh mẽ) làm nền tảng hiển thị cửa sổ.
 ```
-## scene
+# scene (xây dựng cấu trúc cảnh 3D (scene graph), quản lý các đối tượng trực quan (visuals), camera, và các widget)
 ```bash
-- Để xây dựng cấu trúc cảnh 3D (scene graph), quản lý các đối tượng trực quan (visuals), camera, và các widget.
-- Hiểu đơn giản thì đây là hệ thống vẽ 3D.
+Hiểu đơn giản thì đây là hệ thống vẽ 3D.
 ```
-### .SceneCanvas()
-```bash
-Tạo cửa sổ chính (canvas) để hiển thị cảnh. Nó là lớp cơ sở cho mọi ứng dụng VisPy.
-```
+## .SceneCanvas() (Tạo cửa sổ chính (canvas) để hiển thị cảnh. Nó là lớp cơ sở cho mọi ứng dụng VisPy)
 **Syn**
 ```bash
 canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True, title=’Demo’)
 
-- size=(W, H): Kích thước cửa sổ.
-- keys:
-    + 'interactive': Kích hoạt các phím tắt tương tác cơ bản (ví dụ: Escape để đóng, F11 để toàn màn hình).
-- bgcolor=‘black’: màu nền.
-- show=True: Hiển thị cửa sổ ngay lập tức.
-- Title=: thêm tiêu đề cho cửa sổ
+- Input
+  + size=(W, H): Kích thước cửa sổ.
+  + keys:
+    - 'interactive': Kích hoạt các phím tắt tương tác cơ bản (ví dụ: Escape để đóng, F11 để toàn màn hình).
+  + bgcolor=‘black’: màu nền.
+  + show=True: Hiển thị cửa sổ ngay lập tức.
+  + Title='': thêm tiêu đề cho cửa sổ
 ```
+### .title
 ## central_widget
 ### .add_view()
 ```bash
@@ -139,7 +128,7 @@ Camera xác định cách bạn nhìn vào cảnh.
             'panzoom' (hay PanZoomCamera): Phổ biến cho trực quan hóa 2D (kéo và thu phóng).
 
         view.camera.set_range(x_min, x_max, y_min, y_max, z_min, z_max): Thiết lập phạm vi tọa độ của cảnh.
-.title
+
 canvas.title = 'One Point'
 # Draw (Vẽ)
 ## visuals
