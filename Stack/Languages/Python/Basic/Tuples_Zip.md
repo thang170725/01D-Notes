@@ -1,9 +1,11 @@
-- [tuple](#tuple)
+- [Tuple (Bộ giá trị)](#tuple-bộ-giá-trị)
 - [zip()](#zip)
 ---
-# tuple
+# Tuple (Bộ giá trị)
 ```bash
-- Là một kiểu dữ liệu dùng để lưu trữ các đối tượng không thay đổi về sau (giống như hằng số). Nó sử dụng để lưu trữ nhiều mục trong một biến duy nhất. 
+Dùng để lưu trữ nhiều giá trị theo thứ tự không thay đổi sau khi tạo.
+
+Thường dùng cho dữ liệu cố định như tọa độ, ngày tháng, hoặc để trả về nhiều giá trị từ hàm.
 ```
 **Syn**
 ```bash

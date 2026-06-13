@@ -1,5 +1,5 @@
 - [AWS (Amazon Web Services)](#aws-amazon-web-services)
-  - [Region (khu vực địa lý)](#region-khu-vực-địa-lý)
+- [Region (khu vực địa lý)](#region-khu-vực-địa-lý)
   - [Availability Zone (AZ) (1 data center hoặc 1 cụm data center trong cùng 1 Region)](#availability-zone-az-1-data-center-hoặc-1-cụm-data-center-trong-cùng-1-region)
   - [EC2](#ec2)
   - [DATABASE TRÊN AWS (RDS)](#database-trên-aws-rds)
@@ -17,6 +17,11 @@
   - [Simple Storage Service (S3) (Giống như một kho lưu trữ đám mây khổng lồ )](#simple-storage-service-s3-giống-như-một-kho-lưu-trữ-đám-mây-khổng-lồ-)
   - [Log (Nhật ký hệ thống)](#log-nhật-ký-hệ-thống)
   - [Identity and Access Management (IAM) (Quyền truy cập)](#identity-and-access-management-iam-quyền-truy-cập)
+- [AWS CloudTrail (Dịch vụ chuyên ghi lại nhật ký của tất cả các hành động/sự kiện cấu hình trên AWS)](#aws-cloudtrail-dịch-vụ-chuyên-ghi-lại-nhật-ký-của-tất-cả-các-hành-độngsự-kiện-cấu-hình-trên-aws)
+- [Amazon CloudWatch Events (Dịch vụ chuyên ngồi "rình" và bắt bài xem có sự kiện cụ thể nào xảy ra không)](#amazon-cloudwatch-events-dịch-vụ-chuyên-ngồi-rình-và-bắt-bài-xem-có-sự-kiện-cụ-thể-nào-xảy-ra-không)
+- [Amazon SNS (Simple Notification Service) (Dịch vụ chuyên gửi tin nhắn/email tự động)](#amazon-sns-simple-notification-service-dịch-vụ-chuyên-gửi-tin-nhắnemail-tự-động)
+- [Serverless](#serverless)
+  - [AWS Lambda](#aws-lambda)
 ---
 # AWS (Amazon Web Services)
 ```bash
@@ -57,7 +62,7 @@
     + Thép
 - Nhà có chắc hay không là do bạn xây
 ```
-## Region (khu vực địa lý)
+# Region (khu vực địa lý)
 ```bash
 Ví dụ:
     - Singapore
@@ -371,20 +376,27 @@ Hãy tưởng tượng Log giống như hộp đen của máy bay. Mỗi khi má
 **Sự khác biệt của IAM User và IAM Role**
 ```bash
 Rủi ro chết người của Cách 1 (Dùng IAM User):
-Khi bạn dùng IAM User, AWS sẽ cấp cho bạn một cặp mã gọi là Access Key ID và Secret Access Key (nó tương đương với Username/Password nhưng dành cho code đọc). Để Máy chủ Web có thể gửi ảnh lên S3, lập trình viên buộc phải lưu cặp mã này vào một file cấu hình nằm trên ổ cứng (EBS) của máy chủ, hoặc nhét thẳng vào trong mã nguồn.
+    Khi bạn dùng IAM User, AWS sẽ cấp cho bạn một cặp mã gọi là Access Key ID và Secret Access Key (nó tương đương với Username/Password nhưng dành cho code đọc). Để Máy chủ Web có thể gửi ảnh lên S3, lập trình viên buộc phải lưu cặp mã này vào một file cấu hình nằm trên ổ cứng (EBS) của máy chủ, hoặc nhét thẳng vào trong mã nguồn.
 
-Kịch bản bị hack: Nếu hacker tấn công vào Máy chủ Web và chiếm được quyền điều khiển, việc đầu tiên chúng làm là lục lọi các file cấu hình. Chúng sẽ lấy cắp được cặp Access Key này.
+    Kịch bản bị hack: Nếu hacker tấn công vào Máy chủ Web và chiếm được quyền điều khiển, việc đầu tiên chúng làm là lục lọi các file cấu hình. Chúng sẽ lấy cắp được cặp Access Key này.
 
-Hậu quả: Vì Access Key này có giá trị vĩnh viễn (trừ khi bạn chủ động xóa), hacker có thể mang cặp mã này về máy tính cá nhân của chúng ở Nga, Mỹ... và dùng nó để xóa sạch dữ liệu S3 của công ty bạn từ xa mà bạn không hề hay biết.
+    Hậu quả: Vì Access Key này có giá trị vĩnh viễn (trừ khi bạn chủ động xóa), hacker có thể mang cặp mã này về máy tính cá nhân của chúng ở Nga, Mỹ... và dùng nó để xóa sạch dữ liệu S3 của công ty bạn từ xa mà bạn không hề hay biết.
 
-Sự an toàn tuyệt đối của Cách 2 (Dùng IAM Role):
-Khi bạn gán một IAM Role cho Máy chủ Web, bạn hoàn toàn không phải lưu bất kỳ mật khẩu hay Access Key nào trên máy chủ cả.
+Sự an toàn tuyệt đối của Cách 2 (Dùng IAM Role): Khi bạn gán một IAM Role cho Máy chủ Web, bạn hoàn toàn không phải lưu bất kỳ mật khẩu hay Access Key nào trên máy chủ cả.
+    Cơ chế hoạt động: AWS có một dịch vụ ngầm tự động phát cho máy chủ một "tấm thẻ quyền hạn tạm thời" (Temporary Credentials). Tấm thẻ này chỉ có hiệu lực trong vòng 1 đến vài tiếng rồi tự động hủy và đổi thẻ mới.
 
-Cơ chế hoạt động: AWS có một dịch vụ ngầm tự động phát cho máy chủ một "tấm thẻ quyền hạn tạm thời" (Temporary Credentials). Tấm thẻ này chỉ có hiệu lực trong vòng 1 đến vài tiếng rồi tự động hủy và đổi thẻ mới.
+    Kịch bản bị hack: Nếu hacker chiếm được Máy chủ Web, chúng cũng không tìm thấy bất kỳ mật khẩu vĩnh viễn nào lưu trên ổ cứng. Chúng chỉ có thể dùng quyền hạn đó ngay tại bên trong con máy chủ đó để ghi file lên S3.
 
-Kịch bản bị hack: Nếu hacker chiếm được Máy chủ Web, chúng cũng không tìm thấy bất kỳ mật khẩu vĩnh viễn nào lưu trên ổ cứng. Chúng chỉ có thể dùng quyền hạn đó ngay tại bên trong con máy chủ đó để ghi file lên S3.
+    Cách xử lý sự cố: Bạn (Cloud Engineer) chỉ cần lên bảng điều khiển AWS, nhấn nút Gỡ Role ra khỏi máy chủ (hoặc xóa máy chủ đó đi). Lập tức mọi quyền hạn của hacker bị cắt đứt hoàn toàn chỉ trong 1 giây. Khóa Access Key tạm thời cũ cũng tự động vô hiệu hóa.
 
-Cách xử lý sự cố: Bạn (Cloud Engineer) chỉ cần lên bảng điều khiển AWS, nhấn nút Gỡ Role ra khỏi máy chủ (hoặc xóa máy chủ đó đi). Lập tức mọi quyền hạn của hacker bị cắt đứt hoàn toàn chỉ trong 1 giây. Khóa Access Key tạm thời cũ cũng tự động vô hiệu hóa.
-
-Tư duy Cloud cốt lõi: "Con người thì dễ làm lộ mật khẩu (quên đổi, đặt mật khẩu yếu, bị lừa đảo), còn Máy móc (Role) thì tuân thủ tuyệt đối quy trình cấp khóa tạm thời và không bao giờ biết mệt mỏi."
+=> Tư duy Cloud cốt lõi: "Con người thì dễ làm lộ mật khẩu (quên đổi, đặt mật khẩu yếu, bị lừa đảo), còn Máy móc (Role) thì tuân thủ tuyệt đối quy trình cấp khóa tạm thời và không bao giờ biết mệt mỏi."
+```
+# AWS CloudTrail (Dịch vụ chuyên ghi lại nhật ký của tất cả các hành động/sự kiện cấu hình trên AWS)
+# Amazon CloudWatch Events (Dịch vụ chuyên ngồi "rình" và bắt bài xem có sự kiện cụ thể nào xảy ra không)
+# Amazon SNS (Simple Notification Service) (Dịch vụ chuyên gửi tin nhắn/email tự động)
+# Serverless
+## AWS Lambda
+```bash
+Hiện tại, các hàm AWS Lambda có một giới hạn cứng là chỉ được chạy tối đa 15 phút cho một yêu cầu. 
+    - Nếu tác vụ của bạn là render một bộ phim 3D dài 2 tiếng, hay huấn luyện một mô hình AI (Machine Learning) mất cả ngày trời, thì Lambda chắc chắn sẽ "gục ngã" và bạn bắt buộc phải dùng máy chủ truyền thống (EC2).
 ```

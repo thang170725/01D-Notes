@@ -2,7 +2,7 @@
 - [git add](#git-add)
 - [git commit](#git-commit)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
-  - [git status](#git-status)
+  - [git status (Dùng để xem trạng thái repo hiện tại)](#git-status-dùng-để-xem-trạng-thái-repo-hiện-tại)
   - [git log](#git-log)
   - [git diff](#git-diff)
 ---
@@ -39,14 +39,13 @@ Một đơn vị làm việc, đưa vào kho lưu trữ repository với nội d
 git commit –m “them file”
 ```
 # Display (Nhóm cung cấp thông tin)
-## git status
+## git status (Dùng để xem trạng thái repo hiện tại)
 ```bash
-- Dùng để xem trạng thái repo hiện tại:
-  + đang ở branch nào
-  + file nào sửa nhưng chưa stage
-  + file nào đã stage
-  + có conflict không
-  + branch có ahead/behind remote không
+- đang ở branch nào
+- file nào sửa nhưng chưa stage
+- file nào đã stage
+- có conflict không
+- branch có ahead/behind remote không
 ```
 **Ex**
 ```bash
@@ -86,14 +85,15 @@ git diff name.txt # Xem xem nội dung đã thay đổi với lần commit gần
 ```bash
 File cũ: print("hello")
 Bạn sửa: print("hello world")
+
 chạy: git diff
-ra:
-  -print("hello")
-  +print("hello world")
-Ý nghĩa
-dòng bị xóa: -
-dòng thêm: +
-Quan trọng: git diff
-so sánh: Working directory vs staging (tức sửa nhưng chưa add)
-Sau git add. git diff có thể không ra gì. vì đã stage.
+  ra:
+    -print("hello")
+    +print("hello world")
+  Ý nghĩa:
+  - dòng bị xóa: -
+  - dòng thêm: +
+  - Quan trọng: git diff
+  - so sánh: Working directory vs staging (tức sửa nhưng chưa add)
+  - Sau git add. git diff có thể không ra gì. vì đã stage.
 ```

@@ -1,16 +1,16 @@
 - [Directory Structure](#directory-structure)
 - [Introduction](#introduction)
+- [Installation](#installation)
 - [Component (Thành phần)](#component-thành-phần)
-  - [Docker Client](#docker-client)
-  - [Docker Daemon (dockerd)](#docker-daemon-dockerd)
   - [Docker Engine](#docker-engine)
-  - [Image](#image)
-  - [Container](#container)
-  - [Dockerfile](#dockerfile)
-  - [Docker Registry](#docker-registry)
+    - [Docker Client (CLI)](#docker-client-cli)
+    - [Docker Daemon (dockerd) (bộ não điều khiển của Docker)](#docker-daemon-dockerd-bộ-não-điều-khiển-của-docker)
+  - [Image (Một “khuôn mẫu” để tạo container)](#image-một-khuôn-mẫu-để-tạo-container)
+  - [Container (Image + đang chạy → Giống như process)](#container-image--đang-chạy--giống-như-process)
+  - [Dockerfile (file mô tả cách build image)](#dockerfile-file-mô-tả-cách-build-image)
+  - [Docker Registry (Nơi lưu images)](#docker-registry-nơi-lưu-images)
   - [Volume](#volume)
   - [Network](#network)
-- [Installation](#installation)
 ---
 # Directory Structure
 ```bash
@@ -32,71 +32,6 @@ Giả sử em viết một app:
     + Thành một gói duy nhất gọi là container
     + Chạy giống hệt nhau ở mọi nơi
 ```
-# Component (Thành phần)
-## Docker Client
-```bash
-- Là CLI
-- Client không chạy container trực tiếp mà nó gửi request tới Docker Daemon 
-```
-## Docker Daemon (dockerd)
-```bash
-- Đây là process chạy nền
-- Nhiệm vụ:
-    + build image
-    + start/stop container
-    + quản lý network
-    + quản lý volume
-- Giống bộ não điều khiển của Docker
-```
-## Docker Engine
-```bash
-- Bao gồm:
-    + Docker Client + Docker Daemon + REST API
-    + Đây là platform hoàn chỉnh
-```
-## Image
-```bash
-- Một “khuôn mẫu” để tạo container
-- Không chạy, chỉ là file
-- Image chứa:
-    + OS filesystem
-    + libraries
-    + app code
-    + dependencies
-```
-## Container
-```bash
-- Image + đang chạy → Giống như process
-- Ví dụ: 
-    + Image giống Class
-    + Container gống Object
-```
-## Dockerfile
-```bash
-Dockerfile là file mô tả cách build image
-```
-**Ex**
-```bash
-FROM python:3.11
-
-WORKDIR /app
-
-COPY . .
-
-RUN pip install -r requirements.txt
-
-CMD ["python", "main.py"]
-```
-## Docker Registry
-```bash
-- Nơi lưu images
-- Ví dụ:
-    + Docker Hub
-    + Github Container Registry
-    + AWS ECR
-```
-## Volume
-## Network
 # Installation
 ```bash
 1. gỡ bản docker cũ nếu có
@@ -125,3 +60,61 @@ sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 7. test container đầu tiên
     1. sudo docker run hello-world
 ```
+# Component (Thành phần)
+## Docker Engine
+```bash
+- Bao gồm:
+    + Docker Client + Docker Daemon + REST API
+    + Đây là platform hoàn chỉnh
+```
+### Docker Client (CLI)
+```bash
+Client không chạy container trực tiếp mà nó gửi request tới Docker Daemon 
+```
+### Docker Daemon (dockerd) (bộ não điều khiển của Docker)
+```bash
+- Đây là process chạy nền
+- Nhiệm vụ:
+    + build image
+    + start/stop container
+    + quản lý network
+    + quản lý volume
+```
+## Image (Một “khuôn mẫu” để tạo container)
+```bash
+Không chạy, chỉ là file
+
+Image chứa:
+    - OS filesystem
+    - libraries
+    - app code
+    - dependencies
+```
+## Container (Image + đang chạy → Giống như process)
+```bash
+Ví dụ: 
+    - Image giống Class
+    - Container gống Object
+```
+## Dockerfile (file mô tả cách build image)
+**Ex**
+```bash
+FROM python:3.11
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install -r requirements.txt
+
+CMD ["python", "main.py"]
+```
+## Docker Registry (Nơi lưu images)
+```bash
+Ví dụ:
+    - Docker Hub
+    - Github Container Registry
+    - AWS ECR
+```
+## Volume
+## Network

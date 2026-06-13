@@ -1,7 +1,10 @@
 - [NVIDIA Container Toolkit (Docker)](#nvidia-container-toolkit-docker)
   - [Installation (cài đặt)](#installation-cài-đặt)
 - [docker-compose.yml \& compose.yaml (cấu hình file .yml)](#docker-composeyml--composeyaml-cấu-hình-file-yml)
-  - [Những thứ thường có trong docker-compose.yml](#những-thứ-thường-có-trong-docker-composeyml)
+  - [image](#image)
+  - [restart (tự động chạy khi mở máy)](#restart-tự-động-chạy-khi-mở-máy)
+  - [depends\_on (phụ thuộc vào một container khác)](#depends_on-phụ-thuộc-vào-một-container-khác)
+  - [container\_name (đặt tên cho container)](#container_name-đặt-tên-cho-container)
     - [Volume (Cho container nhìn thấy thư mục trên máy)](#volume-cho-container-nhìn-thấy-thư-mục-trên-máy)
 - [Dockerfile (cấu hình Dockerfile)](#dockerfile-cấu-hình-dockerfile)
 - [systemctl is-enabled docker (kiểm tra tại sao bật máy Docker tự chạy?)](#systemctl-is-enabled-docker-kiểm-tra-tại-sao-bật-máy-docker-tự-chạy)
@@ -75,6 +78,7 @@ Bạn mô tả toàn bộ hệ thống trong một file YAML, sau đó chỉ c�
 Tóm lại:
   - Dockerfile = cách tạo 1 image
   - docker-compose.yml = cách chạy nhiều container/service cùng nhau
+
 Trong đồ án AI/FastAPI/React, file này thường dùng để chạy đồng thời:
   Frontend
   Backend
@@ -84,6 +88,38 @@ Trong đồ án AI/FastAPI/React, file này thường dùng để chạy đồng
 chỉ với một lệnh:
   docker compose up
 ```
+## image
+**Ex**
+```bash
+services:  
+  backend:    
+    build: ./backend    
+    image: my-lightgbm-api  
+  frontend:    
+    build: ./frontend    
+    image: my-lightgbm-ui
+
+Build xong: docker image ls
+  sẽ thấy: 
+    - my-lightgbm-api
+    - my-lightgbm-ui
+  thay vì: 
+    - lightgbm-backend
+    - lightgbm-frontend
+```
+## restart (tự động chạy khi mở máy)
+**Syn**
+```bash
+services:
+  db:
+    image: mysql
+    restart: always
+
+- always: cho phép tự khởi động container khi mở máy
+- "no"  : không cho phép tự khởi động khi mở máy 
+```
+## depends_on (phụ thuộc vào một container khác)
+## container_name (đặt tên cho container)
 **Ex: Ví dụ đơn giản**
 ```bash
 Giả sử project của bạn có:
@@ -127,7 +163,7 @@ Ngoài ra còn phải:
   - mount volume
   - truyền biến môi trường
 ```
-## Những thứ thường có trong docker-compose.yml
+**Những thứ thường có trong docker-compose.yml**
 ```bash
 1. Service
   Mỗi service = một container
@@ -197,10 +233,6 @@ dataset/train.csv
 Container:
 
 /app/dataset/train.csv
-```
-```bash
-1. restart
-2. depends_on
 ```
 **Ví dụ**
 ```bash

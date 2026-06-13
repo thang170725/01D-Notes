@@ -1,28 +1,23 @@
-- [git checkout](#git-checkout)
+- [git checkout (Tạo nhánh và chuyển sang nhánh đó (đây là cách cũ))](#git-checkout-tạo-nhánh-và-chuyển-sang-nhánh-đó-đây-là-cách-cũ)
   - [-b](#-b)
-- [git branch](#git-branch)
-  - [Create (Nhóm tạo)](#create-nhóm-tạo)
-    - [git branch ...](#git-branch-)
-    - [--orphan](#--orphan)
+  - [--orphan (Tạo branch mới không có lịch sử)](#--orphan-tạo-branch-mới-không-có-lịch-sử)
+- [git branch (Dùng để tạo nhánh mới nhưng chưa chuyển sang)](#git-branch-dùng-để-tạo-nhánh-mới-nhưng-chưa-chuyển-sang)
   - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
-    - [-l \& --list](#-l----list)
-    - [-a](#-a)
-    - [-r](#-r)
+    - [-l \& --list (chỉ liệt kê local branches trên máy của bạn, không phải toàn bộ nhánh trên GitHub)](#-l----list-chỉ-liệt-kê-local-branches-trên-máy-của-bạn-không-phải-toàn-bộ-nhánh-trên-github)
+    - [-a (Để xem nhánh trên cả local + remote.)](#-a-để-xem-nhánh-trên-cả-local--remote)
+    - [-r (liệt kê remote-tracking branches)](#-r-liệt-kê-remote-tracking-branches)
   - [Update (Nhóm cập cật)](#update-nhóm-cập-cật)
     - [-m](#-m)
   - [Remove (Nhóm xóa)](#remove-nhóm-xóa)
-    - [-D](#-d)
-- [git switch](#git-switch)
+    - [-D (xóa branch)](#-d-xóa-branch)
+- [git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)](#git-switch-vừa-tạo-branch-vừa-checkout-sáng-branch-đó-đây-là-cách-mới)
   - [-c](#-c)
 - [git fetch](#git-fetch)
   - [--prune](#--prune)
-- [git merge](#git-merge)
+- [git merge (gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union)](#git-merge-gộp-lịch-sử-commit-tức-áp-dụng-các-thay-đổi-changesdiffs-không-phải-cộng-file-kiểu-union)
 ---
-# git checkout
+# git checkout (Tạo nhánh và chuyển sang nhánh đó (đây là cách cũ))
 ## -b
-```bash
-Tạo nhánh và chuyển sang nhánh đó (đây là cách cũ)
-```
 **Ex**
 ```bash
 git checkout -b feature/login origin/feature/login # Tạo branch tên feature/login rồi chuyển sang đó
@@ -31,49 +26,34 @@ git checkout -b feature/login origin/feature/login # Tạo branch tên feature/l
 # git branch feature/login
 # git checkout feature/login
 ```
-# git branch
-## Create (Nhóm tạo)
-### git branch ...
-```bash
-Dùng để tạo nhánh mới nhưng chưa chuyển sang
-```
-**Ex**
-```bash
-git branch dev2 # tạo nhánh dev2 nhưng chưa chuyển sang
-```
-### --orphan
-```bash
-Tạo branch mới không có lịch sử
-```
+## --orphan (Tạo branch mới không có lịch sử)
 **Ex**
 ```bash
 git checkout --orphan new-main # tạo branch new-main không có lịch sử
 ```
-## Display (Nhóm cung cấp thông tin)
-### -l & --list
+# git branch (Dùng để tạo nhánh mới nhưng chưa chuyển sang)
+**Ex**
 ```bash
-chỉ liệt kê local branches trên máy của bạn, không phải toàn bộ nhánh trên GitHub.
+git branch dev2 # tạo nhánh dev2 nhưng chưa chuyển sang
 ```
+## Display (Nhóm cung cấp thông tin)
+### -l & --list (chỉ liệt kê local branches trên máy của bạn, không phải toàn bộ nhánh trên GitHub)
 **Syn**
 ```bash
-- git branch
-- git branch -l
-- git branch --list
+1. git branch
+2. git branch -l
+3. git branch --list
 ```
-### -a
-```bash
-Để xem nhánh trên cả local + remote.
-```
+### -a (Để xem nhánh trên cả local + remote.)
 **Syn**
 ```bash
 git branch -a
 ```
-### -r
+### -r (liệt kê remote-tracking branches)
 ```bash
-- liệt kê remote-tracking branches.
-- “remote-tracking branch” là gì?
-    + Không phải branch thật trên GitHub, cũng không phải branch local bạn code.
-    + Nó là bản ghi local của bạn về branch trên remote.
+“remote-tracking branch” là gì?
+  - Không phải branch thật trên GitHub, cũng không phải branch local bạn code.
+  - Nó là bản ghi local của bạn về branch trên remote.
 ```
 **Ex**
 ```bash
@@ -93,16 +73,15 @@ git branch -r
 git branch -m main # đổi tên thành main
 ```
 ## Remove (Nhóm xóa)
-### -D
+### -D (xóa branch)
 **Ex**
 ```bash
-git branch -D main # xóa branch main
+git branch -D main
 ```
-# git switch
+# git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)
 ## -c
 ```bash
 git switch -c dev2 # -c = create
-# vừa tạo branch dev2 vừa checkout sáng branch đó
 ```
 # git fetch
 ```bash
@@ -166,60 +145,17 @@ Cú pháp:
     1. git fetch origin (Lệnh này giúp Git cập nhật tất cả thông tin mới từ GitHub bao gồm nhánh mới của bạn bè)
 git status
 Hiển thị trạng thái của kho lưu trữ.
-# git merge
+# git merge (gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union)
 ```bash
-- Merge là gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union.
-
 "Fast-forward" nghĩa là gì?
-Quan trọng hơn nữa:
-Fast-forward
-đây còn không phải merge commit thật sự.
-Lịch sử kiểu này:
-A---B---C   (dev1)         \          D---E (feature/login)
-Nếu dev1 vẫn ở C và feature/login chỉ đi tiếp từ đó:
-Git chỉ kéo con trỏ:
-A---B---C---D---E
-dev1 trỏ sang E.
-Đó là fast-forward.
-Không có commit merge mới.
-
-Merge nghĩ như "patch"
-Đừng nghĩ:
-❌ gộp file
-Hãy nghĩ:
-✅ áp dụng các chỉnh sửa từ nhánh kia
-
-
-sửa file
-
-
-thêm file
-
-
-xóa file
-
-
-đều được mang sang.
-
-Nếu hai nhánh đều giữ file đó
-Ví dụ:
-Branch A:
-test.txt
-Branch B:
-test.txtlogin.txt
-(không xóa test.txt)
-merge xong mới có:
-test.txtlogin.txt
-
-Git nói rất rõ nó xóa:
-delete mode 100644 test.txt
-đây là thông báo commit được merge có hành động xóa file.
-
-Một câu cực quan trọng:
-Git merge gộp thay đổi, không gộp tập hợp file.
-Đây là lý do test.txt biến mất.
-
-Nếu muốn mình giải thích vì sao fast-forward merge khác merge commit (--no-ff) thế nào trong teamwork thì phần đó cũng đáng biết.
+  Lịch sử kiểu này:
+    A---B---C   (dev1)         \          D---E (feature/login)
+  
+  Nếu dev1 vẫn ở C và feature/login chỉ đi tiếp từ đó:
+    Git chỉ kéo con trỏ:
+      A---B---C---D---E
+    dev1 trỏ sang E.
+  => Đó là fast-forward.
 ```
 **Ex**
 ```bash

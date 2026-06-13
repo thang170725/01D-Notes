@@ -11,5 +11,5 @@ dev-notes           # mình dùng thư mục này là second brain
 ```
 # Icons
 ```bash
-→ ↓
+→ ↓ ∪ ∩
 ```

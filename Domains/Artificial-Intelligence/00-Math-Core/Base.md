@@ -3,6 +3,7 @@
   - [Gradient (gom tất cả đạo hàm thành một mũi tên)](#gradient-gom-tất-cả-đạo-hàm-thành-một-mũi-tên)
   - [Gradient descent](#gradient-descent)
 - [Xác suất thống kê](#xác-suất-thống-kê)
+  - [Công thức bao hàm - loại trừ](#công-thức-bao-hàm---loại-trừ)
   - [Định lý Bayes (cập nhật xác suất khi có thêm thông tin mới)](#định-lý-bayes-cập-nhật-xác-suất-khi-có-thêm-thông-tin-mới)
   - [Phân phối xác suất](#phân-phối-xác-suất)
     - [Normal \& Gaussian](#normal--gaussian)
@@ -10,6 +11,7 @@
     - [Binomial](#binomial)
     - [Central Limit Theorem (CLT) (Định lý giới hạn trung tâm)](#central-limit-theorem-clt-định-lý-giới-hạn-trung-tâm)
 - [Đại số tuyến tính](#đại-số-tuyến-tính)
+  - [Scalar (đại lượng vô hướng)](#scalar-đại-lượng-vô-hướng)
   - [Vector (một trạng thái, vị trí trong không gian)](#vector-một-trạng-thái-vị-trí-trong-không-gian)
     - [Tính vô hướng](#tính-vô-hướng)
   - [Norm 1 (Chuẩn 1)](#norm-1-chuẩn-1)
@@ -18,7 +20,8 @@
     - [Phép nhân ma trận (ghép các phép biến đổi)](#phép-nhân-ma-trận-ghép-các-phép-biến-đổi)
     - [Ma trận chuyển vị (Transpose)](#ma-trận-chuyển-vị-transpose)
     - [Ma trận nghịch đảo](#ma-trận-nghịch-đảo)
-    - [Định thức của ma trận (det)](#định-thức-của-ma-trận-det)
+    - [det (Định thức của ma trận)](#det-định-thức-của-ma-trận)
+    - [Ma trận vuông khả nghịch](#ma-trận-vuông-khả-nghịch)
   - [Eigenvalue \& Eigenvector (những hướng đặc biệt của vũ trụ)](#eigenvalue--eigenvector-những-hướng-đặc-biệt-của-vũ-trụ)
   - [SVD (giải phẫu mọi phép biến đổi)](#svd-giải-phẫu-mọi-phép-biến-đổi)
   - [Ma trận Gram](#ma-trận-gram)
@@ -78,6 +81,29 @@ w_t+1 = w_t - lambda*lr
     - Lặp lại cho đến khi loss không giảm đáng kể nữa.
 ```
 # Xác suất thống kê
+## Công thức bao hàm - loại trừ
+```bash
+Công thức bao hàm - loại trừ dùng để tính xác suất hoặc số lượng của "A hoặc B" mà không bị đếm trùng.
+
+Trong AI dùng để làm gì?
+    1. Xác suất: Tính xác suất một sự kiện xảy ra khi có nhiều điều kiện chồng lấp.
+    2. Naive Bayes và các mô hình xác suất. Ước lượng xác suất của nhiều đặc trưng cùng xuất hiện.
+    3. Data Mining: Đếm số người thuộc nhiều nhóm khác nhau mà không đếm trùng.
+    4. Đánh giá mô hình
+Tính độ phủ (coverage) của nhiều bộ lọc hoặc nhiều luật phân loại.
+```
+**Fomula**
+```bash
+P(A∪B)=P(A)+P(B)-P(A∩B)
+```
+**Ex**
+```bash
+60% người thích Toán.
+50% người thích Tin học.
+20% thích cả hai.
+
+Thì: P(thích toán hoặc Tin) = 60% + 50% − 20% = 90% Trừ 20% vì nhóm đó đã bị đếm hai lần.
+```
 ## Định lý Bayes (cập nhật xác suất khi có thêm thông tin mới)
 ```bash
 - Nói đơn giản: “Ban đầu mình nghĩ khả năng xảy ra là bao nhiêu, rồi sau khi thấy bằng chứng mới thì nên tin lại như thế nào?”
@@ -235,6 +261,21 @@ y = e**(-x**2)
         - nhiều mô hình ML/statistics hoạt động tốt
 ```
 # Đại số tuyến tính
+## Scalar (đại lượng vô hướng) 
+```bash
+Là một giá trị đơn lẻ, chỉ có độ lớn mà không có hướng. Trong toán học và vật lý, scalar thường được biểu diễn bằng một con số duy nhất.
+
+Ví dụ:
+    - Nhiệt độ: 30°C
+    - Khối lượng: 5 kg
+    - Thời gian: 10 giây
+    - Số lượng học sinh: 40
+
+Khác với:
+    - Vector: có nhiều phần tử, ví dụ [1, 2, 3].
+    - Matrix (ma trận): bảng gồm nhiều hàng và cột.
+    - Tensor: khái niệm tổng quát hơn; scalar là tensor bậc 0, vector là tensor bậc 1, ma trận là tensor bậc 2.
+```
 ## Vector (một trạng thái, vị trí trong không gian)
 ```bash
 - “một mũi tên trong không gian”
@@ -372,7 +413,42 @@ Ví dụ:
 	- Các thư viện số học (NumPy, Eigen, MATLAB, v.v.).
 Ít khi tính trực tiếp bằng công thức A
 ```
-### Định thức của ma trận (det)
+### det (Định thức của ma trận)
+```bash
+Là một số vô hướng (scalar) được tính từ một ma trận vuông.
+
+Determinant là một con số tóm tắt tính chất của ma trận vuông: nó cho biết ma trận có khả nghịch hay không và mức độ co giãn của phép biến đổi tuyến tính mà ma trận biểu diễn.
+
+Dùng để làm gì?
+    - Kiểm tra ma trận có nghịch đảo được không:
+        + det(A) ≠ 0 → có ma trận nghịch đảo.
+        + det(A) = 0 → không nghịch đảo được.
+        => Cho biết phép biến đổi tuyến tính do ma trận tạo ra làm co giãn diện tích/thể tích bao nhiêu lần.
+    - Dùng trong giải hệ phương trình tuyến tính và một số bài toán đại số tuyến tính.
+```
+**Formula (Công thức)**
+```bash
+Ma trận 2×2
+    Nếu 
+        A= [[a, b], [c, d]]
+    thì
+        det⁡(A) = ad − bc
+
+
+Ma trận 3×3
+    A = [[a, b, c,], [d, e, f], [g, h, i]]
+    thì det⁡(A) = a(ei−fh) − b(di−fg) + c(dh−eg)
+```
+### Ma trận vuông khả nghịch
+```bash
+Ma trận vuông khả nghịch (invertible matrix) là một ma trận vuông A có tồn tại một ma trận khác A^-1 sao cho:
+    A.A^−1 = A^−1.A = I
+        - A: ma trận gốc kích thước n×n.
+        - A^−1: ma trận nghịch đảo của A.
+        - I: ma trận đơn vị (đường chéo chính toàn số 1).
+
+Nói đơn giản, nếu nhân một ma trận với ma trận nghịch đảo của nó thì ta "quay về trạng thái ban đầu", giống như phép chia là nghịch đảo của phép nhân đối với số thực.
+```
 ## Eigenvalue & Eigenvector (những hướng đặc biệt của vũ trụ)
 ```bash
 - Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại. Đó là eigenvector.

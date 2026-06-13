@@ -5,8 +5,8 @@
   - [Table](#table)
     - [Column()](#column)
 - [Search (Nhóm tìm kiếm để lấy dữ liệu)](#search-nhóm-tìm-kiếm-để-lấy-dữ-liệu)
-  - [select()](#select)
-  - [.where()](#where)
+  - [select() (Là các mới của query dùng được cho cả CORE + ORM)](#select-là-các-mới-của-query-dùng-được-cho-cả-core--orm)
+  - [.where() (lấy đôi tượng có điều kiện)](#where-lấy-đôi-tượng-có-điều-kiện)
   - [.join()](#join)
 - [Display](#display)
   - [.columns](#columns)
@@ -174,10 +174,7 @@ Column(
 )
 ```
 # Search (Nhóm tìm kiếm để lấy dữ liệu)
-## select()
-```bash
-Là các mới của query dùng được cho cả CORE + ORM.
-```
+## select() (Là các mới của query dùng được cho cả CORE + ORM)
 **Ex1**
 ```python
 from sqlalchemy import select
@@ -203,7 +200,7 @@ result = session.execute(stmt).mappings().all()
 
 [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
 ```
-## .where()
+## .where() (lấy đôi tượng có điều kiện)
 ```bash
 - where() dùng được cho cả Core và ORM trong SQLAlchemy mới (2.0 style).
 - Thực tế hiện nay:

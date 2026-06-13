@@ -1,3 +1,4 @@
+- [Introduction](#introduction)
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
   - [list() \& \[\]](#list--)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
@@ -18,6 +19,10 @@
 - [Transform (Xử lý biến dạng cấu trúc mảng)](#transform-xử-lý-biến-dạng-cấu-trúc-mảng)
   - [.append()](#append)
 ---
+# Introduction
+```bash
+list (danh sách) dùng để lưu nhiều giá trị theo thứ tự và có thể thay đổi được (thêm, xóa, sửa phần tử).
+```
 # Create (Nhóm khởi tạo)
 ## list() & []
 ```bash

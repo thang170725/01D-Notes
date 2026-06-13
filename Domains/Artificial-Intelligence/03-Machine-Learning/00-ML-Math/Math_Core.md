@@ -3,6 +3,10 @@
 - [Phương sai](#phương-sai)
 - [Độ lệch chuẩn tổng thể và độ lệch chuẩn mẫu](#độ-lệch-chuẩn-tổng-thể-và-độ-lệch-chuẩn-mẫu)
 - [Bias và Variance](#bias-và-variance)
+- [Cấp số cộng](#cấp-số-cộng)
+- [Cấp số nhân](#cấp-số-nhân)
+- [Preprocessor (Toán học trong tiền xử lý)](#preprocessor-toán-học-trong-tiền-xử-lý)
+  - [Q1 \& Q2 (cách chia dữ liệu thành các phần)](#q1--q2-cách-chia-dữ-liệu-thành-các-phần)
 - [Computer Vision](#computer-vision)
   - [Kernel](#kernel)
   - [Gaussian Blur](#gaussian-blur)
@@ -428,6 +432,104 @@ Cây quyết định có nhược điểm:
         + Dataset B (khác một chút) => Tree B
         Có thể cho ra hai cây hoàn toàn khác nhau.
 Ta gọi đây là high variance.
+```
+# Cấp số cộng
+**Fomula**
+```bash
+Công thức số hạng tổng quát: un = u1+(n−1)d
+```
+**Cấp số cộng trong AI dùng ở đâu?**
+```bash
+a) Learning rate schedule
+    Ví dụ learning rate giảm đều: 0.1,0.09,0.08,0.07,…
+        Đây là một CSC với công sai: d=−0.01
+        Ý tưởng: mỗi epoch giảm một lượng cố định.
+
+b) Tính tổng số phép tính
+    Ví dụ mạng neural có số neuron: 100,200,300,400
+        Tổng số neuron: Sn = (n(a1+an))/2 => Chính là công thức tổng CSC.
+```
+# Cấp số nhân
+**Fomula**
+```bash
+Công thức số hạng tổng quát: un = u1.q**(n−1)
+```
+**Cấp số nhân trong AI dùng ở đâu?**
+```bash
+Đây mới là thứ xuất hiện rất thường xuyên.
+
+a) Learning rate decay
+    Ví dụ: 0.1,0.09,0.081,0.0729,…
+        Mỗi lần nhân với 0.9: un = u1×0.9**(n−1) => Đây là CSN.
+
+b) Neural Network
+    Lan truyền qua nhiều lớp thường có dạng: x,Wx,W**2.x, W**3.x, ...
+
+    Nếu trị riêng của W là λ, độ lớn tín hiệu có xu hướng: 1, λ, λ**2, λ**3, ... => Đó chính là CSN.
+
+    Từ đây xuất hiện hiện tượng:
+        - Vanishing gradient (gradient giảm theo cấp số nhân).
+        - Exploding gradient (gradient tăng theo cấp số nhân).
+```
+# Preprocessor (Toán học trong tiền xử lý)
+## Q1 & Q2 (cách chia dữ liệu thành các phần)
+```bash
+Hình dung trực quan:
+    Nếu dữ liệu là 100 người xếp hàng từ thấp đến cao:
+    |---------|---------|---------|---------|
+    0%        25%       50%       75%      100%
+              Q1      Median       Q3
+        - Q1: người đứng ở vị trí khoảng thứ 25.
+        - Median: người đứng ở vị trí khoảng thứ 50.
+        - Q3: người đứng ở vị trí khoảng thứ 75.
+    Chúng chỉ là các mốc vị trí trong dữ liệu.
+
+Vậy dùng Q1 và Q3 để làm gì?
+    Chúng giúp trả lời câu hỏi: "Phần lớn dữ liệu nằm ở đâu?"
+    
+    Khoảng từ Q1 đến Q3 chứa 50% dữ liệu ở giữa.
+        Ví dụ trên:
+            - Q1 = 11.5
+            - Q3 = 16.5
+            
+            Khoảng: 11.5 ---------------- 16.5 => là nơi tập trung của đa số điểm số "bình thường".
+
+Có thể hiểu cực kỳ đơn giản như thế này:
+    - Median: "Người ở giữa đám đông."
+    - Q1: "Người ở giữa nửa dưới."
+    - Q3: "Người ở giữa nửa trên."
+Ba mốc này giúp bạn biết đám đông phân bố như thế nào mà không bị vài giá trị cực lớn hoặc cực nhỏ làm méo mó. Vì thế chúng rất hữu ích trong thống kê và phân tích dữ liệu.
+```
+**Ex**
+```bash
+Giả sử lớp bạn có 8 bạn và điểm kiểm tra là: 10, 11, 12, 13, 15, 16, 17, 100 
+    Ta xếp từ thấp đến cao (ở đây đã xếp sẵn rồi).
+
+Bước 1: Tìm điểm giữa (median)
+    Có 8 số nên điểm giữa nằm giữa số thứ 4 và thứ 5:
+    10 11 12 13 | 15 16 17 100
+             ↑
+
+    Median = (13 + 15) / 2 = 14
+        Median chia dữ liệu thành hai nửa:
+            - Nửa thấp: 10, 11, 12, 13
+            - Nửa cao: 15, 16, 17, 100
+        
+        Q1 là điểm giữa của nửa thấp. Nửa thấp:
+            10 11 12 13
+                ↑  ↑
+            
+            Q1 = (11 + 12) / 2 = 11.5
+                - Khoảng 25% dữ liệu nhỏ hơn Q1.
+                - Nói cách khác, Q1 là mốc "1/4 quãng đường" của dữ liệu.
+        
+        Q3 là điểm giữa của nửa cao. Nửa cao:
+            15 16 17 100
+               ↑  ↑
+
+            Q3 = (16 + 17) / 2 = 16.5
+                - Khoảng 75% dữ liệu nhỏ hơn Q3.
+                - Hay nói cách khác, Q3 là mốc "3/4 quãng đường".
 ```
 # Computer Vision
 ## Kernel

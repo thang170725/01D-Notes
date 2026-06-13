@@ -1,5 +1,16 @@
 - [Missing values (kỹ thuật xử lý giá trị thiếu)](#missing-values-kỹ-thuật-xử-lý-giá-trị-thiếu)
 - [Outlier (Phát hiện \& xử lý giá trị ngoại lai)](#outlier-phát-hiện--xử-lý-giá-trị-ngoại-lai)
+  - [Boxplot / IQR (Interquartile Range) (Khoảng tứ phân vị)](#boxplot--iqr-interquartile-range-khoảng-tứ-phân-vị)
+  - [Z-Score (Giá trị này cách mức trung bình bao nhiêu độ lệch chuẩn)](#z-score-giá-trị-này-cách-mức-trung-bình-bao-nhiêu-độ-lệch-chuẩn)
+  - [Modified Z-Score (Median Absolute Deviation)](#modified-z-score-median-absolute-deviation)
+  - [Histogram (biểu đồ tần suất)](#histogram-biểu-đồ-tần-suất)
+  - [Scatter Plot](#scatter-plot)
+  - [Percentile](#percentile)
+  - [Distance-Based (Khoảng cách)](#distance-based-khoảng-cách)
+  - [KNN Outlier Detection](#knn-outlier-detection)
+  - [Local Outlier Factor (LOF) (Không chỉ xem khoảng cách mà còn xem mật độ lân cận)](#local-outlier-factor-lof-không-chỉ-xem-khoảng-cách-mà-còn-xem-mật-độ-lân-cận)
+  - [Isolation Forest](#isolation-forest)
+  - [DBSCAN](#dbscan)
 - [Scale (Đưa feature về cùng thang đo)](#scale-đưa-feature-về-cùng-thang-đo)
   - [Standardization (Z-score)](#standardization-z-score)
   - [Min-Max Scaling](#min-max-scaling)
@@ -334,258 +345,103 @@ df['invalid_age'] = (
 # D      14    90      0
 ```
 # Outlier (Phát hiện & xử lý giá trị ngoại lai)
+## Boxplot / IQR (Interquartile Range) (Khoảng tứ phân vị)
 ```bash
-1. Boxplot / IQR (Interquartile Range)
-Bạn đã biết cách này.
-Tính:
-
-
-Q1 = 25%
-
-
-Q3 = 75%
-
-
-IQR:
-IQR=Q3−Q1IQR = Q3 - Q1IQR=Q3−Q1
-Ngưỡng:
-Lower=Q1−1.5×IQRLower = Q1 - 1.5 \times IQRLower=Q1−1.5×IQR
-Upper=Q3+1.5×IQRUpper = Q3 + 1.5 \times IQRUpper=Q3+1.5×IQR
-Điểm nằm ngoài khoảng này được xem là outlier.
-Ví dụ:
-[10, 11, 12, 13, 15, 16, 17, 100]
-100 sẽ bị đánh dấu.
-Ưu điểm:
-
-
-Đơn giản.
-
-
-Không giả định phân phối chuẩn.
-
-
-Nhược điểm:
-
-
-Dữ liệu lệch mạnh có thể đánh dấu hơi nhiều.
-
-
-
-2. Z-Score
-Áp dụng khi dữ liệu gần phân phối chuẩn.
-Công thức:
-z=x−μσz=\frac{x-\mu}{\sigma}z=σx−μ​xxxμ\muμσ\sigmaσz=x−μσ≈1.2z=\frac{x-\mu}{\sigma}\approx 1.2z=σx−μ​≈1.2Φ(z)≈88.5%\Phi(z)\approx 88.5\%Φ(z)≈88.5%
-Trong đó:
-
-
-xxx: giá trị
-
-
-μ\muμ: mean
-
-
-σ\sigmaσ: độ lệch chuẩn
-
-
-Thông thường:
-|z| > 3
-=> outlier
-Ví dụ:
-Giá trịZ-score10-0.2120.1150.51006.8
-100 là outlier.
-Python:
-from scipy.stats import zscoredf["z"] = zscore(df["salary"])outliers = df[df["z"].abs() > 3]
-
-3. Modified Z-Score (Median Absolute Deviation)
-Z-score dùng mean nên dễ bị outlier kéo lệch.
-Ví dụ:
-[10, 11, 12, 13, 1000]
-Mean bị kéo lên rất mạnh.
-Người ta thay bằng:
-
-
-Median
-
-
-MAD (Median Absolute Deviation)
-
-
-Ổn định hơn nhiều.
-Hay dùng trong dữ liệu tài chính.
-
-4. Histogram
-Vẽ histogram.
-Ví dụ:
-20-30 ██████████30-40 ████████40-50 ██████50-60 ███200    █
-Nhìn phát thấy 200 đứng riêng.
-
-5. Scatter Plot
-Rất hữu ích với dữ liệu nhiều biến.
-Ví dụ:
-AreaPrice505555.5606656.56050
-Điểm:
-(60, 50)
-sẽ nằm tách hẳn khỏi đám đông.
-
-6. Percentile
-Ví dụ:
-Top 1%Bottom 1%
-coi là outlier.
-Hay dùng trong:
-
-
-Thu nhập
-
-
-Giá nhà
-
-
-Doanh thu
-
-
-Ví dụ:
-lower = df["salary"].quantile(0.01)upper = df["salary"].quantile(0.99)
-
-7. Distance-Based (Khoảng cách)
-Ý tưởng:
-Điểm nào nằm quá xa các điểm khác→ Outlier
-Ví dụ:
-(1,1)(1,2)(2,1)(50,50)
-Điểm:
-(50,50)
-rất xa cụm còn lại.
-
-8. KNN Outlier Detection
-Ý tưởng giống bạn nói lúc xử lý missing value.
-Ví dụ:
-Một căn nhà:100m²3 phòng ngủ
-Nếu tất cả nhà gần nó đều:
-Giá 4-5 tỷ
-nhưng nó:
-50 tỷ
-thì khả năng là outlier.
-Dựa trên khoảng cách tới k láng giềng gần nhất.
-
-9. Local Outlier Factor (LOF)
-Một kỹ thuật rất nổi tiếng.
-Ý tưởng:
-Không chỉ xem khoảng cáchmà còn xem mật độ lân cận
-Ví dụ:
-Cụm A: rất dàyCụm B: thưa
-Một điểm có thể bình thường ở cụm B nhưng là outlier ở cụm A.
-Scikit-learn:
-from sklearn.neighbors import LocalOutlierFactorlof = LocalOutlierFactor()labels = lof.fit_predict(X)
-
-10. Isolation Forest
-Đây là kỹ thuật cực kỳ phổ biến trong ML hiện đại.
-Ý tưởng:
-Outlier thường dễ tách ra khỏi dữ liệu
-Ví dụ:
-100
-rất dễ bị cô lập.
-Trong khi:
-10,11,12,13
-khó tách hơn.
-Scikit-learn:
-from sklearn.ensemble import IsolationForestclf = IsolationForest()labels = clf.fit_predict(X)
-
-11. DBSCAN
-Thuật toán clustering.
-Ý tưởng:
-Các điểm không thuộc cụm nào→ Outlier
-Ví dụ:
-●●●●●      ●●●●●●
-Điểm ở giữa không thuộc cụm nào.
-DBSCAN sẽ gắn:
-label = -1
-
-Thực tế Data Scientist hay dùng gì?
-Dữ liệu 1 biến
-Ví dụ:
-
-
-tuổi
-
-
-lương
-
-
-diện tích
-
-
-Thường:
-
-
-IQR
-
-
-Boxplot
-
-
-Z-score
-
-
-
-Dữ liệu nhiều biến
-Ví dụ:
-
-
-diện tích
-
-
-số phòng ngủ
-
-
-mặt tiền
-
-
-khoảng cách tới trung tâm
-
-
-Thường:
-
-
-Isolation Forest
-
-
-LOF
-
-
-DBSCAN
-
-
-
-Với bài toán giá nhà
-Nếu có:
-areabedroombathroomfrontagedistrictprice
-thì chỉ dùng boxplot cho price là chưa đủ.
-Ví dụ:
-AreaPrice505 tỷ30025 tỷ
-25 tỷ không hề là outlier nếu diện tích 300m².
-Nhưng:
-AreaPrice5050 tỷ
-thì mới đáng nghi.
-Lúc này phải dùng các phương pháp đa biến như:
-
-
-Scatter Plot
-
-
-LOF
-
-
-Isolation Forest
-
-
-vì chúng xét mối quan hệ giữa nhiều đặc trưng cùng lúc, chứ không chỉ nhìn từng cột riêng lẻ.
+IQR là khoảng cách 50% dữ liệu ở giữa
+    IQR = Q3−Q1
 ```
-- [Missing values (kỹ thuật xử lý giá trị thiếu)](#missing-values-kỹ-thuật-xử-lý-giá-trị-thiếu)
-- [Outlier (Phát hiện \& xử lý giá trị ngoại lai)](#outlier-phát-hiện--xử-lý-giá-trị-ngoại-lai)
-- [Scale (Đưa feature về cùng thang đo)](#scale-đưa-feature-về-cùng-thang-đo)
-  - [Standardization (Z-score)](#standardization-z-score)
-  - [Min-Max Scaling](#min-max-scaling)
-  - [Robust Scaling](#robust-scaling)
----
+**Tính ngưỡng để phát hiện outlier**
+```bash
+Ta tạo hai "hàng rào":
+    - Ngưỡng dưới: Lower = Q1 − 1.5×IQR
+    - Ngưỡng trên: Upper = Q3 + 1.5×IQR
+=> Điểm nằm ngoài khoảng này được xem là outlier.
+
+Ví dụ: [10, 11, 12, 13, 15, 16, 17, 100] => 100 sẽ bị đánh dấu.
+    Ưu điểm:
+        - Đơn giản.
+        - Không giả định phân phối chuẩn.
+    Nhược điểm:
+        - Dữ liệu lệch mạnh có thể đánh dấu hơi nhiều.
+```
+## Z-Score (Giá trị này cách mức trung bình bao nhiêu độ lệch chuẩn)
+```bash
+Dùng để tìm outlier
+    Quy tắc thường dùng:
+        Nếu |z| > 3 thì coi là outlier. Nghĩa là giá trị đó cách trung bình hơn 3 lần độ lệch chuẩn, khá bất thường.
+
+Khi nào dùng?
+    ✅ Dùng tốt khi dữ liệu có dạng chuông (gần phân phối chuẩn).
+    ❌ Nếu dữ liệu bị lệch mạnh, Z-score có thể cho kết quả không tốt.
+```
+**Fomula**
+```bash
+z = (x-μ)/σ
+
+- x: là giá trị cần kiểm tra
+- μ (mean): giá trị trung bình
+- σ (độ lệch chuẩn): mức độ dữ liệu phân tán
+```
+**Ex**
+```bash
+Giả sử chiều cao học sinh trong lớp:
+    - Trung bình: 170 cm
+    - Độ lệch chuẩn: 5 cm
+
+Một bạn cao 180 cm:
+    z = (180−170)/5 = 2
+=> Bạn này cao hơn trung bình 2 độ lệch chuẩn.
+```
+## Modified Z-Score (Median Absolute Deviation)
+```bash
+Z-score dùng mean nên dễ bị outlier kéo lệch.
+    Ví dụ: [10, 11, 12, 13, 1000]. Mean bị kéo lên rất mạnh.
+        Người ta thay bằng: Median - MAD (Median Absolute Deviation)
+            - Ổn định hơn nhiều.
+            - Hay dùng trong dữ liệu tài chính.
+```
+## Histogram (biểu đồ tần suất)
+**Ex**
+```bash
+20-30 ██████████
+30-40 ████████
+40-50 ██████
+50-60 ███
+200   █
+# Nhìn phát thấy 200 đứng riêng.
+```
+## Scatter Plot
+```bash
+Rất hữu ích với dữ liệu nhiều biến.
+```
+## Percentile
+## Distance-Based (Khoảng cách)
+```bash
+Ý tưởng: Điểm nào nằm quá xa các điểm khác→ Outlier
+    Ví dụ: (1,1)(1,2)(2,1)(50,50)
+        Điểm: (50,50) - rất xa cụm còn lại.
+```
+## KNN Outlier Detection
+```bash
+Dựa trên khoảng cách tới k láng giềng gần nhất.
+```
+## Local Outlier Factor (LOF) (Không chỉ xem khoảng cách mà còn xem mật độ lân cận)
+## Isolation Forest
+```bash
+Đây là kỹ thuật cực kỳ phổ biến trong ML hiện đại. Ý tưởng:
+    Outlier thường dễ tách ra khỏi dữ liệu
+
+Ví dụ: 100
+    - rất dễ bị cô lập.
+    - Trong khi: 10,11,12,13. khó tách hơn.
+```
+## DBSCAN
+```bash
+Thuật toán clustering. Ý tưởng: Các điểm không thuộc cụm nào → Outlier
+    Ví dụ:
+        ●●●●●      ●●●●●●
+        Điểm ở giữa không thuộc cụm nào. DBSCAN sẽ gắn: label = -1
+```
 # Scale (Đưa feature về cùng thang đo)
 **Ex**
 ```bash
@@ -845,3 +701,68 @@ One-Hot cho ít category.
 Label Encoding cho dữ liệu có thứ tự.
 
 Target Encoding cho category nhiều và muốn tránh bùng nổ số cột.
+Rất ngắn gọn:
+
+PCA: Nén dữ liệu bằng cách giữ lại những thông tin quan trọng nhất.
+Dùng khi dữ liệu có nhiều cột (nhiều đặc trưng).
+Giúp giảm chiều, tăng tốc huấn luyện, giảm nhiễu.
+Ví dụ: từ 1000 đặc trưng giảm còn 50 đặc trưng.
+t-SNE: Vẽ dữ liệu nhiều chiều xuống 2D/3D để nhìn xem các nhóm có tách biệt không.
+Chủ yếu để trực quan hóa.
+Ví dụ: kiểm tra ảnh mèo, chó, chim có tự động tụ thành các cụm riêng không.
+UMAP: Giống t-SNE nhưng nhanh hơn, giữ được cấu trúc tổng thể tốt hơn.
+Thường được dùng thay t-SNE trên tập dữ liệu lớn.
+Ghi nhớ một câu
+PCA → "nén dữ liệu để mô hình học nhanh hơn".
+t-SNE / UMAP → "vẽ dữ liệu để con người nhìn và hiểu nó".
+Tuyến tính vs Phi tuyến tính
+PCA (tuyến tính): giả sử dữ liệu có thể được mô tả bằng các đường/thành phần tuyến tính.
+t-SNE, UMAP (phi tuyến tính): xử lý được các hình dạng phức tạp như vòng tròn, xoắn ốc, cụm cong mà PCA thường không tách được.
+Ví dụ rất dễ hiểu:
+PCA (nén dữ liệu)
+Giả sử mỗi người có:
+
+
+Chiều cao
+
+
+Cân nặng
+
+
+Cỡ áo
+
+
+Ba thông tin này liên quan khá chặt với nhau. Người cao thường nặng hơn và mặc áo lớn hơn.
+PCA có thể gộp chúng thành một chỉ số mới như:
+
+"Kích thước cơ thể"
+
+Thay vì lưu 3 cột, chỉ cần 1 cột mà vẫn giữ phần lớn thông tin.
+➡️ Trong AI: giảm số đặc trưng để mô hình học nhanh hơn.
+
+t-SNE / UMAP (vẽ dữ liệu)
+Giả sử AI đã biến mỗi ảnh thành 1000 con số.
+Con người không thể nhìn dữ liệu 1000 chiều.
+t-SNE hoặc UMAP sẽ vẽ chúng xuống mặt phẳng 2D:
+
+
+Ảnh chó tụ thành một đám.
+
+
+Ảnh mèo tụ thành một đám khác.
+
+
+Ảnh chim tụ thành một đám khác.
+
+
+Ta nhìn biểu đồ và thấy:
+🐶🐶🐶🐶        🐱🐱🐱🐱                    🐦🐦🐦🐦
+➡️ Trong AI: kiểm tra xem dữ liệu hoặc embedding có tự động phân nhóm tốt không.
+Tóm tắt
+
+
+PCA = "nén dữ liệu".
+
+
+t-SNE / UMAP = "vẽ dữ liệu nhiều chiều thành hình để nhìn các cụm".
+

@@ -18,8 +18,8 @@
     - [Enum](#enum)
     - [Date \& TIMESTAMP](#date--timestamp)
     - [JSON](#json)
-- [Search](#search)
-  - [.query()](#query)
+- [Search (tìm kiếm đôi tượng+](#search-tìm-kiếm-đôi-tượng)
+  - [.query() (lấy ra đối tượng = select \* from ...)](#query-lấy-ra-đối-tượng--select--from-)
 - [Filtering (Bộ lọc)](#filtering-bộ-lọc)
   - [.filter() (Lọc theo điều kiện)](#filter-lọc-theo-điều-kiện)
     - [like()](#like)
@@ -294,11 +294,8 @@ Enum('sedentary', 'light', "moderate", name='activity_level_role')
     + TIMESTAMP → trả về kiểu: datetime.datetime
 ```
 ### JSON
-# Search
-```bash
-- tìm kiếm đôi tượng
-```
-## .query()
+# Search (tìm kiếm đôi tượng+
+## .query() (lấy ra đối tượng = select * from ...)
 ```bash
 Là select kiểu cũ, giờ đổi thành select() - select là chuẩn mới dùng cho cả CORE + ORM.
 ```

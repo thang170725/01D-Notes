@@ -5,7 +5,8 @@
 - [np.power() \& \*\*](#nppower--)
 - [Sqrt()](#sqrt)
   - [Pi](#pi)
-- [.mean() \& .median()](#mean--median)
+- [.mean() (tìm ra giá trị trung bình của một dãy số)](#mean-tìm-ra-giá-trị-trung-bình-của-một-dãy-số)
+- [.median() (giá trị trung vị (giá trị ở giữa))](#median-giá-trị-trung-vị-giá-trị-ở-giữa)
 - [+ \& - \& \* \& /](#-------)
 - [dot() \& @ \& matmul()](#dot----matmul)
 - [Exp](#exp-1)
@@ -161,15 +162,27 @@ a = np.pi
 
 print(a) # 3.141592653589793
 ```
-# .mean() & .median()
-```bash
-- mean      : Để tìm ra giá trị trung bình của một dãy số. 
-- median   : Là giá trị trung vị (giá trị ở giữa)
-```
+# .mean() (tìm ra giá trị trung bình của một dãy số)
 **Ex: mean**
 ```python
 Speed = [90, 105, 55, 60, 75]
 print(np.mean(speed)) # 77.0
+```
+# .median() (giá trị trung vị (giá trị ở giữa))
+**Fomula**
+```bash
+Trường hợp 1: n là số lẻ. 
+  Median là phần tử ở vị trí: (n+1)/2
+  Ví dụ:
+    Dữ liệu: 2,4,7,9,12
+      - Có n=5 (lẻ): (5+1)/2 = 3
+      => Median là phần tử thứ 3: 7
+	​
+Trường hợp 2: n là số chẵn. Median là trung bình cộng của hai phần tử ở giữa:
+  Ví dụ: Dữ liệu: 1,3,6,8,10,15
+    Có n=6 (chẵn):
+      Hai phần tử giữa là: 6,8
+    nên: Median = (6+8)/2=7
 ```
 **Ex: median**
 ```python

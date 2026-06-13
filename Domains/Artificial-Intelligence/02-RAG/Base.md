@@ -13,18 +13,20 @@
 ---
 # Introduction
 ```bash
-- Vấn đề của AI thông thường. Các mô hình như ChatGPT chỉ biết những gì đã được huấn luyện trước đó.
-    + Ví dụ: Em hỏi: “Quy định nội bộ công ty ABC về nghỉ phép là gì?” AI không biết, vì tài liệu đó không có trong dữ liệu huấn luyện. => Đây là lúc RAG xuất hiện.
-- RAG = Retrieval-Augmented Generation. Dịch dễ hiểu: “Tìm tài liệu trước → rồi mới trả lời”
-- Thay vì:
-    + AI trả lời dựa hoàn toàn vào trí nhớ
-    + Thì RAG: AI đi tìm tài liệu liên quan, đọc nó, rồi trả lời dựa trên tài liệu đó
+Vấn đề của AI thông thường: 
+    - Các mô hình như ChatGPT chỉ biết những gì đã được huấn luyện trước đó.
+    - Ví dụ: Em hỏi: “Quy định nội bộ công ty ABC về nghỉ phép là gì?” AI không biết, vì tài liệu đó không có trong dữ liệu huấn luyện. => Đây là lúc RAG xuất hiện.
+=> RAG = Retrieval-Augmented Generation. Dịch dễ hiểu: “Tìm tài liệu trước → rồi mới trả lời”
+
+Thay vì:
+    - AI trả lời dựa hoàn toàn vào trí nhớ
+    - Thì RAG: AI đi tìm tài liệu liên quan, đọc nó, rồi trả lời dựa trên tài liệu đó
 ```
 **Trong RAG có phải luôn phải nạp tài liệu không?**
 ```bash
 Không. Có hai kiểu phổ biến:
     Kiểu 1: RAG trên tài liệu riêng
-        Ví dụ chatbot nội bộ công ty.
+        Ví dụ: chatbot nội bộ công ty.
             Bạn nạp: employee_handbook.pdfcompany_policy.pdf
             
             Pipeline: PDF -> Chunking -> Embedding -> Vector Database -> Retrieval -> LLM
@@ -50,290 +52,106 @@ Không. Có hai kiểu phổ biến:
 **ChatGPT, Gemini, Claude có dùng RAG để tìm web không?**
 ```bash
 Có, khi bật khả năng tìm kiếm.
-Ví dụ bạn hỏi:
 
-Thời tiết Hà Nội hôm nay
-
-LLM không thể biết chính xác vì dữ liệu huấn luyện đã cũ.
-Nó sẽ:
-Query ↓Search Tool ↓Nguồn thời tiết ↓LLM tổng hợp ↓Trả lời
-Đây chính là RAG kết hợp web search.
-
-1. Nếu không dùng RAG thì sao?
+Ví dụ bạn hỏi: Thời tiết Hà Nội hôm nay
+    LLM không thể biết chính xác vì dữ liệu huấn luyện đã cũ.
+    
+    Khi hỏi "Thời tiết Hà Nội hôm nay" thì chuyện gì xảy ra?
+        Thông thường:
+            1. User:"Thời tiết Hà Nội hôm nay?"       
+            2. LLM Router       
+            3. Phát hiện cần dữ liệu realtime       
+            4. Search API / Weather API       
+            5. Kết quả: - 31°C - Mưa rào - Độ ẩm 80%       
+            6. LLM sinh câu trả lời tự nhiên
+        => Thực tế nhiều hệ thống không đi tìm trên web tự do mà gọi thẳng API thời tiết vì dữ liệu chính xác và có cấu trúc hơn.
+        => Đây chính là RAG kết hợp web search.
+```
+**Nếu không dùng RAG thì sao?**
+```bash
 LLM chỉ dựa vào trọng số đã học.
+
 Ví dụ hỏi:
-
-Thủ đô Việt Nam là gì?
-
-Không cần RAG.
-Vì kiến thức này đã nằm trong tham số của mô hình.
-Người ta gọi là:
-Parametric Memory
-(kiến thức nằm trong weights).
+    Thủ đô Việt Nam là gì?
+=> Không cần RAG. Vì kiến thức này đã nằm trong tham số của mô hình.
+Người ta gọi là: Parametric Memory (kiến thức nằm trong weights).
 
 Ngược lại:
+    Giá Bitcoin hiện tại là bao nhiêu?
 
-Giá Bitcoin hiện tại là bao nhiêu?
-
-Thông tin thay đổi từng giây.
-Không thể lưu trong weights.
-Phải dùng:
-External Memory → RAG/Search.
-
-6. Khi hỏi "Thời tiết Hà Nội hôm nay" thì chuyện gì xảy ra?
-Thông thường:
-User:"Thời tiết Hà Nội hôm nay?"       ↓LLM Router       ↓Phát hiện cần dữ liệu realtime       ↓Search API / Weather API       ↓Kết quả:- 31°C- Mưa rào- Độ ẩm 80%       ↓LLM sinh câu trả lời tự nhiên
-Thực tế nhiều hệ thống không đi tìm trên web tự do mà gọi thẳng API thời tiết vì dữ liệu chính xác và có cấu trúc hơn.
-
-7. Dense Retrieval có phải là LLM không?
-Không hẳn.
-Thường có hai mô hình riêng:
-Retriever
-Biến câu hỏi và tài liệu thành vector.
-Ví dụ:
-
-
-DPR
-
-
-Contriever
-
-
-BGE
-
-
-E5
-
-
-GTE
-
-
-
-Generator
-Sinh câu trả lời.
-Ví dụ:
-
-
-GPT
-
-
-Claude
-
-
-Gemini
-
-
-Llama
-
-
-
-Pipeline đầy đủ:
-Question    ↓Retriever(Dense Retrieval)    ↓Top-k Documents    ↓Generator (LLM)    ↓Answer
-Đây chính là kiến trúc RAG cổ điển.
-Nói ngắn gọn:
-
-
-Dense Retrieval hiểu ngữ nghĩa nhờ mô hình Deep Learning (Transformer/Embedding Model).
-
-
-RAG không nhất thiết phải có tài liệu riêng. Nguồn dữ liệu có thể là PDF nội bộ, database, wiki công ty hoặc kết quả tìm kiếm web.
-
-
-Với các câu hỏi thời gian thực như thời tiết, giá cổ phiếu, tin tức, các hệ thống GenAI hiện đại thường dùng Search/API + RAG thay vì chỉ dựa vào kiến thức nằm trong trọng số của mô hình.
-
-Nếu bạn muốn xây dựng RAG bằng Python thì hiện nay có vài nhóm công cụ phổ biến. Tùy mục đích học tập hay triển khai thực tế mà lựa chọn khác nhau.
+    Thông tin thay đổi từng giây. Không thể lưu trong weights.
+    Phải dùng: External Memory → RAG/Search.
+```
+**Nhóm công cụ phổ biến**
+```bash
 1. Bộ công cụ phổ biến nhất hiện nay
-LangChain
-Đây là framework RAG nổi tiếng nhất.
-Nó cung cấp gần như mọi thứ:
-
-
-Load PDF
-
-
-Chunking
-
-
-Embedding
-
-
-Vector Database
-
-
-Retrieval
-
-
-Prompt
-
-
-LLM
-
-
-Ví dụ:
-from langchain.document_loaders import PyPDFLoaderfrom langchain.text_splitter import RecursiveCharacterTextSplitter
-Ưu điểm:
-
-
-Hệ sinh thái lớn
-
-
-Nhiều ví dụ
-
-
-Hỗ trợ hầu hết model
-
-
-Nhược điểm:
-
-
-Khá nặng
-
-
-API thay đổi thường xuyên
-
-
-Nhiều abstraction khiến khó hiểu bản chất
-
-
-
-LlamaIndex
-Framework sinh ra gần như chỉ để làm RAG.
-Ví dụ:
-from llama_index.core import VectorStoreIndexfrom llama_index.core import SimpleDirectoryReader
-Ưu điểm:
-
-
-Tập trung vào retrieval
-
-
-Dễ làm chatbot hỏi đáp tài liệu
-
-
-Tích hợp nhiều vector database
-
-
-Nhược điểm:
-
-
-Ít linh hoạt hơn LangChain
-
-
-
-Nếu mới học RAG:
-👉 LlamaIndex thường dễ tiếp cận hơn.
-
-2. Embedding Model
-RAG luôn cần embedding model.
-Các model phổ biến:
-BAAI/bge-small-en
-from sentence_transformers import SentenceTransformermodel = SentenceTransformer(    "BAAI/bge-small-en")
-
-BAAI/bge-large-en
-Chất lượng cao hơn.
-
-multilingual-e5-large
-Rất tốt cho tiếng Việt.
-intfloat/multilingual-e5-large
-
-OpenAI Embedding
-text-embedding-3-small
-Nếu chấp nhận trả phí.
-
-3. Vector Database
-Nơi lưu embedding.
-FAISS
-Thường dùng nhất khi học.
-Facebook phát triển.
-import faiss
-Ưu điểm:
-
-
-Nhanh
-
-
-Chạy local
-
-
-Không cần server
-
-
-Ví dụ:
-index = faiss.IndexFlatL2(768)
-
-ChromaDB
-Rất phổ biến trong các project nhỏ.
-import chromadb
-Ưu điểm:
-
-
-Dễ dùng hơn FAISS
-
-
-Có metadata
-
-
-
-Qdrant
-Khi triển khai thực tế.
-Ưu điểm:
-
-
-Hiệu năng cao
-
-
-API đẹp
-
-
-Hỗ trợ hybrid search
-
-
-
-Milvus
-Phù hợp hệ thống lớn.
-
-4. Nếu muốn tự code để hiểu bản chất
-Thực ra một RAG tối thiểu chỉ cần:
-sentence-transformersfaiss
-Ví dụ:
-documents    ↓embedding    ↓faiss
-Khi query:
-query   ↓embedding   ↓faiss search   ↓top-k chunks   ↓LLM
-Chỉ khoảng 100-200 dòng code là làm được.
-
-5. Stack mà nhiều người đang dùng hiện nay
-Học RAG từ gốc
-sentence-transformers+FAISS+OpenAI/Llama
-Bạn sẽ hiểu:
-
-
-Chunking
-
-
-Embedding
-
-
-Similarity Search
-
-
-Retrieval
-
-
-rất rõ.
-
-Làm dự án nhỏ
-LlamaIndex+ChromaDB+OpenAI
-Code rất ít.
-
-Production
-LangChain hoặc LlamaIndex+Qdrant+OpenAI / Claude / Gemini / Llama
-
-6. Nếu mục tiêu là hiểu sâu Dense Retrieval
-Mình khuyên không nên đụng LangChain ngay.
-Hãy tự viết pipeline:
-PDF ↓Chunk ↓SentenceTransformer ↓FAISS ↓Top-k Search ↓LLM
-với:
-pip install sentence-transformerspip install faiss-cpu
-Sau khi tự làm được pipeline này, bạn sẽ hiểu khoảng 80% bản chất của RAG. Lúc đó dùng LangChain hay LlamaIndex chỉ là thay thế phần code thủ công bằng framework mà thôi.
+    - LangChain: Đây là framework RAG nổi tiếng nhất. Nó cung cấp gần như mọi thứ:
+        + Load PDF
+        + Chunking
+        + Embedding
+        + Vector Database
+        + Retrieval
+        + Prompt
+        + LLM
+
+        Ưu điểm:
+            - Hệ sinh thái lớn
+            - Nhiều ví dụ
+            - Hỗ trợ hầu hết model
+        Nhược điểm:
+            - Khá nặng
+            - API thay đổi thường xuyên
+            - Nhiều abstraction khiến khó hiểu bản chất
+
+    - LlamaIndex: Framework sinh ra gần như chỉ để làm RAG.
+        Ưu điểm:
+            - Tập trung vào retrieval
+            - Dễ làm chatbot hỏi đáp tài liệu
+            - Tích hợp nhiều vector database
+        Nhược điểm:
+            - Ít linh hoạt hơn LangChain
+            - Nếu mới học RAG: LlamaIndex thường dễ tiếp cận hơn.
+
+2. Embedding Model: RAG luôn cần embedding model.
+    - BAAI/bge-small-en
+    - BAAI/bge-large-en # Chất lượng cao hơn.
+    - multilingual-e5-large # Rất tốt cho tiếng Việt.
+    - intfloat/multilingual-e5-large
+    - OpenAI Embedding
+    - text-embedding-3-small # Nếu chấp nhận trả phí.
+
+3. Vector Database: Nơi lưu embedding.
+    - FAISS # Thường dùng nhất khi học. Facebook phát triển.
+        Ưu điểm:
+            - Nhanh
+            - Chạy local
+            - Không cần server
+    - ChromaDB: Rất phổ biến trong các project nhỏ.
+        Ưu điểm:
+            - Dễ dùng hơn FAISS
+            - Có metadata
+    - Qdrant: Khi triển khai thực tế. Phù hợp hệ thống lớn.
+        Ưu điểm:
+            - Hiệu năng cao
+            - API đẹp
+            - Hỗ trợ hybrid search
+            - Milvus
+```
+**Stack mà nhiều người đang dùng hiện nay**
+```bash
+1. Học RAG từ gốc
+    sentence-transformers+FAISS+OpenAI/Llama
+    Bạn sẽ hiểu:
+        - Chunking
+        - Embedding
+        - Similarity Search
+        - Retrieval
+
+2. Làm dự án nhỏ
+    LlamaIndex+ChromaDB+OpenAI # Code rất ít.
+
+3. Production
+    LangChain hoặc LlamaIndex+Qdrant+OpenAI / Claude / Gemini / Llama
 ```
 **Pipeline**
 ```bash
@@ -434,6 +252,31 @@ Query: “thời tiết thủ đô” 👉 nhưng document viết: “Hà Nội�
 ### Dense Retrieval (tìm theo “nghĩa”)
 ```bash
 Cách nó hoạt động: biến câu thành vector (embedding) và so sánh ý nghĩa.
+    Dense Retrieval hiểu ngữ nghĩa nhờ mô hình Deep Learning (Transformer/Embedding Model).
+```
+**Dense Retrieval có phải là LLM không?**
+```bash
+Không hẳn. Thường có hai mô hình riêng:
+
+- Retriever: Biến câu hỏi và tài liệu thành vector.
+    Ví dụ:
+        - DPR
+        - Contriever
+        - BGE
+        - E5
+        - GTE
+
+- Generator: Sinh câu trả lời.
+    Ví dụ:
+        - GPT
+        - Claude
+        - Gemini
+        - Llama
+```
+**Pipeline đầy đủ**
+```bash
+Question -> Retriever(Dense Retrieval) -> Top-k Documents -> Generator (LLM) -> Answer
+=> Đây chính là kiến trúc RAG cổ điển.
 ```
 **Tại sao Dense Retrieval lại hiểu được ngũ nghĩa**
 ```bash
@@ -490,7 +333,7 @@ Cách nó hoạt động: biến câu thành vector (embedding) và so sánh ý 
             - Hà Nội ≈ thủ đô Việt Nam
         mà không cần trùng từ khóa.
 ```
-**Ex**
+**Ex1**
 ```bash
 Query: “thời tiết thủ đô”
 Model hiểu: “thủ đô” ≈ “Hà Nội”

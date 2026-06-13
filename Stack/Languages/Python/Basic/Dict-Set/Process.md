@@ -1,4 +1,4 @@
-- [Dictionary (từ điển)](#dictionary-từ-điển)
+- [Dictionary (lưu dữ liệu theo cặp key: value để tra cứu nhanh)](#dictionary-lưu-dữ-liệu-theo-cặp-key-value-để-tra-cứu-nhanh)
   - [{} \& dict](#--dict)
 - [.pop() \& Del \& .clear()](#pop--del--clear)
   - [Display (hiển thị, cung cấp thông tin)](#display-hiển-thị-cung-cấp-thông-tin)
@@ -10,7 +10,7 @@
 - [.popitem()](#popitem)
   - [\*\* (unpack dict)](#-unpack-dict)
   - [Exercise 1](#exercise-1)
-- [set](#set)
+- [Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)](#set-không-được-sắp-xếp-theo-thứ-tự-không-thể-thay-đổi-và-không-cho-phép-các-giá-trị-trùng-lặp)
   - [.clear()](#clear)
   - [del](#del)
   - [.remove()](#remove)
@@ -21,7 +21,7 @@
   - [.add()](#add)
 - [.update()](#update)
 ---
-# Dictionary (từ điển)
+# Dictionary (lưu dữ liệu theo cặp key: value để tra cứu nhanh)
 ## {} & dict
 ```bash
 - Để tạo dict.
@@ -287,15 +287,14 @@ def print_table(dic: dict):
 dic = input_dict()
 print_table(dic)
 ```
-# set
+# Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)
 ```bash
-- Các mục set không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp.
-- Sử dụng set để:
-    + Loại bỏ các phần tử trùng lặp.
-    + Kiểm tra sự tồn tại của một phần tử.
-    + Thực hiện các phép toán tập hợp.
-    + Lưu trữ dữ liệu không có thứ tự và duy nhất.
-    + Tối ưu hóa hiệu năng.
+Sử dụng set để:
+    - Loại bỏ các phần tử trùng lặp.
+    - Kiểm tra sự tồn tại của một phần tử.
+    - Thực hiện các phép toán tập hợp.
+    - Lưu trữ dữ liệu không có thứ tự và duy nhất.
+    - Tối ưu hóa hiệu năng.
 ```
 **Syn**
 ```bash
