@@ -51,37 +51,78 @@ canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True, title
   + show=True: Hiển thị cửa sổ ngay lập tức.
   + Title='': thêm tiêu đề cho cửa sổ
 ```
-### .title
-## central_widget
-### .add_view()
+### .title (Tạo tiêu đề)
+### .central_widget (quản lý bố cục (layout), chứa các widget và ViewBox)
+### .add_view() (Thêm một ViewBox vào cửa sổ)
 ```bash
-- Thêm một ViewBox vào cửa sổ. ViewBox là "cửa sổ nhìn" vào cảnh 3D, nơi chứa camera và các đối tượng trực quan.
+ViewBox là "cửa sổ nhìn" vào cảnh 3D, nơi chứa camera và các đối tượng trực quan.
 ```
 **Syn**
 ```bash
 view = canvas.central_widget.add_view()
 
-- Ouput trả về một ViewBox
+- Ouput: trả về một ViewBox
 ```
-#### .camera
-**Ex**
-```python
-view = canvas.central_widget.add_view()
-
-view.camera = 'turntable' # cho phép xoay bằng chuột
-```
-## GridLines()
+#### .camera (xác định cách bạn nhìn vào cảnh)
+**Syn**
 ```bash
-Thêm lưới toạ độ (Grid)
+view.camera = 'turntable': Thiết lập loại camera. Các loại phổ biến:
+
+- 'turntable' (hay TurntableCamera): Xoay quanh một điểm trung tâm, thích hợp cho việc xem đối tượng 3D.
+- 'arcball' (hay ArcballCamera): Tương tự turntable nhưng mượt mà hơn.
+- 'panzoom' (hay PanZoomCamera): Phổ biến cho trực quan hóa 2D (kéo và thu phóng).
 ```
+**Ex: Tạo ra không gian 3d**
+```python
+from vispy import app, scene
+
+app.use_app('pyqt5')
+
+canvas = scene.SceneCanvas(
+    keys='interactive',
+    size=(800, 600),
+    show=True,
+    title="TEST GRAPHIC 3D"
+)
+
+view = canvas.central_widget.add_view()
+view.camera = "turntable" # tạo không gian 3d
+
+grid = scene.visuals.GridLines(parent=view.scene) # tạo lưới
+
+if __name__ == '__main__':
+    app.run()
+```
+# visuals
+## GridLines() (Thêm lưới toạ độ (Grid))
 **Syn**
 ```bash
 grid = scene.visuals.GridLines(parent=view.scene)
 ```
-## XYZAxis()
-```bash
-Vẽ tọa độ trục Oxyz
+**Ex**
+```python
+from vispy import app
+from vispy import scene
+
+app.use_app('pyqt5')
+
+canvas = scene.SceneCanvas(
+    keys='interactive',
+    size=(800, 600),
+    show=True,
+    title="TEST GRAPHIC 3D"
+)
+
+view = canvas.central_widget.add_view()
+
+grid = scene.visuals.GridLines(parent=view.scene)
+
+if __name__ == '__main__':
+    app.run()
+
+# chương trình sẽ mở một cửa sổ có lưới 2d
 ```
+## XYZAxis() (Vẽ tọa độ trục Oxyz)
 **Syn**
 ```bash
 axis = scene.visuals.XYZAxis(parent=view.scene)
@@ -90,53 +131,33 @@ axis = scene.visuals.XYZAxis(parent=view.scene)
 - Trục Y → xanh lá
 - Trục Z → xanh dương
 ```
-### ViewBox
-```bash
-Vùng hiển thị (camera nhìn vào đây)
+**Ex: vẽ trục tọa độ Oxyz**
+```python
+from vispy import app, scene
+
+app.use_app('pyqt5')
+
+canvas = scene.SceneCanvas(
+    keys='interactive',
+    size=(800, 600),
+    show=True,
+    title="TEST GRAPHIC 3D"
+)
+
+view = canvas.central_widget.add_view()
+view.camera = "turntable"
+
+grid = scene.visuals.GridLines(parent=view.scene)
+axis = scene.visuals.XYZAxis(parent=view.scene)
+
+if __name__ == '__main__':
+    app.run()
 ```
-# Run()
+## .Sphere() (một đối tượng hình cầu 3D)
 ```bash
-- Khởi động vòng lặp ứng dụng chính (main event loop) của VisPy. Đây là hàm chặn (blocking) và cần thiết để cửa sổ hiển thị và tương tác hoạt động.
-- Cách dùng: Gọi ở cuối script của bạn.
-```
-Quit()
-Chức năng: Thoát khỏi vòng lặp ứng dụng.
-Timer
-start
-stop
-Connect
+Nó thuộc: scene.visuals.Sphere
 
-.set_range()
-.azimuth
-.elevation
-.scene
-
-
-update
-on_draw()
-Camera
-Camera xác định cách bạn nhìn vào cảnh.
-
-    Thuộc tính/Hàm thường dùng trên ViewBox:
-
-        view.camera = 'turntable': Thiết lập loại camera. Các loại phổ biến:
-
-            'turntable' (hay TurntableCamera): Xoay quanh một điểm trung tâm, thích hợp cho việc xem đối tượng 3D.
-
-            'arcball' (hay ArcballCamera): Tương tự turntable nhưng mượt mà hơn.
-
-            'panzoom' (hay PanZoomCamera): Phổ biến cho trực quan hóa 2D (kéo và thu phóng).
-
-        view.camera.set_range(x_min, x_max, y_min, y_max, z_min, z_max): Thiết lập phạm vi tọa độ của cảnh.
-
-canvas.title = 'One Point'
-# Draw (Vẽ)
-## visuals
-### .Sphere()
-```bash
-- Bản chất Sphere = một đối tượng hình cầu 3D
-- Nó thuộc: scene.visuals.Sphere
-- Dùng để 
+Dùng để:
     + Vẽ hành tinh 🌍
     + Vẽ mặt trời 🌞
     + Vẽ object tròn trong 3D
@@ -167,6 +188,31 @@ scene.visuals.Sphere(
         - transform
         - state để vẽ
 ```
+### ViewBox
+```bash
+Vùng hiển thị (camera nhìn vào đây)
+```
+# Run() (Khởi động vòng lặp ứng dụng chính (main event loop) của VisPy. Đây là hàm chặn (blocking) và cần thiết để cửa sổ hiển thị và tương tác hoạt động)
+```bash
+Cách dùng: Gọi ở cuối script của bạn.
+```
+# Quit() (Thoát khỏi vòng lặp ứng dụng)
+Timer
+start
+stop
+Connect
+
+.set_range()
+.azimuth
+.elevation
+.scene
+
+
+update
+on_draw()
+
+
+canvas.title = 'One Point'
 # Location (xử lý vị trí)
 ## .transform
 ```bash
