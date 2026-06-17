@@ -14,7 +14,7 @@
   - [.clear() \& del \& .remove()](#clear--del--remove)
   - [max()](#max)
   - [\[\]](#)
-  - [.sort() \& sorted() (sắp xếp)](#sort--sorted-sắp-xếp)
+  - [.sort() \& sorted() (Sắp xếp các phần tử trong mảng)](#sort--sorted-sắp-xếp-các-phần-tử-trong-mảng)
   - [sum()](#sum)
 - [Transform (Xử lý biến dạng cấu trúc mảng)](#transform-xử-lý-biến-dạng-cấu-trúc-mảng)
   - [.append()](#append)
@@ -188,9 +188,9 @@ a.reverse()
 
 print(a)
 ```
-## .sort() & sorted() (sắp xếp)
+## .sort() & sorted() (Sắp xếp các phần tử trong mảng)
 ```bash
-Sắp xếp các phần tử trong mảng. Nếu là chuỗi thì sắp xếp theo thứ tự alphabet.
+Nếu là chuỗi thì sắp xếp theo thứ tự alphabet.
 ```
 **Syn**
 ```bash

@@ -21,6 +21,8 @@
   - [__enter__() \& exit()](#enter--exit)
   - [__get__() \& __set__() \& __delete()__](#get--set--delete)
   - [__set\_name__()](#set_name)
+  - [__name__](#name)
+  - [__doc__](#doc)
   - [@property](#property)
   - [@classmethod](#classmethod)
     - [Quản lý kết nối Database (Mô phỏng)](#quản-lý-kết-nối-database-mô-phỏng)
@@ -465,7 +467,8 @@ p.age = -5       # ValueError
 - Được Python gọi khi class được tạo
 - Dùng để descriptor biết tên attribute nó gắn vào
 ```
-Ví dụ:
+**Ex**
+```python
 class PositiveInt:
     def __set_name__(self, owner, name):
         self.private_name = "_" + name
@@ -478,19 +481,16 @@ class PositiveInt:
             raise ValueError("Phải >= 0")
         instance.__dict__[self.private_name] = value
 
-Dùng:
 class Person:
     age = PositiveInt()
     score = PositiveInt()
 
-
-📌 Lúc này:
-
-age → lưu vào _age
-
-score → lưu vào _score
-
-Không cần hard-code _age nữa 👍
+# age → lưu vào _age
+# score → lưu vào _score
+# Không cần hard-code _age nữa 👍
+```
+## __name__
+## __doc__
 ## @property
 **Ex**
 ```python

@@ -5,7 +5,7 @@
   - [Table](#table)
     - [Column()](#column)
 - [Search (Nhóm tìm kiếm để lấy dữ liệu)](#search-nhóm-tìm-kiếm-để-lấy-dữ-liệu)
-  - [select() (Là các mới của query dùng được cho cả CORE + ORM)](#select-là-các-mới-của-query-dùng-được-cho-cả-core--orm)
+  - [select() (Là các mới của query)](#select-là-các-mới-của-query)
   - [.where() (lấy đôi tượng có điều kiện)](#where-lấy-đôi-tượng-có-điều-kiện)
   - [.join()](#join)
 - [Display](#display)
@@ -15,15 +15,17 @@
     - [.count()](#count)
     - [.now()](#now)
     - [.coalesce()](#coalesce)
-  - [.label()](#label)
+  - [.label() (Dùng để đặt tên alias cho cột trong kết quả query)](#label-dùng-để-đặt-tên-alias-cho-cột-trong-kết-quả-query)
 - [Insert](#insert)
-  - [commit](#commit)
-- [Process](#process)
-  - [.execute()](#execute)
-    - [.all()](#all)
-    - [.fetchall()](#fetchall)
+  - [commit (Thực sự insert vào db. nếu lỗi -\> rollback)](#commit-thực-sự-insert-vào-db-nếu-lỗi---rollback)
+- [Process (Các thao tác liên qua đến xử  lý)](#process-các-thao-tác-liên-qua-đến-xử--lý)
+  - [.execute() (Gửi câu SQL xuống database để thực thi)](#execute-gửi-câu-sql-xuống-database-để-thực-thi)
+    - [.all() (lấy tất cả các dòng dữ liệu)](#all-lấy-tất-cả-các-dòng-dữ-liệu)
+    - [.fetchall() (Lấy mọi dòng có kết quả trùng)](#fetchall-lấy-mọi-dòng-có-kết-quả-trùng)
     - [.mappings()](#mappings)
-    - [.first() \& .all()](#first--all)
+    - [.first() (Lấy 1 dòng đầu tiên hoặc None)](#first-lấy-1-dòng-đầu-tiên-hoặc-none)
+    - [scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)](#scalars-dùng-để-lấy-ra-giá-trị-đầu-tiên-của-mỗi-hàng-row-trong-kết-quả-truy-vấn)
+    - [scalar\_one\_or\_none() (dùng để lấy một giá trị duy nhất từ kết quả query)](#scalar_one_or_none-dùng-để-lấy-một-giá-trị-duy-nhất-từ-kết-quả-query)
   - [.update()](#update)
 ---
 # Create
@@ -174,8 +176,11 @@ Column(
 )
 ```
 # Search (Nhóm tìm kiếm để lấy dữ liệu)
-## select() (Là các mới của query dùng được cho cả CORE + ORM)
-**Ex1**
+## select() (Là các mới của query)
+```bash
+Dùng được cho cả CORE + ORM
+```
+**Ex1: sử dụng select cho CORE**
 ```python
 from sqlalchemy import select
 
@@ -364,9 +369,9 @@ stmt = select(
     func.coalesce(User.nickname, "Anonymous")
 )
 ```
-## .label()
+## .label() (Dùng để đặt tên alias cho cột trong kết quả query)
 ```bash
-Dùng để đặt tên alias cho cột trong kết quả query.
+Dùng được cho cả Core & ORM.
 ```
 **Ex**
 ```python
@@ -376,10 +381,9 @@ Category.name.label("category_name")
 # Nó tương đương SQL: SELECT meal.name AS name, category.name AS category_name
 ```
 # Insert
-## commit    
+## commit (Thực sự insert vào db. nếu lỗi -> rollback)
 ```bash
-- Thực sự insert vào db. nếu lỗi -> rollback
-- Dùng cho cả CORE và ORM.
+Dùng cho cả CORE và ORM.
 ```
 **Ex1: commit bằng ORM**
 ```python
@@ -419,22 +423,57 @@ def create_user_core(engine):
 # tự COMMIT khi không lỗi
 # tự ROLLBACK nếu lỗi
 ```
-# Process
+# Process (Các thao tác liên qua đến xử  lý)
+## .execute() (Gửi câu SQL xuống database để thực thi)
 ```bash
-Các thao tác liên qua đến xử  lý
+execute() dùng được cho cả SQLAlchemy Core và ORM, nhưng cách dùng hơi khác tùy phiên bản SQLAlchemy.
 ```
-## .execute()
-```bash
-Gửi câu SQL xuống database để thực thi.
+**Ex1: SQLAlchemy Core**
+```python
+from sqlalchemy import create_engine, text
+
+engine = create_engine(DATABASE_URL)
+
+with engine.connect() as conn:
+    result = conn.execute(text("SELECT * FROM users"))
+
+    for row in result:
+        print(row)
+
+Hoặc:
+
+from sqlalchemy import select
+
+stmt = select(user_table)
+
+with engine.connect() as conn:
+    result = conn.execute(stmt)
+
+# Ở đây execute() thuộc về Connection.
 ```
-### .all()
-```bash
-lấy tất cả các dòng dữ liệu
+**SQLAlchemy ORM**
+```python
+from sqlalchemy import select
+
+db = SessionLocal()
+
+stmt = select(User)
+
+result = db.execute(stmt)
+
+print(result.all())
+
+db.close()
+
+# Ở đây execute() thuộc về Session.
 ```
-### .fetchall()
+### .all() (lấy tất cả các dòng dữ liệu)
 ```bash
-- Lấy mọi dòng có kết quả trùng.
-- dữ liệu trả về là list[obj]
+Dùng được cho cả CORE & ORM.
+```
+### .fetchall() (Lấy mọi dòng có kết quả trùng)
+```bash
+dữ liệu trả về là list[obj]
 ```
 **Ex**
 ```python
@@ -478,10 +517,75 @@ Nhưng bạn có thể dùng như dict bình thường:
 row["name"]
 row["meal_type"]
 ```
-### .first() & .all()
+### .first() (Lấy 1 dòng đầu tiên hoặc None)
+### scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)
+**Không dùng scalars()**
+```python
+stmt = select(User)
+
+result = db.execute(stmt)
+
+print(result.all())
+# Kết quả:
+# [
+#     (<User id=1>,),
+#     (<User id=2>,),
+#     (<User id=3>,)
+# ]
+
+# execute() luôn trả về các Row. Mỗi Row giống như một tuple:
+
+# nên muốn lấy User phải:
+for row in result:
+    user = row[0]
+```
+**Dùng scalars()**
+```python
+users = db.execute(select(User)).scalars().all()
+
+print(users)
+# Kết quả:
+# [
+#     <User id=1>,
+#     <User id=2>,
+#     <User id=3>
+# ]
+
+Nó tự lấy phần tử đầu tiên của mỗi row.
+```
+**Ex**
+```python
+stmt = select(User.username)
+
+result = db.execute(stmt).all()
+print(result)
+# [
+#     ('alice',),
+#     ('bob',),
+#     ('charlie',)
+# ]
+
+Nếu dùng:
+names = db.execute(stmt).scalars().all()
+print(names)
+# ['alice', 'bob', 'charlie']
+```
+**Ex2: Nhưng phải cẩn thận. Nếu truy vấn nhiều cột**
+```python
+stmt = select(User.id, User.username)
+
+result = db.execute(stmt).all()
+# [(1, 'alice'), (2, 'bob')]
+
+# Nếu dùng:
+db.execute(stmt).scalars().all() # thì chỉ lấy cột đầu tiên:
+# [1, 2]
+# vì scalars() luôn lấy cột đầu tiên của mỗi row.
+```
+### scalar_one_or_none() (dùng để lấy một giá trị duy nhất từ kết quả query)
 ```bash
-- first     : Nghĩa là: “Lấy 1 dòng đầu tiên hoặc None”
-- all       : Lấy tất cả dòng.
+Nó có ý nghĩa như sau:
+    "Tôi kỳ vọng query này trả về đúng 1 dòng hoặc không có dòng nào."
 ```
 ## .update()
 **Ex**

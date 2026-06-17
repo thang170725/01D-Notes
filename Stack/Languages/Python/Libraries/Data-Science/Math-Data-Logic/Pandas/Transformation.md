@@ -8,7 +8,7 @@
   - [.transform()](#transform)
   - [qcut()](#qcut)
   - [.astype() (Chuyển đổi kiểu dữ liệu)](#astype-chuyển-đổi-kiểu-dữ-liệu)
-  - [set\_index() (Đặt cột làm index)](#set_index-đặt-cột-làm-index)
+  - [.set\_index() (Đặt cột làm index)](#set_index-đặt-cột-làm-index)
   - [.reset\_index() (đưa index hiện tại trở lại thành cột bình thường)](#reset_index-đưa-index-hiện-tại-trở-lại-thành-cột-bình-thường)
   - [.pivot() (xoay dữ liệu từ dạng "dài" -\> "rộng")](#pivot-xoay-dữ-liệu-từ-dạng-dài---rộng)
   - [melt() (chuyển dữ liệu từ wide format sang long format)](#melt-chuyển-dữ-liệu-từ-wide-format-sang-long-format)
@@ -203,7 +203,7 @@ df.sort_values(
 ```
 ## .groupby() (dùng để nhóm dữ liệu)
 ```bash
-- Nó thay đổi cách nhìn nhận cấu trúc dữ liệu.
+Nó thay đổi cách nhìn nhận cấu trúc dữ liệu.
 ```
 **Syn**
 ```bash
@@ -304,7 +304,7 @@ print(df)
 ```python
 students['grade'] = students['grade'].astype("int")
 ```
-## set_index() (Đặt cột làm index)
+## .set_index() (Đặt cột làm index)
 **Syn**
 ```bash
 df.set_index(

@@ -1,21 +1,37 @@
+- [Introduction (Dùng để cấu hình (tức là bước trước khi vẽ biểu đồ))](#introduction-dùng-để-cấu-hình-tức-là-bước-trước-khi-vẽ-biểu-đồ)
 - [Title() \& set\_title()](#title--set_title)
+- [.suptitle()](#suptitle)
 - [X \& Y Axis (Nhóm cấu hình trên trục X,Y)](#x--y-axis-nhóm-cấu-hình-trên-trục-xy)
   - [.xlabel() \& .ylabel() \&  .set\_ylabel() \& .set\_xlabel()](#xlabel--ylabel---set_ylabel--set_xlabel)
-  - [set\_xticks() \& set\_yticks()](#set_xticks--set_yticks)
-- [xlim \& ylim](#xlim--ylim)
+  - [set\_xticks() \& set\_yticks() (Dùng để đặt vị trí các vạch chia (ticks) trên trục X và Y)](#set_xticks--set_yticks-dùng-để-đặt-vị-trí-các-vạch-chia-ticks-trên-trục-x-và-y)
+  - [.tick\_params() (dùng để chỉnh sửa các "tick" trên trục)](#tick_params-dùng-để-chỉnh-sửa-các-tick-trên-trục)
+  - [xlim \& ylim (Dùng để thiết lập phạm vi (giới hạn) trục x và trục y của biểu đồ.)](#xlim--ylim-dùng-để-thiết-lập-phạm-vi-giới-hạn-trục-x-và-trục-y-của-biểu-đồ)
 - [Config (Nhóm cấu hình)](#config-nhóm-cấu-hình)
 - [Axis()](#axis)
-  - [subplots() \& subplot()](#subplots--subplot)
+  - [subplots() (Để cấu hình vùng hiển thị khi cần vẽ nhiều biểu đồ trong cùng 1 page)](#subplots-để-cấu-hình-vùng-hiển-thị-khi-cần-vẽ-nhiều-biểu-đồ-trong-cùng-1-page)
+  - [subplot()](#subplot)
     - [flatten()](#flatten)
-- [figure()](#figure)
-  - [tight\_layout()](#tight_layout)
+  - [.subplots\_adjust() (dùng để điều chỉnh khoảng cách giữa các subplot (các biểu đồ con) trong cùng một figure)](#subplots_adjust-dùng-để-điều-chỉnh-khoảng-cách-giữa-các-subplot-các-biểu-đồ-con-trong-cùng-một-figure)
+- [figure() (Cài đặt kích thước của một khung hình)](#figure-cài-đặt-kích-thước-của-một-khung-hình)
+  - [tight\_layout() (Để các biểu đồ không bị chồng lên nhau nếu một giao diện có nhiều biểu đồ)](#tight_layout-để-các-biểu-đồ-không-bị-chồng-lên-nhau-nếu-một-giao-diện-có-nhiều-biểu-đồ)
 - [.colorbar()](#colorbar)
+- [.legend() (Hiển thị chú thích)](#legend-hiển-thị-chú-thích)
+- [.grid() (Hiện lưới)](#grid-hiện-lưới)
 - [Save (Nhóm lưu)](#save-nhóm-lưu)
-  - [plt.savefig()](#pltsavefig)
+  - [plt.savefig() (lưu lại biểu đồ)](#pltsavefig-lưu-lại-biểu-đồ)
 ---
+# Introduction (Dùng để cấu hình (tức là bước trước khi vẽ biểu đồ))
 # Title() & set_title() 
 ```bash
 Thiết lập tiêu đề của khung hình, khi cửa sổ đó chỉ có một hình ảnh.
+```
+# .suptitle()
+**Syn**
+```bash
+plt.suptitle(
+    "Aggregate Load Profiles of Random Days",
+    fontsize=14    
+)
 ```
 # X & Y Axis (Nhóm cấu hình trên trục X,Y)
 ## .xlabel() & .ylabel() &  .set_ylabel() & .set_xlabel()
@@ -30,10 +46,7 @@ plt.xlabel("Intent")
 ```bash
 plt.ylabel("Số lượng")
 ```
-## set_xticks() & set_yticks()
-```bash
-Dùng để đặt vị trí các vạch chia (ticks) trên trục X và Y.
-```
+## set_xticks() & set_yticks() (Dùng để đặt vị trí các vạch chia (ticks) trên trục X và Y)
 **Syn**
 ```bash
 ax.set_xticks(vị_trí_ticks)
@@ -77,10 +90,53 @@ ax.set_yticks(
 
 # ra: 0 50 100 150 200 250 300
 ```
-# xlim & ylim
+## .tick_params() (dùng để chỉnh sửa các "tick" trên trục)
 ```bash
-- Dùng để thiết lập phạm vi (giới hạn) trục x và trục y của biểu đồ.
+Tick gồm 2 thứ:
+    - vạch chia trên trục.
+    - nhãn (label) đi kèm vạch chia.
 ```
+**Ex**
+```bash
+  ^
+10|           ●
+  |
+  |
+  |
+  |
+  +----------------->
+    0   2   4   6   8
+
+- 0 2 4 6 8 là tick labels.
+- Các vạch nhỏ dưới chúng là ticks
+```
+**Syn**
+```bash
+ax[i].tick_params(...) hoặc plt.tick_params(...)
+
+plt.tick_params(
+    axis='x', 
+    rotation=45, 
+    labelsize=10, 
+    colors='blue',
+    labelbottom=False,
+    length=10,
+    width=2
+)
+
+- Input:
+    + axis=: chỉnh trục
+        - 'x': chỉ chỉnh trục x
+        - 'y': chỉ chỉnh trục y
+        - 'both': chỉnh cả 2 trục
+    + labelsize=10: Chỉnh kích thước chữ
+    + rotation=45: Xoay chữ 
+    + labelbottom=: Ẩn nhãn
+        - False: cho phép ẩn nhãn
+    + length=10: Chỉnh độ dài vạch
+    + width=2: Chỉnh độ dày vạch
+```
+## xlim & ylim (Dùng để thiết lập phạm vi (giới hạn) trục x và trục y của biểu đồ.)
 **Syn: xlim**
 ```bash
 plt.xlim(xmin, xmax)
@@ -112,18 +168,19 @@ Tắt hoặc hiển thị trục X,Y trên hình ảnh (ẩn các số và vạc
 ```bash
 plt.axis(‘on | off’)
 ```
-## subplots() & subplot()
+## subplots() (Để cấu hình vùng hiển thị khi cần vẽ nhiều biểu đồ trong cùng 1 page)
 ```bash
-- Để cấu hình vùng hiển thị khi cần vẽ nhiều biểu đồ trong cùng 1 page
-- Dùng khi vẽ phức tạp, nhiều axes, muốn quản lý dễ dàng.
+Dùng khi vẽ phức tạp, nhiều axes, muốn quản lý dễ dàng.
 ```
 **Syn: subplots**
 ```bash
 self.fig, self.ax = plt.subplots(2, 2, figsize=(12, 5))
 
-- fig: <class 'matplotlib.figure.Figure'>
-- ax: là mảng numy 2d gồm các axes
+- Output:
+    + fig: <class 'matplotlib.figure.Figure'>
+    + ax: là mảng numy 2d gồm các axes
 ```
+## subplot()
 **Syn: subplot**
 ```bash
 plt.subplot(nrows, ncols, index)
@@ -203,10 +260,60 @@ plt.show()
 # thì: [ax1, ax2, ax3, ax4, ax5, ax6]
 # -> thành mảng 1 chiều. Giờ dùng: axes[4].plot(...) dễ hơn nhiều.
 ```
-# figure()
+## .subplots_adjust() (dùng để điều chỉnh khoảng cách giữa các subplot (các biểu đồ con) trong cùng một figure)
+**Ex: không dùng subplots_adjust**
 ```bash
-Cài đặt kích thước của một khung hình.
+Ví dụ bạn tạo:
+fig, axes = plt.subplots(3, 3)
+thì sẽ có 9 biểu đồ:
+┌─────┬─────┬─────┐
+│     │     │     │
+├─────┼─────┼─────┤
+│     │     │     │
+├─────┼─────┼─────┤
+│     │     │     │
+└─────┴─────┴─────┘
+Mặc định, matplotlib tự quyết định khoảng cách giữa chúng.
 ```
+**Syn**
+```bash
+plt.subplots_adjust(
+    wspace=0.2,
+    hspace=0.2
+)
+
+- wspace: Là khoảng cách theo chiều ngang giữa các cột.
+- hspace: Là khoảng cách theo chiều dọc giữa các hàng.
+```
+**Ex1**
+```python
+plt.subplots_adjust(wspace=0.1)
+# ┌───┐┌───┐┌───┐
+# │   ││   ││   │
+# └───┘└───┘└───┘
+plt.subplots_adjust(wspace=1)
+# ┌───┐     ┌───┐     ┌───┐
+# │   │     │   │     │   │
+# └───┘     └───┘     └───┘
+```
+**Ex2**
+```python
+plt.subplots_adjust(hspace=0.1)
+# ┌───┐
+# │   │
+# └───┘
+# ┌───┐
+# │   │
+# └───┘
+plt.subplots_adjust(hspace=1)
+# ┌───┐
+# │   │
+# └───┘
+# ┌───┐
+# │   │
+# └───┘
+```
+# figure() (Cài đặt kích thước của một khung hình)
 **Ex**
 ```python
 import matplotlib.pyplot as plt
@@ -219,17 +326,11 @@ plt.figure(figsize=(10,4)) # cài đặt khung hình với kích thước 10x4 i
 plt.imshow(digits.images[0], cmap='gray')
 plt.show()
 ```
-## tight_layout()
-```bash
-Nếu một giao diện có nhiều biểu đồ thì hãy sử dụng phương thức này để các biểu đồ không bị chồng lên nhau.
-```
+## tight_layout() (Để các biểu đồ không bị chồng lên nhau nếu một giao diện có nhiều biểu đồ)
 **Syn**
 ```bash
 plt.tight_layout()
 ```
-Xticks()
-Cú pháp:
-plt.xticks(rotation=45)
 # .colorbar()
 ```bash
 - Để hiển thị thanh màu bên cạnh
@@ -241,8 +342,70 @@ plt.xticks(rotation=45)
     + xem khoảng giá trị pixel
     + xử lý ảnh / heatmap / ma trận
 ```
+# .legend() (Hiển thị chú thích)
+```bash
+Dùng khi có nhiều đường biểu diễn, để biết mỗi đường là gì
+```
+**Ex: so sánh doanh thu hai cửa hàng**
+```python
+import matplotlib.pyplot as plt
+
+days = [1, 2, 3, 4]
+store_A = [10, 12, 15, 18]
+store_B = [8, 11, 13, 17]
+
+plt.plot(days, store_A, marker='o', label='Cửa hàng A')
+plt.plot(days, store_B, marker='s', label='Cửa hàng B')
+
+plt.legend()
+
+plt.show()
+# Doanh thu
+
+# 18 |                 ● A
+# 17 |                 ■ B
+# 15 |            ●
+# 13 |            ■
+# 12 |       ●
+# 11 |       ■
+# 10 |  ●
+#  8 |  ■
+#    +----------------
+#      1  2  3  4
+
+# Legend:
+# ● Cửa hàng A
+# ■ Cửa hàng B
+```
+# .grid() (Hiện lưới)
+```bash
+Dùng để đọc giá trị dễ hơn
+```
+**Ex**
+```python
+import matplotlib.pyplot as plt
+
+months = [1, 2, 3, 4]
+temperature = [20, 24, 28, 26]
+
+plt.plot(months, temperature, marker='o')
+
+plt.grid(True)
+
+plt.show()
+# Nhiệt độ
+
+# 30 |
+# 28 |----------------●---------
+# 26 |----------------------●---
+# 24 |---------●---------------
+# 22 |
+# 20 |●------------------------
+#    +-------------------------
+#      1    2    3    4
+```
 # Save (Nhóm lưu)
-## plt.savefig()
+## plt.savefig() (lưu lại biểu đồ)
 **Syn**
 ```bash
 plt.savefig(

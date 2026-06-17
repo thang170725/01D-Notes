@@ -1,8 +1,10 @@
 - [rounded](#rounded)
 - [shadow](#shadow)
-- [font (chỉnh chữ)](#font-chỉnh-chữ)
+- [Text (Chỉnh chữ)](#text-chỉnh-chữ)
+  - [font- (chỉnh độ dày của chữ)](#font--chỉnh-độ-dày-của-chữ)
+  - [text- (chỉnh độ to, nhỏ của chữ)](#text--chỉnh-độ-to-nhỏ-của-chữ)
 - [Border (chỉnh đường viền)](#border-chỉnh-đường-viền)
-- [text](#text)
+- [shadow-](#shadow-)
 - [Background (Chỉnh nền)](#background-chỉnh-nền)
   - [bg-cover](#bg-cover)
   - [bg-no-repeat](#bg-no-repeat)
@@ -49,7 +51,8 @@
 
 Trông giống card nổi.
 ```
-# font (chỉnh chữ)
+# Text (Chỉnh chữ)
+## font- (chỉnh độ dày của chữ)
 **Ex**
 ```js
 <p className="font-thin">Thin (100)</p>
@@ -76,6 +79,7 @@ Trông giống card nổi.
   Dashboard
 </Link>
 ```
+## text- (chỉnh độ to, nhỏ của chữ)
 # Border (chỉnh đường viền)
 **Chỉnh độ dày**
 ```bash
@@ -100,13 +104,12 @@ border-double
   Card
 </div>
 ```
-# text 
+# shadow- 
 ```bash
 - shadow-sm	    : bóng rất nhẹ
 - shadow	    : bóng mặc định
 - shadow-md	    : bóng vừa
 - shadow-lg	    : bóng rõ, sâu
-- text-xl	    : bóng rất sâu
 - shadow-2xl	: bóng cực sâu
 ```
 # Background (Chỉnh nền)

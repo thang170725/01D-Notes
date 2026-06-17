@@ -3,7 +3,7 @@
   - [\*\*kwargs](#kwargs)
   - [Keyword Arguments](#keyword-arguments)
   - [Keyword-Only Arguments](#keyword-only-arguments)
-  - [lambda](#lambda)
+  - [lambda (hàm ẩn danh)](#lambda-hàm-ẩn-danh)
 - [nonlocal](#nonlocal)
 - [global](#global)
 - [yield](#yield)
@@ -63,10 +63,7 @@ def my_function(*, x):
   print(x)
 my_function(3) # lỗi
 ```
-## lambda
-```bash
-Là một hàm ẩn danh nhỏ.
-```
+## lambda (hàm ẩn danh)
 **Syn** 
 ```bash
 lambda arguments : expression

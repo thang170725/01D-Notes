@@ -8,9 +8,9 @@
 - [Hist()](#hist)
 - [bar()](#bar)
 - [pie()](#pie)
-- [Tinh chỉnh tick bằng matplotlib](#tinh-chỉnh-tick-bằng-matplotlib)
 - [take axes current](#take-axes-current)
 - [có phương thức này mới có thể sử dụng được set\_title, …](#có-phương-thức-này-mới-có-thể-sử-dụng-được-set_title-)
+- [.axvline() (Vẽ đường thẳng đứng)](#axvline-vẽ-đường-thẳng-đứng)
 ---
 # Show()
 ```bash
@@ -258,27 +258,328 @@ sl = [350, 420, 250, 300, 280]
 plt.pie(sl,labels = khoa,autopct='%1.1f%%')
 plt.show()
 
-tick_params()
-import seaborn as sns
-import matplotlib.pyplot as plt
-import pandas as pd
 
-df = pd.DataFrame({
-    "intent": ["play_music", "stop_music", "open_door", "close_door", "open_fan"],
-    "length": [4, 5, 6, 7, 3]
-})
-
-plt.figure(figsize=(6,4))
-sns.boxplot(x="intent", y="length", data=df, palette="Set2")
-
-# Tinh chỉnh tick bằng matplotlib
-plt.tick_params(axis='x', rotation=45, labelsize=10, colors='blue')
-plt.tick_params(axis='y', labelsize=9, colors='red')
-
-plt.title("Độ dài câu lệnh theo intent", fontsize=12)
-plt.show()
 gca()
 Để lấy ra axes hiện tại.
 # take axes current
 ax = plt.gca()
 # có phương thức này mới có thể sử dụng được set_title, …
+Biểu đồ cơ bản (phải biết)
+1. plt.plot()
+Dùng để làm gì
+
+Vẽ biểu đồ đường.
+
+Ứng dụng
+Xu hướng theo thời gian
+Giá cổ phiếu
+Doanh thu
+Cú pháp
+plt.plot(x, y)
+Ví dụ
+plt.plot([1,2,3], [2,5,4])
+2. plt.scatter()
+Dùng để làm gì
+
+Biểu đồ phân tán.
+
+Ứng dụng
+Mối quan hệ giữa 2 biến
+Correlation
+Cú pháp
+plt.scatter(x, y)
+Ví dụ
+plt.scatter(height, weight)
+3. plt.bar()
+Dùng để làm gì
+
+Biểu đồ cột đứng.
+
+Ứng dụng
+So sánh giữa các nhóm.
+Cú pháp
+plt.bar(x, height)
+Ví dụ
+plt.bar(["A","B","C"], [10,20,15])
+4. plt.barh()
+Dùng để làm gì
+
+Biểu đồ cột ngang.
+
+Ứng dụng
+Top N
+Ranking.
+Cú pháp
+plt.barh(y, width)
+Ví dụ
+plt.barh(names, scores)
+5. plt.hist()
+Dùng để làm gì
+
+Histogram.
+
+Ứng dụng
+Phân bố dữ liệu.
+Cú pháp
+plt.hist(x)
+Ví dụ
+plt.hist(scores, bins=10)
+6. plt.pie()
+Dùng để làm gì
+
+Biểu đồ tròn.
+
+Ứng dụng
+Tỷ lệ thành phần.
+Cú pháp
+plt.pie(x)
+Ví dụ
+plt.pie([30,40,30],
+        labels=["A","B","C"])
+II. Biểu đồ trung cấp
+7. plt.boxplot()
+Dùng để làm gì
+
+Boxplot.
+
+Ứng dụng
+Outlier
+Median.
+Cú pháp
+plt.boxplot(x)
+Ví dụ
+plt.boxplot(scores)
+8. plt.violinplot()
+Dùng để làm gì
+
+Violin plot.
+
+Ứng dụng
+Hình dạng phân bố.
+Cú pháp
+plt.violinplot(dataset)
+Ví dụ
+plt.violinplot([classA,classB])
+9. plt.stem()
+Dùng để làm gì
+
+Biểu đồ thân-cành.
+
+Ứng dụng
+Xử lý tín hiệu số.
+Cú pháp
+plt.stem(x,y)
+Ví dụ
+plt.stem([1,2,3],[2,5,4])
+10. plt.step()
+Dùng để làm gì
+
+Biểu đồ bậc thang.
+
+Ứng dụng
+Giá điện
+Dữ liệu thay đổi theo mức.
+Cú pháp
+plt.step(x,y)
+Ví dụ
+plt.step(time, level)
+11. plt.errorbar()
+Dùng để làm gì
+
+Vẽ sai số.
+
+Ứng dụng
+Kết quả thí nghiệm.
+Cú pháp
+plt.errorbar(x,y,yerr=error)
+Ví dụ
+plt.errorbar(x,y,yerr=std)
+III. Biểu đồ nâng cao
+12. plt.stackplot()
+Dùng để làm gì
+
+Area chart chồng.
+
+Ứng dụng
+Thành phần thay đổi theo thời gian.
+Cú pháp
+plt.stackplot(x,y1,y2,...)
+Ví dụ
+plt.stackplot(year, ios, android)
+13. plt.fill_between()
+Dùng để làm gì
+
+Tô vùng giữa các đường.
+
+Ứng dụng
+Confidence interval.
+Cú pháp
+plt.fill_between(x,y1,y2)
+Ví dụ
+plt.fill_between(x, lower, upper)
+14. plt.eventplot()
+Dùng để làm gì
+
+Biểu diễn các sự kiện.
+
+Ứng dụng
+Spike train.
+Event timeline.
+Cú pháp
+plt.eventplot(events)
+Ví dụ
+plt.eventplot([1,3,5,8])
+15. plt.hexbin()
+Dùng để làm gì
+
+Scatter mật độ cao.
+
+Ứng dụng
+Dataset rất lớn.
+Cú pháp
+plt.hexbin(x,y)
+Ví dụ
+plt.hexbin(x,y, gridsize=20)
+IV. Biểu đồ ma trận và ảnh
+16. plt.imshow()
+Dùng để làm gì
+
+Hiển thị ảnh hoặc ma trận.
+
+Ứng dụng
+Computer Vision
+Heatmap đơn giản.
+Cú pháp
+plt.imshow(data)
+Ví dụ
+plt.imshow(image)
+17. plt.matshow()
+Dùng để làm gì
+
+Hiển thị ma trận.
+
+Ứng dụng
+Ma trận tương quan.
+Cú pháp
+plt.matshow(matrix)
+Ví dụ
+plt.matshow(df.corr())
+V. Biểu đồ vector
+18. plt.quiver()
+Dùng để làm gì
+
+Biểu diễn vector.
+
+Ứng dụng
+Vật lý.
+Trường lực.
+Cú pháp
+plt.quiver(X,Y,U,V)
+Ví dụ
+plt.quiver(x,y,u,v)
+19. plt.streamplot()
+Dùng để làm gì
+
+Đường dòng.
+
+Ứng dụng
+Dòng chảy chất lỏng.
+Cú pháp
+plt.streamplot(X,Y,U,V)
+Ví dụ
+plt.streamplot(X,Y,U,V)
+VI. Biểu đồ 3D (mpl_toolkits.mplot3d)
+20. ax.plot3D()
+
+Đường 3D.
+
+Ví dụ:
+
+ax.plot3D(x,y,z)
+21. ax.scatter3D()
+
+Scatter 3D.
+
+Ví dụ:
+
+ax.scatter3D(x,y,z)
+22. ax.bar3d()
+
+Cột 3D.
+
+Ví dụ:
+
+ax.bar3d(x,y,z,dx,dy,dz)
+23. ax.plot_surface()
+
+Surface plot.
+
+Ứng dụng:
+
+Hàm số 3D.
+
+Ví dụ:
+
+ax.plot_surface(X,Y,Z)
+24. ax.contour3D()
+
+Contour 3D.
+
+Ví dụ:
+
+ax.contour3D(X,Y,Z)
+VII. Biểu đồ thống kê đặc biệt
+25. plt.contour()
+
+Contour 2D.
+
+Ứng dụng:
+
+Đường đồng mức.
+plt.contour(X,Y,Z)
+26. plt.contourf()
+
+Contour tô màu.
+
+plt.contourf(X,Y,Z)
+27. plt.specgram()
+
+Spectrogram.
+
+Ứng dụng:
+
+Phân tích âm thanh.
+plt.specgram(signal)
+# .axvline() (Vẽ đường thẳng đứng)
+```bash
+Dùng khi muốn đánh dấu một mốc đặc biệt trên trục X.
+```
+**Ex: doanh thu 7 ngày, và đánh dấu ngày bắt đầu khuyến mãi**
+```python
+import matplotlib.pyplot as plt
+
+days = [1, 2, 3, 4, 5, 6, 7]
+sales = [10, 12, 11, 20, 22, 21, 23]
+
+plt.plot(days, sales, marker='o')
+
+# Đánh dấu ngày thứ 4
+plt.axvline(x=4, color='red', linestyle='--')
+
+plt.title("Doanh thu 7 ngày")
+plt.xlabel("Ngày")
+plt.ylabel("Doanh thu")
+plt.show()
+# Doanh thu
+# 23 |                       ●
+# 22 |                    ●
+# 21 |                  ●
+# 20 |             ●
+# 12 |      ●
+# 11 |         ●
+# 10 |   ●
+#    +----------------------------
+#       1  2  3 |4| 5  6  7
+#               ↑
+#       Đường đỏ đánh dấu ngày khuyến mãi
+```

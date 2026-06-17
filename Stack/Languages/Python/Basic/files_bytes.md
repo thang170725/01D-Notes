@@ -1,28 +1,23 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
-  - [__file__](#file)
+  - [__file__ (Biến đặc biệt chứa đường dẫn file python hiện tại)](#file-biến-đặc-biệt-chứa-đường-dẫn-file-python-hiện-tại)
+- [.name](#name)
+- [open() \& .close()](#open--close)
 - [.readline()](#readline)
 - [.readlines()](#readlines)
 - [bytes (kiểu dữ liệu bytes)](#bytes-kiểu-dữ-liệu-bytes)
   - [.encode() \& .decode()](#encode--decode)
 ---
 # Display (Nhóm cung cấp thông tin)
-## __file__
-```bash
-Biến đặc biệt chứa đường dẫn file python hiện tại
-```
+## __file__ (Biến đặc biệt chứa đường dẫn file python hiện tại)
 **Ex**
 ```python
-print(__file__) # /home/thang/projects/tri_tue_nhan_tao/backend/visualizations/check_dataset.py (đường dẫn chạy file hiện tại)
-```
+import os
 
-JSON
-Là cú pháp để lưu trữ và trao đổi dữ liệu.
-JSON là văn bản, được viết bằng ký hiệu đối tượng Javascript.
-json.loads()
-Để phân tích cú pháp nhằm mục đích chuyển từ JSON sang Python.
-Cú pháp:
-json.loads(<variable>)
-json.dumps()# .name
+print(__file__)
+# (.venv) thang@PhatToNhuLai:~/workspace/lightgbm/backend$ python test.py
+# /home/thang/workspace/lightgbm/backend/test.py
+```
+# .name
 ```bash
 Trả về tên của file đang được mở.
 ```
@@ -30,7 +25,8 @@ Trả về tên của file đang được mở.
 ```python
 txt = open("D:\\workspace\Python_box\\a.txt", "rt")
 print(txt.name) # D:\workspace\Python_box\a.txt
-```# open() & .close()
+```
+# open() & .close()
 ```bash
 Để mở file và đóng file.
 ```

@@ -12,7 +12,7 @@ Pandas/                  # mình dùng thư mục này để xem kiến thức v
 ```
 # Introduction
 ```bash
-- Thường dùng để xử lý dữ liệu. Pandas kế thừa numpy tức là nó có thể sử dụng hầu hết các hàm trong numpy
+Thường dùng để xử lý dữ liệu. Pandas kế thừa numpy tức là nó có thể sử dụng hầu hết các hàm trong numpy
 ```
 # Installation
 ```bash

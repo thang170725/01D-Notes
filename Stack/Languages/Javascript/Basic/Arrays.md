@@ -1,5 +1,5 @@
 - [Create (tạo)](#create-tạo)
-  - [new Array \& \[\]](#new-array--)
+  - [new Array \& \[\] (Trong một Array có thể chứa các kiểu dữ liệu dữ liệu khác nhau)](#new-array---trong-một-array-có-thể-chứa-các-kiểu-dữ-liệu-dữ-liệu-khác-nhau)
   - [isArray()](#isarray)
   - [.length](#length)
   - [.join()](#join)
@@ -20,7 +20,7 @@
   - [.sort()](#sort)
   - [.reverse()](#reverse)
   - [.concat()](#concat)
-  - [.slice()](#slice)
+  - [.slice() (Dùng đê lấy một hay một số phần tử trong mảng)](#slice-dùng-đê-lấy-một-hay-một-số-phần-tử-trong-mảng)
   - [.indexOf()](#indexof)
   - [lastIndexOf()](#lastindexof)
 - [Process (xử lý mảng)](#process-xử-lý-mảng)
@@ -42,10 +42,7 @@
   - [map()](#map)
 ---
 # Create (tạo)
-## new Array & []
-```bash
-Trong một Array có thể chứa các kiểu dữ liệu dữ liệu khác nhau.
-```
+## new Array & [] (Trong một Array có thể chứa các kiểu dữ liệu dữ liệu khác nhau)
 **Syn**
 ```bash
 - var | let | const <name> = new Aray( value1, value2, … ); - không được khuyến khích dùng.
@@ -334,10 +331,7 @@ let arr2 = [6,7,8,9,10];
 
 console.log(arr.concat(arr2)); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ]
 ```
-## .slice()
-```bash
-Dùng đê lấy một hay một số phần tử trong mảng.
-```
+## .slice() (Dùng đê lấy một hay một số phần tử trong mảng)
 **Ex**
 ```js
 let arr = [1,2,3,4,5];
@@ -478,10 +472,48 @@ console.log(arr.includes(2, 2)); // false (bắt đầu tìm từ index 2)
 ## toSorted()
 ## ToReversed()
 ## map()
+**Syn**
+```bash
+array.map((item, index, array) => {    // ...})
+
+- item: phần tử hiện tại.
+- index: vị trí của phần tử (bắt đầu từ 0).
+- array: mảng gốc (ít dùng hơn).
+```
+**Ex1: map list**
 ```js
 var a = [1,2,3,4];
 var c  = a.map(function (b){
     return b+2;
 })
-console.log(c); # [3,4,5,6]
+console.log(c); // [3,4,5,6]
+```
+**Ex2: Lấy cả phần tử và vị trí**
+```js
+fruits.map((fruit, index) => {    
+  console.log(index, fruit);
+});
+
+// 0 "Táo"
+// 1 "Cam"
+// 2 "Xoài"
+```
+**Ex3: list of dict**
+```js
+const foods = [
+    { id: 1, name: "Cơm" },
+    { id: 2, name: "Phở" },
+    { id: 3, name: "Bún" },
+];
+
+foods.map((food, index) => (
+    <div key={food.id}
+    >
+      {index + 1}. {food.name}    
+    </div>
+))}
+
+// 1. Cơm
+// 2. Phở
+// 3. Bún
 ```

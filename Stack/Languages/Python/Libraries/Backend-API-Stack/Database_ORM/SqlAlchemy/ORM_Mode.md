@@ -1,10 +1,10 @@
 - [Create \& Config (tạo \& cấu hình hệ thống)](#create--config-tạo--cấu-hình-hệ-thống)
-  - [Connection Setup](#connection-setup)
-    - [sessionmaker()](#sessionmaker)
-    - [Session](#session)
-      - [refresh()](#refresh)
+  - [Connection Setup (Thiết lập kết nối)](#connection-setup-thiết-lập-kết-nối)
+    - [sessionmaker() (Tạo "nhà máy" sinh ra các session, nơi bạn làm việc với db bằng ORM)](#sessionmaker-tạo-nhà-máy-sinh-ra-các-session-nơi-bạn-làm-việc-với-db-bằng-orm)
+    - [Session (Nó giống như “phiên làm việc” giữa app và database)](#session-nó-giống-như-phiên-làm-việc-giữa-app-và-database)
+      - [refresh() (Load lại dữ liệu từ DB vào object)](#refresh-load-lại-dữ-liệu-từ-db-vào-object)
   - [Model Definition](#model-definition)
-    - [declarative\_base() \& DeclarativeBase](#declarative_base--declarativebase)
+    - [declarative\_base() \& DeclarativeBase (Tạo một Base class để các model (class) kế thừa)](#declarative_base--declarativebase-tạo-một-base-class-để-các-model-class-kế-thừa)
     - [__table\_args__](#table_args)
   - [Constraints \& Index](#constraints--index)
     - [UniqueConstraint](#uniqueconstraint)
@@ -34,14 +34,11 @@
   - [Session.delete()](#sessiondelete)
 ---
 # Create & Config (tạo & cấu hình hệ thống)
-## Connection Setup
+## Connection Setup (Thiết lập kết nối)
+### sessionmaker() (Tạo "nhà máy" sinh ra các session, nơi bạn làm việc với db bằng ORM)
 ```bash
-Thiết lập kết nối
+Không thể làm việc trực tiếp db bằng ORM nếu không có Session
 ```
-### sessionmaker()
-```bash
-- Tạo "nhà máy" sinh ra các session, nơi bạn làm việc với db bằng ORM
-- Không thể làm việc trực tiếp db bằng ORM nếu không có Session
 **Syn**
 ```bash
 from sqlalchemy.orm import sessionmaker
@@ -52,10 +49,12 @@ SessionLocal = sessionmaker(
     autoflush=False,
 )
 
-- bind=engine	    : gắn session với DB
-- autocommit=False	: không tự commit
-- autoflush=False	: không tự đẩy dữ liệu
-- SessionLocal()	: tạo 1 session mới
+- Input:
+    + bind=engine	    : gắn session với DB
+    + autocommit=False	: không tự commit
+    + autoflush=False	: không tự đẩy dữ liệu
+- Output: 
+    + SessionLocal()	: tạo 1 session mới
 ```
 **Ex**
 ```python
@@ -81,11 +80,11 @@ def get_db():
 
 # mỗi lần gọi SessionLocal() là tạo một session mới
 ```
-### Session
+### Session (Nó giống như “phiên làm việc” giữa app và database)
 ```bash
-- Nó giống như “phiên làm việc” giữa app và database
-- Bạn không thao tác trực tiếp với DB → Bạn thao tác qua Session
-- Dùng để:
+Bạn không thao tác trực tiếp với DB → Bạn thao tác qua Session
+
+Dùng để:
     + Làm việc với database thông qua ORM
     + Quản lý transaction (commit / rollback)
     + Thêm, sửa, xóa, query dữ liệu
@@ -103,11 +102,11 @@ def create_user(db: Session):
     db.refresh(user)
     return user
 ```
-#### refresh()
+#### refresh() (Load lại dữ liệu từ DB vào object)
 ```bash
-- Thuộc ORM không dùng cho CORE.
-- Mục đích:
-    + Load lại dữ liệu từ DB vào object
+Thuộc ORM không dùng cho CORE.
+
+Mục đích:
     + Đồng bộ state sau khi:
         - commit
         - trigger DB
@@ -137,9 +136,8 @@ def register(
 ```bash
 Định nghĩa thực thể
 ```
-### declarative_base() & DeclarativeBase
+### declarative_base() & DeclarativeBase (Tạo một Base class để các model (class) kế thừa)
 ```bash
-- Tạo một Base class để các model (class) kế thừa.
 - Nó giúp:
     + Map class → table
     + Tự động quản lý metadata
@@ -158,6 +156,20 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 ```
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String)
+
+    def __repr__(self):
+        return f"User(id={self.id}, username='{self.username}')"
+print(db.execute(select(User)).scalars().all())
+[
+    User(id=1, username='alice'),
+    User(id=2, username='bob'),
+    User(id=3, username='john')
+]
 **Syn: Cách mới**
 ```bash
 from sqlalchemy.orm import DeclarativeBase

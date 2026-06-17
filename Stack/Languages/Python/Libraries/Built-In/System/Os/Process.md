@@ -1,6 +1,6 @@
 - [os.path (Nhóm làm việc với đường dẫn)](#ospath-nhóm-làm-việc-với-đường-dẫn)
-  - [.dirname()](#dirname)
-  - [.abspath()](#abspath)
+  - [.dirname() (Lấy thư mục cha của file hoặc thư mục)](#dirname-lấy-thư-mục-cha-của-file-hoặc-thư-mục)
+  - [.abspath() (đổi đường dẫn thành đường dẫn tuyệt đối (absolute path))](#abspath-đổi-đường-dẫn-thành-đường-dẫn-tuyệt-đối-absolute-path)
   - [.join() (Ghép đường dẫn)](#join-ghép-đường-dẫn)
 - [Create \& Config (Nhóm tạo \& cấu hình)](#create--config-nhóm-tạo--cấu-hình)
   - [.mkdir()](#mkdir)
@@ -26,28 +26,27 @@
   - [os.remove() (xóa file)](#osremove-xóa-file)
 ---
 # os.path (Nhóm làm việc với đường dẫn)
-## .dirname()
-```bash
-Lấy thư mục chứa file.
-```
-**Ex1**
+## .dirname() (Lấy thư mục cha của file hoặc thư mục)
+**Ex1: Lấy thư mục cha**
 ```python
 print(os.path.dirname("/data/images/cat.jpg")) # /data/images
 ```
-**Ex: Lấy đường dẫn thư mục gốc**
+**Ex2: lùi 2 cấp thư mục**
 ```python
-BASE_DIR = os.path.dirname(os.path.dirname(__file__)) 
+import os
 
-print(BASE_DIR) # /home/thang/projects/tri_tue_nhan_tao/backend
+BASE_DIR_1 = os.path.dirname(__file__) 
+BASE_DIR_2 = os.path.dirname(BASE_DIR_1) 
 
-# Ví dụ path = "/home/thang/projects/tri_tue_nhan_tao/backend/app.py"
-# Lần 1: os.path.dirname(path) -> /home/thang/projects/tri_tue_nhan_tao/backend
-# Lần 2: -> /home/thang/projects/tri_tue_nhan_tao
+print(__file__)
+print(BASE_DIR_1) 
+print(BASE_DIR_2)
+# (.venv) thang@PhatToNhuLai:~/workspace/lightgbm/backend$ python test.py
+# /home/thang/workspace/lightgbm/backend/test.py
+# /home/thang/workspace/lightgbm/backend
+# /home/thang/workspace/lightgbm
 ```
-## .abspath()
-```bash
-Dùng để đổi đường dẫn đó thành đường dẫn tuyệt đối (absolute path).
-```
+## .abspath() (đổi đường dẫn thành đường dẫn tuyệt đối (absolute path))
 **Syn**
 ```bash
 os.path.abspath(path)
@@ -59,7 +58,10 @@ os.path.abspath(path)
 ```python
 import os
 
-print(os.path.abspath("backend/utils.py")) # /home/thang/workspace/lightgbm/backend/utils.py
+cur_path = os.path.abspath("utils/test.py")
+print(cur_path)
+# (.venv) thang@PhatToNhuLai:~/workspace/lightgbm/backend$ python test.py
+# /home/thang/workspace/lightgbm/backend/utils/test.py
 ```
 **Ex2: Lưu ý abspath gặp / thì giữ nguyên**
 ```python

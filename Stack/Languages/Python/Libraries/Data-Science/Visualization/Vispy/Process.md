@@ -1,23 +1,23 @@
 - [app (Thành phần này quản lý vòng lặp sự kiện (event loop) và hiển thị cửa sổ)](#app-thành-phần-này-quản-lý-vòng-lặp-sự-kiện-event-loop-và-hiển-thị-cửa-sổ)
   - [.use\_app()](#use_app)
-- [scene (xây dựng cấu trúc cảnh 3D (scene graph), quản lý các đối tượng trực quan (visuals), camera, và các widget)](#scene-xây-dựng-cấu-trúc-cảnh-3d-scene-graph-quản-lý-các-đối-tượng-trực-quan-visuals-camera-và-các-widget)
-  - [.SceneCanvas() (Tạo cửa sổ chính (canvas) để hiển thị cảnh. Nó là lớp cơ sở cho mọi ứng dụng VisPy)](#scenecanvas-tạo-cửa-sổ-chính-canvas-để-hiển-thị-cảnh-nó-là-lớp-cơ-sở-cho-mọi-ứng-dụng-vispy)
+- [scene (xây dựng cấu trúc cảnh 3D (scene graph))](#scene-xây-dựng-cấu-trúc-cảnh-3d-scene-graph)
+  - [.SceneCanvas() (Tạo cửa sổ chính (canvas) để hiển thị cảnh)](#scenecanvas-tạo-cửa-sổ-chính-canvas-để-hiển-thị-cảnh)
     - [.title (Tạo tiêu đề)](#title-tạo-tiêu-đề)
-    - [.central\_widget (quản lý bố cục (layout), chứa các widget và ViewBox)](#central_widget-quản-lý-bố-cục-layout-chứa-các-widget-và-viewbox)
+    - [.central\_widget (quản lý bố cục (layout))](#central_widget-quản-lý-bố-cục-layout)
     - [.add\_view() (Thêm một ViewBox vào cửa sổ)](#add_view-thêm-một-viewbox-vào-cửa-sổ)
       - [.camera (xác định cách bạn nhìn vào cảnh)](#camera-xác-định-cách-bạn-nhìn-vào-cảnh)
 - [visuals](#visuals)
   - [GridLines() (Thêm lưới toạ độ (Grid))](#gridlines-thêm-lưới-toạ-độ-grid)
   - [XYZAxis() (Vẽ tọa độ trục Oxyz)](#xyzaxis-vẽ-tọa-độ-trục-oxyz)
   - [.Sphere() (một đối tượng hình cầu 3D)](#sphere-một-đối-tượng-hình-cầu-3d)
+  - [Markers() (Vẽ Điểm rời rạc)](#markers-vẽ-điểm-rời-rạc)
     - [ViewBox](#viewbox)
-- [Run() (Khởi động vòng lặp ứng dụng chính (main event loop) của VisPy. Đây là hàm chặn (blocking) và cần thiết để cửa sổ hiển thị và tương tác hoạt động)](#run-khởi-động-vòng-lặp-ứng-dụng-chính-main-event-loop-của-vispy-đây-là-hàm-chặn-blocking-và-cần-thiết-để-cửa-sổ-hiển-thị-và-tương-tác-hoạt-động)
+- [Run() (cần thiết để cửa sổ hiển thị và tương tác hoạt động)](#run-cần-thiết-để-cửa-sổ-hiển-thị-và-tương-tác-hoạt-động)
 - [Quit() (Thoát khỏi vòng lặp ứng dụng)](#quit-thoát-khỏi-vòng-lặp-ứng-dụng)
 - [Location (xử lý vị trí)](#location-xử-lý-vị-trí)
   - [.transform](#transform)
   - [.STTransform (Scale + translate transform)](#sttransform-scale--translate-transform)
   - [TurntableCamera()](#turntablecamera)
-  - [Markers()](#markers)
   - [.set\_data()](#set_data)
   - [Text()](#text)
 - [color (xử lý màu)](#color-xử-lý-màu)
@@ -34,11 +34,16 @@ from vispy import scene
 
 app.use_app('pyqt5') # Vispy cần một cửa sổ để hiển thị. Ở đây nó ép buộc sử dụng PyQt5 (một thư viện giao diện mạnh mẽ) làm nền tảng hiển thị cửa sổ.
 ```
-# scene (xây dựng cấu trúc cảnh 3D (scene graph), quản lý các đối tượng trực quan (visuals), camera, và các widget)
+# scene (xây dựng cấu trúc cảnh 3D (scene graph))
 ```bash
+Quản lý các đối tượng trực quan (visuals), camera, và các widget.
+
 Hiểu đơn giản thì đây là hệ thống vẽ 3D.
 ```
-## .SceneCanvas() (Tạo cửa sổ chính (canvas) để hiển thị cảnh. Nó là lớp cơ sở cho mọi ứng dụng VisPy)
+## .SceneCanvas() (Tạo cửa sổ chính (canvas) để hiển thị cảnh)
+```bash
+Nó là lớp cơ sở cho mọi ứng dụng VisPy
+```
 **Syn**
 ```bash
 canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True, title=’Demo’)
@@ -52,7 +57,7 @@ canvas = scene.SceneCanvas(keys='interactive', size=(800, 600), show=True, title
   + Title='': thêm tiêu đề cho cửa sổ
 ```
 ### .title (Tạo tiêu đề)
-### .central_widget (quản lý bố cục (layout), chứa các widget và ViewBox)
+### .central_widget (quản lý bố cục (layout))
 ### .add_view() (Thêm một ViewBox vào cửa sổ)
 ```bash
 ViewBox là "cửa sổ nhìn" vào cảnh 3D, nơi chứa camera và các đối tượng trực quan.
@@ -188,11 +193,63 @@ scene.visuals.Sphere(
         - transform
         - state để vẽ
 ```
+## Markers() (Vẽ Điểm rời rạc)
+```bash
+Markers dùng để vẽ các điểm (point) trên màn hình. Bạn có thể tưởng tượng nó giống như việc dùng bút chấm các điểm trên mặt phẳng hoặc không gian 3D.
+
+- Tùy chỉnh Hình dạng: Cho phép định rõ hình dạng của mỗi điểm (ví dụ: tròn, vuông, kim cương, mũi tên, v.v.).
+- Tô màu và Kích thước Đa dạng: Bạn có thể gán màu sắc và kích thước khác nhau cho từng điểm riêng lẻ trong cùng một lần gọi hàm, giúp mã hóa thông tin bổ sung.
+- Hiệu suất cao: Được tối ưu hóa để vẽ hàng nghìn đến hàng triệu điểm một cách nhanh chóng nhờ sử dụng OpenGL.
+```
+**Syn**
+```bash
+single_marker = scene.visuals.Markers(
+    parent=view.scene,
+    antialias=0 # tắt khử răng cưa
+)
+```
+**Ex**
+```python
+import numpy as np
+from vispy import app, scene
+
+# Tạo canvas
+canvas = scene.SceneCanvas(
+    keys='interactive',
+    size=(800, 600),
+    show=True
+)
+
+view = canvas.central_widget.add_view()
+view.camera = 'panzoom'
+
+# Tạo 100 điểm ngẫu nhiên
+pos = np.random.normal(size=(100, 2))
+
+# Marker
+scatter = scene.visuals.Markers()
+scatter.set_data(
+    pos,
+    face_color='red',      # màu bên trong
+    edge_color='black',    # màu viền
+    size=15                # kích thước
+)
+
+view.add(scatter)
+
+# Tự động căn khung nhìn
+view.camera.set_range()
+
+if __name__ == '__main__':
+    app.run()
+
+# Kết quả sẽ giống như một biểu đồ scatter với khoảng 100 chấm đỏ có viền đen nằm rải rác trên màn hình
+```
 ### ViewBox
 ```bash
 Vùng hiển thị (camera nhìn vào đây)
 ```
-# Run() (Khởi động vòng lặp ứng dụng chính (main event loop) của VisPy. Đây là hàm chặn (blocking) và cần thiết để cửa sổ hiển thị và tương tác hoạt động)
+# Run() (cần thiết để cửa sổ hiển thị và tương tác hoạt động)
 ```bash
 Cách dùng: Gọi ở cuối script của bạn.
 ```
@@ -261,20 +318,6 @@ view.camera = scene.cameras.TurntableCamera(
 
 - fov       : góc nhìn (perspective)
 - distance  : Khoảng cách camera
-```
-## Markers()
-```bash
-- Vẽ Điểm rời rạc: Hiển thị một tập hợp các điểm được xác định bởi tọa độ (x,y) hoặc (x,y,z).
-- Tùy chỉnh Hình dạng: Cho phép định rõ hình dạng của mỗi điểm (ví dụ: tròn, vuông, kim cương, mũi tên, v.v.).
-- Tô màu và Kích thước Đa dạng: Bạn có thể gán màu sắc và kích thước khác nhau cho từng điểm riêng lẻ trong cùng một lần gọi hàm, giúp mã hóa thông tin bổ sung.
-- Hiệu suất cao: Được tối ưu hóa để vẽ hàng nghìn đến hàng triệu điểm một cách nhanh chóng nhờ sử dụng OpenGL.
-```
-**Syn**
-```bash
-single_marker = scene.visuals.Markers(
-    parent=view.scene,
-    antialias=0 # tắt khử răng cưa
-)
 ```
 ## .set_data()
 **Syn**

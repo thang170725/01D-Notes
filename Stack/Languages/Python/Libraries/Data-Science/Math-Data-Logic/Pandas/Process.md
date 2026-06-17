@@ -3,21 +3,23 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.head()](#head)
   - [.shape](#shape)
-  - [.columns](#columns)
+  - [.columns (Lấy danh sách tên các cột của dataframe)](#columns-lấy-danh-sách-tên-các-cột-của-dataframe)
   - [.tail()](#tail)
   - [.value\_counts()](#value_counts)
   - [pd.options.display.max\_rows](#pdoptionsdisplaymax_rows)
-  - [unique()](#unique)
-  - [.nunique()](#nunique)
+  - [unique() (Dùng để lấy các giá trị không trùng lặp trong một Series/cột)](#unique-dùng-để-lấy-các-giá-trị-không-trùng-lặp-trong-một-seriescột)
+  - [.nunique() (Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó)](#nunique-để-đếm-tổng-số-lượng-các-giá-trị-khác-nhau-trong-một-cột-nào-đó)
   - [.index()](#index)
   - [.info()](#info)
   - [.describe()](#describe)
+  - [.dtype (Xem kiểu dữ liệu 1 series)](#dtype-xem-kiểu-dữ-liệu-1-series)
+  - [.dtypes (Xem kiểu dữ liệu của tất cả các cột bằng)](#dtypes-xem-kiểu-dữ-liệu-của-tất-cả-các-cột-bằng)
 - [Tạo thêm cột mới trong dataframe](#tạo-thêm-cột-mới-trong-dataframe)
   - [pd.notnull()](#pdnotnull)
   - [.isna() \& .isnull()](#isna--isnull)
 - [Search (nhóm tìm kiếm, lọc)](#search-nhóm-tìm-kiếm-lọc)
   - [loc](#loc)
-  - [iloc (integer location)](#iloc-integer-location)
+  - [iloc (integer location) (dùng để truy cập dữ liệu theo vị trí chỉ số)](#iloc-integer-location-dùng-để-truy-cập-dữ-liệu-theo-vị-trí-chỉ-số)
   - [.notna()](#notna)
   - [.where()](#where)
 - [Process (thao tác xử lý)](#process-thao-tác-xử-lý)
@@ -28,20 +30,22 @@
     - [.drop\_duplicates()](#drop_duplicates)
 - [Time (Nhóm xử lý ngày giờ)](#time-nhóm-xử-lý-ngày-giờ)
   - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin-1)
-    - [.dt.date](#dtdate)
+    - [.dt.date (dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây)](#dtdate-dùng-để-lấy-phần-ngày-date-từ-cột-datetime-bỏ-giờ-phút-giây)
     - [.dt.hour](#dthour)
-    - [.dt.minute](#dtminute)
+    - [.dt.minute (Dùng để lấy ra phần phút (0–59) từ một cột có kiểu datetime)](#dtminute-dùng-để-lấy-ra-phần-phút-059-từ-một-cột-có-kiểu-datetime)
     - [.dt.day\_name()](#dtday_name)
     - [.dt.dayofweek](#dtdayofweek)
   - [Transform (Nhóm biển đổi dữ liệu, cấu trúc dữ liệu)](#transform-nhóm-biển-đổi-dữ-liệu-cấu-trúc-dữ-liệu)
-    - [to\_datetime()](#to_datetime)
-    - [resample()](#resample)
+    - [.to\_datetime() (chuyển dữ liệu thành kiểu ngày giờ (datetime))](#to_datetime-chuyển-dữ-liệu-thành-kiểu-ngày-giờ-datetime)
+    - [resample() (đổi tần suất thời gian)](#resample-đổi-tần-suất-thời-gian)
     - [pd.Timedelta()](#pdtimedelta)
 - [Compare Function (Nhóm chức năng so sánh)](#compare-function-nhóm-chức-năng-so-sánh)
   - [.eq()](#eq)
 - [shift() — lấy giá trị trong quá khứ (lag)](#shift--lấy-giá-trị-trong-quá-khứ-lag)
 - [rolling() — cửa sổ trượt](#rolling--cửa-sổ-trượt)
 - [autocorrelation\_plot()](#autocorrelation_plot)
+- [.agg() (Cho phép áp dụng nhiều hàm cùng lúc)](#agg-cho-phép-áp-dụng-nhiều-hàm-cùng-lúc)
+- [.count() (Đếm số giá trị không null)](#count-đếm-số-giá-trị-không-null)
 ---
 # Create (Nhóm khởi tạo)
 ## DataFrame & Series
@@ -139,17 +143,24 @@ print(df.head()) # tự động lấy ra 5 dòng đầu tiên (mặc địch)
 ```python
 print(df.shape)
 ```
-## .columns
+## .columns (Lấy danh sách tên các cột của dataframe)
 ```bash
-- Là một thuộc tính kiểu index. Nó chứa danh sách tên các cột của dataframe.
-- Có thể dùng để:
+Dùng để:
     + xem danh sách tên cột
     + đổi tên cột
 ```
 **Ex** 
 ```python
-df.columns
-print(df.columns)
+import pandas as pd
+
+df = pd.DataFrame({
+    "name": ['thang', 'minh'],
+    "age": [12, 13],
+    "address": ["hanoi", "hcm"]
+})
+
+cols = df.columns
+print(cols) # Index(['name', 'age', 'address'], dtype='object')
 ```
 ## .tail()
 ```bash
@@ -246,12 +257,13 @@ main()
 
 # [3 rows x 2 columns]
 ```
-## unique()
-unique() dùng để lấy các giá trị không trùng lặp trong một Series/cột.
-
-Cú pháp
+## unique() (Dùng để lấy các giá trị không trùng lặp trong một Series/cột)
+**Syn**
+```python
 df["column"].unique()
-Ví dụ đơn giản
+```
+**Ex**
+```python
 import pandas as pd
 
 df = pd.DataFrame({
@@ -264,35 +276,9 @@ df = pd.DataFrame({
     ]
 })
 
-print(df["city"].unique())
-Kết quả giả định
-['Ha Noi' 'Da Nang' 'HCM']
-
-Chỉ giữ giá trị duy nhất, bỏ trùng.
-
-Với số
-df = pd.DataFrame({
- "hour":[8,8,9,10,10,10]
-})
-
-print(df["hour"].unique())
-
-Kết quả:
-
-[8 9 10]
-Đếm số giá trị unique
-
-Dùng:
-
-df["city"].nunique()
-
-Kết quả:
-
-3
-## .nunique()
-```bash
-- Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó.
+print(df["city"].unique()) # ['Ha Noi' 'Da Nang' 'HCM']
 ```
+## .nunique() (Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó)
 **Ex**
 ```python
 df = pd.DataFrame({
@@ -359,6 +345,36 @@ min = 18 → nhỏ nhất
 50% = 19 → median (trung vị)
 75% = 20.25 → Q3
 max = 21 → lớn nhất
+```
+## .dtype (Xem kiểu dữ liệu 1 series)
+**Syn**
+```bash
+df["ten_cot"].dtype
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "ten": ["An", "Bình", "Chi"],
+    "tuoi": [20, 21, 22],
+    "diem": [8.5, 9.0, 7.5]
+})
+
+print(df["tuoi"].dtype) # int64
+```
+## .dtypes (Xem kiểu dữ liệu của tất cả các cột bằng)
+**Syn**
+```bash
+df.dtypes
+```
+**Ex**
+```python
+print(df.dtypes)
+# ten      object
+# tuoi      int64
+# diem    float64
+# dtype: object
 ```
 # Tạo thêm cột mới trong dataframe
 ```python
@@ -530,10 +546,7 @@ df = pd.DataFrame(data)
 df.loc[df['country'] == 'Viet Nam', 'salary'] += 10
 print(df)
 ```
-## iloc (integer location)
-```bash
-dùng để truy cập dữ liệu theo vị trí chỉ số (index số nguyên) trong pandas.
-```
+## iloc (integer location) (dùng để truy cập dữ liệu theo vị trí chỉ số)
 **Syn**
 ```bash
 df.iloc[hàng, cột]
@@ -760,10 +773,7 @@ print(df)
 ```
 # Time (Nhóm xử lý ngày giờ)
 ## Display (Nhóm cung cấp thông tin)
-### .dt.date 
-```bash
-dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây.
-```
+### .dt.date (dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây)
 **Syn**
 ```bash
 df["col"].dt.date
@@ -813,11 +823,32 @@ print(df)
 # 1 2024-05-02 14:45:00    14
 # 2 2024-05-03 21:15:00    21
 ```
-### .dt.minute
-### .dt.day_name()
-```bash
-Lấy tên thứ
+### .dt.minute (Dùng để lấy ra phần phút (0–59) từ một cột có kiểu datetime)
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "thoi_gian": [
+        "2026-06-17 08:15:30",
+        "2026-06-17 12:45:10",
+        "2026-06-17 21:05:50"
+    ]
+})
+
+# Chuyển sang kiểu datetime
+df["thoi_gian"] = pd.to_datetime(df["thoi_gian"])
+
+# Lấy phút
+df["phut"] = df["thoi_gian"].dt.minute
+
+print(df)
+#            thoi_gian  phut
+# 0 2026-06-17 08:15:30    15
+# 1 2026-06-17 12:45:10    45
+# 2 2026-06-17 21:05:50     5
 ```
+### .dt.day_name() (Lấy tên thứ)
 **Ex**
 ```python
 import pandas as pd
@@ -839,10 +870,7 @@ print(df)
 # 1 2024-05-02 14:45:00   Thursday
 # 2 2024-05-03 21:15:00     Friday
 ```
-### .dt.dayofweek
-```bash
-Lấy số thứ trong tuần
-```
+### .dt.dayofweek (Lấy số thứ trong tuần)
 **Syn**
 ```bash
 df["time"].dt.dayofweek
@@ -878,9 +906,8 @@ print(df)
 # 2 2024-05-03 21:15:00        4
 ```
 ## Transform (Nhóm biển đổi dữ liệu, cấu trúc dữ liệu)
-### to_datetime() 
+### .to_datetime() (chuyển dữ liệu thành kiểu ngày giờ (datetime))
 ```bash
-- dùng để chuyển dữ liệu thành kiểu ngày giờ (datetime).
 - Rất hay dùng khi cột ngày đang là string: "2024-01-15"
     + chuyển thành datetime để:
         - lọc theo ngày
@@ -929,10 +956,9 @@ print(pd.to_datetime(
     format="%d-%m-%Y"
 )) # 2026-04-26
 ```
-### resample()
+### resample() (đổi tần suất thời gian)
 ```bash
-- resample() = đổi tần suất thời gian.
-- Ví dụ:
+Ví dụ:
     + dữ liệu 15 phút → theo giờ
     + theo ngày
     + theo tháng
@@ -1156,3 +1182,295 @@ autocorrelation_plot(series)
 - Input:
     + series: là một pandas series
 ```
+# .agg() (Cho phép áp dụng nhiều hàm cùng lúc)
+```bash
+Dùng khi:
+    - Tổng hợp dữ liệu
+    - Thay thế nhiều lệnh thống kê riêng lẻ
+```
+**Ex**
+```python
+df["salary"].agg(["mean", "max", "min"])
+
+df.groupby("department").agg({
+    "salary": ["mean", "max"],
+    "age": "median"
+})
+```
+# .count() (Đếm số giá trị không null)
+```bash
+df.count()
+```
+.apply()
+
+Hàm "thần thánh" của Pandas.
+
+Áp dụng function lên Series hoặc DataFrame.
+
+df["name"].apply(len)
+
+df["salary"].apply(lambda x: x*1.1)
+
+DataFrame:
+
+df.apply(np.mean)
+.map()
+
+Chỉ dùng cho Series.
+
+gender_map = {
+    "M":"Male",
+    "F":"Female"
+}
+
+df["gender"].map(gender_map)
+
+Dùng để encode.
+
+.applymap()
+
+Áp dụng lên từng phần tử DataFrame.
+
+df.applymap(str.upper)
+
+Hiện nay thường dùng:
+
+df.map(...)
+
+(với các phiên bản Pandas mới).
+
+3. Nhóm Join/Merge (RẤT QUAN TRỌNG)
+
+Nếu đi phỏng vấn Data Analyst gần như chắc chắn gặp.
+
+.merge()
+
+Giống SQL JOIN.
+
+pd.merge(df1, df2,
+         on="id",
+         how="inner")
+
+Các kiểu:
+
+inner
+left
+right
+outer
+
+Ví dụ:
+
+orders.merge(customers,
+             on="customer_id",
+             how="left")
+.join()
+
+Join theo index.
+
+df1.join(df2)
+4. Nhóm String
+
+Cực kỳ hay dùng.
+
+.str.contains()
+df["email"].str.contains("@gmail")
+.str.lower()
+df["name"].str.lower()
+.str.upper()
+df["name"].str.upper()
+.str.strip()
+
+Xóa khoảng trắng.
+
+df["name"].str.strip()
+.str.replace()
+df["phone"].str.replace("-", "")
+.str.split()
+df["fullname"].str.split(" ")
+.str.extract()
+
+Regex.
+
+df["email"].str.extract(r"@(.*)")
+5. Nhóm Category / Encoding
+get_dummies()
+
+One-hot encoding.
+
+pd.get_dummies(df["city"])
+
+AI/ML dùng rất nhiều.
+
+cut()
+
+Chia khoảng theo ngưỡng.
+
+pd.cut(
+    df["age"],
+    bins=[0,18,60,100],
+    labels=["Child","Adult","Senior"]
+)
+
+Khác với:
+
+qcut()
+cut: khoảng cố định
+qcut: số lượng mẫu gần bằng nhau
+6. Nhóm Missing Value nâng cao
+.fillna(method=...)
+df.fillna(method="ffill")
+df.fillna(method="bfill")
+
+Hiện nay khuyến khích viết:
+
+df.ffill()
+df.bfill()
+.interpolate()
+
+Nội suy.
+
+df["temperature"].interpolate()
+
+Rất hữu ích cho time series.
+
+7. Nhóm Ranking
+.rank()
+
+Xếp hạng.
+
+df["salary"].rank(ascending=False)
+.nlargest()
+
+Top N.
+
+df.nlargest(5, "salary")
+.nsmallest()
+
+Bottom N.
+
+df.nsmallest(5, "salary")
+8. Nhóm Time Series quan trọng
+
+Bạn đã học khá nhiều rồi, nhưng nên thêm:
+
+.dt.month
+df["date"].dt.month
+.dt.year
+df["date"].dt.year
+.dt.weekday
+df["date"].dt.weekday
+.diff()
+
+Sai phân.
+
+df["sales"].diff()
+
+Ví dụ:
+
+100
+120
+150
+
+↓
+
+NaN
+20
+30
+.pct_change()
+
+Phần trăm thay đổi.
+
+df["sales"].pct_change()
+
+Ví dụ:
+
+100
+120
+
+↓
+
+0.2
+
+tức tăng 20%.
+
+9. Nhóm Window Function
+
+Rất quan trọng nếu làm time series.
+
+.expanding()
+
+Tính từ đầu đến hiện tại.
+
+df["sales"].expanding().mean()
+
+Ví dụ:
+
+10
+20
+30
+
+↓
+
+10
+15
+20
+ewm()
+
+Exponential Weighted Mean.
+
+df["sales"].ewm(span=5).mean()
+
+Trung bình động có trọng số.
+
+Dùng nhiều trong tài chính.
+
+10. Nhóm Sampling
+.sample()
+
+Lấy mẫu ngẫu nhiên.
+
+df.sample(5)
+
+df.sample(frac=0.2)
+
+Rất hay dùng khi debug.
+
+11. Nhóm MultiIndex
+stack()
+
+Wide → long.
+
+df.stack()
+unstack()
+
+Long → wide.
+
+df.unstack()
+12. Nhóm Index
+.reindex()
+
+Thay đổi index.
+
+df.reindex([0,1,2,3,4])
+.sort_index()
+
+Sắp xếp theo index.
+
+df.sort_index()
+13. Nhóm Performance
+.query()
+
+Lọc bằng biểu thức.
+
+df.query("age > 30 and salary > 5000")
+
+Thường dễ đọc hơn:
+
+df[(df.age > 30) & (df.salary > 5000)]
+.eval()
+
+Đánh giá biểu thức.
+
+df.eval("profit = revenue - cost")
+
+Nhanh hơn trên DataFrame lớn.

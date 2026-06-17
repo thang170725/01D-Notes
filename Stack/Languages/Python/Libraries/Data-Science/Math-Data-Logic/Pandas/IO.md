@@ -1,6 +1,6 @@
 - [File (Nhóm xử lý file)](#file-nhóm-xử-lý-file)
   - [Read (Nhóm lấy dữ liệu)](#read-nhóm-lấy-dữ-liệu)
-    - [.read\_csv()](#read_csv)
+    - [.read\_csv() (lấy dữ liệu từ file)](#read_csv-lấy-dữ-liệu-từ-file)
   - [Write (Nhóm ghi dữ liệu)](#write-nhóm-ghi-dữ-liệu)
     - [.to\_csv()](#to_csv)
 - [SQL (Nhóm xử lý sql)](#sql-nhóm-xử-lý-sql)
@@ -11,7 +11,7 @@
 ---
 # File (Nhóm xử lý file)
 ## Read (Nhóm lấy dữ liệu)
-### .read_csv()
+### .read_csv() (lấy dữ liệu từ file)
 ```bash
 - Nó đọc delimited text files (file văn bản có cột ngăn cách bằng ký tự phân tách)
 - ví dụ:
@@ -22,6 +22,7 @@
 **Syn**
 ```bash
 import pandas as pd
+
 li = pd.read_csv(
     "danhSach.csv", 
     sep=',',

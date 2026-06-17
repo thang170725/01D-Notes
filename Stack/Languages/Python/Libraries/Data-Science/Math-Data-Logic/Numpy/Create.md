@@ -1,11 +1,15 @@
-- [np.array() \& empty \& .zeros()](#nparray--empty--zeros)
+- [Numpy Array (Mảng trong numpy)](#numpy-array-mảng-trong-numpy)
+  - [np.array() (Tạo mảng có sẵn giá trị, không tạo mảng rỗng được)](#nparray-tạo-mảng-có-sẵn-giá-trị-không-tạo-mảng-rỗng-được)
+  - [.arrange()](#arrange)
+  - [.empty \& .zeros()](#empty--zeros)
 - [.zeros\_like()](#zeros_like)
 - [.astype()](#astype)
 - [frombuffer](#frombuffer)
 - [.tobytes()](#tobytes)
 - [linspace()](#linspace)
 - [Asarray()](#asarray)
-- [.view() \& .copy()](#view--copy)
+  - [.view()](#view)
+  - [.copy() (Để sao chép một mảng)](#copy-để-sao-chép-một-mảng)
 - [Random (Tạo ngẫu nhiên)](#random-tạo-ngẫu-nhiên)
   - [Rand()](#rand)
   - [Randint()](#randint)
@@ -14,7 +18,7 @@
   - [randn()](#randn)
   - [normal()](#normal)
   - [binomial()](#binomial)
-  - [.choice()](#choice)
+  - [.choice() (Dùng để chọn ngẫu nhiên phần tử từ một tập hợp)](#choice-dùng-để-chọn-ngẫu-nhiên-phần-tử-từ-một-tập-hợp)
 
 ---
 # Numpy Array (Mảng trong numpy)
@@ -310,10 +314,7 @@ import numpy as np
 result = np.random.binomial(n=10, p=1/6, size=5)
 print(result) # [2 3 6 2 1]
 ```
-## .choice()
-```bash
-Dùng để chọn ngẫu nhiên phần tử từ một tập hợp.
-```
+## .choice() (Dùng để chọn ngẫu nhiên phần tử từ một tập hợp)
 **Syn**
 ```bash
 np.random.choice(a, size=None, replace=True, p=None)
@@ -337,7 +338,7 @@ print(x) # 30
 ```
 **Ex2: Chọn nhiều phần tử**
 ```python
-np.random.choice([10,20,30,40], size=3) ## array([20, 20, 40]) (vì mặc định cho phép lặp)
+np.random.choice([10,20,30,40], size=3) # array([20, 20, 40]) (vì mặc định cho phép lặp)
 
 # Không cho trùng
 np.random.choice([10,20,30,40], size=3, replace=False) # array([40,10,30])

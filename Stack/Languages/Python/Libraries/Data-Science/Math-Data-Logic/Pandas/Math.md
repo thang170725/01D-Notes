@@ -1,10 +1,15 @@
-- [.sum()](#sum)
-- [.cumsum() (cumulative sum)](#cumsum-cumulative-sum)
+- [.sum() (tính tổng)](#sum-tính-tổng)
+- [.cumsum() (cumulative sum) (Là tổng tích lũy / cộng dồn)](#cumsum-cumulative-sum-là-tổng-tích-lũy--cộng-dồn)
 - [.mean()](#mean)
+- [.median() (Trung vị)](#median-trung-vị)
+- [.std() (Độ lệch chuẩn)](#std-độ-lệch-chuẩn)
+- [.var() (Phương sai)](#var-phương-sai)
+- [.quantile() (Lấy percentile)](#quantile-lấy-percentile)
 ---
-# .sum() 
+# .sum() (tính tổng)
 **Syn**
 ```bash
+df.sum()
 
 - Input:
     + axis=:
@@ -24,16 +29,13 @@ print(df.sum())
 A     6
 B    15
 ```
-# .cumsum() (cumulative sum)
+# .cumsum() (cumulative sum) (Là tổng tích lũy / cộng dồn)
 ```bash
-- Là tổng tích lũy / cộng dồn. Nó không cộng tất cả một lần như sum(), mà cộng dồn từng bước.
+Nó không cộng tất cả một lần như sum(), mà cộng dồn từng bước.
 ```
 **Syn**
 ```bash
-Với series: series.cumsum()
-
-Với dataframe:
-df.cumsum(axis=0)
+series.cumsum() hoặc df.cumsum(axis=0)
 
 - Input:
     + axis=0 (mặc định): cộng dồn theo cột
@@ -89,4 +91,27 @@ print(df.mean())
 # Math       8.0
 # English    7.0
 # dtype: float64
+```
+# .median() (Trung vị)
+```bash
+Rất hay dùng khi dữ liệu có outlier
+```
+```bash
+df["salary"].median()
+```
+# .std() (Độ lệch chuẩn)
+```bash
+df["salary"].std()
+```
+# .var() (Phương sai)
+```bash
+df["salary"].var()
+```
+# .quantile() (Lấy percentile)
+```bash
+Dùng nhiều trong phát hiện outlier.
+```
+```bash
+df["salary"].quantile(0.25)
+df["salary"].quantile([0.25,0.5,0.75])
 ```

@@ -8,7 +8,7 @@
   - [in \& not in](#in--not-in)
   - [isdigit()](#isdigit)
   - [.isidentifier()](#isidentifier)
-  - [.isupper() \& .islower() \&](#isupper--islower-)
+  - [.isupper() \& .islower()](#isupper--islower)
   - [.startswith() \& .endswith()](#startswith--endswith)
 - [Search (Tìm kiếm)](#search-tìm-kiếm)
   - [.find() \& .rfind()](#find--rfind)
@@ -26,7 +26,8 @@
   - [.title()](#title)
   - [.replace()](#replace)
   - [expandtabs()](#expandtabs)
-  - [casefold()](#casefold)
+  - [.lower()](#lower)
+  - [.casefold() (chuyễn chuỗi thành chuỗi thường)](#casefold-chuyễn-chuỗi-thành-chuỗi-thường)
   - [capitalize()](#capitalize)
   - [swapcase()](#swapcase)
   - [.splitlines()](#splitlines)
@@ -143,7 +144,7 @@ for t in tests:
 # class       -> True   ❗
 # user name   -> False
 ``` 
-## .isupper() & .islower() &
+## .isupper() & .islower()
 ```bash
 - isupper islower   : Kiểm tra viết hoa, viết thường.
 ```
@@ -339,13 +340,14 @@ x = txt.expandtabs(4)
 print(x) # H    e    l    l  o
 # Khoảng cách 1 tab lúc này được đặt bằng 4 dấu cách
 ```
-## casefold()
+## .lower()
+## .casefold() (chuyễn chuỗi thành chuỗi thường)
 ```bash
 Tương tự như phương thức lower(), nhưng phương thức casefold() mạnh hơn, tích cực hơn, nghĩa là nó sẽ chuyển đổi nhiều ký tự thành chữ thường hơn và sẽ tìm thấy nhiều kết quả khớp hơn khi so sánh hai chuỗi và cả hai đều được chuyển đổi được bằng phương thức casefold().
 ```
 **Syn** 
 ```bash
-<variable>.casefold
+<variable>.casefold()
 ```
 **Ex**
 ```python

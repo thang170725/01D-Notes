@@ -5,7 +5,8 @@
     - [.get() (trả về value của một key nào đó)](#get-trả-về-value-của-một-key-nào-đó)
 - [.items()](#items)
 - [.copy()](#copy)
-  - [.keys() \& .values()](#keys--values)
+  - [.keys() (Để lấy ra tên các key)](#keys-để-lấy-ra-tên-các-key)
+  - [.values() (Trả về danh sách các giá trị của dictionary)](#values-trả-về-danh-sách-các-giá-trị-của-dictionary)
   - [\[\] \& .update()](#--update)
 - [.popitem()](#popitem)
   - [\*\* (unpack dict)](#-unpack-dict)
@@ -149,14 +150,7 @@ mydict = thisdict.copy()
 
 print(mydict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
 ```
-## .keys() & .values()
-```bash
-- keys      : Để lấy ra tên các key.
-- values    : Trả về danh sách các giá trị của dictionary.
-```
-```bash
-<variable>.keys()
-```
+## .keys() (Để lấy ra tên các key)
 **Ex1: keys**
 ```python
 li = [
@@ -175,7 +169,11 @@ dir = dict(name='John', age=25, city='New York')
 
 print(dir.keys(), type(dir.keys())) # dict_keys(['name', 'age', 'city']) <class 'dict_keys'>
 ```
-**Ex3: values**
+## .values() (Trả về danh sách các giá trị của dictionary)
+```bash
+<variable>.keys()
+```
+**Ex1: values**
 ```python
 data = {
     'names': ['Thang', "Minh", "Nghia", "Quy"],

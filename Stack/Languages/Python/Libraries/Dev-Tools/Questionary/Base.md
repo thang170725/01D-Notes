@@ -1,6 +1,6 @@
 # Introduction
 ```bash
-- Dùng để tạo câu hỏi tương tác trong terminal.
+Dùng để tạo câu hỏi tương tác trong terminal.
 ```
 # Installation
 ```bash

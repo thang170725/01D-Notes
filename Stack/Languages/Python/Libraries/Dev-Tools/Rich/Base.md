@@ -1,6 +1,6 @@
 # Introduction
 ```bash
-- rich là thư viện làm đẹp terminal.
+rich là thư viện làm đẹp terminal.
 ```
 **Document**
 ```bash

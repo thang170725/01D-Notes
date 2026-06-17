@@ -1,3 +1,42 @@
+- [!important](#important)
+---
+# !important
+```bash
+- Tailwind v3 trở xuống: đặt ! ở đằng trước.
+- Tailwind v4: đặt ! ở đằng sau.
+  Ví dụ:
+    Tailwind v3
+      <p class="!text-2xl">
+          Hello
+      </p>
+      ✅ Đúng
+
+    Tailwind v4
+      <p class="text-2xl!">
+          Hello
+      </p>
+
+      ✅ Đúng
+```
+**Ex1: Ghi đè class khác**
+```html
+<p class="text-blue-500 !text-red-500">
+    Hello
+</p>
+
+<!-- 
+text-blue-500 → chữ xanh
+!text-red-500 → chữ đỏ vì có !important
+
+CSS tương đương:
+
+color: blue;
+color: red !important;
+-->
+```
+
+
+⚠️ Vẫn có thể chạy để tương thích ngược, nhưng đã bị đánh dấu là deprecated (không khuyến khích dùng nữa).
 @layer là một tính năng của Tailwind CSS dùng để đăng ký CSS vào các layer của Tailwind, giúp Tailwind quản lý thứ tự ưu tiên và hỗ trợ tree-shaking (loại bỏ CSS không dùng).
 
 Trong Tailwind có 3 layer chính:
