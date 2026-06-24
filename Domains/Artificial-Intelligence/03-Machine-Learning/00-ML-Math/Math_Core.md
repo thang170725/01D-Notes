@@ -14,6 +14,8 @@
   - [Sharpen (làm sắc nét)](#sharpen-làm-sắc-nét)
   - [Sobel, Laplacian](#sobel-laplacian)
 - [clustering (gom cụm)](#clustering-gom-cụm)
+  - [DBSCAN (Density-Based Spatial Clustering) (thuật toán clustering (phân cụm))](#dbscan-density-based-spatial-clustering-thuật-toán-clustering-phân-cụm)
+  - [Gaussian Mixture Model (GMM)](#gaussian-mixture-model-gmm)
 - [Tree](#tree)
   - [Bagging (Bootstrap Aggregating)](#bagging-bootstrap-aggregating)
   - [Boosting](#boosting)
@@ -21,6 +23,11 @@
   - [Entropy (độ hỗn loạn)](#entropy-độ-hỗn-loạn)
   - [Information Gain (độ tăng thông tin):](#information-gain-độ-tăng-thông-tin)
   - [Thuật toán ID3 (Iterative Dichotomiser 3)](#thuật-toán-id3-iterative-dichotomiser-3)
+- [Kiểm định giả thuyết (Hypothesis Testing)](#kiểm-định-giả-thuyết-hypothesis-testing)
+- [Evaluation (đánh giá)](#evaluation-đánh-giá)
+  - [K-Fold Cross Validation](#k-fold-cross-validation)
+  - [Stratified K-Fold](#stratified-k-fold)
+  - [TimeSeriesSplit](#timeseriessplit)
 ---
 # Parameter (tham số mô hình)
 ```bash
@@ -619,6 +626,44 @@ Khi nào dùng cái nào?
         + Hệ gợi ý
         + Nhận dạng mẫu
         Ví dụ: Bộ phim này: 60% hành động 30% hài 10% tâm lý. Một bộ phim không nhất thiết chỉ thuộc một thể loại.
+```
+## DBSCAN (Density-Based Spatial Clustering) (thuật toán clustering (phân cụm))
+```bash
+DBSCAN là gì?
+    👉 Là thuật toán học không giám sát (Unsupervised Learning)
+
+🧠 Ý tưởng dễ hiểu:
+    👉 Nó nhóm các điểm lại dựa trên:
+        “chỗ nào đông người thì thành 1 nhóm”
+
+📌 Cách hoạt động:
+    - Nếu 1 điểm có nhiều điểm xung quanh → core point
+    - Các điểm gần core → cùng 1 cụm
+    - Điểm lẻ loi → noise (rác)
+```
+**Ex**
+```bash
+Bạn nhìn bản đồ:
+    - Khu quán cà phê đông → 1 cụm
+    - Khu công viên đông → 1 cụm
+    - Người đứng lẻ 1 mình → noise
+```
+## Gaussian Mixture Model (GMM)
+```bash
+👉 GMM là huật toán học không giám sát (Unsupervised Learning), cũng là thuật toán clustering (phân cụm)
+
+🧠 Ý tưởng dễ hiểu:
+    👉 Thay vì “chia cứng”, GMM nói:
+        “mỗi điểm có xác suất thuộc từng nhóm”
+
+    📌 Ví dụ:
+        1 điểm có thể:
+            - 70% thuộc nhóm A
+            - 30% thuộc nhóm B
+
+💡 Hình dung:
+    - DBSCAN: “anh thuộc nhóm này 100%”
+    - GMM: “anh giống nhóm này 70%, nhóm kia 30%”
 ```
 # Tree
 ## Bagging (Bootstrap Aggregating) 
@@ -1319,3 +1364,98 @@ Workflow của ID3
     hoặc
     - Không còn thuộc tính
 ```
+# Kiểm định giả thuyết (Hypothesis Testing)
+```bash
+Là cách dùng dữ liệu để quyết định một điều “đúng hay sai” có thật sự đáng tin không.
+
+Hiểu đơn giản:
+    Bạn có 1 “ý đoán” (giả thuyết), rồi bạn dùng dữ liệu để kiểm tra:
+        “Có bằng chứng đủ mạnh để tin điều đó không?”
+
+Luôn có 2 giả thuyết:
+- H0 (giả thuyết gốc): “không có gì đặc biệt / không thay đổi”
+- H1 (giả thuyết mới): “có thay đổi / có tác động”
+```
+**Ex**
+```bash
+🎯 Bạn muốn biết: “Uống cà phê có giúp tỉnh táo hơn không?”
+    - H0: Cà phê không làm bạn tỉnh hơn
+    - H1: Cà phê làm bạn tỉnh hơn
+
+👉 Bạn thu thập dữ liệu (test nhiều người uống cà phê)
+
+Sau đó:
+    - Nếu kết quả đủ mạnh → bác bỏ H0 → tin H1
+    - Nếu không đủ mạnh → giữ H0
+```
+# Evaluation (đánh giá)
+## K-Fold Cross Validation
+📌 Ý tưởng:
+
+Chia dữ liệu thành K phần (folds)
+
+Ví dụ K = 5:
+
+Lần 1: train 1-4, test 5
+Lần 2: train 1-3,5 test 4
+…
+
+👉 Lặp lại 5 lần → lấy trung bình kết quả
+
+💡 Hiểu dễ:
+
+“Không test 1 lần mà test nhiều lần cho chắc”
+
+## Stratified K-Fold
+
+👉 Giống K-Fold nhưng giữ tỷ lệ lớp giống nhau
+
+📌 Ví dụ:
+
+Dữ liệu:
+
+90% class A
+10% class B
+
+Stratified K-Fold đảm bảo:
+
+mỗi fold vẫn ~90/10
+💡 Hiểu dễ:
+
+“Chia đều để không bị lệch dữ liệu”
+
+## TimeSeriesSplit
+
+👉 Dùng cho dữ liệu theo thời gian
+
+📌 Nguyên tắc:
+
+❌ Không được dùng tương lai để dự đoán quá khứ
+
+Ví dụ:
+Train: tháng 1–3
+Test: tháng 4
+
+Sau đó:
+
+Train: 1–4
+Test: 5
+💡 Hiểu dễ:
+
+“Học quá khứ → đoán tương lai (không được nhìn trước)”
+
+⚖️ So sánh nhanh:
+Cách	Dùng cho	Ý tưởng
+K-Fold	dữ liệu thường	chia đều nhiều lần
+Stratified K-Fold	classification lệch lớp	giữ tỷ lệ class
+TimeSeriesSplit	dữ liệu thời gian	không dùng tương lai
+❓ Có phải hàm không?
+
+👉 Trong thư viện (scikit-learn):
+✔ đúng, chúng là class / function hỗ trợ
+
+Ví dụ:
+
+KFold()
+StratifiedKFold()
+TimeSeriesSplit()

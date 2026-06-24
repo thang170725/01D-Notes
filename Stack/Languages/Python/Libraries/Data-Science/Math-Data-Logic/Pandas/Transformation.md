@@ -12,6 +12,10 @@
   - [.reset\_index() (đưa index hiện tại trở lại thành cột bình thường)](#reset_index-đưa-index-hiện-tại-trở-lại-thành-cột-bình-thường)
   - [.pivot() (xoay dữ liệu từ dạng "dài" -\> "rộng")](#pivot-xoay-dữ-liệu-từ-dạng-dài---rộng)
   - [melt() (chuyển dữ liệu từ wide format sang long format)](#melt-chuyển-dữ-liệu-từ-wide-format-sang-long-format)
+  - [.sort\_index() (Sắp xếp theo index)](#sort_index-sắp-xếp-theo-index)
+  - [.get\_dummies() (One-hot encoding)](#get_dummies-one-hot-encoding)
+  - [.merge()](#merge)
+  - [.join() (Join theo index)](#join-join-theo-index)
 ---
 # Transformation (biến đổi cấu trúc dữ liệu)
 ## .rename() (đổi tên cột | chỉ mục)
@@ -480,3 +484,28 @@ print(df_long)
 # var_name="Môn"    : Tạo cột: Toán, Lý, Hóa
 # value_name="Điểm":
 ```
+## .sort_index() (Sắp xếp theo index)
+```bash
+df.sort_index()
+```
+## .get_dummies() (One-hot encoding)
+```bash
+pd.get_dummies(df["city"])
+```
+## .merge()
+```bash
+Giống SQL JOIN.
+```
+**Syn**
+```bash
+pd.merge(df1, df2,
+         on="id",
+         how="inner")
+
+- how:
+    + inner
+    + left
+    + right
+    + outer
+```
+## .join() (Join theo index)

@@ -11,10 +11,15 @@
   - [Local Outlier Factor (LOF) (Không chỉ xem khoảng cách mà còn xem mật độ lân cận)](#local-outlier-factor-lof-không-chỉ-xem-khoảng-cách-mà-còn-xem-mật-độ-lân-cận)
   - [Isolation Forest](#isolation-forest)
   - [DBSCAN](#dbscan)
-- [Scale (Đưa feature về cùng thang đo)](#scale-đưa-feature-về-cùng-thang-đo)
-  - [Standardization (Z-score)](#standardization-z-score)
+- [Normalization (chuẩn hóa dữ liệu - Đưa feature về cùng thang đo)](#normalization-chuẩn-hóa-dữ-liệu---đưa-feature-về-cùng-thang-đo)
+  - [Standardization (Z-score) (Đưa dữ liệu về phân phối có mean = 0, std = 1)](#standardization-z-score-đưa-dữ-liệu-về-phân-phối-có-mean--0-std--1)
   - [Min-Max Scaling](#min-max-scaling)
   - [Robust Scaling](#robust-scaling)
+- [Imbalanced Data (Mất cân bằng dữ liệu)](#imbalanced-data-mất-cân-bằng-dữ-liệu)
+  - [SMOTE (Oversampling) (Tạo thêm dữ liệu giả cho lớp ít)](#smote-oversampling-tạo-thêm-dữ-liệu-giả-cho-lớp-ít)
+  - [Downsampling (Giảm bớt dữ liệu lớp nhiều)](#downsampling-giảm-bớt-dữ-liệu-lớp-nhiều)
+  - [Class Weights (Không thay đổi dữ liệu, nhưng phạt lỗi lớp ít nặng hơn)](#class-weights-không-thay-đổi-dữ-liệu-nhưng-phạt-lỗi-lớp-ít-nặng-hơn)
+- [Data Leakage (Rò rỉ dữ liệu)](#data-leakage-rò-rỉ-dữ-liệu)
 ---
 # Missing values (kỹ thuật xử lý giá trị thiếu)
 **Ex: Các kỹ thuật xử lý missing values**
@@ -442,21 +447,17 @@ Thuật toán clustering. Ý tưởng: Các điểm không thuộc cụm nào �
         ●●●●●      ●●●●●●
         Điểm ở giữa không thuộc cụm nào. DBSCAN sẽ gắn: label = -1
 ```
-# Scale (Đưa feature về cùng thang đo)
+# Normalization (chuẩn hóa dữ liệu - Đưa feature về cùng thang đo)
 **Ex**
 ```bash
-- Giả sử bạn có 2 feature:
-    + Chiều cao: 150 → 180 (cm)
-    + Lương: 5,000 → 50,000 (USD)
-- Nếu không scale: Model sẽ “nghĩ” lương quan trọng hơn nhiều (vì số lớn hơn)
-- Sau khi scaling về [0,1]: Cả 2 feature đều nằm cùng range → model học công bằng hơn
+Giả sử bạn có 2 feature:
+    - Chiều cao: 150 → 180 (cm)
+    - Lương: 5,000 → 50,000 (USD)
+
+Nếu không scale: Model sẽ “nghĩ” lương quan trọng hơn nhiều (vì số lớn hơn)
+Sau khi scaling về [0,1]: Cả 2 feature đều nằm cùng range → model học công bằng hơn
 ```
-## Standardization (Z-score)
-```bash
-Đưa dữ liệu về phân phối có
-    - mean = 0
-    - std = 1
-```
+## Standardization (Z-score) (Đưa dữ liệu về phân phối có mean = 0, std = 1)
 **Formula**
 ```bash
 x' = (x - μ) / σ
@@ -766,3 +767,74 @@ PCA = "nén dữ liệu".
 
 t-SNE / UMAP = "vẽ dữ liệu nhiều chiều thành hình để nhìn các cụm".
 
+# Imbalanced Data (Mất cân bằng dữ liệu)
+```bash
+Là khi dữ liệu bị lệch rất nhiều giữa các lớp.
+
+Ví dụ:
+- 95%: không gian lận
+- 5%: gian lận
+👉 Model dễ “học lệch” → chỉ đoán lớp nhiều (95%)
+```
+## SMOTE (Oversampling) (Tạo thêm dữ liệu giả cho lớp ít)
+```bash
+Lớp ít (fraud) → bị thiếu. SMOTE sẽ tạo thêm dữ liệu giống nó
+👉 giống như “nhân bản thông minh”
+
+📌 Ví dụ:
+- 100 gian lận → tạo thêm thành 1000
+```
+## Downsampling (Giảm bớt dữ liệu lớp nhiều)
+```bash
+Lớp nhiều (không gian lận) → bỏ bớt
+
+📌 Ví dụ:
+- 10,000 bình thường → giảm còn 1000
+```
+## Class Weights (Không thay đổi dữ liệu, nhưng phạt lỗi lớp ít nặng hơn)
+```bash
+Model bị ép phải quan tâm hơn tới lớp hiếm
+
+
+📌 Ví dụ:
+- Sai gian lận → bị phạt nặng hơn sai bình thường
+```
+# Data Leakage (Rò rỉ dữ liệu)
+```bash
+👉 Là khi model “nhìn thấy trước đáp án” trong dữ liệu test hoặc tương lai trong lúc học.
+➡️ Kết quả: model học “giả giỏi”, nhưng ra thực tế thì dở.
+
+🧠 Hiểu đơn giản:
+    Bạn cho học sinh làm đề thi, nhưng lỡ “cho xem đáp án trước”
+
+    👉 Học sinh làm bài rất cao
+    ❌ nhưng không phải vì giỏi thật
+
+
+🚨 Tại sao nguy hiểm?
+    - Model test accuracy rất cao (ảo)
+    - Nhưng khi deploy → sai nhiều
+
+🔥 Nguyên tắc quan trọng:
+    👉 Chỉ được fit trên tập train, tuyệt đối không fit trên toàn bộ data.
+    🧠 Vì sao?
+        - fit = học thông tin từ dữ liệu (mean, std, min, max…)
+        - Nếu fit cả dataset → model đã “nhìn thấy test”
+        ➡️ Test không còn là dữ liệu “chưa biết” nữa → bị data leakage
+```
+**Ex**
+```bash
+❌ Sai (bị leakage):
+    Bạn làm preprocessing như này:
+        scaler.fit(all_data)
+        train, test = split(all_data)
+    👉 Nghĩa là:
+        scaler đã “nhìn toàn bộ dữ liệu” (có cả test)
+        ➡️ Test không còn “bí mật” nữa → bị rò rỉ thông tin
+✅ Đúng:
+    train, test = split(data)
+    scaler.fit(train)
+    train_scaled = scaler.transform(train)
+    test_scaled = scaler.transform(test)
+👉 scaler chỉ học từ train thôi
+```

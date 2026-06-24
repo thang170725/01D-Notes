@@ -189,7 +189,8 @@ def positional_encoding_fast(seq_len, d_model):
         - head học vị trí
         - head học quan hệ chủ ngữ–động từ
         - v.v.
-- Tại sao cần nhiều head?
+
+Tại sao cần nhiều head?
     + Nếu chỉ có 1 attention:
         - model phải nhồi mọi loại thông tin vào cùng một không gian
     + Nhiều heads giúp:

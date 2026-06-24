@@ -1,14 +1,14 @@
 - [git config](#git-config)
 - [git clone](#git-clone)
-- [git pull](#git-pull)
-  - [--no-rebase](#--no-rebase)
+- [git pull (Lấy dữ liệu \& hợp nhất)](#git-pull-lấy-dữ-liệu--hợp-nhất)
+  - [--no-rebase (Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge))](#--no-rebase-bắt-git-dùng-merge-không-dùng-rebase-nghĩa-là-fetch--merge)
 - [git push](#git-push)
   - [-u](#-u)
   - [-f \& --force](#-f----force)
   - [--delete](#--delete)
-- [git init](#git-init)
-- [.gitignore](#gitignore)
-- [.git](#git)
+- [git init (Tạo ra một kho lưu trữ repo)](#git-init-tạo-ra-một-kho-lưu-trữ-repo)
+- [.gitignore (hạn chế thư mục commit)](#gitignore-hạn-chế-thư-mục-commit)
+- [.git (file ghi lại lịch sử)](#git-file-ghi-lại-lịch-sử)
 - [git reset](#git-reset)
 ---
 # git config
@@ -97,10 +97,10 @@ git push -f origin main # force push đè GitHub
 ```bash
 git push origin --delete feature/login # xóa branch trên gitHub
 ```
-# git init
+# git init (Tạo ra một kho lưu trữ repo)
 ```bash
 - Dùng để:
-    1. Tạo ra một kho lưu trữ repo. Tạo ra thư mục ẩn “.git” chứa tất cả các thông tin cần thiết để git theo dõi các thay đổi của dự án.
+    1. Tạo ra thư mục ẩn “.git” chứa tất cả các thông tin cần thiết để git theo dõi các thay đổi của dự án.
     2. Hiểu đơn giản là bất đầu nói với git theo dõi sự thay đổi của dự án.
 ```
 **Ex1**
@@ -112,7 +112,7 @@ git init EX1 # Git sẽ tạo ra một thư mục EX1 mới và nó sẽ trở t
 1. cd vào thư mục a
 2. git init # Thư mục a sẽ trở thành kho lưu trữ repo
 ```
-# .gitignore
+# .gitignore (hạn chế thư mục commit)
 **Hạn chế thư mục push lên gitHub**
 ```bash
 ~/workspace/lightgbm
@@ -147,7 +147,7 @@ Bước 5: add code
         .env
         venv/
 ```
-# .git
+# .git (file ghi lại lịch sử)
 **Ex: Xóa .git và init lại từ đầu để xóa toàn bộ lịch sử repo**
 ```bash
 rm -rf .git

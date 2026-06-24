@@ -42,3 +42,8 @@ https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d
 21. Ctrl + ←            : Đưa con trỏ sang trái đúng bằng một chữ.
 22. Ctrl + shift + I    : Sắp xếp các dòng lệnh cho đẹp mắt, dễ nhìn.
 ```
+# Preferences: Open Workspace Settings (JSON)
+```bash
+1. Ctrl + Shift + P
+2. gõ: Preferences: Open Workspace Settings (JSON)
+```

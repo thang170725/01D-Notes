@@ -22,6 +22,8 @@
 - [Bootstrapping: lấy 1000 mẫu, mỗi mẫu có 20 phần tử](#bootstrapping-lấy-1000-mẫu-mỗi-mẫu-có-20-phần-tử)
 - [Tính khoảng tin cậy 80% (10% và 90% phân vị)](#tính-khoảng-tin-cậy-80-10-và-90-phân-vị)
 - [Vẽ đồ thị phân phối của các trung bình mẫu](#vẽ-đồ-thị-phân-phối-của-các-trung-bình-mẫu)
+- [impute](#impute)
+  - [SimpleImputer  (dùng để điền giá trị bị thiếu (NaN) vào dữ liệu)](#simpleimputer--dùng-để-điền-giá-trị-bị-thiếu-nan-vào-dữ-liệu)
 ---
 # Preprocessing
 ## train_test_split()
@@ -658,3 +660,64 @@ plt.show()
 KneighborsClassifier()
 fit()
 predict()
+# impute
+## SimpleImputer  (dùng để điền giá trị bị thiếu (NaN) vào dữ liệu)
+**Ex1: Điền bằng giá trị trung bình (mean)**
+```python
+Dữ liệu
+import numpy as np
+import pandas as pd
+
+df = pd.DataFrame({
+   "age": [20, 25, np.nan, 30, np.nan]
+})
+
+print(df)
+#    age
+# 0  20.0
+# 1  25.0
+# 2   NaN
+# 3  30.0
+# 4   NaN
+
+from sklearn.impute import SimpleImputer
+
+imputer = SimpleImputer(strategy="mean")
+
+df["age"] = imputer.fit_transform(df[["age"]])
+
+print(df)
+#    age
+# 0  20.0
+# 1  25.0
+# 2  25.0
+# 3  30.0
+# 4  25.0
+# (20 + 25 + 30) / 3 = 25 nên NaN được thay bằng 25.
+```
+**Ex2. Điền bằng giá trị xuất hiện nhiều nhất (most_frequent)**
+```python
+df = pd.DataFrame({
+   "city": ["HN", "HCM", np.nan, "HN", np.nan]
+})
+
+print(df)
+#  city
+# 0   HN
+# 1  HCM
+# 2  NaN
+# 3   HN
+# 4  NaN
+
+imputer = SimpleImputer(strategy="most_frequent")
+
+df["city"] = imputer.fit_transform(df[["city"]]).ravel()
+
+print(df)
+#  city
+# 0   HN
+# 1  HCM
+# 2   HN
+# 3   HN
+# 4   HN
+```

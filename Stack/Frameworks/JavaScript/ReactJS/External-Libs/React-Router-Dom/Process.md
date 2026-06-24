@@ -1,3 +1,7 @@
+- [BrowserRouter \& Routes \& Route \& Link](#browserrouter--routes--route--link)
+- [NavLink](#navlink)
+- [useNavigate() (dùng để chuyển hướng (điều hướng) người dùng sang một route/trang khác bằng code JavaScript)](#usenavigate-dùng-để-chuyển-hướng-điều-hướng-người-dùng-sang-một-routetrang-khác-bằng-code-javascript)
+---
 ## BrowserRouter & Routes & Route & Link
 ```bash
 - BrowserRouter	    : Bao toàn bộ app
@@ -101,7 +105,13 @@ function SidebarItem({ to, label }) {
 
 export default SidebarItem
 ```
-## useNavigate()
+## useNavigate() (dùng để chuyển hướng (điều hướng) người dùng sang một route/trang khác bằng code JavaScript)
+**Syn**
+```bash
+const navigate = useNavigate();
+
+navigate("/home"); # chuyển người dùng đếm trang home
+```
 **Ex**
 ```js
 // 1️⃣ Khai báo route

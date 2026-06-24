@@ -3,7 +3,7 @@
 - [Display (Cung cấp thông tin)](#display-cung-cấp-thông-tin)
   - [len()](#len)
   - [ord()](#ord)
-  - [.count()](#count)
+  - [.count() (Đếm xem một ký tự nào đó xuất hiện bao nhiêu lần)](#count-đếm-xem-một-ký-tự-nào-đó-xuất-hiện-bao-nhiêu-lần)
 - [Check (Kiểm tra)](#check-kiểm-tra)
   - [in \& not in](#in--not-in)
   - [isdigit()](#isdigit)
@@ -28,7 +28,7 @@
   - [expandtabs()](#expandtabs)
   - [.lower()](#lower)
   - [.casefold() (chuyễn chuỗi thành chuỗi thường)](#casefold-chuyễn-chuỗi-thành-chuỗi-thường)
-  - [capitalize()](#capitalize)
+  - [capitalize() (Viết hoa kí tự đầu tiên trong chuỗi, tất cả kí tự khác viết thường)](#capitalize-viết-hoa-kí-tự-đầu-tiên-trong-chuỗi-tất-cả-kí-tự-khác-viết-thường)
   - [swapcase()](#swapcase)
   - [.splitlines()](#splitlines)
   - [.zfill()](#zfill)
@@ -80,10 +80,7 @@ a = ord("a")
 b = ord("1")
 print(a, b) # 97 49
 ```
-## .count()
-```bash
-Đếm xem một ký tự nào đó xuất hiện bao nhiêu lần.
-```
+## .count() (Đếm xem một ký tự nào đó xuất hiện bao nhiêu lần)
 **Syn**
 ```bash
 <variable>.count(substring, start=, end=)
@@ -356,13 +353,10 @@ x = txt.casefold()
 
 print(x) # hello, and welcome to my world!
 ```
-## capitalize()
-```bash
-Viết hoa kí tự đầu tiên trong chuỗi, tất cả kí tự khác viết thường.
-```
+## capitalize() (Viết hoa kí tự đầu tiên trong chuỗi, tất cả kí tự khác viết thường)
 **Syn** 
 ```bash
-<variable>.capitalize()
+s = <variable>.capitalize()
 ```
 **Ex**
 ```python

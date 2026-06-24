@@ -1,5 +1,7 @@
 - [Linear](#linear)
 - [ReLu](#relu)
+- [LeakyReLU](#leakyrelu)
+- [GELU](#gelu)
 - [Sigmoid](#sigmoid)
 - [Tanh](#tanh)
 - [Softmax](#softmax)
@@ -18,20 +20,58 @@
 ```
 # ReLu
 ```bash
-Hàm kích hoạt ReLU giúp phá vỡ tính tuyến tính, cho phép mạng học được các hàm số phức tạp hơn và giúp giảm thiểu hiện tượng triệt tiêu đạo hàm (vanishing gradient) so với Sigmoid hay Tanh
+Hàm kích hoạt ReLU giúp phá vỡ tính tuyến tính, cho phép mạng học được các hàm số phức tạp hơn.
+    - ít bị vanishing gradient
+    - có thể gây exploding
 ```
 **Formula**
 ```bash
 f(x) = max(0, x)
 ```
+# LeakyReLU
+```bash
+- ít bị vanishing gradient
+- có thể gây exploding gradient
+```
+**Ex**
+```bash
+f(x) = x (​x>0) and 0.01*x (x<0​)
+```
+# GELU
+```bash
+- ít bị vanishing gradient
+- có thể gây exploding gradient
+
+Được dùng trong:
+    - OpenAI GPT
+    - Google BERT
+    - Transformer hiện đại
+Đồ thị giống ReLU nhưng mượt hơn.
+```
+**Fomula**
+```bash
+GELU(x)=x⋅Φ(x)
+
+- Φ(x): là hàm phân phối tích lũy (CDF) của phân phối chuẩn.
+
+Công thức xấp xỉ thường dùng. Trong code thực tế thường dùng:
+
+GELU(x) = 0.5*x*(1+tanh(sqrt(2/π)*(x+0.044715*x**3)))
+```
 # Sigmoid
+```bash
+Rất dễ gây vanishing gradient, không gây exploding gradient đáng kể
+```
 **Formula**
 ```bash
 f(z) = 1 / (1+e**-z) # chỉ áp dụng lên 1 giá trị của z = W*x + b
 ```
 # Tanh
 ```bash
-- Giống sigmoid, giúp mô hình học các quan hệ phi tuyến.
+Giống sigmoid, giúp mô hình học các quan hệ phi tuyến.
+    - có gây vanishing gradient
+    - gây exploding gradient không đáng kể
+
 - Giá trị nằm giữa -1 và 1 → giúp gradient descent ổn định hơn so với sigmoid (giảm bias về chiều dương).
 - Ứng dụng:
     1. Hidden layer trong mạng nơ-ron

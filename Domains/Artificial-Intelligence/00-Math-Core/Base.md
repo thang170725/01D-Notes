@@ -10,6 +10,7 @@
     - [Bernoulli](#bernoulli)
     - [Binomial](#binomial)
     - [Central Limit Theorem (CLT) (Định lý giới hạn trung tâm)](#central-limit-theorem-clt-định-lý-giới-hạn-trung-tâm)
+  - [P-value (xác suất để kết quả “lạ như bạn thấy” xảy ra nếu giả thuyết ban đầu là đúng)](#p-value-xác-suất-để-kết-quả-lạ-như-bạn-thấy-xảy-ra-nếu-giả-thuyết-ban-đầu-là-đúng)
 - [Đại số tuyến tính](#đại-số-tuyến-tính)
   - [Scalar (đại lượng vô hướng)](#scalar-đại-lượng-vô-hướng)
   - [Vector (một trạng thái, vị trí trong không gian)](#vector-một-trạng-thái-vị-trí-trong-không-gian)
@@ -22,6 +23,7 @@
     - [Ma trận nghịch đảo](#ma-trận-nghịch-đảo)
     - [det (Định thức của ma trận)](#det-định-thức-của-ma-trận)
     - [Ma trận vuông khả nghịch](#ma-trận-vuông-khả-nghịch)
+    - [SVD (Singular Value Decomposition) (Phân rã ma trận)](#svd-singular-value-decomposition-phân-rã-ma-trận)
   - [Eigenvalue \& Eigenvector (những hướng đặc biệt của vũ trụ)](#eigenvalue--eigenvector-những-hướng-đặc-biệt-của-vũ-trụ)
   - [SVD (giải phẫu mọi phép biến đổi)](#svd-giải-phẫu-mọi-phép-biến-đổi)
   - [Ma trận Gram](#ma-trận-gram)
@@ -260,6 +262,23 @@ y = e**(-x**2)
         - trung bình mẫu rất hữu ích
         - nhiều mô hình ML/statistics hoạt động tốt
 ```
+## P-value (xác suất để kết quả “lạ như bạn thấy” xảy ra nếu giả thuyết ban đầu là đúng)
+```bash
+- P-value nhỏ ( < 0.05 ) → kết quả lạ → có vấn đề / có hiệu ứng thật
+- P-value lớn → bình thường, không có gì đặc biệt
+```
+**Ex: tung đồng xu**
+```bash
+Giả thuyết: đồng xu công bằng (50/50)
+Bạn tung 10 lần → ra 9 lần ngửa
+
+👉 Câu hỏi:
+    “Nếu đồng xu thật sự công bằng, thì chuyện ra 9/10 ngửa có hiếm không?”
+
+Nếu P-value = 0.01
+    👉 nghĩa là: chỉ 1% khả năng xảy ra
+    ➡️ Quá hiếm → đồng xu có thể bị lệch
+```
 # Đại số tuyến tính
 ## Scalar (đại lượng vô hướng) 
 ```bash
@@ -448,6 +467,22 @@ Ma trận vuông khả nghịch (invertible matrix) là một ma trận vuông A
         - I: ma trận đơn vị (đường chéo chính toàn số 1).
 
 Nói đơn giản, nếu nhân một ma trận với ma trận nghịch đảo của nó thì ta "quay về trạng thái ban đầu", giống như phép chia là nghịch đảo của phép nhân đối với số thực.
+```
+### SVD (Singular Value Decomposition) (Phân rã ma trận)
+```bash
+Hiểu đơn giản:
+    - SVD là cách tách một ma trận lớn thành 3 ma trận nhỏ hơn để:
+        + giảm chiều dữ liệu
+        + nén dữ liệu
+        + tìm pattern ẩn
+```
+**Formula**
+```bash
+A=U⋅S⋅V**T
+
+- U: hướng dữ liệu
+- S: mức độ quan trọng (giá trị lớn → quan trọng)
+- V: đặc trưng ẩn
 ```
 ## Eigenvalue & Eigenvector (những hướng đặc biệt của vũ trụ)
 ```bash

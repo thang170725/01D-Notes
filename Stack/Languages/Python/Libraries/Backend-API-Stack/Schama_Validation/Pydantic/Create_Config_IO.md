@@ -5,11 +5,7 @@
 - [EmailStr](#emailstr)
 - [ConfigDict](#configdict)
 ---
-# BaseModel
-```bash
-- class nền của Pydantic, bạn kế thừa nó để tạo ra các “model dữ liệu”.
-- Cần from pydantic import BaseModel
-```
+# BaseModel (class nền của Pydantic để tạo model dữ liệu (schema))
 **Ex**
 ```python
 from pydantic import BaseModel

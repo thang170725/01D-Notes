@@ -1,5 +1,93 @@
+- [Batch Size](#batch-size)
 - [TensorRT](#tensorrt)
+- [ONNX](#onnx)
+- [Installation](#installation)
+  - [Demo export .onnx](#demo-export-onnx)
+- [TensorRT Engine](#tensorrt-engine)
 ---
+# Batch Size 
+**Ex**
+```bash
+Giả sử có:
+    1000 ảnh mèo
+
+Batch Size = 1
+    GPU xem: 
+        Ảnh 1 => Cập nhật model
+        Ảnh 2 => Cập nhật model
+        Ảnh 3 => Cập nhật model
+
+Batch Size = 32
+    GPU xem:
+        32 ảnh cùng lúc → tính loss trung bình → update 1 lần
+
+Batch Size = 128
+    GPU xem: 128 ảnh cùng lúc
+```
+**Batch Size ảnh hưởng VRAM thế nào?**
+```bash
+Ví dụ:
+    Batch = 8VRAM = 4GB
+    Tăng:
+    Batch = 16VRAM = 8GB
+    Tăng tiếp:
+    Batch = 32VRAM = 16GB
+    Gần như:
+    Batch Size ↑VRAM ↑
+```
+**Batch Size ảnh hưởng Gradient thế nào?**
+```bash
+Đây là ý quan trọng nhất.
+
+Batch nhỏ
+    Ví dụ:
+        Ảnh 1: mèo trắng
+            Model nghĩ: Ồ, mèo thường màu trắng
+
+        Ảnh tiếp: Mèo đen
+            Model: Không đúng rồi
+
+        Gradient sẽ:
+            - Lúc trái
+            - Lúc phải
+
+Batch lớn
+    Cho model xem: 64 ảnh cùng lúc
+    Nó thấy:
+        - Mèo trắng
+        - Mèo đen
+        - Mèo vàng
+        - Mèo xám
+        - ...
+    
+    Gradient trở nên:
+        - ổn định hơn
+        - Đi đúng hướng hơn.
+```
+**Batch quá lớn cũng không tốt**
+```bash
+Nhiều người nghĩ:
+    - Batch càng lớn càng ngon
+    - Không hẳn.
+
+Ví dụ:
+    Batch = 8192
+    Gradient quá "mượt".
+    Model dễ:
+        - học chậm
+        - generalization kém (tức là train đẹp nhưng test dở)
+```
+**Tốc độ train**
+```bash
+Ví dụ:
+    Batch = 1
+        1000 ảnh→ 1000 lần update
+
+    Batch = 100
+        1000 ảnh→ chỉ 10 lần update (GPU tận dụng tốt hơn)
+
+    Thường: Batch lớn=Train nhanh hơn (nếu GPU đủ VRAM)
+```
 # TensorRT
 ```bash
 - TensorRT = công cụ của NVIDIA để tăng tốc model AI khi chạy (inference) trên GPU.
@@ -136,5 +224,3 @@ GIL (Global Interpreter Lock)
     • Ví dụ:
         ◦ Thread: 1 người cầm chìa khóa (GIL), nhiều người xếp hàng
         ◦ Process: mỗi người có chìa khóa riêng chạy độc lập
-# Mini-Batch
-# Batch

@@ -249,6 +249,26 @@ Xóa dependency thừa sau khi gỡ phần mềm.
 ```
 # rm -rf ~/.cache/huggingface
 # GPU
+## VRAM (giống như bàn làm việc của GPU)
+**Tác động của VRAM đối với train AI**
+```bash
+Khi train model, VRAM phải chứa:
+    Model Weights
+    +
+    Activations
+    +
+    Gradients
+    +
+    Optimizer States
+
+Giống như: Bàn làm việc
+┌─────────────────┐
+│ Tài liệu        │ ← Weights
+│ Giấy nháp       │ ← Activations
+│ Kết quả tính    │ ← Gradients
+│ Sổ ghi chú      │ ← Optimizer
+└─────────────────┘
+```
 ## CUDA Toolkit
 ```bash
 - Nó là bộ thư viện lập trình (compiler, headers...) để bạn code và chạy trực tiếp trên Ubuntu.

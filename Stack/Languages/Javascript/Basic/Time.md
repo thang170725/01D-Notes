@@ -1,26 +1,26 @@
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
-  - [Date](#date)
+  - [Date (lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy)](#date-lấy-ra-đầy-đủ-ngày-tháng-năm-giờ--có-thể-truyền-tham-số-đầu-vào-hoặc-không-tham-số-trong-dấu-nháy)
 - [Process (nhóm xử lý thời gian)](#process-nhóm-xử-lý-thời-gian)
-  - [setTimeout() \& setInterval()](#settimeout--setinterval)
-  - [clearTimeout() \& clearInterval()](#cleartimeout--clearinterval)
-  - [toUTCString()](#toutcstring)
+  - [setTimeout() (Dùng để thực hiện một hàm sau một khoảng thời gian xác định. Chỉ chạy 1 lần)](#settimeout-dùng-để-thực-hiện-một-hàm-sau-một-khoảng-thời-gian-xác-định-chỉ-chạy-1-lần)
+    - [clearTimeout() (Hủy một setTimeout trước khi nó chạy)](#cleartimeout-hủy-một-settimeout-trước-khi-nó-chạy)
+  - [setInterval() (Dùng để lặp lại một hàm sau mỗi khoảng thời gian xác định. Chạy liên tục cho đến khi bị dừng)](#setinterval-dùng-để-lặp-lại-một-hàm-sau-mỗi-khoảng-thời-gian-xác-định-chạy-liên-tục-cho-đến-khi-bị-dừng)
+    - [clearInterval() (Dừng một setInterval đang lặp)](#clearinterval-dừng-một-setinterval-đang-lặp)
+  - [toUTCString() (Để chuyển đổi đối tượng Date thành một chuỗi biểu diễn thời gian theo giờ UTC)](#toutcstring-để-chuyển-đổi-đối-tượng-date-thành-một-chuỗi-biểu-diễn-thời-gian-theo-giờ-utc)
+  - [toISOString() (chuyển đổi một đối tượng date thành một chuỗi theo định dạng ISO 8601 (UTC))](#toisostring-chuyển-đổi-một-đối-tượng-date-thành-một-chuỗi-theo-định-dạng-iso-8601-utc)
   - [.toLocaleDateString()](#tolocaledatestring)
   - [Date.parse()](#dateparse)
   - [Date.now()](#datenow)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [Get](#get)
   - [.getFullYear() \& .getHours()  \& .getMinutes() \& .getSeconds() \& .getMiliseconds() \& .getTime()](#getfullyear--gethours---getminutes--getseconds--getmiliseconds--gettime)
-  - [.getDate()](#getdate)
+  - [.getDate() (Lấy ra ngày trong tháng )](#getdate-lấy-ra-ngày-trong-tháng-)
     - [getDay()](#getday)
   - [.getUTCMonth() \& .getUTCDate() \& .getUTCFullYear() \& .getUTCMonth() \& .getUTCDay() \& .getUTCHours() \& .getUTCMinutes() \& .getUTCSeconds() \& .getUTCMiliseconds()](#getutcmonth--getutcdate--getutcfullyear--getutcmonth--getutcday--getutchours--getutcminutes--getutcseconds--getutcmiliseconds)
   - [getTimezoneOffset()](#gettimezoneoffset)
   - [.setFullYear() \& setMonth() \& setDate() \& setHours() \& setMinutes() \& setSeconds()](#setfullyear--setmonth--setdate--sethours--setminutes--setseconds)
 ---
 # Create (Nhóm khởi tạo)
-## Date
-```bash
-Nó sẽ lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy
-```
+## Date (lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy)
 **Syn**
 ```bash
 var | let | const <variable> = new Date();
@@ -41,14 +41,19 @@ const d = new Date();
 console.log(d); // Wed Feb 05 2025 10:09:00 GMT+0700 (Indochina Time)
 ```
 # Process (nhóm xử lý thời gian)
-## setTimeout() & setInterval()
-```bash
-- setTimeout  : Dùng để thực hiện một hàm sau một khoảng thời gian xác định. Chỉ chạy 1 lần.
-- setInterval : Dùng để lặp lại một hàm sau mỗi khoảng thời gian xác định. Chạy liên tục cho đến khi bị dừng.
-```
+## setTimeout() (Dùng để thực hiện một hàm sau một khoảng thời gian xác định. Chỉ chạy 1 lần)
 **Syn**
 ```bash
 setTimeout(function, time);
+```
+### clearTimeout() (Hủy một setTimeout trước khi nó chạy)
+**Syn**
+```bash
+clearTimeout(id);
+```
+## setInterval() (Dùng để lặp lại một hàm sau mỗi khoảng thời gian xác định. Chạy liên tục cho đến khi bị dừng)
+**Syn**
+```bash
 setInterval(function, time);
 
 - function : Hàm cần thực hiện.
@@ -60,17 +65,11 @@ function hello(){
     console.log("Hello");
 }
 
-setTimeout(hello, 2000);   // chạy 1 lần sau 2s
 setInterval(hello, 2000);  // lặp lại mỗi 2s
 ```
-## clearTimeout() & clearInterval()
-```bash
-- clearTimeout  : Hủy một setTimeout trước khi nó chạy.
-- clearInterval : Dừng một setInterval đang lặp.
-```
+### clearInterval() (Dừng một setInterval đang lặp)
 **Syn**
 ```bash
-clearTimeout(id);
 clearInterval(id);
 
 - id : giá trị được trả về khi gọi setTimeout hoặc setInterval.
@@ -94,10 +93,7 @@ document.getElementsByTagName("button")[0].onclick = function(){
     clearInterval(run);
 }
 ```
-## toUTCString()
-```bash
-Để chuyển đổi đối tượng Date thành một chuỗi biểu diễn thời gian theo giờ UTC.
-```
+## toUTCString() (Để chuyển đổi đối tượng Date thành một chuỗi biểu diễn thời gian theo giờ UTC)
 **Ex**
 ```js
 function main(){
@@ -110,16 +106,23 @@ main();
 // 'Mon, 24 Feb 2025 13:55:44 GMT'
 // 'string'
 ```
-toISOString()
-Để chuyển đổi một đối tượng date thành một chuỗi theo định dạng ISO 8601. Đây là một định dạng chuẩn quốc tế để biểu diễn ngày và giờ.
-function main(){
-    let date = new Date();
-    console.log(date.toISOString())
-    console.log(typeof date.toISOString())
-}
-main();
-'2025-02-24T13:59:40.389Z'
-'string'
+## toISOString() (chuyển đổi một đối tượng date thành một chuỗi theo định dạng ISO 8601 (UTC))
+**Ex**
+```js
+const date = new Date("2026-06-19T15:30:45");
+console.log(date.toISOString()); // "2026-06-19T08:30:45.000Z"
+// Z nghĩa là múi giờ UTC (GMT+0).
+```
+**Ex2: lấy ngày YYYY-MM-DD**
+```js
+const today = new Date();
+
+console.log(today.toISOString()); // "2026-06-19T10:15:30.123Z"
+
+const dateStr = today.toISOString().split("T")[0];
+
+console.log(dateStr); // "2026-06-19"
+```
 ## .toLocaleDateString()
 ```bash
 dùng để chuyển đổi một đối tượng Date thành một chuỗi biểu diễn ngày tháng theo quy ước địa phương.
@@ -179,10 +182,7 @@ Trả về  giá trị thời gian
 const d = new Date();
 console.log(d.getFullYear()); // 2025
 ```
-## .getDate()
-```bash
-Lấy ra ngày trong tháng 
-```
+## .getDate() (Lấy ra ngày trong tháng )
 **Ex**
 ```js
 let date = new Date();

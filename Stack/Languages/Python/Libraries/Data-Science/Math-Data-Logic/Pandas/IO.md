@@ -25,6 +25,8 @@ import pandas as pd
 
 li = pd.read_csv(
     "danhSach.csv", 
+    header=0,
+    name['id', 'fullname']
     sep=',',
     decimal=','
     index=[], 
@@ -35,6 +37,8 @@ li = pd.read_csv(
 ) # dữ liệu hiển thị dưới dạng dataframe
 
 - Input:
+    + header=           : chỉ định dòng nào trong file được dùng làm tiêu đề cột. 0 là mặc định
+    + name=             : cho phép tự định nghĩa tên cột
     + sep=';'           : Phân cách
     + decimal=','       : Nói cho Pandas dấu "," là dấu thập phân
     + parse_dates=[0]   : Bảo Pandas cột số 0 (cột đầu tiên) hãy chuyển thành kiểu ngày giờ.

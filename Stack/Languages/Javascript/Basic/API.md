@@ -20,6 +20,7 @@
 - [.setItem() \& .getItem() \& .removeItem() \& .clear()](#setitem--getitem--removeitem--clear)
 - [FileReader](#filereader)
   - [.readAsText() \& .readAsDataURL \& .readAsArrayBuffer() \& \& .readAsBinary()](#readastext--readasdataurl--readasarraybuffer---readasbinary)
+- [URLSearchParams()](#urlsearchparams)
 ---
 # Promise
 ```bash
@@ -418,4 +419,14 @@ const reader = new FileReader();
 - reader.readAsDataURL(file)      : đọc ảnh / base64
 - reader.readAsArrayBuffer(file)  : đọc binary
 - reader.readAsBinaryString(file) : cũ, ít dùng
+```
+# URLSearchParams()
+```js
+const params = new URLSearchParams({
+    page: 1,
+    limit: 10
+});
+
+fetch(`/users?${params}`);
+// /users?page=1&limit=10
 ```

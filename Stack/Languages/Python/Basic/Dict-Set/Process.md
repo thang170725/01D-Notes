@@ -1,6 +1,8 @@
 - [Dictionary (lưu dữ liệu theo cặp key: value để tra cứu nhanh)](#dictionary-lưu-dữ-liệu-theo-cặp-key-value-để-tra-cứu-nhanh)
   - [{} \& dict](#--dict)
-- [.pop() \& Del \& .clear()](#pop--del--clear)
+  - [Remove (Xóa)](#remove-xóa)
+    - [.pop() (xóa mục có tên khóa được chỉ định)](#pop-xóa-mục-có-tên-khóa-được-chỉ-định)
+  - [Del \& .clear()](#del--clear)
   - [Display (hiển thị, cung cấp thông tin)](#display-hiển-thị-cung-cấp-thông-tin)
     - [.get() (trả về value của một key nào đó)](#get-trả-về-value-của-một-key-nào-đó)
 - [.items()](#items)
@@ -41,13 +43,9 @@ thisdict = {
 
 print(thisdict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
 ```
-# .pop() & Del & .clear()
-```bash
-- pop   : Để xóa mục có tên khóa được chỉ định.
-- del   : Để xóa cặp key: value trong dictionary.
-- clear : Để xóa sạch dictionary.
-```
-**Ex1: pop**
+## Remove (Xóa)
+### .pop() (xóa mục có tên khóa được chỉ định)
+**Ex**
 ```python
 thisdict =	{
   "brand": "Ford",
@@ -59,6 +57,12 @@ thisdict.pop("model")
 
 print(thisdict) # {'brand': 'Ford', 'year': 1964}
 ```
+## Del & .clear()
+```bash
+- del   : Để xóa cặp key: value trong dictionary.
+- clear : Để xóa sạch dictionary.
+```
+
 **Ex2: del**
 ```python
 thisdict =	{

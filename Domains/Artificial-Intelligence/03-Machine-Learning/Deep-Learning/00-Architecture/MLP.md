@@ -3,33 +3,72 @@
   - [Demo MLP classificial](#demo-mlp-classificial)
 ---
 # Demo cách hoạt động của MLP
-Đề bài: Cho input là [1,2,3,4,5] và mạng nơ ron 2 lớp 3x2. Demo cách hoạt động của mạng nơ ron này
-    1. Khởi tạo tham số ban đầu:
-       w11 = [0.1, 0.2, 0.3, 0.4, 0.5], b11 = 0.01
-       w12 = [0.11, 0.22, 0.33, 0.44, 0.55], b12 = 0.01
-       w13 = [0.15, 0.25, 0.35, 0.45, 0.55], b13 = 0.01
-       w21 = [0.1, 0.2, 0.3], b21 = 0.01
-       w22 = [0.05, 0.15, 0.2], b21 = 0.01
-    2. Tíng giá trị z của mỗi nơ ron:
-       z11 = 1x0.1 + 2x0.2 + 3x0.3 + 4x0.4 + 5.0.5 + 0.01 = 5.51
-       z12 = 6
-       z13 = 6.4
-    3. Áp dụng hàm kích hoạt ReLU cho layer 1:
-       h11 = 5.51
-       h12 = 6
-       h13 = 6.4
-    4. Tính giá trị z cho mỗi nơ ron ở layer 2:
-       z21 = 0.1x5.51 + 0.2x6 + 0.3x6.4 = 3.67
-       z22 = 2.58
-    5. Áp dụng softmax cho layer 2: softmax = [0.748, 0.252]
-    6. Tính độ mất mát (loss) bằng Categorical Cross-Entropy với nhãn thật là [1,0]:
+MLP (Multi-layer Perceptron)
+    • Là một mạng nơ-ron nhân tạo gồm nhiều lớp tuyến tính kết hợp với các hàm kích hoạt phi tuyến.
+Ứng dụng:
+    • Phần loại hình ảnh, văn bản.
+    • Dự đoán giá trị (hồi quy).
+    • Dự đoán chuỗi thời gian.
+Cấu trúc cơ bản:
+    1. Input layers: Nhận dữ liệu đầu vào dạng vector.
+    2. Hidden layers (1 hoặc nhiều): Mỗi lớp gồm nhiều nơ ron, mỗi neuron tính tổng có trọng số của đầu vào rồi áp dụng activation function như ReLU, sigmoid, tanh …
+    3. Output layer: Trả về kết quả cuối cừng, có thể là phần loại, hồi quy, …
+Cơ chế hoạt động:
+    • MLP, còn được gọi là mạng truyền thẳng (Feedforward Network), được cấu tạo từ các lớp (layer): Lớp đầu vào, một hoặc nhiều lớp ẩn, và lớp đầu ra.
+    • 1. Phép nhân Ma trận (Matrix Multiplication):
+        ◦ Đây là cơ chế cốt lõi để tính toán đầu ra của một nơ-ron trong lớp tiếp theo.
+        ◦ Đối với mỗi nơ-ron trong lớp ẩn, đầu vào của nó là tổng có trọng số của đầu ra từ tất cả các nơ-ron trong lớp trước.
+        ◦ Công thức tổng quát cho tính toán tuyến tính (linear combination) trong một lớp là: Z=XW+B
+            ▪ X: Ma trận đầu vào từ lớp trước (hoặc lớp đầu vào).
+            ▪ W: Ma trận trọng số (Weights) của lớp hiện tại. Đây là các tham số mà mô hình học được.
+            ▪ B: Vector độ lệch (Bias) của lớp hiện tại.
+            ▪ Z: Đầu ra tuyến tính.
+    • 2. Hàm Kích Hoạt Phi Tuyến tính (Non-linear Activation Function)
+        ◦ Sau khi tính toán tuyến tính (Z), kết quả này sẽ được truyền qua một hàm kích hoạt (ví dụ: Sigmoid, ReLU, Tanh).
+        ◦ Công thức: A=f(Z)
+            ▪ A: Đầu ra đã được kích hoạt (activation), đây chính là đầu vào cho lớp tiếp theo.
+            ▪ f: Hàm kích hoạt phi tuyến tính.
+Tầm quan trọng: Cơ chế này là quan trọng nhất vì nếu không có hàm kích hoạt phi tuyến tính, dù MLP có bao nhiêu lớp đi chăng nữa, nó vẫn chỉ có thể mô hình hóa các mối quan hệ tuyến tính (giống như hồi quy tuyến tính). Khả năng học các mối quan hệ phức tạp và phi tuyến tính của dữ liệu (ví dụ: phân loại hình ảnh, dịch máy) đến từ việc sử dụng các hàm kích hoạt này.
+```bash
+Cho input là [1,2,3,4,5] và mạng nơ ron 2 lớp 3x2. Demo cách hoạt động của mạng nơ ron này
+```
+```bash
+1. Khởi tạo tham số ban đầu:
+    w11 = [0.1, 0.2, 0.3, 0.4, 0.5], b11 = 0.01
+    w12 = [0.11, 0.22, 0.33, 0.44, 0.55], b12 = 0.01
+    w13 = [0.15, 0.25, 0.35, 0.45, 0.55], b13 = 0.01
+    
+    w21 = [0.1, 0.2, 0.3], b21 = 0.01
+    w22 = [0.05, 0.15, 0.2], b21 = 0.01
+
+2. Tíng giá trị z của mỗi nơ ron:
+    z11 = 1x0.1 + 2x0.2 + 3x0.3 + 4x0.4 + 5.0.5 + 0.01 = 5.51
+    z12 = 6
+    z13 = 6.4
+
+3. Áp dụng hàm kích hoạt ReLU cho layer 1:
+    h11 = 5.51
+    h12 = 6
+    h13 = 6.4
+
+4. Tính giá trị z cho mỗi nơ ron ở layer 2:
+    z21 = 0.1x5.51 + 0.2x6 + 0.3x6.4 = 3.67
+    z22 = 2.58
+
+5. Áp dụng softmax cho layer 2: 
+    softmax = [0.748, 0.252]
+
+6. Tính độ mất mát (loss) bằng Categorical Cross-Entropy với nhãn thật là [1,0]:
        L = -(1.log(0.748) + 0.log(252)) = 0.126
-    7. Backpropagation:
+
+7. Backpropagation:
        dL/dz2k = d2k = pk – yk
        …
-    8. Cập nhật lại trọng số và bias
+
+8. Cập nhật lại trọng số và bias
        w := w -alpha*&w
        b := b – alpha*&b
+```
 # Practices
 ## Demo MLP classificial
 ```bash

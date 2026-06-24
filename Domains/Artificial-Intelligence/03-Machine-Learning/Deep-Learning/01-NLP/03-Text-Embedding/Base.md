@@ -1,3 +1,139 @@
+- [Word2Vec](#word2vec)
+  - [CBOW (Continuous Bag of Words)](#cbow-continuous-bag-of-words)
+  - [Skip-Gram](#skip-gram)
+- [Glove (Global Vectors)](#glove-global-vectors)
+- [FastText](#fasttext)
+  - [N-gram](#n-gram)
+- [nomic-embed-text](#nomic-embed-text)
+- [Practices](#practices)
+  - [Demo Transformer Embedding](#demo-transformer-embedding)
+---
+# Word2Vec
+```bash
+Là kỹ thuật biến từ thành vector số (embedding).
+
+Ý tưởng:
+    Những từ xuất hiện trong ngữ cảnh giống nhau sẽ có vector gần nhau
+
+Ví dụ:
+    - Vua gần Hoàng hậu
+    - Hà Nội gần TP.HCM
+
+    Word2Vec học được:
+        King - Man + Woman ≈ Queen
+
+Dùng để:
+    - Biểu diễn từ thành vector
+    - Tìm từ đồng nghĩa
+    - Làm input cho model NLP
+```
+## CBOW (Continuous Bag of Words)
+```bash
+Nhiệm vụ:
+    Đoán từ ở giữa từ các từ xung quanh.
+
+Ví dụ:
+    Tôi ăn ___ vào buổi sáng
+
+    Từ context:
+        Tôi ăn ... vào buổi sáng
+    Model đoán:
+        phở
+
+Dùng để train Word2Vec
+```
+## Skip-Gram 
+```bash
+Ngược với CBOW.
+
+Nhiệm vụ:
+    Dùng từ trung tâm để đoán các từ xung quanh.
+
+Ví dụ:
+    Tôi ăn phở vào buổi sáng
+
+    Input:
+        phở
+    Output:
+        ăn
+        vào
+        buổi
+        sáng
+
+Dùng để train Word2Vec.
+```
+# Glove (Global Vectors)
+```bash
+- Word2Vec:
+    Nhìn từng câu
+- GloVe:
+    Nhìn toàn bộ thống kê corpus
+
+Ví dụ đếm:
+    King xuất hiện với Queen bao nhiêu lần
+
+    Từ đó học embedding.
+
+Dùng để:
+    - Sinh word embedding
+    - Từng rất phổ biến trước BERT
+```
+# FastText 
+```bash
+Do Meta AI phát triển.
+
+Ý tưởng:
+    Một từ được tạo từ nhiều n-gram ký tự.
+
+Ví dụ:
+    học
+        Tách:
+            <h
+            họ
+            ọc
+            c>
+
+Embedding từ: = tổng embedding các n-gram
+
+Ưu điểm:
+    - Hiểu từ hiếm
+    - Hiểu từ chưa từng gặp (OOV)
+
+Ví dụ:
+    chatgptxyz
+
+    Word2Vec:
+        Không biết
+    FastText:
+        Đoán được nhờ các n-gram
+```
+## N-gram
+```bash
+Là chuỗi gồm N token liên tiếp.
+
+Ví dụ:
+    Câu: Tôi thích học NLP
+
+Unigram (1-gram):
+    Tôi
+    thích
+    học
+    NLP
+
+Bigram (2-gram):
+    Tôi thích
+    thích học
+    học NLP
+
+Trigram (3-gram):
+    Tôi thích học
+    thích học NLP
+
+Dùng để:
+    - Language Model cổ điển
+    - FastText
+    - Gợi ý từ tiếp theo
+```
 # nomic-embed-text
 # Practices
 ## Demo Transformer Embedding

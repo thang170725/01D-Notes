@@ -1,3 +1,9 @@
+- [Image (Bản chất ảnh)](#image-bản-chất-ảnh)
+  - [RGB](#rgb)
+  - [BGR](#bgr)
+  - [Grayscale là gì?](#grayscale-là-gì)
+  - [HSV là gì?](#hsv-là-gì)
+- [Kernel](#kernel)
 - [Circle (Hình tròn)](#circle-hình-tròn)
   - [Parametric](#parametric)
 - [Euclidean distance](#euclidean-distance)
@@ -16,11 +22,190 @@
 - [𝛼](#𝛼)
 - [𝛽](#𝛽)
 - [\]](#)
-- [Sharpen \& Blur](#sharpen--blur)
-  - [Kernel](#kernel)
-  - [Blur](#blur)
-    - [Gussian Blur](#gussian-blur)
+- [Sharpen](#sharpen)
+- [Blur](#blur)
+  - [Gussian Blur](#gussian-blur)
+- [Edge Detection](#edge-detection)
+  - [Sobel Edge Detection](#sobel-edge-detection)
+  - [Canny Edge Detection](#canny-edge-detection)
+- [Data Augmentation (Giúp model học được nhiều tình huống hơn và giảm Overfitting)](#data-augmentation-giúp-model-học-được-nhiều-tình-huống-hơn-và-giảm-overfitting)
 ---
+# Image (Bản chất ảnh)
+Ảnh trong máy tính được lưu như thế nào?
+
+Bản chất ảnh là một ma trận số (Numpy Array).
+
+Ví dụ ảnh màu:
+
+img.shape = (H, W, C)
+
+Trong đó:
+
+H (Height) = chiều cao
+W (Width) = chiều rộng
+C (Channel) = số kênh màu
+
+Ví dụ:
+
+(720, 1280, 3)
+
+nghĩa là:
+
+720 pixel cao
+1280 pixel rộng
+3 kênh màu
+2. Pixel là gì?
+
+Mỗi pixel chứa giá trị màu.
+
+Ví dụ:
+
+img[0,0] = [255, 0, 0]
+
+có nghĩa pixel góc trái là màu đỏ (trong RGB).
+
+Thông thường mỗi kênh:
+
+0 → 255
+0 = không có màu đó
+255 = màu đó mạnh nhất
+## RGB
+
+RGB =
+
+Red
+Green
+Blue
+
+Ví dụ:
+
+[255,0,0]   -> Đỏ
+[0,255,0]   -> Xanh lá
+[0,0,255]   -> Xanh dương
+[255,255,255] -> Trắng
+[0,0,0] -> Đen
+
+Đây là chuẩn phổ biến nhất trong Deep Learning.
+
+## BGR
+
+OpenCV mặc định dùng:
+
+Blue
+Green
+Red
+
+thay vì:
+
+Red
+Green
+Blue
+
+Ví dụ:
+
+[255,0,0]
+RGB → màu đỏ
+BGR → màu xanh dương
+
+Đây là lỗi rất hay gặp khi dùng OpenCV.
+
+## Grayscale là gì?
+
+Ảnh xám chỉ có 1 kênh màu.
+
+Shape:
+
+(H, W)
+
+thay vì:
+
+(H, W, 3)
+
+Ví dụ:
+
+0   = đen
+255 = trắng
+128 = xám
+
+Dùng khi:
+
+OCR
+Nhận diện chữ
+Giảm kích thước dữ liệu
+## HSV là gì?
+
+HSV =
+
+Hue        (màu gì)
+Saturation (độ đậm)
+Value      (độ sáng)
+
+Ví dụ:
+
+Một màu đỏ có thể:
+
+Hue = đỏ
+Saturation = cao
+Value = sáng
+
+hoặc
+
+Hue = đỏ
+Saturation = thấp
+Value = tối
+Tại sao dùng HSV?
+
+Tách riêng:
+
+Màu sắc
+↓
+Độ sáng
+
+nên dễ lọc màu hơn RGB.
+
+Ví dụ:
+
+Muốn tìm vật màu đỏ:
+
+cv2.inRange(hsv, lower_red, upper_red)
+
+dễ hơn rất nhiều so với RGB.s 
+# Kernel
+**Cách nhận biết kernel khi nào dùng để sharpen, blur, ...**
+```bash
+1. Kernel làm mờ (blur). Ví dụ:
+  [1 1 1
+   1 1 1
+   1 1 1] / 9
+  - Đặc điểm: Tất cả giá trị dương, Gần như giống nhau. Tổng ≈ 1
+  - Ý nghĩa: Lấy trung bình lân cận → ảnh mượt hơn → blur
+2. Kernel làm nét (sharpen). Ví dụ:
+  [ 0 -1  0
+   -1  5 -1
+    0 -1  0]
+  - Đặc điểm: Trung tâm lớn hơn 1. Xung quanh có giá trị âm. Tổng ≈ 1
+  - Ý nghĩa: Lấy pixel gốc. Trừ đi vùng xung quanh → làm nổi bật khác biệt → sắc nét hơn
+3. Kernel phát hiện cạnh (edge). Ví dụ:
+  [-1 -1 -1
+   -1  8 -1
+   -1 -1 -1]
+  - Đặc điểm: Tổng ≈ 0. Nhiều số âm + số dương lớn
+  - Ý nghĩa: Vùng phẳng → triệt tiêu (≈0). Vùng có cạnh → giữ lại mạnh → edge detection
+```
+**Quy tắc “nhìn phát biết luôn”**
+```bash
+Rule 1: Tổng kernel
+  - ≈ 1	giữ độ sáng → blur hoặc sharpen
+  - ≈ 0	chỉ giữ cạnh (edge)
+Rule 2: Dấu của phần tử
+  - toàn dương	blur
+  - center lớn + xung quanh âm	sharpen
+  - nhiều âm + tổng 0	edge
+Rule 3: So sánh center vs neighbors
+Center ≈ neighbors → blur
+Center >> neighbors → sharpen
+Center đối nghịch neighbors → edge
+```
 # Circle (Hình tròn)
 ## Parametric
 ```bash
@@ -525,7 +710,8 @@ y
 Xoay quanh center
 Có thể scale
 Không cần dùng ma trận 3×3 (vì đây là affine)
-# Sharpen & Blur
+# Sharpen 
+# Blur
 ```bash
 - Ảnh = gồm:
   + Low-frequency → vùng mượt (trời, da, nền)
@@ -533,46 +719,9 @@ Không cần dùng ma trận 3×3 (vì đây là affine)
 - Vì vậy:
   + Blur (làm mờ)	Giữ low-frequency, loại high-frequency
   + Sharpen (làm nét)	Tăng high-frequency (cạnh)
-  + Edge detection	Chỉ giữ high-frequency
+  + Edge detection Chỉ giữ high-frequency
 ```
-## Kernel
-**Cách nhận biết kernel khi nào dùng để sharpen, blur, ...**
-```bash
-1. Kernel làm mờ (blur). Ví dụ:
-  [1 1 1
-   1 1 1
-   1 1 1] / 9
-  - Đặc điểm: Tất cả giá trị dương, Gần như giống nhau. Tổng ≈ 1
-  - Ý nghĩa: Lấy trung bình lân cận → ảnh mượt hơn → blur
-2. Kernel làm nét (sharpen). Ví dụ:
-  [ 0 -1  0
-   -1  5 -1
-    0 -1  0]
-  - Đặc điểm: Trung tâm lớn hơn 1. Xung quanh có giá trị âm. Tổng ≈ 1
-  - Ý nghĩa: Lấy pixel gốc. Trừ đi vùng xung quanh → làm nổi bật khác biệt → sắc nét hơn
-3. Kernel phát hiện cạnh (edge). Ví dụ:
-  [-1 -1 -1
-   -1  8 -1
-   -1 -1 -1]
-  - Đặc điểm: Tổng ≈ 0. Nhiều số âm + số dương lớn
-  - Ý nghĩa: Vùng phẳng → triệt tiêu (≈0). Vùng có cạnh → giữ lại mạnh → edge detection
-```
-**Quy tắc “nhìn phát biết luôn”**
-```bash
-Rule 1: Tổng kernel
-  - ≈ 1	giữ độ sáng → blur hoặc sharpen
-  - ≈ 0	chỉ giữ cạnh (edge)
-Rule 2: Dấu của phần tử
-  - toàn dương	blur
-  - center lớn + xung quanh âm	sharpen
-  - nhiều âm + tổng 0	edge
-Rule 3: So sánh center vs neighbors
-Center ≈ neighbors → blur
-Center >> neighbors → sharpen
-Center đối nghịch neighbors → edge
-```
-## Blur
-### Gussian Blur
+## Gussian Blur
 **Cách hoạt động**
 ```bash
 Giả sử chúng ta muốn tính giá trị của pixel tại vị trí (1,1), giá trị 60 trong ví dụ. Chúng ta sẽ đặt môt kernel 3x3 lên ma trận ảnh sao cho trung tâm của kernel đó trùng với pixel(1,1).
@@ -586,3 +735,197 @@ Giá trị pixel mới tại (1,1) sẽ là:
 = 65
 Vậy, giá trị pixel mới tại vị trí (1,1) trong ma trận kết quả sẽ là 65.
 ```
+# Edge Detection
+## Sobel Edge Detection 
+**Ex**
+```bash
+10    10    10    200   200   200
+Tối   Tối   Tối   Sáng  Sáng  Sáng
+
+=> Giữa 10 và 200 có sự thay đổi rất mạnh → đó chính là cạnh.
+
+Ý tưởng của Sobel:
+  tính độ thay đổi cường độ sáng giữa các pixel lân cận.
+  Ví dụ: Hiệu giữa hai vùng: 200 − 10 = 190 => rất lớn ⇒ Sobel kết luận: “Đây là cạnh.
+```
+## Canny Edge Detection 
+```bash
+Canny không chỉ hỏi “có thay đổi không?” 
+  mà còn hỏi: 
+    - Thay đổi có mạnh đủ không? 
+    - Có phải nhiễu không?
+    - Cạnh có liên tục không?
+```
+**Các bước của Canny**
+```bash
+1. Làm mờ ảnh (Gaussian Blur):
+  Giảm nhiễu trước khi tìm cạnh.
+
+2. Tính gradient
+  Dùng Sobel để biết cạnh nằm ở đâu.
+
+3. Làm mỏng cạnh
+  Chỉ giữ đường cạnh mảnh nhất.
+
+4. Ngưỡng kép (Double Threshold)
+  Giữ cạnh mạnh, loại cạnh yếu hoặc nhiễu
+```
+# Data Augmentation (Giúp model học được nhiều tình huống hơn và giảm Overfitting)
+Các kỹ thuật cơ bản
+1. Flip (Lật ảnh)
+Ví dụ:
+🐱 → 🐱 (lật ngang)
+Dùng khi:
+
+
+Đối tượng có thể xuất hiện ở cả hai phía.
+
+
+Classification, Object Detection thông thường.
+
+
+Không nên dùng:
+
+
+OCR (chữ sẽ bị ngược).
+
+
+Biển báo, ký hiệu có hướng cố định.
+
+
+
+2. Rotation (Xoay)
+Ví dụ:
+0° → 10° → -15°
+Dùng khi:
+
+
+Camera có thể nghiêng.
+
+
+Ảnh thực tế không hoàn toàn thẳng.
+
+
+Không nên:
+
+
+Xoay 180° nếu ngoài thực tế đối tượng không bao giờ lộn ngược.
+
+
+
+3. Color Jittering
+Thay đổi:
+
+
+Brightness
+
+
+Contrast
+
+
+Saturation
+
+
+Hue
+
+
+Ví dụ:
+
+
+Chụp ban ngày
+
+
+Chụp tối
+
+
+Đèn vàng
+
+
+Đèn trắng
+
+
+Dùng khi:
+
+
+Điều kiện ánh sáng thay đổi.
+
+
+
+4. Random Crop
+Cắt ngẫu nhiên một phần ảnh.
+Ví dụ:
+Ảnh gốc chứa con mèo toàn thân.
+Crop chỉ còn:
+
+
+Đầu mèo
+
+
+Nửa thân mèo
+
+
+Giúp model:
+
+
+Tập trung đặc trưng quan trọng.
+
+
+Không phụ thuộc vị trí chính xác của vật thể.
+
+
+
+Kỹ thuật nâng cao chống Overfitting
+5. MixUp
+Trộn 2 ảnh lại với nhau.
+Ví dụ:
+
+
+70% ảnh mèo
+
+
+30% ảnh chó
+
+
+=> Label:
+
+
+Cat = 0.7
+
+
+Dog = 0.3
+
+
+Model học mềm hơn, ít học thuộc dữ liệu.
+
+6. CutMix
+Lấy một vùng của ảnh A dán vào ảnh B.
+Ví dụ:
+Ảnh mèo
+↓
+Dán một phần ảnh chó vào.
+Label:
+
+
+Cat = 0.8
+
+
+Dog = 0.2
+
+
+Hiệu quả hơn MixUp cho:
+
+
+Classification
+
+
+Object Detection
+
+
+
+Khi nào dùng gì?
+Kỹ thuậtNên dùngFlipGần như luôn dùngRotationCamera có thể nghiêngColor JitterÁnh sáng thay đổiCropMuốn model robust với vị trí vật thểMixUpDataset nhỏ, dễ overfitCutMixDataset vừa/lớn, CNN hiện đại
+Pipeline phổ biến trong production
+Image ↓Random Flip ↓Random Rotation ↓Color Jitter ↓Random Crop ↓Normalize ↓Model
+Nếu dataset nhỏ hoặc model bắt đầu overfit:
+Flip + Rotation + Color Jitter + Crop + MixUp/CutMix
+Đây là pipeline augmentation phổ biến cho các bài toán Computer Vision production hiện nay.

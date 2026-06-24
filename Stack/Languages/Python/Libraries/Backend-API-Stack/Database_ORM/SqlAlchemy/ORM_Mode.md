@@ -18,18 +18,18 @@
     - [Enum](#enum)
     - [Date \& TIMESTAMP](#date--timestamp)
     - [JSON](#json)
-- [Search (tìm kiếm đôi tượng+](#search-tìm-kiếm-đôi-tượng)
+- [Search (tìm kiếm đôi tượng)](#search-tìm-kiếm-đôi-tượng)
   - [.query() (lấy ra đối tượng = select \* from ...)](#query-lấy-ra-đối-tượng--select--from-)
 - [Filtering (Bộ lọc)](#filtering-bộ-lọc)
   - [.filter() (Lọc theo điều kiện)](#filter-lọc-theo-điều-kiện)
     - [like()](#like)
-    - [filter\_by()](#filter_by)
+    - [filter\_by() (lọc theo tên thuộc tính của model)](#filter_by-lọc-theo-tên-thuộc-tính-của-model)
   - [Logic Healers](#logic-healers)
 - [sa](#sa)
 - [Insert (thêm mới vào db)](#insert-thêm-mới-vào-db)
-  - [.add()](#add)
+  - [.add() (đưa object vào session chưa ghi xuống db)](#add-đưa-object-vào-session-chưa-ghi-xuống-db)
 - [Update (Nhóm cập nhật)](#update-nhóm-cập-nhật)
-  - [.flush()](#flush)
+  - [.flush() (Dùng để đẩy (sync) các thay đổi từ bộ nhớ (session) xuống database nhưng chưa commit transaction)](#flush-dùng-để-đẩy-sync-các-thay-đổi-từ-bộ-nhớ-session-xuống-database-nhưng-chưa-commit-transaction)
 - [Delete (Nhóm xóa)](#delete-nhóm-xóa)
   - [Session.delete()](#sessiondelete)
 ---
@@ -306,9 +306,10 @@ Enum('sedentary', 'light', "moderate", name='activity_level_role')
     + TIMESTAMP → trả về kiểu: datetime.datetime
 ```
 ### JSON
-# Search (tìm kiếm đôi tượng+
+# Search (tìm kiếm đôi tượng)
 ## .query() (lấy ra đối tượng = select * from ...)
 ```bash
+query chỉ dùng cho ORM không dùng cho Core.
 Là select kiểu cũ, giờ đổi thành select() - select là chuẩn mới dùng cho cả CORE + ORM.
 ```
 **Syn: query**
@@ -350,7 +351,25 @@ user = db.query(User).filter(User.username == "thang").first() # SELECT * FROM u
 # Hoặc None
 ```
 ### like()
-### filter_by()
+### filter_by() (lọc theo tên thuộc tính của model)
+```bash
+filter_by() là API của ORM, không dùng cho SQLAlchemy Core.
+```
+**Syn**
+```bash
+session.query(User).filter_by(name="Thắng") # SELECT *FROM usersWHERE name = 'Thắng';
+```
+**Ex1: tìm user theo tên**
+```bash
+user = session.query(User).filter_by(name="Thắng").first() # SELECT *FROM usersWHERE name = 'Thắng'LIMIT 1;
+```
+**Ex2: nhiều điều kiện**
+```python
+users = session.query(User).filter_by(
+    name="Thắng",
+    age=20
+).all() # SELECT *FROM usersWHERE name='Thắng'AND age=20;
+```
 ## Logic Healers
 # sa
 ```bash
@@ -372,10 +391,11 @@ def downgrade():
     op.drop_table("users")
 ```
 # Insert (thêm mới vào db)
-## .add()
+## .add() (đưa object vào session chưa ghi xuống db)
 ```bash
-- add       : đưa object vào session chưa ghi xuống db.
-- Để insert data vào database bằng ORM của SQLAlchemy, bạn làm theo flow chuẩn: tạo model → tạo session → add → commit.
+add chỉ dùng cho ORM, không dùng cho Core
+
+Để insert data vào database bằng ORM của SQLAlchemy, bạn làm theo flow chuẩn: tạo model → tạo session → add → commit.
 ```
 **Ex: insert vào db bằng ORM**
 ```python
@@ -422,14 +442,13 @@ session.add_all(users)
 session.commit()
 ```
 # Update (Nhóm cập nhật)
-## .flush() 
+## .flush() (Dùng để đẩy (sync) các thay đổi từ bộ nhớ (session) xuống database nhưng chưa commit transaction)
 ```bash
-- Dùng để đẩy (sync) các thay đổi từ bộ nhớ (session) xuống database nhưng chưa commit transaction.
+flush chỉ dùng cho ORM, không dùng cho Core.
 - Hiểu đơn giản:
     + Bạn thêm/sửa/xóa object trong Session
     + → flush() sẽ generate và execute SQL (INSERT/UPDATE/DELETE)
     + → nhưng chưa COMMIT, nên vẫn có thể rollback
-- ORM (chủ yếu dùng ở đây)
 ```
 **Ex1: cần lấy id ngay sau khi insert**
 ```python
@@ -439,7 +458,6 @@ session.add(user)
 session.flush()  # gửi INSERT xuống DB
 
 print(user.id)  # lúc này đã có id
-
 # Nếu không flush(), user.id có thể vẫn là None
 ```
 **Ex2: Đảm bảo dữ liệu đã tồn tại trong DB trước khi query tiếp**

@@ -490,7 +490,26 @@ class Person:
 # Không cần hard-code _age nữa 👍
 ```
 ## __name__
+```python
+from pydantic import BaseModel
+
+class A(BaseModel):
+  """đây là class A"""
+  pass
+
+print(A.__name__) # A
+```
 ## __doc__
+**Ex**
+```python
+from pydantic import BaseModel
+
+class A(BaseModel):
+  """đây là class A"""
+  pass
+
+print(A.__doc__) # đây là class A
+```
 ## @property
 **Ex**
 ```python

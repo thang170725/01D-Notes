@@ -8,11 +8,13 @@
   - [on delete cascade](#on-delete-cascade)
 - [Update](#update)
   - [update](#update-1)
-- [Select (xem dữ liệu trong bảng)](#select-xem-dữ-liệu-trong-bảng)
+- [Search (tìm kiếm, lọc, xem dữ liệu)](#search-tìm-kiếm-lọc-xem-dữ-liệu)
+  - [Select (xem dữ liệu trong bảng)](#select-xem-dữ-liệu-trong-bảng)
   - [select ... limit](#select--limit)
   - [select ... order by](#select--order-by)
   - [union all](#union-all)
-- [like](#like)
+- [like (truy vấn dữ liệu theo điều kiện)](#like-truy-vấn-dữ-liệu-theo-điều-kiện)
+  - [REGEXP (công cụ khớp mẫu cực mạnh)](#regexp-công-cụ-khớp-mẫu-cực-mạnh)
 - [Process (Nhóm xử lý tính toán)](#process-nhóm-xử-lý-tính-toán)
   - [count](#count)
   - [sum](#sum)
@@ -133,7 +135,8 @@ UPDATE workout_plans
 SET note = 'Chest and Triceps workout'
 WHERE id = 5;
 ```
-# Select (xem dữ liệu trong bảng)
+# Search (tìm kiếm, lọc, xem dữ liệu)
+## Select (xem dữ liệu trong bảng)
 ## select ... limit
 ```bash
 SELECT * FROM Students limit 50;
@@ -202,10 +205,25 @@ SELECT name FROM B;
 -- | Bình  |
 -- | Cường |
 ```
-# like
-**Ex: truy vấn dữ liệu theo điều kiện**
+# like (truy vấn dữ liệu theo điều kiện)
+**Ex**
 ```sql
 SELECT * FROM exercises WHERE name LIKE '%Mountain%'
+```
+## REGEXP (công cụ khớp mẫu cực mạnh)
+**Syn**
+```bash
+... REGEXP "^An"
+
+- "^An": bắt đầu bằng An
+- 'abc$': Cuối chuỗi
+- 'cat|dog': Hoặc
+- 'A+': Ít nhất 1 lần
+- 'A*': 0 hoặc nhiều lần
+- "?": 0 hoặc 1 lần
+- 'G{3}': Chính xác n lần
+- "G{3,}": Ít nhất n lần
+- '[ABC]': Một ký tự trong tập
 ```
 # Process (Nhóm xử lý tính toán)
 ## count

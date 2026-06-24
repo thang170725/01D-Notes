@@ -1,0 +1,16 @@
+# Introduction
+```bash
+GRU (Gated Recurrent Unit) là một phiên bản "tối giản" của LSTM. 
+    Nó ra đời sau (vào năm 2014) với mục tiêu làm cho mạng nơ-ron hồi tiếp chạy nhanh hơn và tốn ít bộ nhớ hơn nhưng vẫn giữ được khả năng "nhớ lâu" của LSTM.
+
+3 sự thay đổi lớn so với LSTM:
+    1. Hợp nhất hai trạng thái thành một: 
+        Trong khi LSTM tách biệt Cell State (Ct​ - trí nhớ dài hạn) và Hidden State (ht​ - trí nhớ ngắn hạn)
+        
+        Thì GRU gộp chúng lại làm một. GRU chỉ dùng duy nhất Hidden State (ht​) để truyền tải thông tin xuyên suốt qua các bước thời gian. Điều này giúp cấu trúc của nó gọn nhẹ hơn hẳn.
+    
+    2. Cơ chế 2 Cổng (Gates) thay vì 3: 
+        GRU không dùng "Cổng quên" riêng biệt và "Cổng vào" riêng biệt. Thay vào đó, nó dùng: Update Gate (Cổng cập nhật): Đây là sự kết hợp giữa Cổng quên và Cổng vào của LSTM. Nó quyết định xem bao nhiêu phần trăm thông tin cũ từ quá khứ cần giữ lại, và bao nhiêu phần trăm thông tin mới sẽ được nạp vào. Ví dụ: Nếu giá trị cổng là 0.7, nó có thể hiểu là giữ 70% cũ và nạp thêm 30% mới.
+    
+    3. Reset Gate (Cổng đặt lại): Cổng này quyết định xem nên "quên" bao nhiêu thông tin từ trạng thái ẩn trước đó để tính toán thông tin mới (candidate state). Nó giúp mô hình loại bỏ những thông tin không còn liên quan đến ngữ cảnh hiện tại.
+```

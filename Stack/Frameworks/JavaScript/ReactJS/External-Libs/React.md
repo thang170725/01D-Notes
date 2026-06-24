@@ -1,5 +1,6 @@
 - [Introduction](#introduction)
-- [Suspense \& Lazy](#suspense--lazy)
+- [Suspense](#suspense)
+- [Lazy (dùng để load component một cách động (lazy load))](#lazy-dùng-để-load-component-một-cách-động-lazy-load)
 ---
 # Introduction
 ```bash
@@ -12,9 +13,10 @@
     - cách cập nhật khối
     - cách quản lý trạng thái
 ```
-# Suspense & Lazy
+# Suspense
+# Lazy (dùng để load component một cách động (lazy load))
 ```bash
-- Lazy dùng để load component một cách động (lazy load)
+- Lazy 
   + component chỉ được tải khi thực sự cần, thay vì tải toàn bộ ngay từ đầu.
   + Giúp:
     - Giảm kích thước bundle ban đầu

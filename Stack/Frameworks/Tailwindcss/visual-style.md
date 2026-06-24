@@ -10,7 +10,15 @@
   - [bg-no-repeat](#bg-no-repeat)
   - [bg-center](#bg-center)
 - [Backdrop (Chỉnh style đằng sau)](#backdrop-chỉnh-style-đằng-sau)
-  - [backdrop-blur](#backdrop-blur)
+  - [backdrop-blur- (làm mờ nền phía sau)](#backdrop-blur--làm-mờ-nền-phía-sau)
+  - [backdrop-brightness (Điều chỉnh độ sáng nền phía sau)](#backdrop-brightness-điều-chỉnh-độ-sáng-nền-phía-sau)
+  - [backdrop-contrast (Tăng/giảm độ tương phản nền)](#backdrop-contrast-tănggiảm-độ-tương-phản-nền)
+  - [backdrop-grayscale (Biến nền phía sau thành đen trắng)](#backdrop-grayscale-biến-nền-phía-sau-thành-đen-trắng)
+  - [backdrop-hue-rotate (Xoay tông màu)](#backdrop-hue-rotate-xoay-tông-màu)
+  - [backdrop-invert (Đảo màu nền phía sau)](#backdrop-invert-đảo-màu-nền-phía-sau)
+  - [backdrop-opacity (Thay đổi độ trong suốt của nền phía sau)](#backdrop-opacity-thay-đổi-độ-trong-suốt-của-nền-phía-sau)
+  - [backdrop-saturate (Tăng độ rực màu)](#backdrop-saturate-tăng-độ-rực-màu)
+  - [backdrop-sepia (Tạo hiệu ứng ảnh cổ)](#backdrop-sepia-tạo-hiệu-ứng-ảnh-cổ)
 ---
 # rounded
 ```bash
@@ -117,4 +125,57 @@ border-double
 ## bg-no-repeat
 ## bg-center
 # Backdrop (Chỉnh style đằng sau)
-## backdrop-blur
+## backdrop-blur- (làm mờ nền phía sau)
+```html
+<div class="bg-white/20 backdrop-blur-md p-6 rounded-lg">
+  Glassmorphism Card
+</div>
+```
+## backdrop-brightness (Điều chỉnh độ sáng nền phía sau)
+```html
+<div class="bg-white/10 backdrop-brightness-50 p-6">
+  Darker Background
+</div>
+```
+## backdrop-contrast (Tăng/giảm độ tương phản nền)
+```html
+<div class="bg-white/20 backdrop-contrast-200 p-6">
+  High Contrast
+</div>
+```
+## backdrop-grayscale (Biến nền phía sau thành đen trắng)
+```html
+<div class="bg-white/20 backdrop-grayscale p-6">
+  Black & White Background
+</div>
+```
+## backdrop-hue-rotate (Xoay tông màu)
+```html
+<div class="bg-white/20 backdrop-hue-rotate-90 p-6">
+  Hue Rotate
+</div>
+```
+## backdrop-invert (Đảo màu nền phía sau)
+```html
+<div class="bg-white/20 backdrop-invert p-6">
+  Inverted Background
+</div>
+```
+## backdrop-opacity (Thay đổi độ trong suốt của nền phía sau)
+```html
+<div class="bg-white/20 backdrop-opacity-50 p-6">
+  Opacity Example
+</div>
+```
+## backdrop-saturate (Tăng độ rực màu)
+```html
+<div class="bg-white/20 backdrop-saturate-200 p-6">
+  Vibrant Colors
+</div>
+```
+## backdrop-sepia (Tạo hiệu ứng ảnh cổ)
+```html
+<div class="bg-white/20 backdrop-sepia p-6">
+  Vintage Style
+</div>
+```

@@ -10,10 +10,11 @@
   - [unique() (Dùng để lấy các giá trị không trùng lặp trong một Series/cột)](#unique-dùng-để-lấy-các-giá-trị-không-trùng-lặp-trong-một-seriescột)
   - [.nunique() (Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó)](#nunique-để-đếm-tổng-số-lượng-các-giá-trị-khác-nhau-trong-một-cột-nào-đó)
   - [.index()](#index)
-  - [.info()](#info)
-  - [.describe()](#describe)
+  - [.info() (xem nhanh cấu trúc tổng quan của dữ liệu)](#info-xem-nhanh-cấu-trúc-tổng-quan-của-dữ-liệu)
+  - [.describe() (mô tả dữ liệu)](#describe-mô-tả-dữ-liệu)
   - [.dtype (Xem kiểu dữ liệu 1 series)](#dtype-xem-kiểu-dữ-liệu-1-series)
   - [.dtypes (Xem kiểu dữ liệu của tất cả các cột bằng)](#dtypes-xem-kiểu-dữ-liệu-của-tất-cả-các-cột-bằng)
+  - [.isin() (kiểm tra một giá trị có nằm trong một danh sách/tập hợp giá trị hay không)](#isin-kiểm-tra-một-giá-trị-có-nằm-trong-một-danh-sáchtập-hợp-giá-trị-hay-không)
 - [Tạo thêm cột mới trong dataframe](#tạo-thêm-cột-mới-trong-dataframe)
   - [pd.notnull()](#pdnotnull)
   - [.isna() \& .isnull()](#isna--isnull)
@@ -22,19 +23,23 @@
   - [iloc (integer location) (dùng để truy cập dữ liệu theo vị trí chỉ số)](#iloc-integer-location-dùng-để-truy-cập-dữ-liệu-theo-vị-trí-chỉ-số)
   - [.notna()](#notna)
   - [.where()](#where)
+  - [.sample() (Lấy mẫu ngẫu nhiên)](#sample-lấy-mẫu-ngẫu-nhiên)
 - [Process (thao tác xử lý)](#process-thao-tác-xử-lý)
   - [Basic Process (xử lý dữ liệu cơ bản)](#basic-process-xử-lý-dữ-liệu-cơ-bản)
     - [.drop() \& .dropna()](#drop--dropna)
   - [Duplicate Process (xử lý dữ liệu trùng)](#duplicate-process-xử-lý-dữ-liệu-trùng)
     - [.duplicated()](#duplicated)
     - [.drop\_duplicates()](#drop_duplicates)
+  - [.apply() (Áp dụng function lên Series hoặc DataFrame)](#apply-áp-dụng-function-lên-series-hoặc-dataframe)
+  - [.map()](#map)
+  - [replace() (Thay thế giá trị cũ bằng giá trị mới trong Series hoặc DataFrame)](#replace-thay-thế-giá-trị-cũ-bằng-giá-trị-mới-trong-series-hoặc-dataframe)
 - [Time (Nhóm xử lý ngày giờ)](#time-nhóm-xử-lý-ngày-giờ)
   - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin-1)
     - [.dt.date (dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây)](#dtdate-dùng-để-lấy-phần-ngày-date-từ-cột-datetime-bỏ-giờ-phút-giây)
     - [.dt.hour](#dthour)
     - [.dt.minute (Dùng để lấy ra phần phút (0–59) từ một cột có kiểu datetime)](#dtminute-dùng-để-lấy-ra-phần-phút-059-từ-một-cột-có-kiểu-datetime)
-    - [.dt.day\_name()](#dtday_name)
-    - [.dt.dayofweek](#dtdayofweek)
+    - [.dt.day\_name() (Lấy tên thứ)](#dtday_name-lấy-tên-thứ)
+    - [.dt.dayofweek (Lấy số thứ trong tuần)](#dtdayofweek-lấy-số-thứ-trong-tuần)
   - [Transform (Nhóm biển đổi dữ liệu, cấu trúc dữ liệu)](#transform-nhóm-biển-đổi-dữ-liệu-cấu-trúc-dữ-liệu)
     - [.to\_datetime() (chuyển dữ liệu thành kiểu ngày giờ (datetime))](#to_datetime-chuyển-dữ-liệu-thành-kiểu-ngày-giờ-datetime)
     - [resample() (đổi tần suất thời gian)](#resample-đổi-tần-suất-thời-gian)
@@ -46,6 +51,8 @@
 - [autocorrelation\_plot()](#autocorrelation_plot)
 - [.agg() (Cho phép áp dụng nhiều hàm cùng lúc)](#agg-cho-phép-áp-dụng-nhiều-hàm-cùng-lúc)
 - [.count() (Đếm số giá trị không null)](#count-đếm-số-giá-trị-không-null)
+  - [.query()](#query)
+  - [.format()](#format)
 ---
 # Create (Nhóm khởi tạo)
 ## DataFrame & Series
@@ -300,7 +307,15 @@ df = pd.DataFrame({
 print(df.index)
 # RangeIndex(start=0, stop=2, step=1)
 ```
-## .info()
+## .info() (xem nhanh cấu trúc tổng quan của dữ liệu)
+```bash
+Xem được:
+    - Số dòng, số cột.
+    - Tên các cột.
+    - Kiểu dữ liệu (dtype) của từng cột.
+    - Số lượng giá trị không bị thiếu (non-null).
+    - Mức sử dụng bộ nhớ
+```
 ```python
 import pandas as pd
 
@@ -321,30 +336,31 @@ dtypes: float64(1), object(1)
 memory usage: 176.0+ bytes
 None
 ```
-## .describe()
+## .describe() (mô tả dữ liệu)
+**Ex**
 ```python
 df = pd.DataFrame({    
     'name': ['thinh', 'thang', 'tu', 'thang', 'thinh'],    
     'age': [18,None,21,20,18]
 })
-        age
-count   4.00
-mean   19.25
-std     1.50
-min    18.00
-25%    18.00
-50%    19.00
-75%    20.25
-max    21.00
+#         age
+# count   4.00
+# mean   19.25
+# std     1.50
+# min    18.00
+# 25%    18.00
+# 50%    19.00
+# 75%    20.25
+# max    21.00
 
-count = 4 → có 4 giá trị hợp lệ (bỏ qua None)
-mean = 19.25 → trung bình: (18 + 21 + 20 + 18) / 4
-std = 1.50 → độ lệch chuẩn (mức độ phân tán)
-min = 18 → nhỏ nhất
-25% = 18 → Q1 (phần tư thứ 1)
-50% = 19 → median (trung vị)
-75% = 20.25 → Q3
-max = 21 → lớn nhất
+# count = 4 → có 4 giá trị hợp lệ (bỏ qua None)
+# mean = 19.25 → trung bình: (18 + 21 + 20 + 18) / 4
+# std = 1.50 → độ lệch chuẩn (mức độ phân tán)
+# min = 18 → nhỏ nhất
+# 25% = 18 → Q1 (phần tư thứ 1)
+# 50% = 19 → median (trung vị)
+# 75% = 20.25 → Q3
+# max = 21 → lớn nhất
 ```
 ## .dtype (Xem kiểu dữ liệu 1 series)
 **Syn**
@@ -375,6 +391,22 @@ print(df.dtypes)
 # tuoi      int64
 # diem    float64
 # dtype: object
+```
+## .isin() (kiểm tra một giá trị có nằm trong một danh sách/tập hợp giá trị hay không)
+**Ex: Lọc dữ liệu**
+```python
+df = pd.DataFrame({
+    "city": ["HN", "HCM", "DN", "HP"]
+})
+
+mask = df["city"].isin(["HN", "DN"])
+
+print(mask)
+# 0     True
+# 1    False
+# 2     True
+# 3    False
+# Name: city, dtype: bool
 ```
 # Tạo thêm cột mới trong dataframe
 ```python
@@ -638,6 +670,11 @@ print(df_new)
 # 1  Bình 12000000
 # 2  Chi  15000000
 ```
+## .sample() (Lấy mẫu ngẫu nhiên)
+**Syn**
+```bash
+df.sample(5)
+```
 # Process (thao tác xử lý)
 ## Basic Process (xử lý dữ liệu cơ bản)
 ### .drop() & .dropna()
@@ -770,6 +807,56 @@ print(df)
 # 3   3  Cường
 # 4   4   Dũng
 # 7   5     Hà
+```
+## .apply() (Áp dụng function lên Series hoặc DataFrame)
+**Ex1: Dùng apply() trên một cột**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "name": ["alice", "bob", "charlie"]
+})
+
+print(df)
+#       name
+# 0    alice
+# 1      bob
+# 2  charlie
+
+df["name"] = df["name"].apply(lambda x: x.capitalize())
+
+print(df)
+#       name
+# 0    Alice
+# 1      Bob
+# 2  Charlie
+```
+## .map()
+## replace() (Thay thế giá trị cũ bằng giá trị mới trong Series hoặc DataFrame)
+**Syn**
+```bash
+df = df.replace(options)
+
+- options: thường là dict
+```
+**Ex: Thay thế trong nhiều cột**
+```python
+df = pd.DataFrame({
+    "status": [0, 1, 1, 0],
+    "gender": ["M", "F", "M", "F"]
+})
+
+df = df.replace({
+    "status": {0: "Inactive", 1: "Active"},
+    "gender": {"M": "Male", "F": "Female"}
+})
+
+print(df)
+     status  gender
+0  Inactive    Male
+1    Active  Female
+2    Active    Male
+3  Inactive  Female
 ```
 # Time (Nhóm xử lý ngày giờ)
 ## Display (Nhóm cung cấp thông tin)
@@ -1201,31 +1288,7 @@ df.groupby("department").agg({
 ```bash
 df.count()
 ```
-.apply()
 
-Hàm "thần thánh" của Pandas.
-
-Áp dụng function lên Series hoặc DataFrame.
-
-df["name"].apply(len)
-
-df["salary"].apply(lambda x: x*1.1)
-
-DataFrame:
-
-df.apply(np.mean)
-.map()
-
-Chỉ dùng cho Series.
-
-gender_map = {
-    "M":"Male",
-    "F":"Female"
-}
-
-df["gender"].map(gender_map)
-
-Dùng để encode.
 
 .applymap()
 
@@ -1238,37 +1301,7 @@ Hiện nay thường dùng:
 df.map(...)
 
 (với các phiên bản Pandas mới).
-
-3. Nhóm Join/Merge (RẤT QUAN TRỌNG)
-
-Nếu đi phỏng vấn Data Analyst gần như chắc chắn gặp.
-
-.merge()
-
-Giống SQL JOIN.
-
-pd.merge(df1, df2,
-         on="id",
-         how="inner")
-
-Các kiểu:
-
-inner
-left
-right
-outer
-
-Ví dụ:
-
-orders.merge(customers,
-             on="customer_id",
-             how="left")
-.join()
-
-Join theo index.
-
-df1.join(df2)
-4. Nhóm String
+1. Nhóm String
 
 Cực kỳ hay dùng.
 
@@ -1293,13 +1326,7 @@ Regex.
 
 df["email"].str.extract(r"@(.*)")
 5. Nhóm Category / Encoding
-get_dummies()
 
-One-hot encoding.
-
-pd.get_dummies(df["city"])
-
-AI/ML dùng rất nhiều.
 
 cut()
 
@@ -1424,16 +1451,7 @@ Trung bình động có trọng số.
 
 Dùng nhiều trong tài chính.
 
-10. Nhóm Sampling
-.sample()
 
-Lấy mẫu ngẫu nhiên.
-
-df.sample(5)
-
-df.sample(frac=0.2)
-
-Rất hay dùng khi debug.
 
 11. Nhóm MultiIndex
 stack()
@@ -1446,19 +1464,9 @@ unstack()
 Long → wide.
 
 df.unstack()
-12. Nhóm Index
-.reindex()
 
-Thay đổi index.
 
-df.reindex([0,1,2,3,4])
-.sort_index()
-
-Sắp xếp theo index.
-
-df.sort_index()
-13. Nhóm Performance
-.query()
+## .query()
 
 Lọc bằng biểu thức.
 
@@ -1474,3 +1482,16 @@ df[(df.age > 30) & (df.salary > 5000)]
 df.eval("profit = revenue - cost")
 
 Nhanh hơn trên DataFrame lớn.
+## .format()
+```python
+df = pd.DataFrame({
+    "rate": [0.1234, 0.5678]
+})
+
+df["rate"] = df["rate"].apply(
+    lambda x: "{:.1%}".format(x)
+)
+#     rate
+# 0  12.3%
+# 1  56.8%
+```

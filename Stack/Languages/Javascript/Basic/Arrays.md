@@ -9,8 +9,8 @@
   - [every()](#every)
   - [some()](#some)
 - [Filter (lọc)](#filter-lọc)
-  - [.find()](#find)
-  - [.filter()](#filter)
+  - [.find() (Tìm phần tử trong mảng)](#find-tìm-phần-tử-trong-mảng)
+  - [.filter() (Tìm phần tử trong mảng thỏa mãn điều kiện. trả về nhiều giá trị nếu thỏa mãn)](#filter-tìm-phần-tử-trong-mảng-thỏa-mãn-điều-kiện-trả-về-nhiều-giá-trị-nếu-thỏa-mãn)
 - [Shape (xử lý hình dạng)](#shape-xử-lý-hình-dạng)
   - [.push() (thêm phần tử vào cuối mảng)](#push-thêm-phần-tử-vào-cuối-mảng)
   - [.pop()](#pop)
@@ -26,7 +26,7 @@
 - [Process (xử lý mảng)](#process-xử-lý-mảng)
   - [.reduce()](#reduce)
   - [reduceRight()](#reduceright)
-  - [.filter()](#filter-1)
+  - [.filter()](#filter)
   - [copyWithin()](#copywithin)
   - [fill()](#fill)
   - [findIndex()](#findindex)
@@ -142,9 +142,8 @@ a = a.some(function (Number){
 console.log(a); // true
 ```
 # Filter (lọc)
-## .find()
+## .find() (Tìm phần tử trong mảng)
 ```bash
-- Tìm phần tử trong mảng rồi in ra màn hình. 
 - Chỉ trả về một giá trị.
 ```
 **Ex1: Tìm số đầu tiên > 10**
@@ -170,10 +169,7 @@ const user = users.find((item) => item.id === 2);
 console.log(user);
 // { id: 2, name: "Linh" }
 ```
-## .filter()
-```bash
-Tìm phần tử trong mảng thỏa mãn điều kiện. trả về nhiều giá trị nếu thỏa mãn.
-```
+## .filter() (Tìm phần tử trong mảng thỏa mãn điều kiện. trả về nhiều giá trị nếu thỏa mãn)
 **Ex1: Không dùng filter**
 ```js
 let a = [1,2,3,4,5,6,7];
@@ -186,6 +182,8 @@ for(var i = 0; i < a.length; i++){
 ```
 **Ex2: dùng filter**
 ```js
+let a = [1,2,3,4,5,6,7];
+
 a = a.filter(function (Number){
   return (Number > 4);
 })

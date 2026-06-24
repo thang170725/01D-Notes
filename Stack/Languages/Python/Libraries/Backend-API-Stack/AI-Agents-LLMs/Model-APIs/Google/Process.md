@@ -1,12 +1,25 @@
-- [genai](#genai)
-  - [.Client()](#client)
+- [genai (làm việc với mô hình AI của Google)](#genai-làm-việc-với-mô-hình-ai-của-google)
+  - [.Client() (class dùng để tạo đối tượng kết nối tới dịch vụ Gemini)](#client-class-dùng-để-tạo-đối-tượng-kết-nối-tới-dịch-vụ-gemini)
     - [.models](#models)
       - [.embed\_content() (biến văn bản thành vector)](#embed_content-biến-văn-bản-thành-vector)
+        - [.embeddings](#embeddings)
+          - [.values](#values)
       - [.list()](#list)
         - [.name](#name)
+  - [types](#types)
+    - [.EmbedContentConfig()](#embedcontentconfig)
 ---
-# genai
-## .Client()
+# genai (làm việc với mô hình AI của Google)
+```bash
+Nó chứa các class và hàm để làm việc với mô hình AI của Google như:
+    - Tạo văn bản
+    - Phân tích hình ảnh
+    - Sinh ảnh
+    - Chat nhiều lượt
+    - Embedding
+    - Gọi tool/function
+```
+## .Client() (class dùng để tạo đối tượng kết nối tới dịch vụ Gemini)
 **Syn**
 ```bash
 from google import genai
@@ -38,9 +51,11 @@ Nó là một trong những hàm quan trọng nhất khi xây dựng:
 **Syn**
 ```bash
 response = client.models.embed_content(
-    model=...,
-    contents=...,
-    config=...
+    model="gemini-embedding-2",
+    contents=text,
+    config=types.EmbedContentConfig(
+        task_type="RETRIEVAL_DOCUMENT"  # Ép kiểu enum chuẩn viết hoa
+    )
 )
 
 - Input:
@@ -48,8 +63,10 @@ response = client.models.embed_content(
     + contents: Văn bản cần chuyển thành vector 
     + config: Cấu hình embedding              
 - Output:
-    + response: Kết quả chứa vector             
+    + response: Kết quả là một object          
 ```
+##### .embeddings
+###### .values
 **Ex**
 ```python
 from google import genai
@@ -76,3 +93,26 @@ print(response.embeddings[0].values[:5])
 for model in client.models.list():
     print(model.name)
 ```
+## types
+```bash
+là module chứa các kiểu dữ liệu (classes, enums, config objects) mà SDK Gemini định nghĩa sẵn
+```
+types.GenerateContentConfig
+### .EmbedContentConfig()
+**Syn**
+```bash
+types.EmbedContentConfig(
+    task_type="RETRIEVAL_DOCUMENT"
+)
+
+- task_type:
+    + RETRIEVAL_DOCUMENT    : Embedding tài liệu để lưu vector DB
+    + RETRIEVAL_QUERY	    : Embedding câu hỏi của người dùng
+    + SEMANTIC_SIMILARITY	: So sánh độ giống nhau
+    + CLASSIFICATION	    : Phân loại văn bản
+    + CLUSTERING	        : Gom nhóm văn bản
+```
+types.SafetySetting
+types.Part
+types.Content
+...

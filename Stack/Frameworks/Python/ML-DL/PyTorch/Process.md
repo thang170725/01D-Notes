@@ -1,21 +1,22 @@
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
-  - [.tensor()](#tensor)
+  - [.tensor() (Để tạo tensor trong pytorch, giống với mảng số)](#tensor-để-tạo-tensor-trong-pytorch-giống-với-mảng-số)
   - [.clone()](#clone)
   - [Arange()](#arange)
   - [Zeros()](#zeros)
   - [Random](#random)
-    - [.rand()](#rand)
+    - [.rand() (Để tạo ma trận ngẫu nhiên)](#rand-để-tạo-ma-trận-ngẫu-nhiên)
     - [randn\_like()](#randn_like)
-    - [.randn()](#randn)
+    - [.randn() (Khởi tạo ngẫu nhiên theo phân phối chuẩn (Normal distribution))s](#randn-khởi-tạo-ngẫu-nhiên-theo-phân-phối-chuẩn-normal-distributions)
     - [Randint()](#randint)
     - [.manual\_seed()](#manual_seed)
-- [Structure](#structure)
-  - [\[\]](#)
+- [Structure (chuyển đổi cấu trúc của tensor)](#structure-chuyển-đổi-cấu-trúc-của-tensor)
+  - [.T](#t)
+  - [\[\] (slicing)](#-slicing)
   - [.view()](#view)
   - [.reshape()](#reshape)
   - [.unsqueeze()](#unsqueeze)
   - [.tolist()](#tolist)
-- [Display](#display)
+- [Display (Mục đích hiển thị nhằm cung cấp thêm thông tin)](#display-mục-đích-hiển-thị-nhằm-cung-cấp-thêm-thông-tin)
   - [.size()](#size)
   - [.shape](#shape)
   - [.item()](#item)
@@ -27,7 +28,7 @@
   - [ones()](#ones)
   - [add()](#add)
   - [add\_()](#add_)
-- [Training](#training)
+- [Training graph (Liên quan đến huấn luyện model)](#training-graph-liên-quan-đến-huấn-luyện-model)
   - [.backward()](#backward)
   - [.grad](#grad)
   - [.zero\_()](#zero_)
@@ -52,13 +53,12 @@
 ```bash
 Các hàm để khởi tạo
 ```
-## .tensor()
-```bash
-Để tạo tensor trong pytorch, giống với mảng số.
-```
+## .tensor() (Để tạo tensor trong pytorch, giống với mảng số)
 **Syn**
 ```bash
 import torch
+
+
 X = torch.tensor(X, requires_grad=True, dtype=torch.float32)
 
 - requires_grad=True: Cho phép PyTorch theo dõi tensor để tính gradient (W = torch.randn(3, 3, requires_grad=True))
@@ -101,10 +101,7 @@ tensor([0, 2, 4, 6, 8])
 self.bh = torch.zeros(3, requires_grad=True) # (hidden_dim, )
 ```
 ## Random
-### .rand()
-```bash
-Để tạo ma trận ngẫu nhiên.
-```
+### .rand() (Để tạo ma trận ngẫu nhiên)
 **Ex**
 ```python
 import torch
@@ -119,10 +116,7 @@ print(li1) # 8
 x = torch.rand(5,3)
 ```
 ### randn_like()
-### .randn()
-```bash
-Khởi tạo ngẫu nhiên theo phân phối chuẩn (Normal distribution).
-```
+### .randn() (Khởi tạo ngẫu nhiên theo phân phối chuẩn (Normal distribution))s
 **Syn**
 ```bash
 X = torch.randn(32, 5, 3, device=device) 
@@ -153,11 +147,13 @@ torch.manual_seed(42)
 print(torch.randn(3))
 print(torch.randint(0, 10, (3,)))
 ```
-# Structure
+# Structure (chuyển đổi cấu trúc của tensor)
+## .T
+**Syn**
 ```bash
-Hàm làm chuyển đổi cấu trúc của tensor
-``` 
-## []
+x.T
+```
+## [] (slicing)
 **Ex: chuyển đổi cấu trúc cuar tensor**
 ```python
 embedding_matrix = torch.randn(10, 5)  # vocab_size=100, d_model=16
@@ -229,10 +225,7 @@ x = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
 list_x = x.tolist()
 print(list_x)
 ```
-# Display
-```bash
-Mục đích hiển thị nhằm cung cấp thêm thông tin
-``` 
+# Display (Mục đích hiển thị nhằm cung cấp thêm thông tin)
 ## .size()
 **Ex**
 ```python
@@ -278,10 +271,7 @@ print(a.mean()) # tensor(3.)
 ## ones()
 ## add()
 ## add_()
-# Training
-```bash
-Liên quan đến huấn luyện model
-```
+# Training graph (Liên quan đến huấn luyện model)
 ## .backward() 
     • Lan truyền ngược (backpropagation) - tính đạo hàm của loss theo từng trọng số mô hình.
     • Cập nhật trọng số mô hình theo gradient đã tính từ backward() và thuật toán tói ưu (Adam)

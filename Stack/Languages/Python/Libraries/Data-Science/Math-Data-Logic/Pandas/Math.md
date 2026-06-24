@@ -115,3 +115,15 @@ Dùng nhiều trong phát hiện outlier.
 df["salary"].quantile(0.25)
 df["salary"].quantile([0.25,0.5,0.75])
 ```
+# .round() (làm tròn sau dấu thập phân)
+```python
+df = pd.DataFrame({
+    "A": [1.2345, 2.3456],
+    "B": [3.4567, 4.5678]
+})
+
+df = df.round(2)
+#       A     B
+# 0  1.23  3.46
+# 1  2.35  4.57
+```

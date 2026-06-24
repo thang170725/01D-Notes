@@ -2,6 +2,7 @@
   - [np.array() (Tạo mảng có sẵn giá trị, không tạo mảng rỗng được)](#nparray-tạo-mảng-có-sẵn-giá-trị-không-tạo-mảng-rỗng-được)
   - [.arrange()](#arrange)
   - [.empty \& .zeros()](#empty--zeros)
+  - [.ones() (dùng để tạo một mảng với tất cả phần tử đều bằng 1)](#ones-dùng-để-tạo-một-mảng-với-tất-cả-phần-tử-đều-bằng-1)
 - [.zeros\_like()](#zeros_like)
 - [.astype()](#astype)
 - [frombuffer](#frombuffer)
@@ -10,6 +11,7 @@
 - [Asarray()](#asarray)
   - [.view()](#view)
   - [.copy() (Để sao chép một mảng)](#copy-để-sao-chép-một-mảng)
+- [np.nan (Not a Number) (dùng để biểu diễn giá trị bị thiếu)](#npnan-not-a-number-dùng-để-biểu-diễn-giá-trị-bị-thiếu)
 - [Random (Tạo ngẫu nhiên)](#random-tạo-ngẫu-nhiên)
   - [Rand()](#rand)
   - [Randint()](#randint)
@@ -61,6 +63,29 @@ out = np.zeros(
    (out_h, out_w, chanels),
    dtype=np.uint8
 )
+```
+## .ones() (dùng để tạo một mảng với tất cả phần tử đều bằng 1)
+```python
+import numpy as np
+
+arr = np.ones(5)
+
+print(arr)
+
+Kết quả:
+
+[1. 1. 1. 1. 1.]
+```
+```python
+arr = np.ones((3, 4))
+
+print(arr)
+
+Kết quả:
+
+[[1. 1. 1. 1.]
+ [1. 1. 1. 1.]
+ [1. 1. 1. 1.]]
 ```
 # .zeros_like()
 ```bash
@@ -213,6 +238,29 @@ arr[0] = 42
 
 print(arr) # [42 2 3 4 5]
 print(x) # [1 2 3 4 5]
+```
+# np.nan (Not a Number) (dùng để biểu diễn giá trị bị thiếu)
+```python
+import numpy as np
+
+x = np.nan
+print(x) # nan
+```
+**Ex2: Tạo dữ liệu chứa np.nan**
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "name": ["Alice", "Bob", "Charlie"],
+    "score": [8, np.nan, 10]
+})
+
+print(df)
+#       name  score
+# 0    Alice    8.0
+# 1      Bob    NaN
+# 2  Charlie   10.0
 ```
 # Random (Tạo ngẫu nhiên)
 ## Rand()
