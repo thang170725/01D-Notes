@@ -2,6 +2,7 @@
 - [git clone](#git-clone)
 - [git pull (Lấy dữ liệu \& hợp nhất)](#git-pull-lấy-dữ-liệu--hợp-nhất)
   - [--no-rebase (Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge))](#--no-rebase-bắt-git-dùng-merge-không-dùng-rebase-nghĩa-là-fetch--merge)
+  - [git config pull (đây là các cách pull cũ)](#git-config-pull-đây-là-các-cách-pull-cũ)
 - [git push](#git-push)
   - [-u](#-u)
   - [-f \& --force](#-f----force)
@@ -50,6 +51,13 @@ git pull origin main
 **Ex**
 ```bash
 git pull --no-rebase origin feature/profile 
+```
+## git config pull (đây là các cách pull cũ)
+**Syn**
+```bash
+git config pull.rebase false # tương đương với git pull --no-rebase
+git config pull.rebase true # git pull --rebase
+git config pull.ff only # git pull --ff-only
 ```
 # git push
 ## -u

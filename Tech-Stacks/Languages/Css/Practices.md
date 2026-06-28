@@ -1,3 +1,14 @@
+- [Tạo trường đăng nhập (Username) bằng html + css](#tạo-trường-đăng-nhập-username-bằng-html--css)
+- [Tạo icon youtube](#tạo-icon-youtube)
+- [Tạo Menu 1 cấp](#tạo-menu-1-cấp)
+- [Tạo Menu 2 cấp](#tạo-menu-2-cấp)
+- [Kéo dãn thẻ div bằng scale](#kéo-dãn-thẻ-div-bằng-scale)
+- [Hiệu ứng thanh trượt từ trái sang phải](#hiệu-ứng-thanh-trượt-từ-trái-sang-phải)
+- [Hiệu ứng thanh trượt từ giữa sang 2 bên](#hiệu-ứng-thanh-trượt-từ-giữa-sang-2-bên)
+- [Hiệu ứng loading](#hiệu-ứng-loading)
+- [Hiệu ứng loading](#hiệu-ứng-loading-1)
+- [Hiệu ứng loading](#hiệu-ứng-loading-2)
+---
 # Tạo trường đăng nhập (Username) bằng html + css
 **Ex1**
 ```html
@@ -136,7 +147,7 @@ body{
     justify-content: center;
     align-items: center;
 }
-. hexagon{
+.hexagon{
     position: absolute;
     width: 10em;
     height: 17.32em;
@@ -214,8 +225,8 @@ hexInner1::before, .hexInner1::after{
     left: 172px;
 }
 ```
-Tạo Menu 1 cấp
-
+# Tạo Menu 1 cấp
+```html
 <!DOCTYPE html>
 <html>
 <head>
@@ -287,8 +298,9 @@ Tạo Menu 1 cấp
     </nav>
 </body>
 </html>
-Tạo Menu 2 cấp
-
+```
+# Tạo Menu 2 cấp
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -474,8 +486,9 @@ Tạo Menu 2 cấp
     </nav>
 </body>
 </html>
-Bài tập
-Kéo dãn thẻ div bằng scale
+```
+# Kéo dãn thẻ div bằng scale
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -500,8 +513,9 @@ Kéo dãn thẻ div bằng scale
  <div></div>
 </body>
 </html>
-
-Hiệu ứng thanh trượt từ trái sang phải
+```
+# Hiệu ứng thanh trượt từ trái sang phải
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -533,8 +547,9 @@ Hiệu ứng thanh trượt từ trái sang phải
     </div>
 </body>
 </html>
-
-Hiệu ứng thanh trượt từ giữa sang 2 bên
+```
+# Hiệu ứng thanh trượt từ giữa sang 2 bên
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -568,9 +583,9 @@ Hiệu ứng thanh trượt từ giữa sang 2 bên
     </div>
 </body>
 </html>
-
-Hiệu ứng loading
-
+```
+# Hiệu ứng loading
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -694,8 +709,9 @@ body > div{
         transform: rotate(360deg);
     }
 }
-Hiệu ứng loading
-
+```
+# Hiệu ứng loading
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -765,16 +781,9 @@ body{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-weight: bolder;
 }
-
-
-Matrix()
-Là tổng hợp các hiệu ứng.
-Cú pháp:
-matrix(scaleX, skewY, skewX, scaleY, translateX, translateY)
-rotate() 
-Dùng để xoay đối tượng HTML theo một góc độ nào đó.
-Hiệu ứng loading
-
+```
+# Hiệu ứng loading
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -821,3 +830,4 @@ Hiệu ứng loading
       transform: rotate(360deg);
     }
 }
+```

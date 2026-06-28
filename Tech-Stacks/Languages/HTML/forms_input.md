@@ -1,5 +1,5 @@
 - [input](#input)
-- [button](#button)
+- [button (Để tạo ra một nút bấm)](#button-để-tạo-ra-một-nút-bấm)
 ---
 # input 
 ```bash
@@ -46,5 +46,4 @@
 - autocomplete  : Gợi ý các lựa chọn để người dùng nhập dữ liệu nhanh và dễ dàng hơn
 - step          : Thường được sử dụng trong cá loại nhập số, dùng để xác định giá trị bước nhảy của ô
 ```
-# button
-Để tạo ra một nút bấm.
+# button (Để tạo ra một nút bấm)

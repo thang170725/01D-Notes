@@ -247,3 +247,9 @@ chỉ định hoạt ảnh ảnh đang chạy hoặc tạm dừng.
 @keyfames <animation-name>
 Chỉ định tác vụ thay đổi của animation
 Sử dụng from{}…to{}… hoặc %{}
+Matrix()
+Là tổng hợp các hiệu ứng.
+Cú pháp:
+matrix(scaleX, skewY, skewX, scaleY, translateX, translateY)
+rotate() 
+Dùng để xoay đối tượng HTML theo một góc độ nào đó.

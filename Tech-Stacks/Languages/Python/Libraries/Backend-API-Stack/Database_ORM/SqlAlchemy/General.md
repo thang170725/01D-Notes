@@ -31,6 +31,11 @@
     - [.coalesce() (Trả về giá trị đầu tiên khác NULL trong danh sách các giá trị)](#coalesce-trả-về-giá-trị-đầu-tiên-khác-null-trong-danh-sách-các-giá-trị)
     - [round()](#round)
     - [case()](#case)
+- [ext](#ext)
+  - [asyncio](#asyncio)
+    - [create\_async\_engine (tạo Engine kết nối Database)](#create_async_engine-tạo-engine-kết-nối-database)
+    - [async\_sessionmaker (tạo ra Session Factory)](#async_sessionmaker-tạo-ra-session-factory)
+    - [AsyncSession](#asyncsession)
 ---
 # Create
 ```bash
@@ -644,3 +649,27 @@ stmt = select(
     ).label("rank")
 )
 ```
+# ext
+## asyncio
+### create_async_engine (tạo Engine kết nối Database)
+**Syn**
+```bash
+engine = create_async_engine(
+    url,
+    echo=False
+)
+
+- url: # url = "postgresql+asyncpg://..." hoặc url = "mysql+aiomysql://..."
+- echo:
+    True: SQL được sinh ra tiện cho debug
+```
+### async_sessionmaker (tạo ra Session Factory)
+**Syn**
+```bash
+from sqlalchemy.ext.asyncio import async_sessionmaker
+
+SessionLocal = async_sessionmaker(
+    bind=engine
+)
+```
+### AsyncSession 
