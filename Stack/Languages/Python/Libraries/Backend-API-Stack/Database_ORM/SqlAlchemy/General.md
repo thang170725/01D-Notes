@@ -6,15 +6,12 @@
     - [Column()](#column)
 - [Search (Nhóm tìm kiếm để lấy dữ liệu)](#search-nhóm-tìm-kiếm-để-lấy-dữ-liệu)
   - [select() (Là các mới của query)](#select-là-các-mới-của-query)
+  - [select\_from()](#select_from)
   - [.where() (lấy đôi tượng có điều kiện)](#where-lấy-đôi-tượng-có-điều-kiện)
   - [.join()](#join)
 - [Display](#display)
   - [.columns](#columns)
   - [.name \& .type](#name--type)
-  - [func](#func)
-    - [.count()](#count)
-    - [.now()](#now)
-    - [.coalesce()](#coalesce)
   - [.label() (Dùng để đặt tên alias cho cột trong kết quả query)](#label-dùng-để-đặt-tên-alias-cho-cột-trong-kết-quả-query)
 - [Insert](#insert)
   - [commit (Thực sự insert vào db. nếu lỗi -\> rollback)](#commit-thực-sự-insert-vào-db-nếu-lỗi---rollback)
@@ -27,6 +24,13 @@
     - [scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)](#scalars-dùng-để-lấy-ra-giá-trị-đầu-tiên-của-mỗi-hàng-row-trong-kết-quả-truy-vấn)
     - [scalar\_one\_or\_none() (dùng để lấy một giá trị duy nhất từ kết quả query)](#scalar_one_or_none-dùng-để-lấy-một-giá-trị-duy-nhất-từ-kết-quả-query)
   - [.update()](#update)
+  - [func](#func)
+    - [.sum()](#sum)
+    - [.count()](#count)
+    - [.now()](#now)
+    - [.coalesce() (Trả về giá trị đầu tiên khác NULL trong danh sách các giá trị)](#coalesce-trả-về-giá-trị-đầu-tiên-khác-null-trong-danh-sách-các-giá-trị)
+    - [round()](#round)
+    - [case()](#case)
 ---
 # Create
 ```bash
@@ -205,6 +209,7 @@ result = session.execute(stmt).mappings().all()
 
 [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
 ```
+## select_from()
 ## .where() (lấy đôi tượng có điều kiện)
 ```bash
 - where() dùng được cho cả Core và ORM trong SQLAlchemy mới (2.0 style).
@@ -316,58 +321,6 @@ if __name__ == '__main__':
 # posted_date DATE
 # scraped_date DATETIME
 # market_trend_idx FLOAT
-```
-## func
-```bash
-- func trong SQLAlchemy dùng để gọi SQL functions (hàm của database) 
-    + COUNT()
-    + SUM()
-    + NOW()
-    + MAX()
-    + DATE_TRUNC()
-    + hoặc bất kỳ function custom nào trong DB
-```
-### .count()
-**Ex: COUNT**
-**SQL thuần**
-```sql
-SELECT COUNT(id) FROM users;
-```
-```python
-from sqlalchemy import func
-
-stmt = select(func.count(User.id))
-```
-### .now()
-```bash
-dùng để gọi hàm NOW() của database
-```
-**Ex: Lấy thời gian hiện tại từ DB**
-```python
-from sqlalchemy import create_engine, select, func
-from sqlalchemy.orm import Session
-
-engine = create_engine("sqlite:///test.db")
-
-with Session(engine) as session:
-    stmt = select(func.now())
-    result = session.execute(stmt).scalar()
-    print(result)
-
-# 2026-03-01 10:42:15
-```
-### .coalesce()
-**Syn**
-```bash
-from sqlalchemy import func
-
-func.coalesce(column, 0)
-```
-**Ex**
-```sql
-stmt = select(
-    func.coalesce(User.nickname, "Anonymous")
-)
 ```
 ## .label() (Dùng để đặt tên alias cho cột trong kết quả query)
 ```bash
@@ -600,4 +553,94 @@ stmt = (
 
 with engine.begin() as conn:
     conn.execute(stmt)
+```
+## func
+```bash
+- func trong SQLAlchemy dùng để gọi SQL functions (hàm của database) 
+    + COUNT()
+    + SUM()
+    + NOW()
+    + MAX()
+    + DATE_TRUNC()
+    + hoặc bất kỳ function custom nào trong DB
+```
+### .sum()
+```python
+stmt = (
+    select(
+        Product.category_id,
+        func.sum(Product.price).label("total")
+    )
+    .group_by(Product.category_id)
+)
+```
+### .count()
+**Ex: COUNT**
+**SQL thuần**
+```sql
+SELECT COUNT(id) FROM users;
+```
+```python
+from sqlalchemy import func
+
+stmt = select(func.count(User.id))
+```
+### .now()
+```bash
+dùng để gọi hàm NOW() của database
+```
+**Ex: Lấy thời gian hiện tại từ DB**
+```python
+from sqlalchemy import create_engine, select, func
+from sqlalchemy.orm import Session
+
+engine = create_engine("sqlite:///test.db")
+
+with Session(engine) as session:
+    stmt = select(func.now())
+    result = session.execute(stmt).scalar()
+    print(result)
+
+# 2026-03-01 10:42:15
+```
+### .coalesce() (Trả về giá trị đầu tiên khác NULL trong danh sách các giá trị)
+**Syn**
+```bash
+from sqlalchemy import func
+
+func.coalesce(column, 0)
+```
+**Ex**
+```sql
+stmt = select(
+    func.coalesce(User.nickname, "Anonymous")
+)
+```
+### round()
+```python
+from sqlalchemy import func
+
+stmt = select(
+    Product.name,
+    func.round(Product.price, 2).label("price")
+)
+
+# SELECT
+#     product.name,
+#     ROUND(product.price, 2) AS price
+# FROM product;
+```
+### case()
+**Ex**
+```python
+from sqlalchemy import case
+
+stmt = select(
+    Student.name,
+    case(
+        (Student.score >= 8, "Giỏi"),
+        (Student.score >= 5, "Đạt"),
+        else_="Trượt"
+    ).label("rank")
+)
 ```

@@ -7,12 +7,6 @@
 - [Cấp số nhân](#cấp-số-nhân)
 - [Preprocessor (Toán học trong tiền xử lý)](#preprocessor-toán-học-trong-tiền-xử-lý)
   - [Q1 \& Q2 (cách chia dữ liệu thành các phần)](#q1--q2-cách-chia-dữ-liệu-thành-các-phần)
-- [Computer Vision](#computer-vision)
-  - [Kernel](#kernel)
-  - [Gaussian Blur](#gaussian-blur)
-  - [Median Blur](#median-blur)
-  - [Sharpen (làm sắc nét)](#sharpen-làm-sắc-nét)
-  - [Sobel, Laplacian](#sobel-laplacian)
 - [clustering (gom cụm)](#clustering-gom-cụm)
   - [DBSCAN (Density-Based Spatial Clustering) (thuật toán clustering (phân cụm))](#dbscan-density-based-spatial-clustering-thuật-toán-clustering-phân-cụm)
   - [Gaussian Mixture Model (GMM)](#gaussian-mixture-model-gmm)
@@ -537,31 +531,6 @@ Bước 1: Tìm điểm giữa (median)
             Q3 = (16 + 17) / 2 = 16.5
                 - Khoảng 75% dữ liệu nhỏ hơn Q3.
                 - Hay nói cách khác, Q3 là mốc "3/4 quãng đường".
-```
-# Computer Vision
-## Kernel
-```bash
-- Phần lớn các bộ lọc đều dựa trên khái niệm convolution (tích chập) – tức là áp một ma trận (kernel) lên từng vùng nhỏ của ảnh để tính toán giá trị mới cho pixel trung tâm. 
-- Cách áp dụng kernel này có một quy tắc chuẩn:
-    + Duyệt từng pixel trong ảnh gốc.
-    + Với mỗi pixel, lấy vùng lân cận (theo kích thước kernel), nhân chéo với kernel.
-    + Tính tổng và gán giá trị kết quả vào pixel tương ứng trong ảnh mới.
-```
-## Gaussian Blur
-```bash
-Dùng kernel theo phân phối Gauss – làm mờ mịn, tự nhiên hơn.
-```
-## Median Blur
-```bash
-Lấy giá trị trung vị trong vùng lân cận – khử nhiễu muối tiêu.
-```
-## Sharpen (làm sắc nét)
-```bash
-Dùng kernel làm nổi bật cạnh, tăng tương phản cục bộ.
-```
-## Sobel, Laplacian
-```bash
-Dùng để phát hiện biên cạnh – áp kernel đạo hàm.
 ```
 # clustering (gom cụm)
 **Gom cụm cứng và gom cụm mềm**

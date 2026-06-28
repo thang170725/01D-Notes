@@ -15,17 +15,21 @@
   - [union all](#union-all)
 - [like (truy vấn dữ liệu theo điều kiện)](#like-truy-vấn-dữ-liệu-theo-điều-kiện)
   - [REGEXP (công cụ khớp mẫu cực mạnh)](#regexp-công-cụ-khớp-mẫu-cực-mạnh)
-- [Process (Nhóm xử lý tính toán)](#process-nhóm-xử-lý-tính-toán)
+- [Math (Nhóm xử lý tính toán)](#math-nhóm-xử-lý-tính-toán)
   - [count](#count)
-  - [sum](#sum)
+  - [sum (Để cộng tổng các giá trị trong 1 cột hoặc khác cột)](#sum-để-cộng-tổng-các-giá-trị-trong-1-cột-hoặc-khác-cột)
   - [DISTINCT](#distinct)
+  - [ROUND() (dùng để làm tròn số)](#round-dùng-để-làm-tròn-số)
+  - [TRUNCATE()](#truncate)
 - [Time (Nhóm thời gian)](#time-nhóm-thời-gian)
   - [WEEK()](#week)
   - [YEARWEEK()](#yearweek)
   - [YEAR()](#year)
   - [MONTH()](#month)
-- [COALESCE()](#coalesce)
+- [COALESCE() (xử lý NULL)](#coalesce-xử-lý-null)
 - [char\_length()](#char_length)
+- [Process](#process)
+  - [Case ... When ... then ... else ... end (biểu thức điều kiện)](#case--when--then--else--end-biểu-thức-điều-kiện)
 ---
 # Kiểu dữ liệu
 ```bash
@@ -225,7 +229,7 @@ SELECT * FROM exercises WHERE name LIKE '%Mountain%'
 - "G{3,}": Ít nhất n lần
 - '[ABC]': Một ký tự trong tập
 ```
-# Process (Nhóm xử lý tính toán)
+# Math (Nhóm xử lý tính toán)
 ## count
 ```bash
 Dùng để đếm số dòng trong mỗi nhóm
@@ -250,10 +254,7 @@ GROUP BY department;
 | IT         | 3     |
 | HR         | 2     |
 ```
-## sum
-```bash
-Để cộng tổng các giá trị trong 1 cột hoặc khác cột
-```
+## sum (Để cộng tổng các giá trị trong 1 cột hoặc khác cột)
 **Ex1: Tính tổng các giá trị trong 1 cột**
 ```sql
 Employees table:
@@ -281,7 +282,7 @@ Employees table:
 | 2      | 2020-11-28 | 3       | 33       |
 | 2      | 2020-12-9  | 47      | 74       |
 
-select sum(output - in_time) from Employees
+select sum(out_time - in_time) from Employees
 -- | sum(out_time - in_time) |
 -- | ----------------------- |
 -- | 271                     |
@@ -317,6 +318,34 @@ SELECT DISTINCT subject_id FROM Teacher;
 -- Math
 -- Physics
 ```
+## ROUND() (dùng để làm tròn số)
+**Syn**
+```bash
+ROUND(number, decimal_places)
+
+- number: Số cần làm tròn.
+- decimal_places (tùy chọn):
+  > 0: Giữ lại số chữ số thập phân.
+  = 0: Làm tròn đến số nguyên (mặc định nếu không truyền).
+  < 0: Làm tròn sang bên trái dấu thập phân (hàng chục, hàng trăm,...).
+```
+**Ex1: Làm tròn đến số nguyên**
+```sql
+SELECT ROUND(3.14159); -- 3
+
+SELECT ROUND(3.8); -- 4
+```
+**Ex2: Giữ lại 2 chữ số thập phân**
+```sql
+SELECT ROUND(3.14159, 2); -- 3.14
+```
+**Ex3: Làm tròn sang hàng chục, trăm**
+```bash
+SELECT ROUND(127, -1); -- 130
+
+SELECT ROUND(1567, -2); -- 1600
+``` 
+## TRUNCATE()
 # Time (Nhóm thời gian)
 ## WEEK()
 ```bash
@@ -379,10 +408,9 @@ SELECT YEAR('2026-04-11'); -- 2026
 ```sql
 SELECT MONTH('2026-04-11'); -- 4
 ```
-# COALESCE()
+# COALESCE() (xử lý NULL)
 ```bash
-- xử lý NULL (cực quan trọng)
-- Công dụng trả về giá trị KHÔNG NULL đầu tiên
+Công dụng trả về giá trị KHÔNG NULL đầu tiên
 ```
 **Syn**
 ```bash
@@ -401,4 +429,35 @@ Trả về số ký tự trong chuỗi
 SELECT tweet_id
 FROM Tweets
 WHERE CHAR_LENGTH(content) > 15;
+```
+# Process
+## Case ... When ... then ... else ... end (biểu thức điều kiện)
+```bash
+CASE
+    ↓
+    bắt đầu biểu thức điều kiện
+
+WHEN
+    ↓
+    điều kiện 1
+
+THEN
+    ↓
+    giá trị trả về nếu đúng
+
+ELSE
+    ↓
+    giá trị mặc định
+
+END
+    ↓
+    kết thúc biểu thức
+```
+**Ex**
+```sql
+CASE
+    WHEN score >= 8 THEN 'Giỏi'
+    WHEN score >= 5 THEN 'Đạt'
+    ELSE 'Trượt'
+END
 ```

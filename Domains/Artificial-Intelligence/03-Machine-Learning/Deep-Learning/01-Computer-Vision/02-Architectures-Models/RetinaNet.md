@@ -1,74 +1,6 @@
-- [Architecture](#architecture)
-  - [ResNet](#resnet)
-  - [RetinaNet](#retinanet)
+- [RetinaNet](#retinanet)
 ---
-# Architecture
-## ResNet
-```bash
-- ResNet (Residual Network) là một kiến trúc CNN sâu dùng để:
-  + Trích xuất đặc trưng mạnh từ ảnh và giải quyết bài toán thị giác máy tính phức tạp.
-  + Nó nổi tiếng vì đưa ra skip connection (residual connection) giúp huấn luyện được mạng rất sâu (50, 101, 152 layer…) mà không bị vanishing gradient.
-- Ứng dụng:
-  + Image Classification
-  + Object Detection
-  + Image Segmentation (phân vùng ảnh)
-  + Face Recognition 
-  + Medical AI
-  + Autonomous Driving
-```
-**Pipeline**
-```bash
-Original Image (H × W × C)
-(Ex: 224 × 224 × 3)
-      ↓
-Preprocess Image
-- Resize
-- Normalize
-- (Optional) Data Augmentation
-      ↓
-┌──────────────────────────────────────────────────────────────────────────────┐
-│ ResNet Backbone                                                             │
-│                                                                              │
-│  ├─ Initial Convolution                                                     │
-│  │     7×7 Conv, 64 filters, stride=2                                       │
-│  │     Output: 112×112×64                                                    │
-│  │     ↓                                                                     │
-│  │     BatchNorm                                                             │
-│  │     ↓                                                                     │
-│  │     ReLU                                                                  │
-│  │     ↓                                                                     │
-│  │     3×3 MaxPool, stride=2                                                 │
-│  │     Output: 56×56×64                                                      │
-│  │                                                                           │
-│  ├─ Residual Block Stage 1 (×3 blocks)                                      │
-│  │     Output: 56×56×256                                                     │
-│  │                                                                           │
-│  ├─ Residual Block Stage 2 (×4 blocks)                                      │
-│  │     Output: 28×28×512                                                     │
-│  │                                                                           │
-│  ├─ Residual Block Stage 3 (×6 blocks)                                      │
-│  │     Output: 14×14×1024                                                    │
-│  │                                                                           │
-│  ├─ Residual Block Stage 4 (×3 blocks)                                      │
-│  │     Output: 7×7×2048                                                      │
-│  │                                                                           │
-│  └─ Global Average Pooling                                                   │
-│        7×7×2048 → 1×1×2048                                                   │
-└──────────────────────────────────────────────────────────────────────────────┘
-      ↓
-Flatten
-1×1×2048 → 2048 chiều
-      ↓
-Fully Connected Layer
-2048 → Number of Classes (Ex: 1000)
-      ↓
-Softmax
-      ↓
-Loss Function (Cross Entropy)
-      ↓
-Backpropagation (Training Only)
-```
-## RetinaNet
+# RetinaNet
 ```bash
 - Là một kiến trúc dùng để phát hiện và phân loại nhiều vật thể trong ảnh (object detection)
 - Nó dự đoán Bounding box, class của vật thể
@@ -152,10 +84,6 @@ EfficientNet - Mạng cân bằng cả tốc độ và độ chính xác
 SSD - Single Shot Detector
     • Phát hiện vật thể trong 1 lần quét ảnh (sigle shot).
     • Nhanh, nhẹ, dùng tốt cho real-time (ảnh từ wwebcam, robot, …)
-Faster R-CNN
-    • Phát hiện vật thể chính xác cao nhưng chậm hơn YOLO.
-    • Gồm 2 bước: Xác định vùng → nhận diện vật thể.
-    • Dùng khi cần độ chính xác cao, ít quan trọng tốc độ.
 U-Net
     • Phân đoạn ảnh y tế (VD: Tách khối u khỏi ảnh chụp CT).
     • Inout là ảnh, output là mặt nạ (mask) có cùng kích thước.

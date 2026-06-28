@@ -3,7 +3,7 @@
   - [Use ... (Dùng để chọn database)](#use--dùng-để-chọn-database)
   - [create table ... (Tạo bảng)](#create-table--tạo-bảng)
 - [Add (Thêm)](#add-thêm)
-  - [add column (Thêm cột vào bảng)](#add-column-thêm-cột-vào-bảng)
+  - [alter table ... add column ... (Thêm cột vào bảng)](#alter-table--add-column--thêm-cột-vào-bảng)
   - [add constraint ... foreign key ... references (Thêm khóa ngoài)](#add-constraint--foreign-key--references-thêm-khóa-ngoài)
 - [Delete (Xóa)](#delete-xóa)
   - [TRUNCATE TABLE ... (Khuyên dùng nếu bạn muốn xóa sạch dữ liệu và reset ID về 1)](#truncate-table--khuyên-dùng-nếu-bạn-muốn-xóa-sạch-dữ-liệu-và-reset-id-về-1)
@@ -19,7 +19,7 @@
   - [inner join (JOIN mặc định trong SQL thực ra là INNER JOIN)](#inner-join-join-mặc-định-trong-sql-thực-ra-là-inner-join)
   - [left join (Giữ tất cả dữ liệu bảng bên trái. Nếu bảng phải không có → NULL.)](#left-join-giữ-tất-cả-dữ-liệu-bảng-bên-trái-nếu-bảng-phải-không-có--null)
   - [right join (Ngược lại với LEFT JOIN: lấy tất cả bên phải)](#right-join-ngược-lại-với-left-join-lấy-tất-cả-bên-phải)
-  - [full join (Lấy tất cả của cả hai bên Khớp thì ghép Không khớp thì bên còn lại là NULL.)](#full-join-lấy-tất-cả-của-cả-hai-bên-khớp-thì-ghép-không-khớp-thì-bên-còn-lại-là-null)
+  - [full join | full outer join (Lấy tất cả của cả hai bên Khớp thì ghép Không khớp thì bên còn lại là NULL)](#full-join--full-outer-join-lấy-tất-cả-của-cả-hai-bên-khớp-thì-ghép-không-khớp-thì-bên-còn-lại-là-null)
 - [Transform (Nhóm làm thay đổi hình dạng bảng)](#transform-nhóm-làm-thay-đổi-hình-dạng-bảng)
   - [group by](#group-by)
 ---
@@ -94,11 +94,17 @@ CREATE TABLE users (
       + Không mất dữ liệu giữa chừng
 ```
 # Add (Thêm)
-## add column (Thêm cột vào bảng)
+## alter table ... add column ... (Thêm cột vào bảng)
 **Ex**
 ```bash
 ALTER TABLE platform
 ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP; # nếu thêm nhiều cột thì dùng ',' sau mỗi lệnh add
+```
+**Ex2: thêm một cột sau một cột khác**
+```sql
+ALTER TABLE table_name
+ADD COLUMN new_column datatype
+AFTER existing_column;
 ```
 ## add constraint ... foreign key ... references (Thêm khóa ngoài)
 **Ex**
@@ -204,16 +210,16 @@ JOIN scores ON students.id = scores.student_id;
 ## left join (Giữ tất cả dữ liệu bảng bên trái. Nếu bảng phải không có → NULL.)
 **Ex: join bảng bằng left join**
 ```bash
-Bảng students
-id	name
-1	  An
-2	  Bình
-3	  Cường
+Bảng students:
+  id	name
+  1	  An
+  2	  Bình
+  3	  Cường
 
-Bảng scores
-student_id	score
-1	          8
-2	          9
+Bảng scores:
+  student_id	score
+  1	          8
+  2	          9
 ```
 ```sql
 SELECT students.name, scores.score FROM students
@@ -227,7 +233,10 @@ LEFT JOIN scores ON students.id = scores.student_id;
 -- Cường vẫn còn dù không có điểm.
 ```
 ## right join (Ngược lại với LEFT JOIN: lấy tất cả bên phải)
-## full join (Lấy tất cả của cả hai bên Khớp thì ghép Không khớp thì bên còn lại là NULL.)
+## full join | full outer join (Lấy tất cả của cả hai bên Khớp thì ghép Không khớp thì bên còn lại là NULL)
+```bash
+Mariadb không hỗ trợ trực tiếp outer join mà phải kết hợp left join và right join
+```
 # Transform (Nhóm làm thay đổi hình dạng bảng)
 ## group by
 ```bash

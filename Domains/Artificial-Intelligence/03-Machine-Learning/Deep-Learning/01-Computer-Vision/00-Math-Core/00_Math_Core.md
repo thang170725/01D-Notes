@@ -3,7 +3,9 @@
   - [BGR](#bgr)
   - [Grayscale là gì?](#grayscale-là-gì)
   - [HSV là gì?](#hsv-là-gì)
-- [Kernel](#kernel)
+- [Kernel (Weight)](#kernel-weight)
+- [Feature map (output sau khi kernel quét qua ảnh)](#feature-map-output-sau-khi-kernel-quét-qua-ảnh)
+- [FPS](#fps)
 - [Circle (Hình tròn)](#circle-hình-tròn)
   - [Parametric](#parametric)
 - [Euclidean distance](#euclidean-distance)
@@ -12,9 +14,8 @@
   - [ArcFace](#arcface)
 - [Color (Toán học về xử lý màu sắc trong ảnh)](#color-toán-học-về-xử-lý-màu-sắc-trong-ảnh)
   - [Gray Scale (ảnh xám)](#gray-scale-ảnh-xám)
-- [CNN (Toán học trong CNN)](#cnn-toán-học-trong-cnn)
-  - [Convolution](#convolution)
-  - [BatchNorm](#batchnorm)
+- [Convolution](#convolution)
+- [BatchNorm (Chuẩn hóa dữ liệu đưa output về phân phối “chuẩn hơn” → học nhanh, ổn định)](#batchnorm-chuẩn-hóa-dữ-liệu-đưa-output-về-phân-phối-chuẩn-hơn--học-nhanh-ổn-định)
   - [pooling](#pooling)
 - [Rotation (Xoay)](#rotation-xoay)
   - [Affine](#affine)
@@ -31,44 +32,35 @@
 - [Data Augmentation (Giúp model học được nhiều tình huống hơn và giảm Overfitting)](#data-augmentation-giúp-model-học-được-nhiều-tình-huống-hơn-và-giảm-overfitting)
 ---
 # Image (Bản chất ảnh)
-Ảnh trong máy tính được lưu như thế nào?
-
+**Ảnh trong máy tính được lưu như thế nào?**
+```bash
 Bản chất ảnh là một ma trận số (Numpy Array).
 
 Ví dụ ảnh màu:
-
-img.shape = (H, W, C)
-
-Trong đó:
-
-H (Height) = chiều cao
-W (Width) = chiều rộng
-C (Channel) = số kênh màu
+  img.shape = (H, W, C)
+    - H (Height) = chiều cao
+    - W (Width) = chiều rộng
+    - C (Channel) = số kênh màu
 
 Ví dụ:
-
-(720, 1280, 3)
-
-nghĩa là:
-
-720 pixel cao
-1280 pixel rộng
-3 kênh màu
-2. Pixel là gì?
-
+  (720, 1280, 3)
+    - 720 pixel cao
+    - 1280 pixel rộng
+    - 3 kênh màu
+```
+**Pixel là gì?**
+```bash
 Mỗi pixel chứa giá trị màu.
 
 Ví dụ:
-
-img[0,0] = [255, 0, 0]
-
-có nghĩa pixel góc trái là màu đỏ (trong RGB).
+  img[0,0] = [255, 0, 0]
+  => có nghĩa pixel góc trái là màu đỏ (trong RGB).
 
 Thông thường mỗi kênh:
-
-0 → 255
-0 = không có màu đó
-255 = màu đó mạnh nhất
+  - 0 → 255
+  - 0 = không có màu đó
+  - 255 = màu đó mạnh nhất
+```
 ## RGB
 
 RGB =
@@ -170,7 +162,32 @@ Muốn tìm vật màu đỏ:
 cv2.inRange(hsv, lower_red, upper_red)
 
 dễ hơn rất nhiều so với RGB.s 
-# Kernel
+# Kernel (Weight)
+**Kernel lấy ở đâu ra?**
+```bash
+Trường hợp 1 - xử lý ảnh truyền thống: Con người tự viết kernel
+  1  0 -1
+  1  0 -1
+  1  0 -1
+  hoặc
+  -1 -1 -1
+   0  0  0
+   1  1  1
+  => Những kernel này do con người thiết kế để phát hiện cạnh.
+
+Trường hợp 2: CNN - Deep Learning: Con người không viết kernel nữa.
+  Ban đầu máy tính tự tạo ngẫu nhiên
+
+  Ví dụ:
+    0.23  -0.51   0.18
+    0.71   0.02  -0.66
+    0.35  -0.14   0.49
+    hoặc
+    -0.82  0.15  0.44
+    0.03 -0.29  0.67
+    0.91  0.56 -0.11
+    Đây là kernel ban đầu. 👉 Không ai biết nó có ý nghĩa gì cả. Nó chỉ là các số ngẫu nhiên
+```
 **Cách nhận biết kernel khi nào dùng để sharpen, blur, ...**
 ```bash
 1. Kernel làm mờ (blur). Ví dụ:
@@ -206,6 +223,116 @@ Center ≈ neighbors → blur
 Center >> neighbors → sharpen
 Center đối nghịch neighbors → edge
 ```
+# Feature map (output sau khi kernel quét qua ảnh)
+# FPS
+
+Khi bạn làm bài toán CV (detect người, track object, camera AI…), hệ thống không xử lý “video” một lần, mà:
+
+👉 tách video thành từng frame (ảnh tĩnh)
+👉 xử lý từng frame
+👉 ghép lại thành video
+
+Video = chuỗi frame
+
+Frame 1 → xử lý
+Frame 2 → xử lý
+Frame 3 → xử lý
+...
+
+👉 FPS = mỗi giây xử lý được bao nhiêu frame
+
+🎯 Ví dụ dễ hiểu
+FPS	Ý nghĩa
+30 FPS	30 ảnh/giây (mượt bình thường)
+60 FPS	rất mượt (game, real-time CV)
+10 FPS	giật, chậm
+1 FPS	gần như slideshow
+⚡ FPS cao hay thấp có ý nghĩa gì?
+🚀 FPS cao (tốt)
+✔ xử lý nhanh
+✔ phản hồi real-time tốt
+✔ tracking mượt
+
+👉 dùng trong:
+
+camera AI
+self-driving car
+robot
+video realtime detection
+
+Ví dụ:
+
+YOLO chạy 60 FPS → rất tốt
+🐢 FPS thấp (xấu hoặc chậm)
+✖ trễ (latency cao)
+✖ không realtime
+✖ dễ mất object khi tracking
+
+Ví dụ:
+
+2–5 FPS → gần như lag
+detection chậm → camera bị “đứng hình”
+📊 FPS trong Computer Vision phụ thuộc vào gì?
+1. Model AI
+YOLOv8 nano → nhanh
+YOLOv8 large → chậm hơn
+2. Hardware
+CPU → chậm
+GPU (RTX) → nhanh hơn nhiều lần
+3. Input resolution
+640x640 → nhanh
+1920x1080 → chậm
+4. Pipeline xử lý
+
+Ví dụ:
+
+decode video
+→ preprocess
+→ inference AI
+→ postprocess
+→ render
+
+Càng nhiều bước → FPS càng giảm
+
+🔥 FPS trong CV vs đời thực
+Ứng dụng	FPS cần
+Camera an ninh	10–15 FPS
+Face recognition realtime	20–30 FPS
+Self-driving	30–60 FPS
+Gaming AI	60+ FPS
+📌 FPS và latency liên quan gì?
+FPS cao → latency thấp
+FPS thấp → delay cao
+FPS 30 → ~33ms/frame
+FPS 10 → ~100ms/frame
+FPS 1 → ~1000ms/frame
+🧠 Tóm tắt cực dễ hiểu
+FPS = tốc độ xử lý video trong CV
+
+FPS cao → nhanh + mượt + realtime
+FPS thấp → chậm + lag + trễ
+⚠️ Một hiểu lầm phổ biến
+
+❌ FPS cao = model tốt hơn
+✔ Không đúng
+
+👉 FPS chỉ nói về tốc độ, không nói về độ chính xác
+
+Ví dụ:
+
+Model	FPS	Accuracy
+YOLO nano	80 FPS	thấp hơn
+YOLO large	20 FPS	cao hơn
+Nếu bạn muốn nâng level CV
+
+Mình có thể giải thích thêm:
+
+cách tăng FPS YOLO (quantization, TensorRT)
+batching vs streaming
+real-time pipeline architecture
+OpenCV video processing tối ưu
+
+Chỉ cần nói: “cách tăng FPS trong YOLO” 👍
 # Circle (Hình tròn)
 ## Parametric
 ```bash
@@ -293,8 +420,11 @@ Gray = 0.299 * R + 0.587 * G + 0.114 * B
 
 - Mắt người nhạy với xanh lá (G) nhất. Sau đó là đỏ (R). Ít nhạy với xanh dương (B)
 ```
-# CNN (Toán học trong CNN)
-## Convolution
+# Convolution
+**Tại sao mọi người lại làm tăng số chanel lên**
+```bash
+
+```
 **Ex: Code thuần Conv2d ảnh 100x100**
 ```python
 import numpy as np
@@ -386,13 +516,9 @@ print("Output shape:", result.shape)
 # [-223.   22.  -52. ... -144.  227.  409.]]
 # Output shape: (100, 100)
 ```
-## BatchNorm
+# BatchNorm (Chuẩn hóa dữ liệu đưa output về phân phối “chuẩn hơn” → học nhanh, ổn định)
 ```bash
-- BatchNorm là một trong những “vũ khí” quan trọng trong CNN — nếu hiểu đúng thì bạn nắm được cách ổn định training luôn 👍
-- Ý tưởng chính
-  👉 Chuẩn hóa dữ liệu ngay trong mạng theo từng mini-batch:
-  + đưa output về phân phối “chuẩn hơn” → học nhanh, ổn định 
-- Tại sao cần BatchNorm?
+Tại sao cần BatchNorm?
   1. Training nhanh hơn: giảm “internal covariate shift”
   2. Gradient ổn định: tránh exploding / vanishing
   3. Regularization nhẹ: giống noise → đỡ overfit
@@ -402,77 +528,10 @@ print("Output shape:", result.shape)
   + shift lại (beta)
 ```
 **Luồng hoạt động của BatchNorm**
-```bash
-- Giả sử output của một lớp convolution trong CNN có shape: (batch, height, width, channels)=(16, 1000, 1000, 32)
-- Tức là:
-  + batch size = 16
-  + ảnh feature map = 1000×1000
-  + có 32 channels
-```
-```bash
-Ta xét channel số 7
-1. Tensor đầu vào:
-  - Giả sử vài giá trị đầu của channel 7 là:
-    Batch 1:
-    [[2, 4, 3, ...],
-     [5, 6, 7, ...],
-     ...]
+<img src="../../../../../images/BatchNorm-Workflow.png">
 
-    Batch 2:
-    [[1, 2, 3, ...],
-     ...]
-
-    ...
-  - Tổng cộng: 16000000 giá trị
-  - Tổng toàn bộ giá trị của channel 7 là: ∑xi = 80000000 (x1 + x2 + ...)
-2. Tính mean:
-  - Công thức: μB​ = (1/m)​∑xi (m=16000000) = 80000000/16000000 = 5
-3. Tính variance
-  - Giả sử: ∑(xi​−μB​)**2 = 144,000,000
-  - variance: σB**2 = 144,000,000/16,000,000 = 9
-4. Chuẩn hóa từng phần tử:
-  - x_outi = (xi - μB)/sqrt(σB**2 + ϵ)
-  - giả sử: ϵ = 0.00001 => x_outi = 3
-5. Scale & Shift
-  - BatchNorm có tham số học được:
-    + γ
-    + β
-  - giả sử:
-    + γ = 1.5
-    + β = 0.
-  - Output cuối: yi = γ.x_outi + β
-
-- Sau khi xử lý
-  + Input shape: (16, 1000, 1000, 32)
-  + Output shape vẫn là: (16, 1000, 1000, 32)
-- BatchNorm:
-  + KHÔNG đổi kích thước tensor
-  + chỉ đổi phân phối dữ liệu
-```
-**Ex: Code demo batchnorm)**
-```python
-import numpy as np
-
-def batchnorm(x, eps=1e-5):
-    # x: (N, H, W, C)
-    
-    # mean theo channel
-    mean = np.mean(x, axis=(0,1,2), keepdims=True)
-    
-    # variance theo channel
-    var = np.var(x, axis=(0,1,2), keepdims=True)
-    
-    # normalize
-    x_hat = (x - mean) / np.sqrt(var + eps)
-    
-    # gamma, beta (giả sử =1,0)
-    gamma = np.ones_like(mean)
-    beta = np.zeros_like(mean)
-    
-    out = gamma * x_hat + beta
-    
-    return out
-```
+**Ex: Code demo batchnorm**
+[link demo cách hoạt động của batchNorm](./Practices.md#demo-cách-hoạt-động-của-batchnorm)
 ## pooling 
 ```bash
 - Pooling là bước giảm kích thước (downsampling) trong CNN — cực kỳ giống sliding window bạn đã học 👍

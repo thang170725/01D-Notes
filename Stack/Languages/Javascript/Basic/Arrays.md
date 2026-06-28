@@ -26,10 +26,9 @@
 - [Process (xử lý mảng)](#process-xử-lý-mảng)
   - [.reduce()](#reduce)
   - [reduceRight()](#reduceright)
-  - [.filter()](#filter)
   - [copyWithin()](#copywithin)
   - [fill()](#fill)
-  - [findIndex()](#findindex)
+  - [findIndex() (tìm vị trí đầu tiên của phần tử được tìm thấy thỏa điều kiện nào đó)](#findindex-tìm-vị-trí-đầu-tiên-của-phần-tử-được-tìm-thấy-thỏa-điều-kiện-nào-đó)
   - [at()](#at)
   - [flat()](#flat)
   - [toSpliced()](#tospliced)
@@ -398,20 +397,6 @@ arr.reduceRight((acc, current) => {
 // cur = 2 → acc = 3 + 2 = 5
 // cur = 1 → acc = 5 + 1 = 6
 ```
-## .filter()
-```bash
-Để lặp qua các phần tử trong mảng, dùng để lọc các phần tử trong mảng theo một điều kiện nào đó.
-```
-**Ex**
-```js
-let arr = [1,2,3,3,4,5];
-
-let list = arr.filter(function(item){
-   return item > 3;
-})
-
-console.log(list); // [4, 5]
-```
 ## copyWithin()
 ```bash
 Để sao chép các phần tử trong mảng với vị trí bắt đầu và kết thúc việc sao chép được xác định.
@@ -426,9 +411,27 @@ let arr = [1,2,3,4,5];
 
 console.log(arr.fill(7, 0, 2)); //[ 7, 7, 3, 4, 5 ]
 ```
-## findIndex()
+## findIndex() (tìm vị trí đầu tiên của phần tử được tìm thấy thỏa điều kiện nào đó)
 ```bash
-Để tìm vị trí đầu tiên của phần tử được tìm thấy thỏa điều kiện nào đó.
+Nếu không tìm thấy thì trả về -1.
+```
+**Syn**
+```bash
+array.findIndex((item) => {
+    return điều_kiện;
+});
+```
+**Ex: Tìm số**
+```js
+const numbers = [10, 20, 30, 40, 50];
+
+const index = numbers.findIndex((item) => item === 30);
+
+console.log(index); //2
+// Index:   0   1   2   3   4
+// Value:  10  20  30  40  50
+
+// 30 nằm ở vị trí số 2.
 ```
 ## at()
 ```bash

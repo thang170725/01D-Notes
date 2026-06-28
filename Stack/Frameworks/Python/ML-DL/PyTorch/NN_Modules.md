@@ -1,10 +1,10 @@
 - [Nn](#nn)
   - [Module](#module)
   - [.Linear()](#linear)
+  - [Conv2d()](#conv2d)
+    - [.weight (xem weight của conv2d)](#weight-xem-weight-của-conv2d)
 - [tensor đầu ra của mô hình](#tensor-đầu-ra-của-mô-hình)
-  - [.eval()](#eval)
-- [TRAIN](#train)
-- [TEST](#test)
+    - [.eval()](#eval)
 ---
 # Nn
 ```bash
@@ -60,7 +60,70 @@ import torch.nn as nn
 fc = nn.Linear(10, 5)
 print(fc) # Linear(in_features=10, out_features=5, bias=True)
 ```
-conv2d
+## Conv2d()
+**Syn**
+```bash
+torch.nn.Conv2d(
+    in_channels,
+    out_channels,
+    kernel_size,
+    stride=1,
+    padding=0,
+    dilation=1,
+    groups=1,
+    bias=True
+)
+
+- Input:
+    + in_channels: Số channel của ảnh đầu vào.
+    + out_channels: Là số lượng kernel sẽ học.
+    + kernel_size: Kích thước kernel.
+    + stride: Bước nhảy của kernel.
+    + padding: Thêm pixel 0 xung quanh ảnh.
+    + bias: Có thêm bias hay không.
+        - Nếu sau Conv có BatchNorm thì thường. bias=False
+```
+### .weight (xem weight của conv2d)
+**Ex**
+```python
+from torch.nn import Conv2d
+
+conv2d = Conv2d(
+    in_channels=2,
+    out_channels=3,
+    kernel_size=3
+)
+
+print(conv2d.weight)
+# Parameter containing:
+# tensor([[[[-0.1232,  0.1901, -0.1639],
+#           [-0.2294, -0.2218, -0.1060],
+#           [ 0.0344,  0.1406,  0.2098]],
+
+#          [[-0.2212, -0.2055, -0.1613],
+#           [-0.0246,  0.1428,  0.2032],
+#           [ 0.1845,  0.0490, -0.1305]]],
+
+
+#         [[[-0.0976,  0.0150,  0.2226],
+#           [-0.0695,  0.1997, -0.0979],
+#           [-0.0423,  0.0625, -0.1446]],
+
+#          [[ 0.0943,  0.0577, -0.0195],
+#           [ 0.2126,  0.0686,  0.0900],
+#           [ 0.2253,  0.0676,  0.0571]]],
+
+
+#         [[[ 0.1900,  0.0262,  0.0853],
+#           [ 0.0829, -0.1343,  0.2229],
+#           [ 0.1989,  0.2234, -0.0469]],
+
+#          [[ 0.0153,  0.0620,  0.0935],
+#           [-0.0264,  0.1789, -0.1087],
+#           [-0.0092,  0.0349, -0.0987]]]], requires_grad=True)
+
+# (số kernel, số channel mỗi kernel, chiều cao kernel, chiều rộng kernel) = (3, 1, 3, 3)
+```
 functional
 import torch
 import torch.nn.functional as F
