@@ -8,6 +8,78 @@
 - [Practices](#practices)
   - [Demo Transformer Embedding](#demo-transformer-embedding)
 ---
+4. Embedding là gì?
+
+Embedding khác hoàn toàn.
+
+Ví dụ:
+
+king
+
+Embedding:
+
+[0.23, -0.51, 0.87, ...]
+
+có thể dài:
+
+128 chiều
+768 chiều
+1536 chiều
+3072 chiều
+
+Embedding học được ý nghĩa:
+
+king gần queen
+dog gần cat
+
+trong không gian vector.
+
+BoW và TF-IDF không làm được điều này.
+
+So sánh dễ nhớ
+Token
+"Tôi thích AI"
+
+↓
+
+["Tôi", "thích", "AI"]
+
+Là các mảnh văn bản.
+
+BoW
+["Tôi", "thích", "AI"]
+
+↓
+
+[1, 1, 1, 0, 0, 0]
+
+Đếm số lần xuất hiện.
+
+TF-IDF
+["Tôi", "thích", "AI"]
+
+↓
+
+[0.1, 0.1, 0.9, 0, 0, 0]
+
+Đếm có trọng số.
+
+Embedding
+["Tôi", "thích", "AI"]
+
+↓
+
+[-0.23, 0.77, 1.02, ...]
+
+Vector học được ngữ nghĩa.
+
+Tóm gọn:
+
+Khái niệm	Là gì?
+Token	Các mảnh văn bản sau tokenization
+BoW	Vector đếm số lần xuất hiện của token
+TF-IDF	Vector trọng số của token
+Embedding	Vector ngữ nghĩa được học từ dữ liệu
 # Word2Vec
 ```bash
 Là kỹ thuật biến từ thành vector số (embedding).

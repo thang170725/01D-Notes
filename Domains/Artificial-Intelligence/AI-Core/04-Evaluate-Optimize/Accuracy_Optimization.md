@@ -26,6 +26,10 @@
   - [Categorical Cross Entropy (dùng cho bài toán phân loại nhiều lớp (multi-class classification))](#categorical-cross-entropy-dùng-cho-bài-toán-phân-loại-nhiều-lớp-multi-class-classification)
   - [Sparse Categorical Cross-Entropy (SCCE) (hàm loss dùng cho bài toán phân loại nhiều lớp (multi-class classification))](#sparse-categorical-cross-entropy-scce-hàm-loss-dùng-cho-bài-toán-phân-loại-nhiều-lớp-multi-class-classification)
   - [ROC-AUC và PR-AUC](#roc-auc-và-pr-auc)
+  - [ROC Curve](#roc-curve)
+  - [ROC-AUC (Xác suất mô hình xếp một Positive thật cao hơn một Negative thật.)](#roc-auc-xác-suất-mô-hình-xếp-một-positive-thật-cao-hơn-một-negative-thật)
+  - [PR Curve](#pr-curve)
+  - [PR-AUC](#pr-auc)
 - [Optimizer (thuật toán tối ưu)](#optimizer-thuật-toán-tối-ưu)
   - [SGD (Stochastic Gradient Descent)](#sgd-stochastic-gradient-descent)
   - [Momentum (SGD + quán tính)](#momentum-sgd--quán-tính)
@@ -213,21 +217,14 @@ Sai số từng điểm: e = y_true - y_pred = [10, -20, 20]
     + Bằng cách lấy MAE chia cho giá trị trung bình thực tế (np.mean(y_true)), công thức Relative MAE đã triệt tiêu đơn vị gốc (kW) để biến sai số thành tỷ lệ phần trăm (%).
     + Kết quả Relative MAE = 7.54% của bạn có nghĩa là: "Tính trung bình trên toàn bộ hệ thống, dù khách hàng dùng điện nhiều hay ít, mô hình LightGBM chỉ sai lệch khoảng 7.54% so với mức tiêu thụ thực tế của họ."
 ```
-2. Sự khác biệt giữa Relative MAE và MAPE là gì?
-Bạn sẽ thắc mắc: "Ơ, thế thì nó khác gì cái MAPE = 10.10% ở ngay bên dưới?"
+**Sự khác biệt giữa Relative MAE và MAPE là gì?**
+```bash
+MAPE: Tính tỷ lệ phần trăm sai số cho từng dòng dữ liệu trước, rồi mới lấy trung bình cộng của các phần trăm đó.	
+    Bị nhạy cảm quá mức với các giá trị nhỏ gần bằng 0. Nếu thực tế khách hàng chỉ dùng 1 kW mà mô hình đoán 2 kW, MAPE của dòng đó lập tức vọt lên 100%, làm kéo cả chỉ số tổng thể xấu đi một cách oan uổng.
 
-Đây là một câu hỏi rất sâu về mặt toán học dữ liệu mà nếu bạn chủ động đưa vào báo cáo, thầy cô sẽ đánh giá bạn cực kỳ cao:
-
-Chỉ số	Cách tính toán học	Điểm yếu khi gặp dữ liệu điện năng
-MAPE	Tính tỷ lệ phần trăm sai số cho từng dòng dữ liệu trước, rồi mới lấy trung bình cộng của các phần trăm đó.	Bị nhạy cảm quá mức với các giá trị nhỏ gần bằng 0. Nếu thực tế khách hàng chỉ dùng 1 kW mà mô hình đoán 2 kW, MAPE của dòng đó lập tức vọt lên 100%, làm kéo cả chỉ số tổng thể xấu đi một cách oan uổng.
-Relative MAE	Tính tổng sai số MAE của toàn bộ tập dữ liệu trước, rồi mới chia cho mức trung bình tổng.	Khắc phục hoàn toàn lỗi chia cho số 0 hoặc số quá nhỏ. Nó cho một cái nhìn toàn cục và công bằng hơn khi tập dữ liệu dính nhiều dải số 0 hoặc dải tiêu thụ thấp.
-
-3. Cách viết ý nghĩa của Relative MAE vào Chương 3
-Bạn có thể đưa đoạn nhận xét này vào mục 3.3.1 (Kết quả dự báo trên tập kiểm thử):
-
-"Bên cạnh các chỉ số truyền thống, nghiên cứu đưa vào chỉ số Relative MAE (7.54%) để đánh giá hiệu năng mô hình một cách khách quan trên toàn bộ 370 khách hàng. Vì bộ dữ liệu UCI bao gồm nhiều nhóm đối tượng có quy mô tiêu thụ chênh lệch lớn (từ hộ gia đình đến nhà máy), chỉ số Relative MAE giúp chuẩn hóa sai số tuyệt đối về dạng tỷ lệ phần trăm dựa trên mức nền tiêu thụ trung bình. Kết quả 7.54% chứng minh mô hình Global Model của LightGBM có khả năng kiểm soát sai số cực kỳ ổn định và đồng đều, không bị ảnh hưởng bởi sự lệch pha về quy mô giữa các khách hàng."
-
-Hiểu được bản chất RMAE giúp bạn nắm đằng chuôi vũ khí lý thuyết, không sợ bị hội đồng hỏi vặn tại sao lại vẽ ra nhiều chỉ số sai số làm gì!
+Relative MAE: Tính tổng sai số MAE của toàn bộ tập dữ liệu trước, rồi mới chia cho mức trung bình tổng.	
+    Khắc phục hoàn toàn lỗi chia cho số 0 hoặc số quá nhỏ. Nó cho một cái nhìn toàn cục và công bằng hơn khi tập dữ liệu dính nhiều dải số 0 hoặc dải tiêu thụ thấp.
+```
 ## Mean Absolute Percentage Error (MAPE) (Trung bình sai số phần trăm tuyệt đối)
 ```bash
 - Nó là một metric dùng để đánh giá độ chính xác của mô hình dự đoán, đặc biệt trong bài toán regression / forecasting (ví dụ dự đoán điện năng mà bạn đang làm với LightGBM).
@@ -569,234 +566,147 @@ Loss = -log(P(lớp đúng))
 ## ROC-AUC và PR-AUC 
 ```bash
 là hai cách đánh giá mô hình phân loại nhị phân, đặc biệt khi mô hình trả về xác suất thay vì chỉ trả lời Có/Không.
-
-Trước tiên: tại sao cần ROC và PR?
-
+```
+**tại sao cần ROC và PR?**
+```bash
 Giả sử mô hình dự đoán:
-
-A: 0.99
-B: 0.90
-C: 0.80
-D: 0.60
-E: 0.20
+    A: 0.99
+    B: 0.90
+    C: 0.80
+    D: 0.60
+    E: 0.20
 
 Nếu đặt ngưỡng (threshold) là 0.5:
-
->= 0.5 → Positive
-< 0.5 → Negative
-
-thì A, B, C, D là Positive.
+    >= 0.5 → Positive
+    < 0.5 → Negative
+=> thì A, B, C, D là Positive.
 
 Nhưng nếu đổi threshold thành 0.8:
-
->= 0.8 → Positive
-
-thì chỉ còn A, B, C là Positive.
+    >= 0.8 → Positive
+=> thì chỉ còn A, B, C là Positive.
 
 => Precision và Recall sẽ thay đổi theo threshold.
-
-ROC-AUC và PR-AUC đánh giá mô hình trên mọi threshold, không phụ thuộc vào việc bạn chọn 0.5 hay 0.8.
-
-1. ROC Curve
-
+```
+## ROC Curve
+```bash
 ROC vẽ:
+    Trục X = FPR (False Positive Rate)
+        FPR = FP+TN # Trong số người vô tội, bắt nhầm bao nhiêu phần trăm?
+    Trục Y = TPR (Recall)
+        TPR=Recall # Trong số tội phạm thật, bắt được bao nhiêu phần trăm?
 
-Trục X = FPR (False Positive Rate)
-Trục Y = TPR (Recall)
-FPR
-FPR=
-FP+TN
-FP
-	​
+Ví dụ;
+    Có:
+        - 100 tội phạm
+        - 900 người vô tội
 
+    Mô hình:
+        - Bắt được 90 tội phạm
+        - Bắt nhầm 90 người vô tội
 
-Ý nghĩa:
+    Ta có:
+        - TPR = 90/100 = 90%
+        - FPR = 90/900 = 10%
 
-Trong số người vô tội, bắt nhầm bao nhiêu phần trăm?
-
-TPR
-TPR=Recall
-
-Ý nghĩa:
-
-Trong số tội phạm thật, bắt được bao nhiêu phần trăm?
-
-Ví dụ cảnh sát
-
-Có:
-
-100 tội phạm
-900 người vô tội
-
-Mô hình:
-
-Bắt được 90 tội phạm
-Bắt nhầm 90 người vô tội
-
-Ta có:
-
-TPR = 90/100 = 90%
-FPR = 90/900 = 10%
-
-Điểm ROC sẽ là:
-
-(0.1, 0.9)
-ROC-AUC là gì?
-
+    Điểm ROC sẽ là: (0.1, 0.9)
+```
+## ROC-AUC (Xác suất mô hình xếp một Positive thật cao hơn một Negative thật.)
+```bash
 AUC = Area Under Curve.
-
-AUC = 1 → hoàn hảo
-AUC = 0.5 → đoán ngẫu nhiên
-AUC < 0.5 → tệ hơn random
-Cách hiểu trực quan
-
-ROC-AUC =
-
-Xác suất mô hình xếp một Positive thật cao hơn một Negative thật.
+    - AUC = 1 → hoàn hảo
+    - AUC = 0.5 → đoán ngẫu nhiên
+    - AUC < 0.5 → tệ hơn random
 
 Ví dụ:
+    - Spam:      0.9
+    - Không spam:0.3
+    → đúng.
 
-Spam:      0.9
-Không spam:0.3
-
-→ đúng.
-
-Nếu hầu hết Positive đều được xếp điểm cao hơn Negative:
-
-ROC-AUC ≈ 1
-2. PR Curve
-
+    Nếu hầu hết Positive đều được xếp điểm cao hơn Negative:
+        ROC-AUC ≈ 1
+```
+## PR Curve
+```bash
 PR = Precision-Recall.
 
 Vẽ:
+    - Trục X = Recall
+    - Trục Y = Precision
 
-Trục X = Recall
-Trục Y = Precision
 Ví dụ
+    Có:
+        - 1000 email
+        - 990 email thường
+        - 10 email spam
 
-Có:
+    Mô hình tìm được:
+        - TP = 8
+        - FP = 2
+        - FN = 2
 
-1000 email
+    Ta có:
+        - Precision = 8/(8+2)=80%
+        - Recall    = 8/(8+2)=80%
 
-990 email thường
-10 email spam
-
-Mô hình tìm được:
-
-TP = 8
-FP = 2
-FN = 2
-
-Ta có:
-
-Precision = 8/(8+2)=80%
-Recall    = 8/(8+2)=80%
-
-Điểm trên PR Curve là:
-
-(Recall=0.8, Precision=0.8)
-PR-AUC là gì?
-
+    Điểm trên PR Curve là: (Recall=0.8, Precision=0.8)
+```
+## PR-AUC
+```bash
 Diện tích dưới đường Precision-Recall.
 
 Nó trả lời:
-
-Khi cố gắng tăng Recall, Precision bị giảm bao nhiêu?
+    Khi cố gắng tăng Recall, Precision bị giảm bao nhiêu?
 
 PR-AUC càng lớn càng tốt.
 
 Khi nào dùng ROC-AUC?
-Dữ liệu cân bằng
+    Dữ liệu cân bằng
 
 Ví dụ:
-
-500 mèo
-500 chó
-
-hoặc
-
-45% gian lận
-55% không gian lận
+    500 mèo
+    500 chó
+    hoặc
+    45% gian lận
+    55% không gian lận
 
 ROC-AUC hoạt động rất tốt.
 
 Khi nào dùng PR-AUC?
-Dữ liệu mất cân bằng mạnh
+    Dữ liệu mất cân bằng mạnh
 
 Ví dụ:
-
-9990 người bình thường
-10 người bị bệnh
-
-hoặc
-
-99999 giao dịch bình thường
-1 giao dịch gian lận
-
-Lúc này PR-AUC đáng tin hơn.
-
-Tại sao ROC có thể "đánh lừa" bạn?
-
+    9990 người bình thường
+    10 người bị bệnh
+    hoặc
+    99999 giao dịch bình thường
+    1 giao dịch gian lận
+=> Lúc này PR-AUC đáng tin hơn.
+```
+**Tại sao ROC có thể "đánh lừa" bạn?**
+```bash
 Giả sử:
-
-10000 người
-
-9990 bình thường
-10 bệnh
+    - 10000 người
+    - 9990 bình thường
+    - 10 bệnh
 
 Mô hình:
-
-TP = 8
-FP = 100
+    - TP = 8
+    - FP = 100
 
 Nhìn qua:
-
-Recall = 80%
-
-Rất ngon.
+    - Recall = 80%
+=> Rất ngon.
 
 ROC:
-
-FPR = 100 / 9990
-    ≈ 1%
-
-FPR rất nhỏ.
+    FPR = 100 / 9990 ≈ 1%
+    => FPR rất nhỏ.
 
 => ROC-AUC có thể vẫn rất cao.
 
 Nhưng thực tế:
-
-Precision = 8 / (8+100)
-          = 7.4%
-
-Tức là:
-
-Cứ báo có bệnh thì 92.6% là báo nhầm.
-
-Đây là thảm họa.
-
-PR-AUC sẽ phản ánh điều này ngay lập tức.
-
-Mẹo nhớ cực nhanh
-ROC-AUC
-
-Quan tâm:
-
-Mô hình có phân biệt được 2 lớp không?
-
-Positive đứng trên Negative bao nhiêu?
-
-Phù hợp khi dữ liệu tương đối cân bằng.
-
-PR-AUC
-
-Quan tâm:
-
-Những gì tôi bắt được có đáng tin không?
-
-Precision ↔ Recall
-
-Phù hợp khi Positive rất hiếm.
+    Precision = 8 / (8+100) = 7.4%
+    => Cứ báo có bệnh thì 92.6% là báo nhầm. Đây là thảm họa.
+    => PR-AUC sẽ phản ánh điều này ngay lập tức.
 ```
 # Optimizer (thuật toán tối ưu)
 ## SGD (Stochastic Gradient Descent)

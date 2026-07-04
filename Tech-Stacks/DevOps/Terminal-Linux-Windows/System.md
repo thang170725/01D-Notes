@@ -3,19 +3,21 @@
   - [ac (Accounting)](#ac-accounting)
   - [tree](#tree)
   - [du](#du)
-  - [free](#free)
+- [RAM](#ram)
+  - [free (tổng quan nhất về dung lượng RAM tổng, dung lượng đã dùng, còn trống và bộ nhớ đệm)](#free-tổng-quan-nhất-về-dung-lượng-ram-tổng-dung-lượng-đã-dùng-còn-trống-và-bộ-nhớ-đệm)
   - [df](#df)
-  - [systemctl](#systemctl)
-  - [sudo systemctl status](#sudo-systemctl-status)
-  - [sudo lsof](#sudo-lsof)
-  - [ss -tulpn | grep](#ss--tulpn--grep)
-- [systemctl list-units](#systemctl-list-units)
+- [Service](#service)
+  - [systemctl \& sudo systemctl (Quản lý các service)](#systemctl--sudo-systemctl-quản-lý-các-service)
+    - [status (Kiểm tra trạng thái service có đang chạy không)](#status-kiểm-tra-trạng-thái-service-có-đang-chạy-không)
+    - [sudo lsof (Kiểm tra xem port nào đang bị sử dụng)](#sudo-lsof-kiểm-tra-xem-port-nào-đang-bị-sử-dụng)
+    - [ss -tulpn | grep (Kiểm tra xem port nào đang bị sử dụng)](#ss--tulpn--grep-kiểm-tra-xem-port-nào-đang-bị-sử-dụng)
+    - [systemctl list-units (Dùng để: liệt kê các service đang hoạt động (hoặc được systemd quản lý))](#systemctl-list-units-dùng-để-liệt-kê-các-service-đang-hoạt-động-hoặc-được-systemd-quản-lý)
+    - [start (Mở lại một service đã Stop)](#start-mở-lại-một-service-đã-stop)
+    - [sudo systemctl stop (Dừng một service đang chạy)](#sudo-systemctl-stop-dừng-một-service-đang-chạy)
+    - [sudo systemctl disable (Dùng khi muốn tắt hẳn service)](#sudo-systemctl-disable-dùng-khi-muốn-tắt-hẳn-service)
   - [Powercfg /batteryreport (Windows)](#powercfg-batteryreport-windows)
 - [Create \& Config (Tạo \& cấu hình)](#create--config-tạo--cấu-hình)
-  - [sudo systemctl start](#sudo-systemctl-start)
 - [Remove \& Close (Nhóm xóa \& dừng)](#remove--close-nhóm-xóa--dừng)
-  - [sudo systemctl stop](#sudo-systemctl-stop)
-  - [sudo systemctl disable](#sudo-systemctl-disable)
   - [clear](#clear)
   - [sudo apt clean](#sudo-apt-clean)
   - [sudo apt autoclean](#sudo-apt-autoclean)
@@ -24,6 +26,7 @@
 - [Sửa lỗi 2 màn](#sửa-lỗi-2-màn)
 - [rm -rf ~/.cache/huggingface](#rm--rf-cachehuggingface)
 - [GPU](#gpu)
+  - [VRAM (giống như bàn làm việc của GPU)](#vram-giống-như-bàn-làm-việc-của-gpu)
   - [CUDA Toolkit](#cuda-toolkit)
   - [Check (kiểm tra)](#check-kiểm-tra)
     - [nvidia-smi](#nvidia-smi)
@@ -86,9 +89,12 @@ Xem dung lương thư mục hoặc file.
 ```bash
 du -sh: xem dung lượng thư mục hiện tại
 ```
-## free
+# RAM
+## free (tổng quan nhất về dung lượng RAM tổng, dung lượng đã dùng, còn trống và bộ nhớ đệm)
+**Syn**
 ```bash
-Lệnh này cho bạn cái nhìn tổng quan nhất về dung lượng RAM tổng, dung lượng đã dùng, còn trống và bộ nhớ đệm (cache).
+free -h
+- -h: giúp hiển thị con số dưới dạng dễ đọc như GB, MB thay vì những dãy byte dài ngoằng
 ```
 ## df
 Xem dung lượng còn lại của ổ, -h là để hiển thị theo đơn vị dễ đọc.
@@ -96,12 +102,8 @@ Xem dung lượng còn lại của ổ, -h là để hiển thị theo đơn v�
 1. df -h /
 2. df -h /home
 ```
-**Syn**
-```bash
-free -h
-- -h: giúp hiển thị con số dưới dạng dễ đọc như GB, MB thay vì những dãy byte dài ngoằng
-```
-## systemctl
+# Service 
+## systemctl & sudo systemctl (Quản lý các service)
 **Ex**
 ```bash
 1. systemctl list-units --type=service
@@ -111,14 +113,13 @@ free -h
 3. systemctl list-units --type=service --state=running
     + Chỉ xem service đang chạy
 ```
-## sudo systemctl status
+###  status (Kiểm tra trạng thái service có đang chạy không)
 ```bash
-- Nó dùng để:
-    + Kiểm tra service có đang chạy không
-    + Xem PID
-    + Xem log gần nhất
-    + Xem có lỗi không
-    + Xem service có tự start khi boot không
+Nó dùng để:
+    - Xem PID
+    - Xem log gần nhất
+    - Xem có lỗi không
+    - Xem service có tự start khi boot không
 ```
 **Ex**
 ```bash
@@ -142,10 +143,7 @@ free -h
 #      CGroup: /system.slice/mariadb.service
 #              └─1798 /usr/sbin/mariadbd
 ```
-## sudo lsof
-```bash
-Kiểm tra xem port nào đang bị sử dụng
-```
+### sudo lsof (Kiểm tra xem port nào đang bị sử dụng)
 **Ex**
 ```bash
 (sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe/frontend$ sudo lsof -i :3306
@@ -153,23 +151,13 @@ Kiểm tra xem port nào đang bị sử dụng
 # COMMAND   PID  USER   FD   TYPE DEVICE SIZE/OFF NODE NAME
 # mariadbd 1798 mysql   34u  IPv4  20838      0t0  TCP localhost:mysql (LISTEN)
 ```
-## ss -tulpn | grep 
-```bash
-Kiểm tra xem port nào đang bị sử dụng
-```
-**Ex**
-```bash
-Kiểm tra xem port nào đang bị sử dụng.
-```
+### ss -tulpn | grep (Kiểm tra xem port nào đang bị sử dụng)
 **Ex**
 ```bash
 (sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe/frontend$ ss -tulpn | grep 3306
 # tcp   LISTEN 0      80                               127.0.0.1:3306       0.0.0.0:*
 ```
-# systemctl list-units
-```bash
-Dùng để: liệt kê các service đang hoạt động (hoặc được systemd quản lý) và lọc ra những service liên quan đến MySQL hoặc MariaDB
-```
+### systemctl list-units (Dùng để: liệt kê các service đang hoạt động (hoặc được systemd quản lý))
 **Ex**
 ```bash
 systemctl list-units --type=service | grep -E 'mysql|mariadb'
@@ -186,21 +174,14 @@ systemctl list-units --type=service | grep -E 'mysql|mariadb'
     + 'mysql|mariadb': tìm dòng chứa mysql HOẶC mariadb
 => Hiểu đơn giản: “Cho tôi xem các service đang chạy có liên quan đến MySQL hoặc MariaDB”
 ```
-## Powercfg /batteryreport (Windows)
-# Create & Config (Tạo & cấu hình)
-## sudo systemctl start
-```bash
-Mở lại một service đã Stop.
-```
+### start (Mở lại một service đã Stop)
 **Syn**
 ```bash
 sudo systemctl start <service>
 ```
-# Remove & Close (Nhóm xóa & dừng)
-## sudo systemctl stop
+### sudo systemctl stop (Dừng một service đang chạy)
 ```bash
-- Dừng (stop) một service đang chạy
-- Khi chạy lệnh này, systemd sẽ:
+Khi chạy lệnh này, systemd sẽ:
     + Gửi tín hiệu dừng (SIGTERM)
     + Tắt tiến trình của service
     + Giải phóng tài nguyên (RAM, CPU, file lock, port…)
@@ -209,14 +190,14 @@ sudo systemctl start <service>
 ```bash
 sudo systemctl stop <tên-service>
 ```
-## sudo systemctl disable
-```bash
-Dùng khi muốn tắt hẳn service
-```
+### sudo systemctl disable (Dùng khi muốn tắt hẳn service)
 **Syn**
 ```bash
 sudo systemctl disable <service>
 ```
+## Powercfg /batteryreport (Windows)
+# Create & Config (Tạo & cấu hình)
+# Remove & Close (Nhóm xóa & dừng)
 ## clear
 ```bash
 Xóa hết các dòng lệnh.

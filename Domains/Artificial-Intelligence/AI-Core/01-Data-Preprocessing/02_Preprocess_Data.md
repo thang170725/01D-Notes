@@ -1,4 +1,8 @@
 - [Missing values (kỹ thuật xử lý giá trị thiếu)](#missing-values-kỹ-thuật-xử-lý-giá-trị-thiếu)
+  - [conditional imputation](#conditional-imputation)
+  - [KNN Imputer](#knn-imputer)
+  - [Predictive Imputation](#predictive-imputation)
+- [Tạo cột flag](#tạo-cột-flag)
 - [Outlier (Phát hiện \& xử lý giá trị ngoại lai)](#outlier-phát-hiện--xử-lý-giá-trị-ngoại-lai)
   - [Boxplot / IQR (Interquartile Range) (Khoảng tứ phân vị)](#boxplot--iqr-interquartile-range-khoảng-tứ-phân-vị)
   - [Z-Score (Giá trị này cách mức trung bình bao nhiêu độ lệch chuẩn)](#z-score-giá-trị-này-cách-mức-trung-bình-bao-nhiêu-độ-lệch-chuẩn)
@@ -15,6 +19,10 @@
   - [Standardization (Z-score) (Đưa dữ liệu về phân phối có mean = 0, std = 1)](#standardization-z-score-đưa-dữ-liệu-về-phân-phối-có-mean--0-std--1)
   - [Min-Max Scaling](#min-max-scaling)
   - [Robust Scaling](#robust-scaling)
+- [Encode (Máy học không hiểu chữ, nên phải biến thành số. Có 3 cách phổ biến)](#encode-máy-học-không-hiểu-chữ-nên-phải-biến-thành-số-có-3-cách-phổ-biến)
+  - [One-Hot Encoding](#one-hot-encoding)
+  - [Label Encoding (Gán số cho từng giá trị)](#label-encoding-gán-số-cho-từng-giá-trị)
+  - [Target Encoding (Thay mỗi giá trị bằng trung bình của biến mục tiêu)](#target-encoding-thay-mỗi-giá-trị-bằng-trung-bình-của-biến-mục-tiêu)
 - [Imbalanced Data (Mất cân bằng dữ liệu)](#imbalanced-data-mất-cân-bằng-dữ-liệu)
   - [SMOTE (Oversampling) (Tạo thêm dữ liệu giả cho lớp ít)](#smote-oversampling-tạo-thêm-dữ-liệu-giả-cho-lớp-ít)
   - [Downsampling (Giảm bớt dữ liệu lớp nhiều)](#downsampling-giảm-bớt-dữ-liệu-lớp-nhiều)
@@ -92,69 +100,60 @@ Median:
 Thay:
 df["Salary"] = df["Salary"].fillna(df["Salary"].median())
 ```
-Bạn đang nghĩ theo hướng mà các Data Scientist thực tế thường làm, và đúng là median toàn cột không phải lúc nào cũng hợp lý.
-Ví dụ bài toán giá nhà:
-Diện tíchPhòng ngủQuậnGiá502Cầu Giấy5 tỷ552Cầu Giấy5.5 tỷ2005Ba Đình40 tỷ?2Cầu Giấy5.2 tỷ
-Nếu điền diện tích bằng median toàn bộ cột:
-[50, 55, 200]median = 55
-thì khá ổn trong ví dụ này.
-Nhưng nếu dữ liệu là:
-Diện tích303540300400
-Median:
-40
-Giả sử căn nhà bị thiếu diện tích thực chất là biệt thự 350m² thì điền 40m² là sai rất xa.
-
-Tại sao người ta vẫn dùng median?
+**Tại sao người ta vẫn dùng median?**
+```bash
 Vì nó:
-
-
-Nhanh
-
-
-Dễ triển khai
-
-
-Không bị ảnh hưởng mạnh bởi outlier như mean
-
-
-Thường là baseline khá tốt
-
-
-Ví dụ:
-df["area"].fillna(df["area"].median())
-chỉ mất 1 dòng.
-
-Cách bạn đề xuất thực ra là "conditional imputation"
+    - Nhanh
+    - Dễ triển khai
+    - Không bị ảnh hưởng mạnh bởi outlier như mean
+    - Thường là baseline khá tốt
+```
+## conditional imputation
+```bash
 Thay vì:
-Diện tích thiếu↓median của toàn bộ dữ liệu
+    Diện tích thiếu
+    ↓
+    median của toàn bộ dữ liệu
 ta làm:
-Diện tích thiếu↓tìm nhóm nhà tương tự↓median trong nhóm đó
-Ví dụ:
-QuậnPhòng ngủDiện tíchCầu Giấy250Cầu Giấy255Cầu Giấy2?Ba Đình5200
+    Diện tích thiếu
+    ↓
+    tìm nhóm nhà tương tự
+    ↓
+    median trong nhóm đó
+```
+**Ex**
+```bash
+Quận        Phòng ngủ   Diện tích
+Cầu Giấy    2           50     
+Cầu Giấy    2           55
+Cầu Giấy    2           ?
+Ba Đình     5           200
+```
+```bash
 Ta chỉ xét:
-Quận = Cầu GiấyPhòng ngủ = 2
+    Quận = Cầu Giấy
+    Phòng ngủ = 2
 Median:
-(50,55) → 52.5
+    (50,55) → 52.5
 Điền:
-52.5
-Hợp lý hơn nhiều.
+    52.5
+```
+## KNN Imputer
+**Ex**
+```bash
+Area    Bedroom     Frontage
+50      2           45
+52      5           ?
+24.5    2           41
 
-Cao cấp hơn: KNN Imputer
-Đây gần giống hệt suy nghĩ của bạn.
-Ví dụ:
-AreaBedroomFrontage50245525?24.5200510
-Dòng thiếu:
-?, 2, 4.5
 KNN sẽ tìm những điểm gần nhất:
-50, 2, 455, 2, 5
-sau đó lấy trung bình hoặc trọng số:
-(50 + 55)/2 = 52.5
+    sau đó lấy trung bình hoặc trọng số:
+        (50 + 55)/2 = 52.5
 Đây chính xác là ý tưởng:
-
-"xem những căn nhà giống nó nhất"
-
-
-Thậm chí còn mạnh hơn: Predictive Imputation
+    "xem những căn nhà giống nó nhất"
+```
+## Predictive Imputation
+```bash
 Thay vì:
 tìm hàng gần nhất
 ta huấn luyện model:
@@ -204,7 +203,7 @@ Người không khai thu nhập có thể có hành vi khác với người khai
 Nhiều đội ML sẽ tạo thêm:
 incomeincome_missing200? → median1150
 để mô hình học được rằng "thiếu dữ liệu" cũng là một tín hiệu. Đây là kỹ thuật rất hay trong các bài toán tín dụng và dự báo rủi ro.
-5. Mode Imputation (Điền giá trị xuất hiện nhiều nhất)
+1. Mode Imputation (Điền giá trị xuất hiện nhiều nhất)
 Dùng cho dữ liệu categorical.
 Ví dụ:
 Thành phốHà NộiHà NộiTP.HCM?
@@ -213,7 +212,7 @@ Hà Nội
 Điền:
 df["City"] = df["City"].fillna(df["City"].mode()[0])
 
-6. Fill Constant
+1. Fill Constant
 Điền giá trị cố định.
 Ví dụ:
 df["City"] = df["City"].fillna("Unknown")
@@ -221,7 +220,7 @@ Kết quả:
 Thành phốHà NộiTP.HCMUnknown
 Cách này khá phổ biến.
 
-7. Forward Fill (ffill)
+1. Forward Fill (ffill)
 Hay dùng với dữ liệu thời gian.
 Ví dụ:
 NgàyGiá11002?3?4120
@@ -229,14 +228,14 @@ Forward fill:
 NgàyGiá1100210031004120
 df.fillna(method="ffill")
 
-8. Backward Fill (bfill)
+1. Backward Fill (bfill)
 Ngược lại:
 NgàyGiá11002?3?4120
 Sau bfill:
 NgàyGiá1100212031204120
 df.fillna(method="bfill")
 
-9. Interpolation
+1. Interpolation
 Nội suy giữa các điểm.
 Ví dụ:
 Thời gianNhiệt độ1202?330
@@ -246,7 +245,7 @@ Kết quả:
 Thời gianNhiệt độ120225330
 df.interpolate()
 
-10. Dùng mô hình ML để dự đoán giá trị thiếu
+1.  Dùng mô hình ML để dự đoán giá trị thiếu
 Ví dụ:
 TuổiKinh nghiệmLương2521030515358?
 Ta có thể huấn luyện model:
@@ -257,7 +256,7 @@ from sklearn.impute import KNNImputer
 hoặc
 IterativeImputer
 
-11. KNN Imputation
+1.  KNN Imputation
 Ví dụ:
 TuổiLương2510261127?
 Tìm các hàng gần nhất:
@@ -506,204 +505,116 @@ x' = (x - median) / IQR
     + Q3: 75th percentile
     + x′: giá trị sau scaling
 ```
-Cứ tưởng tượng bạn có một cột dữ liệu dạng chữ:
-
-Màu sắc
-Đỏ
-Xanh
-Vàng
-
-Máy học không hiểu chữ, nên phải biến thành số. Có 3 cách phổ biến:
-
-1. One-Hot Encoding
-
-Biến mỗi giá trị thành một cột riêng.
-
-Màu	Đỏ	Xanh	Vàng
-Đỏ	1	0	0
-Xanh	0	1	0
-Vàng	0	0	1
-Dùng khi nào?
-
-Khi các giá trị không có thứ tự.
-
-Ví dụ:
-
-Giới tính
-Thành phố (ít loại)
-Màu sắc
-Hãng xe
-
-Vì:
-
-Đỏ không lớn hơn Xanh
-Toyota không lớn hơn Honda
-Nhược điểm
-
-Nếu có 1000 thành phố:
-
-→ tạo ra 1000 cột.
-
-Đó là cái gọi là "tăng chiều dữ liệu vô tội vạ".
-
-2. Label Encoding
-
-Gán số cho từng giá trị.
-
-Màu
-Đỏ → 0
-Xanh → 1
-Vàng → 2
-Dùng khi nào?
-
-Khi dữ liệu có thứ tự thật sự.
-
-Ví dụ:
-
-Mức độ
-Thấp
-Trung bình
-Cao
-
-Encode:
-
-Thấp = 0
-Trung bình = 1
-Cao = 2
-
-Điều này hợp lý vì:
-
-Cao>Trung b
-ı
-ˋ
-nh>Th
-a
-^
-ˊ
-p
-Không nên dùng cho dữ liệu không có thứ tự
-
-Ví dụ:
-
-Hà Nội = 0
-Đà Nẵng = 1
-TP.HCM = 2
-
-Máy có thể hiểu nhầm:
-
-TP.HCM>Đ
-a
-ˋ
- N
-a
-˘
-~
-ng>H
-a
-ˋ
- Nội
-
-Trong thực tế điều này vô nghĩa.
-
-3. Target Encoding
-
-Thay mỗi giá trị bằng trung bình của biến mục tiêu (target).
-
-Ví dụ dự đoán khách có mua hàng hay không.
-
-Thành phố	Tỷ lệ mua
-Hà Nội	80%
-TP.HCM	60%
-Đà Nẵng	30%
-
-Encode thành:
-
-Thành phố
-Hà Nội → 0.8
-TP.HCM → 0.6
-Đà Nẵng → 0.3
-Dùng khi nào?
-
-Khi có rất nhiều category.
-
-Ví dụ:
-
-10.000 sản phẩm
-5.000 mã bưu điện
-20.000 user ID
-
-Nếu One-Hot:
-
-→ hàng nghìn cột.
-
-Nếu Target Encoding:
-
-→ chỉ 1 cột.
-
-Nhược điểm
-
-Dễ bị data leakage.
-
-Ví dụ bạn dùng toàn bộ dữ liệu để tính tỷ lệ mua rồi train.
-
-Mô hình đã "nhìn trước đáp án".
-
-Vì vậy thường phải:
-
-K-Fold Target Encoding
-Leave-One-Out Encoding
-CatBoost Encoding
-Quy tắc nhớ cực ngắn
+# Encode (Máy học không hiểu chữ, nên phải biến thành số. Có 3 cách phổ biến)
+```bash
 Có thứ tự?
-
-Ví dụ:
-
-Nhỏ / Vừa / Lớn
-Junior / Mid / Senior
-
+    Ví dụ:
+        - Nhỏ / Vừa / Lớn
+        - Junior / Mid / Senior
 👉 Label Encoding
 
 Không có thứ tự và số category ít?
-
-Ví dụ:
-
-Màu sắc
-Giới tính
-Hãng xe
-
+    Ví dụ:
+        - Màu sắc
+        - Giới tính
+        - Hãng xe
 👉 One-Hot Encoding
 
 Không có thứ tự nhưng category rất nhiều?
-
-Ví dụ:
-
-Zip code
-Product ID
-User ID
-Thành phố (hàng nghìn loại)
-
+    Ví dụ:
+        - Zip code
+        - Product ID
+        - User ID
+        - Thành phố (hàng nghìn loại)
 👉 Target Encoding
 
-Mẹo thực tế khi đi làm
+Mẹo thực tế khi đi làm Nếu số category:
+    - < 10 → thường One-Hot
+    - 10–50 → cân nhắc One-Hot
+    - 100 → bắt đầu xem xét Target Encoding
+    - 1000 → gần như không muốn One-Hot nữa
+```
+## One-Hot Encoding
+```bash
+Biến mỗi giá trị thành một cột riêng.
+    Màu	    Đỏ	Xanh	Vàng
+    Đỏ	    1	0	    0
+    Xanh	0	1	    0
+    Vàng	0	0	    1
 
-Nếu số category:
+Dùng khi nào?
+    Khi các giá trị không có thứ tự.
+        Ví dụ:
+            - Giới tính
+            - Thành phố (ít loại)
+            - Màu sắc
+            - Hãng xe
+        Vì:
+            - Đỏ không lớn hơn Xanh
+            - Toyota không lớn hơn Honda
 
-< 10 → thường One-Hot
-10–50 → cân nhắc One-Hot
+Nhược điểm:
+    - Nếu có 1000 thành phố: → tạo ra 1000 cột.
+    - Đó là cái gọi là "tăng chiều dữ liệu vô tội vạ".
+```
+## Label Encoding (Gán số cho từng giá trị)
+```bash
+Dùng khi nào?
+    Khi dữ liệu có thứ tự thật sự. => Không nên dùng cho dữ liệu không có thứ tự
 
-100 → bắt đầu xem xét Target Encoding
+Ví dụ:
+    Mức độ
+        - Thấp
+        - Trung bình
+        - Cao
+    Encode:
+        - Thấp = 0
+        - Trung bình = 1
+        - Cao = 2
 
-1000 → gần như không muốn One-Hot nữa
+Điều này hợp lý vì:
 
-Tóm lại:
+Cao>Trung bình > Thấp
+```
+## Target Encoding (Thay mỗi giá trị bằng trung bình của biến mục tiêu)
+```bash
+Dùng khi nào?
+    Khi có rất nhiều category.
 
-One-Hot cho ít category.
+Ví dụ:
+    - 10.000 sản phẩm
+    - 5.000 mã bưu điện
+    - 20.000 user ID
 
-Label Encoding cho dữ liệu có thứ tự.
+Nếu One-Hot:
+    → hàng nghìn cột.
 
-Target Encoding cho category nhiều và muốn tránh bùng nổ số cột.
-Rất ngắn gọn:
+Nếu Target Encoding:
+    → chỉ 1 cột.
 
+Nhược điểm
+    - Dễ bị data leakage.
+    - Ví dụ bạn dùng toàn bộ dữ liệu để tính tỷ lệ mua rồi train.
+    - Mô hình đã "nhìn trước đáp án".
+
+Vì vậy thường phải:
+    - K-Fold Target Encoding
+    - Leave-One-Out Encoding
+    - CatBoost Encoding
+```
+**Ex: dự đoán khách có mua hàng hay không**
+```bash
+Thành phố	Tỷ lệ mua
+Hà Nội	    80%
+TP.HCM	    60%
+Đà Nẵng	    30%
+
+Encode thành:
+    Thành phố
+        Hà Nội → 0.8
+        TP.HCM → 0.6
+        Đà Nẵng → 0.3
+```
 PCA: Nén dữ liệu bằng cách giữ lại những thông tin quan trọng nhất.
 Dùng khi dữ liệu có nhiều cột (nhiều đặc trưng).
 Giúp giảm chiều, tăng tốc huấn luyện, giảm nhiễu.

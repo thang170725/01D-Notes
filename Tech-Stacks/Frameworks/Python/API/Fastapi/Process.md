@@ -1,10 +1,10 @@
 - [App Configuration](#app-configuration)
-  - [FastAPI()](#fastapi)
+  - [FastAPI() (tạo một ứng dụng web API)](#fastapi-tạo-một-ứng-dụng-web-api)
     - [.include\_router()](#include_router)
       - [APIRouter()](#apirouter)
     - [.add\_middleware()](#add_middleware)
       - [CORSMiddleware](#corsmiddleware)
-    - [.mount()](#mount)
+    - [.mount() (gắn một ứng dụng ASGI khác vào một đường dẫn cụ thể)](#mount-gắn-một-ứng-dụng-asgi-khác-vào-một-đường-dẫn-cụ-thể)
 - [Routing (HTTP Methods)](#routing-http-methods)
 - [.get() \& .post() \& .put()](#get--post--put)
   - [@router.post()](#routerpost)
@@ -34,9 +34,8 @@
     + cấu hình middleware
     + mount app hoặc static files
 ```
-## FastAPI() 
+## FastAPI() (tạo một ứng dụng web API)
 ```bash
-- Dùng để tạo một ứng dụng web API. 
 - Đây là đối tượng trung tâm của toàn bộ ứng dụng – nơi bạn đăng ký route, middleware, dependency, cấu hình OpenAPI, v.v.
 - FastAPI được xây dựng dựa trên:
     + FastAPI
@@ -122,10 +121,7 @@ app.add_middleware(
     + Backend: http://localhost:8000
 - Nếu không bật CORS → trình duyệt sẽ chặn request.
 ```
-### .mount()
-```bash
-gắn (mount) một ứng dụng ASGI khác vào một đường dẫn cụ thể.
-```
+### .mount() (gắn một ứng dụng ASGI khác vào một đường dẫn cụ thể)
 **Syn**
 ```bash
 app.mount(

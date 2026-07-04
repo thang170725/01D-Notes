@@ -1,5 +1,6 @@
-- [Create (Nhóm khởi tạo MediaPipe modules)](#create-nhóm-khởi-tạo-mediapipe-modules)
-  - [mp.solutions.hands.Hands()](#mpsolutionshandshands)
+- [solutions](#solutions)
+  - [.hands](#hands)
+    - [.Hands() (Khởi tạo hand tracking model)](#hands-khởi-tạo-hand-tracking-model)
   - [mp.solutions.pose.Pose()](#mpsolutionsposepose)
   - [mp.solutions.face\_mesh.FaceMesh()](#mpsolutionsface_meshfacemesh)
   - [mp.solutions.face\_detection.FaceDetection()](#mpsolutionsface_detectionfacedetection)
@@ -22,11 +23,9 @@
   - [results.multi\_face\_landmarks](#resultsmulti_face_landmarks)
   - [results.pose\_landmarks](#resultspose_landmarks)
 ---
-# Create (Nhóm khởi tạo MediaPipe modules)
-## mp.solutions.hands.Hands()
-```bash
-Khởi tạo hand tracking model.
-```
+# solutions
+## .hands
+### .Hands() (Khởi tạo hand tracking model)
 **Syn**
 ```bash
 hands = mp.solutions.hands.Hands(
@@ -41,7 +40,7 @@ hands = mp.solutions.hands.Hands(
 - max_num_hands	            : số bàn tay tối đa
 - model_complexity	        : độ chính xác model
 - min_detection_confidence	: ngưỡng detect
-- min_tracking_confidence	: ngưỡng tracking
+- min_tracking_confidence	  : ngưỡng tracking
 ```
 ## mp.solutions.pose.Pose()
 ```bash

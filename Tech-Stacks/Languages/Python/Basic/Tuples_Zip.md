@@ -1,10 +1,9 @@
-- [Tuple (Bộ giá trị)](#tuple-bộ-giá-trị)
+- [Tuple (Bộ giá trị dùng để lưu trữ nhiều giá trị theo thứ tự không thay đổi sau khi tạo)](#tuple-bộ-giá-trị-dùng-để-lưu-trữ-nhiều-giá-trị-theo-thứ-tự-không-thay-đổi-sau-khi-tạo)
+  - [.append()](#append)
 - [zip()](#zip)
 ---
-# Tuple (Bộ giá trị)
+# Tuple (Bộ giá trị dùng để lưu trữ nhiều giá trị theo thứ tự không thay đổi sau khi tạo)
 ```bash
-Dùng để lưu trữ nhiều giá trị theo thứ tự không thay đổi sau khi tạo.
-
 Thường dùng cho dữ liệu cố định như tọa độ, ngày tháng, hoặc để trả về nhiều giá trị từ hàm.
 ```
 **Syn**
@@ -20,7 +19,8 @@ print(type(days))
 
 # ('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday')
 # <class 'tuple'>
-```# .append()
+```
+## .append()
 ```bash
 Để thêm một phần tử nào đó vào tuple. Cần phải chuyển sang kiểu dữ liệu list rồi mới thêm.
 ```

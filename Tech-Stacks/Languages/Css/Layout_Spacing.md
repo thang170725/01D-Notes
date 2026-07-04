@@ -1,5 +1,6 @@
 - [Units](#units)
 - [Box](#box)
+  - [box-sizing (thiết lập phạm vi từ đâu đổ vào)](#box-sizing-thiết-lập-phạm-vi-từ-đâu-đổ-vào)
   - [Height/Width \& max-height \& max-width](#heightwidth--max-height--max-width)
   - [background](#background)
     - [background-attachment](#background-attachment)
@@ -100,6 +101,13 @@ div{
 }
 ```
 # Box
+## box-sizing (thiết lập phạm vi từ đâu đổ vào)
+```bash
+- content-box
+- border-box
+- initial
+- inherit
+```
 ## Height/Width & max-height & max-width
 ```bash
 Thiết lập chiều dài, chiều rộng cho khối bao ngoài.

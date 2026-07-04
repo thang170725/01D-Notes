@@ -2,9 +2,10 @@
   - [Create \& Config (tạo \& cấu hình)](#create--config-tạo--cấu-hình)
     - [docker compose up (chạy file yaml)](#docker-compose-up-chạy-file-yaml)
       - [--build](#--build)
-      - [-d](#-d)
+      - [-d (detached mode, chạy nền không chiếm terminal)](#-d-detached-mode-chạy-nền-không-chiếm-terminal)
   - [Remove (xóa \& dừng)](#remove-xóa--dừng)
     - [docker compose down (dừng và xóa toàn bộ tài nguyên mà Docker Compose đã tạo cho project hiện tại)](#docker-compose-down-dừng-và-xóa-toàn-bộ-tài-nguyên-mà-docker-compose-đã-tạo-cho-project-hiện-tại)
+      - [--rmi](#--rmi)
 - [docker build (Dùng để tạo Docker image từ Dockerfile)](#docker-build-dùng-để-tạo-docker-image-từ-dockerfile)
   - [--no-cache](#--no-cache)
   - [docker run (Tạo và chạy một container mới)](#docker-run-tạo-và-chạy-một-container-mới)
@@ -12,8 +13,6 @@
 - [docker start (Mở lại một container khi đã stop)](#docker-start-mở-lại-một-container-khi-đã-stop)
 - [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
   - [docker ps](#docker-ps)
-  - [docker system df](#docker-system-df)
-  - [docker system df -v](#docker-system-df--v)
   - [docker images \& docker image ls (Xem tất cả image)](#docker-images--docker-image-ls-xem-tất-cả-image)
     - [-a (Xem tất cả image trên máy)](#-a-xem-tất-cả-image-trên-máy)
 - [Remove \& Stop (xóa \& dừng)](#remove--stop-xóa--dừng)
@@ -22,7 +21,11 @@
   - [docker volume rm](#docker-volume-rm)
   - [docker volume ls](#docker-volume-ls)
   - [docker volume inspect smart-recipe\_db\_data](#docker-volume-inspect-smart-recipe_db_data)
-  - [docker system prune (Don rác - Xóa các tài nguyên không dùng)](#docker-system-prune-don-rác---xóa-các-tài-nguyên-không-dùng)
+- [Resource (Quản lý tài nguyên)](#resource-quản-lý-tài-nguyên)
+  - [docker system df (Xem docker chiếm bao nhiêu dung lượng)](#docker-system-df-xem-docker-chiếm-bao-nhiêu-dung-lượng)
+    - [docker system df -v](#docker-system-df--v)
+  - [docker system prune (Xóa các tài nguyên không dùng)](#docker-system-prune-xóa-các-tài-nguyên-không-dùng)
+    - [-a | --all (xóa sạch sành sanh tài nguyên Docker tạp ra)](#-a----all-xóa-sạch-sành-sanh-tài-nguyên-docker-tạp-ra)
 ---
 # docker compose
 ## Create & Config (tạo & cấu hình)
@@ -41,7 +44,7 @@ docker compose up dùng để:
 docker compose up [OPTIONS] [SERVICE...]
 
 - OPTIONS:  
-    + -d = detached mode # Chạy nền, không chiếm terminal.
+    
     + --build # build lại image trước khi chạy. Dùng khi bạn vừa sửa Dockerfile hoặc code.
 - SERVICE:
     + docker compose up backend # Chỉ khởi động service tên backend.
@@ -65,7 +68,7 @@ Bước 2:
     ↓
     Container
 ```
-#### -d
+#### -d (detached mode, chạy nền không chiếm terminal)
 **Ex: file docker-compose.yml**
 ```bash
 version: "3.9"
@@ -164,6 +167,15 @@ docker compose down
     - Muốn chạy lại phải:
         + docker compose up
         + Docker sẽ tạo container mới.
+```
+#### --rmi
+```bash
+Nếu bạn chỉ muốn dọn dẹp duy nhất 1 dự án mà không làm ảnh hưởng đến dự án còn lại, hãy dùng lệnh sau ngay tại thư mục của dự án đó:
+```
+```bash
+docker compose down --rmi all
+
+# Lệnh này sẽ dừng container, xóa mạng, và chỉ xóa các Image được định nghĩa trong file compose.yaml của chính dự án đó. Dự án còn lại của bạn sẽ hoàn toàn bình an vô sự!
 ```
 # docker build (Dùng để tạo Docker image từ Dockerfile)
 ```bash
@@ -294,7 +306,24 @@ docker exec -it smart-recipe-ai-1 bash
 # docker start (Mở lại một container khi đã stop)
 **Syn**
 ```bash
-docker start my_container
+docker start id | nanme
+```
+**Ex**
+```bash
+CONTAINER ID   IMAGE          NAMES
+a1b2c3d4e5f6   postgres:16     postgres_db
+f6e5d4c3b2a1   redis:7         redis_cache
+
+Dùng ID:
+    - docker start a1b2c3d4e5f6
+    - docker start f6e5d4c3b2a1
+
+Hoặc dùng tên (thường dễ nhớ hơn):
+    - docker start postgres_db
+    - docker start redis_cache
+
+Hoặc khởi động nhiều container cùng lúc:
+    docker start postgres_db redis_cache
 ```
 # Display (cung cấp thông tin)
 ## docker ps
@@ -325,21 +354,6 @@ docker ps [OPTIONS]
     + Port
     + Name
 ```
-## docker system df
-```bash
-Xem docker chiếm bao nhiêu dung lượng
-```
-**Ex**
-```bash
-(sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe$ docker system df
-
-# TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
-# Images          22        4         56.19GB   47.11GB (83%)
-# Containers      4         0         3.732GB   3.732GB (100%)
-# Local Volumes   2         2         395.2MB   0B (0%)
-# Build Cache     81        0         33.38GB   1.051GB
-```
-## docker system df -v
 ## docker images & docker image ls (Xem tất cả image)
 ```bash
 Docker Compose tự đặt tên image cho bạn nếu bạn không chỉ định. Compose sẽ tự sinh image name theo quy tắc:
@@ -399,8 +413,28 @@ docker rm my_container
 ## docker volume rm
 ## docker volume ls
 ## docker volume inspect smart-recipe_db_data
-## docker system prune (Don rác - Xóa các tài nguyên không dùng)
+# Resource (Quản lý tài nguyên)
+## docker system df (Xem docker chiếm bao nhiêu dung lượng)
 **Ex**
 ```bash
+(sr) thang@PhatToNhuLai:~/workspace/Smart-Recipe$ docker system df
+
+# TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+# Images          22        4         56.19GB   47.11GB (83%)
+# Containers      4         0         3.732GB   3.732GB (100%)
+# Local Volumes   2         2         395.2MB   0B (0%)
+# Build Cache     81        0         33.38GB   1.051GB
+```
+### docker system df -v
+## docker system prune (Xóa các tài nguyên không dùng)
+### -a | --all (xóa sạch sành sanh tài nguyên Docker tạp ra)
+**Syn**
+```bash
 docker system prune -a
+
+Docker sẽ tiến hành một cuộc "tổng vệ sinh" và xóa bỏ toàn bộ:
+    - All stopped containers: Tất cả các container đã bị dừng (stop). Do bạn đã stop cả 2 dự án, toàn bộ container của chúng sẽ bị xóa bỏ.
+    - All networks not used...: Tất cả các mạng nội bộ do Docker Compose tạo ra mà không có container nào đang dùng.
+    - All build cache: Bộ nhớ đệm lúc bạn chạy lệnh RUN trước đó để build image (lần sau build lại sẽ chậm hơn).
+    - All images without at least one container associated with them: Đây chính là lý do vì sao 2 dự án của bạn bị bay màu Image. Khi bạn đã stop và xóa sạch container ở trên, các Docker Image của 2 dự án lúc này trở thành "vô gia cư" (không có container nào đang chạy dựa trên chúng). Docker sẽ coi chúng là đồ dư thừa và xóa sạch.
 ```

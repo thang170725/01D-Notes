@@ -11,7 +11,7 @@
     - [Index](#index)
     - [ForeignKey](#foreignkey)
     - [ForeignKeyConstraint](#foreignkeyconstraint)
-    - [relationship](#relationship)
+    - [relationship (giúp bạn lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)](#relationship-giúp-bạn-lấy-dữ-liệu-liên-quan-giữa-các-bảng-bằng-object-không-cần-viết-join)
   - [Data Types](#data-types)
     - [Integer](#integer)
     - [String \& DateTime](#string--datetime)
@@ -29,7 +29,7 @@
 - [Insert (thêm mới vào db)](#insert-thêm-mới-vào-db)
   - [.add() (đưa object vào session chưa ghi xuống db)](#add-đưa-object-vào-session-chưa-ghi-xuống-db)
 - [Update (Nhóm cập nhật)](#update-nhóm-cập-nhật)
-  - [.flush() (Dùng để đẩy (sync) các thay đổi từ bộ nhớ (session) xuống database nhưng chưa commit transaction)](#flush-dùng-để-đẩy-sync-các-thay-đổi-từ-bộ-nhớ-session-xuống-database-nhưng-chưa-commit-transaction)
+  - [.flush() (Dùng để đẩy các thay đổi từ bộ nhớ session xuống database nhưng chưa commit transaction)](#flush-dùng-để-đẩy-các-thay-đổi-từ-bộ-nhớ-session-xuống-database-nhưng-chưa-commit-transaction)
 - [Delete (Nhóm xóa)](#delete-nhóm-xóa)
   - [Session.delete()](#sessiondelete)
 ---
@@ -247,10 +247,7 @@ __table_args__ = (
     ),
 )
 ```
-### relationship
-```bash
-relationship giúp bạn lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN
-```
+### relationship (giúp bạn lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)
 **Syn**
 ```bash
 relationship("TenModel", back_populates="ten_field")
@@ -442,10 +439,11 @@ session.add_all(users)
 session.commit()
 ```
 # Update (Nhóm cập nhật)
-## .flush() (Dùng để đẩy (sync) các thay đổi từ bộ nhớ (session) xuống database nhưng chưa commit transaction)
+## .flush() (Dùng để đẩy các thay đổi từ bộ nhớ session xuống database nhưng chưa commit transaction)
 ```bash
 flush chỉ dùng cho ORM, không dùng cho Core.
-- Hiểu đơn giản:
+
+Hiểu đơn giản:
     + Bạn thêm/sửa/xóa object trong Session
     + → flush() sẽ generate và execute SQL (INSERT/UPDATE/DELETE)
     + → nhưng chưa COMMIT, nên vẫn có thể rollback

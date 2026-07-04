@@ -1,12 +1,19 @@
 - [NVIDIA Container Toolkit (Docker)](#nvidia-container-toolkit-docker)
   - [Installation (cài đặt)](#installation-cài-đặt)
 - [docker-compose.yml \& compose.yaml (cấu hình file .yml)](#docker-composeyml--composeyaml-cấu-hình-file-yml)
+  - [version (định nghĩa phiên bản cấu trúc (schema version) của file Docker Compose)](#version-định-nghĩa-phiên-bản-cấu-trúc-schema-version-của-file-docker-compose)
+  - [build (cấu hình đường dẫn đến thư mục chứa Dockerfile)](#build-cấu-hình-đường-dẫn-đến-thư-mục-chứa-dockerfile)
   - [image](#image)
   - [restart (tự động chạy khi mở máy)](#restart-tự-động-chạy-khi-mở-máy)
   - [depends\_on (phụ thuộc vào một container khác)](#depends_on-phụ-thuộc-vào-một-container-khác)
   - [container\_name (đặt tên cho container)](#container_name-đặt-tên-cho-container)
     - [Volume (Cho container nhìn thấy thư mục trên máy)](#volume-cho-container-nhìn-thấy-thư-mục-trên-máy)
-- [Dockerfile (cấu hình Dockerfile)](#dockerfile-cấu-hình-dockerfile)
+- [Dockerfile (file văn bản chứa các chỉ thị để Docker tự động tạo ra một Docker image)](#dockerfile-file-văn-bản-chứa-các-chỉ-thị-để-docker-tự-động-tạo-ra-một-docker-image)
+  - [from (dùng để chỉ định "Hệ điều hành nền" hoặc "Môi trường nền")](#from-dùng-để-chỉ-định-hệ-điều-hành-nền-hoặc-môi-trường-nền)
+  - [run (thực thi các câu lệnh terminal trong quá trình xây dựng Image)](#run-thực-thi-các-câu-lệnh-terminal-trong-quá-trình-xây-dựng-image)
+  - [copy (chép các file và thư mục từ máy tính của bạn vào bên trong Docker Image lúc đang build)](#copy-chép-các-file-và-thư-mục-từ-máy-tính-của-bạn-vào-bên-trong-docker-image-lúc-đang-build)
+  - [EXPOSE](#expose)
+  - [CMD](#cmd)
 - [systemctl is-enabled docker (kiểm tra tại sao bật máy Docker tự chạy?)](#systemctl-is-enabled-docker-kiểm-tra-tại-sao-bật-máy-docker-tự-chạy)
 - [.dockerignore](#dockerignore)
 ---
@@ -62,7 +69,6 @@ Sun Mar 22 10:45:29 2026
 |=========================================================================================|
 +-----------------------------------------------------------------------------------------+
 thang@PhatToNhuLai:~$ 
-
 ```
 # docker-compose.yml & compose.yaml (cấu hình file .yml)
 ```bash
@@ -87,6 +93,39 @@ Trong đồ án AI/FastAPI/React, file này thường dùng để chạy đồng
   Nginx (nếu có)
 chỉ với một lệnh:
   docker compose up
+```
+## version (định nghĩa phiên bản cấu trúc (schema version) của file Docker Compose)
+**Điền version bao nhiêu là tốt và ổn định nhất?**
+```bash
+Hiện tại, tốt nhất là KHÔNG CẦN ĐIỀN thuộc tính version nữa.
+  Từ năm 2020, Docker đã hợp nhất các nhánh phát triển và ra mắt Compose Specification (Tiêu chuẩn Compose chung).
+
+  Khi bạn dùng công cụ Docker Compose hiện đại (lệnh docker compose thay vì docker-compose cũ có dấu gạch ngang), Docker sẽ tự động mặc định hiểu file của bạn đang dựa trên tiêu chuẩn mới nhất và đầy đủ tính năng nhất.
+
+  Docker chính thức tuyên bố thuộc tính version giờ là không bắt buộc (deprecated/optional).
+
+Nếu vẫn muốn điền (hoặc bắt buộc phải điền do công cụ cũ)?
+  Nếu bạn đang dùng một hệ thống CI/CD cũ hoặc một công cụ bên thứ ba yêu cầu phải có dòng version, hãy điền:
+    YAML
+    version: "3.8"
+  
+  Lý do: 3.8 là phiên bản cuối cùng và ổn định nhất của nhánh v3 trước khi Docker chuyển sang chuẩn Compose Specification. Nó hỗ trợ đầy đủ các tính năng hiện đại (secret, config, deploy, định dạng resource giới hạn CPU/RAM) và tương thích ngược cực tốt.
+
+=> Tóm lại, bạn nên viết như thế nào?
+Cách chuẩn chỉnh và hiện đại nhất hiện nay:
+  Bỏ hẳn dòng version đi và khai báo thẳng các dịch vụ.
+```
+## build (cấu hình đường dẫn đến thư mục chứa Dockerfile)
+```bash
+nhằm tự động xây dựng (build) một Docker Image tùy chỉnh cho dịch vụ đó, thay vì tải về một Image có sẵn từ trên mạng (như Docker Hub).
+```
+**Syn**
+```bash
+build: ./backend
+
+# Docker Compose sẽ tìm đến thư mục có tên là backend (nằm cùng cấp với file compose.yaml này).
+# Trong thư mục ./backend đó, bắt buộc phải có một file tên là Dockerfile. 
+#   Docker Compose sẽ đọc các câu lệnh trong Dockerfile này để tự đóng gói mã nguồn Python/C++ (ở đây dựa vào tên container của bạn là p_lightgbm_backend_container thì có vẻ là một dự án Machine Learning với LightGBM) thành một Image riêng cho bạn.
 ```
 ## image
 **Ex**
@@ -357,10 +396,8 @@ services:
 volumes:
   db_data:
 ```
-# Dockerfile (cấu hình Dockerfile)
+# Dockerfile (file văn bản chứa các chỉ thị để Docker tự động tạo ra một Docker image)
 ```bash
-Dockerfile là một file văn bản chứa các chỉ thị (instructions) để Docker tự động tạo ra một Docker image.
-
 Dockerfile dùng để :
   - Tự động tạo môi trường chạy ứng dụng
   - Đóng gói ứng dụng thành image
@@ -381,10 +418,6 @@ EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 - FROM      : chọn image nền
-    + slim: là phiên bản rút gọn của image Python chính thức trên Docker.
-        - python:3.11           : ~900MB+. Full tool, build tools, nhiều package   
-        - python:3.11-slim      : ~120–200MB. Chỉ những thứ cần thiết để chạy Python
-        - python:3.11-alpine    : ~50MB. Nhẹ nhất nhưng dễ lỗi build
 - WORKDIR   : thư mục làm việc
   không phải thư mục trên máy. Là thư mục bên trong container
   
@@ -404,6 +437,95 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
     + Không mở port ra ngoài máy bạn
     + muốn truy cập được phải chạy docker run -p 8000:8000 image_name
 - CMD       : lệnh chạy khi container start
+```
+## from (dùng để chỉ định "Hệ điều hành nền" hoặc "Môi trường nền")
+**Syn**
+```bash
+FROM <tên_image>:<tag>
+
+- <tên_image>: Tên của môi trường bạn muốn lấy về (ví dụ: ubuntu, python, node, golang).
+- <tag>: Phiên bản cụ thể của môi trường đó (ví dụ: 20.04, 3.10-slim, 18-alpine). Nếu bạn không điền <tag>, Docker sẽ tự động lấy bản mới nhất (latest), nhưng điều này thường không được khuyến khích vì thiếu ổn định.
+  + slim: là phiên bản rút gọn của image Python chính thức trên Docker.
+    - python:3.11           : ~900MB+. Full tool, build tools, nhiều package   
+    - python:3.11-slim      : ~120–200MB. Chỉ những thứ cần thiết để chạy Python
+    - python:3.11-alpine    : ~50MB. Nhẹ nhất nhưng dễ lỗi build
+```
+## run (thực thi các câu lệnh terminal trong quá trình xây dựng Image)
+**RUN hoạt động như thế nào?**
+```bash
+Mỗi khi bạn gọi một lệnh RUN, Docker sẽ:
+  1. Chạy lệnh đó ngay trong môi trường container tạm thời lúc build.
+  2. Lưu lại các thay đổi (phần mềm được cài thêm, file được tạo ra...) thành một Layer (tầng dữ liệu) mới trong Image.
+  3. Cache (ghi nhớ) layer đó lại. Lần sau nếu bạn build lại mà không sửa dòng RUN này, Docker sẽ lấy luôn kết quả cũ ra dùng chứ không tốn thời gian chạy lại nữa.
+```
+**Ex1: Cài đặt thư viện Python cho Backend (LightGBM, FastAPI)**
+```Dockerfile
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Dùng RUN để cập nhật hệ thống và cài pip dependencies
+RUN pip install --no-cache-dir lightgbm fastapi uvicorn
+```
+**Ex2: Cài đặt thư viện Node.js cho Frontend**
+```Dockerfile
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package.json .
+
+# Dùng RUN để cài các package trong file package.json
+RUN npm install
+```
+**Ex3: Cài đặt các gói phần mềm của hệ điều hành (Ubuntu/Debian)**
+```Dockerfile
+FROM ubuntu:22.04
+
+# Dùng RUN để cập nhật apt và cài công cụ curl, git
+RUN apt-get update && apt-get install -y \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+```
+## copy (chép các file và thư mục từ máy tính của bạn vào bên trong Docker Image lúc đang build)
+```bash
+Vì khi build, Docker Image là một môi trường hoàn toàn trống rỗng, bạn phải mang code của mình vào đó thì nó mới chạy được
+```
+## EXPOSE
+```bash
+Nhiều người nghĩ rằng viết EXPOSE 8000 là để mở cổng 8000 cho máy ngoài truy cập vào. Nhưng thực tế không phải vậy.
+  EXPOSE thực chất chỉ mang tính chất khai báo và làm tài liệu (Documentation).
+
+  Nó nói với người đọc file Dockerfile (và nói với chính Docker) rằng: "Cái ứng dụng chạy bên trong Container này sẽ lắng nghe ở cổng 8000 đấy nhé".
+
+  Nó không tự động mở cổng đó ra ngoài máy thật (Host máy bạn). Để máy ngoài vào được, bạn vẫn bắt buộc phải mapping cổng bằng thuộc tính ports trong file compose.yaml (giống như bạn đã làm: "8000:8000").
+💡 Tóm lại: EXPOSE giống như một cái biển báo chỉ dẫn, giúp các Container trong cùng một mạng nội bộ (Docker Network) dễ tìm thấy nhau hơn, và giúp người khác đọc Dockerfile hiểu được ứng dụng chạy cổng nào mà map cho đúng.
+```
+## CMD
+**Tại sao CMD lại viết theo dạng List ["uvicorn", ...] mà không viết liền luôn?**
+```bash
+Trong Docker, bạn có 2 cách (2 định dạng) để viết lệnh CMD:
+  Cách 1: Dạng List ["uvicorn", "app:app"] (Gọi là Exec Form - Khuyên dùng)
+    Khi bạn viết dạng list này, Docker sẽ chạy lệnh của bạn trực tiếp dưới dạng một tiến trình độc lập (nó sẽ có mã tiến trình là PID 1).
+
+  Cách 2: Dạng viết liền CMD uvicorn application:app --host 0.0.0.0 (Gọi là Shell Form)
+  Nếu bạn viết thế này, Docker sẽ tự động chèn thêm một lớp vỏ hệ điều hành (Shell) vào trước lệnh của bạn. Thực tế máy sẽ chạy lệnh:
+    /bin/sh -c "uvicorn application:app --host 0.0.0.0"
+
+Tại sao dạng List (Exec Form) lại tốt hơn và được chọn làm tiêu chuẩn?
+  Lý do 1: Để Docker có thể TẮT ứng dụng một cách an toàn (Graceful Shutdown)
+    Khi bạn gõ lệnh docker stop hoặc docker compose down, Docker sẽ gửi một tín hiệu có tên là SIGTERM đến tiến trình có PID 1 bên trong container để bảo nó: "Này, chuẩn bị đóng ứng dụng gọn gàng rồi nghỉ nhé".
+
+    Nếu dùng dạng List: Ứng dụng uvicorn của bạn nắm PID 1. Nó nhận được tín hiệu, nó sẽ kịp thời lưu dữ liệu, đóng các kết nối tới Database rồi mới tắt (Tắt an toàn).
+
+    Nếu dùng dạng viết liền: Thằng nhận PID 1 lại là /bin/sh. Thằng Shell này cực kỳ "vô tâm", khi nhận tín hiệu tắt, nó không thèm chuyển tiếp tín hiệu đó tới uvicorn. Kết quả là uvicorn bị Docker "rút ổ cắm" đột ngột (Kill) sau 10 giây chờ đợi. Điều này dễ gây lỗi hoặc mất mát dữ liệu đang xử lý dở.
+
+Lý do 2: Tránh tốn tài nguyên vô ích
+  Dạng viết liền bắt buộc Docker phải bật thêm một tiến trình /bin/sh chỉ để làm nhiệm vụ "gọi" thằng uvicorn. Dạng List sẽ gọi thẳng uvicorn, bớt đi được một tiến trình chạy ngầm không cần thiết.
+
+Lý do 3: Tách biệt rõ ràng các tham số
+  Việc viết dạng List giúp loại bỏ các vấn đề nhập nhằng về khoảng trắng hoặc các ký tự đặc biệt khi bạn truyền các tham số phức tạp vào câu lệnh.
 ```
 # systemctl is-enabled docker (kiểm tra tại sao bật máy Docker tự chạy?)
 ```bash

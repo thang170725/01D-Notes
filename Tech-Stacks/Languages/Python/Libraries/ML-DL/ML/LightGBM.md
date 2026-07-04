@@ -1,12 +1,9 @@
-- [.LGBMRegressor()](#lgbmregressor)
+- [.LGBMRegressor() (Dùng cho regression)](#lgbmregressor-dùng-cho-regression)
+- [LGBMClassifier()](#lgbmclassifier)
   - [.fit()](#fit)
   - [.predict()](#predict)
-- [LGBMClassifier()](#lgbmclassifier)
 ---
-# .LGBMRegressor()
-```bash
-Dùng cho regression
-```
+# .LGBMRegressor() (Dùng cho regression)
 **Syn**
 ```bash
 model = lgb.LGBMRegressor(
@@ -15,7 +12,10 @@ model = lgb.LGBMRegressor(
     learning_rate=0.1,
     max_depth=-1,
     num_leaves=31,
-    subsample=
+    subsample=0.8,
+    colsample_bytree=0.8,
+    random_state=42,
+    verbosity=-1
 )
 
 - Input:
@@ -63,6 +63,24 @@ model = lgb.LGBMRegressor(
         - Thực tế:
             + Local machine → -1
             + Server shared → set cụ thể (vd: 4, 8)
+    + verbosity: điều khiển mức độ log (thông báo) được in ra trong quá trình train. Nó không ảnh hưởng đến chất lượng mô hình chỉ ảnh hưởng đến lượng thông tin hiển thị trên terminal.
+        - -1    : Không in bất kỳ warning/info nào (silent mode). Đây là giá trị được dùng nhiều nhất.
+        - 0	    : Chỉ in các lỗi (Error).
+        - 1	    : In warning.
+        - >1	: In thêm nhiều thông tin debug và quá trình train.
+```
+# LGBMClassifier()
+```bash
+- Dùng cho bài toán classifier
+- Có các hàm tương tự như LGBMRegressor:
+    + [fit](#fit)
+    + [predict](#predict)
+```
+```bash
+clf=lgb.LGBMClassifier(
+    n_estimators=200,
+    num_leaves=31
+)
 ```
 ## .fit()
 ```bash
@@ -77,17 +95,4 @@ model.fit(X_train,y_train)
 pred=model.predict(X_test)
 
 - Output: numpy array predictions
-```
-# LGBMClassifier()
-```bash
-- Dùng cho bài toán classifier
-- Có các hàm tương tự như LGBMRegressor:
-    + [fit](#fit)
-    + [predict](#predict)
-```
-```bash
-clf=lgb.LGBMClassifier(
-    n_estimators=200,
-    num_leaves=31
-)
 ```

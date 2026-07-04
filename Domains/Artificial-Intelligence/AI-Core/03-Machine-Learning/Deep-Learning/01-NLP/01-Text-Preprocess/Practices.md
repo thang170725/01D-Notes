@@ -5,317 +5,96 @@
   - [Tạo danh sách tất cả các cặp ký tự liền nhau](#tạo-danh-sách-tất-cả-các-cặp-ký-tự-liền-nhau)
   - [Tìm bigram xuất hiện nhiều nhất](#tìm-bigram-xuất-hiện-nhiều-nhất)
   - [Replace một bigram trong danh sách token](#replace-một-bigram-trong-danh-sách-token)
-  - [Demo BPE](#demo-bpe)
+  - [Demo full pipeline BPE](#demo-full-pipeline-bpe)
 ---
-# BPE (Byte-Pair Encoding)
-```bash
-BPE thực chất là tổng hợp của các bài toán nhỏ hơn. Thông qua các bài tập nhỏ này có thể ghép lại và code được BPE
-```
-## Tách chuỗi "hello" thành ["h", "e", "l", "l", "o"]
+# Demo pipeline thuật toán BPE code thuần
 ```python
-def split(text: str):
-    return [t for t in text]
-```
-## Nối các phần tử của mảng ["he", "l", "lo"] thành "he l lo"
-```python
-def split(li: list):
-    return ' '.join(li)
-
-print(split(["he", "l", "lo"])) # he l lo
-```
-## Tách chữ thành ký tự và đếm tần suất mỗi ký tự
-```python
-def counts(lines: list):
-    # 1. Tách ký tự và gộp thành 1 list
-    chars = []
-    for line in lines:
-        for ch in line:
-            if ch != " ":       # bỏ khoảng trắng
-                chars.append(ch)
-    
-    # 2. Đếm tần suất
-    freq = {}
-    for ch in chars:
-        freq[ch] = freq.get(ch, 0) + 1
-
-    return freq
-
-print(counts(["hello world", "hello"]))
-```
-## Tạo danh sách tất cả các cặp ký tự liền nhau
-```python
-def bigrams_from_string(s: str):
-    return [(s[i], s[i+1]) for i in range(len(s)-1)]
-
-print(bigrams_from_string("hello")) # [('h','e'), ('e','l'), ('l','l'), ('l','o')]
-```
-## Tìm bigram xuất hiện nhiều nhất
-```python
-def most_bigram_frequency(big: list):
-    # big: list of tuple
-    freq = {}
-    for b in big:
-        freq[b] = freq.get(b, 0) + 1
-
-    best_count = -1
-    best_bigram = None
-    for k, v in freq.items():
-        if v > best_count:
-            best_count = v
-            best_bigram = k
-
-    return freq, (best_bigram, best_count)
-
-input_data = [("h","e"), ("e","l"), ("l","l"), ("l","o")]
-print(most_bigram_frequency(input_data))
-# Expected: ({('h','e'):1, ('e','l'):1, ('l','l'):1, ('l','o'):1}, (('h','e'),1))
-# Note: all have count 1 so first-seen is returned as "best"
 from collections import Counter
-
-def most_bigram_frequency(big: list):
-    cnt = Counter(big)
-    if not cnt:
-        return {}, (None, 0)
-    most_common_bigram, freq = cnt.most_common(1)[0]
-    return dict(cnt), (most_common_bigram, freq)
-
-input_data = [("h","e"), ("e","l"), ("l","l"), ("l","o")]
-print(most_bigram_frequency(input_data))
-from collections import Counter
-
-def most_bigram_frequency(big: list):
-    cnt = Counter(big)
-    if not cnt:
-        return {}, (None, 0)
-    most_common_bigram, freq = cnt.most_common(1)[0]
-    return dict(cnt), (most_common_bigram, freq)
-
-input_data = [("h","e"), ("e","l"), ("l","l"), ("l","o")]
-print(most_bigram_frequency(input_data))
-```
-## Replace một bigram trong danh sách token
-```python
-def replace_pair(tokens_list, pair, new_token):
-    out = []
-    for tokens in tokens_list:
-        merged = []
-        i = 0
-        while i < len(tokens):
-            if i < len(tokens)-1 and (tokens[i], tokens[i+1]) == pair:
-                merged.append(new_token)
-                i += 2
-            else:
-                merged.append(tokens[i])
-                i += 1
-        out.append(merged)
-    return out
-from collections import Counter
-from typing import List, Tuple, Dict
-```
-## Demo BPE
-```python
-class BPESimple:
-    def __init__(self, series: List[str], end_marker='</w>'):
-        self.raw_series = series[:]                   # danh sách từ bản gốc
-        self.end_marker = end_marker
-
-        self.words_list = self._extract_words(series) # danh sách cách word từ corpus
-        
-        self.tokenized_words = [self._extract_words(w) for w in self.words_list]
-
-        # biến lưu lịch sử merge
-        self.merges: List[Tuple[Tuple[str, str], str]] = []
-
-        # cập nhật khi train
-        self.vocab = set(tok for tw in self.tokenized_words for tok in tw)
-    
-    # ---------------------------
-    # 1) Tiền xử lý / helper
-    # ---------------------------
-    def _extract_words(self, series: List[str]) -> List[str]:
-        '''
-        tách word bằng whitespace -> trả về list các word
-        '''
-        words = []
-        for s in series:
-            for w in s.split():
-                words.append(w)
-        return words
-
-    
-    def _word_to_tokens(self, word: str) -> List[str]:
-        '''
-        biểu diễn 1 word dưới dạng list ký tự + end_marker
-        ví dụ: "hello" -> ['h', 'e', 'l', 'l', 'o', '</w>']
-        '''
-        return [ch for ch in word] + [self.end_marker]
-
-
-    # ---------------------------------
-    # 2) Tạo bigrams & đếm tần suất
-    # ---------------------------------
-    def _bigrams_from_token_list(self, tokens: List[str]) -> List[Tuple[str, str]]:
-        '''
-        Từ 1 token list trả về danh sách bigram (liền kề, overlapping)
-        ví dụ: ['h', 'e', 'l', 'l', 'o', '</w>'] 
-        -> [('h','e'), ('e','l'), ('l','l'), ('l','o'), ('o','</w>')]
-        '''
-        return [(tokens[i], tokens[i+1]) for i in range(len(tokens)-1)]
-    
-    def get_all_bigrams_counts(self) -> Counter:
-        '''
-        Tính tần suất của tất cả bigram trên toàn bộ tokenized_words.
-        Trả về Counter mapping (bigram_tuple -> count).
-        '''
-        cnt = Counter()
-        for tokens in self.tokenized_words:
-            for bg in self._bigrams_from_token_list(tokens):
-                cnt[bg] += 1
-        return cnt
-    
-    # ---------------------------------
-    # 3) Tìm bigram phổ biến nhất
-    # ---------------------------------
-    def most_frequent_bigram(self):
-        """
-        Trả về (best_bigram_tuple, frequency).
-        Nếu không có bigram (corpus rỗng) trả về (None, 0)
-        """
-        cnt = self.get_all_bigrams_counts()
-        if not cnt:
-            return None, 0
-        bigram, freq = cnt.most_common(1)[0]
-        return bigram, freq
-
-    # ---------------------------
-    # 4) Replace/merge pair trong toàn bộ tokenized_words (1 step)
-    # ---------------------------
-    def replace_pair(self, pair: Tuple[str,str], new_token: str):
-        """
-        Thay thế tất cả occurrences của pair (a,b) bằng new_token trên toàn corpus (self.tokenized_words).
-        Thao tác in-place (cập nhật self.tokenized_words).
-        Logic:
-            - duyệt từng word (tokens list)
-            - duyệt token theo index i; nếu tokens[i], tokens[i+1] == pair -> append new_token và i += 2
-              else: append tokens[i] và i += 1
-        """
-        new_tokenized = []
-        for tokens in self.tokenized_words:
-            merged = []
-            i = 0
-            while i < len(tokens):
-                if i < len(tokens) - 1 and (tokens[i], tokens[i+1]) == pair:
-                    # merge pair -> new token
-                    merged.append(new_token)
-                    i += 2  # skip next because đã merge
-                else:
-                    merged.append(tokens[i])
-                    i += 1
-            new_tokenized.append(merged)
-
-        # cập nhật tokenized words và vocab
-        self.tokenized_words = new_tokenized
-        # cập nhật vocab: thêm new_token
-        self.vocab.add(new_token)
-```
-```python 
-from collections import Counter
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Set
 
 class BPESimple:
     """
-    Một implementation BPE rất đơn giản, phù hợp để học/giải thích.
-    - Huấn luyện (train) bằng num_merges bước merge.
-    - Tokenization nội bộ: xử lý theo từng 'word' (mỗi 'word' là một unit, ví dụ tiếng/cụm không chứa space).
-    - Dùng end-of-word marker '</w>' để BPE không merge qua ranh giới từ.
+    A very simple Byte Pair Encoding (BPE) implementation for educational purposes.
+    - Trains using a specified number of merge steps.
+    - Internal tokenization operates at the word level (whitespace-separated units).
+    - Uses an end-of-word marker '</w>' to prevent merging across word boundaries.
     """
 
     def __init__(self, series: List[str], end_marker: str = '</w>'):
-        """
-        series: list các câu hoặc 'words' bạn muốn train trên đó.
-                Ở ví dụ đơn giản này mình coi mỗi element là một câu -> tách thành words bằng split().
-        end_marker: token dùng để đánh dấu kết thúc 1 từ (giúp BPE không merge qua khoảng trắng)
-        """
-        self.raw_series = series[:]           # giữ bản gốc để tham khảo
         self.end_marker = end_marker
-        # words_list: danh sách các 'word' (chuỗi không chứa whitespace) từ corpus
-        self.words_list = self._extract_words(series)
-        # tokenized_words: list of list, mỗi phần tử là word biểu diễn bằng ký tự + end_marker
-        self.tokenized_words = [self._word_to_tokens(w) for w in self.words_list]
+        self.series = series
+        
+        # Internal states managed during pipeline and training
+        self.merges: List[Tuple[Tuple[str, str], str]] = []
+        self.tokenized_words: List[List[str]] = []
+        self.vocab: Set[str] = set()
 
-        # merges: danh sách các rule đã merge theo thứ tự [(pair, new_token), ...]
-        self.merges: List[Tuple[Tuple[str,str], str]] = []
-        # vocab: set các token hiện có (cập nhật khi train), khởi tạo từ ký tự đơn + end_marker
-        self.vocab = set(tok for tw in self.tokenized_words for tok in tw)
-
-    # ---------------------------
-    # 1) Tiền xử lý / helper
-    # ---------------------------
+    # 1. Extract words from corpus
     def _extract_words(self, series: List[str]) -> List[str]:
         """
-        Tách các câu thành các 'word' đơn giản (split bằng whitespace).
-        Trả về list các word.
+        Split sentences into a list of words by whitespace.
+        Example: ["hello world"] -> ['hello', 'world']
         """
         words = []
         for s in series:
-            # split mặc định theo whitespace -> trả về các tiếng / từ
             for w in s.split():
                 words.append(w)
+        
+        print("\n--- [Step 1: Extract Words] ---")
+        print("Words extracted from corpus:\n", words)
         return words
 
-    def _word_to_tokens(self, word: str) -> List[str]:
+    # 2. Convert words to initial characters + end marker
+    def _word_to_tokens(self, word_list: List[str]) -> List[List[str]]:
         """
-        Biểu diễn 1 word dưới dạng list ký tự + end_marker.
-        Ví dụ: "hello" -> ['h','e','l','l','o','</w>']
+        Example: ["hello", "i"] -> [['h','e','l','l','o','</w>'], ['i', '</w>']]
         """
-        return [ch for ch in word] + [self.end_marker]
+        tokenized = []
+        for word in word_list:
+            tokenized.append([ch for ch in word] + [self.end_marker])
+        
+        print("\n--- [Step 2: Initialize Tokens] ---")
+        print("Initial tokenized words (char level + </w>):\n", tokenized)
+        return tokenized
 
-    # ---------------------------
-    # 2) Tạo bigrams & đếm tần suất
-    # ---------------------------
-    def _bigrams_from_token_list(self, tokens: List[str]) -> List[Tuple[str,str]]:
+    # 3. Create bigrams from token list
+    def _bigrams_from_token_list(self, tokenized_words: List[List[str]]) -> List[Tuple[str, str]]:
         """
-        Từ 1 token list trả về danh sách bigram (liền kề, overlapping).
-        Ví dụ ['h','e','l','l','o','</w>'] -> [('h','e'), ('e','l'), ('l','l'), ('l','o'), ('o','</w>')]
+        Extract adjacent, overlapping bigrams from token lists.
+        Example: [['h','e','l']] -> [('h','e'), ('e','l')]
         """
-        return [(tokens[i], tokens[i+1]) for i in range(len(tokens)-1)]
+        all_bigrams = []
+        for tokens in tokenized_words:
+            for i in range(len(tokens) - 1):
+                all_bigrams.append((tokens[i], tokens[i+1]))
 
-    def get_all_bigrams_counts(self) -> Counter:
-        """
-        Tính tần suất của tất cả bigram trên toàn bộ tokenized_words.
-        Trả về Counter mapping (bigram_tuple -> count).
-        """
-        cnt = Counter()
-        for tokens in self.tokenized_words:
-            for bg in self._bigrams_from_token_list(tokens):
-                cnt[bg] += 1
+        print("\n--- [Step 3: Extract Bigrams] ---")
+        print("Bigrams extracted from current token list (showing first 15):\n", all_bigrams[:15])
+        return all_bigrams
+   
+    # 4. Count bigram frequencies
+    def _get_all_bigrams_counts(self, bigrams_from_token_list: List[Tuple[str, str]]) -> Counter:
+        cnt = Counter(bigrams_from_token_list)
+        print("\n--- [Step 4: Count Bigrams] ---")
+        print("Top 5 bigram counts:\n", cnt.most_common(5))
         return cnt
 
-    # ---------------------------
-    # 3) Tìm bigram phổ biến nhất
-    # ---------------------------
-    def most_frequent_bigram(self) -> Tuple[Tuple[str,str], int]:
+    # 5. Find the most frequent bigram
+    def most_frequent_bigram(self, bigrams_counts: Counter) -> Tuple[Tuple[str, str], int]:
         """
-        Trả về (best_bigram_tuple, frequency).
-        Nếu không có bigram (corpus rỗng) trả về (None, 0)
-        """
-        cnt = self.get_all_bigrams_counts()
-        if not cnt:
+        Returns (best_bigram_tuple, frequency). Returns (None, 0) if empty.
+        """     
+        if not bigrams_counts:
             return None, 0
-        bigram, freq = cnt.most_common(1)[0]
+        bigram, freq = bigrams_counts.most_common(1)[0]
+        print("\n--- [Step 5: Find Most Frequent Bigram] ---")
+        print("Most frequent bigram:\n", (bigram, freq))
         return bigram, freq
 
-    # ---------------------------
-    # 4) Replace/merge pair trong toàn bộ tokenized_words (1 step)
-    # ---------------------------
-    def replace_pair(self, pair: Tuple[str,str], new_token: str):
+    # 6. Merge the chosen pair across the entire corpus
+    def replace_pair(self, pair: Tuple[str, str], new_token: str):
         """
-        Thay thế tất cả occurrences của pair (a,b) bằng new_token trên toàn corpus (self.tokenized_words).
-        Thao tác in-place (cập nhật self.tokenized_words).
-        Logic:
-            - duyệt từng word (tokens list)
-            - duyệt token theo index i; nếu tokens[i], tokens[i+1] == pair -> append new_token và i += 2
-              else: append tokens[i] và i += 1
+        Example: ('x', 'i') -> "xi" in all tokenized words
         """
         new_tokenized = []
         for tokens in self.tokenized_words:
@@ -323,72 +102,70 @@ class BPESimple:
             i = 0
             while i < len(tokens):
                 if i < len(tokens) - 1 and (tokens[i], tokens[i+1]) == pair:
-                    # merge pair -> new token
-                    merged.append(new_token)
-                    i += 2  # skip next because đã merge
+                    merged.append(new_token)  # Merge pair into new token
+                    i += 2                    # Skip next token since it's merged
                 else:
                     merged.append(tokens[i])
                     i += 1
             new_tokenized.append(merged)
 
-        # cập nhật tokenized words và vocab
+        # Update the state of the corpus and vocabulary
         self.tokenized_words = new_tokenized
-        # cập nhật vocab: thêm new_token
         self.vocab.add(new_token)
 
-    # ---------------------------
-    # 5) Huấn luyện BPE: lặp merge N lần
-    # ---------------------------
-    def train(self, num_merges: int = 10, verbose: bool = True):
+    # 7. Train BPE model
+    def train(self, num_merges: int, verbose: bool = True):
         """
-        Thực hiện num_merges bước merge.
-        Mỗi bước:
-            1) tính tần suất bigram
-            2) chọn bigram phổ biến nhất
-            3) tạo token mới = concat 2 token cũ (ví dụ 'l'+'l' -> 'll')
-            4) replace_pair trên toàn corpus
-            5) lưu merge rule vào self.merges
+        Perform a number of merge steps to learn subwords.
         """
+        print(f"\n================ STARTING BPE TRAINING ({num_merges} merges) ================")
+        
+        # Initialize initial vocabulary set from current state
+        self.vocab = set(tok for tw in self.tokenized_words for tok in tw)
+
         for step in range(num_merges):
-            bigram, freq = self.most_frequent_bigram()
+            # Recalculate frequencies at each iteration based on current state
+            bigrams = self._bigrams_from_token_list(self.tokenized_words)
+            counts = self._get_all_bigrams_counts(bigrams)
+            bigram, freq = self.most_frequent_bigram(counts)
+            
             if bigram is None or freq == 0:
                 if verbose:
-                    print(f"[step {step}] No more bigrams to merge.")
+                    print(f"[Step {step}] No more bigrams to merge.")
                 break
 
-            # tạo tên token mới (ghép hai token cũ). Bạn có thể dùng một separator nếu muốn.
-            new_token = ''.join(bigram)  # ví dụ ('l','l') -> 'll'
-            # tránh trùng token mới nếu đã tồn tại; nếu trùng thì thêm suffix số (rất hiếm)
+            # Create a new token by combining the pair
+            new_token = ''.join(bigram)
+            
+            # Prevent duplicate tokens if they already exist in the vocabulary
             if new_token in self.vocab:
                 suffix = 1
                 while f"{new_token}_{suffix}" in self.vocab:
                     suffix += 1
                 new_token = f"{new_token}_{suffix}"
 
-            # ghi nhận và replace
             if verbose:
-                print(f"[step {step}] Merging {bigram} (freq={freq}) -> '{new_token}'")
+                print(f"**[Step {step}] Merging pair {bigram} (freq={freq}) -> '{new_token}'**")
+            
+            # Apply merge rule to corpus and record it
             self.replace_pair(bigram, new_token)
             self.merges.append((bigram, new_token))
 
     # ---------------------------
-    # 6) Encode: dùng merges đã học để tokenize text mới
+    # Inference: Tokenize new text using learned merge rules
     # ---------------------------
     def encode_word(self, word: str) -> List[str]:
         """
-        Tokenize 1 word dùng rules đã học (self.merges).
-        Cách làm đơn giản:
-          - khởi tạo token list = [char,..., '</w>']
-          - áp dụng các merge rules theo thứ tự đã học (lần lượt, mỗi rule merge tất cả occurrences trong word)
-        Trả về list token (subwords)
+        Tokenize a single word using learned merge rules (self.merges).
         """
-        tokens = self._word_to_tokens(word)
+        # Convert word to initial characters + end marker
+        tokens = [ch for ch in word] + [self.end_marker]
+        
         for pair, new_token in self.merges:
-            # apply replace step cho 1 word
             merged = []
             i = 0
             while i < len(tokens):
-                if i < len(tokens)-1 and (tokens[i], tokens[i+1]) == pair:
+                if i < len(tokens) - 1 and (tokens[i], tokens[i+1]) == pair:
                     merged.append(new_token)
                     i += 2
                 else:
@@ -399,52 +176,61 @@ class BPESimple:
 
     def encode(self, text: str) -> List[List[str]]:
         """
-        Tokenize 1 câu/chuỗi text:
-          - split thành words
-          - encode từng word bằng encode_word
-        Trả về danh sách các token lists tương ứng với các word.
+        Tokenize a full string/sentence by breaking it down into words.
         """
         out = []
         for w in text.split():
             out.append(self.encode_word(w))
         return out
-
+    
     # ---------------------------
-    # 7) Utility: get vocab / merges
+    # Utilities
     # ---------------------------
-    def get_merges(self) -> List[Tuple[Tuple[str,str], str]]:
-        """Trả về danh sách merges đã học."""
+    def get_merges(self) -> List[Tuple[Tuple[str, str], str]]:
         return self.merges[:]
 
     def get_vocab(self) -> set:
-        """Trả về tập vocab hiện tại (các token xuất hiện trong tokenized_words)."""
-        vocab = set(tok for tw in self.tokenized_words for tok in tw)
-        return vocab
+        self.vocab = set(tok for tw in self.tokenized_words for tok in tw)
+        return self.vocab
+    
+    def run_pipeline(self):
+        print("================ STARTING PIPELINE INITIALIZATION ================")
+        # 1. Extract words list from corpus
+        words_list = self._extract_words(self.series)
 
-# ---------------------------
-# Example chạy thử
-# ---------------------------
+        # 2. Tokenize words into list of characters + end_marker
+        self.tokenized_words = self._word_to_tokens(words_list)
+
+        # 3. Get bigrams from the initial token list
+        bigrams_from_token_list = self._bigrams_from_token_list(self.tokenized_words)
+
+        # 4. Get bigram counts
+        bigrams_count = self._get_all_bigrams_counts(bigrams_from_token_list)
+
+        # 5. Extract the most popular bigram
+        bigram, freq = self.most_frequent_bigram(bigrams_count)
+        print("================ PIPELINE INITIALIZATION COMPLETED ================\n")
+
+
+# ===================
+# ==== TESTING ======
+# ===================
 if __name__ == "__main__":
-    series = [
+    # 1. Initialize data demo
+    series: List[str] = [
         "xin chào tôi tên là thắng",
         "bạn có khỏe không",
         "xin chào bạn",
         "tôi khỏe"
     ]
 
-    # Khởi tạo
+    # 1.2 Create BPE instance
     bpe = BPESimple(series)
 
-    print("=== Words extracted from corpus ===")
-    print(bpe.words_list)
-    print()
+    # 2. Run pipeline to view processing flow
+    bpe.run_pipeline()
 
-    print("=== Initial tokenized words (char level + </w>) ===")
-    for tw in bpe.tokenized_words:
-        print(tw)
-    print()
-
-    # Train với 10 merges (bạn có thể thay đổi)
+    # 3. Train with 10 merges
     bpe.train(num_merges=10, verbose=True)
     print()
 
@@ -458,12 +244,205 @@ if __name__ == "__main__":
         print(tw)
     print()
 
-    print("=== Vocab (sample) ===")
-    print(sorted(list(bpe.get_vocab()))[:50])
+    print("=== Vocab (Sample) ===")
+    print(sorted(list(bpe.get_vocab())))
     print()
 
-    # Encode 1 câu mới
-    text = "xin chào"
-    print(f"Encoding '{text}' ->")
+    # 4. Encode new text using learned vocabulary rules
+    text = "xin chào thắng"
+    print(f"Encoding text: '{text}' ->")
     print(bpe.encode(text))
+```
+**Result**
+```bash
+================ STARTING PIPELINE INITIALIZATION ================
+
+--- [Step 1: Extract Words] ---
+Words extracted from corpus:
+ ['xin', 'chào', 'tôi', 'tên', 'là', 'thắng', 'bạn', 'có', 'khỏe', 'không', 'xin', 'chào', 'bạn', 'tôi', 'khỏe']
+
+--- [Step 2: Initialize Tokens] ---
+Initial tokenized words (char level + </w>):
+ [['x', 'i', 'n', '</w>'], ['c', 'h', 'à', 'o', '</w>'], ['t', 'ô', 'i', '</w>'], ['t', 'ê', 'n', '</w>'], ['l', 'à', '</w>'], ['t', 'h', 'ắ', 'n', 'g', '</w>'], ['b', 'ạ', 'n', '</w>'], ['c', 'ó', '</w>'], ['k', 'h', 'ỏ', 'e', '</w>'], ['k', 'h', 'ô', 'n', 'g', '</w>'], ['x', 'i', 'n', '</w>'], ['c', 'h', 'à', 'o', '</w>'], ['b', 'ạ', 'n', '</w>'], ['t', 'ô', 'i', '</w>'], ['k', 'h', 'ỏ', 'e', '</w>']]
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('x', 'i'), ('i', 'n'), ('n', '</w>'), ('c', 'h'), ('h', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n'), ('n', '</w>'), ('l', 'à'), ('à', '</w>')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('n', '</w>'), 5), (('k', 'h'), 3), (('x', 'i'), 2), (('i', 'n'), 2), (('c', 'h'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('n', '</w>'), 5)
+================ PIPELINE INITIALIZATION COMPLETED ================
+
+
+================ STARTING BPE TRAINING (10 merges) ================
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('x', 'i'), ('i', 'n'), ('n', '</w>'), ('c', 'h'), ('h', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n'), ('n', '</w>'), ('l', 'à'), ('à', '</w>')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('n', '</w>'), 5), (('k', 'h'), 3), (('x', 'i'), 2), (('i', 'n'), 2), (('c', 'h'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('n', '</w>'), 5)
+**[Step 0] Merging pair ('n', '</w>') (freq=5) -> 'n</w>'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('x', 'i'), ('i', 'n</w>'), ('c', 'h'), ('h', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('k', 'h'), 3), (('x', 'i'), 2), (('i', 'n</w>'), 2), (('c', 'h'), 2), (('h', 'à'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('k', 'h'), 3)
+**[Step 1] Merging pair ('k', 'h') (freq=3) -> 'kh'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('x', 'i'), ('i', 'n</w>'), ('c', 'h'), ('h', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('x', 'i'), 2), (('i', 'n</w>'), 2), (('c', 'h'), 2), (('h', 'à'), 2), (('à', 'o'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('x', 'i'), 2)
+**[Step 2] Merging pair ('x', 'i') (freq=2) -> 'xi'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('xi', 'n</w>'), ('c', 'h'), ('h', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('xi', 'n</w>'), 2), (('c', 'h'), 2), (('h', 'à'), 2), (('à', 'o'), 2), (('o', '</w>'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('xi', 'n</w>'), 2)
+**[Step 3] Merging pair ('xi', 'n</w>') (freq=2) -> 'xin</w>'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('c', 'h'), ('h', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n'), ('n', 'g')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('c', 'h'), 2), (('h', 'à'), 2), (('à', 'o'), 2), (('o', '</w>'), 2), (('t', 'ô'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('c', 'h'), 2)
+**[Step 4] Merging pair ('c', 'h') (freq=2) -> 'ch'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('ch', 'à'), ('à', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n'), ('n', 'g'), ('g', '</w>')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('ch', 'à'), 2), (('à', 'o'), 2), (('o', '</w>'), 2), (('t', 'ô'), 2), (('ô', 'i'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('ch', 'à'), 2)
+**[Step 5] Merging pair ('ch', 'à') (freq=2) -> 'chà'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('chà', 'o'), ('o', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n'), ('n', 'g'), ('g', '</w>'), ('b', 'ạ')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('chà', 'o'), 2), (('o', '</w>'), 2), (('t', 'ô'), 2), (('ô', 'i'), 2), (('i', '</w>'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('chà', 'o'), 2)
+**[Step 6] Merging pair ('chà', 'o') (freq=2) -> 'chào'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('chào', '</w>'), ('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n'), ('n', 'g'), ('g', '</w>'), ('b', 'ạ'), ('ạ', 'n</w>')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('chào', '</w>'), 2), (('t', 'ô'), 2), (('ô', 'i'), 2), (('i', '</w>'), 2), (('n', 'g'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('chào', '</w>'), 2)
+**[Step 7] Merging pair ('chào', '</w>') (freq=2) -> 'chào</w>'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('t', 'ô'), ('ô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n'), ('n', 'g'), ('g', '</w>'), ('b', 'ạ'), ('ạ', 'n</w>'), ('c', 'ó')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('t', 'ô'), 2), (('ô', 'i'), 2), (('i', '</w>'), 2), (('n', 'g'), 2), (('g', '</w>'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('t', 'ô'), 2)
+**[Step 8] Merging pair ('t', 'ô') (freq=2) -> 'tô'**
+
+--- [Step 3: Extract Bigrams] ---
+Bigrams extracted from current token list (showing first 15):
+ [('tô', 'i'), ('i', '</w>'), ('t', 'ê'), ('ê', 'n</w>'), ('l', 'à'), ('à', '</w>'), ('t', 'h'), ('h', 'ắ'), ('ắ', 'n'), ('n', 'g'), ('g', '</w>'), ('b', 'ạ'), ('ạ', 'n</w>'), ('c', 'ó'), ('ó', '</w>')]
+
+--- [Step 4: Count Bigrams] ---
+Top 5 bigram counts:
+ [(('tô', 'i'), 2), (('i', '</w>'), 2), (('n', 'g'), 2), (('g', '</w>'), 2), (('b', 'ạ'), 2)]
+
+--- [Step 5: Find Most Frequent Bigram] ---
+Most frequent bigram:
+ (('tô', 'i'), 2)
+**[Step 9] Merging pair ('tô', 'i') (freq=2) -> 'tôi'**
+
+=== Merges learned (in order) ===
+(('n', '</w>'), 'n</w>')
+(('k', 'h'), 'kh')
+(('x', 'i'), 'xi')
+(('xi', 'n</w>'), 'xin</w>')
+(('c', 'h'), 'ch')
+(('ch', 'à'), 'chà')
+(('chà', 'o'), 'chào')
+(('chào', '</w>'), 'chào</w>')
+(('t', 'ô'), 'tô')
+(('tô', 'i'), 'tôi')
+
+=== Tokenized corpus after merges ===
+['xin</w>']
+['chào</w>']
+['tôi', '</w>']
+['t', 'ê', 'n</w>']
+['l', 'à', '</w>']
+['t', 'h', 'ắ', 'n', 'g', '</w>']
+['b', 'ạ', 'n</w>']
+['c', 'ó', '</w>']
+['kh', 'ỏ', 'e', '</w>']
+['kh', 'ô', 'n', 'g', '</w>']
+['xin</w>']
+['chào</w>']
+['b', 'ạ', 'n</w>']
+['tôi', '</w>']
+['kh', 'ỏ', 'e', '</w>']
+
+=== Vocab (Sample) ===
+['</w>', 'b', 'c', 'chào</w>', 'e', 'g', 'h', 'kh', 'l', 'n', 'n</w>', 't', 'tôi', 'xin</w>', 'à', 'ê', 'ó', 'ô', 'ạ', 'ắ', 'ỏ']
+
+Encoding text: 'xin chào thắng' ->
+[['xin</w>'], ['chào</w>'], ['t', 'h', 'ắ', 'n', 'g', '</w>']]
 ```

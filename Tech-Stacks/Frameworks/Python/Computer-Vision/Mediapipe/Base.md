@@ -1,4 +1,5 @@
 - [Introduction](#introduction)
+  - [Architecture (kiến trúc)](#architecture-kiến-trúc)
   - [Installation](#installation)
 ---
 # Introduction
@@ -6,7 +7,8 @@
 - Đây là framework xử lý pipeline ML realtime của Google 
     + dùng để xử lý vision realtime
     + nhận diện tay, pose, mặt, tracking… từ camera. 
-- Nó cung cấp các model sẵn như:
+
+Nó cung cấp các model sẵn như:
     + Hand              : Tracking	nhận diện bàn tay
     + Face Mesh	        : 468 điểm trên khuôn mặt
     + Pose	            : nhận diện skeleton cơ thể

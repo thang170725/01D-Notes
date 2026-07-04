@@ -2,7 +2,8 @@
 - [Hyperparameter](#hyperparameter)
 - [Phương sai](#phương-sai)
 - [Độ lệch chuẩn tổng thể và độ lệch chuẩn mẫu](#độ-lệch-chuẩn-tổng-thể-và-độ-lệch-chuẩn-mẫu)
-- [Bias và Variance](#bias-và-variance)
+- [Bias (mô hình lệch có hệ thống khỏi đáp án đúng)](#bias-mô-hình-lệch-có-hệ-thống-khỏi-đáp-án-đúng)
+- [Variance (mô hình quá nhạy với dữ liệu train)](#variance-mô-hình-quá-nhạy-với-dữ-liệu-train)
 - [Cấp số cộng](#cấp-số-cộng)
 - [Cấp số nhân](#cấp-số-nhân)
 - [Preprocessor (Toán học trong tiền xử lý)](#preprocessor-toán-học-trong-tiền-xử-lý)
@@ -210,35 +211,14 @@ Phương sai càng lớn thì giá trị trong tập dữ liệu càng phân tá
     Tính độ lệch chuẩn của phương sai mẫu: np.sqrt(854.8)= 29.23696291
     Tính độ lệch chuẩn của phương sai tổng thể: np.sqrt(683.84) = 26.15 
 ```
-# Bias và Variance 
+# Bias (mô hình lệch có hệ thống khỏi đáp án đúng)
 ```bash
-Là hai khái niệm cực kỳ quan trọng trong Machine Learning. Nếu hiểu được chúng, bạn sẽ hiểu vì sao:
-    - Linear Regression đôi khi quá đơn giản.
-    - Decision Tree đôi khi overfit.
-    - Random Forest lại hiệu quả.
-    - Bagging giảm variance.
-    - Boosting giảm bias.
-
-Bias = mô hình lệch có hệ thống khỏi đáp án đúng.
-Variance = mô hình quá nhạy với dữ liệu train.
-
-Câu thần chú dễ nhớ
-    - Bias = mô hình quá ngu vì quá đơn giản
-        Không học đủ
-        ↓
-        Underfitting
-    - Variance = mô hình quá thông minh đến mức học thuộc
-        Học quá kỹ
-        ↓
-        Overfitting
-    
-    Vì thế người ta thường nói:
-        - Machine Learning là bài toán cân bằng giữa Bias và Variance.
-        - Tăng độ phức tạp mô hình → Bias giảm nhưng Variance tăng.
-        - Giảm độ phức tạp mô hình → Variance giảm nhưng Bias tăng.
-    => Mục tiêu là tìm điểm cân bằng sao cho mô hình vừa học đủ quy luật của dữ liệu, vừa không học thuộc dữ liệu train.
+Bias = mô hình quá ngu vì quá đơn giản
+    Không học đủ
+    ↓
+    Underfitting
 ```
-**Ex: bắn cung**
+**Ex**
 ```bash
 Hãy tưởng tượng tâm bia là đáp án đúng.
       X
@@ -282,6 +262,29 @@ X = dự đoán của mô hình
 
         Ta gọi là:
             Underfitting
+```
+# Variance (mô hình quá nhạy với dữ liệu train)
+```bash
+Variance = mô hình quá thông minh đến mức học thuộc
+    Học quá kỹ
+    ↓
+    Overfitting
+    
+    Vì thế người ta thường nói:
+        - Machine Learning là bài toán cân bằng giữa Bias và Variance.
+        - Tăng độ phức tạp mô hình → Bias giảm nhưng Variance tăng.
+        - Giảm độ phức tạp mô hình → Variance giảm nhưng Bias tăng.
+    => Mục tiêu là tìm điểm cân bằng sao cho mô hình vừa học đủ quy luật của dữ liệu, vừa không học thuộc dữ liệu train.
+```
+**Ex: bắn cung**
+```bash
+Hãy tưởng tượng tâm bia là đáp án đúng.
+      X
+   X  O  X
+      X
+
+O = đáp án đúng
+X = dự đoán của mô hình
 
 2. Variance là gì?
     Ví dụ:

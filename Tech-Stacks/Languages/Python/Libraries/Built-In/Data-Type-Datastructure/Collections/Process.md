@@ -1,5 +1,21 @@
-# Counter()
-Tham số truyền vào có thể là list, tuple, ...
+- [Counter() (để đếm tần xuất)](#counter-để-đếm-tần-xuất)
+  - [.values()](#values)
+  - [.most\_common() (Trả về n phần tử xuất hiện nhiều nhất)](#most_common-trả-về-n-phần-tử-xuất-hiện-nhiều-nhất)
+  - [Counter({'a': 4, 'b': 4})](#countera-4-b-4)
+- [Defaultdict](#defaultdict)
+- [deque](#deque)
+- [.popleft()](#popleft)
+- [.pop()](#pop)
+---
+# Counter() (để đếm tần xuất)
+**Syn**
+```bash
+from collections import Counter
+
+c = Counter()
+
+- Tham số truyền vào có thể là list, tuple, ...
+```
 **Ex**
 ```python
 from collections import Counter
@@ -8,8 +24,7 @@ c = Counter(['a', 'b', 'a', 'c', 'b', 'a'])
 print(c)
 # Counter({'a': 3, 'b': 2, 'c': 1})
 ```
-
-# .values()
+## .values()
 ```python
 from collections import Counter
 c = Counter(['a', 'b', 'c', 'a'])
@@ -17,12 +32,13 @@ print(c.values())
 
 # dict_values([2, 1, 1])
 ```
-.most_common()
-Trả về n phần tử xuất hiện nhiều nhất.
-Cú pháp:
+## .most_common() (Trả về n phần tử xuất hiện nhiều nhất)
+**Ex**
+```python
 c = Counter("aaabbbbccdde")
-print(c.most_common(2)) # Nếu không truyền n → trả tất cả theo thứ tự giảm dần.
-[('b', 4), ('a', 3)]
+
+print(c.most_common(2)) # [('b', 4), ('a', 3)]
+```
 .elements()
 Trả ra tất cả phần tử, lặp lại theo số lần đếm.
 Cú pháp:

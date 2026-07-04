@@ -161,10 +161,14 @@ Nhược điểm:
 ```bash
 Là một kỹ thuật tokenization hiện đại và phổ biến nhất dùng trong GPT-2, GPT-3, RoBERTa, XLM-R, PhoBERT. 
     Rộng rãi nhất trong các mô hình open-source → Học sâu
+```
+**Cách hoạt động**
+```bash
+bằng cách ghép các cặp ký tự/subword phổ biến nhất. 
 
-Cách hoạt động:
-    - bằng cách ghép các cặp ký tự/subword phổ biến nhất. 
-    - BPE phải có </w>? Vì BPE hoạt động bằng cách merge các cặp ký tự/token, và nếu không có end marker, BPE sẽ merge xuyên qua ranh giới giữa các từ → làm hỏng cấu trúc từ.
+BPE phải có </w>? 
+    Vì BPE hoạt động bằng cách merge các cặp ký tự/token
+    nếu không có end marker => BPE sẽ merge xuyên qua ranh giới giữa các từ → làm hỏng cấu trúc từ.
 ```
 **Ex: workfollow của BPE**
 ```bash

@@ -1,5 +1,6 @@
-- [StateGraph](#stategraph)
-- [END](#end)
+- [graph](#graph)
+  - [StateGraph (Tạo graph với state kiểu TypedDict)](#stategraph-tạo-graph-với-state-kiểu-typeddict)
+  - [END (Dùng để kết thúc graph)](#end-dùng-để-kết-thúc-graph)
   - [.add\_node()](#add_node)
   - [.set\_entry\_point()](#set_entry_point)
   - [.add\_edge()](#add_edge)
@@ -8,20 +9,15 @@
   - [.invoke()](#invoke)
   - [.stream()](#stream)
 ---
-# StateGraph
-```bash
-Tạo graph với state kiểu TypedDict.
-```
+# graph
+## StateGraph (Tạo graph với state kiểu TypedDict)
 **Syn**
 ```bash
 from langgraph.graph import StateGraph, END
 
 graph = StateGraph(StateType)
 ```
-# END
-```bash
-Dùng để kết thúc graph
-```
+## END (Dùng để kết thúc graph)
 **Syn**
 ```bash
 graph.add_edge("node_name", END)

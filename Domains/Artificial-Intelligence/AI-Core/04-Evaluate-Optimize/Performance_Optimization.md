@@ -1,9 +1,9 @@
 - [Batch Size](#batch-size)
-- [TensorRT](#tensorrt)
-- [ONNX](#onnx)
+- [TensorRT (công cụ của NVIDIA để tăng tốc model AI khi chạy trên GPU)](#tensorrt-công-cụ-của-nvidia-để-tăng-tốc-model-ai-khi-chạy-trên-gpu)
+  - [TensorRT Engine](#tensorrt-engine)
+- [ONNX (định dạng model trung gian, dùng để “nói chuyện” giữa các framework)](#onnx-định-dạng-model-trung-gian-dùng-để-nói-chuyện-giữa-các-framework)
 - [Installation](#installation)
   - [Demo export .onnx](#demo-export-onnx)
-- [TensorRT Engine](#tensorrt-engine)
 ---
 # Batch Size 
 **Ex**
@@ -88,10 +88,9 @@ Ví dụ:
 
     Thường: Batch lớn=Train nhanh hơn (nếu GPU đủ VRAM)
 ```
-# TensorRT
+# TensorRT (công cụ của NVIDIA để tăng tốc model AI khi chạy trên GPU)
 ```bash
-- TensorRT = công cụ của NVIDIA để tăng tốc model AI khi chạy (inference) trên GPU.
-- Hiểu đơn giản: Bạn train model bằng PyTorch / TensorFlow. Khi đem model đi chạy thật → TensorRT giúp:
+Hiểu đơn giản: Bạn train model bằng PyTorch / TensorFlow. Khi đem model đi chạy thật → TensorRT giúp:
     + Chạy nhanh hơn
     + Dùng ít bộ nhớ hơn
     + Tối ưu cho GPU NVIDIA
@@ -149,10 +148,27 @@ GPU
          └─ TensorRT
 -> Driver ↔ CUDA ↔ TensorRT phải tương thích
 ```
-# ONNX
+## TensorRT Engine
 ```bash
-- ONNX = định dạng model trung gian, dùng để “nói chuyện” giữa các framework.
-- ONNX KHÔNG:
+- Engine = model đã được TensorRT “compile” riêng cho GPU của bạn.
+- So sánh cho dễ hiểu:
+    + PyTorch           : model, code Python
+    + ONNX	            : file, trung gian
+    + TensorRT Engine   : file .engine giống file .exe
+- Engine:
+    + chỉ chạy trên đúng GPU + CUDA version
+    + rất nhanh
+    + không portable
+- Vì sao Engine nhanh?
+    + TensorRT làm 4 việc chính:
+    + Fuse layer (gộp nhiều layer)
+    + Chọn kernel GPU tốt nhất
+    + Giảm precision (FP32 → FP16 / INT8)
+    + Tối ưu memory
+```
+# ONNX (định dạng model trung gian, dùng để “nói chuyện” giữa các framework)
+```bash
+ONNX KHÔNG:
     + train model
     + chạy nhanh hơn
     + ONNX chỉ là file mô tả graph model
@@ -200,24 +216,6 @@ torch.onnx.export(
     output_names=["output"],
     opset_version=13
 )
-```
-# TensorRT Engine
-```bash
-- Engine = model đã được TensorRT “compile” riêng cho GPU của bạn.
-- So sánh cho dễ hiểu:
-    + PyTorch           : model, code Python
-    + ONNX	            : file, trung gian
-    + TensorRT Engine   : file .engine giống file .exe
-- Engine:
-    + chỉ chạy trên đúng GPU + CUDA version
-    + rất nhanh
-    + không portable
-- Vì sao Engine nhanh?
-    + TensorRT làm 4 việc chính:
-    + Fuse layer (gộp nhiều layer)
-    + Chọn kernel GPU tốt nhất
-    + Giảm precision (FP32 → FP16 / INT8)
-    + Tối ưu memory
 ```
 GIL (Global Interpreter Lock)
     • GIL (Global Interpreter Lock) là một cơ chế khóa trong CPython (trình thông dịch Python phổ biến nhất). Tại mọi thời điểm, chỉ có 1 thread được phép thực thi Python bytecode, dù máy có nhiều CPU core.

@@ -1,3 +1,4 @@
+- [Hiệu ứng nút bấm màu trượt từ trái sang phải](#hiệu-ứng-nút-bấm-màu-trượt-từ-trái-sang-phải)
 - [Tạo trường đăng nhập (Username) bằng html + css](#tạo-trường-đăng-nhập-username-bằng-html--css)
 - [Tạo icon youtube](#tạo-icon-youtube)
 - [Tạo Menu 1 cấp](#tạo-menu-1-cấp)
@@ -8,7 +9,58 @@
 - [Hiệu ứng loading](#hiệu-ứng-loading)
 - [Hiệu ứng loading](#hiệu-ứng-loading-1)
 - [Hiệu ứng loading](#hiệu-ứng-loading-2)
+  - [Tạo form đăng nhập cơ bản](#tạo-form-đăng-nhập-cơ-bản)
+- [Tạo hiệu ứng loading](#tạo-hiệu-ứng-loading)
 ---
+# Hiệu ứng nút bấm màu trượt từ trái sang phải
+```html
+<a href="#">Button</a>
+```
+```css
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  }
+  body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  }
+  a{
+  position: relative;
+  font-size: 1.5em;
+  border: 2px solid #000;
+  padding: 10px 30px;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  background-color: #ff6600;
+  z-index: 1;
+  }
+a::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+   background-color: #fff;
+  z-index: -1;
+  transform: scaleX(1);
+  transform-origin: left;
+  transition: transform 0.7s ease;
+  }
+  a:hover::before{
+  transform-origin: right;
+  transform: scaleX(0);
+   transition: transform 0.7s ease;
+  }
+  a:hover{
+  color: #fff;
+  }
+```
 # Tạo trường đăng nhập (Username) bằng html + css
 **Ex1**
 ```html
@@ -608,7 +660,8 @@ hexInner1::before, .hexInner1::after{
     </div>
 </body>
 </html>
-
+```
+```css
 body{
     margin: 0px;
     box-sizing: border-box;
@@ -726,7 +779,8 @@ body > div{
     </div>
 </body>
 </html>
-
+```
+```css
 body{
     width: 100%;
     height: 100vh;
@@ -798,7 +852,8 @@ body{
   </div>
 </body>
 </html>
-
+```
+```css
 *{
     margin: 0;
     padding: 0;
@@ -829,5 +884,107 @@ body{
     to{
       transform: rotate(360deg);
     }
+}
+```
+## Tạo form đăng nhập cơ bản
+```html
+<div class="login">
+<form action="">
+<h1>LOGN IN</h1>
+<label for="">Username</label>
+<input type="text" name="" id="">
+<label for="">Password</label>
+<input type="password" name="" id="">
+<button>Submit</button>
+</form>
+</div>
+```
+```css
+.login{
+width: 400px;
+height: 500px;
+border-radius: 20px;
+box-shadow: 0px 0px 20px rgba(0,0,0,0.75);
+background-position: center;
+overflow: hidden;
+}
+
+form{
+display: block;
+box-sizing: border-box;
+padding: 40px;
+width: 100%;
+height: 100%;
+backdrop-filter: brightness(80%);
+flex-direction: column;
+display: flex;
+gap: 5px;
+background-color: #000;
+}
+
+h1{
+color: #fff;
+font-size: 2em;
+text-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+text-align: center;
+}
+
+label{
+color: #fff;
+text-transform: uppercase;
+font-size: 10px;
+letter-spacing: 2px;
+padding-left: 10px;
+}
+
+input{
+color: #fff;
+background: rgba(255,255,255,0.3);
+height: 40px;
+line-height: 40px;
+border-radius: 20px;
+padding: 0px 20px;
+border: none;
+margin-bottom: 20px;
+}
+
+button{
+background: rgb(45,126,231);
+height: 40px;
+border-radius: 40px;
+border: none;
+margin: 10px 0px;
+box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+color: #fff;
+font-size: 12px;
+text-transform: uppercase;
+}
+```
+# Tạo hiệu ứng loading
+```html
+<div class="loading"></div>
+```
+```css
+.loading{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    background: conic-gradient(#0000 10%, #8f44fd);
+    border-radius: 50%;
+    animation: rotate 1.5s linear 0.4s infinite;
+}
+.loading::before{
+    position: absolute;
+    content: "";
+    left: 15px;
+    right: 15px;
+    top: 15px;
+    bottom: 15px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+@keyframes rotate {
+    0% {transform: rotate(0deg);}
+    100%{transform: rotate(360deg);}
 }
 ```

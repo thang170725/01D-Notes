@@ -1,7 +1,8 @@
 - [Image (Bản chất ảnh)](#image-bản-chất-ảnh)
-  - [RGB](#rgb)
-  - [BGR](#bgr)
-  - [Grayscale là gì?](#grayscale-là-gì)
+  - [RGB (hệ màu phối của red – green – blue)](#rgb-hệ-màu-phối-của-red--green--blue)
+  - [BGR (OpenCV mặc định dùng Blue - Green - Red)](#bgr-opencv-mặc-định-dùng-blue---green---red)
+  - [Grayscale (Ảnh xám chỉ có 1 kênh màu)](#grayscale-ảnh-xám-chỉ-có-1-kênh-màu)
+  - [HEX (giá trị thập lục phân)](#hex-giá-trị-thập-lục-phân)
   - [HSV là gì?](#hsv-là-gì)
 - [Kernel (Weight)](#kernel-weight)
 - [Feature map (output sau khi kernel quét qua ảnh)](#feature-map-output-sau-khi-kernel-quét-qua-ảnh)
@@ -61,69 +62,44 @@ Thông thường mỗi kênh:
   - 0 = không có màu đó
   - 255 = màu đó mạnh nhất
 ```
-## RGB
-
-RGB =
-
-Red
-Green
-Blue
-
-Ví dụ:
-
+## RGB (hệ màu phối của red – green – blue)
+```bash
+Giá trị cao nhất là 255, thấp nhất là 0.
+```
+**Ex**
+```bash
 [255,0,0]   -> Đỏ
 [0,255,0]   -> Xanh lá
 [0,0,255]   -> Xanh dương
 [255,255,255] -> Trắng
 [0,0,0] -> Đen
-
-Đây là chuẩn phổ biến nhất trong Deep Learning.
-
-## BGR
-
-OpenCV mặc định dùng:
-
-Blue
-Green
-Red
-
-thay vì:
-
-Red
-Green
-Blue
-
-Ví dụ:
-
+=> Đây là chuẩn phổ biến nhất trong Deep Learning.
+```
+## BGR (OpenCV mặc định dùng Blue - Green - Red)
+**Ex**
+```bash
 [255,0,0]
 RGB → màu đỏ
 BGR → màu xanh dương
 
 Đây là lỗi rất hay gặp khi dùng OpenCV.
+```
+## Grayscale (Ảnh xám chỉ có 1 kênh màu)
+```bash
+Có:
+  Shape: (H, W) thay vì (H, W, 3)
 
-## Grayscale là gì?
-
-Ảnh xám chỉ có 1 kênh màu.
-
-Shape:
-
-(H, W)
-
-thay vì:
-
-(H, W, 3)
-
-Ví dụ:
-
-0   = đen
-255 = trắng
-128 = xám
+  Ví dụ:
+    0   = đen
+    255 = trắng
+    128 = xám
 
 Dùng khi:
-
-OCR
-Nhận diện chữ
-Giảm kích thước dữ liệu
+  - OCR
+  - Nhận diện chữ
+  - Giảm kích thước dữ liệu
+```
+## HEX (giá trị thập lục phân)
 ## HSV là gì?
 
 HSV =

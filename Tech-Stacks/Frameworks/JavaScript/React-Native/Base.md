@@ -14,4 +14,5 @@ javac -version (nếu chưa có thì chạy lệnh sudo apt install openjdk-21-j
 3. npx create-expo-app my-first-app
 4. cd my-first-app
 5. npx start (chạy app)
+    - sau đó bấm a để chạy trên android studio
 ```
