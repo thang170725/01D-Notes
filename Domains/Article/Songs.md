@@ -42,6 +42,7 @@
 33. thiên sơn vạn thủy của em (c5)
 34. quê tôi (c5)
 35. kiếp sau vấn muốn lập gia đình vói em (c5)
+36. Hoang (dizi D)
 ```
 # Gutar
 ```bash
@@ -102,6 +103,7 @@
 38. Anh vẫn ở đây	
 39. Đâu phải cho anh	
 40. Đớn đau vô cùng
+41. Phai dấu cuộc tình
 ```
 # Karaoke & Guitar
 ```bash

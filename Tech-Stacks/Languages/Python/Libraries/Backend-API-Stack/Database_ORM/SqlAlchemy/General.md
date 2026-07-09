@@ -1,5 +1,5 @@
-- [Create](#create)
-  - [create\_engine()](#create_engine)
+- [Create (Nhóm khởi tạo và cấu hình)](#create-nhóm-khởi-tạo-và-cấu-hình)
+  - [create\_engine() (Để tạo hoặc kết nối database)](#create_engine-để-tạo-hoặc-kết-nối-database)
   - [MetaData](#metadata)
     - [.create\_all()](#create_all)
   - [Table](#table)
@@ -37,19 +37,16 @@
     - [async\_sessionmaker (tạo ra Session Factory)](#async_sessionmaker-tạo-ra-session-factory)
     - [AsyncSession](#asyncsession)
 ---
-# Create
+# Create (Nhóm khởi tạo và cấu hình)
+## create_engine() (Để tạo hoặc kết nối database)
 ```bash
-Nhóm khởi tạo và cấu hình
-```
-## create_engine()
-```bash
-- Để tạo hoặc kết nối database.
-- create_engine kHÔNG kết nối DB ngay, mà chỉ kết nối khi có query đầu tiên.
+Dùng cho cả CORE và ORM
+
+create_engine kHÔNG kết nối DB ngay, mà chỉ kết nối khi có query đầu tiên.
 ```
 **Syn**
 ```bash
 from sqlalchemy import create_engine
-
 engine = create_engine(
     "dialect+driver://username:password@host:port/database", # nếu chưa có thì tự động tạo db
     pool_recycle=,

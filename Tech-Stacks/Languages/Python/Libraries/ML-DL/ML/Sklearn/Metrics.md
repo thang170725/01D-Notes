@@ -1,6 +1,6 @@
 - [Introduction](#introduction)
 - [Regression (nhóm mô hình hồi quy)](#regression-nhóm-mô-hình-hồi-quy)
-- [mean\_squared\_error()](#mean_squared_error)
+  - [mean\_squared\_error()](#mean_squared_error)
   - [r2\_score](#r2_score)
 - [Classifier (Nhóm mô hình phân loại)](#classifier-nhóm-mô-hình-phân-loại)
   - [accuracy\_score()](#accuracy_score)
@@ -12,7 +12,7 @@
 - Nếu chỉ .predict() mà không tính toán gì, thì chỉ thấy ra một mớ số dự đoán, không biết mô hình giỏi hay dở, không đủ chứng minh cho người khác là mô hình mình tốt hay xấu.
 ```
 # Regression (nhóm mô hình hồi quy)
-# mean_squared_error()
+## mean_squared_error()
 ```bash
 - Là một hàm đánh giá sai số phổ biến trong học máy, đặc biệt dùng trong các bài toán hồi quy (regression).
 - Để đo lường độ chính xác của mô hình hồi quy. MSE càng nhỏ -> mô hình càng dự đoán sát với dữ liệu thực tế. 

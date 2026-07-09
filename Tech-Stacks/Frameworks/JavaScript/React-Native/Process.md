@@ -1,88 +1,9 @@
-- [Structure System](#structure-system)
-  - [README.md (Hướng dẫn project)](#readmemd-hướng-dẫn-project)
-  - [App.tsx (root component)](#apptsx-root-component)
-  - [index.js (entry point)](#indexjs-entry-point)
-  - [package.json](#packagejson)
-  - [app.json (Thông tin ứng dụng)](#appjson-thông-tin-ứng-dụng)
-  - [babel.config.js (Babel dùng để biên dịch JavaScript)](#babelconfigjs-babel-dùng-để-biên-dịch-javascript)
+- [\[...\] (Destructuring Array trong js)](#-destructuring-array-trong-js)
+- [flexDirection (Xác định hướng xếp hàng)](#flexdirection-xác-định-hướng-xếp-hàng)
+- [justifyContent (Căn chỉnh theo Trục Chính)](#justifycontent-căn-chỉnh-theo-trục-chính)
+- [event (Bắt sự kiện trong React Native)](#event-bắt-sự-kiện-trong-react-native)
+  - [onChangeText](#onchangetext)
 ---
-# Structure System
-```bash
-Cấu trúc của một dự án React Native phụ thuộc vào việc bạn dùng React Native CLI, Expo, hay framework như Expo Router. Tuy nhiên, đa số các dự án hiện nay đều có cấu trúc tương tự nhau.
-```
-**Ex: một dự án React Native được tổ chức theo hướng dễ mở rộng**
-```bash
-my-app/
-│
-├── android/                # Mã nguồn Android
-├── ios/                    # Mã nguồn iOS
-│
-├── src/                    # Toàn bộ source code
-│   ├── assets/
-│   │   ├── images/
-│   │   ├── fonts/
-│   │   └── icons/
-│   │
-│   ├── components/
-│   ├── screens/
-│   ├── navigation/
-│   ├── services/
-│   ├── api/
-│   ├── hooks/
-│   ├── context/
-│   ├── store/
-│   ├── utils/
-│   ├── constants/
-│   ├── types/
-│   ├── theme/
-│   └── App.tsx | App.js
-│
-├── .gitignore
-├── app.json
-├── babel.config.js
-├── metro.config.js
-├── package.json
-├── tsconfig.json
-├── index.js
-└── README.md
-```
-**Quy định file không đưa lên Git**
-```bash
-- node_modules/
-- android/build/
-- ios/build/
-- .env
-```
-**Luồng hoạt động của ứng dụng**
-```bash
-Một ứng dụng React Native thường có luồng như sau:
-    index.js
-        │
-        ▼
-    App.tsx
-        │
-        ▼
-    Providers
-    (Auth, Redux, Theme...)
-        │
-        ▼
-    Navigation
-        │
-        ▼
-    Screen
-        │
-        ├── Components
-        ├── Hooks
-        ├── Services
-        │      │
-        │      ▼
-        │     API
-        │      │
-        │      ▼
-        │   Backend
-        │
-        └── Store / Context
-```
 ## README.md (Hướng dẫn project)
 1. android/
 android/
@@ -518,3 +439,55 @@ Nên người ta viết
 const [fontsLoaded] = useFonts(...)
 
 để lấy phần tử đầu tiên.
+# flexDirection (Xác định hướng xếp hàng)
+```bash
+Thuộc tính này quyết định các phần tử con bên trong sẽ được xếp theo hàng dọc hay hàng ngang. 
+    Nó sẽ thiết lập một Trục chính (Main Axis) cho container
+```
+**Syn**
+```bash
+flexDirection: 'row'
+
+- column    : Mặc định. Xếp theo hàng dọc (từ trên xuống). Trục chính là trục dọc.
+- row       : Xếp theo hàng ngang (từ trái sang phải). Trục chính lúc này đổi thành trục ngang.
+```
+**Ex**
+```js
+import {Text, View} from 'react-native';
+
+const YourApp = () => {
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+      }}>
+      <Text>Try editing Me! 🎉</Text>
+      <Text>Try editing Me! 🎉</Text>
+      <Text>Try editing Me! 🎉</Text>
+      <Text>Try editing Me! 🎉</Text>
+    </View>
+  );
+};
+
+export default YourApp;
+// 4 Text được xếp ngang đều vào khung hình
+```
+# justifyContent (Căn chỉnh theo Trục Chính)
+```bash
+Dùng để phân bổ không gian trống giữa các phần tử con dọc theo Trục Chính.
+
+Thường đi kèm với flex, flexDirection.
+```
+**Syn**
+```bash
+justifyContent: 'center'
+
+- flex-start    : Mặc định. Dồn hết phần tử về đầu dòng.
+- flex-end      : Dồn hết phần tử về cuối dòng.
+- center        : Căn giữa tất cả phần tử.
+- space-between : Đẩy các phần tử ra xa nhau nhất có thể. Phần tử đầu sát mép trái/trên, phần tử cuối sát mép phải/dưới. 
+- space-around  : Chia đều khoảng trống xung quanh hoặc giữa các phần tử.
+- space-evenly  : Chia đều khoảng trống xung quanh hoặc giữa các phần tử.
+```
+# event (Bắt sự kiện trong React Native)
+## onChangeText

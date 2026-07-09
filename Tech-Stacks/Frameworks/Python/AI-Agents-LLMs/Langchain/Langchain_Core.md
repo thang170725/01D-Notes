@@ -1,7 +1,11 @@
 - [Introduction](#introduction)
-- [langchain\_core.messages](#langchain_coremessages)
+- [messages](#messages)
   - [SystemMessage](#systemmessage)
-  - [HumanMessage()](#humanmessage)
+  - [HumanMessage() (Đại diện cho input của người dùng - user prompt)](#humanmessage-đại-diện-cho-input-của-người-dùng---user-prompt)
+  - [Display (Dùng để cung cấp thông tin)](#display-dùng-để-cung-cấp-thông-tin)
+    - [type](#type)
+    - [.content](#content)
+    - [.model\_dump() (chuyển từ object -\> dict)](#model_dump-chuyển-từ-object---dict)
 - [PydanticOutputParser()](#pydanticoutputparser)
 - [RunnableWithMessageHistory](#runnablewithmessagehistory)
 - [RunnableLambda](#runnablelambda)
@@ -14,36 +18,7 @@
 - Nếu bạn thấy LangChain “khó đọc” vì nó chia theo pipeline, thì langchain_core chính là nơi định nghĩa các primitive (khối cơ bản) để pipeline đó hoạt động.
 - Nói ngắn gọn: langchain_core không phải để build app trực tiếp, mà là để định nghĩa chuẩn chung cho các thành phần như model, prompt, output, chain.
 ```
-# langchain_core.messages
-## SystemMessage
-```bash
-- Dùng để thiết lập “luật chơi” / ngữ cảnh chung cho model.
-- Định nghĩa: vai trò, phong cách, quy tắc trả lời.
-- Dùng khi muốn model:
-    + trả lời theo phong cách cụ thể (giáo viên, chuyên gia…)
-    + hạn chế/tuân thủ quy tắc
-    + định hướng toàn bộ cuộc hội thoại
-```
-**Ex**
-```python
-from langchain_core.messages import SystemMessage
-
-system_msg = SystemMessage(
-    content="You are a helpful assistant that explains code clearly."
-)
-```
-## HumanMessage()
-```bash
-- Đại diện cho input của người dùng (user prompt).
-```
-**Ex**
-```python
-from langchain_core.messages import HumanMessage
-
-human_msg = HumanMessage(
-    content="Explain what a Python decorator is."
-)
-```
+# messages
 **Ex2: Cách dùng chung với Chat Model**
 ```python
 from langchain_core.messages import SystemMessage, HumanMessage
@@ -64,6 +39,73 @@ print(response.content)
 # SystemMessage → hiểu vai trò
 # HumanMessage → hiểu câu hỏi
 # Sau đó sinh ra câu trả lời.
+```
+## SystemMessage
+```bash
+- Dùng để thiết lập “luật chơi” / ngữ cảnh chung cho model.
+- Định nghĩa: vai trò, phong cách, quy tắc trả lời.
+- Dùng khi muốn model:
+    + trả lời theo phong cách cụ thể (giáo viên, chuyên gia…)
+    + hạn chế/tuân thủ quy tắc
+    + định hướng toàn bộ cuộc hội thoại
+```
+**Ex**
+```python
+from langchain_core.messages import SystemMessage
+
+system_msg = SystemMessage(
+    content="You are a helpful assistant that explains code clearly."
+)
+```
+## HumanMessage() (Đại diện cho input của người dùng - user prompt)
+```bash
+HumanMessage không phải là dict, mà là một object (class). 
+    Tuy nhiên, khi bạn print() nó, cách hiển thị có thể trông giống một dict, vì lớp này định nghĩa cách biểu diễn (__repr__) để dễ đọc.
+```
+**Ex**
+```python
+from langchain_core.messages import HumanMessage
+
+human_msg = HumanMessage(
+    content="Explain what a Python decorator is."
+)
+
+print(human_msg) # content='Explain what a Python decorator is.' additional_kwargs={} response_metadata={}
+```
+## Display (Dùng để cung cấp thông tin)
+### type
+**Ex**
+```python
+from langchain_core.messages import HumanMessage
+
+human_msg = HumanMessage(
+    content="Explain what a Python decorator is."
+)
+
+print(human_msg.type) # human
+```
+### .content
+**Ex**
+```python
+from langchain_core.messages import HumanMessage, SystemMessage
+
+human_msg = HumanMessage(
+    content="Explain what a Python decorator is."
+)
+
+print(human_msg.content) # Explain what a Python decorator is.
+```
+### .model_dump() (chuyển từ object -> dict)
+**Ex**
+```python
+from langchain_core.messages import HumanMessage, SystemMessage
+
+human_msg = HumanMessage(
+    content="Explain what a Python decorator is."
+)
+
+print(human_msg.model_dump())
+# {'content': 'Explain what a Python decorator is.', 'additional_kwargs': {}, 'response_metadata': {}, 'type': 'human', 'name': None, 'id': None}
 ```
 # PydanticOutputParser()
 ```bash

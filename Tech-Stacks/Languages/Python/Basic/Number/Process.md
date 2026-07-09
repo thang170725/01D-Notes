@@ -1,6 +1,9 @@
 - [bin()](#bin)
 - [Operator (Toán tử)](#operator-toán-tử)
   - [^ (XOR)](#-xor)
+  - [\>\> (dịch phải)](#-dịch-phải)
+  - [\<\< (dịch trái)](#-dịch-trái)
+  - [| (OR)](#-or)
 ---
 # bin()
 **Ex1**
@@ -58,4 +61,35 @@ print(a ^ b)
 # ------
 #   0110  (6)
 # Kết quả: 6
+```
+## >> (dịch phải) 
+**Ex1: dịch phải 1 bit**
+```python
+a = 3
+res = a >> 1 # 011 -> 01
+print(res, type(res)) # 1 <class 'int'>
+```
+## << (dịch trái)
+**Ex**
+```python
+a = 8
+res = 2 << a # 1000 -> 1000000
+print(res, type(res)) # 512 <class 'int'>
+```
+## | (OR)
+**Formula**
+```bash
+| Bit A | Bit B | A OR B |
+| ----- | ----- | ------ |
+| 0     | 0     | 0      |
+| 0     | 1     | 1      |
+| 1     | 0     | 1      |
+| 1     | 1     | 1      |
+```
+**Ex**
+```python
+a = 4 # 100
+b = 5 # 101
+res = a|b # 100 OR 101 -> 101 (không nhớ)
+print(res, type(res))
 ```

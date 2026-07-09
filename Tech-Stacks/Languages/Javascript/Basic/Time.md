@@ -1,5 +1,5 @@
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
-  - [Date (lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy)](#date-lấy-ra-đầy-đủ-ngày-tháng-năm-giờ--có-thể-truyền-tham-số-đầu-vào-hoặc-không-tham-số-trong-dấu-nháy)
+  - [new Date (lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy)](#new-date-lấy-ra-đầy-đủ-ngày-tháng-năm-giờ--có-thể-truyền-tham-số-đầu-vào-hoặc-không-tham-số-trong-dấu-nháy)
 - [Process (nhóm xử lý thời gian)](#process-nhóm-xử-lý-thời-gian)
   - [setTimeout() (Dùng để thực hiện một hàm sau một khoảng thời gian xác định. Chỉ chạy 1 lần)](#settimeout-dùng-để-thực-hiện-một-hàm-sau-một-khoảng-thời-gian-xác-định-chỉ-chạy-1-lần)
     - [clearTimeout() (Hủy một setTimeout trước khi nó chạy)](#cleartimeout-hủy-một-settimeout-trước-khi-nó-chạy)
@@ -20,7 +20,7 @@
   - [.setFullYear() \& setMonth() \& setDate() \& setHours() \& setMinutes() \& setSeconds()](#setfullyear--setmonth--setdate--sethours--setminutes--setseconds)
 ---
 # Create (Nhóm khởi tạo)
-## Date (lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy)
+## new Date (lấy ra đầy đủ ngày, tháng, năm, giờ, … có thể truyền tham số đầu vào hoặc không, tham số trong dấu nháy)
 **Syn**
 ```bash
 var | let | const <variable> = new Date();

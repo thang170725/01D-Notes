@@ -1,29 +1,34 @@
 - [Preprocessing](#preprocessing)
   - [train\_test\_split()](#train_test_split)
-- [.fit() \& .transfrom() \& .fit\_transform()](#fit--transfrom--fit_transform)
 - [StandardScaler()](#standardscaler)
-- [Encode](#encode)
-- [LabelEncoder()](#labelencoder)
+- [preprocessing (Tiền xử lý)](#preprocessing-tiền-xử-lý)
+  - [LabelEncoder() (chuyển đổi các giá trị thành các số nguyên)](#labelencoder-chuyển-đổi-các-giá-trị-thành-các-số-nguyên)
 - [Pipeline](#pipeline)
 - [CountVectorizer()](#countvectorizer)
-- [dữ liệu gốc dạng chuỗi](#dữ-liệu-gốc-dạng-chuỗi)
-- [tạo LabelEncoder](#tạo-labelencoder)
-- [mã hóa từ chuỗi sang số](#mã-hóa-từ-chuỗi-sang-số)
-- [giải mã](#giải-mã)
-- [Data](#data)
-- [Build tree](#build-tree)
-- [Predict](#predict)
-- [(0: xanh, nhỏ) (1: đỏ, to)](#0-xanh-nhỏ-1-đỏ-to)
+- [.inverse\_transform() (Để giải mã)](#inverse_transform-để-giải-mã)
+- [.class\_ (In ra tất cả các giá trị khác nhau của intent. Các giá trị tạo thành một mảng)](#class_-in-ra-tất-cả-các-giá-trị-khác-nhau-của-intent-các-giá-trị-tạo-thành-một-mảng)
+- [model\_selection](#model_selection)
+- [tree (Cây quyết định)](#tree-cây-quyết-định)
+  - [DecisionTreeClassifier() (một cây quyết định)](#decisiontreeclassifier-một-cây-quyết-định)
+  - [plot\_tree() (Để vẽ cây quyết định)](#plot_tree-để-vẽ-cây-quyết-định)
 - [Datasets (bộ dữ liệu có sẵn trong scikit-learn)](#datasets-bộ-dữ-liệu-có-sẵn-trong-scikit-learn)
   - [load\_digits()](#load_digits)
     - [.keys()](#keys)
   - [.images\[\]](#images)
   - [.reshape()](#reshape)
+  - [Target (Nhãn tương ứng với từng ảnh - số 0 đến số 9)](#target-nhãn-tương-ứng-với-từng-ảnh---số-0-đến-số-9)
+  - [Data (Ảnh những được làm phẳng (flatten) thành vector 1 chiều có 64 phần tử)](#data-ảnh-những-được-làm-phẳng-flatten-thành-vector-1-chiều-có-64-phần-tử)
+  - [make\_blobs (tạo dữ liệu giả lập cho các bài toán phân cụm hoặc phân loại)](#make_blobs-tạo-dữ-liệu-giả-lập-cho-các-bài-toán-phân-cụm-hoặc-phân-loại)
+- [cluster](#cluster)
+  - [.Kmeans()](#kmeans)
 - [Bootstrapping: lấy 1000 mẫu, mỗi mẫu có 20 phần tử](#bootstrapping-lấy-1000-mẫu-mỗi-mẫu-có-20-phần-tử)
 - [Tính khoảng tin cậy 80% (10% và 90% phân vị)](#tính-khoảng-tin-cậy-80-10-và-90-phân-vị)
 - [Vẽ đồ thị phân phối của các trung bình mẫu](#vẽ-đồ-thị-phân-phối-của-các-trung-bình-mẫu)
 - [impute](#impute)
   - [SimpleImputer  (dùng để điền giá trị bị thiếu (NaN) vào dữ liệu)](#simpleimputer--dùng-để-điền-giá-trị-bị-thiếu-nan-vào-dữ-liệu)
+- [Train (train model)](#train-train-model)
+  - [.fit() \& .transfrom()](#fit--transfrom)
+  - [.fit\_transform() (kết hợp 2 bước fit và transform)](#fit_transform-kết-hợp-2-bước-fit-và-transform)
 ---
 # Preprocessing
 ## train_test_split()
@@ -58,15 +63,6 @@ print("nhãn huấn luyên ", y_train)    # nhãn huấn luyên  ['nam', 'nam', 
 print("dữ liệu kiểm tra ", X_test)    # dữ liệu kiểm tra  [[180], [165]]
 print("nhãn kiểm tra ", y_test)       # nhãn kiểm tra  ['nam', 'nữ']
 ```
-# .fit() & .transfrom() & .fit_transform()
-```bash
-- fit               : học dữ liệu.
-- fit_transform     : kết hợp 2 bước fit và transform
-```
-**Syn** 
-```bash
-model.fit(X, y)
-```
 # StandardScaler()
 ```bash
 - Dùng để chuẩn hóa dữ liệu. Trả về một đối tượng Scaler với các phương thức để chuyển đổi tập dữ liệu.
@@ -95,48 +91,24 @@ X = df[['Weight', 'Volume']]
 scaledX = scale.fit_transform(X)
 
 print(scaledX)
-
 # [[-2.10389253 -1.59336644]
 #  [-0.55407235 -1.07190106]
 #  [-1.52166278 -1.59336644]
-#  [-1.78973979 -1.85409913]
-#  [-0.63784641 -0.28970299]
-#  [-1.52166278 -1.59336644]
-#  [-0.76769621 -0.55043568]
-#  [ 0.3046118  -0.28970299]
-#  [-0.7551301  -0.28970299]
-#  [-0.59595938 -0.0289703 ]
-#  [-1.30803892 -1.33263375]
-#  [-1.26615189 -0.81116837]
-#  [-0.7551301  -1.59336644]
-#  [-0.16871166 -0.0289703 ]
-#  [ 0.14125238 -0.0289703 ]
-#  [ 0.15800719 -0.0289703 ]
-#  [ 0.3046118  -0.0289703 ]
-#  [-0.05142797  1.53542584]
-#  [-0.72580918 -0.0289703 ]
-#  [ 0.14962979  1.01396046]
-#  [ 1.2219378  -0.0289703 ]
-#  [ 0.5685001   1.01396046]
-#  [ 0.3046118   1.27469315]
-#  [ 0.51404696 -0.0289703 ]
-#  [ 0.51404696  1.01396046]
-#  [ 0.72348212 -0.28970299]
-#  [ 0.8281997   1.01396046]
-#  [ 1.81254495  1.01396046]
-#  [ 0.96642691 -0.0289703 ]
-#  [ 1.72877089  1.01396046]
-#  [ 1.30990057  1.27469315]
-#  [ 1.90050772  1.01396046]
-#  [-0.23991961 -0.0289703 ]
+#  ...
 #  [ 0.40932938 -0.0289703 ]
 #  [ 0.47215993 -0.0289703 ]
 #  [ 0.4302729   2.31762392]]
 ```
-# Encode
-# LabelEncoder()
+# preprocessing (Tiền xử lý)
+## LabelEncoder() (chuyển đổi các giá trị thành các số nguyên)
+**Syn**
 ```bash
-Dùng để chuyển đổi các giá trị thành các số nguyên.
+from sklearn.preprocessing import LabelEncoder
+
+# 1. tạo LabelEncoder
+le = LabelEncoder()
+# 2. mã hóa từ chuỗi sang số
+encoded = le.fit_transform(arr)
 ```
 **Ex1**
 ```python
@@ -220,18 +192,15 @@ print("Accuracy:", pipe.score(X_test, y_test))
 
 # Không cần gọi scaler.fit_transform() thủ công Pipeline tự xử lý thứ tự chuẩn.
 ```
-Sklearn
-feature_extraction
-text
 # CountVectorizer()
 ```bash
 Công cụ tự động hóa việc: Tách từ (tokenize), Xây dựng từ vựng (vocabulary), Đếm số lần xuất hiện của từng từ trong mỗi tài liệu
 ```
-**Syn**
-self.vectorizer = CountVectorizer()
-X = self.vectorizer.fit_transform(self.df["text"]).toarray()
-.fit_transform()
-Yầu đầu vào là một iterable, có thể là list, numpy array, series, ...
+**Ex**
+```python
+vectorizer = CountVectorizer()
+X = vectorizer.fit_transform(self.df["text"]).toarray()
+```
 
 .get_feature_names_out()
 Xem danh sách từ vựng.
@@ -240,156 +209,33 @@ Xem ma trận đếm
 ```bash
 from sklearn.linear_model import LinearRegression
 ```
-
-
-.inverse_transform()
-Để giải mã.
-Cú pháp:
-from sklearn.preprocessing import LabelEncoder
-# dữ liệu gốc dạng chuỗi
-arr = ['reb', 'blue', 'blue', 'orange', 'red', 'yellow', 'blue']
-# tạo LabelEncoder
-le = LabelEncoder()
-# mã hóa từ chuỗi sang số
-encoded = le.fit_transform(arr)
-# giải mã
-decoded = le.inverse_transform(encoded)
-print(decoded)
-['reb' 'blue' 'blue' 'orange' 'red' 'yellow' 'blue']
-.class_
-In ra tất cả các giá trị khác nhau của intent. Các giá trị tạo thành một mảng.
-Cú pháp:
+# .inverse_transform() (Để giải mã)
+# .class_ (In ra tất cả các giá trị khác nhau của intent. Các giá trị tạo thành một mảng)
+**Ex**
+```python
 print(label_encoder.classes_)
-['close_info' 'greeting' 'open_info' 'open_webapp' 'play_music', 'stop_music' 'turn_off_lights' 'turn_on_lights' 'weather']
-In bảng ánh xạ nhãn
-print(dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_))))
-model_selection
-14.4 Thư viện tree
-14.4.1 Giới thiệu
-    • Cây quyết định là biểu đồ luồng và có thể giúp bạn đưa ra quyết định dựa trên kinh nghiệm trước đó.
-Thuật toán
-import numpy as np
+# ['close_info' 'greeting' 'open_info' 'open_webapp' 'play_music', 'stop_music' 'turn_off_lights' 'turn_on_lights' 'weather']
+```
+# model_selection
+# tree (Cây quyết định)
+## DecisionTreeClassifier() (một cây quyết định)
+```bash
+Là một mô hình học máy thuộc loại phân loại (classification) 
+    dùng để dự đoán đối tượng thuộc về nhóm nào (label/class), dựa trên các đặc điểm (features) của nó.
 
-def entropy(y):
-    counts = np.bincount(y)
-    probs = counts / len(y)
-    ent = 0
-    for p in probs:
-        if p > 0:
-            ent -= p * np.log2(p)
-    return ent
-
-def best_split(X, y):
-    m, n = X.shape
-    base_entropy = entropy(y)
-    best_gain = 0
-    best_feature = None
-    best_threshold = None
-
-    for feature in range(n):
-        values = np.unique(X[:, feature])
-        for threshold in values:
-            left_mask = X[:, feature] <= threshold
-            right_mask = X[:, feature] > threshold
-
-            if sum(left_mask) == 0 or sum(right_mask) == 0:
-                continue
-
-            left_entropy = entropy(y[left_mask])
-            right_entropy = entropy(y[right_mask])
-            weighted_entropy = (sum(left_mask) * left_entropy + sum(right_mask) * right_entropy) / m
-
-            info_gain = base_entropy - weighted_entropy
-
-            print(f"Feature {feature}, Threshold {threshold}, Info Gain {info_gain:.4f}")
-
-            if info_gain > best_gain:
-                best_gain = info_gain
-                best_feature = feature
-                best_threshold = threshold
-
-    return best_feature, best_threshold
-
-def build_tree(X, y, depth=0, max_depth=2):
-    if len(set(y)) == 1:
-        return {'leaf': True, 'class': y[0]}
-    if depth >= max_depth:
-        counts = np.bincount(y)
-        return {'leaf': True, 'class': np.argmax(counts)}
-
-    feature, threshold = best_split(X, y)
-    if feature is None:
-        counts = np.bincount(y)
-        return {'leaf': True, 'class': np.argmax(counts)}
-
-    left_mask = X[:, feature] <= threshold
-    right_mask = X[:, feature] > threshold
-
-    left_subtree = build_tree(X[left_mask], y[left_mask], depth + 1, max_depth)
-    right_subtree = build_tree(X[right_mask], y[right_mask], depth + 1, max_depth)
-
-    return {
-        'leaf': False,
-        'feature': feature,
-        'threshold': threshold,
-        'left': left_subtree,
-        'right': right_subtree
-    }
-
-def predict_one(x, tree):
-    if tree['leaf']:
-        return tree['class']
-    if x[tree['feature']] <= tree['threshold']:
-        return predict_one(x, tree['left'])
-    else:
-        return predict_one(x, tree['right'])
-
-def predict(X, tree):
-    return np.array([predict_one(x, tree) for x in X])
-
-# Data
-X = np.array([[1], [2], [3], [4], [5]])
-y = np.array([0, 0, 1, 1, 1])
-
-# Build tree
-tree = build_tree(X, y, max_depth=2)
-
-# Predict
-print(predict(np.array([[1.5], [3.5], [4.5]]), tree))
-Feature 0, Threshold 1, Info Gain 0.3219
-Feature 0, Threshold 2, Info Gain 0.9710
-Feature 0, Threshold 3, Info Gain 0.4200
-Feature 0, Threshold 4, Info Gain 0.1710
-[0 1 1]
-
-DecisionTreeClassifier()
-    • Là một mô hình học máy thuộc loại phân loại (classification) dùng để dự đoán đối tượng thuộc về nhóm nào (label/class), dựa trên các đặc điểm (features) của nó.
-    • Nó hoạt động như một cây quyết định, ở mỗi nút, nó đặt câu hỏi “có hay không”, nhỏ hơn bao nhiêu” rồi phân nhánh.
-    • Thường đi kèm với predict().
-Cú pháp:
+Nó hoạt động như một cây quyết định, ở mỗi nút, nó đặt câu hỏi “có hay không”, nhỏ hơn bao nhiêu” rồi phân nhánh.
+```
+**Syn**
+```bash
 from sklearn.tree import DecisionTreeClassifier
+
 model = DecisionTreeClassifier(criterion='gini', max_depth=None, random_state=None)
-    • criterion: Tiêu chí chia nhánh.
-    • max_depth: Giới hạn độ sâu của cây.
-    • random_state: Đảm bảo kết quả lặp lại khi chạy nhiều lần.
 
-predict()
-Dùng để dự đoán kết quả (label/ class) của dữ liệu mới sau khi đã huấn luyện bằng fit().
-Cú pháp: model.predict(X_new)
-plot_tree()
-Để vẽ cây quyết định.
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-import matplotlib.pyplot as plt
-# (0: xanh, nhỏ) (1: đỏ, to)
-X = [[0,1],[1,1],[0,0],[1,0]] # đặc trưng
-y = [0,1,0,1] # nhãn 0 = không phải táo, 1 = táo
-
-model = DecisionTreeClassifier()
-model.fit(X,y)
-print(model.predict([[1,0]]))
-plot_tree(model, filled=True)
-plt.show()
-
+- criterion: Tiêu chí chia nhánh.
+- max_depth: Giới hạn độ sâu của cây.
+- random_state: Đảm bảo kết quả lặp lại khi chạy nhiều lần.
+```
+## plot_tree() (Để vẽ cây quyết định)
 # Datasets (bộ dữ liệu có sẵn trong scikit-learn) 
 ## load_digits()
 ```bash
@@ -457,16 +303,14 @@ print(y.shape)
 #  [ 0.  0. 10. ... 12.  1.  0.]]
 (1797,)
 ```
-Target
-Nhãn tương ứng với từng ảnh (số 0 đến số 9).
-Data
-Ảnh những được làm phẳng (flatten) thành vector 1 chiều có 64 phần tử.
-14.7.3 Thư viện make_blobs
-14.7.3.1 Giới thiệu
-Dùng để tạo dữ liệu giả lập cho các bài toán phân cụm hoặc phân loại. Dữ liệu tạo ra gồm các điểm dữ liệu được phân bố quanh các tâm cụm xác định, rất hữu ích cho việc thử nghiệm mô hình học máy.
-14.7.3.2 Cơ bản
-make_blobs()
-Cú pháp:
+## Target (Nhãn tương ứng với từng ảnh - số 0 đến số 9)
+## Data (Ảnh những được làm phẳng (flatten) thành vector 1 chiều có 64 phần tử)
+## make_blobs (tạo dữ liệu giả lập cho các bài toán phân cụm hoặc phân loại)
+```bash
+Dùng để . Dữ liệu tạo ra gồm các điểm dữ liệu được phân bố quanh các tâm cụm xác định, rất hữu ích cho việc thử nghiệm mô hình học máy.
+```
+**Syn**
+```python
 from sklearn.datasets import make_blobs
 
 X, y = make_blobs(n_samples=100,       # số lượng điểm dữ liệu
@@ -474,8 +318,12 @@ X, y = make_blobs(n_samples=100,       # số lượng điểm dữ liệu
                   centers=3,           # số cụm hoặc tọa độ cụm
                   cluster_std=1.0,     # độ lệch chuẩn (spread) của cụm
                   random_state=42)     # seed để kết quả giống nhau mỗi lần
-    • X: mảng numpy chứa tọa độ các điểm dữ liệu, shape=(n_samples, n_features)
-    • y: mảng numpy chứa nhãn cụm tương ứng cho từng điểm, shape=(n_samples,)
+- Output:
+    + X: mảng numpy chứa tọa độ các điểm dữ liệu, shape=(n_samples, n_features)
+    + y: mảng numpy chứa nhãn cụm tương ứng cho từng điểm, shape=(n_samples,)
+```
+**Ex**
+```python
 from sklearn.datasets import make_blobs
 import matplotlib.pyplot as plt
 
@@ -483,55 +331,53 @@ X,y = make_blobs(n_samples=300, centers=3, random_state=42)
 
 plt.scatter(X[:,0], X[:,1], c=y, cmap='viridis')
 plt.show()
+```
+# cluster
+## .Kmeans()
+**Ex**
+```python
+import numpy as np
+from sklearn.cluster import KMeans
 
+# 1. Chuẩn bị dữ liệu (Chuyển danh sách điểm thành Numpy Array)
+X = np.array([[1, 1], [1, 3], [2, 2], [4, 4], [4, 5], [5, 4], [5, 5]])
 
-14.7 Confusion Matrix
-    • Đây là bảng được sử dụng trong các bài toán phân loại để đánh giá lỗi trong mô hình xảy ra ở đâu.
-    • Các hàng biểu diễn các lớp thực tế mà kết quả phải có được. Trong khi các cột biểu diễn các dự đoán mà chúng ta đã đưa ra. Sử dụng bảng này, bạn có thể xem dự đoán nào là sai.
-    • Ma trận confusion matrix có thể được tạo bằng các dự đoán đưa ra từ hồi quy logistic.
-Nó dùng để:
-    • Đánh giá hiệu suất của mô hình phân loại bằng cách so sánh giữa dự đoán của mô hình và nhãn thực tế.
-Giải thích ngắn gọn:
+# 2. Định nghĩa tọa độ 3 tâm cụm ban đầu (m1=x1, m2=x2, m3=x3)
+# Chú ý: Cần bọc trong np.array để tương thích với scikit-learn
+initial_centroids = np.array([[1, 1], [1, 3], [2, 2]])
 
-Dự đoán: Pos
-Dự đoán: Neg
-Thực tế: Pos
-True Positive (TP)
-False Negative (FN)
-Thực tế: Neg
-False Positive (FP)
-True Negative (TN)
-    • TP: Dự đoán đúng trường hợp dương.
-    • TN: Dự đoán đúng trường hợp âm.
-    • FP: Dự đoán sai là dương (nhầm lẫn).
-    • FN: Dự đoán sai là âm (bỏ sót).
-    • Accuracy: Độ chính xác tổng thể.
-    • Precision: Độ chính xác khi dự đoán là dương.
-    • Recall: Khả năng tìm đúng tất cả trường hợp dương.
-    • F1-score: Trung bình hài hòa giữa precision và recall.
-14.8 Hierarchical Clustering
-    • Là học máy không giám sát.
-    • Một loại phân cụm, phân cấp theo phương pháp tiếp cận từ dưới lên. Chúng ta bắt đầu bằng cách xử lý từng điểm dữ liệu như một cụm riêng. Sau đó, chúng ta kết hợp các cụm có khoảng cách ngắn nhất giữa chúng lại với nhau để tạo thành các cụm lớn hơn. Bước này được lặp lại cho đến khi tạo thành một cụm lớn chứa tất cả các điểm dữ liệu.
-    • Phân cụm phân cấp yêu cầu chúng ta phải quyết định cả phương pháp khoảng cách và phương pháp liên kết. Chúng ta sẽ sử dụng khoảng cách Euclid và phương pháp liên kết Ward, phương pháp này cố gắng giảm thiểu phương sai giữa các cụm.
-14.9 Grid Search
-    • Một phương pháp là thử các giá trị khác nhau rồi chọn giá trị cho điểm cao nhất. Kỹ thuật này được gọi là tìm kiếm lưới. Nếu chúng ta phải chọn các giá trị cho hai hoặc nhiều tham số, chúng ta sẽ đánh giá tất cả các kết hợp của các tập giá trị, do đó tạo thành một lưới các giá trị.
-    • Trước khi đi vào ví dụ, tốt nhất là bạn nên biết tham số chúng ta đang thay đổi có tác dụng gì. Các giá trị C cao hơn cho biết mô hình, dữ liệu đào tạo giống với thông tin trong thế giới thực, đặt trọng số lớn hơn vào dữ liệu đào tạo. Trong khi các giá trị C thấp hơn thì ngược lại.
-    • Sử dụng tham số mặc định
-    • Trước tiên, hãy xem chúng ta có thể tạo ra loại kết quả nào mà không cần tìm kiếm lưới chỉ bằng cách sử dụng các tham số cơ sở.
-    • Để bắt đầu, trước tiên chúng ta phải tải tập dữ liệu mà chúng ta sẽ làm việc.
-14.10 K-means
-14.11 Bootstrap Aggregation
-14.12 Cross Validation
-14.13 AUC – ROC Curve
-14.14 K-nearest neighbors
-14.15 Mô hình Support Vector Machine (SVM)
+# 3. Khởi tạo đối tượng KMeans
+# n_init=1 nghĩa là chỉ chạy đúng 1 lần với tâm cụm ta đưa vào, không chạy lại ngẫu nhiên
+model = KMeans(
+    n_clusters=3, init=initial_centroids, n_init=1, max_iter=100
+)
 
-sklearn.preprocessing.MinMaxScaler
-fit()
-sklearn.neighbors.KneighborsClassifier
-sklearn.cluster.Kmeans
-fit()
-predict()
+# 4. Hàm kích hoạt thuật toán tính toán (Thay cho toàn bộ vòng lặp for/while code thuần)
+model.fit(X)
+
+# 5. Lấy kết quả đầu ra
+labels = model.labels_  # Mảng chứa kết quả gán cụm của từng điểm
+final_centroids = model.cluster_centers_  # Tọa độ các tâm cụm sau khi hội tụ
+
+# --- IN KẾT QUẢ ---
+print("=== KẾT QUẢ K-MEANS BẰNG SCIKIT-LEARN ===")
+print("Kết quả gán cụm của từng điểm (từ x1 đến x7):")
+print(labels)
+# Kết quả sẽ có dạng dạng: [0 1 2 2 2 2 2] nghĩa là x1 thuộc cụm 0, x2 thuộc cụm 1, còn lại thuộc cụm 2
+
+print("\nTọa độ các tâm cụm cuối cùng sau khi hội tụ:")
+for i, center in enumerate(final_centroids):
+    print(f"  Tâm cụm {i+1}: {center}")
+
+# === KẾT QUẢ K-MEANS BẰNG SCIKIT-LEARN ===
+# Kết quả gán cụm của từng điểm (từ x1 đến x7):
+# [0 1 0 2 2 2 2]
+
+# Tọa độ các tâm cụm cuối cùng sau khi hội tụ:
+#   Tâm cụm 1: [1.5 1.5]
+#   Tâm cụm 2: [1. 3.]
+#   Tâm cụm 3: [4.5 4.5]
+```
 sklearn.metrics.accuracy_score
 sklearn.metrics.classification_report
 sklearn.metrics.confusion_matrix
@@ -721,3 +567,20 @@ print(df)
 # 3   HN
 # 4   HN
 ```
+# Train (train model)
+## .fit() & .transfrom()
+```bash
+- fit               : học dữ liệu.
+- fit_transform     : 
+```
+**Syn** 
+```bash
+model.fit(X, y)
+```
+## .fit_transform() (kết hợp 2 bước fit và transform)
+```bash
+Yầu đầu vào là một iterable, có thể là list, numpy array, series, ...
+```
+predict()
+Dùng để dự đoán kết quả (label/ class) của dữ liệu mới sau khi đã huấn luyện bằng fit().
+Cú pháp: model.predict(X_new)

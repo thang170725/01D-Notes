@@ -30,6 +30,7 @@
 - [char\_length()](#char_length)
 - [Process](#process)
   - [Case ... When ... then ... else ... end (biểu thức điều kiện)](#case--when--then--else--end-biểu-thức-điều-kiện)
+  - [if()](#if)
 ---
 # Kiểu dữ liệu
 ```bash
@@ -461,3 +462,4 @@ CASE
     ELSE 'Trượt'
 END
 ```
+## if()

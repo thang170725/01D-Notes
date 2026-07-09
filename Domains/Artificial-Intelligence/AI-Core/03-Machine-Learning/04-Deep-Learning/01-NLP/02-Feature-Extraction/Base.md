@@ -87,17 +87,67 @@ Ví dụ với Logistic Regression:
         - x2 = số lần xuất hiện của “money”
 => Nếu không có BoW thì x1, x2, ... không tồn tại.
 ```
-# TF-IDF 
+# TF-IDF (biến token thành feature vector)
 ```bash
-Là cách biến token thành feature vector cho NLP truyền thống. 
+Là cách  cho NLP truyền thống. 
     Khác với embedding là cách biến token thành vector ngữ nghĩa cho Deep Learning và LLM.
-
-Nhưng thay vì đếm:
-    [1, 1, 1, 0]
-
-    nó tính trọng số: [0.12, 0.08, 0.91, 0]
-    => Vẫn là feature vector.
 ```
+**Workflow của TF-IDF**
+```bash
+Giả sử chúng ta có một tập dữ liệu gồm 3 câu (3 văn bản) sau:
+    - Văn bản 1 (D1): "Tôi thích học AI"
+    - Văn bản 2 (D2): "Tôi thích ăn kem"
+    - Văn bản 3 (D3): "Học AI rất vui"
+Tổng số văn bản trong tập dữ liệu là N = 3.
+Chúng ta sẽ tính TF-IDF cho các từ trong Văn bản 1 (D_1).
+```
+```bash
+Bước 1: Tính TF (Term Frequency) của các từ trong Văn bản 1
+    TF đo lường mức độ thường xuyên của một từ xuất hiện trong một văn bản cụ thể.
+
+    TF = (Số lần từ xuất hiện trong văn bản) / (Tổng số từ của văn bản đó)
+ 
+    Văn bản 1 có tổng cộng 4 từ: "Tôi", "thích", "học", "AI". Mỗi từ xuất hiện đúng 1 lần.
+
+        Từ trong D1 	Số lần xuất hiện	Tổng số từ trong D1 	TF
+        Tôi         	1	                    4	                1/4=0.25
+        thích          	1	                    4	                1/4=0.25
+        học         	1	                    4	                1/4=0.25
+        AI          	1	                    4	                1/4=0.25
+
+Bước 2: Tính IDF (Inverse Document Frequency) của từng từ
+    IDF đo lường mức độ "hiếm" hoặc "phổ biến" của một từ trên toàn bộ 3 văn bản. Từ nào xuất hiện ở quá nhiều văn bản 
+        Ví dụ như từ "Tôi" thì IDF sẽ thấp vì nó không mang tính đặc trưng.
+
+    IDF=log((Tổng số văn bản (N))/ (Số văn bản có chứa từ đó))
+        (Ở đây ta dùng logarit tự nhiên ln hoặc log10)
+
+    - Từ "Tôi": Xuất hiện trong D1 và D2 (2 văn bản) → IDF = log10(3/2) ≈ 0.176
+    - Từ "thích": Xuất hiện trong D1 và D2 (2 văn bản) → IDF = log10(3/2) ≈ 0.176
+    - Từ "học": Xuất hiện trong D1 và D3 (2 văn bản) → IDF = log10(3/2) ≈ 0.176
+    - Từ "AI": Xuất hiện trong D1 và D3 (2 văn bản) → IDF = log10(3/2) ≈ 0.176
+
+Bước 3: Tính TF-IDF cho Văn bản 1
+    TF-IDF = TF×IDF
+
+    Từ trong D1 	TF      IDF     TF-IDF
+    Tôi         	0.25	0.176	0.044
+    thích           0.25	0.176	0.044
+    học         	0.25	0.176	0.044
+    AI          	0.25	0.176	0.044
+
+    Kết quả thu được là một vector đại diện cho Văn bản 1: [0.044, 0.044, 0.044, 0.044].
+
+📈 Giả định trường hợp thực tế (Khi tập dữ liệu lớn lên)
+Trong các bài toán thực tế (hàng nghìn văn bản), những từ mang tính kết nối hoặc đại từ như "Tôi", "và", "là", "những" sẽ xuất hiện ở gần như 100% văn bản.
+
+Nếu áp dụng vào công thức:
+    - Từ "Tôi" xuất hiện ở 1000 / 1000 văn bản: IDF=log10(1000/1000)=log10(1)=0.
+    - Từ "AI" chỉ xuất hiện ở 10 / 1000 văn bản chuyên ngành: IDF=log10(1000/10)=log10(100)=2.
+
+Khi đó, điểm TF-IDF của từ "Tôi" sẽ bị kéo tuột về 0, còn từ "AI" sẽ có điểm số rất cao. Máy tính sẽ ngay lập tức hiểu rằng: "À, Văn bản 1 này nói về chủ đề AI chứ không phải nói về chủ đề Tôi!".
+```
+## Ask (các câu hỏi liên quan đến TF-IDF)
 **Nhiều bài toán dùng luôn Bow và TF-IDF vào train model chứ không dùng embedding**
 ```bash
 Đúng

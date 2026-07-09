@@ -6,6 +6,9 @@
 - [ScrollView (Nó giống như một màn hình có thể kéo lên kéo xuống)](#scrollview-nó-giống-như-một-màn-hình-có-thể-kéo-lên-kéo-xuống)
 - [TouchableOpacity (Đây là nút bấm)](#touchableopacity-đây-là-nút-bấm)
 - [KeyboardAvoidingView](#keyboardavoidingview)
+- [Image](#image)
+- [TextInput (ô nhập liệu)](#textinput-ô-nhập-liệu)
+- [Button](#button)
 ---
 # Platform (cho biết app đang chạy trên hệ điều hành nào)
 ## OS (trả về hệ điều hành)
@@ -40,9 +43,26 @@ Platform.OS // "android" hoặc "ios"
 // └─────────────────┘
 ```
 # Text (Dùng để hiển thị chữ)
-**Ex**
+**Ex1**
 ```js
-<Text>Hello</Text>
+import {Text} from 'react-native';
+
+const Cat = () => {
+  return <Text>Hello, I am your cat!</Text>;
+};
+
+export default Cat;
+```
+**Ex: truyền biến**
+```js
+import {Text} from 'react-native';
+
+const Cat = () => {
+  const name = 'Maru';
+  return <Text>Hello, I am {name}!</Text>;
+};
+
+export default Cat;
 ```
 # StyleSheet (Nó là một hàm để tạo style)
 **Ex: Không dùng StyleSheet**
@@ -74,41 +94,42 @@ const styles = StyleSheet.create({
 ```
 # ScrollView (Nó giống như một màn hình có thể kéo lên kéo xuống)
 ```bash
-Nếu không dùng ScrollView
-↓
-chỉ thấy
-1
-2
-3
-4
-=> Các dòng dưới bị mất.
-
-Có ScrollView
-↓
-Vuốt
-1
-2
-3
-4
-↓
-5
-6
-7
-↓
-20
-↓
-50
-↓
-100
-
 Khi nào dùng?
-    - Danh sách dài
+    Danh sách dài
 
-Ví dụ
-    - Tin tức
-    - Facebook
-    - Shopee
-    - Danh sách sản phẩm
+    Ví dụ
+        - Tin tức
+        - Facebook
+        - Shopee
+        - Danh sách sản phẩm
+```
+**Ex**
+**Nếu không dùng ScrollView**
+```bash
+chỉ thấy
+    1
+    2
+    3
+    4
+=> Các dòng dưới bị mất.
+```
+**Có ScrollView**
+```bash
+Vuốt
+    1
+    2
+    3
+    4
+    ↓
+    5
+    6
+    7
+    ↓
+    20
+    ↓
+    50
+    ↓
+    100
 ```
 **Ex**
 ```js
@@ -176,4 +197,67 @@ Giả sử có màn hình
     <TextInput/>
     <TextInput/>
 </KeyboardAvoidingView>
+```
+# Image
+**Ex**
+```js
+import {View, Text, Image, ScrollView, TextInput} from 'react-native';
+
+const App = () => {
+    return (
+        <Image
+          source={{
+            uri: 'https://reactnative.dev/docs/assets/p_cat2.png',
+          }}
+          style={{width: 200, height: 200}}
+        />
+  );
+};
+
+export default App;
+```
+# TextInput (ô nhập liệu)
+**Syn**
+```bash
+<TextInput
+    placeholder="Type here to translate!"
+    onChangeText={newText => setText(newText)}
+    defaultValue={text}
+    style={{
+      height: 40,
+      padding: 5,
+      marginHorizontal: 8,
+      borderWidth: 1,
+    }}
+/>
+```
+**Ex**
+```js
+import {Text, TextInput, View} from 'react-native';
+
+const Cat = () => {
+  return (
+      <TextInput
+        style={{
+          height: 40,
+          borderColor: 'gray',
+          borderWidth: 1,
+        }}
+        defaultValue="Name me!"
+      />
+  );
+};
+
+export default Cat;
+```
+# Button
+**Ex**
+```js
+<Button
+    onPress={() => {
+      setIsHungry(false);
+    }}
+    disabled={!isHungry}
+    title={isHungry ? 'Give me some food, please!' : 'Thank you!'}
+  />
 ```

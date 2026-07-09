@@ -1,48 +1,26 @@
-- [Nn](#nn)
-  - [Module](#module)
-  - [.Linear()](#linear)
+- [Nn introduction (Để xây dựng mạng nơ ron nhanh chóng)](#nn-introduction-để-xây-dựng-mạng-nơ-ron-nhanh-chóng)
+- [Sequential() (Khởi tạo mô hình mạng nơ ron)](#sequential-khởi-tạo-mô-hình-mạng-nơ-ron)
+- [.train() (Bật chế độ training mode)](#train-bật-chế-độ-training-mode)
+- [.Linear()](#linear)
   - [Conv2d()](#conv2d)
     - [.weight (xem weight của conv2d)](#weight-xem-weight-của-conv2d)
 - [tensor đầu ra của mô hình](#tensor-đầu-ra-của-mô-hình)
     - [.eval()](#eval)
 ---
-# Nn
+# Nn introduction (Để xây dựng mạng nơ ron nhanh chóng)
+# Sequential() (Khởi tạo mô hình mạng nơ ron)
+**Syn**
 ```bash
-- Để xây dựng mạng nơ ron nhanh chóng.
-```
-nn
-├── Layers
-│   ├── Linear
-│   ├── Conv2d
-│   ├── Embedding
-│
-├── Activations
-│   ├── ReLU
-│   ├── Tanh
-│   ├── Sigmoid
-│
-├── Loss Functions
-│   ├── CrossEntropyLoss
-│   ├── MSELoss
-│
-└── Model Tools
-    ├── Module
-    ├── Sequential
-Sequential()
-Khởi tạo mô hình mạng nơ ron
-Cú pháp:
 self.net = nn.Sequential(
-            nn.Linear(input_size, 128),
-            nn.ReLU(),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Linear(64, num_classes)
-        )
-.train()
-Bật chế độ training mode.
-
-## Module
-## .Linear()
+    nn.Linear(input_size, 128),
+    nn.ReLU(),
+    nn.Linear(128, 64),
+    nn.ReLU(),
+    nn.Linear(64, num_classes)
+)
+```
+# .train() (Bật chế độ training mode)
+# .Linear()
 ```bash
 Là lớp fully connected (FC).
 ```
@@ -133,7 +111,6 @@ logits = torch.tensor([2.0, 1.0, 0.1])
 probs = F.softmax(logits, dim=0)
 print(probs)
 print(probs.sum())  # Kiểm tra tổng = 1
-Softmax()
 import tensorflow as tf
 
 logits = tf.constant([2.0, 1.0, 0.1])
@@ -188,8 +165,6 @@ y_pred = self.sigmoid(logits) # sigmoid
 
 Tanh()
 tanh là lớp, phải gọi hàm kích hoạt
-
-Softmax()
 LeakyReLU
 CrossEntropyLoss()
     • Là hàm mất mát (loss function) dùng trong các bài toán phân loại (classification). Nó đo mức độ khác nhau giữa xác suất dữ đoán của mô hình và nhãn thật.

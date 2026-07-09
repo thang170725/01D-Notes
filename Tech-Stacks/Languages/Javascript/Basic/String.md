@@ -28,7 +28,7 @@
   - [.trim() \& trimstart() \& trimEnd()](#trim--trimstart--trimend)
 - [RegExp (Biểu thức chính quy)](#regexp-biểu-thức-chính-quy)
   - [.match()](#match)
-  - [.test()](#test)
+  - [.test() (Trả về True/False nếu chuỗi khớp hoặc không khớp với biểu thức chính quy)](#test-trả-về-truefalse-nếu-chuỗi-khớp-hoặc-không-khớp-với-biểu-thức-chính-quy)
   - [.exec()](#exec)
   - [.replace()](#replace-1)
 ---
@@ -400,7 +400,7 @@ console.log(a.trim());
     + g: so khớp toàn bộ chuỗi cần tìm .
     + m: so khớp luôn cả các dữ liệu xuống dòng (multiline).
 ```
-**Ex**
+**Ký hiệu cơ bản**
 ```js
 - /[A-Z]/g  : khớp từ A-Z
 - /[1-9]/g  : khớp từ 1-9
@@ -436,10 +436,7 @@ let text = "Hello world";
 
 console.log(text.match("w")); // [ 'w', index: 6, input: 'Hello world', groups: undefined ]
 ```
-## .test()
-```bash
-Trả về True/False nếu chuỗi khớp hoặc không khớp với biểu thức chính quy.
-```
+## .test() (Trả về True/False nếu chuỗi khớp hoặc không khớp với biểu thức chính quy)
 **Ex**
 ```js
 let a = /hello/.test('chào là hello world')

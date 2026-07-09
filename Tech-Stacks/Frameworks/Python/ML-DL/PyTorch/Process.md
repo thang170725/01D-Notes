@@ -15,13 +15,16 @@
   - [.view()](#view)
   - [.reshape()](#reshape)
   - [.unsqueeze()](#unsqueeze)
+  - [.unique()](#unique)
   - [.tolist()](#tolist)
+  - [.zero\_() (dùng để đưa tất cả phần tử của tensor về 0)](#zero_-dùng-để-đưa-tất-cả-phần-tử-của-tensor-về-0)
 - [Display (Mục đích hiển thị nhằm cung cấp thêm thông tin)](#display-mục-đích-hiển-thị-nhằm-cung-cấp-thêm-thông-tin)
   - [.size()](#size)
   - [.shape](#shape)
   - [.item()](#item)
 - [Math](#math)
   - [.mean()](#mean)
+  - [@ (nhân ma trận)](#-nhân-ma-trận)
   - [exp()](#exp)
   - [Tanh()](#tanh)
   - [empty()](#empty)
@@ -29,9 +32,8 @@
   - [add()](#add)
   - [add\_()](#add_)
 - [Training graph (Liên quan đến huấn luyện model)](#training-graph-liên-quan-đến-huấn-luyện-model)
-  - [.backward()](#backward)
-  - [.grad](#grad)
-  - [.zero\_()](#zero_)
+  - [.backward() (Lan truyền ngược (backpropagation) - tính đạo hàm của loss theo từng trọng số mô hình)](#backward-lan-truyền-ngược-backpropagation---tính-đạo-hàm-của-loss-theo-từng-trọng-số-mô-hình)
+    - [.grad](#grad)
   - [.squeeze()](#squeeze)
   - [.argmax()](#argmax)
   - [.item()](#item-1)
@@ -40,14 +42,20 @@
   - [Stack()](#stack)
   - [Cat()](#cat)
   - [no\_grad()](#no_grad)
+  - [softmax (chuyển tensor thành thành xác suất)](#softmax-chuyển-tensor-thành-thành-xác-suất)
+  - [argmax](#argmax-1)
 - [Cuda](#cuda)
   - [device()](#device)
   - [is\_available()](#is_available)
   - [get\_device\_name()](#get_device_name)
   - [.to()](#to)
   - [Utils](#utils)
-- [Dataset](#dataset)
-- [DataLoader](#dataloader)
+- [Data (Quản lý dữ liệu bằng Pytorch)](#data-quản-lý-dữ-liệu-bằng-pytorch)
+  - [Dataset (lớp đại diện cho toàn bộ dữ liệu)](#dataset-lớp-đại-diện-cho-toàn-bộ-dữ-liệu)
+  - [DataLoader](#dataloader)
+- [optim](#optim)
+  - [SGD](#sgd)
+    - [zero\_grad()](#zero_grad)
 ---
 # Create (Nhóm khởi tạo)
 ```bash
@@ -57,7 +65,6 @@ Các hàm để khởi tạo
 **Syn**
 ```bash
 import torch
-
 
 X = torch.tensor(X, requires_grad=True, dtype=torch.float32)
 
@@ -211,6 +218,17 @@ x = x.unsqueeze(1)   # (6, 1)
 x = x.unsqueeze(2)   # (6, 1, 1)
 x = x.unsqueeze(3)   # giờ mới được: (6, 1, 1, 1)
 ```
+## .unique()
+**Ex**
+```python
+import torch
+
+y = torch.tensor([1,1,2,2,3,3])
+print(y) # tensor([1, 1, 2, 2, 3, 3])
+
+new_y = torch.unique(y)
+print(new_y) # tensor([1, 2, 3])
+```
 ## .tolist() 
 ```bash
 Chuyển tensor sang danh sách Python.
@@ -224,6 +242,66 @@ print(arr.tolist()) # [2.347059488296509, 0.8164411783218384]
 x = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
 list_x = x.tolist()
 print(list_x)
+```
+## .zero_() (dùng để đưa tất cả phần tử của tensor về 0)
+```bash
+Dấu gạch dưới _ ở cuối tên hàm có nghĩa là:
+    Hàm sẽ sửa trực tiếp tensor gốc, không tạo tensor mới.
+
+
+Tại sao PyTorch có zero_()?
+    Trong Deep Learning, gradient sẽ được cộng dồn sau mỗi lần gọi backward().
+```
+**Ex1: zero_() cơ bản**
+```python
+import torch
+
+x = torch.tensor([1., 2., 3.])
+print(x)
+
+x.zero_()
+print(x)
+
+# Kết quả
+# tensor([1., 2., 3.])
+# tensor([0., 0., 0.])
+```
+**Ex2: Ma trận**
+```python
+import torch
+
+A = torch.tensor([
+    [1., 2.],
+    [3., 4.]
+])
+print(A)
+
+A.zero_()
+print(A)
+
+# Kết quả
+# tensor([[1., 2.],
+#         [3., 4.]])
+# tensor([[0., 0.],
+#         [0., 0.]])
+```
+**Ex3**
+```python
+import torch
+
+x = torch.tensor(2.0, requires_grad=True)
+
+# Lần 1
+y = x**2
+y.backward()
+print(x.grad) # tensor(4.)
+
+x.grad.zero_() # Xóa gradient
+print(x.grad) # tensor(0.)
+
+y = x**2 # Tính lại
+y.backward()
+print(x.grad) # tensor(4.)
 ```
 # Display (Mục đích hiển thị nhằm cung cấp thêm thông tin)
 ## .size()
@@ -265,6 +343,43 @@ a = torch.tensor([1.0, 2.0, 3.0, 4.0, 5.0])
 
 print(a.mean()) # tensor(3.)
 ```
+## @ (nhân ma trận)
+```bash
+Nó tương đương với torch.matmul().
+```
+**Ex**
+```python
+import torch
+
+A = torch.tensor([
+    [1, 2],
+    [3, 4]
+])
+
+B = torch.tensor([
+    [5, 6],
+    [7, 8]
+])
+
+C = A @ B
+
+print(C)
+# tensor([[19, 22],
+#         [43, 50]])
+
+# [1 2]     [5 6]
+# [3 4]  @  [7 8]
+# =
+# [
+# 1*5 + 2*7, 1*6 + 2*8
+# 3*5 + 4*7, 3*6 + 4*8
+# ]
+# =
+# [
+# 19 22
+# 43 50
+# ]
+```
 ## exp()
 ## Tanh()
 ## empty()
@@ -272,10 +387,52 @@ print(a.mean()) # tensor(3.)
 ## add()
 ## add_()
 # Training graph (Liên quan đến huấn luyện model)
-## .backward() 
-    • Lan truyền ngược (backpropagation) - tính đạo hàm của loss theo từng trọng số mô hình.
-    • Cập nhật trọng số mô hình theo gradient đã tính từ backward() và thuật toán tói ưu (Adam)
-## .grad
+## .backward() (Lan truyền ngược (backpropagation) - tính đạo hàm của loss theo từng trọng số mô hình)
+```bash
+Cập nhật trọng số mô hình theo gradient đã tính từ backward() và thuật toán tói ưu (Adam)
+```
+**Syn**
+```bash
+tensor.backward()
+
+- tensor thường là loss.
+- Sau khi gọi backward(), gradient sẽ được lưu vào thuộc tính: parameter.grad
+```
+**Ex**
+```python
+import torch
+
+X = torch.tensor([1.0, 2.0, 3.0])
+W = torch.tensor([0.1, 0.2, 0.3], requires_grad=True)
+b = torch.tensor(1.0, requires_grad=True)
+Y = W*X + b
+
+print("X = ", X)
+print("W = ", W)
+print("b = ", b)
+print("Y = ", Y)
+
+Z = torch.sum(Y)
+print("Z = ", Z)
+
+Z.backward()
+print("W.grad = ", W.grad)
+print("b.grad = ", b.grad) # dz/dW, dz/db
+# giải thích:
+# dz/dW = (dz/dy).(dy/dW)
+#   - dy/dW = X = [1.0, 2.0, 3.0]
+#   - dz/dy = [1.0, 1.0, 1.0]
+# dz/db = (dz/dy).(dy/db) = 1. + 1. + 1. = 3.
+
+# X =  tensor([1., 2., 3.])
+# W =  tensor([0.1000, 0.2000, 0.3000], requires_grad=True)
+# b =  tensor(1., requires_grad=True)
+# Y =  tensor([1.1000, 1.4000, 1.9000], grad_fn=<AddBackward0>)
+# Z =  tensor(4.4000, grad_fn=<SumBackward0>)
+# W.grad =  tensor([1., 2., 3.])
+# b.grad =  tensor(3.)
+```
+### .grad
 **Ex**
 ```python
 import torch
@@ -284,25 +441,8 @@ y = x**2
 y.backward()  # Tính đạo hàm y theo x
 print(x)
 print(x.grad) # gradient được lưu trong x.grad
-tensor(2., requires_grad=True)
-tensor(4.)
-a = torch.tensor([1.0, 2.0, 3.0])
-W = torch.tensor([0.1, 0.2, 0.3], requires_grad=True)
-b = torch.tensor(1.0, requires_grad=True)
-y = W*a+b
-z = torch.sum(y)
-z.backward()
-print(W.grad, b.grad) # dz/dW, dz/db
-# dz/dW = (dz/dy).(dy/dW)
-# dy/dW = a = [1.0, 2.0, 3.0]
-
-# dz/db = (dz/dy).(dy/db) = 1. + 1. + 1. = 3.
-
-tensor([1., 2., 3.]) tensor(3.)
-```
-## .zero_()
-```bash
-Xóa gradient cũ trước vòng tiếp theo.
+# tensor(2., requires_grad=True)
+# tensor(4.)
 ```
 ## .squeeze()
 ```bash
@@ -381,9 +521,31 @@ torch.Size([3, 3])
 ## no_grad()
 ```bash
 Trong quá trình dự đoán (inference), bạn không cần tính gradient nữa (vì không học nữa). Việc tắt gradient sẽ giúp giảm tốn bộ nhớ, tăng tốc độ, tránh sai sót do vô tình .backward() khi không cần.
-Cú pháp: 
+```
+**Syn**
+```bash
 with torch.no_grad():
     # các câu lệnh không cần tính gradient ở đây
+```
+## softmax (chuyển tensor thành thành xác suất)
+**Ex1: Một mẫu dữ liệu**
+```python
+import torch
+
+logits = torch.tensor([2.0, 1.0, 0.1])
+
+probs = torch.softmax(logits, dim=0)
+
+print(probs) # tensor([0.6590, 0.2424, 0.0986])
+```
+## argmax
+```python
+import torch
+
+probs = torch.tensor([0.6590, 0.2424, 0.0986])
+pred = torch.argmax(probs)
+
+print(pred) # tensor(0)
 ```
 # Cuda
 ## device()
@@ -418,13 +580,19 @@ a = torch.tensor([1,2]).to(device)
 print(a.device) # cuda:
 ```
 ## Utils
-# Dataset
+# Data (Quản lý dữ liệu bằng Pytorch)
+## Dataset (lớp đại diện cho toàn bộ dữ liệu)
 ```bash
-- Là lớp đại diện cho toàn bộ dữ liệu. Tập ảnh huấn luyện (train images), Dữ liệu dạng bảng (CSV), Các file văn bản, Bất cứ loại dữ liệu nào bạn muốn đưa vào mô hình
-- Tại sao phải dùng Dataset:
-    + Nếu bạn chỉ đọc file trực tiếp bằng cv2.imread() hay pandas.read_csv(), bạn sẽ phải tự quản lý việc chia batch, shuffle, và load dần vào GPU → rất rối. PyTorch tạo ra lớp Dataset để bạn chỉ cần định nghĩa 2 hàm quan trọng: 
-    + __len__() → cho biết có bao nhiêu mẫu dữ liệu 
-    + __getitem__(index) → khi cần lấy mẫu thứ index, thì làm thế nào để load nó. 
+Có thể là:
+    - Tập ảnh huấn luyện (train images)
+    - Dữ liệu dạng bảng (CSV)
+    - Các file văn bản
+    - Bất cứ loại dữ liệu nào bạn muốn đưa vào mô hình
+
+Tại sao phải dùng Dataset:
+    Nếu bạn chỉ đọc file trực tiếp bằng cv2.imread() hay pandas.read_csv(), bạn sẽ phải tự quản lý việc chia batch, shuffle, và load dần vào GPU → rất rối. PyTorch tạo ra lớp Dataset để bạn chỉ cần định nghĩa 2 hàm quan trọng: 
+        - __len__() → cho biết có bao nhiêu mẫu dữ liệu 
+        - __getitem__(index) → khi cần lấy mẫu thứ index, thì làm thế nào để load nó. 
     + Còn việc lặp qua batch, chia batch, shuffle… sẽ do DataLoader lo.
 ```
 **Ex**
@@ -473,10 +641,10 @@ if __name__ == "__main__":
     dataset = RealEstateDataset(df, features, labels)
     print(f'Data length: {dataset.__len__()}')
     print(f'First sample: {dataset.__getitem__(0)}')
-Data length: 4
-First sample: (tensor([850.,   2.,  10.]), tensor([200000.]))
+# Data length: 4
+# First sample: (tensor([850.,   2.,  10.]), tensor([200000.]))
 ```
-# DataLoader
+## DataLoader
 **Ex**
 ```bash
 from torch.utils.data import DataLoader
@@ -497,4 +665,53 @@ for X_batch, y_batch in train_loader:
     print(X_batch.shape)  # (32, 10)
     print(y_batch.shape)  # (32,)
     break
+```
+# optim
+## SGD
+### zero_grad()
+**Không dùng zero_grad()**
+```bash
+Giả sử ta có: y = x**2
+```
+```python
+import torch
+
+x = torch.tensor(2.0, requires_grad=True)
+
+# Lần 1
+y = x ** 2
+y.backward()
+
+print(x.grad) # tensor(4.)
+
+# Lần 2
+y = x ** 2
+y.backward()
+
+print(x.grad) # tensor(8.)
+```
+**Dùng zero_grad()**
+```python
+import torch
+
+x = torch.tensor(2.0, requires_grad=True)
+
+optimizer = torch.optim.SGD([x], lr=0.1)
+
+# Lần 1
+optimizer.zero_grad()
+
+y = x ** 2
+y.backward()
+
+print(x.grad) # tensor(4.)
+
+# Lần thứ hai
+optimizer.zero_grad()
+y = x ** 2
+y.backward()
+
+print(x.grad) # tensor(4.)
+
+# vì zero_grad() đã xóa gradient cũ trước khi tính gradient mới.
 ```

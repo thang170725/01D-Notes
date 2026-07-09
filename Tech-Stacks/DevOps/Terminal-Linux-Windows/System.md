@@ -5,7 +5,7 @@
   - [du](#du)
 - [RAM](#ram)
   - [free (tổng quan nhất về dung lượng RAM tổng, dung lượng đã dùng, còn trống và bộ nhớ đệm)](#free-tổng-quan-nhất-về-dung-lượng-ram-tổng-dung-lượng-đã-dùng-còn-trống-và-bộ-nhớ-đệm)
-  - [df](#df)
+  - [df (Xem dung lượng còn lại của ổ)](#df-xem-dung-lượng-còn-lại-của-ổ)
 - [Service](#service)
   - [systemctl \& sudo systemctl (Quản lý các service)](#systemctl--sudo-systemctl-quản-lý-các-service)
     - [status (Kiểm tra trạng thái service có đang chạy không)](#status-kiểm-tra-trạng-thái-service-có-đang-chạy-không)
@@ -96,10 +96,9 @@ du -sh: xem dung lượng thư mục hiện tại
 free -h
 - -h: giúp hiển thị con số dưới dạng dễ đọc như GB, MB thay vì những dãy byte dài ngoằng
 ```
-## df
-Xem dung lượng còn lại của ổ, -h là để hiển thị theo đơn vị dễ đọc.
+## df (Xem dung lượng còn lại của ổ)
 ```bash
-1. df -h /
+1. df -h / # -h là để hiển thị theo đơn vị dễ đọc.
 2. df -h /home
 ```
 # Service 

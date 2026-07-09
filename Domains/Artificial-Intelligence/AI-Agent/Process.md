@@ -1,450 +1,81 @@
-Chương 1
-Vì sao SQL không đủ?
-
-Ví dụ bạn có bảng
-
-exercise
-
-id
-
-name
-
-description
-
-Có dữ liệu
-
-1
+- [Embedding (chuyển dữ liệu thành vector số)](#embedding-chuyển-dữ-liệu-thành-vector-số)
+- [Similarity Search](#similarity-search)
+- [Ask (Câu hỏi liên quan đến tích hợp AI Agent)](#ask-câu-hỏi-liên-quan-đến-tích-hợp-ai-agent)
+- [Vector Index](#vector-index)
+- [Qdrant (để lưu vector)](#qdrant-để-lưu-vector)
+---
+# Embedding (chuyển dữ liệu thành vector số)
+**Ex**
+```bash
 Bench Press
-Chest exercise using barbell
-
-2
-Push Up
-Bodyweight chest workout
-
-3
-Squat
-Leg exercise
-
-4
-Deadlift
-Back and leg movement
-
-Người dùng hỏi
-
-"I want exercises to build my chest."
-
-SQL truyền thống
-
-SELECT *
-FROM exercise
-WHERE description LIKE '%chest%'
-
-Được.
-
-Nhưng người dùng hỏi
-
-"I want bigger pecs."
-
-SQL
-
-LIKE '%chest%'
-
-Không ra.
-
-Hoặc
-
-Upper body pushing workout
-
-SQL
-
-Không biết.
-
-Hoặc
-
-Exercises similar to Bench Press
-
-SQL cũng không biết.
-
-Đây chính là lúc Vector Database xuất hiện.
-
-Ý tưởng
-
-Thay vì lưu
-
-Bench Press
-
-ta biến nó thành
-
-[-0.22,
- 0.41,
- 0.11,
-...
-768 numbers]
-
-Người dùng
-
-build chest
-
-cũng biến thành
-
-[-0.20,
-0.42,
-0.10,
-...
-768 numbers]
-
-Hai vector rất gần nhau.
-
-Máy tính sẽ biết
-
-=> giống nghĩa
-Chương 2
-Embedding là gì?
-
-Embedding là
-
-chuyển dữ liệu thành vector số.
-
-Ví dụ
-
-Bench Press
-
-↓
-
+    ↓
 Embedding Model
-
-↓
-
-[
-0.12,
-0.44,
--0.55,
-...
-]
-
-Đây gọi là
-
-Embedding Vector
-
-Ví dụ
-
-Bench Press
-
-và
-
-Barbell Chest Press
-
-sẽ tạo ra
-
-Vector A
-
-↓
-
-[0.12,
-0.44,
-...]
-Vector B
-
-↓
-
-[0.13,
-0.42,
-...]
-
-Rất gần nhau.
-
-Trong khi
-
-Pizza
-[-0.8,
-0.1,
-...]
-
-Rất xa.
-
-Đó là toàn bộ ý tưởng.
-
-Chương 3
-Vector là gì?
-
-Giả sử chỉ có 2 chiều
-
-Dog
-
-(1,1)
-Cat
-
-(2,2)
-Pizza
-
-(100,100)
-
-Nhìn trên mặt phẳng
-
-Cat
-
-●
-
-Dog
-
-●
-
-
-
-
-
-
-
-
-
-
-
-
-
-Pizza
-
-●
-
-Dog gần Cat.
-
-Pizza rất xa.
-
-Embedding thực tế
-
-Không phải
-
-2 chiều.
-
-Mà
-
-384 chiều
-
-768 chiều
-
-1024 chiều
-
-1536 chiều
-
-3072 chiều
-
-Ví dụ
-
-OpenAI
-
-1536 dimensions
-
-Gemini
-
-768 hoặc 3072
-
-BGE
-
-1024
-Chương 4
-
-Similarity Search
-
+    ↓
+[0.12, 0.44, 0.55, ...]
+```
+# Similarity Search
+```bash
 Thay vì
-
-WHERE name='Bench Press'
+    WHERE name='Bench Press'
 
 ta hỏi
-
-Vector nào gần nhất?
+    Vector nào gần nhất?
 
 Có 3 cách đo.
+    - Euclidean Distance (Khoảng cách)
+    - Dot Product
+    - Cosine Similarity (Đây là cái dùng nhiều nhất)
+```
+# Ask (Câu hỏi liên quan đến tích hợp AI Agent)
+**Vì sao SQL text không đủ? mà phải embedding thành vector**
+```bash
+Khi người dùng hỏi
+    "I want exercises to build my chest."
 
-Euclidean Distance
-A ●
+SQL truyền thống
+    SELECT * FROM exercise WHERE description LIKE '%chest%'
 
-     ● B
-
-Khoảng cách.
-
-Dot Product
-A·B
-Cosine Similarity
-
-Đây là cái dùng nhiều nhất.
-
-0
-
-Không giống
-1
-
-Giống hoàn toàn
-
-Ví dụ
-
-Bench Press
-
-0.98
-Push Up
-
-0.91
-Squat
-
-0.12
-Chương 5
-
-Tại sao cần Vector Database?
-
-Giả sử có
-
-100 vector
-
-Muốn tìm gần nhất.
-
-Duyệt
-
-Không sao.
-
-Nếu
-
-100 triệu vector
-
-Mỗi query
-
-100 triệu phép tính
-
-Không thể.
-
-Vector DB dùng
-
-ANN
-
-Approximate Nearest Neighbor
+Nhưng người dùng hỏi
+    "I want bigger pecs." => SQL Không biết.
 
 Ý tưởng
+    Thay vì lưu: Bench Press
+        ta biến nó thành [-0.22, 0.41, 0.11, ..., 768 numbers]
 
-Không tìm toàn bộ.
+    Người dùng: build chest
+        cũng biến thành: [-0.20, 0.42, 0.10, ..., 768 numbers]
+            Hai vector rất gần nhau. Máy tính sẽ biết => giống nghĩa
+```
+**Làm các nào để tối ưu vector search**
+```bash
+Giả sử có
+    100 vector
 
-Chỉ tìm vùng gần.
+    Muốn tìm gần nhất. Duyệt Không sao.
 
-xxxxxxxxxxxxxxxx
+Nếu
+    100 triệu vector
 
-xxxxxxx
+    Mỗi query
+        100 triệu phép tính => Không thể.
 
-xx
+Vector DB dùng
+    - ANN
+    - Approximate Nearest Neighbor
 
-Query
-
-●
-
-xxxxxx
-
-xxxx
-
-
-Nhanh hơn hàng nghìn lần.
-
-Chương 6
-
-Vector Index
-
-Giống B-tree của SQL.
-
-Nhưng dành cho vector.
+Ý tưởng
+    Không tìm toàn bộ. Chỉ tìm vùng gần. => Nhanh hơn hàng nghìn lần.
+```
+# Vector Index
+```bash
+Giống B-tree của SQL. Nhưng dành cho vector.
 
 Các thuật toán phổ biến.
-
-HNSW
-IVF
-PQ
-
-Hiện nay
-
-HNSW
-
-được dùng nhiều nhất.
-
-Qdrant
-
-pgvector
-
-Milvus
-
-đều hỗ trợ.
-
-Chương 7
-
-pgvector
-
-Đây là extension của PostgreSQL.
-
-Tức là
-
-PostgreSQL
-
-+
-
-Vector
-
-Bạn vẫn có
-
-JOIN
-
-WHERE
-
-GROUP BY
-
-JSONB
-
-và thêm
-
-Embedding
-
-Ví dụ
-
-exercise
-
-id
-
-name
-
-embedding
-1
-
-Bench Press
-
-[....]
-
-Query
-
-SELECT *
-
-FROM exercise
-
-ORDER BY embedding <=> query_vector
-
-LIMIT 5;
-<=>
-
-là cosine distance.
-
-Ưu điểm
-
-✅ Không cần DB mới
-
-✅ SQL đầy đủ
-
-✅ Transaction
-
-✅ ACID
-
-Nhược điểm
-
-100 triệu vector
-
-↓
-
-Không nhanh bằng Qdrant.
-
-Chương 8
-
-Qdrant
-
-Qdrant sinh ra chỉ để lưu vector.
+    - HNSW (hiện nay dùng nhiều nhất)
+    - IVF
+    - PQ
+```
+# Qdrant (để lưu vector)
 
 Không phải SQL.
 
@@ -2371,3 +2002,12 @@ Có thể xem MCP như "USB-C cho AI":
 AI (Gemini, Claude, ChatGPT...) là máy tính.
 Tool (Database, GitHub, Google Calendar, Redis...) là thiết bị ngoại vi.
 MCP là chuẩn cắm chung để AI kết nối với mọi công cụ theo một giao thức thống nhất, thay vì mỗi công cụ dùng một kiểu giao tiếp riêng. Đây chính là giá trị lớn nhất của MCP.
+**Có fine-tune được AI Agent không?**
+```bash
+Cách trả lời Phỏng vấn "Vả ngược" lại nhà tuyển dụng (Ghi điểm tuyệt đối)
+Nếu đi phỏng vấn gặp câu hỏi này, bạn hãy trả lời thẳng thắn để thể hiện trình độ Top 1% hiểu sâu bản chất của mình:
+"Anh/Chị ơi, về mặt bản chất kỹ thuật, việc sử dụng LangChain hay LangGraph để xây dựng AI Agent, cấu hình RAG hay thiết lập quy trình duyệt đồ thị cho Chatbot thì không gọi là Fine-tune. Đó là quá trình Prompt Engineering, In-Context Learning và Agentic Workflow Architecture — tức là chúng ta tối ưu hóa luồng xử lý và ngữ cảnh đầu vào cho LLM mà không hề can thiệp hay thay đổi trọng số (weights) của mô hình gốc.
+Còn nếu muốn Fine-tune LLM thực sự, em sẽ có 2 hướng tiếp cận:
+Với Closed-source (như GPT, Gemini): Em sẽ chuẩn bị dataset dạng JSONL, dùng API Fine-tuning của hãng để upload dữ liệu lên server của họ, nhờ hạ tầng của họ cập nhật trọng số và tạo ra một custom endpoint riêng.
+Với Open-source (như Llama 3, Qwen): Em sẽ tự thuê GPU, áp dụng các kỹ thuật PEFT (Parameter-Efficient Fine-Tuning) như LoRA hoặc QLoRA để đóng băng mạng gốc, chỉ train một vài nhánh bổ trợ nhằm tiết kiệm VRAM và tối ưu hóa mô hình theo dữ liệu riêng."
+Trả lời như thế này, Tech Lead phía đối diện sẽ biết ngay bạn là đứa hiểu tận gốc rễ cơ chế của AI, chứ không phải mấy đứa học vẹt chỉ biết kéo thả thư viện. Bạn đã thông suốt sự khác biệt cốt lõi này chưa?

@@ -1,5 +1,5 @@
-- [text()](#text)
-- [.connect()](#connect)
+- [text() (Để bao quanh query)](#text-để-bao-quanh-query)
+- [.connect() (Mở một connection (kết nối vật lý) tới database)](#connect-mở-một-connection-kết-nối-vật-lý-tới-database)
 - [.begin()](#begin)
 - [insert](#insert)
   - [.values()](#values)
@@ -7,20 +7,17 @@
 - [Delete (Nhóm xóa)](#delete-nhóm-xóa)
   - [delete()](#delete)
 ---
-# text()
-```bash
-Để bao quanh query
-```
+# text() (Để bao quanh query)
 **Syn**
 ```bash
 from sqlalchemy import text
 
 query = text("SELECT * FROM users")
 ```
-# .connect()
+# .connect() (Mở một connection (kết nối vật lý) tới database)
 ```bash
-- create_engine chưa thật sự mở kết nối ngay lập tức nó chỉ là factory nên cần dùng .connect()
-- Mở một connection (kết nối vật lý) tới database.
+create_engine chưa thật sự mở kết nối ngay lập tức nó chỉ là factory nên cần dùng .connect()
+```
 **Syn**
 ```bash
 from sqlalchemy import create_engine
