@@ -56,13 +56,13 @@
   - [Image Embedding Extraction](#image-embedding-extraction)
   - [Contrastive Preprocessing](#contrastive-preprocessing)
 - [Color (xử lý màu sắc)](#color-xử-lý-màu-sắc)
-  - [CLAHE](#clahe)
+  - [CLAHE (tăng cường độ tương phản theo vùng ảnh)](#clahe-tăng-cường-độ-tương-phản-theo-vùng-ảnh)
   - [Color Jitter](#color-jitter)
   - [Gaussian Noise](#gaussian-noise)
   - [Gaussian Blur](#gaussian-blur)
   - [Median Filter](#median-filter)
   - [Bilateral Filter](#bilateral-filter)
-  - [Histogram Equalization](#histogram-equalization)
+  - [Histogram Equalization (Tăng tương phản cho toàn ảnh)](#histogram-equalization-tăng-tương-phản-cho-toàn-ảnh)
 ---
 # Shape (xử lý hình dạng)
 ## Resize (Thay đổi kích thước)
@@ -180,20 +180,21 @@ Trích đặc trưng hình dạng
 ## Image Embedding Extraction
 ## Contrastive Preprocessing
 # Color (xử lý màu sắc)
-## CLAHE
+## CLAHE (tăng cường độ tương phản theo vùng ảnh)
 ```bash
-- Mục đích chính của kỹ thuật này là tăng cường độ tương phản (contrast) cục bộ của hình ảnh.
-- Nó giúp làm nổi bật các chi tiết trong các vùng ảnh quá tối hoặc quá sáng mà các phương pháp tăng cường độ tương phản toàn cục (như Histogram Equalization truyền thống) không xử lý tốt, thậm chí còn gây ra nhiễu hoặc làm mất chi tiết.
-- Bạn nên sử dụng kỹ thuật CLAHE khi bạn có những bức ảnh gặp vấn đề về độ tương phản, đặc biệt là khi sự chênh lệch độ sáng (dynamic range) trong ảnh lớn hoặc có những vùng bị tối/sáng cục bộ.
-- Các trường hợp cụ thể thường áp dụng CLAHE bao gồm:
-- Xử lý Ảnh Y học (Medical Imaging): Ảnh chụp X-quang, MRI, CT, ảnh soi đáy mắt (như trong chẩn đoán bệnh lý về mắt) thường có độ tương phản thấp hoặc có các vùng chi tiết cần làm nổi bật. CLAHE giúp tăng khả năng hiển thị các cấu trúc sinh học.
-- Ảnh trong Điều kiện Ánh sáng Kém: Ảnh chụp trong điều kiện thiếu sáng hoặc có ánh sáng nền mạnh (backlit), nơi chi tiết bị "chìm" trong bóng tối hoặc bị "cháy" sáng.
-- Hệ thống Thị giác Máy (Machine Vision) và Xử lý Ảnh: Khi cần tiền xử lý ảnh (preprocessing) để chuẩn hóa hoặc tăng cường chất lượng ảnh đầu vào trước khi đưa vào các thuật toán nhận dạng, phân loại, hoặc học sâu (Deep Learning/CNN). Việc này giúp thuật toán trích xuất đặc trưng (feature extraction) chính xác hơn.
-- Ảnh Thiên văn hoặc Viễn thám: Ảnh vệ tinh hoặc ảnh chụp từ kính thiên văn thường cần CLAHE để làm rõ các cấu trúc và đặc điểm bề mặt.
-- Ưu điểm của CLAHE so với HE truyền thống
-- CLAHE là một cải tiến của phương pháp Cân bằng Biểu đồ màu (Histogram Equalization - HE) truyền thống:
-- Adaptive (Thích nghi): Thay vì áp dụng sự cân bằng độ tương phản cho toàn bộ ảnh, CLAHE chia ảnh thành nhiều ô (tiles/regions) nhỏ và áp dụng HE cho từng ô riêng biệt. Điều này giúp tăng cường độ tương phản cục bộ mà không làm ảnh hưởng đến các vùng khác.
-- Contrast Limited (Giới hạn Độ tương phản): CLAHE có một tham số giới hạn (clip limit) để ngăn chặn việc độ tương phản bị tăng quá mức ở các vùng nhiễu (noise) hoặc các vùng có độ tương phản rất thấp, giúp tránh tình trạng nhiễu bị khuếch đại (over-amplification).
+Nó giúp làm nổi bật các chi tiết trong các vùng ảnh quá tối hoặc quá sáng mà các phương pháp tăng cường độ tương phản toàn cục (như Histogram Equalization truyền thống) không xử lý tốt, thậm chí còn gây ra nhiễu hoặc làm mất chi tiết.
+
+Bạn nên sử dụng kỹ thuật CLAHE khi bạn có những bức ảnh gặp vấn đề về độ tương phản, đặc biệt là khi sự chênh lệch độ sáng (dynamic range) trong ảnh lớn hoặc có những vùng bị tối/sáng cục bộ.
+
+Các trường hợp cụ thể thường áp dụng CLAHE bao gồm:
+  - Xử lý Ảnh Y học (Medical Imaging): Ảnh chụp X-quang, MRI, CT, ảnh soi đáy mắt (như trong chẩn đoán bệnh lý về mắt) thường có độ tương phản thấp hoặc có các vùng chi tiết cần làm nổi bật. CLAHE giúp tăng khả năng hiển thị các cấu trúc sinh học.
+  - Ảnh trong Điều kiện Ánh sáng Kém: Ảnh chụp trong điều kiện thiếu sáng hoặc có ánh sáng nền mạnh (backlit), nơi chi tiết bị "chìm" trong bóng tối hoặc bị "cháy" sáng.
+  - Hệ thống Thị giác Máy (Machine Vision) và Xử lý Ảnh: Khi cần tiền xử lý ảnh (preprocessing) để chuẩn hóa hoặc tăng cường chất lượng ảnh đầu vào trước khi đưa vào các thuật toán nhận dạng, phân loại, hoặc học sâu (Deep Learning/CNN). Việc này giúp thuật toán trích xuất đặc trưng (feature extraction) chính xác hơn.
+  - Ảnh Thiên văn hoặc Viễn thám: Ảnh vệ tinh hoặc ảnh chụp từ kính thiên văn thường cần CLAHE để làm rõ các cấu trúc và đặc điểm bề mặt.
+  - Ưu điểm của CLAHE so với HE truyền thống
+  - CLAHE là một cải tiến của phương pháp Cân bằng Biểu đồ màu (Histogram Equalization - HE) truyền thống:
+  - Adaptive (Thích nghi): Thay vì áp dụng sự cân bằng độ tương phản cho toàn bộ ảnh, CLAHE chia ảnh thành nhiều ô (tiles/regions) nhỏ và áp dụng HE cho từng ô riêng biệt. Điều này giúp tăng cường độ tương phản cục bộ mà không làm ảnh hưởng đến các vùng khác.
+  - Contrast Limited (Giới hạn Độ tương phản): CLAHE có một tham số giới hạn (clip limit) để ngăn chặn việc độ tương phản bị tăng quá mức ở các vùng nhiễu (noise) hoặc các vùng có độ tương phản rất thấp, giúp tránh tình trạng nhiễu bị khuếch đại (over-amplification).
 ```
 ## Color Jitter
 ```bash
@@ -212,7 +213,4 @@ Thêm nhiễu
 ```bash
 Giữ cạnh khi làm mịn
 ```
-## Histogram Equalization
-```bash
-Tăng tương phản
-```
+## Histogram Equalization (Tăng tương phản cho toàn ảnh)

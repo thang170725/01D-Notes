@@ -17,13 +17,18 @@
     - [Tính vô hướng](#tính-vô-hướng)
   - [Norm 1 (Chuẩn 1)](#norm-1-chuẩn-1)
   - [Norm 2 (Chuẩn 2)](#norm-2-chuẩn-2)
-  - [Ma trận (một cỗ máy biến đổi không gian)](#ma-trận-một-cỗ-máy-biến-đổi-không-gian)
+  - [Matrix (Ma trận)](#matrix-ma-trận)
     - [Phép nhân ma trận (ghép các phép biến đổi)](#phép-nhân-ma-trận-ghép-các-phép-biến-đổi)
     - [Ma trận chuyển vị (Transpose)](#ma-trận-chuyển-vị-transpose)
     - [Ma trận nghịch đảo](#ma-trận-nghịch-đảo)
     - [det (Định thức của ma trận)](#det-định-thức-của-ma-trận)
     - [Ma trận vuông khả nghịch](#ma-trận-vuông-khả-nghịch)
     - [SVD (Singular Value Decomposition) (Phân rã ma trận)](#svd-singular-value-decomposition-phân-rã-ma-trận)
+    - [Matrix Norms (dùng để đo “độ lớn” của vector hoặc ma trận)](#matrix-norms-dùng-để-đo-độ-lớn-của-vector-hoặc-ma-trận)
+      - [Frobenius norm](#frobenius-norm)
+      - [Column norm (đo độ lớn theo từng cột)](#column-norm-đo-độ-lớn-theo-từng-cột)
+      - [Infinity norm (chuẩn vô cực)](#infinity-norm-chuẩn-vô-cực)
+      - [Spectral norm (chuẩn quang phổ - đo “mức phóng đại lớn nhất” của matrix)](#spectral-norm-chuẩn-quang-phổ---đo-mức-phóng-đại-lớn-nhất-của-matrix)
   - [Eigenvalue \& Eigenvector (những hướng đặc biệt của vũ trụ)](#eigenvalue--eigenvector-những-hướng-đặc-biệt-của-vũ-trụ)
   - [SVD (giải phẫu mọi phép biến đổi)](#svd-giải-phẫu-mọi-phép-biến-đổi)
   - [Ma trận Gram](#ma-trận-gram)
@@ -31,7 +36,6 @@
     - [demo eigenvalue \& eigenvector](#demo-eigenvalue--eigenvector)
     - [Trích xuất đặc trựng ảnh 100x100 bằng eigen](#trích-xuất-đặc-trựng-ảnh-100x100-bằng-eigen)
   - [Jacobian (khi thay đổi (u, v) thì (x, y) thay đổi như thế nào)](#jacobian-khi-thay-đổi-u-v-thì-x-y-thay-đổi-như-thế-nào)
-- [7](#7)
 ---
 # Giải tích
 ## Đạo hàm
@@ -110,8 +114,10 @@ Thì: P(thích toán hoặc Tin) = 60% + 50% − 20% = 90% Trừ 20% vì nhóm �
 ```
 ## Định lý Bayes (cập nhật xác suất khi có thêm thông tin mới)
 ```bash
-- Nói đơn giản: “Ban đầu mình nghĩ khả năng xảy ra là bao nhiêu, rồi sau khi thấy bằng chứng mới thì nên tin lại như thế nào?”
-- Ý nghĩa trực quan
+Nói đơn giản: 
+    “Ban đầu mình nghĩ khả năng xảy ra là bao nhiêu, rồi sau khi thấy bằng chứng mới thì nên tin lại như thế nào?”
+
+Ý nghĩa trực quan
     + Bayes giống như: Niềm tin cũ + bằng chứng mới = niềm tin mới
     + Ví dụ:
         - trời nhiều mây → nghĩ sắp mưa
@@ -152,18 +158,23 @@ P(A|B) = (P(B|A).P(A))/P(B)
 Có 2 hộp:
     - Hộp A: 9 đỏ, 1 xanh
     - Hộp B: 1 đỏ, 9 xanh
+
 Chọn ngẫu nhiên một hộp. Xác suất ban đầu:
     - P(A) = 50%
     - P(B) = 50%
+
 Đây gọi là prior probability (niềm tin ban đầu). Bây giờ bạn rút được một viên bi đỏ.
+
 Câu hỏi: Khả năng bạn đang cầm hộp A là bao nhiêu?
-Trước khi nhìn màu bi:
-    - A: 50%
-    - B: 50%
-Sau khi thấy bi đỏ:
-    - A có vẻ hợp lý hơn vì:
-        + P(đỏ | A) = 90%
-        + P(đỏ | B) = 10%
+    Trước khi nhìn màu bi:
+        - A: 50%
+        - B: 50%
+
+    Sau khi thấy bi đỏ:
+        A có vẻ hợp lý hơn vì:
+            + P(đỏ | A) = 90%
+            + P(đỏ | B) = 10%
+
 Nói cách khác:
     + Nếu hộp A là thật thì việc nhìn thấy bi đỏ rất bình thường.
     + Nếu hộp B là thật thì việc nhìn thấy bi đỏ khá bất thường.
@@ -350,12 +361,10 @@ x = (1,2) y = (3,6)
 cos(x,y) = x.y/(||x||.||y||) =  15/(sqrt(5)+sqrt(45)) = 1
 => đây là 2 vector cùng hướng y dài hơn 3 lần so với x
 ```
-## Ma trận (một cỗ máy biến đổi không gian)
+## Matrix (Ma trận)
 ```bash
-- Nhiều người nghĩ ma trận chỉ là “bảng số”. Không.
-- Bản chất thật:
-    + Ma trận là một phép biến đổi tuyến tính.
-    + Nó nhận một vector đầu vào và biến đổi nó.
+Dùng để:
+    - biến đổi không gian. Nó nhận một vector đầu vào và biến đổi nó.
 ```
 **Ex: vật lý**
 ```bash
@@ -486,6 +495,40 @@ A=U⋅S⋅V**T
 - S: mức độ quan trọng (giá trị lớn → quan trọng)
 - V: đặc trưng ẩn
 ```
+### Matrix Norms (dùng để đo “độ lớn” của vector hoặc ma trận)
+```bash
+Norm = cách đo “kích thước / độ lớn / mức độ mạnh” của vector hoặc matrix
+```
+#### Frobenius norm
+#### Column norm (đo độ lớn theo từng cột)
+**Ex**
+```bash
+A = [[1  4], [2  5], [3  6]]
+    Chuẩn cột = norm của từng cột vector:
+        - cột 1: [1,2,3]
+        - cột 2: [4,5,6]
+
+📌 Ý nghĩa:
+    - xem “feature nào mạnh hơn”
+    - dùng trong numerical stability
+```
+#### Infinity norm (chuẩn vô cực)
+```bash
+🧠 Hiểu đơn giản:
+    lấy tổng trị tuyệt đối lớn nhất của một hàng
+```
+**Formula**
+```bash
+||A||∞ = max row sum
+```
+**Ex**
+```bash
+A =
+    [1  -2  3] → sum = 6
+    [4   5  6] → sum = 15
+👉 norm = 15
+```
+#### Spectral norm (chuẩn quang phổ - đo “mức phóng đại lớn nhất” của matrix)
 ## Eigenvalue & Eigenvector (những hướng đặc biệt của vũ trụ)
 ```bash
 - Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại. Đó là eigenvector.
@@ -710,279 +753,53 @@ features = np.array(features)
 print("Feature shape:", features.shape)
 ```
 ## Jacobian (khi thay đổi (u, v) thì (x, y) thay đổi như thế nào)
-
+```bash
 Khi bạn có một hàm nhiều biến:
-
-x = f(u, v)
-y = g(u, v)
+    x = f(u, v)
+    y = g(u, v)
 
 thì Jacobian là ma trận các đạo hàm riêng:
-
-J =
-| ∂x/∂u   ∂x/∂v |
-| ∂y/∂u   ∂y/∂v |
-
-👉 Nó cho biết:
-
-
-🔥 Ý nghĩa trực quan (rất quan trọng)
+    J =
+    | ∂x/∂u   ∂x/∂v |
+    | ∂y/∂u   ∂y/∂v |
 
 Jacobian giống như:
-
-“độ biến dạng” của không gian khi biến đổi tọa độ
-
-Ví dụ:
-
+    “độ biến dạng” của không gian khi biến đổi tọa độ
+```
+**Ex**
+```bash
 Một hình vuông → biến thành hình nghiêng
 Diện tích bị co giãn hoặc kéo dãn
 
 Jacobian đo:
-
-→ co giãn bao nhiêu lần
-→ xoay bao nhiêu
-→ biến dạng ra sao
-📌 Định thức Jacobian (determinant)
-
+    → co giãn bao nhiêu lần
+    → xoay bao nhiêu
+    → biến dạng ra sao
+```
+**📌 Định thức Jacobian (determinant)**
+```bash
 Không chỉ có ma trận, ta còn lấy:
-
-det(J)
+    det(J)
 
 👉 Ý nghĩa:
-
-|det(J)| > 1 → phóng to
-|det(J)| < 1 → thu nhỏ
-det(J) < 0 → bị lật hướng
-📦 Ví dụ đơn giản
+    - |det(J)| > 1 → phóng to
+    - |det(J)| < 1 → thu nhỏ
+    - det(J) < 0 → bị lật hướng
+```
+**Ex**
+```bash
 Biến đổi:
-x = 2u
-y = 3v
+    x = 2u
+    y = 3v
 
 Jacobian:
-
-J =
-| 2  0 |
-| 0  3 |
+    J =
+    | 2  0 |
+    | 0  3 |
 
 Định thức:
-
-det(J) = 6
-
-👉 Nghĩa là:
-
-Diện tích tăng gấp 6 lần
-🧭 Dùng để làm gì trong Giải tích?
-1. Đổi biến trong tích phân
-
-Quan trọng nhất!
-
-Ví dụ:
-
-∬ f(x, y) dx dy
-
-đổi sang (u, v):
-
-dx dy = |det(J)| du dv
-
-👉 Jacobian chính là “hệ số đổi diện tích”
-
-2. Tích phân nhiều lớp (Double / Triple integrals)
-
-Ví dụ:
-
-tọa độ Cartesian → Polar (r, θ)
-Cartesian → Spherical
-
-Jacobian giúp đổi hệ tọa độ.
-
-3. Machine Learning / AI
-
-Jacobian dùng trong:
-
-Backpropagation (gradient)
-Neural networks
-Transformation layers
-4. Robotics
-chuyển động tay robot
-mapping vị trí khớp → tọa độ không gian
-📊 Ví dụ cực quan trọng: tọa độ cực (Polar coordinates)
-x = r cosθ
-y = r sinθ
-
-Jacobian:
-
-J = r
+    det(J) = 6
 
 👉 Nghĩa là:
-
-dx dy = r dr dθ
-
-💡 Đây là công thức bạn hay gặp trong tích phân.
-
-🧠 Tóm tắt dễ hiểu
-Jacobian = “bộ đo thay đổi khi biến đổi tọa độ”
-Ma trận Jacobian → tốc độ thay đổi
-Định thức Jacobian → mức co giãn diện tích/thể tích
-⚠️ Có thể bạn đang nhầm tên
-
-“tích decard” có thể là:
-
-Bạn nghe	Đúng là
-decard	Jacobian
-tích decard	định thức Jacobian
-tích Jac	Jacobian determinant
-Nếu bạn muốn học tiếp
-
-Mình có thể giải thích thêm:
-
-Jacobian trong đổi biến tích phân (có bài mẫu)
-Hessian (liên quan đạo hàm bậc 2)
-Gradient, divergence, curl (vector calculus)
-Ứng dụng trong AI / deep learning
-
-Chỉ cần nói: “giải thích Jacobian có bài tập” 👍
-🟨 2. Các “chuẩn” (Matrix Norms)
-
-Đây là khái niệm trong đại số tuyến tính dùng để đo “độ lớn” của vector hoặc ma trận.
-
-🧠 Hiểu đơn giản:
-
-Norm = cách đo “kích thước / độ lớn / mức độ mạnh” của vector hoặc matrix
-
-📌 1. Frobenius norm
-📦 Công thức:
-A
-2
-1
-3
-4
-0
-2
-×
-B
-5
-2
-1
-4
-3
-7
-=
-AB
-20
-29
-26
-22
-(AB)
-11
-	​
-
-=(2⋅5)+(1⋅1)+(3⋅3)=20
-Row
-1
-2
-1
-2
-Column
-1
-2
-1
-2
-🧠 Hiểu đơn giản:
-
-“Cộng bình phương tất cả phần tử rồi lấy căn”
-
-||A||_F = sqrt(sum of all a_ij^2)
-🎯 Ý nghĩa:
-đo “độ lớn tổng thể” của matrix
-giống như vector norm nhưng cho ma trận
-📌 Dùng để làm gì?
-machine learning (regularization)
-đo sai số (loss)
-deep learning weight decay
-🟩 2. Column norm (chuẩn cột)
-🧠 Ý tưởng:
-
-đo độ lớn theo từng cột
-
-Ví dụ:
-
-A =
-[1  4]
-[2  5]
-[3  6]
-
-Chuẩn cột = norm của từng cột vector:
-
-cột 1: [1,2,3]
-cột 2: [4,5,6]
-📌 Ý nghĩa:
-xem “feature nào mạnh hơn”
-dùng trong numerical stability
-🟪 3. Infinity norm (chuẩn vô cực)
-📦 Công thức:
-||A||∞ = max row sum
-🧠 Hiểu đơn giản:
-
-lấy tổng trị tuyệt đối lớn nhất của một hàng
-
-📌 Ví dụ:
-A =
-[1  -2  3] → sum = 6
-[4   5  6] → sum = 15
-
-👉 norm = 15
-
-🎯 Ý nghĩa:
-đo “worst-case impact”
-dùng trong error bound, stability
-🟧 4. Spectral norm (chuẩn quang phổ)
-🧠 Ý tưởng:
-
-đo “mức phóng đại lớn nhất” của matrix
-
-📦 Công thức:
-||A||₂ = largest singular value
-🧠 Hiểu đơn giản:
-
-matrix có thể “kéo giãn vector mạnh nhất bao nhiêu lần”
-
-🎯 Ví dụ:
-A * vector → vector bị phóng to 10 lần
-→ spectral norm = 10
-📌 Dùng để làm gì?
-deep learning stability
-GAN training
-spectral normalization (Stable training)
-control exploding gradients
-🔥 So sánh các norm
-Norm	Ý nghĩa
-Frobenius	tổng năng lượng toàn matrix
-Column norm	độ lớn theo cột
-Infinity norm	worst-case theo hàng
-Spectral norm	mức phóng đại lớn nhất
-🧠 Trực quan cực dễ nhớ
-Frobenius → tổng năng lượng
-Column norm → từng feature mạnh thế nào
-Infinity norm → hàng xấu nhất
-Spectral norm → matrix nguy hiểm nhất (max stretch)
-🚀 Liên hệ thực tế AI
-Deep learning:
-Frobenius → regularization loss
-Spectral → GAN stability
-Infinity → gradient bound
-Column → feature scaling
-🧠 Tổng kết siêu ngắn
-Mask R-CNN = detect + segmentation (box + mask)
-
-Norms = cách đo độ lớn của vector/matrix:
-- Frobenius: tổng năng lượng
-- Column: theo cột
-- Infinity: max row sum
-- Spectral: max phóng đại
-
-Nếu bạn muốn, mình có thể giải thích tiếp:
-
-IoU + NMS trong Mask R-CNN hoạt động thế nào
-ROI Align khác ROI Pooling
-Spectral norm trong GAN (rất quan trọng trong AI hiện đại)
-
-Chỉ cần nói 👍
+    Diện tích tăng gấp 6 
+```

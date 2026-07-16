@@ -1,3 +1,5 @@
+- [Directory Structure](#directory-structure)
+---
 # Directory Structure
 ```bash
 Evaluate-Optimization               # mình dùng folder này để xem mô hình có tốt không và tìm cách làm cho nó tốt hơn

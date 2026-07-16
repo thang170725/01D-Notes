@@ -27,7 +27,7 @@
   - [Small()](#small)
   - [.trim() \& trimstart() \& trimEnd()](#trim--trimstart--trimend)
 - [RegExp (Biểu thức chính quy)](#regexp-biểu-thức-chính-quy)
-  - [.match()](#match)
+  - [.match() (Trả về một mảng với các kết quả khớp. Trả về null nếu không tìm thấy kết quả khớp)](#match-trả-về-một-mảng-với-các-kết-quả-khớp-trả-về-null-nếu-không-tìm-thấy-kết-quả-khớp)
   - [.test() (Trả về True/False nếu chuỗi khớp hoặc không khớp với biểu thức chính quy)](#test-trả-về-truefalse-nếu-chuỗi-khớp-hoặc-không-khớp-với-biểu-thức-chính-quy)
   - [.exec()](#exec)
   - [.replace()](#replace-1)
@@ -422,10 +422,7 @@ console.log(a.trim());
 - /s        : Cho phép cả khoảng trắng
 - (?=...)   : kiểm tra điều kiện nhưng không "ăn" ký tự
 ```
-## .match()
-```bash
-Trả về một mảng với các kết quả khớp. Trả về null nếu không tìm thấy kết quả khớp.
-```
+## .match() (Trả về một mảng với các kết quả khớp. Trả về null nếu không tìm thấy kết quả khớp)
 **Syn**
 ```bash
 text.match(paterrn);

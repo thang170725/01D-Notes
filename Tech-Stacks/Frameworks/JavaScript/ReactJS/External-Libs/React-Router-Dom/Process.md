@@ -1,10 +1,23 @@
-- [BrowserRouter \& Routes \& Route \& Link](#browserrouter--routes--route--link)
-- [NavLink](#navlink)
-- [useNavigate() (dùng để chuyển hướng (điều hướng) người dùng sang một route/trang khác bằng code JavaScript)](#usenavigate-dùng-để-chuyển-hướng-điều-hướng-người-dùng-sang-một-routetrang-khác-bằng-code-javascript)
+- [BrowserRouter (Bao toàn bộ app)](#browserrouter-bao-toàn-bộ-app)
+- [Routes \& Route \& Link](#routes--route--link)
+  - [NavLink](#navlink)
+  - [useNavigate() (dùng để chuyển hướng (điều hướng) người dùng sang một route/trang khác bằng code JavaScript)](#usenavigate-dùng-để-chuyển-hướng-điều-hướng-người-dùng-sang-một-routetrang-khác-bằng-code-javascript)
 ---
-## BrowserRouter & Routes & Route & Link
+# BrowserRouter (Bao toàn bộ app)
+**Ex**
+```js
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
+
+createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
+);
+```
+# Routes & Route & Link
 ```bash
-- BrowserRouter	    : Bao toàn bộ app
+- BrowserRouter	    : 
 - Routes	          : Chứa danh sách route
 - Route	            : Khai báo 1 đường dẫn
 - Link	            : Chuyển trang KHÔNG reload
@@ -17,16 +30,7 @@ Home.jsx
 About.jsx
 Login.jsx
 ```
-```js
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
 
-createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>
-);
-```
 **App.jsx**
 ```js
 import { Routes, Route, Link } from "react-router-dom";

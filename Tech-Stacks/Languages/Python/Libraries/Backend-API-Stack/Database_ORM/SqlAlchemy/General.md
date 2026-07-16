@@ -9,7 +9,8 @@
   - [select\_from()](#select_from)
   - [.where() (lấy đôi tượng có điều kiện)](#where-lấy-đôi-tượng-có-điều-kiện)
   - [.join()](#join)
-- [Display](#display)
+  - [order\_by()](#order_by)
+- [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
   - [.columns](#columns)
   - [.name \& .type](#name--type)
   - [.label() (Dùng để đặt tên alias cho cột trong kết quả query)](#label-dùng-để-đặt-tên-alias-cho-cột-trong-kết-quả-query)
@@ -24,6 +25,7 @@
     - [scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)](#scalars-dùng-để-lấy-ra-giá-trị-đầu-tiên-của-mỗi-hàng-row-trong-kết-quả-truy-vấn)
     - [scalar\_one\_or\_none() (dùng để lấy một giá trị duy nhất từ kết quả query)](#scalar_one_or_none-dùng-để-lấy-một-giá-trị-duy-nhất-từ-kết-quả-query)
   - [.update()](#update)
+    - [one\_or\_none()](#one_or_none)
   - [func](#func)
     - [.sum()](#sum)
     - [.count()](#count)
@@ -50,6 +52,7 @@ from sqlalchemy import create_engine
 engine = create_engine(
     "dialect+driver://username:password@host:port/database", # nếu chưa có thì tự động tạo db
     pool_recycle=,
+    pool_pre_ping=True,
     echo=
 )
 
@@ -61,6 +64,7 @@ engine = create_engine(
     + host	    : localhost
     + port	    : 3306, 5432
     + database	: test_db
+- pool_pre_ping : dùng để kiểm tra xem kết nối (connection) trong connection pool còn sống hay không trước khi cấp nó cho ứng dụng
 - echo      : True là bất chế độ log in ra các cấu SQL
 ```
 ## MetaData
@@ -77,9 +81,9 @@ from sqlalchemy import MetaData
 
 metadata = MetaData()
 ```
-### .create_all()
+### .create_all() (Tạo bảng trong db)
 ```bash
-Tạo bảng trong db.
+
 ```
 **Syn**
 ```bash
@@ -251,10 +255,201 @@ with engine.connect() as conn:
     for row in conn.execute(stmt):
         print(row)
 ```
-# Display
-```bash
-nhóm hàm để cung cấp thông tin (nhóm hiển thị thông tin).
-```
+## order_by()
+Thực ra là cả hai.
+
+Trong SQLAlchemy 2.x:
+
+stmt = select(User).order_by(User.created_at)
+select() là SQLAlchemy Core API
+Nhưng User.created_at là ORM Model
+
+Đây là cách viết phổ biến hiện nay.
+
+2. SQL tương ứng
+
+Giả sử bảng
+
+id	name	created_at
+1	Alice	2025-01-01
+2	Bob	2025-03-10
+3	Tom	2025-02-01
+
+Nếu viết
+
+stmt = select(User).order_by(User.created_at)
+
+SQL
+
+SELECT *
+FROM users
+ORDER BY created_at ASC;
+
+Kết quả
+
+id	name
+1	Alice
+3	Tom
+2	Bob
+3. Sắp xếp giảm dần
+stmt = select(User).order_by(User.created_at.desc())
+
+SQL
+
+SELECT *
+FROM users
+ORDER BY created_at DESC;
+
+Kết quả
+
+id	name
+2	Bob
+3	Tom
+1	Alice
+4. Lấy row mới nhất
+
+Đây là trường hợp rất phổ biến.
+
+Ví dụ muốn lấy user được tạo gần đây nhất.
+
+Viết
+
+stmt = (
+    select(User)
+    .order_by(User.created_at.desc())
+    .limit(1)
+)
+
+result = await session.execute(stmt)
+
+user = result.scalar_one_or_none()
+
+SQL
+
+SELECT *
+FROM users
+ORDER BY created_at DESC
+LIMIT 1;
+
+Đầu ra
+
+id = 2
+name = Bob
+created_at = 2025-03-10
+5. Có dùng MAX(created_at) không?
+
+Có thể.
+
+Ví dụ
+
+SELECT MAX(created_at)
+FROM users;
+
+Kết quả
+
+2025-03-10
+
+Nhưng bạn chỉ lấy được giá trị thời gian, không lấy được toàn bộ hàng.
+
+Nếu muốn lấy cả row thì phải viết thêm truy vấn.
+
+Ví dụ SQL
+
+SELECT *
+FROM users
+WHERE created_at = (
+    SELECT MAX(created_at)
+    FROM users
+);
+
+Điều này dài hơn.
+
+6. Vậy nên dùng cách nào?
+
+Nếu mục tiêu là:
+
+Lấy row mới nhất
+
+thì cách chuẩn là
+
+.order_by(User.created_at.desc()).limit(1)
+
+Đây cũng là cách hầu hết các dự án sử dụng.
+
+7. order_by nhiều cột
+
+Ví dụ
+
+stmt = select(User).order_by(
+    User.age.desc(),
+    User.name.asc()
+)
+
+SQL
+
+ORDER BY age DESC,
+         name ASC
+
+Ý nghĩa
+
+ưu tiên tuổi lớn
+nếu tuổi bằng nhau thì sắp xếp tên A→Z
+8. Luồng hoạt động
+Database
+
+↓
+
+SELECT *
+
+↓
+
+ORDER BY created_at DESC
+
+↓
+
+LIMIT 1
+
+↓
+
+Row mới nhất
+
+↓
+
+ORM Object
+9. Tổng kết
+Mục đích	Cách dùng
+Sắp xếp tăng dần	order_by(User.created_at) hoặc order_by(User.created_at.asc())
+Sắp xếp giảm dần	order_by(User.created_at.desc())
+Lấy bản ghi mới nhất	order_by(User.created_at.desc()).limit(1)
+Lấy bản ghi cũ nhất	order_by(User.created_at.asc()).limit(1)
+Ví dụ hoàn chỉnh
+from sqlalchemy import select
+
+stmt = (
+    select(User)
+    .order_by(User.created_at.desc())
+    .limit(1)
+)
+
+result = await session.execute(stmt)
+
+latest_user = result.scalar_one_or_none()
+
+print(latest_user)
+
+Nếu bảng có:
+
+id	name	created_at
+1	Alice	2025-01-01
+2	Bob	2025-03-10
+3	Tom	2025-02-01
+
+thì latest_user sẽ là:
+
+<User(id=2, name='Bob', created_at='2025-03-10')>
+
+Đây là cách ngắn gọn, rõ ràng và hiệu quả để lấy toàn bộ bản ghi có created_at mới nhất.
+# Display (cung cấp thông tin)
 ## .columns
 **Ex**
 ```python
@@ -556,6 +751,247 @@ stmt = (
 with engine.begin() as conn:
     conn.execute(stmt)
 ```
+### one_or_none()
+Đây là câu hỏi rất hay vì one_or_none() và scalar_one_or_none() là hai hàm dễ gây nhầm lẫn. Sự khác biệt nằm ở kết quả của select() có bao nhiêu cột.
+
+1. scalar_one_or_none()
+
+Nó chỉ lấy cột đầu tiên của mỗi row.
+
+Ví dụ bảng User:
+
+id	name
+1	Alice
+2	Bob
+stmt = select(User)
+
+result = db.execute(stmt)
+
+user = result.scalar_one_or_none()
+
+user là:
+
+User(id=1, name="Alice")
+
+Vì select(User) chỉ có 1 cột ORM object.
+
+Nhưng nếu
+stmt = select(User, HealthMetric.height)
+
+SQL trả về:
+
+User	height
+Alice	170
+
+Thì
+
+result.scalar_one_or_none()
+
+chỉ lấy:
+
+User(id=1, ...)
+
+170 bị bỏ đi.
+
+Đó chính là lỗi bạn gặp.
+
+2. one_or_none()
+
+one_or_none() không bỏ cột nào cả.
+
+Ví dụ:
+
+stmt = (
+    select(User, HealthMetric.height)
+)
+
+Kết quả:
+
+result = db.execute(stmt)
+
+row = result.one_or_none()
+
+print(row)
+
+Output
+
+(
+    User(id=1, name="Alice"),
+    170
+)
+
+Đây là một Row.
+
+Có thể unpack:
+
+user, height = row
+
+print(user.name)
+
+print(height)
+
+Output
+
+Alice
+
+170
+3. Ví dụ giống hệt trường hợp của bạn
+
+Giả sử
+
+HealthMetric
+
+user_id	height	weight
+1	170	65
+
+Viết
+
+stmt = (
+    select(
+        User,
+        HealthMetric.height,
+        HealthMetric.weight
+    )
+)
+
+Sau đó
+
+result = db.execute(stmt)
+
+row = result.one_or_none()
+
+print(row)
+
+Output
+
+(
+    User(...),
+    170,
+    65
+)
+
+Unpack
+
+user, height, weight = row
+
+Giờ
+
+print(user.email)
+
+print(height)
+
+print(weight)
+
+Output
+
+alice@gmail.com
+
+170
+
+65
+4. Nếu không có dữ liệu
+row = result.one_or_none()
+
+Output
+
+None
+
+Không exception.
+
+5. Nếu có nhiều hơn một dòng
+
+Giả sử
+
+stmt = select(User)
+
+Có
+
+Alice
+
+Bob
+
+Tom
+
+Thì
+
+result.one_or_none()
+
+sẽ báo
+
+MultipleResultsFound
+
+vì hàm này kỳ vọng:
+
+đúng 1 dòng
+hoặc 0 dòng
+6. Ví dụ đầy đủ
+stmt = (
+    select(
+        User,
+        HealthMetric.height,
+        HealthMetric.weight
+    )
+    .join(HealthMetric)
+    .where(User.id == 15)
+    .order_by(HealthMetric.recorded_at.desc())
+    .limit(1)
+)
+
+result = db.execute(stmt)
+
+row = result.one_or_none()
+
+if row is None:
+    print("Không có dữ liệu")
+else:
+
+    user, height, weight = row
+
+    print(user.email)
+    print(height)
+    print(weight)
+
+Output
+
+alice@gmail.com
+
+170
+
+65
+7. So sánh trực quan
+
+Giả sử SQL trả về
+
+User	height	weight
+Alice	170	65
+scalar_one_or_none()
+user = result.scalar_one_or_none()
+
+Kết quả
+
+User(...)
+
+Nó chỉ lấy cột đầu tiên.
+
+one_or_none()
+row = result.one_or_none()
+
+Kết quả
+
+(
+    User(...),
+    170,
+    65
+)
+
+Giữ nguyên toàn bộ row.
+
+Tóm tắt
+Hàm	Trả về	Khi nào dùng
+scalar_one_or_none()	Giá trị của cột đầu tiên (ví dụ ORM object hoặc một giá trị đơn lẻ)	select(User), select(func.count()), select(User.id)
+one_or_none()	Toàn bộ một row (tuple/Row)	select(User, HealthMetric.height, HealthMetric.weight), select(User, Role), hoặc bất kỳ truy vấn nào có từ 2 cột trở lên
+
+Quy tắc nhớ nhanh: nếu select() của bạn chỉ có một cột, scalar_one_or_none() thường là lựa chọn gọn gàng. Nếu select() có nhiều cột hoặc nhiều entity, hãy dùng one_or_none() để giữ lại toàn bộ dữ liệu rồi unpack từng phần.
 ## func
 ```bash
 - func trong SQLAlchemy dùng để gọi SQL functions (hàm của database) 

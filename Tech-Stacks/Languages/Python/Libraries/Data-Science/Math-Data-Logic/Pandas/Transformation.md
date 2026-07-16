@@ -1,6 +1,6 @@
 - [Transformation (biến đổi cấu trúc dữ liệu)](#transformation-biến-đổi-cấu-trúc-dữ-liệu)
   - [.rename() (đổi tên cột | chỉ mục)](#rename-đổi-tên-cột--chỉ-mục)
-  - [.concat()](#concat)
+  - [.concat() (nối hoặc thêm dữ liệu mới vào dataframe)](#concat-nối-hoặc-thêm-dữ-liệu-mới-vào-dataframe)
   - [fillna()](#fillna)
   - [.values \& to\_numpy()](#values--to_numpy)
   - [.sort\_values()](#sort_values)
@@ -27,7 +27,7 @@
 DataFrame.rename(
     mapper=None,
     *,
-    index=None,
+    index={3: "Total"},
     columns={"Unnamed: 0": "timestamp"},    # đổi tên cột từ Unnamed: 0 -> timestamp
     axis=None,
     copy=None,
@@ -37,6 +37,7 @@ DataFrame.rename(
 )
 
 - Input:
+    + index: dict. dùng để đổi tên index - chỉ mục
     + inplace=:
         - True  : sửa trực tiếp vào df
         - False : (mặc định) → trả về DataFrame mới
@@ -67,10 +68,7 @@ print(df)
 # 0  thang      leducthang
 # 1   minh  nguyenngocminh
 ```
-## .concat()
-```bash
-nối hoặc thêm dữ liệu mới vào dataframe
-```
+## .concat() (nối hoặc thêm dữ liệu mới vào dataframe)
 **Ex1: thêm mới một hàng**
 ```python
 def add_worker(df):
@@ -106,7 +104,6 @@ test = pd.DataFrame({
 df = pd.concat([train, test])
 
 print(df)
-
 #    age  score
 # 0   10   80.0
 # 1   12    NaN

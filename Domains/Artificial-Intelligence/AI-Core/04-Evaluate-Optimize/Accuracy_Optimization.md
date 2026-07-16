@@ -25,10 +25,13 @@
     - [Demo về công thức BCE bằng math](#demo-về-công-thức-bce-bằng-math)
   - [Categorical Cross Entropy (dùng cho bài toán phân loại nhiều lớp (multi-class classification))](#categorical-cross-entropy-dùng-cho-bài-toán-phân-loại-nhiều-lớp-multi-class-classification)
   - [Sparse Categorical Cross-Entropy (SCCE) (hàm loss dùng cho bài toán phân loại nhiều lớp (multi-class classification))](#sparse-categorical-cross-entropy-scce-hàm-loss-dùng-cho-bài-toán-phân-loại-nhiều-lớp-multi-class-classification)
-  - [ROC-AUC và PR-AUC](#roc-auc-và-pr-auc)
-  - [ROC Curve](#roc-curve)
+  - [TPR (True Positive Rate = Recall, tỷ lệ dự đoán đúng các mẫu dương)](#tpr-true-positive-rate--recall-tỷ-lệ-dự-đoán-đúng-các-mẫu-dương)
+  - [FPR (False Positive Rate, tỷ lệ báo nhầm mẫu âm thành dương)](#fpr-false-positive-rate-tỷ-lệ-báo-nhầm-mẫu-âm-thành-dương)
+  - [ROC-AUC và PR-AUC (là hai cách đánh giá mô hình phân loại nhị phân, đặc biệt khi mô hình trả về xác suất thay vì chỉ trả lời Có/Không)](#roc-auc-và-pr-auc-là-hai-cách-đánh-giá-mô-hình-phân-loại-nhị-phân-đặc-biệt-khi-mô-hình-trả-về-xác-suất-thay-vì-chỉ-trả-lời-cókhông)
+  - [ROC Curve (đồ thị giữa FPR và TPR)](#roc-curve-đồ-thị-giữa-fpr-và-tpr)
+  - [AUC (Area Under Curve - Diện tích dưới đường ROC)](#auc-area-under-curve---diện-tích-dưới-đường-roc)
   - [ROC-AUC (Xác suất mô hình xếp một Positive thật cao hơn một Negative thật.)](#roc-auc-xác-suất-mô-hình-xếp-một-positive-thật-cao-hơn-một-negative-thật)
-  - [PR Curve](#pr-curve)
+  - [PRC (Precision-Recall Curve, đồ thị giữa Recall (TPR) và Precision)](#prc-precision-recall-curve-đồ-thị-giữa-recall-tpr-và-precision)
   - [PR-AUC](#pr-auc)
 - [Optimizer (thuật toán tối ưu)](#optimizer-thuật-toán-tối-ưu)
   - [SGD (Stochastic Gradient Descent)](#sgd-stochastic-gradient-descent)
@@ -563,10 +566,26 @@ Ví dụ:
 ```bash
 Loss = -log(P(lớp đúng))
 ```
-## ROC-AUC và PR-AUC 
+## TPR (True Positive Rate = Recall, tỷ lệ dự đoán đúng các mẫu dương)
 ```bash
-là hai cách đánh giá mô hình phân loại nhị phân, đặc biệt khi mô hình trả về xác suất thay vì chỉ trả lời Có/Không.
+TPR = TP / (TP + FN)
 ```
+**Ex**
+```bash
+Có 100 người mắc bệnh. Mô hình phát hiện đúng 90 người.
+→ TPR = 90/100 = 0.9
+```
+## FPR (False Positive Rate, tỷ lệ báo nhầm mẫu âm thành dương)
+**Formula**
+```bash
+FPR = FP / (FP+TN)
+```
+**Ex**
+```bash
+Có 100 người khỏe. Mô hình báo nhầm 10 người là mắc bệnh.
+→ FPR = 10/100 = 0.1
+```
+## ROC-AUC và PR-AUC (là hai cách đánh giá mô hình phân loại nhị phân, đặc biệt khi mô hình trả về xác suất thay vì chỉ trả lời Có/Không)
 **tại sao cần ROC và PR?**
 ```bash
 Giả sử mô hình dự đoán:
@@ -587,7 +606,7 @@ Nhưng nếu đổi threshold thành 0.8:
 
 => Precision và Recall sẽ thay đổi theo threshold.
 ```
-## ROC Curve
+## ROC Curve (đồ thị giữa FPR và TPR)
 ```bash
 ROC vẽ:
     Trục X = FPR (False Positive Rate)
@@ -610,45 +629,33 @@ Ví dụ;
 
     Điểm ROC sẽ là: (0.1, 0.9)
 ```
-## ROC-AUC (Xác suất mô hình xếp một Positive thật cao hơn một Negative thật.)
+## AUC (Area Under Curve - Diện tích dưới đường ROC)
 ```bash
-AUC = Area Under Curve.
-    - AUC = 1 → hoàn hảo
-    - AUC = 0.5 → đoán ngẫu nhiên
-    - AUC < 0.5 → tệ hơn random
-
-Ví dụ:
-    - Spam:      0.9
-    - Không spam:0.3
-    → đúng.
-
-    Nếu hầu hết Positive đều được xếp điểm cao hơn Negative:
-        ROC-AUC ≈ 1
+- AUC = 1 → hoàn hảo
+- AUC = 0.9 → rất tốt
+- AUC = 0.8 → tốt
+- AUC = 0.5 → đoán ngẫu nhiên
+- AUC < 0.5 → tệ hơn random
 ```
-## PR Curve
+## ROC-AUC (Xác suất mô hình xếp một Positive thật cao hơn một Negative thật.)
+## PRC (Precision-Recall Curve, đồ thị giữa Recall (TPR) và Precision)
+**Ex**
 ```bash
-PR = Precision-Recall.
+Có:
+    - 1000 email
+    - 990 email thường
+    - 10 email spam
 
-Vẽ:
-    - Trục X = Recall
-    - Trục Y = Precision
+Mô hình tìm được:
+    - TP = 8
+    - FP = 2
+    - FN = 2
 
-Ví dụ
-    Có:
-        - 1000 email
-        - 990 email thường
-        - 10 email spam
+Ta có:
+    - Precision = 8/(8+2)=80%
+    - Recall    = 8/(8+2)=80%
 
-    Mô hình tìm được:
-        - TP = 8
-        - FP = 2
-        - FN = 2
-
-    Ta có:
-        - Precision = 8/(8+2)=80%
-        - Recall    = 8/(8+2)=80%
-
-    Điểm trên PR Curve là: (Recall=0.8, Precision=0.8)
+Điểm trên PR Curve là: (Recall=0.8, Precision=0.8)
 ```
 ## PR-AUC
 ```bash

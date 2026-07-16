@@ -16,7 +16,7 @@
 - [like (truy vấn dữ liệu theo điều kiện)](#like-truy-vấn-dữ-liệu-theo-điều-kiện)
   - [REGEXP (công cụ khớp mẫu cực mạnh)](#regexp-công-cụ-khớp-mẫu-cực-mạnh)
 - [Math (Nhóm xử lý tính toán)](#math-nhóm-xử-lý-tính-toán)
-  - [count](#count)
+  - [count (Dùng để đếm số dòng trong mỗi nhóm)](#count-dùng-để-đếm-số-dòng-trong-mỗi-nhóm)
   - [sum (Để cộng tổng các giá trị trong 1 cột hoặc khác cột)](#sum-để-cộng-tổng-các-giá-trị-trong-1-cột-hoặc-khác-cột)
   - [DISTINCT](#distinct)
   - [ROUND() (dùng để làm tròn số)](#round-dùng-để-làm-tròn-số)
@@ -231,10 +231,7 @@ SELECT * FROM exercises WHERE name LIKE '%Mountain%'
 - '[ABC]': Một ký tự trong tập
 ```
 # Math (Nhóm xử lý tính toán)
-## count
-```bash
-Dùng để đếm số dòng trong mỗi nhóm
-```
+## count (Dùng để đếm số dòng trong mỗi nhóm)
 **Ex: đếm số user trong mỗi phòng ban**
 ```bash
 | id | name | department |

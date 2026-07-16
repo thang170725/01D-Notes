@@ -1,54 +1,57 @@
-- [Kiểm tra java đã cài trong máy chưa](#kiểm-tra-java-đã-cài-trong-máy-chưa)
-- [System.out.println() \& System.out.print() \& System.out.printf()](#systemoutprintln--systemoutprint--systemoutprintf)
+- [Java introduction](#java-introduction)
+- [Installation](#installation)
+- [Display (Cung cấp thông tin)](#display-cung-cấp-thông-tin)
+	- [System.out.println() (xuất một nội dung ra màn hình có xuống dòng)](#systemoutprintln-xuất-một-nội-dung-ra-màn-hình-có-xuống-dòng)
+- [variable (biến)](#variable-biến)
+	- [public (Instance variable - biến toàn cục)](#public-instance-variable---biến-toàn-cục)
+	- [Static variable](#static-variable)
+- [Data Type (kiểu dữ liệu)](#data-type-kiểu-dữ-liệu)
+	- [Boolean](#boolean)
+	- [Integer (Số nguyên)](#integer-số-nguyên)
+	- [Float (Số thực)](#float-số-thực)
+- [math](#math)
+	- [BigInteger() (dùng để tạo ra một số nguyên cực lớn)](#biginteger-dùng-để-tạo-ra-một-số-nguyên-cực-lớn)
+		- [.valueOf() (Tạo ra một đối tượng lớp Integer có giá trị cụ thể)](#valueof-tạo-ra-một-đối-tượng-lớp-integer-có-giá-trị-cụ-thể)
+			- [.add() (để cộng 2 số có kiểu dữ liệu BigInteger)](#add-để-cộng-2-số-có-kiểu-dữ-liệu-biginteger)
+			- [.subtract() (để trừ 2 số có kiểu dữ liệu BigInteger)](#subtract-để-trừ-2-số-có-kiểu-dữ-liệu-biginteger)
+			- [.multiply() (để nhân 2 số có kiểu dữ liệu BigInteger)](#multiply-để-nhân-2-số-có-kiểu-dữ-liệu-biginteger)
+			- [.divide() (để chia 2 số có kiễu dữ liệu BigInteger)](#divide-để-chia-2-số-có-kiễu-dữ-liệu-biginteger)
+			- [.mod() (để chia lấy dư của 2 số có kiểu dữ liệu BigInteger)](#mod-để-chia-lấy-dư-của-2-số-có-kiểu-dữ-liệu-biginteger)
+			- [.compareTo() (để so sánh với một BigInteger khác)](#compareto-để-so-sánh-với-một-biginteger-khác)
+			- [.equals() (so sánh 2 đối tượng BigInteger có bằng nhau về giá trị hay không](#equals-so-sánh-2-đối-tượng-biginteger-có-bằng-nhau-về-giá-trị-hay-không)
+			- [.intValue() (chuyển đổi một đối tượng BigInteger thành một giá trị nguyên)](#intvalue-chuyển-đổi-một-đối-tượng-biginteger-thành-một-giá-trị-nguyên)
+- [Operators](#operators)
+	- [++](#)
+	- [--](#--)
 ---
-# Kiểm tra java đã cài trong máy chưa
+# Java introduction
+**Quy trình biên dịch chương trình trong Java**
 ```bash
-1. java --version
-2. which java		: kiểm tra đường dẫn java
+B1: Viết mã: Bạn viết mã bằng trình soạn thảo văn bản.
+B2: Biên dịch: Mã nguồn java được biên dịch thành mã byteCode.
+B3: Thực thi: JVM tải mã byteCode vào bô nhớ, kiểm tra, thông dịch và thực thi.
+B4: Kết quả: Kết quả của chương trình được hiển thị trên màn hình hoặc được lưu trữ vào một file.
 ```
-# javac
+**javac**
 ```bash
 Khi biên dịch chương trình, bằng công cụ javac, trình biên dịch sẽ chuyển đổi mã nguồn thành mã byte (byte code).
 ```
-
-Tóm lại:
-B1: Viết mã: Bạn viết mã bằng trình soạn thảo văn bản.
-B2: Biên dịch: Mã nguồn java được biên dịch thành mã byyteCode.
-B3: Thực thi: JVM tải mã byteCode vào bô nhớ, kiểm tra, thông dịch và thực thi.
-B4: Kết quả: Kết quả của chương trình được hiển thị trên màn hình hoặc được lưu trữ vào một file.
-Cài đặt path
-Đường dẫn cần được thiết lập để sử dụng các công cụ như javac, java, …
-Nếu bạn đang lưu tệp nguồn java bên trong thư mục JDK/Bin thì không cần thiết lập vì tất cả các công cụ sẽ có sẵn trong thư mục hiện tại.
-Nếu bạn có tệp Java bên ngoài thư mục JDK/Bin, bạn cần thiết lập đường dẫn của JDK.
-Có 2 cách:
-    • Thiết lập tạm thời (temporary).
-    • Thiết lập vĩnh viễn (permanent).
-Temporary
-B1: Mở command prompt.
-B2: Sao chép đường dẫn JDK/Bin.
-B3 sử dụng lệnh set (VD: set path=C:\Program Files\Java\jdk1.6.0_23\bin).
-Permanent
-B1: Chuột phải vào this PC chọn properties.
-B2: Chọn advanced tab.
-B3: Chọn enviroment variable.
-B4: Chọn new tab of user variable.
-B5: Viết đường dẫn.
-B6: Chọn OK.
-# JVM
+**JVM (thiết bị trừu tượng ảo có thể giúp máy tính chạy các chương trình java)**
 ```bash
-- https://www.youtube.com/watch?v=VDItFvpvckI
-- JVM (Java Virtual Machine)
-    • là một thiết bị trừu tượng ảo có thể giúp máy tính chạy các chương trình java.
-    • Nó được gọi là máy ảo vì nó không tồn tại vật lý.
-    • Nó cung cấp môi trường runtime mà trong đó Java Bytecode có thể được thực thi.
-    • JVM có sẵn cho nhiều nền tảng Window, linux, … 
-    • JVM, JRE, JDK là phụ thuộc nền tảng bởi vì cấu hình của OS (hệ điều hành) là khác nhau. Nhưng Java không phụ thuộc vào nền tảng.
-- JVM thực hiện các tác vụ sau:
-    • Tải code.
-    • Kiểm tra code.
-    • Thực thi code.
-    • Cung cấp môi trường runtime.
-- JVM cung cấp các định nghĩa cho: khu vực bộ nhớ, định dạng class file, thiết lập Register, heap cho trình rọn rác và các báo lỗi nghiêm trọng (fatal error).
+[Link giới thiệu JVM](https://www.youtube.com/watch?v=VDItFvpvckI)
+
+JVM (Java Virtual Machine) được gọi là máy ảo vì nó không tồn tại vật lý
+    Nó cung cấp môi trường runtime mà trong đó Java Bytecode có thể được thực thi.
+    JVM có sẵn cho nhiều nền tảng Window, linux, … 
+    JVM, JRE, JDK là phụ thuộc nền tảng bởi vì cấu hình của OS (hệ điều hành) là khác nhau. Nhưng Java không phụ thuộc vào nền tảng.
+
+JVM thực hiện các tác vụ sau:
+    - Tải code.
+    - Kiểm tra code.
+    - Thực thi code.
+    - Cung cấp môi trường runtime.
+
+JVM cung cấp các định nghĩa cho: khu vực bộ nhớ, định dạng class file, thiết lập Register, heap cho trình rọn rác và các báo lỗi nghiêm trọng (fatal error).
 
     • Classloader: là một hệ thống con của JVM được sử dụng để tải class file.
     • Class Area: lưu trữ cấu trúc mỗi lớp, chẳng hạn như hằng, trường, dữ liệu phương thức, code của phương thức
@@ -60,11 +63,13 @@ B6: Chọn OK.
     • Just-in-time (JIT) compiler: được sử dụng để cải thiện hiệu suất. JIT biên dịch các phần của bytecode mà có cùng tính năng tại cùng một thời điểm, và vì thế giảm lượng thời gian cần thiết để biên dịch. ở đây khái niệm Compiler là một bộ biên dịch tập
     • Của JVM thành tập của CPU cụ thể
 ```
-# JRE (Java runtime Enviroment)
+**JRE (Java runtime Enviroment)**
+```bash
 Được sử dụng để cung cấp môi trường runtime. Nó là trình triển khai của JVM. JRE bao gồm các thư viện và các file khác mà JVM sử dụng tại runtime. Trình triển khai của JVM cững được công bố bởi các công ty nước ngoài Sun Micro Systems.
 JRE = JVM + libraries
-
-# JDK (Java Development Kit)
+```
+**JDK (Java Development Kit)**
+```bash
 Nó bao gồm JRE và các development tool.
 
 Cấu trúc format
@@ -80,77 +85,63 @@ Ví dụ: định dạng các sô sau
     • %.3f\n – một số thực lấy sau dấu phẩy 3 số
     • %-15s – chuỗi có 15 kí tự được căn trái
     • %03d – số nguyên có 3 chữ số thêm số 0 nếu số nhỏ hơn 3 chữ số
-Scanner
-Phải thêm thư viện: import java.util.Scanner;
-Phương thức
-Mô tả
-nextBoolean()
-Đọc một giá trị boolean từ bàn phím
-nextByte()
-Đọc một giá trị byte từ bàn phím
-nextDouble()
-Đọc một giá trị double từ bàn phím
-nextFloat()
-Đọc một giá trị float từ bàn phím
-nextInt()
-Đọc một giá trị int từ bàn phím
-nextLong()
-Đọc một giá trị long từ bàn phím
-nextShort()
-Đọc một giá trị short từ bàn phím
-nextline()
-Đọc một giá trị String từ bàn phím
-Ví Dụ:
-Scanner sc = new Scanner(System.in);
-System.out.println(“…”);
-String nhap = sc.nextLine();
-Comment
-// -  ghi chú trên một dòng
-/* ghi chú trên nhiều dòng */
-/** chú thích để tạo tài liệu javadoc */
-final 
-Xác định một biến không thể thay đổi được.
-Cú pháp:
-final <dataType> <name> = value;
-class Solution{
-	public static void main(String[] args) {
-		final int a = 10;
-		a = 12; // Có thông báo lỗi
-		System.out.println(a);
-	}
-}
+```
+# Installation
+**Step1: Kiểm tra java đã cài trong máy chưa**
+```bash
+1. java --version
+2. which java		# kiểm tra đường dẫn java
+```
+**Step2: Cài đặt path**
+```bash
+Đường dẫn cần được thiết lập để sử dụng các công cụ như javac, java, …
+Nếu bạn đang lưu tệp nguồn java bên trong thư mục JDK/Bin thì không cần thiết lập vì tất cả các công cụ sẽ có sẵn trong thư mục hiện tại.
+Nếu bạn có tệp Java bên ngoài thư mục JDK/Bin, bạn cần thiết lập đường dẫn của JDK.
 
-Variable
-Biến có vhữ đầu viết thường, chữ thứ 2 viết hoa.
-Local variable
-    • Một biến được khai báo trong thân phương thức được gọi là biến cục bộ. Bạn chỉ có thể sử dụng biến này trong phương thức đó và các phương thức khác thậm chí không biết đến sử tồn tại của biến này.
-    • Không thể định nghĩa local variable bằng từ khóa “static”.
-public class Run_01 {
-public void age() {
-	    	   int n = 10;
-	    	   System.out.println(n); // biến n chỉ được in ra trong void
-	       }
+Có 2 cách:
+    Temporary
+		B1: Mở command prompt.
+		B2: Sao chép đường dẫn JDK/Bin.
+		B3: sử dụng lệnh set (VD: set path=C:\Program Files\Java\jdk1.6.0_23\bin).
+	Permanent
+		B1: Chuột phải vào this PC chọn properties.
+		B2: Chọn advanced tab.
+		B3: Chọn enviroment variable.
+		B4: Chọn new tab of user variable.
+		B5: Viết đường dẫn.
+		B6: Chọn OK.
+```
+# Display (Cung cấp thông tin)
+## System.out.println() (xuất một nội dung ra màn hình có xuống dòng)
+**Ex**
+```java
+
+## System.out.print() 
+## System.out.printf()
+```bash
+- Dùng để , không xuống dòng, hoặc theo một định dạng nào đó.
+```
+**Ex: chạy chương trinh**
+```java
+public class test {
     public static void main(String[] args) {
-    	Run_01 object = new Run_01();
-    	object.age();
-    	System.out.println(n); // câu lệnh này sẽ lỗi
-    	// n cannot be resolved to a variable
+        System.out.println("hello world!!!");
     }
 }
-
-Instance variable (biến toàn cục)
-    • Một biến được khai báo bên trong lớp nhưng bên ngoài thân phương thức thì được gọi là biến toàn cục.
-    • Được lưu trong bộ nhớ heap.
-    • Được tạo khi một đối tượng được tạo bằng việc sử dụng từ khóa new và sẽ bị hủy khi đối tượng bị hủy.
-    • Có thể sử dụng bởi các phương thức, constructor, block, … nhưng phải được sử dụng thông qua một đối tượng cụ thể
-    • Được phép sử dụng access modifier khi khai báo biến instance, mặc định là default.
-    • Có giá trị mặc định phụ thuộc vào kiểu dữ liệu của nó vì vậy không cần khởi tạo giá trị trước.
-    • Bên trong class mà bạn đang khai báo biến instance, có thể gọi nó trực tiếp bằng tên khi sử dụng ở khắp nơi bên trong class đó.
+// thang@PhatToNhuLai:~/workspace/test/HEALTH_CARE_WEBSITE$ java test.java
+// hello world!!!
+```
+# variable (biến)
+## public (Instance variable - biến toàn cục)
+**Ex**
+```java
 class Solution {
 	public int n = 10; // đây là biến instance
+
 	public void age() {
 		n *= 2;
 	}
+
 	public static void main(String[] args) {
 		Solution object = new Solution(); // khai báo đối tương
 		System.out.println(object.n);
@@ -158,14 +149,15 @@ class Solution {
 		System.out.println(object.n);
 	}
 }
-10
-20
-Static variable
-    • Một biến được khai báo với từ khóa static được gọi là biến static. Có thể chia sẻ nó ở tất cả mọi thể hiện của lớp. 
-    • Sẽ có một bản sao duy nhất của các biến static được tạo ra, dù bạn tạo bao nhiêu đối tượng từ lớp tương ứng.
-    • Được lưu trữ trong bộ nhớ static riêng.
-    • Được tạo khi chương trình chạy, bị hủy khi chưng trình dừng.
-    • Được truy cập thông qua tên class chứa nó.
+// 10
+// 20
+```
+## Static variable
+```bash
+Biến static. Có thể chia sẻ nó ở tất cả mọi thể hiện của lớp. 
+```
+**Ex**
+```java
 class Solution {
 	public static int n = 10; // đây là biến static
 	public static void age() {
@@ -178,54 +170,60 @@ class Solution {
 		System.out.println(n);
 	}
 }
-10
-20
-Data Type
-Boolean
-    • boolean: 1 bit
-Number
-Số nguyên
-    • byte: 1 byte
-    • short: 2 byte
-    • int: 4 byte
-    • long: 8 byte
-Số thực
-    • float: 4 byte
-    • double: 8 byte
-BigInteger(“ “)
-Là một lớp, dùng để tạo ra một số nguyên cực lớn, không bị tràn dữ liệu
-Cần import java.math.BigInteger
-Cú pháp: 
-BigInteger name = new BigInteger(“ “);
-BigInteger.valueOf(number)
-Tạo ra một đối tượng lớp Integer có giá trị cụ thể là bằng number
-add()
-để cộng 2 số có kiểu dữ liệu BigInteger
-cú pháp:
+# 10
+# 20
+```
+# Data Type (kiểu dữ liệu)
+## Boolean
+```bash
+boolean: 1 bit
+```
+## Integer (Số nguyên)
+```bash
+byte: 1 byte
+short: 2 byte
+int: 4 byte
+long: 8 byte
+```
+## Float (Số thực)
+```bash
+float: 4 byte
+double: 8 byte
+```
+# math
+## BigInteger() (dùng để tạo ra một số nguyên cực lớn)
+**Syn**
+```bash
+import java.math.BigInteger
+
+BigInteger name = new BigInteger();
+```
+### .valueOf() (Tạo ra một đối tượng lớp Integer có giá trị cụ thể)
+#### .add() (để cộng 2 số có kiểu dữ liệu BigInteger)
+**Syn**
+```bash
 <name1>.add(<name2>);
-subtract()
-để trừ 2 số có kiểu dữ liệu BigInteger
-multiply()
-để nhân 2 số có kiểu dữ liệu BigInteger
-divide()
-để chia 2 số có kiễu dữ liệu BigInteger
-mod()
-để chia lấy dư của 2 số có kiểu dữ liệu BigInteger
-public Biginteger modPow(BigInteger exponent, BigInteger modulus)
-để tính lũy thừa rồi chia lấy dư số có kiểu dữ liệu BigInteger
-compareTo()
-để so sánh với một BigInteger khác, trả về -1 nếu bé hơn BigInteger được so sánh, 0 nếu bằng và 1 nếu lớn hơn.
-equals()
-được sử dụng để so sánh 2 đối tượng BigInteger có bằng nhau về giá trị hay không, nó so sánh giá trị tuyệt đối. trả về true nếu bằng và false nếu không bằng.
-intValue() 
-để chuyển đổi một đối tượng BigInteger thành một giá trị nguyên (kiểu int). phương thức này lấy 32 bit ý nghĩa nhất của Integer và chuyển chúng thành số nguyên nếu giá trị của BigInteger quá lớn, các bit cao sẽ bị bỏ đi dẫn đến mất mát dữ liệu
-Java Type casting
-Khi gán một giá trị của một kiểu dữ liệu nguyên thủy cho một kiểu khác.
-Trong Java có 2 kiểu ép kiểu:
-    • chuyển đổi một kiểu nhỏ hơn sang một kiểu có kích thước lớn hơn một cách tự động.
-    • chuyển đổi một kiểu lớn hơn sang một kiểu có kích thước nhỏ hơn một cách tự động. 
-Java Operators
-++ and –
+```
+#### .subtract() (để trừ 2 số có kiểu dữ liệu BigInteger)
+#### .multiply() (để nhân 2 số có kiểu dữ liệu BigInteger)
+#### .divide() (để chia 2 số có kiễu dữ liệu BigInteger)
+#### .mod() (để chia lấy dư của 2 số có kiểu dữ liệu BigInteger)
+#### .compareTo() (để so sánh với một BigInteger khác)
+```bash 
+Trả về -1 nếu bé hơn BigInteger được so sánh, 0 nếu bằng và 1 nếu lớn hơn.
+```
+#### .equals() (so sánh 2 đối tượng BigInteger có bằng nhau về giá trị hay không
+```bash
+Nó so sánh giá trị tuyệt đối. trả về true nếu bằng và false nếu không bằng.
+```
+#### .intValue() (chuyển đổi một đối tượng BigInteger thành một giá trị nguyên) 
+```bash
+phương thức này lấy 32 bit ý nghĩa nhất của Integer và chuyển chúng thành số nguyên nếu giá trị của BigInteger quá lớn, các bit cao sẽ bị bỏ đi dẫn đến mất mát dữ liệu
+```
+# Operators
+## ++ 
+**Ex**
+```java
 class Solution{
 	public static void main(String[] args) {
 		int a = 10;
@@ -233,9 +231,12 @@ class Solution{
 		System.out.println(++a);
 	}
 }
-10
-12
-
+// 10
+// 12
+```
+## --
+**Ex**
+```java
 class Solution{
 	public static void main(String[] args) {
 		int a = 10;
@@ -243,8 +244,9 @@ class Solution{
 		System.out.println(--a);
 	}
 }
-10 
-8
+// 10 
+// 8
+```
 String
 char
 Là kiểu ký tự. 2 byte
@@ -4740,3 +4742,42 @@ setOpaque(boolean)
 jtextfield
 jtextarea
 jscrollpane
+Scanner
+Phải thêm thư viện: import java.util.Scanner;
+Phương thức
+Mô tả
+nextBoolean()
+Đọc một giá trị boolean từ bàn phím
+nextByte()
+Đọc một giá trị byte từ bàn phím
+nextDouble()
+Đọc một giá trị double từ bàn phím
+nextFloat()
+Đọc một giá trị float từ bàn phím
+nextInt()
+Đọc một giá trị int từ bàn phím
+nextLong()
+Đọc một giá trị long từ bàn phím
+nextShort()
+Đọc một giá trị short từ bàn phím
+nextline()
+Đọc một giá trị String từ bàn phím
+Ví Dụ:
+Scanner sc = new Scanner(System.in);
+System.out.println(“…”);
+String nhap = sc.nextLine();
+Comment
+// -  ghi chú trên một dòng
+/* ghi chú trên nhiều dòng */
+/** chú thích để tạo tài liệu javadoc */
+final 
+Xác định một biến không thể thay đổi được.
+Cú pháp:
+final <dataType> <name> = value;
+class Solution{
+	public static void main(String[] args) {
+		final int a = 10;
+		a = 12; // Có thông báo lỗi
+		System.out.println(a);
+	}
+}

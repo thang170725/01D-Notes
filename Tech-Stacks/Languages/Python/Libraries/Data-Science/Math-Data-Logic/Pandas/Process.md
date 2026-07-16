@@ -19,7 +19,7 @@
   - [pd.notnull()](#pdnotnull)
   - [.isna() \& .isnull()](#isna--isnull)
 - [Search (nhóm tìm kiếm, lọc)](#search-nhóm-tìm-kiếm-lọc)
-  - [loc](#loc)
+  - [loc (Chọn theo nhãn hoặc theo điều kiện)](#loc-chọn-theo-nhãn-hoặc-theo-điều-kiện)
   - [iloc (integer location) (dùng để truy cập dữ liệu theo vị trí chỉ số)](#iloc-integer-location-dùng-để-truy-cập-dữ-liệu-theo-vị-trí-chỉ-số)
   - [.notna()](#notna)
   - [.where()](#where)
@@ -514,10 +514,7 @@ print(non_salary)
 # 5  False   False  False
 ```
 # Search (nhóm tìm kiếm, lọc)
-## loc
-```bash
-- Chọn theo nhãn hoặc theo điều kiện.
-```
+## loc (Chọn theo nhãn hoặc theo điều kiện)
 **Ex1: Lấy ra một hàng theo index**
 ```python
 import pandas as pd

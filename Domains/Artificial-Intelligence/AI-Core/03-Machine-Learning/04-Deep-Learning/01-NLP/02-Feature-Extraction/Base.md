@@ -1,4 +1,7 @@
-- [BoW và TF-IDF không phải Token, cũng không phải Embedding.](#bow-và-tf-idf-không-phải-token-cũng-không-phải-embedding)
+-- [BoW (Bag of Words - Lấy các token rồi đếm số lần xuất hiện)](#bow-bag-of-words---lấy-các-token-rồi-đếm-số-lần-xuất-hiện)
+- [BoW (Bag of Words - Lấy các token rồi đếm số lần xuất hiện)](#bow-bag-of-words---lấy-các-token-rồi-đếm-số-lần-xuất-hiện)
+- [TF-IDF (biến token thành feature vector)](#tf-idf-biến-token-thành-feature-vector)
+  - [Ask (các câu hỏi liên quan đến TF-IDF)](#ask-các-câu-hỏi-liên-quan-đến-tf-idf)
 - [Attention](#attention)
 ---
 # BoW (Bag of Words - Lấy các token rồi đếm số lần xuất hiện)

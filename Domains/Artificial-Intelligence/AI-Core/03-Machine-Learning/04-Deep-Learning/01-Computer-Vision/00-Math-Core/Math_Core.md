@@ -3,7 +3,9 @@
   - [BGR (OpenCV mặc định dùng Blue - Green - Red)](#bgr-opencv-mặc-định-dùng-blue---green---red)
   - [Grayscale (Ảnh xám chỉ có 1 kênh màu)](#grayscale-ảnh-xám-chỉ-có-1-kênh-màu)
   - [HEX (giá trị thập lục phân)](#hex-giá-trị-thập-lục-phân)
-  - [HSV là gì?](#hsv-là-gì)
+  - [HSV (Hue Saturation value)](#hsv-hue-saturation-value)
+  - [LAB (CIELAB)](#lab-cielab)
+  - [YCbCr](#ycbcr)
 - [Kernel (Weight)](#kernel-weight)
 - [Feature map (output sau khi kernel quét qua ảnh)](#feature-map-output-sau-khi-kernel-quét-qua-ảnh)
 - [FPS](#fps)
@@ -100,44 +102,137 @@ Dùng khi:
   - Giảm kích thước dữ liệu
 ```
 ## HEX (giá trị thập lục phân)
-## HSV là gì?
+## HSV (Hue Saturation value)
+```bash
+Hue (H) = quyết định màu gốc (đỏ, vàng, xanh lá, xanh dương,...).
+Saturation (S) = độ bão hòa (màu có đậm/rực hay nhạt gần xám).
+Value (V) = độ sáng (sáng hay tối).
 
-HSV =
+Hue	  Saturation	Value	  Màu
+0°	  100%	      100%	  🔴 Đỏ
+60°	  100%	      100%	  🟡 Vàng
+120°	100%	      100%	  🟢 Xanh lá
+180°	100%	      100%	  🟦 Cyan
+240°	100%	      100%	  🔵 Xanh dương
+300°	100%	      100%	  🟣 Tím
+Nếu bạn đặt:
+```
+**Ex**
+```bash
+HSV(0°, 100%, 100%) → 🔴 đỏ thuần.
+HSV(5°, 90%, 100%) → đỏ cam.
+HSV(350°, 80%, 100%) → đỏ hồng.
+```
+## LAB (CIELAB)
+```bash
+Ứng dụng:
+  - YCbCr được dùng trong gần như mọi chuẩn video:
+    + JPEG
+    + MPEG
+    + H.264
+    + H.265
+    + AV1
+    + Camera
+    + TV
+    + YouTube
+=> Lý do là nén rất hiệu quả.
+```
+```bash
+LAB mô tả màu bằng 3 thành phần:
+  - L (Lightness): Độ sáng
+  - a: Trục xanh lá ↔ đỏ
+  - b: Trục xanh dương ↔ vàng
 
-Hue        (màu gì)
-Saturation (độ đậm)
-Value      (độ sáng)
+Có thể hình dung như thế này:
+            +b
+          (Vàng)
+             ↑
+             │
+-a ←─────────┼────────→ +a
+(Xanh lá)    │        (Đỏ)
+             │
+             ↓
+         -b (Xanh dương)
+
+Trong đó:
+  - L = 0 → đen hoàn toàn
+  - L = 100 → trắng hoàn toàn
+```
+**Ex**
+```bash
+Màu đỏ:
+  - L = 55  # L vừa phải
+  - a = +80 # a rất dương ⇒ rất đỏ
+  - b = +60 # b hơi dương ⇒ hơi ngả vàng
+→ Đỏ cam.
+
+Màu xanh lá:
+  - L = 70
+  - a = -70 # a âm ⇒ xanh lá
+  - b = +50 # b dương ⇒ hơi vàng
+→ Xanh lá tươi.
+
+Màu xanh dương:
+  - L = 40
+  - a = +10
+  - b = -80 # b âm mạnh ⇒ xanh dương.
+```
+**Vì sao LAB hay dùng?**
+```bash
+Điểm mạnh nhất: Khoảng cách giữa hai màu gần giống với cảm nhận của mắt người.
 
 Ví dụ:
+  Màu A
+  ↓
+  dịch 5 đơn vị
+  ↓
+  Màu B
+Khoảng cách 5 trong LAB gần như luôn có nghĩa là "khác nhau một chút". Trong RGB thì không như vậy.
 
-Một màu đỏ có thể:
+Cho nên:
+  - Photoshop
+  - Color correction
+  - AI xử lý ảnh
+  - In ấn
+=> rất thích dùng LAB.
+```
+## YCbCr
+```bash
+Nó tách thành:
+  - Y = Độ sáng (Luminance)
+  - Cb = Độ xanh dương
+  - Cr = Độ đỏ
+```
+**Ex**
+```bash
+Một pixel đỏ:
+  - Y = 80    # Y khá sáng
+  - Cb = 90   
+  - Cr = 240  # # Cr rất cao ⇒ đỏ mạnh
 
-Hue = đỏ
-Saturation = cao
-Value = sáng
+Pixel xanh dương:
+  - Y = 60
+  - Cb = 220 # Cb cao ⇒ xanh dương.
+  - Cr = 100
 
-hoặc
+Pixel xám:
+  - Y = 120
+  - Cb = 128 # Cb và Cr gần trung tính.
+  - Cr = 128
+→ Chỉ còn độ sáng.
+```
+**Tại sao lại tách như vậy?**
+```bash
+Mắt người nhạy với độ sáng hơn là màu sắc.
 
-Hue = đỏ
-Saturation = thấp
-Value = tối
-Tại sao dùng HSV?
+Ví dụ: ████████
+  Nếu làm mờ màu nhưng giữ nguyên độ sáng,
+    ta vẫn nhìn thấy vật thể khá rõ.
 
-Tách riêng:
-
-Màu sắc
-↓
-Độ sáng
-
-nên dễ lọc màu hơn RGB.
-
-Ví dụ:
-
-Muốn tìm vật màu đỏ:
-
-cv2.inRange(hsv, lower_red, upper_red)
-
-dễ hơn rất nhiều so với RGB.s 
+  Do đó người ta giữ:
+    - Y ở độ phân giải đầy đủ.
+    - Cb, Cr thì giảm xuống.
+```
 # Kernel (Weight)
 **Kernel lấy ở đâu ra?**
 ```bash

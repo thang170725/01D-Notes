@@ -1,120 +1,103 @@
-- [Batch Normalization (BN) (tăng tốc độ huấn luyện và giảm hiện tượng gradient biến mất)](#batch-normalization-bn-tăng-tốc-độ-huấn-luyện-và-giảm-hiện-tượng-gradient-biến-mất)
+- [Batch Normalization (BatchNorm) (tăng tốc độ huấn luyện và giảm hiện tượng gradient biến mất)](#batch-normalization-batchnorm-tăng-tốc-độ-huấn-luyện-và-giảm-hiện-tượng-gradient-biến-mất)
+- [LayerNorm](#layernorm)
 ---
-# Batch Normalization (BN) (tăng tốc độ huấn luyện và giảm hiện tượng gradient biến mất)
-Tại sao Batch Normalization giúp hội tụ nhanh hơn?
-Giả sử bạn có mạng:
-Input  ↓Layer 1  ↓Layer 2  ↓Layer 3
+# Batch Normalization (BatchNorm) (tăng tốc độ huấn luyện và giảm hiện tượng gradient biến mất)
+```bash
+Không có BatchNorm: 
+    mỗi lần cập nhật ở các layer trước có thể làm đầu vào của các layer sau thay đổi đáng kể, khiến quá trình tối ưu trở nên kém ổn định và hội tụ chậm hơn.
 
-Vấn đề khi không có BatchNorm
-Khi Layer 1 cập nhật trọng số:
-w1 thay đổi
-Output của Layer 1 cũng thay đổi:
-Layer 1 output:hôm qua: [-1, 2, 3]hôm nay: [50, -20, 100]
-Layer 2 đang học dựa trên phân phối cũ:
-[-1, 2, 3]
-nhưng giờ phải học lại với:
-[50, -20, 100]
-Layer 2 bị "sốc dữ liệu".
-Sau đó Layer 3 cũng bị ảnh hưởng.
-Toàn bộ mạng cứ phải thích nghi lại liên tục.
+Có BatchNorm: 
+    đầu vào của mỗi layer được giữ ở một phân phối ổn định hơn, nên các layer không phải liên tục thích nghi với những thay đổi lớn, giúp huấn luyện nhanh và ổn định hơn.
 
-BatchNorm xử lý thế nào?
-Sau mỗi layer:
-Layer Output      ↓BatchNorm      ↓Activation
-BatchNorm ép output về dạng ổn định:
-Mean ≈ 0Std ≈ 1
-Ví dụ:
-Trước:
-[100, 120, 90, 130]
-Sau BatchNorm:
-[-0.7, 0.4, -1.2, 1.5]
-Layer sau luôn nhận dữ liệu cùng scale.
+Tác dụng:
+    - Làm gradient ổn định hơn.
+    - Cho phép dùng learning rate lớn hơn mà vẫn hội tụ.
+    - Làm bề mặt tối ưu (loss landscape) "mượt" hơn, giúp Gradient Descent dễ tìm điểm tối ưu.
 
-Kết quả
-Gradient ổn định hơn:
-Learning rate có thể lớn hơn
-Ít bị:
-Exploding GradientVanishing Gradient
-Nên:
-Epoch ít hơnHội tụ nhanh hơn
+Có thể hình dung bằng ví dụ lái xe
+    Giả sử bạn đang học lái xe.
 
-2. BatchNorm thực sự chuẩn hóa cái gì?
-Giả sử batch size = 4
-Feature có 3 chiều:
-x1  x2  x31   5   82   6   73   7   64   8   5
-BatchNorm nhìn theo từng cột:
-x1: [1,2,3,4]x2: [5,6,7,8]x3: [8,7,6,5]
-Nó tính:
-mean(x1)std(x1)mean(x2)std(x2)mean(x3)std(x3)
-rồi normalize từng cột.
+    - Nếu hôm nay vô lăng quay 1 vòng để rẽ 30°.
+    - Ngày mai tự nhiên phải quay 5 vòng mới rẽ 30°.
+    - Ngày kia chỉ cần quay 1/10 vòng đã rẽ 30°.
+    => Bạn vẫn có thể học, nhưng sẽ rất khó vì "quy luật đầu vào" thay đổi liên tục.
+=> BatchNorm giống như đảm bảo rằng vô lăng luôn có cảm giác lái gần giống nhau. Bạn vẫn phải học lái, nhưng môi trường học ổn định hơn nên tiến bộ nhanh hơn.
+```
+**Tại sao Batch Normalization giúp hội tụ nhanh hơn?**
+```bash
+Ví dụ có một mạng:
+    Input
+      ↓
+    Layer 1
+      ↓
+    Layer 2
+      ↓
+    Output
 
-Hình dung
-Batch↓4 samplesS1S2S3S4
-BatchNorm chuẩn hóa:
-THEO CHIỀU BATCH↑↓
+Ban đầu Layer 1 tạo ra: [-1, 2, 3]
+    Layer 2 học dần dần dựa trên kiểu dữ liệu này.
 
-3. LayerNorm là gì?
-LayerNorm không nhìn theo batch.
-Nó nhìn từng sample riêng lẻ.
-Ví dụ:
-Sample:[1, 5, 8]
-Tính:
-mean = (1+5+8)/3std = ...
-rồi normalize chính sample đó.
+Sau một bước Gradient Descent
+    Giả sử Layer 1 chỉ thay đổi một chút:
+        [-1, 2, 3]
+            ↓
+        [-0.9, 2.1, 2.8]
+    => Điều này hoàn toàn bình thường. Layer 2 gần như không bị ảnh hưởng.
 
-Hình dung
-[1, 5, 8] ↑  ↑  ↑
-LayerNorm chuẩn hóa:
-THEO CHIỀU FEATURE←────────→
+Nhưng nếu thay đổi quá mạnh
+    Giả sử do learning rate lớn hoặc gradient lớn:
+        [-1, 2, 3]
+            ↓
+        [80, -150, 60]
 
-So sánh trực quan
-Input:
-Sample1: [1,5,8]Sample2: [2,6,7]Sample3: [3,7,6]Sample4: [4,8,5]
-BatchNorm
-Nhìn theo cột:
-1 2 3 4↑feature 15 6 7 8↑feature 28 7 6 5↑feature 3
-Normalize từng feature trên toàn batch.
+    => Bây giờ Layer 2 gặp vấn đề. 
+        vì layer 1 thay đổi 1 thì layer 2 có thể thay đổi 10 bởi sự nhân chia phức tạp của mạng neural.
 
-LayerNorm
-Nhìn theo hàng:
-[1,5,8] ↑ ↑ ↑[2,6,7] ↑ ↑ ↑
-Normalize từng sample.
+BatchNorm làm gì?
+    Nó chỉ nói: "Dù Layer 1 tạo ra gì đi nữa, trước khi đưa sang Layer 2, mình sẽ chuẩn hóa nó."
 
-Tại sao Transformer dùng LayerNorm?
-Transformer thường xử lý:
-1 câu1 document1 token stream
-Batch size có thể:
-124
-rất nhỏ hoặc thay đổi liên tục.
-Nếu dùng BatchNorm:
-Mean batch không ổn định
-=> train khó.
-LayerNorm không phụ thuộc batch:
-1 sample vẫn chạy tốt1000 sample vẫn chạy tốt
-Nên GPT, Gemini, Claude đều dùng:
+    Ví dụ Layer 1 sinh ra:
+        [50,-20,100]
 
+        BatchNorm biến thành gần giống:
+            [-0.3, 0.8, 1.2]
 
-LayerNorm
+        Lần sau Layer 1 sinh:
+            [-300,700,-50]
 
-
-hoặc RMSNorm (phiên bản đơn giản hơn)
-
-
+        BatchNorm lại biến thành:
+            [-0.5, 0.9, 1.1]
+=> Giá trị gốc thay đổi rất nhiều, nhưng phân phối sau BatchNorm vẫn khá ổn định.
+```
+# LayerNorm
+```bash
+LayerNorm không nhìn theo batch. Nó nhìn từng sample riêng lẻ.
 
 Mẹo nhớ 5 giây
-BatchNorm
-Chuẩn hóa theo featurequa nhiều sample trong batch
-Nhìn dọc:
-↓↓↓
+    BatchNorm: Chuẩn hóa theo featurequa nhiều sample trong batch
+        Nhìn dọc: ↓↓↓
 
-LayerNorm
-Chuẩn hóa theo featurebên trong 1 sample
-Nhìn ngang:
-← → ← →
+    LayerNorm: Chuẩn hóa theo featurebên trong 1 sample
+        Nhìn ngang: ← → ← →
 
-Bảng nhớ nhanh:
-BatchNormLayerNormChuẩn hóa theoBatchSampleTính mean/std từNhiều mẫuMột mẫuPhụ thuộc batch sizeCóKhôngCNNRất phổ biếnÍtTransformerHiếmChuẩn hiện nayGPT/Gemini/Claude❌✅
-Một câu cực ngắn:
+    BatchNorm = "so sánh một feature giữa nhiều mẫu".
+    LayerNorm = "so sánh các feature bên trong một mẫu".
+```
+**Tại sao Transformer dùng LayerNorm?**
+```bash
+Transformer thường xử lý:
+    - 1 câu
+    - 1 document
+    - 1 token stream
 
-BatchNorm = "so sánh một feature giữa nhiều mẫu".
-LayerNorm = "so sánh các feature bên trong một mẫu".
+Nếu dùng BatchNorm:
+    Mean batch không ổn định => train khó.
+
+LayerNorm không phụ thuộc batch:
+    - 1 sample vẫn chạy tốt
+    - 1000 sample vẫn chạy tốt
+
+Nên GPT, Gemini, Claude đều dùng:
+    - LayerNorm
+    - RMSNorm (phiên bản đơn giản hơn)
+```

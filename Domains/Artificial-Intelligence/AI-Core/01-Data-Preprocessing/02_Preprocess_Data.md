@@ -1,8 +1,18 @@
 - [Missing values (kỹ thuật xử lý giá trị thiếu)](#missing-values-kỹ-thuật-xử-lý-giá-trị-thiếu)
-  - [conditional imputation](#conditional-imputation)
-  - [KNN Imputer](#knn-imputer)
-  - [Predictive Imputation](#predictive-imputation)
-- [Tạo cột flag](#tạo-cột-flag)
+  - [Drop (Xóa sample hoặc cột có giá trị thiếu)](#drop-xóa-sample-hoặc-cột-có-giá-trị-thiếu)
+  - [Mean Imputation (Điền giá trị trung bình của toàn cột)](#mean-imputation-điền-giá-trị-trung-bình-của-toàn-cột)
+  - [Median Imputation (Điền giá trị trung vị)](#median-imputation-điền-giá-trị-trung-vị)
+  - [conditional imputation (điền theo nhóm)](#conditional-imputation-điền-theo-nhóm)
+  - [KNN Imputer (dùng KNN để tìm nhóm và điền)](#knn-imputer-dùng-knn-để-tìm-nhóm-và-điền)
+  - [Predictive Imputation (huấn luyện model từ các dòng không thiếu dự đoán ra giá trị của dòng thiếu)](#predictive-imputation-huấn-luyện-model-từ-các-dòng-không-thiếu-dự-đoán-ra-giá-trị-của-dòng-thiếu)
+  - [Mode Imputation (Điền giá trị xuất hiện nhiều nhất)](#mode-imputation-điền-giá-trị-xuất-hiện-nhiều-nhất)
+  - [Fill Constant (Điền giá trị cố định)](#fill-constant-điền-giá-trị-cố-định)
+  - [Forward Fill (ffill - Hay dùng với dữ liệu thời gian)](#forward-fill-ffill---hay-dùng-với-dữ-liệu-thời-gian)
+  - [Backward Fill (bfill)](#backward-fill-bfill)
+  - [Interpolation (Nội suy giữa các điểm)](#interpolation-nội-suy-giữa-các-điểm)
+  - [Tạo cột flag (Tạo cột cờ)](#tạo-cột-flag-tạo-cột-cờ)
+  - [Yếu vị (Mode)](#yếu-vị-mode)
+  - [Phân vị (Percentiles - ví dụ Q1, Q3, P95, P99)](#phân-vị-percentiles---ví-dụ-q1-q3-p95-p99)
 - [Outlier (Phát hiện \& xử lý giá trị ngoại lai)](#outlier-phát-hiện--xử-lý-giá-trị-ngoại-lai)
   - [Boxplot / IQR (Interquartile Range) (Khoảng tứ phân vị)](#boxplot--iqr-interquartile-range-khoảng-tứ-phân-vị)
   - [Z-Score (Giá trị này cách mức trung bình bao nhiêu độ lệch chuẩn)](#z-score-giá-trị-này-cách-mức-trung-bình-bao-nhiêu-độ-lệch-chuẩn)
@@ -30,21 +40,53 @@
 - [Data Leakage (Rò rỉ dữ liệu)](#data-leakage-rò-rỉ-dữ-liệu)
 ---
 # Missing values (kỹ thuật xử lý giá trị thiếu)
-**Ex: Các kỹ thuật xử lý missing values**
 ```bash
-Ví dụ dataset:
-| ID | Tuổi | Lương | Thành phố |
-| -- | ---- | ----- | --------- |
-| 1  | 25   | 10    | Hà Nội    |
-| 2  | 30   | ?     | TP.HCM    |
-| 3  | ?    | 15    | Hà Nội    |
-| 4  | 40   | 20    | ?         |
-| 5  | 35   | 18    | Đà Nẵng   |
-```
-**1. Xóa dòng (Drop Rows)**
-```bash
-Nếu số lượng missing rất ít.
+Một điểm rất quan trọng: 
+    đôi khi giá trị bị thiếu tự nó là thông tin.
+    
+    Ví dụ hồ sơ vay vốn:
+        Thu nhập
+        20 triệu
+        ?
+        15 triệu
+        
+        Người không khai thu nhập có thể có hành vi khác với người khai đầy đủ.
+        
+        Nhiều đội ML sẽ tạo thêm:
+            income_missing200? → median1150
+            
+            để mô hình học được rằng "thiếu dữ liệu" cũng là một tín hiệu. Đây là kỹ thuật rất hay trong các bài toán tín dụng và dự báo rủi ro.
 
+Một quy tắc khá hữu ích:
+    - Thiếu dưới 5% → median/mode thường đủ tốt.
+    - Thiếu 5–30% → cân nhắc kỹ nguyên nhân thiếu.
+    - Thiếu trên 50–70% → thường xem xét bỏ cột đó nếu nó không quá quan trọng.
+
+Điều quan trọng không chỉ là "điền bằng gì", mà còn phải hiểu vì sao dữ liệu bị thiếu. 
+    Ví dụ cột "Thu nhập" bị thiếu vì khách hàng từ chối khai báo có thể mang ý nghĩa khác hẳn việc bị thiếu do lỗi nhập liệu.
+        Trong nhiều bài toán, việc thêm một cột cờ như income_missing = 1/0 còn giúp mô hình học được thông tin từ chính việc thiếu dữ liệu đó.
+```
+**Trong thực tế khi nào dùng cách nào gì?**
+```bash
+- Dataset nhỏ hoặc bài tập
+    MedianMode là đủ.
+
+- Dataset nhà đất, tín dụng, khách hàng
+    Median theo nhóm
+
+- Dự án ML nghiêm túc
+    + Median
+    + KNN Imputer
+    + Iterative Imputer
+    + Model-based Imputer
+    + sau đó so sánh bằng cross-validation xem cách nào cho mô hình cuối cùng tốt hơn.
+```
+## Drop (Xóa sample hoặc cột có giá trị thiếu)
+```bash
+Nếu số lượng missing của sample rất ít hoặc cột bị thiếu quá nhiều.
+```
+**Ex1: Xóa hàng**
+```bash
 | ID | Tuổi | Lương |
 | -- | ---- | ----- |
 | 1  | 25   | 10    |
@@ -59,8 +101,6 @@ thì xóa dòng 2:
 ```
 **2. Xóa cột (Drop Columns)**
 ```bash
-Nếu cột bị thiếu quá nhiều.
-
 | ID | Tuổi | Email                                 |
 | -- | ---- | ------------------------------------- |
 | 1  | 25   | ?                                     |
@@ -69,7 +109,8 @@ Nếu cột bị thiếu quá nhiều.
 
 90% email bị thiếu. Có thể bỏ luôn
 ```
-**3. Mean Imputation (Điều trung bình)**
+## Mean Imputation (Điền giá trị trung bình của toàn cột)
+**Ex**
 ```bash
 | Tuổi |
 | ---- |
@@ -88,19 +129,11 @@ Thay:
 | 26.67 |
 | 35    |
 ```
-**4. Median Imputation (Điền trung vị)**
+## Median Imputation (Điền giá trị trung vị)
 ```bash
 Đây là cách thường dùng hơn Mean.
-Lương1012151000?
-Mean:
-(10+12+15+1000)/4=259.25(10+12+15+1000)/4 = 259.25(10+12+15+1000)/4=259.25
-Rất vô lý.
-Median:
-10 12 15 1000   ↑ 13.5
-Thay:
-df["Salary"] = df["Salary"].fillna(df["Salary"].median())
 ```
-**Tại sao người ta vẫn dùng median?**
+**Tại sao người ta dùng median?**
 ```bash
 Vì nó:
     - Nhanh
@@ -108,18 +141,28 @@ Vì nó:
     - Không bị ảnh hưởng mạnh bởi outlier như mean
     - Thường là baseline khá tốt
 ```
-## conditional imputation
+**Ex**
 ```bash
-Thay vì:
-    Diện tích thiếu
-    ↓
-    median của toàn bộ dữ liệu
-ta làm:
-    Diện tích thiếu
-    ↓
-    tìm nhóm nhà tương tự
-    ↓
-    median trong nhóm đó
+| Lương |
+| ----- |
+| 10    | 
+| 12    |
+| 15    |
+| 1000  |
+| ?     |
+
+Nếu điền Mean:
+    (10+12+15+1000)/4 = 259.25 -> Rất vô lý.
+
+Nếu điền Median: 13.5 -> hợp lý
+
+Thay:
+    df["Salary"] = df["Salary"].fillna(df["Salary"].median())
+```
+## conditional imputation (điền theo nhóm)
+```bash
+Thay vì: → Diện tích thiếu → median của toàn bộ dữ liệu
+    Ta làm: Diện tích thiếu → tìm nhóm nhà tương tự → median trong nhóm đó
 ```
 **Ex**
 ```bash
@@ -133,12 +176,9 @@ Ba Đình     5           200
 Ta chỉ xét:
     Quận = Cầu Giấy
     Phòng ngủ = 2
-Median:
-    (50,55) → 52.5
-Điền:
-    52.5
+Median: (50,55) → 52.5 → Điền: 52.5
 ```
-## KNN Imputer
+## KNN Imputer (dùng KNN để tìm nhóm và điền)
 **Ex**
 ```bash
 Area    Bedroom     Frontage
@@ -149,185 +189,38 @@ Area    Bedroom     Frontage
 KNN sẽ tìm những điểm gần nhất:
     sau đó lấy trung bình hoặc trọng số:
         (50 + 55)/2 = 52.5
+
 Đây chính xác là ý tưởng:
     "xem những căn nhà giống nó nhất"
 ```
-## Predictive Imputation
+## Predictive Imputation (huấn luyện model từ các dòng không thiếu dự đoán ra giá trị của dòng thiếu)
+## Mode Imputation (Điền giá trị xuất hiện nhiều nhất)
 ```bash
-Thay vì:
-tìm hàng gần nhất
-ta huấn luyện model:
-(Phòng ngủ, mặt tiền, quận, ...)        ↓    Diện tích
-Từ các dòng không thiếu diện tích.
-Sau đó dự đoán cho dòng bị thiếu.
-Ví dụ:
-X = df[df["area"].notna()].drop("area", axis=1)y = df[df["area"].notna()]["area"]
-Train:
-RandomForestRegressor
-Rồi dự đoán:
-missing_area = model.predict(...)
-
-Trong thực tế khi nào dùng gì?
-Dataset nhỏ hoặc bài tập
-MedianMode
-là đủ.
-
-Dataset nhà đất, tín dụng, khách hàng
-Thường dùng:
-Median theo nhóm
-Ví dụ:
-median diện tích theo quậnmedian thu nhập theo nghề nghiệpmedian lương theo cấp bậc
-
-Dự án ML nghiêm túc
-Thường thử:
-
-
-Median
-
-
-KNN Imputer
-
-
-Iterative Imputer
-
-
-Model-based Imputer
-
-
-sau đó so sánh bằng cross-validation xem cách nào cho mô hình cuối cùng tốt hơn.
-
-Một điểm rất quan trọng: đôi khi giá trị bị thiếu tự nó là thông tin.
-Ví dụ hồ sơ vay vốn:
-Thu nhập20 triệu?15 triệu
-Người không khai thu nhập có thể có hành vi khác với người khai đầy đủ.
-Nhiều đội ML sẽ tạo thêm:
-incomeincome_missing200? → median1150
-để mô hình học được rằng "thiếu dữ liệu" cũng là một tín hiệu. Đây là kỹ thuật rất hay trong các bài toán tín dụng và dự báo rủi ro.
-1. Mode Imputation (Điền giá trị xuất hiện nhiều nhất)
 Dùng cho dữ liệu categorical.
-Ví dụ:
-Thành phốHà NộiHà NộiTP.HCM?
-Mode:
-Hà Nội
-Điền:
-df["City"] = df["City"].fillna(df["City"].mode()[0])
-
-1. Fill Constant
-Điền giá trị cố định.
-Ví dụ:
-df["City"] = df["City"].fillna("Unknown")
-Kết quả:
-Thành phốHà NộiTP.HCMUnknown
-Cách này khá phổ biến.
-
-1. Forward Fill (ffill)
-Hay dùng với dữ liệu thời gian.
-Ví dụ:
-NgàyGiá11002?3?4120
-Forward fill:
-NgàyGiá1100210031004120
-df.fillna(method="ffill")
-
-1. Backward Fill (bfill)
-Ngược lại:
-NgàyGiá11002?3?4120
-Sau bfill:
-NgàyGiá1100212031204120
-df.fillna(method="bfill")
-
-1. Interpolation
-Nội suy giữa các điểm.
-Ví dụ:
-Thời gianNhiệt độ1202?330
-Nội suy:
-25
-Kết quả:
-Thời gianNhiệt độ120225330
-df.interpolate()
-
-1.  Dùng mô hình ML để dự đoán giá trị thiếu
-Ví dụ:
-TuổiKinh nghiệmLương2521030515358?
-Ta có thể huấn luyện model:
-(Tuổi, Kinh nghiệm) → Lương
-Rồi dự đoán lương bị thiếu.
-Thư viện:
-from sklearn.impute import KNNImputer
-hoặc
-IterativeImputer
-
-1.  KNN Imputation
-Ví dụ:
-TuổiLương2510261127?
-Tìm các hàng gần nhất:
-25 → 1026 → 11
-Điền:
-10.5
-from sklearn.impute import KNNImputer
-
-Thực tế người ta thường dùng gì?
-Nếu làm dự án ML thông thường:
-
-
-Numeric feature
-
-
-Median (phổ biến nhất)
-
-
-Mean
-
-
-
-
-Categorical feature
-
-
-Mode
-
-
-"Unknown"
-
-
-
-
-Time series
-
-
-Forward fill
-
-
-Interpolation
-
-
-
-
-Dataset lớn, quan trọng
-
-
-KNN Imputer
-
-
-Iterative Imputer
-
-
-
-
-Một quy tắc khá hữu ích:
-
-
-Thiếu dưới 5% → median/mode thường đủ tốt.
-
-
-Thiếu 5–30% → cân nhắc kỹ nguyên nhân thiếu.
-
-
-Thiếu trên 50–70% → thường xem xét bỏ cột đó nếu nó không quá quan trọng.
-
-
-Điều quan trọng không chỉ là "điền bằng gì", mà còn phải hiểu vì sao dữ liệu bị thiếu. Ví dụ cột "Thu nhập" bị thiếu vì khách hàng từ chối khai báo có thể mang ý nghĩa khác hẳn việc bị thiếu do lỗi nhập liệu. Trong nhiều bài toán, việc thêm một cột cờ như income_missing = 1/0 còn giúp mô hình học được thông tin từ chính việc thiếu dữ liệu đó.
+    Ví dụ:
+        Thành phố
+        Hà Nội
+        Hà Nội
+        TP.HCM
+        ?
 ```
-# Tạo cột flag
+## Fill Constant (Điền giá trị cố định)
+## Forward Fill (ffill - Hay dùng với dữ liệu thời gian)
+**Ex**
+```python
+df.fillna(method="ffill")
+```
+## Backward Fill (bfill)
+**Ex**
+```python
+df.fillna(method="bfill")
+```
+## Interpolation (Nội suy giữa các điểm)
+**Ex**
+```python
+df.interpolate()
+```
+## Tạo cột flag (Tạo cột cờ)
 **Ex**
 ```python
 import pandas as pd
@@ -347,6 +240,14 @@ df['invalid_age'] = (
 # B      16    120     0
 # C      -2    60      1
 # D      14    90      0
+```
+## Yếu vị (Mode)
+```bash
+Con số chi phí xuất hiện nhiều nhất trong tập dữ liệu (ví dụ: mức phí khám lâm sàng thông thường).
+```
+## Phân vị (Percentiles - ví dụ Q1, Q3, P95, P99)
+```bash
+Cực kỳ quan trọng trong bảo hiểm. Ví dụ, chỉ số P99 (99th Percentile) sẽ cho công ty biết: "99% các ca khám bệnh có chi phí dưới mức X, và chỉ có 1% ca đặc biệt vượt qua mức X". Điều này giúp công ty ước lượng được quỹ dự phòng rủi ro tối đa cần chuẩn bị.
 ```
 # Outlier (Phát hiện & xử lý giá trị ngoại lai)
 ## Boxplot / IQR (Interquartile Range) (Khoảng tứ phân vị)

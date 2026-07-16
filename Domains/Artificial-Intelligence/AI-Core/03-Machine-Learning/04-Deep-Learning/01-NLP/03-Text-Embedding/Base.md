@@ -1,4 +1,4 @@
-- [Word2Vec](#word2vec)
+- [Word2Vec (nhận token id của vocab -\> vector số embedding)](#word2vec-nhận-token-id-của-vocab---vector-số-embedding)
   - [CBOW (Continuous Bag of Words)](#cbow-continuous-bag-of-words)
   - [Skip-Gram](#skip-gram)
 - [Glove (Global Vectors)](#glove-global-vectors)
@@ -80,10 +80,8 @@ Token	Các mảnh văn bản sau tokenization
 BoW	Vector đếm số lần xuất hiện của token
 TF-IDF	Vector trọng số của token
 Embedding	Vector ngữ nghĩa được học từ dữ liệu
-# Word2Vec
+# Word2Vec (nhận token id của vocab -> vector số embedding)
 ```bash
-Là kỹ thuật biến từ thành vector số (embedding).
-
 Ý tưởng:
     Những từ xuất hiện trong ngữ cảnh giống nhau sẽ có vector gần nhau
 

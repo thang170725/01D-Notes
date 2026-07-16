@@ -143,6 +143,8 @@ const res = await fetch("https://api.example.com/users", {
 - Input:
   + method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE". Mặc định: "GET"
     - Quyết định bạn đang làm gì với server
+    - POST  : Tạo mới (Create) hoặc thực hiện một hành động
+    - PUT   : Cập nhật (Update) hoặc thay thế hoàn toàn một tài nguyên đã tồn tại
   + headers: Là metadata của request → cho server biết: Dữ liệu kiểu gì. Ai gửi, Quyền hạn gì, Header là key – value (string)
     - "application/json": chỉ dùng cho dữ liệu kiểu json
     - scheme  : Bearer là chuẩn Rest API

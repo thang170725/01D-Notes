@@ -5,7 +5,7 @@
 - [rm](#rm)
   - [–d (xóa một thư mục rỗng)](#d-xóa-một-thư-mục-rỗng)
   - [–r](#r)
-- [echo (tạo file)](#echo-tạo-file)
+- [echo (ghi dữ liệu vào file)](#echo-ghi-dữ-liệu-vào-file)
 - [touch (tạo file)](#touch-tạo-file)
 - [cat (hiển thị nội dung file)](#cat-hiển-thị-nội-dung-file)
 ---
@@ -41,7 +41,7 @@ rm –d EX1 # Thư mục rỗng EX1 bị xóa
 ```bash 
 rm –r EX1 # Thư mục EX1 sẽ bị xóa
 ```
-# echo (tạo file)
+# echo (ghi dữ liệu vào file)
 **Ex1: không ghi đề**
 ```bash
 echo “text” >> name.txt # Tạo file name.txt có nội dung là text, không ghi đè.
@@ -55,3 +55,7 @@ echo “text” > name.txt # Tạo file name.txt có nội dung là text,ghi đ�
 touch listName.txt # Tạo ra một file tên là listName.txt
 ```
 # cat (hiển thị nội dung file)
+**Ex**
+```bash
+cat a.txt
+```

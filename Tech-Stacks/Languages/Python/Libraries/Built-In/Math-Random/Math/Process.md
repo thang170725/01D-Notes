@@ -15,7 +15,8 @@
 - [math.cos()](#mathcos)
 - [math.tan()](#mathtan)
 - [math.radians() (đổi độ → radian)](#mathradians-đổi-độ--radian)
-- [math.degrees() (đổi radian → độ](#mathdegrees-đổi-radian--độ)
+- [math.degrees() (đổi radian → độ)](#mathdegrees-đổi-radian--độ)
+- [.hypot() (tính khoảng cách)](#hypot-tính-khoảng-cách)
 ---
 # math.sqrt() (lấy căn bậc 2 của một số)
 **Syn**
@@ -62,4 +63,13 @@ math.fabs(-5.3)   # 5.3
 # math.cos()
 # math.tan()
 # math.radians() (đổi độ → radian)
-# math.degrees() (đổi radian → độ
+# math.degrees() (đổi radian → độ)
+# .hypot() (tính khoảng cách)
+**Syn**
+```bash
+math.hypot(dx,dy)
+```
+**Ex**
+```python
+math.hypot(3,4) # 5
+```

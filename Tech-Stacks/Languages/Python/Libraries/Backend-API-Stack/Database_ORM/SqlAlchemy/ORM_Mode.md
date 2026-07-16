@@ -11,15 +11,18 @@
     - [Index](#index)
     - [ForeignKey](#foreignkey)
     - [ForeignKeyConstraint](#foreignkeyconstraint)
-    - [relationship (giúp bạn lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)](#relationship-giúp-bạn-lấy-dữ-liệu-liên-quan-giữa-các-bảng-bằng-object-không-cần-viết-join)
+    - [relationship (lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)](#relationship-lấy-dữ-liệu-liên-quan-giữa-các-bảng-bằng-object-không-cần-viết-join)
   - [Data Types](#data-types)
     - [Integer](#integer)
     - [String \& DateTime](#string--datetime)
     - [Enum](#enum)
     - [Date \& TIMESTAMP](#date--timestamp)
     - [JSON](#json)
+    - [Mapped (type annotation ORM)](#mapped-type-annotation-orm)
+      - [mapped\_column() (Nó giống như Column() nhưng dành cho ORM mới)](#mapped_column-nó-giống-như-column-nhưng-dành-cho-orm-mới)
 - [Search (tìm kiếm đôi tượng)](#search-tìm-kiếm-đôi-tượng)
   - [.query() (lấy ra đối tượng = select \* from ...)](#query-lấy-ra-đối-tượng--select--from-)
+  - [.get()](#get)
 - [Filtering (Bộ lọc)](#filtering-bộ-lọc)
   - [.filter() (Lọc theo điều kiện)](#filter-lọc-theo-điều-kiện)
     - [like()](#like)
@@ -156,20 +159,6 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String)
 ```
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True)
-    username = Column(String)
-
-    def __repr__(self):
-        return f"User(id={self.id}, username='{self.username}')"
-print(db.execute(select(User)).scalars().all())
-[
-    User(id=1, username='alice'),
-    User(id=2, username='bob'),
-    User(id=3, username='john')
-]
 **Syn: Cách mới**
 ```bash
 from sqlalchemy.orm import DeclarativeBase
@@ -247,7 +236,7 @@ __table_args__ = (
     ),
 )
 ```
-### relationship (giúp bạn lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)
+### relationship (lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)
 **Syn**
 ```bash
 relationship("TenModel", back_populates="ten_field")
@@ -257,6 +246,13 @@ relationship("TenModel", back_populates="ten_field")
     + back_populates    : tên field ở model bên kia, dùng để liên kết 2 chiều
     + lazy              : cách load data
     + cascade           : xóa dây chuyền
+        - 'all, delete-orphan'  : 
+        - 'save-update'         : Lưu/cập nhật object con khi lưu object cha
+        - merge	                : Session.merge() thì object con cũng được merge
+        - refresh-expire	    : Refresh hoặc expire object cha thì object con cũng vậy
+        - expunge	            : Xóa object cha khỏi Session thì object con cũng bị xóa khỏi Session
+        - delete	            : Xóa object cha thì object con cũng bị DELETE trong database
+        - delete-orphan	        : Nếu object con không còn thuộc cha nào thì tự động DELETE
 - Output: trả về dạng Object
 ```
 **Ex**
@@ -303,6 +299,45 @@ Enum('sedentary', 'light', "moderate", name='activity_level_role')
     + TIMESTAMP → trả về kiểu: datetime.datetime
 ```
 ### JSON
+### Mapped (type annotation ORM)
+```bash
+ORM mới (2.0) SQLAlchemy giới thiệu
+    - Mapped
+    - mapped_column
+=> để hỗ trợ type hint.
+```
+**Syn**
+```bash
+id: Mapped[int] # thuộc tính id khi lấy ra sẽ có kiểu int.
+```
+#### mapped_column() (Nó giống như Column() nhưng dành cho ORM mới)
+**Kiểu cũ**
+```bash
+id = Column(Integer, primary_key=True)
+```
+**Kiểu mới**
+```bash
+id: Mapped[int] = mapped_column(primary_key=True)
+```
+**Ex**
+```python
+from sqlalchemy.orm import DeclarativeBase
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+
+class Base(DeclarativeBase):
+    pass
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    name: Mapped[str] = mapped_column(nullable=False)
+
+    age: Mapped[int]
+```
 # Search (tìm kiếm đôi tượng)
 ## .query() (lấy ra đối tượng = select * from ...)
 ```bash
@@ -321,6 +356,7 @@ users = session.query(User).all() # [User(...), User(...)] → List object ORM
 ```python
 rows = session.query(User.id, User.name).all() # [(1, 'Alice'), (2, 'Bob')] → List tuple
 ```
+## .get()
 # Filtering (Bộ lọc)
 ## .filter() (Lọc theo điều kiện)
 ```bash

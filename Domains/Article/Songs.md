@@ -43,6 +43,7 @@
 34. quê tôi (c5)
 35. kiếp sau vấn muốn lập gia đình vói em (c5)
 36. Hoang (dizi D)
+37. Bích thượng quan
 ```
 # Gutar
 ```bash
@@ -104,6 +105,8 @@
 39. Đâu phải cho anh	
 40. Đớn đau vô cùng
 41. Phai dấu cuộc tình
+42. dừng thương
+43. chỉ bằng 1 cái gật đầu
 ```
 # Karaoke & Guitar
 ```bash

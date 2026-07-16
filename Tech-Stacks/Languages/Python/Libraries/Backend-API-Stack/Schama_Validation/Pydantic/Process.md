@@ -1,11 +1,10 @@
 - [Convert Datatype (chuyển đổi dữ liệu)](#convert-datatype-chuyển-đổi-dữ-liệu)
-  - [model\_dump()](#model_dump)
+  - [model\_dump() (Chuyển object Pydantic → dict Python)](#model_dump-chuyển-object-pydantic--dict-python)
 ---
 # Convert Datatype (chuyển đổi dữ liệu)
-## model_dump()
+## model_dump() (Chuyển object Pydantic → dict Python)
 ```bash
-- Chuyển object Pydantic → dict Python
-- Dùng khi bạn muốn:
+Dùng khi bạn muốn:
     + Trả JSON cho API
     + Ghi DB
     + Log dữ liệu

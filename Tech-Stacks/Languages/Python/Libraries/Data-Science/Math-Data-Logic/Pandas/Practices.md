@@ -1,7 +1,35 @@
+- [calc](#calc)
+  - [Tính tổng hàng và cột trong Dataframe](#tính-tổng-hàng-và-cột-trong-dataframe)
 - [lọc có điều kiện trong dataframe](#lọc-có-điều-kiện-trong-dataframe)
 - [Quản lý nhân viên bằng pandas](#quản-lý-nhân-viên-bằng-pandas)
 - [Quản lý danh sách công nhân](#quản-lý-danh-sách-công-nhân)
 ---
+# calc
+## Tính tổng hàng và cột trong Dataframe
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "A": [1,2,3],
+    "B": [4,5,6]
+})
+print(f"{df}\n")
+
+df['sum_row'] = df.sum(axis=1)
+df.loc[len(df)] = df.sum(axis=0)
+df.rename(index={3: "Total"}, inplace=True)
+print(df)
+#    A  B
+# 0  1  4
+# 1  2  5
+# 2  3  6
+
+#        A   B  sum_row
+# 0      1   4        5
+# 1      2   5        7
+# 2      3   6        9
+# Total  6  15       21
+```
 # lọc có điều kiện trong dataframe
 ```python
 import pandas as pd

@@ -1,20 +1,22 @@
 - [.sum() (tính tổng)](#sum-tính-tổng)
 - [.cumsum() (cumulative sum) (Là tổng tích lũy / cộng dồn)](#cumsum-cumulative-sum-là-tổng-tích-lũy--cộng-dồn)
-- [.mean()](#mean)
+- [.mean() (Dùng để tính giá trị trung bình)](#mean-dùng-để-tính-giá-trị-trung-bình)
 - [.median() (Trung vị)](#median-trung-vị)
 - [.std() (Độ lệch chuẩn)](#std-độ-lệch-chuẩn)
 - [.var() (Phương sai)](#var-phương-sai)
 - [.quantile() (Lấy percentile)](#quantile-lấy-percentile)
+- [.round() (làm tròn sau dấu thập phân)](#round-làm-tròn-sau-dấu-thập-phân)
 ---
 # .sum() (tính tổng)
 **Syn**
 ```bash
 df.sum()
 
-- Input:
+Input: Dataframe | Series
     + axis=:
         - 0: tính theo cột
         - 1: tính theo hàng
+Output: Series
 ```
 **Ex**
 ```python
@@ -26,8 +28,8 @@ df = pd.DataFrame({
 })
 
 print(df.sum())
-A     6
-B    15
+# A     6
+# B    15
 ```
 # .cumsum() (cumulative sum) (Là tổng tích lũy / cộng dồn)
 ```bash
@@ -66,10 +68,7 @@ print(df.cumsum())
 # 1  3   9
 # 2  6  15
 ```
-# .mean()
-```bash
-Dùng để tính giá trị trung bình
-```
+# .mean() (Dùng để tính giá trị trung bình)
 **Ex1: mean với series**
 ```python
 import pandas as pd
@@ -96,8 +95,36 @@ print(df.mean())
 ```bash
 Rất hay dùng khi dữ liệu có outlier
 ```
+**Syn**
 ```bash
-df["salary"].median()
+import pandas as pd
+Dataframe | Series.median(
+    axis=
+) 
+```
+**Ex**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "A": [1,2,3],
+    "B": [4,5,6]
+})
+print(f"{df}\n")
+
+df.loc[len(df)] = df.median(axis=0)
+df.rename(index={3: "Median"}, inplace=True)
+print(df)
+#    A  B
+# 0  1  4
+# 1  2  5
+# 2  3  6
+
+#           A    B
+# 0       1.0  4.0
+# 1       2.0  5.0
+# 2       3.0  6.0
+# Median  2.0  5.0
 ```
 # .std() (Độ lệch chuẩn)
 ```bash

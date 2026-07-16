@@ -3,18 +3,34 @@
 ---
 # Introduction
 ```bash
-- OCR Deep Learning all-in-one, rất phổ biến trong công nghiệp
-- Ưu điểm:
+PaddleOCR là một framework OCR - OCR Deep Learning all-in-one rất phổ biến trong công nghiệp, 
+    được xây dựng trên PaddlePaddle (deep learning framework của Baidu).
+
+Nói chính xác hơn:
+    - PaddlePaddle → Deep Learning Framework (tương tự PyTorch, TensorFlow)
+    - PaddleOCR → OCR Framework/Application Framework được xây dựng trên PaddlePaddle
+Ưu điểm:
     + Full pipeline Detection + Recognition
     + Tốc độ nhanh, accuracy cao
     + Hỗ trợ rất nhiều ngôn ngữ (có tiếng Việt)
     + Có mô hình lightweight cho mobile
 ```
 # Installation
-**Installation for cpu**
+**Step 1: Cài PaddlePaddle**
 ```bash
-1. python -m pip install paddlepaddle==3.2.0 -i https://www.paddlepaddle.org.cn/packages/stable/cpu/
-2. python -m pip install "paddleocr[all]"
+python -m pip install paddlepaddle==3.2.0 -i https://www.paddlepaddle.org.cn/packages/stable/cpu/ # khi muốn dùng cpu
+```
+**Step 2: Cài PaddleOCR**
+```bash
+python -m pip install paddleocr
+
+python -m pip install "paddleocr[all]"
+# Chỉ cài khi bạn cần:
+# Phân tích bố cục tài liệu (Layout Analysis)
+# Nhận diện bảng (Table OCR)
+# Trích xuất thông tin từ hóa đơn, hợp đồng
+# Dịch tài liệu
+# Document Understanding
 ```
 **Configure (cấu hình chuẩn để dùng paddleocr)**
 ```bash

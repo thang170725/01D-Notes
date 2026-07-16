@@ -1,7 +1,9 @@
 - [Re Introduction](#re-introduction)
 - [.search() (Tìm vị trí đầu tiên khớp pattern)](#search-tìm-vị-trí-đầu-tiên-khớp-pattern)
+  - [.group()](#group)
 - [.sub() (Thay thế chuỗi)](#sub-thay-thế-chuỗi)
 - [.findall()](#findall)
+- [compile()](#compile)
 - [Practices](#practices)
   - [Bắt email](#bắt-email)
   - [Nhập một số nguyên có 5 chữ số](#nhập-một-số-nguyên-có-5-chữ-số)
@@ -19,10 +21,12 @@ dùng để:
 ```
 **các ký tự Regex cơ bản**
 ```bash
-- .             : Bất kỳ ký tự nào (trừ dòng mới)	a.c khớp với "abc", "a1c"
-- \d            : Bất kỳ chữ số nào (0-9)	\d\d khớp với "12", "99"
-- \w	        : Chữ cái, chữ số và dấu gạch dưới	\w+ khớp với "Python_3"
-- \s	        : Khoảng trắng (space, tab, newline)	\s+ khớp với các khoảng trống
+- .             : Bất kỳ ký tự nào (trừ dòng mới)
+- \d            : Bất kỳ chữ số nào (0-9) # \d khớp với "12", "99"
+- \w	        : Chữ cái, chữ số và dấu gạch dưới	
+- \w+           : khớp với "Python_3"
+- \s	        : Khoảng trắng (space, tab, newline)	
++ \s+           : khớp với các khoảng trống
 - \S            : không phải khoảng trắng
 - ^	            : Bắt đầu một dòng	^Hello
 - $	            : Kết thúc một dòng	Bye$
@@ -38,6 +42,7 @@ dùng để:
 ```bash
 Dùng khi: Cần kiểm tra có tồn tại hay không. Không cần tất cả kết quả.
 ```
+## .group()
 # .sub() (Thay thế chuỗi)
 ```bash
 Dùng cực nhiều để:
@@ -61,6 +66,7 @@ text = "Các số: 10, 20 và 30"
 nums = re.findall(r"\d+", text)
 print(nums)   # ['10', '20', '30']
 ```
+# compile()
 # Practices
 ## Bắt email
 ```bash

@@ -1,7 +1,13 @@
 - [Check Database (Kiểm tra database)](#check-database-kiểm-tra-database)
   - [Linux (Kiểm tra db trên linux)](#linux-kiểm-tra-db-trên-linux)
+    - [mysql -u root -p (Đăng nhập quyền root)](#mysql--u-root--p-đăng-nhập-quyền-root)
     - [mysql --version | mysql -V](#mysql---version--mysql--v)
     - [mariadb --version](#mariadb---version)
+    - [systemctl status ...](#systemctl-status-)
+    - [ps -ef | grep -E "mysqld|mariadbd" (Kiểm tra tiến trình)](#ps--ef--grep--e-mysqldmariadbd-kiểm-tra-tiến-trình)
+    - [ss -tlnp | grep 3306 hoặc netstat -tlnp | grep 3306 (Kiểm tra cổng mặc định 3306)](#ss--tlnp--grep-3306-hoặc-netstat--tlnp--grep-3306-kiểm-tra-cổng-mặc-định-3306)
+    - [where mysql](#where-mysql)
+    - [SELECT VERSION();](#select-version)
 - [Create \& Use (Tạo và dùng)](#create--use-tạo-và-dùng)
   - [create database ... (Tạo database)](#create-database--tạo-database)
   - [Use ... (Dùng để chọn database)](#use--dùng-để-chọn-database)
@@ -29,6 +35,7 @@
 ---
 # Check Database (Kiểm tra database)
 ## Linux (Kiểm tra db trên linux)
+### mysql -u root -p (Đăng nhập quyền root)
 ### mysql --version | mysql -V
 **Ex**
 ```bash
@@ -41,207 +48,20 @@ mysql  Ver 15.1 Distrib 10.11.13-MariaDB, for debian-linux-gnu (x86_64) using  E
 ```bash
 dpkg -l | grep -Ei "mysql|mariadb" (Kiểm tra package đã cài)
 ```
-CentOS/RHEL
-
-rpm -qa | grep -Ei "mysql|mariadb"
-1. Kiểm tra server có đang chạy không
-
-Nếu dùng systemd:
-
-systemctl status mysql
-
-hoặc
-
-systemctl status mariadb
-
-Nếu service tồn tại sẽ hiển thị trạng thái active (running) hoặc inactive.
-
-5. Kiểm tra tiến trình
-ps -ef | grep -E "mysqld|mariadbd"
-6. Kiểm tra cổng mặc định 3306
-ss -tlnp | grep 3306
-
-hoặc
-
-netstat -tlnp | grep 3306
-Windows
-
-Mở Command Prompt hoặc PowerShell:
-
-mysql --version
-
-hoặc
-
-where mysql
-
-Kiểm tra service:
-
-sc query MySQL80
-
-hoặc
-
-Get-Service *mysql*
-Kiểm tra nhanh nhất trên Linux
-
-Nếu bạn chỉ muốn biết máy đã cài MySQL/MariaDB hay chưa, chạy:
-
-mysql --version
-mariadb --version
-dpkg -l | grep -Ei "mysql|mariadb"
-
-Nếu bạn đang dùng Ubuntu, hãy gửi kết quả của:
-
-mysql --version
-mariadb --version
-dpkg -l | grep -Ei "mysql|mariadb"
-
-mình sẽ giúp xác định chính xác máy đã cài MySQL, MariaDB hay chưa.
-Kết luận: Máy của bạn hiện đang chạy MariaDB, không phải MySQL Server.
-
-Các bằng chứng:
-
-1. Client mysql thực chất là MariaDB
-
-Bạn chạy:
-
-mysql --version
-
-Kết quả:
-
-mysql  Ver 15.1 Distrib 10.11.13-MariaDB
-
-Dòng Distrib 10.11.13-MariaDB cho biết lệnh mysql này là client của MariaDB.
-
-Tương tự:
-
-mariadb --version
-
-cũng ra:
-
-Distrib 10.11.13-MariaDB
-
-=> Hai lệnh đều dùng cùng bộ client của MariaDB.
-
-2. Server đang chạy là MariaDB
-
-Bạn chạy:
-
-systemctl status mariadb
-
-Kết quả:
-
-Active: active (running)
-
-Main PID: 1872 (mariadbd)
-
-Quan trọng nhất là
-
-mariadbd
-
-Nếu là MySQL thì sẽ là
-
-mysqld
-
-hoặc
-
-mysqld_safe
-3. Tại sao systemctl status mysql vẫn ra MariaDB?
-
-Ubuntu tạo alias.
-
-Khi bạn gõ
-
-systemctl status mysql
-
-nó thực chất mở
-
-mariadb.service
-
-nên bạn thấy ngay dòng
-
-● mariadb.service - MariaDB 10.11.13 database server
-
-Điều này hoàn toàn bình thường.
-
-4. Trong package thì sao?
-
-Bạn có
-
-ii mariadb-server
-ii mariadb-client
-
-đây là package đang cài.
-
-Trong khi
-
-rc mysql-community-server
-rc mysql-community-client
-rc mysql-server-8.0
-
-chữ rc nghĩa là
-
-r = removed
-c = config files còn sót lại
-
-Tức là trước đây bạn từng cài MySQL rồi gỡ đi, chỉ còn file cấu hình.
-
-Nó không còn chạy nữa.
-
-5. Có cả libmysqlclient là sao?
-
-Bạn thấy
-
-ii libmysqlclient21
-
-Đây chỉ là thư viện client.
-
-Nó không có nghĩa là MySQL Server đang chạy.
-
-Rất nhiều chương trình cần thư viện này để kết nối MySQL/MariaDB.
-
-6. Muốn kiểm tra chính xác server là gì
-
-Đăng nhập:
-
-mysql -u root -p
-
-sau đó chạy
-
-SELECT VERSION();
-
-Nếu là MariaDB sẽ hiện kiểu
-
-10.11.13-MariaDB-0ubuntu0.24.04.1
-
-hoặc
-
-SHOW VARIABLES LIKE 'version_comment';
-
-thường sẽ trả về
-
-MariaDB Server
-7. Muốn xem tiến trình
-ps -ef | grep maria
-
-hoặc
-
-ps -ef | grep mysql
-
-Bạn sẽ thấy đại loại
-
-mysql   1872  ... /usr/sbin/mariadbd
-Tóm lại
-
-Hiện trạng máy của bạn:
-
-Thành phần	Trạng thái
-MariaDB Server	✅ Đang chạy
-MariaDB Client	✅ Đã cài
-MySQL Server	❌ Đã gỡ (chỉ còn file config)
-MySQL Client	❌ Đã gỡ (chỉ còn file config)
-Cổng 3306	✅ MariaDB đang lắng nghe
-
-Nếu bạn đang phát triển với FastAPI + SQLAlchemy, thì MariaDB 10.11 hoàn toàn tương thích với hầu hết mã nguồn viết cho MySQL. Bạn chỉ cần sử dụng driver phù hợp (ví dụ asyncmy, aiomysql hoặc mysqlclient tùy trường hợp) và chuỗi kết nối dạng mysql+...://....
+### systemctl status ...
+**Ex**
+```bash
+systemctl status mysql hoặc systemctl status mariadb
+# Nếu service tồn tại sẽ hiển thị trạng thái active (running) hoặc inactive.
+```
+### ps -ef | grep -E "mysqld|mariadbd" (Kiểm tra tiến trình)
+### ss -tlnp | grep 3306 hoặc netstat -tlnp | grep 3306 (Kiểm tra cổng mặc định 3306)
+### where mysql
+### SELECT VERSION();
+```bash
+# Nếu là MariaDB sẽ hiện kiểu
+# 10.11.13-MariaDB-0ubuntu0.24.04.1
+```
 # Create & Use (Tạo và dùng)
 ## create database ... (Tạo database)
 **Syn**

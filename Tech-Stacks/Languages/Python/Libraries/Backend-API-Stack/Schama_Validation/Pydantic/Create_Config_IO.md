@@ -1,4 +1,4 @@
-- [BaseModel](#basemodel)
+- [BaseModel (class nền của Pydantic để tạo model dữ liệu (schema))](#basemodel-class-nền-của-pydantic-để-tạo-model-dữ-liệu-schema)
 - [Datatype](#datatype)
   - [Field()](#field)
   - [Literal](#literal)
@@ -131,7 +131,7 @@ from pydantic import BaseModel, ConfigDict
 model_config = ConfigDict(
     extra='forbid',
     validate_assignment=True,
-    from_attributes=
+    from_attributes=True
 )
 
 - Bắt buộc: tên biến phải là model_config

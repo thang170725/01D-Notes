@@ -13,8 +13,9 @@
 ## Read (Nhóm lấy dữ liệu)
 ### .read_csv() (lấy dữ liệu từ file)
 ```bash
-- Nó đọc delimited text files (file văn bản có cột ngăn cách bằng ký tự phân tách)
-- ví dụ:
+Nó đọc delimited text files (file văn bản có cột ngăn cách bằng ký tự phân tách)
+
+ví dụ:
     + .csv → phân tách bởi dấu phẩy ,
     + .tsv → phân tách bởi tab \t
     + .txt → có thể phân tách bởi ;, |, tab,... miễn là chỉ rõ sep=...
@@ -44,9 +45,9 @@ li = pd.read_csv(
     + parse_dates=[0]   : Bảo Pandas cột số 0 (cột đầu tiên) hãy chuyển thành kiểu ngày giờ.
 ```
 ## Write (Nhóm ghi dữ liệu)
-### .to_csv()
+### .to_csv() (Ghi dữ liệu vào file csv)
 ```bash
-Ghi dữ liệu vào file csv.
+
 ```
 **Syn**
 ```bash

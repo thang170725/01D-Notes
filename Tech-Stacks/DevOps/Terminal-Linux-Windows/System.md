@@ -48,6 +48,9 @@
   - [Check (Kiểm tra)](#check-kiểm-tra-1)
     - [Các bước kiểm tra microphone có hoạt động không](#các-bước-kiểm-tra-microphone-có-hoạt-động-không)
     - [Mic bị gain quá cao (bị khuếch đại quá mức)](#mic-bị-gain-quá-cao-bị-khuếch-đại-quá-mức)
+- [Powershell chặn việc chạy script](#powershell-chặn-việc-chạy-script)
+  - [Get-ExecutionPolicy -List (kiểm tra chính sách hiện tại)](#get-executionpolicy--list-kiểm-tra-chính-sách-hiện-tại)
+  - [Set-ExecutionPolicy -Scope CurrentUser RemoteSigned](#set-executionpolicy--scope-currentuser-remotesigned)
 ---
 # Display (Nhóm cung cấp thông tin)
 ## uptime
@@ -392,3 +395,6 @@ Mở repeat.
 3. Dùng phím mũi tên để giảm gian xuống thấp hơn.
 4. Esc để thoát.
 ```
+# Powershell chặn việc chạy script
+## Get-ExecutionPolicy -List (kiểm tra chính sách hiện tại) 
+## Set-ExecutionPolicy -Scope CurrentUser RemoteSigned

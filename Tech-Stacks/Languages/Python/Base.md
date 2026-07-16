@@ -1,8 +1,9 @@
 - [Installation](#installation)
 - [Kiểm tra](#kiểm-tra)
 - [Tạo môi trường ảo \& activate](#tạo-môi-trường-ảo--activate)
-- [deactivate](#deactivate)
-- [which python](#which-python)
+  - [deactivate (Thoát khỏi môi trường ảo hiện tại)](#deactivate-thoát-khỏi-môi-trường-ảo-hiện-tại)
+  - [which python (Linux/MacOS) | Get-Command python hoặc gcm pytho (Windows) (Xem đường dẫn môi trường run python trỏ đến đâu)](#which-python-linuxmacos--get-command-python-hoặc-gcm-pytho-windows-xem-đường-dẫn-môi-trường-run-python-trỏ-đến-đâu)
+  - [where.exe python (Windows)](#whereexe-python-windows)
 ---
 # Installation
 **Ex: Cài đặt Python3.10**
@@ -25,12 +26,6 @@
 2. python3 -m venv D:\python_env
 3. D:\python_env\Scripts\activate (Windows) | source env/bin/activate (Linux)
 ```
-# deactivate
-```bash
-Thoát khỏi môi trường ảo hiện tại.
-```
-# which python
-```bash
-- Xem đường dẫn môi trường run python trỏ đến đâu.
-```
-
+## deactivate (Thoát khỏi môi trường ảo hiện tại)
+## which python (Linux/MacOS) | Get-Command python hoặc gcm pytho (Windows) (Xem đường dẫn môi trường run python trỏ đến đâu)
+## where.exe python (Windows)

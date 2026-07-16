@@ -1,7 +1,7 @@
 - [Directory Structure](#directory-structure)
 - [Installation](#installation)
-- [git –-version](#git--version)
-- [Git –-help](#git--help)
+- [git –-version (Hiển thị thông tin phiên bản của git)](#git--version-hiển-thị-thông-tin-phiên-bản-của-git)
+- [Git –-help (hiển thị ra các câu lệnh hướng dẫn)](#git--help-hiển-thị-ra-các-câu-lệnh-hướng-dẫn)
 ---
 # Directory Structure
 ```bash
@@ -19,11 +19,5 @@ GitHub/                # mình dùng thư mục này để xem kiến thức cơ
 2. sudo apt install git
 3. git --version: Kiểm tra.
 ```
-# git –-version
-```bash
-Hiển thị thông tin phiên bản của git.
-```
-# Git –-help
-```bash
-hiển thị ra các câu lệnh hướng dẫn
-```
+# git –-version (Hiển thị thông tin phiên bản của git)
+# Git –-help (hiển thị ra các câu lệnh hướng dẫn)
