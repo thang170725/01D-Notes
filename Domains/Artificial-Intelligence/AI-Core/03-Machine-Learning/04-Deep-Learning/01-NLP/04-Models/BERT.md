@@ -120,3 +120,13 @@ Bước 7: Classification Layer
 # Nhưng với BERT:
 # "not" ảnh hưởng mạnh → đảo nghĩa → negative ✅
 ```
+# Sentence Transformer (mô hình AI dùng để biến câu -> vector số embedding)
+```bash
+Khác với BERT thông thường (trả về embedding của từng từ), Sentence Transformer được huấn luyện để tạo embedding cho cả câu, rất phù hợp cho:
+  - Semantic Search (tìm kiếm theo ngữ nghĩa)
+  - Chatbot
+  - RAG (Retrieval-Augmented Generation)
+  - Phát hiện câu trùng lặp
+  - Phân cụm văn bản
+  - Hệ thống gợi ý
+```
