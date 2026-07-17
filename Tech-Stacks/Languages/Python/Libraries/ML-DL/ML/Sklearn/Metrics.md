@@ -83,3 +83,37 @@ print(classification_report(y_true, y_pred))
 #    macro avg       0.83      0.83      0.78         5
 # weighted avg       0.90      0.80      0.80         5
 ```
+# pairwise
+## .cosine_similarity (đo xem hai vector có cùng hướng hay không)
+```bash
+Giá trị gần 1 → rất giống nhau.
+Giá trị gần 0 → không liên quan.
+Giá trị gần -1 → ngược nhau (ít gặp trong embedding văn bản).
+```
+**Ex: Hai vector giống nhau**
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+A = [[1, 2]]
+B = [[2, 4]]
+
+print(cosine_similarity(A, B)) # [[1.]]
+```
+**Ex2: Hai vector vuông góc**
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+A = [[1, 0]]
+B = [[0, 1]]
+
+print(cosine_similarity(A, B)) # [[0.]]
+```
+**Ex3: Hai vector gần giống**
+```python
+from sklearn.metrics.pairwise import cosine_similarity
+
+A = [[1, 2]]
+B = [[2, 3]]
+
+print(cosine_similarity(A, B)) # [[0.992]]
+```
