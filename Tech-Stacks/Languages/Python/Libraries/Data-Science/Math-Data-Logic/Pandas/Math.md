@@ -154,3 +154,24 @@ df = df.round(2)
 # 0  1.23  3.46
 # 1  2.35  4.57
 ```
+# ewm() (Trung bình động có trọng số)
+```python
+Dùng nhiều trong tài chính.
+```
+**Syn**
+```python
+df["sales"].ewm(span=5).mean()
+```
+# .expanding() (Tính từ đầu đến hiện tại)
+**Ex**
+```bash
+df["sales"].expanding().mean()
+```
+# .pct_change() (Tính phần trăm thay đổi)
+```python
+df["sales"].pct_change()
+```
+# .diff() (Sai phân)
+```python
+df["sales"].diff()
+```

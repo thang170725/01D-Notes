@@ -270,12 +270,8 @@ print(root.tagName) # library
 #### getElementsByTagName()
 ##### .getAttribute()
 ##### .firstChild.data
-1.  DOM đọc như thế nào?
-
-Giả sử parser đọc xong.
-
-Trong RAM sẽ có
-
+**Ex**
+```bash
 Document
 │
 └── library
@@ -287,49 +283,27 @@ Document
       │      └── price
       │
       └── book
-
-Khi gọi
-
+```
+```python
 books = doc.getElementsByTagName("book")
+# nó sẽ tìm toàn bộ node tên book Sau đó trả về
+#  [
+#   book1,
+#   book2
+#  ]
 
-nó sẽ tìm toàn bộ node tên
-
-book
-
-Sau đó trả về
-
-[
-book1,
-book2
-]
-11. Sửa dữ liệu
-
-Ví dụ
-
-Python
-
-↓
-
-Python Advanced
 title = books[0].getElementsByTagName("title")[0]
 
-title.firstChild.data = "Python Advanced"
+title.firstChild.data = "Python Advanced" # DOM cho phép sửa trực tiếp cây XML trong bộ nhớ.
 
-DOM cho phép sửa trực tiếp cây XML trong bộ nhớ.
-
-12. Ghi lại file
-with open("new.xml", "w") as f:
+with open("new.xml", "w") as f: # Ghi lại file
     f.write(doc.toprettyxml())
 
-Kết quả
-
-<library>
-
-    <book id="1">
-
-        <title>Python Advanced</title>
-
+# <library>
+#     <book id="1">
+#         <title>Python Advanced</title>
 ...
+```
 #### .createElement()
 ##### .setAttribute()
 #### createTextNode()

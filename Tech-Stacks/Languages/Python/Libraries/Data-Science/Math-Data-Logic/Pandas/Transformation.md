@@ -506,3 +506,8 @@ pd.merge(df1, df2,
     + outer
 ```
 ## .join() (Join theo index)
+## .query() (Lọc bằng biểu thức)
+**Ex**
+```python
+df.query("age > 30 and salary > 5000")
+```

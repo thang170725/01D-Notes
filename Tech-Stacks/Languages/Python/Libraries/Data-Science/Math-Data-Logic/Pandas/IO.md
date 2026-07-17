@@ -2,7 +2,7 @@
   - [Read (Nhóm lấy dữ liệu)](#read-nhóm-lấy-dữ-liệu)
     - [.read\_csv() (lấy dữ liệu từ file)](#read_csv-lấy-dữ-liệu-từ-file)
   - [Write (Nhóm ghi dữ liệu)](#write-nhóm-ghi-dữ-liệu)
-    - [.to\_csv()](#to_csv)
+    - [.to\_csv() (Ghi dữ liệu vào file csv)](#to_csv-ghi-dữ-liệu-vào-file-csv)
 - [SQL (Nhóm xử lý sql)](#sql-nhóm-xử-lý-sql)
   - [Read (Nhóm đọc, lấy thông tin)](#read-nhóm-đọc-lấy-thông-tin)
     - [pd.read\_sql()](#pdread_sql)
@@ -46,9 +46,6 @@ li = pd.read_csv(
 ```
 ## Write (Nhóm ghi dữ liệu)
 ### .to_csv() (Ghi dữ liệu vào file csv)
-```bash
-
-```
 **Syn**
 ```bash
 df.to_csv(
