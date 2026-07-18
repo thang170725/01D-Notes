@@ -55,27 +55,17 @@ library
       ├── author
       └── price -->
 ```
-# sax (Nó đọc từng dòng, từng thẻ và báo sự kiện (event) cho chương trình của bạn)
+# .sax (Nó đọc từng dòng, từng thẻ và báo sự kiện event cho chương trình của bạn)
 **SAX hoạt động như thế nào?**
 ```bash
 Giả sử parser đọc từ trên xuống.
-
-Đọc đến
-    <library> => gọi startElement("library")
-
-Đọc đến
-    <book id="1"> => gọi startElement("book")
-
-Đọc đến
-    <title> => gọi startElement("title")
-
-Đọc đến
-    Python => gọi characters("Python")
-
-Đọc đến
-    </title> => gọi endElement("title")
-
-Cứ thế cho tới hết file.
+  Đọc đến: <library> => gọi startElement("library")
+  Đọc đến: <book id="1"> => gọi startElement("book")
+  Đọc đến: <title> => gọi startElement("title")
+  Nếu thẻ có nội dung => gọi characters("Python")
+  Đọc đến: </title> => gọi endElement("title")
+  ...
+  Cứ thế cho tới hết file.
 
 Nói cách khác luồng hoạt động của SAX:
     books.xml
@@ -108,7 +98,6 @@ Nói cách khác luồng hoạt động của SAX:
 Luôn có 2 phần.
     - Parser
         import xml.sax
-
         parser = xml.sax.make_parser() # Parser chỉ có nhiệm vụ đọc file.
 
     - Handler # Handler là nơi bạn viết code xử lý.
@@ -311,6 +300,55 @@ with open("new.xml", "w") as f: # Ghi lại file
 #### removeChild() (Xóa node con)
 #### toprettyxml() (Xuất XML ra chuỗi có định dạng đẹp)
 # Practices
+## Đọc tất cả thông tin bằng sax
+```python
+import xml
+import xml.sax
+
+class MyHandler(xml.sax.ContentHandler):
+    def __init__(self):
+        self.curent = ""
+        self.book = {}
+        self.books = []
+    
+    def startElement(self, name, attrs):
+        self.current = name
+
+        if name == "book":
+            self.book = {}
+            
+    
+    def characters(self, content):
+        content = content.strip()
+
+        if not content:
+            return
+        
+        if self.current == "title":
+            self.book["title"] = content
+
+        elif self.current == "author":
+            self.book["author"] = content
+
+        elif self.current == "year":
+            self.book["year"] = content
+    
+    def endElement(self, name):
+        if name == 'book':
+            self.books.append(self.book)
+        
+        self.current = ""
+
+if __name__ == '__main__':
+    handler = MyHandler()
+
+    parser = xml.sax.make_parser()
+    parser.setContentHandler(handler)
+    parser.parse('lession1.xml')
+
+    print(handler.books)
+# [{'title': 'Python Programming', 'author': 'John Doe', 'year': '2020'}, {'title': 'Data Science with Python', 'author': 'Jane Smith', 'year': '2021'}]
+```
 ## Đọc tất cả thông tin bằng dom
 ```python
 from xml.dom import minidom
