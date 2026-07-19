@@ -1,4 +1,4 @@
-- [Introduction](#introduction)
+- [RAG Introduction (Tìm tài liệu trước → rồi mới trả lời)](#rag-introduction-tìm-tài-liệu-trước--rồi-mới-trả-lời)
   - [Pipeline chuẩn (production mindset)](#pipeline-chuẩn-production-mindset)
 - [Phân loại RAG](#phân-loại-rag)
   - [Retrieval (Phân loại theo cách tìm tài liệu)](#retrieval-phân-loại-theo-cách-tìm-tài-liệu)
@@ -10,13 +10,17 @@
     - [Advanced RAG](#advanced-rag)
   - [Modular RAG](#modular-rag)
   - [Agentic RAG](#agentic-rag)
+- [Phân loại RAG dựa vào ứng dụng thực tế](#phân-loại-rag-dựa-vào-ứng-dụng-thực-tế)
+  - [Knowledge RAG (RAG truyền thống)](#knowledge-rag-rag-truyền-thống)
+  - [Tool RAG (Retrival Tool)](#tool-rag-retrival-tool)
+  - [SQL RAG (Không retrieve tài liệu. Retrieve schema)](#sql-rag-không-retrieve-tài-liệu-retrieve-schema)
+  - [API RAG (Retrieve API](#api-rag-retrieve-api)
 ---
-# Introduction
+# RAG Introduction (Tìm tài liệu trước → rồi mới trả lời)
 ```bash
 Vấn đề của AI thông thường: 
     - Các mô hình như ChatGPT chỉ biết những gì đã được huấn luyện trước đó.
     - Ví dụ: Em hỏi: “Quy định nội bộ công ty ABC về nghỉ phép là gì?” AI không biết, vì tài liệu đó không có trong dữ liệu huấn luyện. => Đây là lúc RAG xuất hiện.
-=> RAG = Retrieval-Augmented Generation. Dịch dễ hiểu: “Tìm tài liệu trước → rồi mới trả lời”
 
 Thay vì:
     - AI trả lời dựa hoàn toàn vào trí nhớ
@@ -574,3 +578,380 @@ Agent có thể tự lập kế hoạch:
 Nó giống:
     - Nhân viên phân tích dữ liệu hơn là Máy tìm kiếm
 ```
+# Phân loại RAG dựa vào ứng dụng thực tế
+```bash
+Nếu nói theo nghiên cứu và sản phẩm hiện nay thì không có một tiêu chuẩn chính thức kiểu "RAG có đúng 5 loại". 
+    Nhưng trong thực tế, người ta thường chia thành khoảng 7–8 kiến trúc RAG phổ biến. Chúng khác nhau ở chỗ retrieve cái gì và retrieve như thế nào
+```
+## Knowledge RAG (RAG truyền thống)
+```bash
+Đây là thứ mọi người nghĩ đến nhiều nhất
+
+Đây là kiến trúc của:
+    - ChatPDF
+    - AskYourPDF
+    - NotebookLM
+    - Chat với tài liệu
+=> Đây là RAG cơ bản nhất.
+```
+**Architecture (kiến trúc)**
+```bash
+PDF
+Word
+Excel
+Website
+Wiki
+...
+
+↓
+
+Chunk
+
+↓
+
+Embedding
+
+↓
+
+Vector DB
+
+↓
+
+Top K
+
+↓
+
+LLM
+
+↓
+
+Answer
+```
+**Ex**
+```bash
+Hỏi:
+Chính sách hoàn tiền là gì?
+
+↓
+
+Tìm trong PDF
+
+↓
+
+Lấy đoạn liên quan
+
+↓
+
+LLM trả lời
+```
+## Tool RAG (Retrival Tool)
+```bash
+Framework Agent hiện nay dùng rất nhiều.
+    Ví dụ:
+        - LangGraph
+        - LlamaIndex Agent
+        - CrewAI
+        - OpenAI Agent SDK
+```
+**Ex**
+```bash
+Tool Description
+↓
+Embedding
+↓
+Vector DB
+↓
+User
+↓
+Embedding
+↓
+Top K Tool
+↓
+LLM
+↓
+Function Calling
+```
+**Ex**
+```bash
+Đổi địa chỉ
+↓
+retrieve
+↓
+update_address
+↓
+call tool
+```
+## SQL RAG (Không retrieve tài liệu. Retrieve schema)
+**Ex**
+```bash
+Database
+    - users
+    - orders
+    - products
+    - payments
+
+Embedding
+users
+description...
+orders
+description...
+
+User
+    Doanh thu tháng này?
+↓
+retrieve
+    - orders
+    - payments
+↓
+LLM sinh SQL
+    SELECT ...
+=> Đây cũng là RAG.
+```
+## API RAG (Retrieve API
+**Ex**
+```bash
+- Weather API
+- Google Calendar API
+- Email API
+- Maps API
+- ...
+
+Embedding description.
+    User: Mai Hà Nội có mưa không?
+    ↓
+    retrieve: Weather API
+    ↓
+    LLM gọi API.
+```
+Hybrid RAG
+
+Đây là loại phổ biến nhất trong doanh nghiệp.
+
+Không chỉ Vector Search.
+
+Mà là
+
+User
+
+↓
+
+BM25
+
++
+
+Embedding
+
+↓
+
+Fusion
+
+↓
+
+Top K
+
+Ví dụ
+
+"GPT-4.1"
+
+
+Embedding đôi khi tìm không tốt.
+
+BM25 lại rất mạnh với keyword.
+
+Người ta kết hợp cả hai.
+
+BM25
+
++
+
+Vector
+
+=
+
+Hybrid Search
+
+Milvus
+
+Weaviate
+
+Elastic
+
+Azure AI Search
+
+đều hỗ trợ.
+
+6. Graph RAG
+
+Rất hot 2 năm gần đây.
+
+Không lưu vector.
+
+Mà lưu Graph.
+
+Ví dụ
+
+Steve Jobs
+
+↓
+
+Founder
+
+↓
+
+Apple
+
+↓
+
+Developed
+
+↓
+
+iPhone
+
+User
+
+Ai tạo ra iPhone?
+
+LLM truy vấn Graph.
+
+Steve Jobs
+↓
+
+Apple
+↓
+
+iPhone
+
+Microsoft đang đầu tư khá mạnh vào GraphRAG.
+
+Nó tốt khi dữ liệu có nhiều quan hệ.
+
+7. Agentic RAG
+
+Đây là xu hướng hiện nay.
+
+Không retrieve một lần.
+
+Mà Agent tự quyết định.
+
+User
+
+↓
+
+Search
+
+↓
+
+Không đủ
+
+↓
+
+Search tiếp
+
+↓
+
+Không đủ
+
+↓
+
+Search Web
+
+↓
+
+Đọc PDF
+
+↓
+
+Gọi Tool
+
+↓
+
+Answer
+
+Có nhiều vòng retrieve.
+
+Ví dụ
+
+User
+
+↓
+
+Search PDF
+
+↓
+
+Không thấy
+
+↓
+
+Search Internet
+
+↓
+
+Không thấy
+
+↓
+
+Search SQL
+
+↓
+
+Không thấy
+
+↓
+
+Hỏi tiếp user
+
+↓
+
+Answer
+
+Thằng Agent sẽ tự lập kế hoạch.
+
+8. Multi-Modal RAG
+
+Không chỉ text.
+
+Có thể retrieve
+
+Image
+
+Video
+
+Audio
+
+Table
+
+PDF
+
+PowerPoint
+
+Ví dụ
+
+Ảnh hóa đơn
+
+↓
+
+Embedding
+
+↓
+
+Retrieve
+
+↓
+
+LLM
+
+Hoặc
+
+Ảnh X-ray
+
+↓
+
+Retrieve case tương tự
+
+↓
+
+LLM
+
+Đây là hướng đang phát triển rất mạnh.

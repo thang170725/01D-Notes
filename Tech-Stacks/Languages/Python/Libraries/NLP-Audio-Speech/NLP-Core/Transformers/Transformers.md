@@ -17,8 +17,390 @@
   - [So sánh độ giống nhau giữa 2 câu](#so-sánh-độ-giống-nhau-giữa-2-câu)
 ---
 # Transformers Introduction
-**Mô hình cho chatbot Hỏi-Đáp**
 ```bash
+Transformers là một library được phát triển bởi Hugging Face.
+    Là một trong những thư viện AI phổ biến nhất hiện nay.
+
+Nó giúp bạn sử dụng các mô hình Transformer một cách đơn giản
+```
+**Phân loại mô hình theo task**
+```bash
+1. Mô hình sinh văn bản (Text Generation)
+
+Đây là nhóm LLM mà mọi người thường nhắc đến.
+
+Ứng dụng
+
+Chatbot
+AI Assistant
+Viết code
+Viết email
+Viết bài
+Agent
+
+Ví dụ
+
+GPT-2
+Llama
+Mistral
+Mixtral
+Qwen
+Gemma
+Falcon
+BLOOM
+OPT
+Phi
+GPT-Neo
+GPT-J
+GPT-NeoX
+
+Ví dụ
+
+from transformers import AutoModelForCausalLM
+2. Mô hình Encoder (Embedding & Hiểu văn bản)
+
+Nhóm này không giỏi viết mà giỏi hiểu.
+
+Ứng dụng
+
+Embedding
+Semantic Search
+RAG
+Phân loại
+Clustering
+
+Ví dụ
+
+BERT
+RoBERTa
+DeBERTa
+DistilBERT
+ALBERT
+ELECTRA
+MPNet
+MiniLM
+
+Ví dụ
+
+AutoModel
+3. Text Classification
+
+Dùng để phân loại.
+
+Ví dụ
+
+Spam
+Toxic
+Positive
+Negative
+Chủ đề
+
+Model thường dùng
+
+BERT
+RoBERTa
+DistilBERT
+DeBERTa
+
+Ví dụ
+
+AutoModelForSequenceClassification
+4. Token Classification
+
+Phân loại từng từ.
+
+Ví dụ
+
+Tôi sống ở Hà Nội
+
+Tôi      O
+sống     O
+ở        O
+Hà Nội   LOCATION
+
+Ứng dụng
+
+NER
+POS Tagging
+
+Model
+
+BERT
+RoBERTa
+DeBERTa
+
+Ví dụ
+
+AutoModelForTokenClassification
+5. Question Answering
+
+Cho Context + Question.
+
+Ví dụ
+
+Context:
+Việt Nam có thủ đô là Hà Nội.
+
+Question:
+Thủ đô Việt Nam là gì?
+
+↓
+
+Hà Nội
+
+Model
+
+BERT
+RoBERTa
+DistilBERT
+
+Ví dụ
+
+AutoModelForQuestionAnswering
+6. Summarization
+
+Tóm tắt.
+
+Ví dụ
+
+Báo chí
+PDF
+Email
+
+Model
+
+BART
+T5
+Pegasus
+LongT5
+
+Ví dụ
+
+pipeline("summarization")
+7. Translation
+
+Dịch ngôn ngữ.
+
+Ví dụ
+
+Anh → Việt
+Việt → Nhật
+
+Model
+
+MarianMT
+mBART
+M2M100
+NLLB
+
+Ví dụ
+
+pipeline("translation")
+8. Fill Mask
+
+Điền từ bị thiếu.
+
+Ví dụ
+
+I love [MASK].
+
+↓
+
+Python
+
+Model
+
+BERT
+RoBERTa
+DeBERTa
+
+Ví dụ
+
+pipeline("fill-mask")
+9. Sentence Embedding
+
+Sinh vector.
+
+Ứng dụng
+
+RAG
+Search
+Recommendation
+
+Model
+
+BGE
+E5
+GTE
+Sentence-BERT
+MiniLM
+10. Image Classification
+
+Ảnh →
+
+chó
+mèo
+xe
+
+Model
+
+ViT
+ConvNext
+Swin Transformer
+BEiT
+
+Ví dụ
+
+AutoModelForImageClassification
+11. Object Detection
+
+Tìm vật thể.
+
+Ví dụ
+
+Ảnh
+
+↓
+
+Người
+
+↓
+
+Bounding Box
+
+Model
+
+DETR
+YOLOS
+DINO
+12. Image Segmentation
+
+Tách từng pixel.
+
+Ví dụ
+
+Người
+
+Xe
+
+Cây
+
+Model
+
+SegFormer
+Mask2Former
+SAM (một số phiên bản)
+13. Image Captioning
+
+Sinh mô tả ảnh.
+
+Ví dụ
+
+Ảnh
+
+↓
+
+"A dog running in a park."
+
+Model
+
+BLIP
+BLIP-2
+GIT
+14. Visual Question Answering (VQA)
+
+Ví dụ
+
+Ảnh
+
++
+
+"Có bao nhiêu người?"
+
+↓
+
+3 người
+
+Model
+
+BLIP
+ViLT
+15. Speech Recognition
+
+Âm thanh →
+
+Văn bản
+
+Model
+
+Whisper
+Wav2Vec2
+HuBERT
+16. Text To Speech
+
+Text →
+
+Giọng nói
+
+Model
+
+Bark
+SpeechT5
+VITS
+17. Audio Classification
+
+Ví dụ
+
+tiếng chó
+tiếng còi
+tiếng mưa
+
+Model
+
+AST
+Wav2Vec2
+18. Multimodal LLM
+
+Đầu vào
+
+Ảnh
+
++
+
+Text
+
+↓
+
+Chat.
+
+Model
+
+LLaVA
+Qwen2-VL
+Phi-4 Multimodal
+IDEFICS
+SmolVLM
+19. Code Generation
+
+Sinh code.
+
+Model
+
+CodeLlama
+StarCoder
+CodeGen
+DeepSeek-Coder
+Qwen-Coder
+20. Document AI
+
+Hiểu PDF.
+
+Model
+
+LayoutLM
+LayoutLMv2
+LayoutLMv3
+Donut
 1. Qwen/Qwen2.5-7B-Instruct
 2. Qwen/Qwen2.5-14B-Instruct
 3. Qwen/Qwen2.5-72B-Instruct

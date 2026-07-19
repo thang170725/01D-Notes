@@ -5,6 +5,7 @@
   - [geometry() (Đặt kích thước cửa sổ)](#geometry-đặt-kích-thước-cửa-sổ)
   - [.resizeable() (Không cho kéo dãn)](#resizeable-không-cho-kéo-dãn)
   - [mainloop() (tạo vòng lặp giữ của sổ xuất hiện)](#mainloop-tạo-vòng-lặp-giữ-của-sổ-xuất-hiện)
+    - [.wifo\_children() (lấy danh sách tất cả widget con trực tiếp của một widge)](#wifo_children-lấy-danh-sách-tất-cả-widget-con-trực-tiếp-của-một-widge)
 - [Label() (Hiển thị văn bản)](#label-hiển-thị-văn-bản)
   - [pack() (Đưa widget lên cửa sổ)](#pack-đưa-widget-lên-cửa-sổ)
 - [Button() (Tạo nút bấm)](#button-tạo-nút-bấm)
@@ -19,17 +20,8 @@
 - [render() (vẽ toàn bộ giao diện)](#render-vẽ-toàn-bộ-giao-diện)
   - [.grid() (dùng để sắp xếp các widget (Button, Label, Entry,...) theo dạng bảng (hàng và cột), giống như bảng trong Excel)](#grid-dùng-để-sắp-xếp-các-widget-button-label-entry-theo-dạng-bảng-hàng-và-cột-giống-như-bảng-trong-excel)
   - [column=0      column=1](#column0------column1)
+- [tk](#tk)
 - [ttk](#ttk)
-  - [Combobox (Danh sách xổ xuống -dropdown)](#combobox-danh-sách-xổ-xuống--dropdown)
-- [Treeview (Hiển thị dữ liệu dạng bảng hoặc cây)](#treeview-hiển-thị-dữ-liệu-dạng-bảng-hoặc-cây)
-- [messagebox (dùng để hiện thị popup)](#messagebox-dùng-để-hiện-thị-popup)
-  - [showinfo()](#showinfo)
-- [ttk (là phiên bản widget đẹp hơn của Tkinter)](#ttk-là-phiên-bản-widget-đẹp-hơn-của-tkinter)
-  - [.Frame (giống như 1 cái hộp)](#frame-giống-như-1-cái-hộp)
-    - [.wifo\_children() (lấy tất cả widget bên trong Frame)](#wifo_children-lấy-tất-cả-widget-bên-trong-frame)
-    - [.destroy() (xóa từng widget)](#destroy-xóa-từng-widget)
-    - [.pack() (Đặt frame vào window)](#pack-đặt-frame-vào-window)
-    - [grid()](#grid)
 ---
 # Tkinter Introduction (dùng để xây dựng giao diện đồ họa GUI - Graphical User Interface)
 ```bash
@@ -103,6 +95,146 @@ root = tk.Tk()
 root.mainloop()
 # Kết quả: xuất hiện một cửa sổ trống
 ```
+### .wifo_children() (lấy danh sách tất cả widget con trực tiếp của một widge)
+winfo_children() trong Tkinter dùng để lấy danh sách tất cả các widget con trực tiếp của một widget.
+
+Ví dụ đơn giản:
+
+import tkinter as tk
+
+root = tk.Tk()
+
+label = tk.Label(root, text="Tên")
+label.pack()
+
+entry = tk.Entry(root)
+entry.pack()
+
+button = tk.Button(root, text="Lưu")
+button.pack()
+
+children = root.winfo_children()
+
+print(children)
+Kết quả giả định
+[
+    <tkinter.Label object .!label>,
+    <tkinter.Entry object .!entry>,
+    <tkinter.Button object .!button>
+]
+
+Hoặc trên máy khác có thể hiện:
+
+[.!label, .!entry, .!button]
+
+Đây là một list các đối tượng widget, không phải chuỗi.
+
+Ví dụ khác
+
+Giả sử bạn có giao diện:
+
+root
+│
+├── Label("Tên")
+├── Entry
+├── Button("Lưu")
+└── Frame
+
+thì:
+
+children = root.winfo_children()
+
+print(children)
+
+Kết quả giả định:
+
+[
+    Label,
+    Entry,
+    Button,
+    Frame
+]
+
+Bạn có thể duyệt:
+
+for widget in root.winfo_children():
+    print(widget)
+
+Kết quả:
+
+.!label
+.!entry
+.!button
+.!frame
+Nếu Frame cũng có widget con
+root
+│
+├── Label
+├── Button
+└── Frame
+      │
+      ├── Entry
+      └── Button
+
+Thì:
+
+root.winfo_children()
+
+chỉ trả về:
+
+[
+    Label,
+    Button,
+    Frame
+]
+
+Muốn lấy widget bên trong Frame:
+
+frame.winfo_children()
+
+Kết quả:
+
+[
+    Entry,
+    Button
+]
+Tóm tắt
+
+Giả sử cây widget như sau:
+
+root
+├── Label
+├── Entry
+├── Button
+└── Frame
+      ├── Label
+      └── Entry
+
+Thì:
+
+root.winfo_children()
+
+➡️ Kết quả giả định:
+
+[
+    <Label>,
+    <Entry>,
+    <Button>,
+    <Frame>
+]
+
+và:
+
+frame.winfo_children()
+
+➡️ Kết quả giả định:
+
+[
+    <Label>,
+    <Entry>
+]
+
+winfo_children() chỉ lấy các widget con trực tiếp, không lấy các widget "cháu" (con của con).
 # Label() (Hiển thị văn bản)
 **Syn**
 ```bash
@@ -598,168 +730,113 @@ sticky = căn hoặc kéo giãn widget trong ô.
 padx, pady = thêm khoảng trống xung quanh widget.
 
 Đây là cách bố trí được dùng nhiều nhất khi tạo form đăng nhập, form nhập dữ liệu, máy tính bỏ túi, giao diện quản lý, vì nó giúp các thành phần thẳng hàng và dễ sắp xếp.
+Có. tk cũng có Frame, và ttk cũng có Frame.
+
+Ví dụ:
+
+tk.Frame
+import tkinter as tk
+
+root = tk.Tk()
+
+frame = tk.Frame(
+    root,
+    bg="lightblue",
+    width=200,
+    height=100
+)
+frame.pack()
+
+root.mainloop()
+
+Kết quả giả định:
+
++----------------------+
+|                      |
+|      Frame           |  ← nền xanh nhạt
+|                      |
++----------------------+
+
+Bạn có thể đổi màu trực tiếp:
+
+frame = tk.Frame(
+    root,
+    bg="yellow"
+)
+ttk.Frame
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+
+frame = ttk.Frame(root)
+frame.pack()
+
+root.mainloop()
+
+ttk.Frame sẽ dùng giao diện (theme) của hệ điều hành và không hỗ trợ:
+
+bg="yellow"   # ❌ Lỗi
+
+Muốn đổi màu thường phải dùng ttk.Style, và tùy theme mà việc đổi màu nền có thể không có tác dụng.
+
+So sánh
+# tk
+frame1 = tk.Frame(root, bg="lightblue")
 # ttk
-## Combobox (Danh sách xổ xuống -dropdown)
-**Syn**
-```bash
-from tkinter import ttk
+frame2 = ttk.Frame(root)
+Frame dùng để làm gì?
 
-ttk.Combobox(parent, values=[...])
-```
-**Ex**
-```python
+Frame giống như một chiếc hộp để chứa các widget khác.
+
+Ví dụ:
+
 import tkinter as tk
-from tkinter import ttk
 
 root = tk.Tk()
 
-combo = ttk.Combobox(root, values=["Python", "Java", "C++"])
-combo.pack()
+frame = tk.Frame(root, bg="lightgray")
+frame.pack(padx=20, pady=20)
 
-root.mainloop()
-# Người dùng chọn:
-# ▼ Python
-# ▼ Java
-# ▼ C++
-```
-# Treeview (Hiển thị dữ liệu dạng bảng hoặc cây)
-**Syn**
-```bash
-tree = ttk.Treeview(parent)
-```
-**Ex**
-```python
-import tkinter as tk
-from tkinter import ttk
+tk.Label(frame, text="Tên").pack()
 
-root = tk.Tk()
+tk.Entry(frame).pack()
 
-tree = ttk.Treeview(root, columns=("Tên",), show="headings")
-tree.heading("Tên", text="Tên")
-tree.insert("", "end", values=("An",))
-tree.insert("", "end", values=("Bình",))
-
-tree.pack()
-
-root.mainloop()
-# Kết quả:
-# +-----------+
-# |   Tên     |
-# +-----------+
-# |   An      |
-# |   Bình    |
-# +-----------+
-```
-# messagebox (dùng để hiện thị popup)
-## showinfo()
-# ttk (là phiên bản widget đẹp hơn của Tkinter)
-## .Frame (giống như 1 cái hộp)
-```bash
-Frame trong Tkinter/ttk có thể hiểu đơn giản là một cái khung (container) để chứa các widget khác như Label, Button, Entry,...
-
-Nếu không có Frame, mọi widget sẽ nằm trực tiếp trên cửa sổ (Tk).
-```
-**Ex1: Không dùng Frame**
-```python
-import tkinter as tk
-from tkinter import ttk
-
-root = tk.Tk()
-root.geometry("300x180")
-
-ttk.Label(root, text="Username").pack()
-ttk.Entry(root).pack()
-
-ttk.Label(root, text="Password").pack()
-ttk.Entry(root).pack()
-
-ttk.Button(root, text="Login").pack()
+tk.Button(frame, text="Lưu").pack()
 
 root.mainloop()
 
-# +---------------------------+
-# |                           |
-# | Username                  |
-# | [______________]          |
-# |                           |
-# | Password                  |
-# | [______________]          |
-# |                           |
-# |    [ Login ]              |
-# |                           |
-# +---------------------------+
-# Mọi widget đều nằm trực tiếp trên root.
-```
-**Ex2: Dùng một Frame**
-```python
-import tkinter as tk
-from tkinter import ttk
+Cấu trúc sẽ là:
 
-root = tk.Tk()
-root.geometry("300x180")
+root
+│
+└── Frame
+      │
+      ├── Label
+      ├── Entry
+      └── Button
 
-frame = ttk.Frame(root, padding=20)
-frame.pack(fill="both", expand=True)
+Nếu gọi:
 
-ttk.Label(frame, text="Username").pack()
-ttk.Entry(frame).pack()
+print(root.winfo_children())
 
-ttk.Label(frame, text="Password").pack()
-ttk.Entry(frame).pack()
+Kết quả giả định:
 
-ttk.Button(frame, text="Login").pack(pady=10)
+[<Frame>]
 
-root.mainloop()
+Còn:
 
-# +--------------------------------+
-# |                                |
-# |   +------------------------+   |
-# |   | Username               |   |
-# |   | [______________]       |   |
-# |   |                        |   |
-# |   | Password               |   |
-# |   | [______________]       |   |
-# |   |                        |   |
-# |   |     [ Login ]          |   |
-# |   +------------------------+   |
-# |                                |
-# +--------------------------------+
-# Khung bên trong chính là Frame.
-```
-**Ex3: Hai Frame**
-```python
-import tkinter as tk
-from tkinter import ttk
+print(frame.winfo_children())
 
-root = tk.Tk()
-root.geometry("400x250")
+Kết quả giả định:
 
-top = ttk.Frame(root, padding=10)
-top.pack(fill="x")
+[
+    <Label>,
+    <Entry>,
+    <Button>
+]
 
-bottom = ttk.Frame(root, padding=10)
-bottom.pack(fill="both", expand=True)
-
-ttk.Label(top, text="Personal Health Tracker").pack()
-
-ttk.Button(bottom, text="Login").pack(pady=5)
-ttk.Button(bottom, text="Register").pack()
-
-root.mainloop()
-
-# +---------------------------------------+
-# | Personal Health Tracker               |  ← top Frame
-# +---------------------------------------+
-# |                                       |
-# |           [ Login ]                   |
-# |                                       |
-# |         [ Register ]                  |
-# |                                       |
-# |                                       |
-# +---------------------------------------+
-```
-### .wifo_children() (lấy tất cả widget bên trong Frame)
-### .destroy() (xóa từng widget)
+Đây cũng là một ví dụ rất điển hình để hiểu cách winfo_children() hoạt động.
 Trong Tkinter, destroy() dùng để xóa một widget hoặc đóng toàn bộ cửa sổ.
 
 Có hai cách dùng phổ biến:
@@ -922,13 +999,3 @@ label = tk.Label(root, text="Xin chào")
 label.pack()
 
 Đó là điểm khác biệt với pack_forget() hoặc grid_forget(), vốn chỉ ẩn widget chứ không xóa hẳn nó.
-### .pack() (Đặt frame vào window)
-**Syn**
-```bash
-
-- fill:
-  + both: chiếm cả ngang và dọc
-- expand:
-  + True
-```
-### grid()
