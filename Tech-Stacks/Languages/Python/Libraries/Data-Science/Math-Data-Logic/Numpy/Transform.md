@@ -8,6 +8,7 @@
 - [Clip()](#clip)
 - [.argmin() \& .argmax()](#argmin--argmax)
 - [Hstack](#hstack)
+- [.pad() (Thêm phần đệm)](#pad-thêm-phần-đệm)
 ---
 # .tolist()
 ```bash
@@ -218,15 +219,3 @@ print(b)
 # trái: 3 cột
 # phải: 4 cột
 ```
-
-np.pad(a, 2, mode='edge')
-
-→ lặp giá trị biên
-
-np.pad(a, 2, mode='reflect')
-
-→ phản chiếu
-
-np.pad(a, ((1,1),(2,2)))
-
-→ pad ma trận 2D

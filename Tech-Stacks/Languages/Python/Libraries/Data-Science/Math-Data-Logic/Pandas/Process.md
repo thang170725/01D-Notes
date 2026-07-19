@@ -1,5 +1,6 @@
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
-  - [DataFrame \& Series](#dataframe--series)
+  - [Series](#series)
+  - [DataFrame (tao dữ liêụ 2 chiều dạng bảng)](#dataframe-tao-dữ-liêụ-2-chiều-dạng-bảng)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.head()](#head)
   - [.shape](#shape)
@@ -35,6 +36,10 @@
   - [replace() (Thay thế giá trị cũ bằng giá trị mới trong Series hoặc DataFrame)](#replace-thay-thế-giá-trị-cũ-bằng-giá-trị-mới-trong-series-hoặc-dataframe)
 - [Time (Nhóm xử lý ngày giờ)](#time-nhóm-xử-lý-ngày-giờ)
   - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin-1)
+    - [.dt](#dt)
+      - [.month](#month)
+      - [.year](#year)
+      - [.weekday](#weekday)
     - [.dt.date (dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây)](#dtdate-dùng-để-lấy-phần-ngày-date-từ-cột-datetime-bỏ-giờ-phút-giây)
     - [.dt.hour](#dthour)
     - [.dt.minute (Dùng để lấy ra phần phút (0–59) từ một cột có kiểu datetime)](#dtminute-dùng-để-lấy-ra-phần-phút-059-từ-một-cột-có-kiểu-datetime)
@@ -47,19 +52,46 @@
 - [Compare Function (Nhóm chức năng so sánh)](#compare-function-nhóm-chức-năng-so-sánh)
   - [.eq()](#eq)
 - [shift() — lấy giá trị trong quá khứ (lag)](#shift--lấy-giá-trị-trong-quá-khứ-lag)
-- [rolling() — cửa sổ trượt](#rolling--cửa-sổ-trượt)
+- [rolling() (cửa sổ trượt)](#rolling-cửa-sổ-trượt)
 - [autocorrelation\_plot()](#autocorrelation_plot)
 - [.agg() (Cho phép áp dụng nhiều hàm cùng lúc)](#agg-cho-phép-áp-dụng-nhiều-hàm-cùng-lúc)
 - [.count() (Đếm số giá trị không null)](#count-đếm-số-giá-trị-không-null)
-  - [.query()](#query)
+- [.applymap() (Áp dụng lên từng phần tử DataFrame)](#applymap-áp-dụng-lên-từng-phần-tử-dataframe)
+- [str](#str)
+  - [.contains()](#contains)
+  - [.lower()](#lower)
+  - [.upper()](#upper)
+  - [.strip() (Xóa khoảng trắng)](#strip-xóa-khoảng-trắng)
+  - [.replace()](#replace)
+  - [.split()](#split)
+  - [.extract()](#extract)
+  - [cut() (Chia khoảng theo ngưỡng)](#cut-chia-khoảng-theo-ngưỡng)
+- [.fillna()](#fillna)
+- [.interpolate() (Nội suy)](#interpolate-nội-suy)
+- [.rank() (Xếp hạng)](#rank-xếp-hạng)
+- [.nlargest() (Top N)](#nlargest-top-n)
+- [.nsmallest() (Bottom N)](#nsmallest-bottom-n)
+- [stack()](#stack)
+- [unstack()](#unstack)
+  - [.eval() (Đánh giá biểu thức)](#eval-đánh-giá-biểu-thức)
   - [.format()](#format)
 ---
 # Create (Nhóm khởi tạo)
-## DataFrame & Series
+## Series
 ```bash
 - series    : Cấu trúc dữ liệu 1 chiều.
-- DataFrame : Cấu trúc dữ liêụ 2 chiều (dạng bảng).
 ```
+**Ex2: Series**
+```python
+s = pd.Series([0,1,2,3], index=["a","b","c","d"])
+
+# a    0
+# b    1
+# c    2
+# d    3
+# dtype: int64
+```
+## DataFrame (tao dữ liêụ 2 chiều dạng bảng)
 **Syn: DataFrame**
 ```bash
 df = pd.DataFrame(data, index=None, columns=None, dtype=None, copy=False)
@@ -84,15 +116,34 @@ print(li)
 # 1      Duo     Hanoi
 # 2  Chicago     Tokyo
 ```
-**Ex2: Series**
+**Ex**
 ```python
-s = pd.Series([0,1,2,3], index=["a","b","c","d"])
+import pandas as pd
 
-# a    0
-# b    1
-# c    2
-# d    3
-# dtype: int64
+data = [
+    {
+        "fullName": "John",
+        "address": "New York",
+        "age": 12
+    },
+    {
+        "fullName": "Duo",
+        "address": "Hanoi",
+        "age": 13
+    },
+    {
+        "fullName": "Chicago",
+        "address": "Tokyo",
+        "age": 14
+    }
+]
+
+df = pd.DataFrame(data)
+print(df)
+#   fullName   address  age
+# 0     John  New York   12
+# 1      Duo     Hanoi   13
+# 2  Chicago     Tokyo   14
 ```
 **Ex: Tạo tên cột cho dataframe**
 ```python
@@ -854,6 +905,13 @@ print(df)
 ```
 # Time (Nhóm xử lý ngày giờ)
 ## Display (Nhóm cung cấp thông tin)
+### .dt
+#### .month
+df["date"].dt.month
+#### .year
+df["date"].dt.year
+#### .weekday
+df["date"].dt.weekday
 ### .dt.date (dùng để lấy phần ngày (date) từ cột datetime, bỏ giờ phút giây)
 **Syn**
 ```bash
@@ -1158,65 +1216,43 @@ df['A'].eq(df['B'])
 # 2     True
 ```
 # shift() — lấy giá trị trong quá khứ (lag)
-👉 Ý tưởng:
-
-“Lấy giá trị của n bước trước”
-
-📌 Cách dùng
-df['power_shift_1'] = df['power'].shift(1)
-
-👉 nghĩa là:
-
-giá trị hiện tại ← giá trị của 1 giờ trước
-📊 Ví dụ
+```bash
+Ý tưởng: “Lấy giá trị của n bước trước”
+```
+**Ex**
+```bash
 time        power
 00:00       10
 01:00       20
 02:00       30
+```
+```python
 df['shift_1'] = df['power'].shift(1)
-
-👉 kết quả:
-
-time        power   shift_1
-00:00       10      NaN
-01:00       20      10
-02:00       30      20
-🔥 Dùng để làm gì?
-Feature cực quan trọng:
-df['lag_1'] = df['power'].shift(1)
-df['lag_24'] = df['power'].shift(24)
-
-👉 model học được:
-
-hôm nay phụ thuộc hôm qua
-giờ này phụ thuộc giờ hôm qua
-# rolling() — cửa sổ trượt
-👉 Ý tưởng:
-
-“Nhìn lại N điểm gần nhất rồi tính toán”
-
-📌 Cách dùng
-df['rolling_mean_3'] = df['power'].rolling(3).mean()
-
-👉 nghĩa là:
-
-lấy 3 giá trị gần nhất
-tính trung bình
-📊 Ví dụ
+# time        power   shift_1
+# 00:00       10      NaN
+# 01:00       20      10
+# 02:00       30      20
+```
+# rolling() (cửa sổ trượt)
+```bash
+Ý tưởng: “Nhìn lại N điểm gần nhất rồi tính toán”
+```
+**Ex**
+```bash
 time        power
 00:00       10
 01:00       20
 02:00       30
 03:00       40
+```
+```python
 df['roll_mean'] = df['power'].rolling(3).mean()
-
-👉 kết quả:
-
-time        power   roll_mean
-00:00       10      NaN
-01:00       20      NaN
-02:00       30      20   (10+20+30)/3
-03:00       40      30   (20+30+40)/3
+# time        power   roll_mean
+# 00:00       10      NaN
+# 01:00       20      NaN
+# 02:00       30      20   (10+20+30)/3
+# 03:00       40      30   (20+30+40)/3
+```
 # autocorrelation_plot() 
 ```bash
 - Là một hàm trong thư viện pandas dùng để vẽ đồ thị tự tương quan (autocorrelation) của chuỗi thời gian (time series).
@@ -1282,200 +1318,100 @@ df.groupby("department").agg({
 ```bash
 df.count()
 ```
-
-
-.applymap()
-
-Áp dụng lên từng phần tử DataFrame.
-
-df.applymap(str.upper)
-
-Hiện nay thường dùng:
-
-df.map(...)
-
-(với các phiên bản Pandas mới).
-1. Nhóm String
-
-Cực kỳ hay dùng.
-
-.str.contains()
+# .applymap() (Áp dụng lên từng phần tử DataFrame)
+```bash
+Hiện nay thường dùng: df.map(...)
+```
+# str
+## .contains()
+**Ex**
+```python
 df["email"].str.contains("@gmail")
-.str.lower()
+```
+## .lower()
+**Ex**
+```bash
 df["name"].str.lower()
-.str.upper()
+```
+## .upper()
+```bash
 df["name"].str.upper()
-.str.strip()
-
-Xóa khoảng trắng.
-
+```
+## .strip() (Xóa khoảng trắng)
+```bash
 df["name"].str.strip()
-.str.replace()
+```
+## .replace()
+```bash
 df["phone"].str.replace("-", "")
-.str.split()
+```
+## .split()
+```bash
 df["fullname"].str.split(" ")
-.str.extract()
-
-Regex.
-
-df["email"].str.extract(r"@(.*)")
-5. Nhóm Category / Encoding
-
-
-cut()
-
-Chia khoảng theo ngưỡng.
-
+```
+## .extract()
+## cut() (Chia khoảng theo ngưỡng)
+```bash
 pd.cut(
     df["age"],
     bins=[0,18,60,100],
     labels=["Child","Adult","Senior"]
 )
-
-Khác với:
-
-qcut()
-cut: khoảng cố định
-qcut: số lượng mẫu gần bằng nhau
-6. Nhóm Missing Value nâng cao
-.fillna(method=...)
-df.fillna(method="ffill")
-df.fillna(method="bfill")
-
-Hiện nay khuyến khích viết:
-
-df.ffill()
-df.bfill()
-.interpolate()
-
-Nội suy.
-
+```
+# .fillna()
+# .interpolate() (Nội suy)
+```bash
 df["temperature"].interpolate()
 
 Rất hữu ích cho time series.
-
-7. Nhóm Ranking
-.rank()
-
-Xếp hạng.
-
+```
+# .rank() (Xếp hạng)
+```bash
 df["salary"].rank(ascending=False)
-.nlargest()
-
-Top N.
-
+```
+# .nlargest() (Top N)
+```bash
 df.nlargest(5, "salary")
-.nsmallest()
-
-Bottom N.
-
+```
+# .nsmallest() (Bottom N)
+```bash
 df.nsmallest(5, "salary")
-8. Nhóm Time Series quan trọng
+```
+# stack()
+# unstack() 
+```python
+import pandas as pd
 
-Bạn đã học khá nhiều rồi, nhưng nên thêm:
+s = pd.Series(
+    [100,200,300,400],
+    index=pd.MultiIndex.from_tuples([
+        (0,0),
+        (0,1),
+        (1,0),
+        (1,1)
+    ])
+)
 
-.dt.month
-df["date"].dt.month
-.dt.year
-df["date"].dt.year
-.dt.weekday
-df["date"].dt.weekday
-.diff()
+print(s)
+# 0 0    100
+#   1    200
+# 1 0    300
+#   1    400
 
-Sai phân.
+# print(s.unstack())
+#       0    1
 
-df["sales"].diff()
+# 0   100  200
 
-Ví dụ:
-
-100
-120
-150
-
-↓
-
-NaN
-20
-30
-.pct_change()
-
-Phần trăm thay đổi.
-
-df["sales"].pct_change()
-
-Ví dụ:
-
-100
-120
-
-↓
-
-0.2
-
-tức tăng 20%.
-
-9. Nhóm Window Function
-
-Rất quan trọng nếu làm time series.
-
-.expanding()
-
-Tính từ đầu đến hiện tại.
-
-df["sales"].expanding().mean()
-
-Ví dụ:
-
-10
-20
-30
-
-↓
-
-10
-15
-20
-ewm()
-
-Exponential Weighted Mean.
-
-df["sales"].ewm(span=5).mean()
-
-Trung bình động có trọng số.
-
-Dùng nhiều trong tài chính.
-
-
-
-11. Nhóm MultiIndex
-stack()
-
-Wide → long.
-
-df.stack()
-unstack()
-
-Long → wide.
-
-df.unstack()
-
-
-## .query()
-
-Lọc bằng biểu thức.
-
-df.query("age > 30 and salary > 5000")
-
-Thường dễ đọc hơn:
-
-df[(df.age > 30) & (df.salary > 5000)]
-.eval()
-
-Đánh giá biểu thức.
-
-df.eval("profit = revenue - cost")
-
+# 1   300  400
+```
+## .eval() (Đánh giá biểu thức)
+```bash
 Nhanh hơn trên DataFrame lớn.
+```
+```bash
+df.eval("profit = revenue - cost")
+```
 ## .format()
 ```python
 df = pd.DataFrame({
