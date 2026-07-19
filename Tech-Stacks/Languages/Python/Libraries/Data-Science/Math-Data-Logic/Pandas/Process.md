@@ -5,7 +5,7 @@
   - [.shape](#shape)
   - [.columns (Lấy danh sách tên các cột của dataframe)](#columns-lấy-danh-sách-tên-các-cột-của-dataframe)
   - [.tail()](#tail)
-  - [.value\_counts()](#value_counts)
+  - [.value\_counts() (Dùng để đếm tần suât xuất hiện của các các giá trị trong một Series (hoặc cột của Dataframe))](#value_counts-dùng-để-đếm-tần-suât-xuất-hiện-của-các-các-giá-trị-trong-một-series-hoặc-cột-của-dataframe)
   - [pd.options.display.max\_rows](#pdoptionsdisplaymax_rows)
   - [unique() (Dùng để lấy các giá trị không trùng lặp trong một Series/cột)](#unique-dùng-để-lấy-các-giá-trị-không-trùng-lặp-trong-một-seriescột)
   - [.nunique() (Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó)](#nunique-để-đếm-tổng-số-lượng-các-giá-trị-khác-nhau-trong-một-cột-nào-đó)
@@ -203,10 +203,7 @@ df.tail(2)
 # 4 E   10
 # 5 F    5
 ```
-## .value_counts()
-```bash
-Dùng để đếm tần suât xuất hiện của các các giá trị trong một Series (hoặc cột của Dataframe).
-```
+## .value_counts() (Dùng để đếm tần suât xuất hiện của các các giá trị trong một Series (hoặc cột của Dataframe))
 **Syn**
 ```bash
 Series.value_counts(
