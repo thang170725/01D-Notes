@@ -6,7 +6,7 @@
   - [.shape](#shape)
   - [.columns (Lấy danh sách tên các cột của dataframe)](#columns-lấy-danh-sách-tên-các-cột-của-dataframe)
   - [.tail()](#tail)
-  - [.value\_counts() (Dùng để đếm tần suât xuất hiện của các các giá trị trong một Series (hoặc cột của Dataframe))](#value_counts-dùng-để-đếm-tần-suât-xuất-hiện-của-các-các-giá-trị-trong-một-series-hoặc-cột-của-dataframe)
+  - [.value\_counts() (đếm tần suât xuất hiện của các các giá trị trong một Series hoặc cột Dataframe)](#value_counts-đếm-tần-suât-xuất-hiện-của-các-các-giá-trị-trong-một-series-hoặc-cột-dataframe)
   - [pd.options.display.max\_rows](#pdoptionsdisplaymax_rows)
   - [unique() (Dùng để lấy các giá trị không trùng lặp trong một Series/cột)](#unique-dùng-để-lấy-các-giá-trị-không-trùng-lặp-trong-một-seriescột)
   - [.nunique() (Để đếm tổng số lượng các giá trị khác nhau trong một cột nào đó)](#nunique-để-đếm-tổng-số-lượng-các-giá-trị-khác-nhau-trong-một-cột-nào-đó)
@@ -72,7 +72,7 @@
 - [.nlargest() (Top N)](#nlargest-top-n)
 - [.nsmallest() (Bottom N)](#nsmallest-bottom-n)
 - [stack()](#stack)
-- [unstack()](#unstack)
+- [unstack() (chuyển một cấp của Index thành cột pivot dữ liệu)](#unstack-chuyển-một-cấp-của-index-thành-cột-pivot-dữ-liệu)
   - [.eval() (Đánh giá biểu thức)](#eval-đánh-giá-biểu-thức)
   - [.format()](#format)
 ---
@@ -254,7 +254,7 @@ df.tail(2)
 # 4 E   10
 # 5 F    5
 ```
-## .value_counts() (Dùng để đếm tần suât xuất hiện của các các giá trị trong một Series (hoặc cột của Dataframe))
+## .value_counts() (đếm tần suât xuất hiện của các các giá trị trong một Series hoặc cột Dataframe)
 **Syn**
 ```bash
 Series.value_counts(
@@ -272,6 +272,7 @@ Series.value_counts(
         - False: giữ nguyên thứ tự xuất hiện
     + ascending: True là sắp xếp tăng dần
     + dropna: Có tính NaN không. False là có tính
+- Output: Series
 ```
 **Ex**
 ```python
@@ -316,6 +317,8 @@ main()
 **Syn**
 ```python
 df["column"].unique()
+
+- Output: list
 ```
 **Ex**
 ```python
@@ -1378,7 +1381,103 @@ df.nlargest(5, "salary")
 df.nsmallest(5, "salary")
 ```
 # stack()
-# unstack() 
+# unstack() (chuyển một cấp của Index thành cột pivot dữ liệu)
+```bash
+Trong bài toán của bạn, nó biến dữ liệu từ dạng danh sách các ô (cell) thành bảng (table).
+```
+**Syn**
+```bash
+
+- Input:
+    + fill_value trong unstack() dùng để điền giá trị vào những ô không có dữ liệu sau khi chuyển từ dạng hàng sang dạng bảng.
+```
+**Ex1: Không dùng fill_value**
+```bash
+import pandas as pd
+
+df = pd.DataFrame({
+    "row_index": [0, 0, 1],
+    "col_index": [0, 2, 1],
+    "text": ["A", "B", "C"]
+})
+print(df)
+# row_index	col_index	text
+# 0	        0	        A
+# 0	        2	        B
+# 1	        1	        C
+
+table = (
+    df.groupby(["row_index", "col_index"])["text"]
+      .apply(" ".join)
+      .unstack()
+)
+print(table)
+# row_index	0	1	2
+# 0	        A	NaN	B
+# 1	        NaN	C	NaN
+# Các vị trí không có dữ liệu sẽ là NaN.
+```
+**Ex2: Dùng fill_value**
+```python
+table = (
+    df.groupby(["row_index", "col_index"])["text"]
+      .apply(" ".join)
+      .unstack(fill_value="")
+)
+# row_index	0	1	2
+# 0	        A		B
+# 1	        	C	
+# Thay vì NaN sẽ là chuỗi rỗng "".
+```
+**Ex3: Dùng fill_value="N/A"**
+```python
+table = (
+    df.groupby(["row_index", "col_index"])["text"]
+      .apply(" ".join)
+      .unstack(fill_value="N/A")
+)
+# row_index	0	1	2
+# 0	        A	N/A	B
+# 1	        N/A	C	N/A
+```
+**Ex**:
+```bash
+import pandas as pd
+
+df = pd.DataFrame({
+    "row_index": [0, 0, 1, 1],
+    "col_index": [0, 1, 0, 1],
+    "text": ["A", "B", "C", "D"]
+})
+
+print(df)
+#    row_index  col_index text
+# 0          0          0    A
+# 1          0          1    B
+# 2          1          0    C
+# 3          1          1    D
+
+# Bước 1: Group
+s = (
+    df.groupby(["row_index", "col_index"])["text"]
+      .apply(" ".join)
+)
+
+print(s)
+row_index  col_index
+# 0          0            A
+#            1            B
+# 1          0            C
+#            1            D
+# Kết quả là một Series có MultiIndex:
+
+table = s.unstack()
+print(table)
+# col_index  0  1
+# row_index
+# 0          A  B
+# 1          C  D
+```
 ```python
 import pandas as pd
 

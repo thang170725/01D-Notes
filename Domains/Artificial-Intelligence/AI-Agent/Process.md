@@ -3,6 +3,7 @@
 - [Qdrant (để lưu vector)](#qdrant-để-lưu-vector)
 - [Hybrid Search](#hybrid-search)
 - [Redis (một cuốn sổ ghi chú siêu nhanh)](#redis-một-cuốn-sổ-ghi-chú-siêu-nhanh)
+- [LangSmith không phải là framework. Nó là một nền tảng (platform) để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent.](#langsmith-không-phải-là-framework-nó-là-một-nền-tảng-platform-để-quan-sát-debug-đánh-giá-và-kiểm-thử-ứng-dụng-llmai-agent)
 - [Ask (câu hỏi liên quan đến AI agent)](#ask-câu-hỏi-liên-quan-đến-ai-agent)
   - [Có fine-tune được AI Agent không?](#có-fine-tune-được-ai-agent-không)
   - [nếu hỏi AI mà AI trả lời sai thì em sẽ xử lý thế nào, kiểu mình cần lấy thông tin A mà nó nói thông tin B](#nếu-hỏi-ai-mà-ai-trả-lời-sai-thì-em-sẽ-xử-lý-thế-nào-kiểu-mình-cần-lấy-thông-tin-a-mà-nó-nói-thông-tin-b)
@@ -158,557 +159,146 @@ So sánh
         Đọc trực tiếp từ RAM
     => RAM nhanh hơn SSD rất nhiều.
 ```
-Trong AI Agent, thường có 4 mục đích lớn.
-
-Session
-
-Conversation State
-
-Pending Actions
-
-Cache
+**Trong AI Agent, thường có 4 mục đích lớn**
+```bash
 1. Session
+    Ví dụ:
+        User đăng nhập. -> Sau khi login thành công.
+            Server tạo
+                session_id: abc123xyz
+                Redis lưu
+                Key session:abc123xyz
+                ↓
+                Value
+                    { 
+                        user_id:15,
+                        role:"premium",
+                        expire:30 phút
+                    }
+            
+            Lần request tiếp theo.
+                Browser gửi
+                    Cookie
+                    abc123xyz
 
-Ví dụ
+                Server
+                ↓
+                Redis
+                ↓
+                Lấy được: user_id=15 (Không cần query MariaDB) -> Nhanh hơn.
 
-User đăng nhập.
+    Session Pipeline
+        Login
+        ↓
+        MariaDB
+        ↓
+        Password đúng
+        ↓
+        Redis (session:abc123)
+        ↓
+        Browser lưu Cookie
+        ↓
+        Request mới
+        ↓
+        Redis
+        ↓
+        User
 
-MariaDB
-
-user
-
-id = 15
-
-email
-
-password
-
-Sau khi login thành công.
-
-Server tạo
-
-session_id
-
-abc123xyz
-
-Redis lưu
-
-Key
-
-session:abc123xyz
-
-↓
-
-Value
-
-{
-
-user_id:15,
-
-role:"premium",
-
-expire:30 phút
-
-}
-
-Lần request tiếp theo.
-
-Browser gửi
-
-Cookie
-
-abc123xyz
-
-Server
-
-↓
-
-Redis
-
-↓
-
-Lấy được
-
-user_id=15
-
-Không cần query MariaDB.
-
-Nhanh hơn.
-
-Session Pipeline
-Login
-
-↓
-
-MariaDB
-
-↓
-
-Password đúng
-
-↓
-
-Redis
-
-session:abc123
-
-↓
-
-Browser lưu Cookie
-
-↓
-
-Request mới
-
-↓
-
-Redis
-
-↓
-
-User
 2. Cache
+    Ví dụ: Có API GET /exercises
+        Trong DB: 10000 bài tập
+        Mỗi request: SELECT * FROM exercise -> Tốn.
+        Thay vào đó. Lần đầu:
+            Client
+            ↓
+            MariaDB
+            ↓
+            10000 exercise
+            ↓
+            Redis Cache
+        Lần sau
+            Client
+            ↓
+            Redis
+            ↓
+            Trả luôn: Không cần query SQL.
 
-Ví dụ
-
-Có API
-
-GET
-
-/exercises
-
-Trong DB
-
-10000 bài tập
-
-Mỗi request
-
-SELECT *
-
-FROM exercise
-
-Tốn.
-
-Thay vào đó.
-
-Lần đầu
-
-Client
-
-↓
-
-MariaDB
-
-↓
-
-10000 exercise
-
-↓
-
-Redis Cache
-
-Lần sau
-
-Client
-
-↓
-
-Redis
-
-↓
-
-Trả luôn
-
-Không cần query SQL.
-
-Ví dụ
-
-Redis
-
-Key
-
-exercise:list
-
-↓
-
-Value
-
-JSON
-Cache Pipeline
-Request
-
-↓
-
-Redis
-
-↓
-
-Có
-
-↓
-
-Return
-
-Nếu không có
-
-Redis
-
-↓
-
-MariaDB
-
-↓
-
-Redis
-
-↓
-
-Return
 3. Conversation State
+    Đây là phần AI Agent dùng rất nhiều.
 
-Đây là phần AI Agent dùng rất nhiều.
+    Ví dụ.
+        Bạn chat
+            User: Tôi muốn giảm cân.
+            AI  : Được.
+        Sau đó
+            User: Nam. 25 tuổi. 70kg. Rồi. Tôi nên ăn gì? Nếu AI không nhớ. Nó sẽ hỏi lại.
+            Redis sẽ lưu. conversation:abc
+                {
+                    goal:"lose weight",
+                    gender:"male",
+                    age:25,
+                    weight:70
+                }
+        Lần prompt sau.
+            AI đọc.
+            ↓
+            Biết ngay.
 
-Ví dụ.
+    Pipeline
+        Prompt
+        ↓
+        Redis
+        ↓
+        Conversation State
+        ↓
+        LLM
+        ↓
+        Update State
+        ↓
+        Redis
 
-Bạn chat
-
-User
-
-Tôi muốn giảm cân.
-
-AI
-
-Được.
-
-Sau đó
-
-User
-
-Nam.
-
-25 tuổi.
-
-70kg.
-
-
-Rồi
-
-Tôi nên ăn gì?
-
-Nếu AI không nhớ.
-
-Nó sẽ hỏi lại.
-
-Redis sẽ lưu.
-
-conversation:abc
-
-{
-
-goal:"lose weight",
-
-gender:"male",
-
-age:25,
-
-weight:70
-
-}
-
-Lần prompt sau.
-
-AI đọc.
-
-↓
-
-Biết ngay.
-
-Pipeline
-
-Prompt
-
-↓
-
-Redis
-
-↓
-
-Conversation State
-
-↓
-
-LLM
-
-↓
-
-Update State
-
-↓
-
-Redis
 4. Pending Actions
-
-Đây là phần rất nhiều AI Agent production sử dụng.
-
-Ví dụ.
-
-User
-
-Đặt lịch tập cho ngày mai.
-
-AI
-
-↓
-
-Bạn có chắc không?
-
-User
-
-Chưa trả lời.
-
-Redis lưu
-
-pending_action
-
-{
-
-type:"create_workout",
-
-date:"tomorrow"
-
-}
-
-5 phút sau.
-
-User
-
-Đồng ý.
-
-AI
-
-↓
-
-Redis
-
-↓
-
-Ồ
-
-Đang chờ action
-
-↓
-
-Thực hiện luôn.
-
-Nếu không có Redis.
-
-AI sẽ quên.
-
-Pipeline
-
-User
-
-↓
-
-AI
-
-↓
-
-Pending Action
-
-↓
-
-Redis
-
-↓
-
-Sau
-
-User
-
-OK
-
-↓
-
-Redis
-
-↓
-
-Action
-
-↓
-
-Database
-
-Ví dụ khác
-
-AI
-
-Bạn có muốn xóa lịch tập không?
-
-Redis
-
-pending
-
-delete_workout
-
-id=15
-
-User
-
-Có.
-
-↓
-
-AI
-
-↓
-
-Redis
-
-↓
-
-Biết đang xác nhận việc gì.
-
-↓
-
-Delete.
-
-Trong AI Agent của bạn
-
-Giả sử pipeline.
-
-Gemini
-
-↓
-
-Tool Calling
-
-↓
-
-Workout Tool
-
-↓
-
-MariaDB
-
-Redis sẽ nằm ở đâu?
-
-User
-
-↓
-
-Redis
-
-(Session)
-
-↓
-
-Redis
-
-(Conversation)
-
-↓
-
-Gemini
-
-↓
-
-Tool Calling
-
-↓
-
-MariaDB
-
-↓
-
-Redis
-
-(Cache)
-
-↓
-
-Response
-Ví dụ thực tế
-
-User
-
-Tôi muốn tăng cơ.
-
-Redis
-
-goal
-
-↓
-
-gain muscle
-
-User
-
-Tôi chỉ có tạ đơn.
-
-Redis
-
-equipment
-
-↓
-
-dumbbell
-
-User
-
-Lập lịch tập giúp tôi.
-
-Gemini
-
-↓
-
-Đọc Redis
-
-↓
-
-Biết
-
-goal
-
-gain muscle
-
-equipment
-
-dumbbell
-
-↓
-
-Gọi Tool
-
-↓
-
-Sinh Workout.
-
-Không cần người dùng nhập lại.
-
-Tóm tắt
-Redis dùng để lưu	Có lưu lâu dài không?	Ví dụ
-Session	❌ Không (TTL)	Người dùng đã đăng nhập
-Cache	❌ Không (TTL)	Danh sách bài tập phổ biến
-Conversation State	❌ Thường không (TTL)	Mục tiêu, tuổi, cân nặng trong cuộc trò chuyện
-Pending Actions	❌ Không (TTL)	"Đang chờ xác nhận xóa lịch tập"
-Phân biệt Redis và MariaDB trong AI Agent
-
-Hãy nhớ một quy tắc rất dễ:
-
-MariaDB = "Sự thật" (Source of Truth): lưu user, workout, recipe, exercise, lịch sử... Những dữ liệu này phải bền vững và không được mất.
-Redis = "Bộ nhớ ngắn hạn" (Working Memory): lưu những gì AI hoặc ứng dụng cần nhớ trong vài phút đến vài giờ để xử lý nhanh.
-
-Có thể hình dung như một người làm việc:
-
-MariaDB giống tủ hồ sơ: mọi tài liệu chính thức đều được cất ở đó.
-Redis giống tờ giấy ghi chú trên bàn: ghi những việc đang làm, thông tin cần dùng ngay. Làm xong thì bỏ đi.
-
-Đó cũng chính là cách hầu hết các AI Agent production hiện nay sử dụng Redis.
-Câu trả lời ngắn:
-
-LangSmith không phải là framework. Nó là một nền tảng (platform) để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent.
+    Đây là phần rất nhiều AI Agent production sử dụng.
+
+    Ví dụ.
+        User: Đặt lịch tập cho ngày mai.
+        AI  : Bạn có chắc không?
+        User: Chưa trả lời.
+            Redis lưu: pending_action {
+                type:"create_workout",
+                date:"tomorrow"
+            }
+
+        5 phút sau.
+            User: Đồng ý.
+            AI
+            ↓
+            Redis
+            ↓
+            Ồ. Đang chờ action
+            ↓
+            Thực hiện luôn.
+
+        Nếu không có Redis. AI sẽ quên.
+
+    Pipeline
+        User
+        ↓
+        AI
+        ↓
+        Pending Action
+        ↓
+        Redis
+        ↓
+        Sau User: OK
+        ↓
+        Redis
+        ↓
+        Action
+        ↓
+        Database
+```
+# LangSmith không phải là framework. Nó là một nền tảng (platform) để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent.
 
 Nó giống như:
 
