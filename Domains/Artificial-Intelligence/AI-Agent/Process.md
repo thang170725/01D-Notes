@@ -3,7 +3,7 @@
 - [Qdrant (để lưu vector)](#qdrant-để-lưu-vector)
 - [Hybrid Search](#hybrid-search)
 - [Redis (một cuốn sổ ghi chú siêu nhanh)](#redis-một-cuốn-sổ-ghi-chú-siêu-nhanh)
-- [LangSmith không phải là framework. Nó là một nền tảng (platform) để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent.](#langsmith-không-phải-là-framework-nó-là-một-nền-tảng-platform-để-quan-sát-debug-đánh-giá-và-kiểm-thử-ứng-dụng-llmai-agent)
+- [LangSmith (để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent)](#langsmith-để-quan-sát-debug-đánh-giá-và-kiểm-thử-ứng-dụng-llmai-agent)
 - [Ask (câu hỏi liên quan đến AI agent)](#ask-câu-hỏi-liên-quan-đến-ai-agent)
   - [Có fine-tune được AI Agent không?](#có-fine-tune-được-ai-agent-không)
   - [nếu hỏi AI mà AI trả lời sai thì em sẽ xử lý thế nào, kiểu mình cần lấy thông tin A mà nó nói thông tin B](#nếu-hỏi-ai-mà-ai-trả-lời-sai-thì-em-sẽ-xử-lý-thế-nào-kiểu-mình-cần-lấy-thông-tin-a-mà-nó-nói-thông-tin-b)
@@ -298,526 +298,78 @@ So sánh
         ↓
         Database
 ```
-# LangSmith không phải là framework. Nó là một nền tảng (platform) để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent.
+# LangSmith (để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent)
+```bash
+LangSmith không phải là framework. Nó là một nền tảng (platform)
+    Nó giống như:
+        Với Backend → có Grafana, Prometheus, Jaeger
+        Với AI Agent → có LangSmith
 
-Nó giống như:
-
-Với Backend → có Grafana, Prometheus, Jaeger
-Với AI Agent → có LangSmith
-Hệ sinh thái LangChain
-
-Rất nhiều người nhầm các thành phần này.
-
-LangChain
-│
-├── LangChain
-│     Framework viết AI Agent
-│
-├── LangGraph
-│     Framework xây AI Workflow/Agent phức tạp
-│
-└── LangSmith
-      Monitoring + Debug + Evaluation
-
-Nó giống như
-
-FastAPI
-
-↓
-
-Application
-
-↓
-
-Prometheus
-
-↓
-
-Grafana
-
-LangSmith đóng vai trò giống
-
-Prometheus
-
-+
-
-Grafana
-
-+
-
-Jaeger
-
-cho AI.
-
-LangSmith làm gì?
-
+So sánh:
+    - LangChain: Framework viết AI Agent
+    - LangGraph: Framework xây AI Workflow/Agent phức tạp
+    - LangSmith: Monitoring + Debug + Evaluation
+```
+**LangSmith làm gì?**
+```bash
 Giả sử AI Agent của bạn.
-
-User
-
-↓
-
-Gemini
-
-↓
-
-Tool Calling
-
-↓
-
-MariaDB
-
-↓
-
-Gemini
-
-↓
-
-Response
+    User
+    ↓
+    Gemini
+    ↓
+    Tool Calling
+    ↓
+    MariaDB
+    ↓
+    Gemini
+    ↓
+    Response
 
 Một ngày AI trả lời sai.
-
-Bạn sẽ hỏi
-
-Sai ở đâu?
-
-Nếu không có LangSmith.
-
-Bạn chỉ có
-
-print(prompt)
-
-hoặc
-
-logger.info(...)
-
-Khá cực.
+    Bạn sẽ hỏi: Sai ở đâu?
+    
+    Nếu không có LangSmith.
+        Bạn chỉ có print(prompt) hoặc logger.info(...) -> Khá cực.
 
 Có LangSmith.
-
-Bạn mở dashboard.
-
-Thấy toàn bộ.
-
-Request
-
-↓
-
-System Prompt
-
-↓
-
-User Prompt
-
-↓
-
-LLM Response
-
-↓
-
-Tool Calling
-
-↓
-
-SQL
-
-↓
-
-Output
-
-↓
-
-Final Answer
-
-Toàn bộ pipeline hiện ra.
-
-Ví dụ
-
-User
-
-Lập lịch tập cho tôi.
+    Bạn mở dashboard. -> Thấy toàn bộ.
+        Request
+        ↓
+        System Prompt
+        ↓
+        User Prompt
+        ↓
+        LLM Response
+        ↓
+        Tool Calling
+        ↓
+        SQL
+        ↓
+        Output
+        ↓
+        Final Answer
+=> Toàn bộ pipeline hiện ra.
+```
+**Workflow**
+```bash
+User: Lập lịch tập cho tôi.
 
 LangSmith hiển thị
-
-Trace
-
-Request
-
+    Trace Request
 ↓
-
 Prompt
-
 ↓
-
 Gemini
-
 ↓
-
-Tool
-
-get_user_profile()
-
+Tool: get_user_profile()
 ↓
-
-Tool
-
-search_exercise()
-
+Tool: search_exercise()
 ↓
-
 Gemini
-
 ↓
-
 Final Response
-
-Bạn click từng bước.
-
-Biết ngay.
-
-Nó lưu gì?
-
-Ví dụ.
-
-Prompt
-
-You are workout assistant...
-
-↓
-
-Model
-
-gemini-2.5-pro
-
-↓
-
-Input
-
-I want bigger chest
-
-↓
-
-Output
-
-Bench Press...
-
-↓
-
-Latency
-
-2.3 seconds
-
-↓
-
-Cost
-
-$0.003
-
-↓
-
-Token
-
-Input
-
-1230
-
-Output
-
-420
-
-Tất cả đều có.
-
-Trace
-
-Đây là tính năng mạnh nhất.
-
-Ví dụ
-
-AI Agent.
-
-User
-
-↓
-
-Gemini
-
-↓
-
-Tool A
-
-↓
-
-Tool B
-
-↓
-
-Tool C
-
-↓
-
-Gemini
-
-LangSmith sẽ vẽ
-
-Run
-
-│
-
-├── Prompt
-
-├── LLM
-
-├── Tool A
-
-├── Tool B
-
-├── Tool C
-
-└── Response
-
-Giống Jaeger Trace.
-
-Evaluation
-
-Ví dụ.
-
-Bạn có
-
-100 prompt
-
-Muốn biết.
-
-AI mới có tốt hơn AI cũ không.
-
-LangSmith chạy
-
-100 Prompt
-
-↓
-
-Gemini
-
-↓
-
-Score
-
-↓
-
-Accuracy
-
-↓
-
-Hallucination
-
-↓
-
-Latency
-
-Đây gọi là
-
-Evaluation
-Dataset
-
-Ví dụ.
-
-Prompt
-
-↓
-
-Expected Answer
-Tăng cơ
-
-↓
-
-Workout A
-Giảm cân
-
-↓
-
-Workout B
-
-LangSmith lưu.
-
-Sau này test.
-
-AI mới.
-
-↓
-
-So sánh.
-
-Playground
-
-Bạn sửa Prompt.
-
-You are fitness coach...
-
-↓
-
-Run.
-
-↓
-
-Đổi Prompt.
-
-↓
-
-Run.
-
-↓
-
-So sánh.
-
-Không cần sửa code.
-
-Monitoring
-
-Production.
-
-10000 request/ngày
-
-LangSmith biết.
-
-Average latency
-
-2.1s
-Prompt lỗi
-
-2%
-Hallucination
-
-...
-Cost
-
-Ví dụ.
-
-Gemini.
-
-Input Tokens
-
-Output Tokens
-
-Total Cost
-
-Hiển thị luôn.
-
-Có bắt buộc dùng LangChain không?
-
-Không.
-
-Đây là điểm nhiều người nhầm.
-
-Bạn có thể dùng
-
-FastAPI
-
-+
-
-Gemini SDK
-
-+
-
-Qdrant
-
-+
-
-SQLAlchemy
-
-Không có LangChain.
-
-Vẫn dùng LangSmith được.
-
-Hoặc thậm chí chỉ gửi trace thủ công.
-
-Trong dự án AI Agent của bạn
-
-Pipeline hiện tại của bạn có dạng:
-
-User
-        │
-        ▼
-FastAPI
-        │
-        ▼
-Gemini
-        │
-        ▼
-Tool Calling
-        │
-        ├── MariaDB
-        ├── Redis
-        ├── Qdrant
-        ▼
-Gemini
-        ▼
-Response
-
-Nếu tích hợp LangSmith.
-
-User
-        │
-        ▼
-LangSmith Trace  ← Ghi toàn bộ pipeline
-        │
-        ▼
-FastAPI
-        │
-        ▼
-Gemini
-        │
-        ▼
-Tool Calling
-        │
-        ├── SQL
-        ├── Redis
-        ├── Qdrant
-        ▼
-Gemini
-        ▼
-Response
-
-Sau này nếu AI trả lời sai.
-
-Bạn mở dashboard sẽ biết ngay:
-
-Prompt có đúng không?
-Tool nào được gọi?
-SQL chạy ra dữ liệu gì?
-Qdrant trả về document nào?
-Gemini nhận context gì?
-Gemini sinh câu trả lời như thế nào?
-
-Không cần đọc hàng nghìn dòng log.
-
-LangSmith có nên học không?
-
-Theo lộ trình của bạn (xây AI Agent production), mình đánh giá:
-
-Công nghệ	Mức độ ưu tiên
-FastAPI Async	⭐⭐⭐⭐⭐
-SQLAlchemy Async	⭐⭐⭐⭐⭐
-Redis	⭐⭐⭐⭐⭐
-Qdrant / pgvector	⭐⭐⭐⭐⭐
-Tool Calling	⭐⭐⭐⭐⭐
-MCP	⭐⭐⭐⭐☆
-LangGraph	⭐⭐⭐⭐☆ (nếu workflow phức tạp)
-LangSmith	⭐⭐⭐⭐☆ (rất nên biết khi đưa AI Agent lên production)
-
-Điểm mấu chốt là: LangSmith không giúp AI "thông minh hơn". Nó giúp bạn hiểu AI đang làm gì, debug nhanh hơn, đánh giá chất lượng, theo dõi chi phí và vận hành hệ thống AI Agent một cách chuyên nghiệp. Đây là lý do nó được nhiều đội ngũ sử dụng khi ứng dụng AI đã bước sang giai đoạn production.
-Nếu phải chọn một công nghệ AI được nhắc đến nhiều nhất năm 2025–2026, thì đó là MCP (Model Context Protocol).
-
-Nhưng có một điều nhiều người hiểu sai:
-
-MCP không phải AI.
-
-MCP không phải framework.
-
-MCP là một giao thức (Protocol).
-
-Nó giống như:
-
-HTTP là giao thức để Browser nói chuyện với Server.
-SQL là ngôn ngữ để nói chuyện với Database.
+=> Bạn click từng bước. Biết ngay nó lưu gì?
+```
 # Ask (câu hỏi liên quan đến AI agent)
 ## Có fine-tune được AI Agent không?
 ```bash

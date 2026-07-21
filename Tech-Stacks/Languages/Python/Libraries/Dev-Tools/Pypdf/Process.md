@@ -1,11 +1,14 @@
+- [PdfReader (mở PDF để đọc)](#pdfreader-mở-pdf-để-đọc)
+  - [.pages](#pages)
 - [PdfWriter (đối tượng dùng để tạo hoặc ghi ra một file PDF mới)](#pdfwriter-đối-tượng-dùng-để-tạo-hoặc-ghi-ra-một-file-pdf-mới)
   - [.add\_page()](#add_page)
   - [.append() (Thêm trang)](#append-thêm-trang)
 ---
+# PdfReader (mở PDF để đọc)
+## .pages 
 # PdfWriter (đối tượng dùng để tạo hoặc ghi ra một file PDF mới)
 ```bash
 - Hãy hình dung:
-    + PdfReader = mở PDF để đọc.
     + PdfWriter = tạo PDF kết quả.
 ```
 **Ex: copy toàn bộ trang từ input.pdf sang output.pdf**

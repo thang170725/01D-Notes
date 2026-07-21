@@ -1,9 +1,9 @@
-- [Introduction](#introduction)
+- [Pypdf Introduction (thư viện để đọc, chỉnh sửa, ghép, tách và ghi file PDF. .)](#pypdf-introduction-thư-viện-để-đọc-chỉnh-sửa-ghép-tách-và-ghi-file-pdf-)
 - [Installation](#installation)
 ---
-# Introduction
+# Pypdf Introduction (thư viện để đọc, chỉnh sửa, ghép, tách và ghi file PDF. .)
 ```bash
-- pypdf là thư viện để đọc, chỉnh sửa, ghép, tách và ghi file PDF. Nó không dùng để chuyển SVG sang PDF như CairoSVG, mà dùng sau khi đã có PDF.
+pypdf không dùng để chuyển SVG sang PDF như CairoSVG, mà dùng sau khi đã có PDF
 ```
 # Installation
 ```bash
