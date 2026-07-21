@@ -1,37 +1,37 @@
 - [Dictionary (lưu dữ liệu theo cặp key: value để tra cứu nhanh)](#dictionary-lưu-dữ-liệu-theo-cặp-key-value-để-tra-cứu-nhanh)
-  - [{} \& dict](#--dict)
-  - [Remove (Xóa)](#remove-xóa)
+  - [{} \& dict (Để tạo dict)](#--dict-để-tạo-dict)
+  - [Remove (thao tác xóa)](#remove-thao-tác-xóa)
     - [.pop() (xóa mục có tên khóa được chỉ định)](#pop-xóa-mục-có-tên-khóa-được-chỉ-định)
-  - [Del \& .clear()](#del--clear)
-  - [Display (hiển thị, cung cấp thông tin)](#display-hiển-thị-cung-cấp-thông-tin)
+    - [del (Để xóa cặp key: value trong dictionary)](#del-để-xóa-cặp-key-value-trong-dictionary)
+    - [.clear() (Để xóa sạch dictionary)](#clear-để-xóa-sạch-dictionary)
+    - [.popitem() (Xóa một phần tử được chèn cuối cùng)](#popitem-xóa-một-phần-tử-được-chèn-cuối-cùng)
+  - [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
+    - [.keys() (Để lấy ra tên các key)](#keys-để-lấy-ra-tên-các-key)
+    - [.values() (Trả về danh sách các giá trị của dictionary)](#values-trả-về-danh-sách-các-giá-trị-của-dictionary)
     - [.get() (trả về value của một key nào đó)](#get-trả-về-value-của-một-key-nào-đó)
-- [.items()](#items)
-- [.copy()](#copy)
-  - [.keys() (Để lấy ra tên các key)](#keys-để-lấy-ra-tên-các-key)
-  - [.values() (Trả về danh sách các giá trị của dictionary)](#values-trả-về-danh-sách-các-giá-trị-của-dictionary)
-  - [\[\] \& .update()](#--update)
-- [.popitem()](#popitem)
-  - [\*\* (unpack dict)](#-unpack-dict)
-  - [Exercise 1](#exercise-1)
+    - [.items() (Dùng để lấy ra các cặp key, value)](#items-dùng-để-lấy-ra-các-cặp-key-value)
+  - [Process (nhóm xử lý)](#process-nhóm-xử-lý)
+    - [.copy()](#copy)
+    - [\[\] \& .update()](#--update)
+    - [\*\* (unpack dict)](#-unpack-dict)
 - [Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)](#set-không-được-sắp-xếp-theo-thứ-tự-không-thể-thay-đổi-và-không-cho-phép-các-giá-trị-trùng-lặp)
   - [.clear()](#clear)
   - [del](#del)
   - [.remove()](#remove)
   - [.discard()](#discard)
   - [.intersection()](#intersection)
-- [\&](#)
+  - [\& (tìm phần tử chung)](#-tìm-phần-tử-chung)
   - [.union()](#union)
-  - [.add()](#add)
-- [.update()](#update)
+  - [.add() (Để thêm một phần tử vào trong một set)](#add-để-thêm-một-phần-tử-vào-trong-một-set)
+- [.update() (Để thêm các mục từ tập hợp khác vào tập hợp hiện tại)](#update-để-thêm-các-mục-từ-tập-hợp-khác-vào-tập-hợp-hiện-tại)
+  - [intersection\_update() (Chỉ giữ lại các phần tử trùng lặp, nhưng nó sẽ thay đổi tập hợp gốc thay vì trả về tập hợp mới)](#intersection_update-chỉ-giữ-lại-các-phần-tử-trùng-lặp-nhưng-nó-sẽ-thay-đổi-tập-hợp-gốc-thay-vì-trả-về-tập-hợp-mới)
+  - [.pop() (xóa một mục, nhưng phương thức này sẽ xóa một mục ngẫu nhiên, do đó bạn không thể chắc chắn mục nào sẽ bị xóa)](#pop-xóa-một-mục-nhưng-phương-thức-này-sẽ-xóa-một-mục-ngẫu-nhiên-do-đó-bạn-không-thể-chắc-chắn-mục-nào-sẽ-bị-xóa)
 ---
 # Dictionary (lưu dữ liệu theo cặp key: value để tra cứu nhanh)
-## {} & dict
-```bash
-- Để tạo dict.
-```
+## {} & dict (Để tạo dict)
 **Syn**
 ```bash
-dic = {key: value, …} – name[key]
+dic = {key: value, …}
 ```
 **Ex**
 ```python
@@ -43,7 +43,7 @@ thisdict = {
 
 print(thisdict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
 ```
-## Remove (Xóa)
+## Remove (thao tác xóa)
 ### .pop() (xóa mục có tên khóa được chỉ định)
 **Ex**
 ```python
@@ -57,13 +57,8 @@ thisdict.pop("model")
 
 print(thisdict) # {'brand': 'Ford', 'year': 1964}
 ```
-## Del & .clear()
-```bash
-- del   : Để xóa cặp key: value trong dictionary.
-- clear : Để xóa sạch dictionary.
-```
-
-**Ex2: del**
+### del (Để xóa cặp key: value trong dictionary)
+**Ex**
 ```python
 thisdict =	{
   "brand": "Ford",
@@ -75,7 +70,8 @@ del thisdict["model"]
 
 print(thisdict) # {'brand': 'Ford', 'year': 1964}
 ```
-**Ex3: clear**
+### .clear() (Để xóa sạch dictionary)
+**Ex**
 ```python
 thisdict =	{
   "brand": "Ford",
@@ -87,7 +83,65 @@ thisdict.clear()
 
 print(thisdict) # {}
 ```
-## Display (hiển thị, cung cấp thông tin)
+### .popitem() (Xóa một phần tử được chèn cuối cùng)
+**Ex**
+```python
+thisdict =	{
+  "brand": "Ford",
+  "model": "Mustang",
+  "year": 1964
+}
+
+thisdict.popitem()
+
+print(thisdict) # {'brand': 'Ford', 'model': 'Mustang'}
+```
+## Display (cung cấp thông tin)
+### .keys() (Để lấy ra tên các key)
+**Ex1: keys**
+```python
+li = [
+    {'name': 'thang', 'address': 'hanoi', 'age': 20}, 
+    {'name': 'minh', 'address': 'hcm', 'age': 21},
+    {'name': 'chien', 'address': 'da nang', 'age': 21}
+]
+
+keys = list(li[0].keys())
+
+print(keys) # ['name', 'address', 'age']
+```
+**Ex2: keys**
+```python
+dir = dict(name='John', age=25, city='New York')
+
+print(dir.keys(), type(dir.keys())) # dict_keys(['name', 'age', 'city']) <class 'dict_keys'>
+```
+### .values() (Trả về danh sách các giá trị của dictionary)
+```bash
+<variable>.keys()
+```
+**Ex1: values**
+```python
+data = {
+    'names': ['Thang', "Minh", "Nghia", "Quy"],
+    'ages': [18, 20, 23, 16],
+    'scores': [10, 9, 6, 7]
+}
+
+print(data.values()) # dict_values([['Thang', 'Minh', 'Nghia', 'Quy'], [18, 20, 23, 16], [10, 9, 6, 7]])
+```
+**Ex4: values**
+```python
+data = {
+    'size': 850,
+    'bedrooms': 2,
+    'age': 10,
+    'price': 200000
+}
+
+
+print(list(data.values())) # [850, 2, 10, 200000]
+```
 ### .get() (trả về value của một key nào đó)
 **Syn**
 ```bash
@@ -111,10 +165,11 @@ for label in labels:
 print(counts)
 {'no': 2}
 ```
-# .items()
+### .items() (Dùng để lấy ra các cặp key, value)
 ```bash
-- Dùng để lấy ra các cặp key, value. Thường dùng trong vòng lặp để lặp qua các key, value. 
-- Phương thức này trả về từng mục trong từ điển dưới dạng các bộ trong danh sách.
+Thường dùng trong vòng lặp để lặp qua các key, value. 
+
+Phương thức này trả về từng mục trong từ điển dưới dạng các bộ trong danh sách.
 ```
 **Syn**
 ```bash
@@ -141,7 +196,8 @@ for i in dir.items():
 # ('age', 25)
 # ('city', 'New York')
 ```
-# .copy()
+## Process (nhóm xử lý)
+### .copy()
 **Ex**
 ```python
 thisdict = {
@@ -154,52 +210,7 @@ mydict = thisdict.copy()
 
 print(mydict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
 ```
-## .keys() (Để lấy ra tên các key)
-**Ex1: keys**
-```python
-li = [
-    {'name': 'thang', 'address': 'hanoi', 'age': 20}, 
-    {'name': 'minh', 'address': 'hcm', 'age': 21},
-    {'name': 'chien', 'address': 'da nang', 'age': 21}
-]
-
-keys = list(li[0].keys())
-
-print(keys) # ['name', 'address', 'age']
-```
-**Ex2: keys**
-```python
-dir = dict(name='John', age=25, city='New York')
-
-print(dir.keys(), type(dir.keys())) # dict_keys(['name', 'age', 'city']) <class 'dict_keys'>
-```
-## .values() (Trả về danh sách các giá trị của dictionary)
-```bash
-<variable>.keys()
-```
-**Ex1: values**
-```python
-data = {
-    'names': ['Thang', "Minh", "Nghia", "Quy"],
-    'ages': [18, 20, 23, 16],
-    'scores': [10, 9, 6, 7]
-}
-
-print(data.values()) # dict_values([['Thang', 'Minh', 'Nghia', 'Quy'], [18, 20, 23, 16], [10, 9, 6, 7]])
-```
-**Ex4: values**
-```python
-data = {
-    'size': 850,
-    'bedrooms': 2,
-    'age': 10,
-    'price': 200000
-}
-
-
-print(list(data.values())) # [850, 2, 10, 200000]
-```
-## [] & .update()
+### [] & .update()
 ```bash
 - []        : Để thay đổi values của keys hoặc thêm keys-values mới.
 - update    : để thay đổi values của keys.
@@ -238,57 +249,8 @@ thisdict["color"] = "red"
 
 print(thisdict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964, 'color': 'red'}
 ```
-# .popitem()
-```bash
-Xóa một phần tử được chèn cuối cùng.
-```
-**Ex**
-```python
-thisdict =	{
-  "brand": "Ford",
-  "model": "Mustang",
-  "year": 1964
-}
+### ** (unpack dict)
 
-thisdict.popitem()
-
-print(thisdict) # {'brand': 'Ford', 'model': 'Mustang'}
-```
-## ** (unpack dict)
-## Exercise 1
-**Topic**
-```bash
-1. Khởi tạo một từ điển gồm n sinh viên, keys lưu mã sinh viên, values lưu điểm trung bình.
-2. Hiển thị dưới dạng bảng.
-```
-**Answer**
-```python
-def input_dict():
-    n = int(input('Số lượng sinh viên: '))
-
-    dic = {
-        input(f'mã của sinh viên thứ {i+1}: '): 
-        float(input(f'Điểm của sinh viên thứ {i+1}: '))
-        for i in range(n)
-    }
-
-    return dic
-
-def print_table(dic: dict):
-    headers = ['Mã sinh viên', 'Điểm trung bình']
-
-    widths_id = max(len(headers[0]), max(len(k) for k in dic))
-    width_score = max(len(headers[1]), max(len(str(v)) for v in dic.values()))
-
-    print(f'{headers[0]:<{widths_id}} | {headers[1]:<{width_score}}')
-    print(f'{"-"*widths_id}-+-{"-"*width_score}')
-
-    for k, v in dic.items():
-        print(f'{k:<{widths_id}} | {v:<{width_score}}')
-
-dic = input_dict()
-print_table(dic)
-```
 # Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)
 ```bash
 Sử dụng set để:
@@ -391,7 +353,7 @@ Set = mySet.intersection(orther)
 
 print(Set) # {'Lemon', 'orange'}
 ```
-# &
+## & (tìm phần tử chung)
 **Ex2**
 ```python
 mySet= {"apple", "banana", "orange", "Lemon"}
@@ -423,10 +385,7 @@ orther = {"orange", "Lemon", "Passion"}
 Set = mySet | orther
 print(Set) # {'Passion', 'orange', 'Lemon', 'banana', 'apple'}
 ```
-## .add()
-```bash
-Để thêm một phần tử vào trong một set. 
-```
+## .add() (Để thêm một phần tử vào trong một set)
 **Syn**
 ```bash
 <variable>.add(value)
@@ -438,10 +397,7 @@ thisset.add("orange")
 print(thisset) # {'apple', 'cherry', 'banana', 'orange'}
 ```
 
-# .update()
-```bash
-Để thêm các mục từ tập hợp khác vào tập hợp hiện tại.
-```
+# .update() (Để thêm các mục từ tập hợp khác vào tập hợp hiện tại)
 **Syn**  
 ```bash
 <variable>.update(value)
@@ -452,10 +408,8 @@ mySet= {"apple"}
 orther = {"banana"}
 mySet.update(orther)
 print(mySet) # {'apple', 'banana'}
-```# intersection_update()
-```bash
-Chỉ giữ lại các phần tử trùng lặp, nhưng nó sẽ thay đổi tập hợp gốc thay vì trả về tập hợp mới.
 ```
+## intersection_update() (Chỉ giữ lại các phần tử trùng lặp, nhưng nó sẽ thay đổi tập hợp gốc thay vì trả về tập hợp mới)
 **Syn**
 ```bash 
 <variable1>.intersection_update(<variable2>)
@@ -467,10 +421,8 @@ orther = {"orange", "Lemon", "Passion"}
 mySet.intersection_update(orther)
 
 print(mySet) # {'orange', 'Lemon'}
-```# .pop()
-```bash
-Bạn cũng có thể sử dụng phương thức pop để xóa một mục, nhưng phương thức này sẽ xóa một mục ngẫu nhiên, do đó bạn không thể chắc chắn mục nào sẽ bị xóa.
 ```
+## .pop() (xóa một mục, nhưng phương thức này sẽ xóa một mục ngẫu nhiên, do đó bạn không thể chắc chắn mục nào sẽ bị xóa)
 **Syn** 
 ```bash
 <variable>.pop()

@@ -16,10 +16,13 @@
   - [.dtype (Xem kiểu dữ liệu 1 series)](#dtype-xem-kiểu-dữ-liệu-1-series)
   - [.dtypes (Xem kiểu dữ liệu của tất cả các cột bằng)](#dtypes-xem-kiểu-dữ-liệu-của-tất-cả-các-cột-bằng)
   - [.isin() (kiểm tra một giá trị có nằm trong một danh sách/tập hợp giá trị hay không)](#isin-kiểm-tra-một-giá-trị-có-nằm-trong-một-danh-sáchtập-hợp-giá-trị-hay-không)
+  - [.empty (kiểm tra xem một DataFrame hoặc Series có rỗng hay không)](#empty-kiểm-tra-xem-một-dataframe-hoặc-series-có-rỗng-hay-không)
 - [Tạo thêm cột mới trong dataframe](#tạo-thêm-cột-mới-trong-dataframe)
   - [pd.notnull()](#pdnotnull)
-  - [.isna() \& .isnull()](#isna--isnull)
+  - [.isna() (tìm giá trị NaN trong một cột dữ liệu, thường để lọc data)](#isna-tìm-giá-trị-nan-trong-một-cột-dữ-liệu-thường-để-lọc-data)
+  - [.isnull()](#isnull)
 - [Search (nhóm tìm kiếm, lọc)](#search-nhóm-tìm-kiếm-lọc)
+  - [\[\]](#)
   - [loc (Chọn theo nhãn hoặc theo điều kiện)](#loc-chọn-theo-nhãn-hoặc-theo-điều-kiện)
   - [iloc (integer location) (dùng để truy cập dữ liệu theo vị trí chỉ số)](#iloc-integer-location-dùng-để-truy-cập-dữ-liệu-theo-vị-trí-chỉ-số)
   - [.notna()](#notna)
@@ -459,6 +462,51 @@ print(mask)
 # 3    False
 # Name: city, dtype: bool
 ```
+## .empty (kiểm tra xem một DataFrame hoặc Series có rỗng hay không)
+**Syn**
+```bash
+df | series.empty # Lưu ý: Không có dấu ngoặc () vì đây là thuộc tính.
+```
+**Ex1: DataFrame rỗng**
+```python
+import pandas as pd
+
+df = pd.DataFrame()
+
+print(df.empty) # True
+```
+**Ex2: DataFrame có dữ liệu**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "A": [1, 2],
+    "B": [3, 4]
+})
+
+print(df.empty) # False
+```
+**Ex3: Sau khi lọc dữ liệu**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    "Age": [20, 25, 30]
+})
+
+result = df[df["Age"] > 40]
+
+print(result)
+# Empty DataFrame
+# Columns: [Age]
+# Index: []
+
+if result.empty:
+    print("Không tìm thấy dữ liệu")
+else:
+    print(result)
+# Không tìm thấy dữ liệu
+```
 # Tạo thêm cột mới trong dataframe
 ```python
 import pandas as pd
@@ -517,10 +565,7 @@ print(check)
 1  False  False
 2   True   True
 ```
-## .isna() & .isnull()
-```bash
-Dùng để tìm giá trị NaN trong một cột dữ liệu, thường để lọc data.
-```
+## .isna() (tìm giá trị NaN trong một cột dữ liệu, thường để lọc data)
 **Ex1: dùng với series**
 ```python
 import pandas as pd
@@ -543,6 +588,7 @@ print(non_salary)
 # 5    False
 # Name: salary, dtype: bool
 ```
+## .isnull()
 **Ex2: Dùng với Dataframe**
 ```python
 import pandas as pd
@@ -565,6 +611,58 @@ print(non_salary)
 # 5  False   False  False
 ```
 # Search (nhóm tìm kiếm, lọc)
+## []
+**Ex**
+```python
+col_names = (
+    df[["col_index", "type"]]
+    .drop_duplicates(subset="col_index")
+    .sort_values("col_index")
+)
+# row_index	col_index	text	type
+# 0	2	Táo	fruit
+# 0	0	An	name
+# 0	1	20	age
+# 1	2	Cam	fruit
+# 1	0	Bình	name
+# 1	1	25	age
+
+# Ở đây:
+# col_index = 0 luôn có type = name
+# col_index = 1 luôn có type = age
+# col_index = 2 luôn có type = fruit
+# Bước 1: Chỉ lấy 2 cột cần thiết
+# df[["col_index", "type"]]
+
+# col_index	type
+# 2	fruit
+# 0	name
+# 1	age
+# 2	fruit
+# 0	name
+# 1	age
+
+# Bước 2: Xóa các dòng trùng col_index
+# Kết quả:
+# col_index	type
+# 2	fruit
+# 0	name
+# 1	age
+
+# Vì:
+# col_index = 2 xuất hiện 2 lần → giữ lần đầu.
+# col_index = 0 xuất hiện 2 lần → giữ lần đầu.
+# col_index = 1 xuất hiện 2 lần → giữ lần đầu.
+
+# Bước 3: Sắp xếp theo col_index
+# .sort_values("col_index")
+
+# Kết quả:
+# col_index	type
+# 0	name
+# 1	age
+# 2	fruit
+```
 ## loc (Chọn theo nhãn hoặc theo điều kiện)
 **Ex1: Lấy ra một hàng theo index**
 ```python

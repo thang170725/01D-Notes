@@ -6,44 +6,68 @@
 Thời gian vốn không có câu trả lời.
 Nó chỉ làm chúng ta dịu nhẹ những vết thương trong lòng
 ```
-
-2.
+**2**
+```bash
 Người từng dạy tôi thức khuya
 Giờ tôi muốn học cách ngủ sớm.
-2.	
+```
+**3**
+```bash	
 Người đem lòng yêu cả dòng sông
 Chỉ vì họ chưa nhìn thấy biển cả
 Riêng tôi, thấy cả dải ngân hà,
 Nhưng vẫn ôm trong lòng một vì sao.
-3.
+```
+**4**
+```bash
 Trưởng thành chính là đối diên với những mất mát trong thinh lặng
-4.
+```
+**5**
+```bash
 Sẽ rất khó để một người yêu lấy một người, nhưng càng khó hơn khi tình yêu chứa đầy sự kỳ vọng đến từ một phía
-5.
+```
+**6**
+```bash
 Nỗi đau đôi khi không cần lời khuyên 
 Chỉ cần người góp mặt lặng lẽ ở bên
-6.
+```
+**7**
+```bash
 Có những quyết định tuy kiên quyết 
 Nhưng vẫn mang trong mình những tiếc nuối
-7.
+```
+**8**
+```bash
 Bạn sẽ không biết giá trị của bình yên cho đến khi bạn mất đi rất nhiều.
-9.
+```
+**9**
+```bash
 Một cánh của không nguyện ý mở
 Tiếp tục gõ cửa là bất lịch sự
-10.
+```
+**10**
+```bash
 Biển cả rất đẹp
 Nhưng thuyền phải cập bờ.
-11.
+```
+**11**
+```bash
 Sẽ đến lúc bạn không muốn vượt cả đại dương
 Chỉ vì một người không dám nhảy qua vũng nước vì bạn.
-12.
+```
+**12**
+```bash
 Một vài phong cảnh chỉ có thể thích, không thể cất giữ
-
-13.
+```
+**13**
+```bash
 Bỏ ngoài tai trăm lời tán tỉnh
 Vì tôi chỉ thấy một mình em xinh
 Thề với chúa đây không phải là thính
 Đây là em trong mắt kẻ si tình
-14.
+```
+**14**
+```bash
 Em đánh mất đi người bạn tồi,
 Còn anh đánh mất đi cả bầu trời
+```

@@ -581,68 +581,26 @@ x = [1,2], lamda=5, lamda=-1
         - xoay
         - kéo dãn
         - xoay tiếp
-Cụ thể
-V
-T
-
-Xoay không gian đầu vào.
-
-Σ
-
-Kéo dãn theo các trục độc lập.
-
-Các giá trị trên đường chéo:
-
-gọi là singular values.
-U
-
-Xoay không gian đầu ra.
-
-Trực giác cực mạnh
 
 SVD giống như:
+    tìm hệ trục “tự nhiên nhất” để mô tả phép biến đổi.
 
-tìm hệ trục “tự nhiên nhất”
-để mô tả phép biến đổi.
-
-Ví dụ vật lý
-
-Tưởng tượng:
-
-bạn cầm một cục đất sét
-xoay nó
-bóp theo vài hướng chính
-rồi xoay lại
-
-Đó chính là SVD.
+    Ví dụ vật lý
+        Tưởng tượng: bạn cầm một cục đất sét -> xoay nó -> bóp theo vài hướng chính -> rồi xoay lại -> Đó chính là SVD.
 
 Tại sao SVD quan trọng khủng khiếp?
+    Vì nó:
+        - nén dữ liệu
+        - lọc nhiễu
+        - tìm cấu trúc ẩn
+        - PCA
+        - recommender systems
+        - latent semantics
+        - diffusion models
+        - LLM compression
 
-Vì nó:
-
-nén dữ liệu
-lọc nhiễu
-tìm cấu trúc ẩn
-PCA
-recommender systems
-latent semantics
-diffusion models
-LLM compression
-
-đều dựa trên nó.
-
-Trực giác sâu nhất
-Eigen decomposition
-
-Tìm:
-
-“các hướng bất biến”.
-
-SVD
-
-Tìm:
-
-“cách đơn giản nhất để mô tả mọi biến đổi”.
+SVD Tìm:
+    “cách đơn giản nhất để mô tả mọi biến đổi”.
 ```
 ## Ma trận Gram
 **Ex**
