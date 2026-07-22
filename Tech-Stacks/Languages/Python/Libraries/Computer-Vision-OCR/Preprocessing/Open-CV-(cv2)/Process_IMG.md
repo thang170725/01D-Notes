@@ -37,6 +37,8 @@
 - [BoundingRect()](#boundingrect)
 - [Histogram](#histogram)
   - [cv2.calcHist()](#cv2calchist)
+- [Datatype (chuyển đổi kiểu dữ liệu)](#datatype-chuyển-đổi-kiểu-dữ-liệu)
+  - [.tobytes()](#tobytes)
 ---
 # Transform (làm ảnh mới khác ảnh gốc)
 ## [] (Crop ảnh)
@@ -410,11 +412,23 @@ for i, pt in enumerate(mapped_many):
 cv2.resize(
    src=frame, 
    dsize=(300, 200),
+   interpolation=cv2.INTER_AREA
 )
 
 - Input:
     + src: Ảnh gốc
     + dsize: Kích thước đích dưới dạng (width, height) (bắt buộc nếu không dùng fx, fy)
+    + interpolation: cách OpenCV tính toán pixel mới
+        - cv2.INTER_NEAREST: Nó lấy pixel gần nhất.
+            + Ưu điểm: rất nhanh
+            + Nhược điểm: ảnh bị răng cưa, vỡ hình
+        - cv2.INTER_LINEAR: Đây là mặc định của OpenCV. Nó lấy trung bình của các pixel xung quanh.
+        - cv2.INTER_CUBIC: Thuật toán nội suy bậc ba.
+            + Ưu điểm: đẹp
+            + Nhược điểm: chậm
+        - cv2.INTER_LANCZOS4: Thuật toán cao cấp. Nhìn tới 8 × 8 = 64 pixel xung quanh. Cho chất lượng rất cao khi phóng to.
+        - cv2.INTER_AREA: Nó tính theo diện tích (Area Resampling).
+            + thường dùng tốt cho thu nhỏ ảnh
 ```
 **Ex**
 ```python
@@ -875,3 +889,5 @@ plt.show()
 
 cv.waitKey(0)
 ```
+# Datatype (chuyển đổi kiểu dữ liệu)
+## .tobytes()

@@ -1,5 +1,6 @@
 - [Parameter (tham số mô hình)](#parameter-tham-số-mô-hình)
 - [Hyperparameter](#hyperparameter)
+- [Minkowski (Minkowski Distance - đo "độ xa" giữa hai điểm).](#minkowski-minkowski-distance---đo-độ-xa-giữa-hai-điểm)
 - [Phương sai](#phương-sai)
 - [Độ lệch chuẩn tổng thể và độ lệch chuẩn mẫu](#độ-lệch-chuẩn-tổng-thể-và-độ-lệch-chuẩn-mẫu)
 - [Bias (mô hình lệch có hệ thống khỏi đáp án đúng)](#bias-mô-hình-lệch-có-hệ-thống-khỏi-đáp-án-đúng)
@@ -13,8 +14,11 @@
   - [Gaussian Mixture Model (GMM)](#gaussian-mixture-model-gmm)
 - [Tree](#tree)
   - [Bagging (Bootstrap Aggregating)](#bagging-bootstrap-aggregating)
+  - [Bootstrap](#bootstrap)
+- [Aggregating](#aggregating)
   - [Boosting](#boosting)
-  - [Gradient Boosting](#gradient-boosting)
+  - [AdaBoost (Boosting đời đầu)](#adaboost-boosting-đời-đầu)
+  - [Gradient Boosting (không phải là một mô hình cụ thể. Nó là một framework / kỹ thuật xây dựng mô hình ensemble method)](#gradient-boosting-không-phải-là-một-mô-hình-cụ-thể-nó-là-một-framework--kỹ-thuật-xây-dựng-mô-hình-ensemble-method)
   - [Entropy (độ hỗn loạn)](#entropy-độ-hỗn-loạn)
   - [Information Gain (độ tăng thông tin):](#information-gain-độ-tăng-thông-tin)
   - [Thuật toán ID3 (Iterative Dichotomiser 3)](#thuật-toán-id3-iterative-dichotomiser-3)
@@ -91,110 +95,63 @@ Bạn phải quyết định:
 7. k trong KNN
     k = 3 nghĩa là xem 3 hàng xóm gần nhất.
 ```
-Có lẽ bạn đang hỏi khoảng cách Minkowski (Minkowski Distance).
-
-Đây là một cách đo "độ xa" giữa hai điểm, và nó là công thức tổng quát bao gồm nhiều loại khoảng cách quen thuộc khác.
-
-Công thức:
-
+# Minkowski (Minkowski Distance - đo "độ xa" giữa hai điểm).
+**Formula**
+```bash
 d(x,y)=(∑
-i=1
-n
-	​
 
-∣x
-i
-	​
-
-−y
-i
-	​
-
-∣
-p
-)
-1/p
-
-Trong đó:
-
-x, y: hai điểm dữ liệu.
-p: tham số quyết định cách đo khoảng cách.
-Hình dung đơn giản
-
+- x, y: hai điểm dữ liệu.
+- p: tham số quyết định cách đo khoảng cách.
+```
+**Ex**
+```bash
 Giả sử bạn có hai điểm:
+    - A = (1, 1)
+    - B = (4, 5)
 
-A = (1, 1)
-B = (4, 5)
+1. p = 1 → Manhattan Distance # Tùy chọn giá trị p, bạn sẽ có các kiểu khoảng cách khác nhau.
+    Tên gọi xuất phát từ việc đi trên các ô phố vuông góc như ở Manhattan.
 
-Tùy chọn giá trị p, bạn sẽ có các kiểu khoảng cách khác nhau.
-
-1. p = 1 → Manhattan Distance
-
-Tên gọi xuất phát từ việc đi trên các ô phố vuông góc như ở Manhattan.
-
-Bạn chỉ được đi ngang và dọc:
-
-∣4−1∣+∣5−1∣=3+4=7
-
-Giống như phải đi theo đường phố chứ không được cắt ngang qua các tòa nhà.
+    Bạn chỉ được đi ngang và dọc:
+        ∣4−1∣+∣5−1∣=3+4=7
+    # Giống như phải đi theo đường phố chứ không được cắt ngang qua các tòa nhà.
 
 2. p = 2 → Euclidean Distance
-
-Đây là khoảng cách "đường chim bay".
-
-d=
-(4−1)
-2
-+(5−1)
-2
-	​
-
-
-Kết quả:
-
-d=5
-
-Đây là khoảng cách quen thuộc nhất trong hình học.
+    Đây là khoảng cách "đường chim bay".
+    
+    d = (4−1)**2 +(5−1)**2 = 5
+    => Đây là khoảng cách quen thuộc nhất trong hình học.
 
 3. p → ∞ → Chebyshev Distance
-
-Chỉ quan tâm đến độ lệch lớn nhất giữa các chiều.
-
-Ví dụ:
-
-lệch theo x = 3
-lệch theo y = 4
-
-Khoảng cách = 4.
-
-Giống như quân vua trong cờ vua cần bao nhiêu bước tối thiểu để tới đích.
-
-Tại sao cần Minkowski?
-
+    Chỉ quan tâm đến độ lệch lớn nhất giữa các chiều.
+    
+    Ví dụ:
+        - lệch theo x = 3
+        - lệch theo y = 4
+    Khoảng cách = 4.
+```
+**Tại sao cần Minkowski?**
+```bash
 Vì nhiều thuật toán cần đo khoảng cách:
-
-K-Nearest Neighbors (KNN)
-K-Means
-Phân cụm dữ liệu
-Tìm điểm tương tự
+    - K-Nearest Neighbors (KNN)
+    - K-Means
 
 Thay vì viết riêng từng công thức, người ta dùng Minkowski và chọn giá trị p:
-
-p	Loại khoảng cách
-1	Manhattan
-2	Euclidean
-∞	Chebyshev
-Cách nhớ nhanh
-
+    - p	: Loại khoảng cách
+    - 1	: Manhattan
+    - 2	: Euclidean
+    - ∞	: Chebyshev
+```
+**Cách nhớ nhanh**
+```bash
 Hãy coi Minkowski như một "hộp công thức khoảng cách":
-
-p = 1 → đi theo đường phố → Manhattan.
-p = 2 → đi thẳng → Euclidean.
-p rất lớn → chỉ nhìn độ lệch lớn nhất → Chebyshev.
+    - p = 1 → đi theo đường phố → Manhattan.
+    - p = 2 → đi thẳng → Euclidean.
+    - p rất lớn → chỉ nhìn độ lệch lớn nhất → Chebyshev.
 
 Nói ngắn gọn:
-
-Minkowski Distance là công thức tổng quát sinh ra nhiều loại khoảng cách khác nhau bằng cách thay đổi tham số p.
+    Minkowski Distance là công thức tổng quát sinh ra nhiều loại khoảng cách khác nhau bằng cách thay đổi tham số p.
+```
 # Phương sai
 ```bash
 Phương sai là một số đo cho biết mức độ phân tán của các giá trị trong tập dữ liệu so với giá trị trung bình của tập dữ liệu đó. Phương sai cho biết các giá trị trong tập dữ liệu “lan rộng” ra sao xung quanh giá trị trung bình.
@@ -699,46 +656,66 @@ Minh họa bằng dart
           X      |      |      |      O
 => Gần tâm hơn.
 ```
-
-
-Bootstrap là gì?
+## Bootstrap
+```bash
 Đây là phần đầu tiên của Bagging.
-Giả sử dataset gốc:
-ABCDE
-Ta lấy mẫu ngẫu nhiên có hoàn lại (with replacement).
+    Giả sử dataset gốc: ABCDE
+        Ta lấy mẫu ngẫu nhiên có hoàn lại (with replacement).
+
 Ví dụ:
-Dataset 1
-ABBDE
-Dataset 2
-AACDE
-Dataset 3
-BCCEE
+    - Dataset 1: ABBDE
+    - Dataset 2: AACDE
+    - Dataset 3: BCCEE
+
 Chú ý:
-Một dòng có thể xuất hiện nhiều lầnMột dòng có thể không xuất hiện
-vì lấy mẫu có hoàn lại.
-
-Tại sao phải làm vậy?
+    - Một dòng có thể xuất hiện nhiều lần
+    - Một dòng có thể không xuất hiện
+    -> vì lấy mẫu có hoàn lại.
+```
+**Tại sao phải làm vậy?**
+```bash
 Mỗi dataset con sẽ hơi khác nhau.
-Dataset 1↓Tree 1Dataset 2↓Tree 2Dataset 3↓Tree 3
+    Dataset 1
+    ↓
+    Tree 1
 
-Ví dụ trực quan
+    Dataset 2
+    ↓
+    Tree 2
+
+    Dataset 3
+    ↓
+    Tree 3
+```
+**Ex**
+```bash
 Giả sử cần dự đoán giá căn nhà mới.
+
 Các cây dự đoán:
-Tree1 → 2.0 tỷTree2 → 2.2 tỷTree3 → 1.9 tỷTree4 → 2.1 tỷTree5 → 2.0 tỷ
+    - Tree1 → 2.0 tỷ
+    - Tree2 → 2.2 tỷ
+    - Tree3 → 1.9 tỷ
+    - Tree4 → 2.1 tỷ
+    - Tree5 → 2.0 tỷ
+```
+# Aggregating
+```bash
+Regression: # Lấy trung bình.
+    (2.0 + 2.2 + 1.9 + 2.1 + 2.0)/5= 2.04 tỷ
 
-Aggregating
-Regression:
-Lấy trung bình.
-(2.0 + 2.2 + 1.9 + 2.1 + 2.0)/5= 2.04 tỷ
+Classification: # Lấy phiếu bầu.
 
-Classification:
-Lấy phiếu bầu.
 Ví dụ phân loại chó/mèo:
-Tree1 → ChóTree2 → ChóTree3 → MèoTree4 → ChóTree5 → Mèo
+    - Tree1 → Chó
+    - Tree2 → Chó
+    - Tree3 → Mèo
+    - Tree4 → Chó
+    - Tree5 → Mèo
 Kết quả:
-Chó = 3 phiếuMèo = 2 phiếu
-=> Dự đoán:
-Chó
+    - Chó = 3 phiếu
+    - Mèo = 2 phiếu
+=> Dự đoán: Chó
+```
 **Random Forest liên quan gì?**
 ```bash
 Random Forest chính là:
@@ -766,192 +743,52 @@ Boosting
     - Phải train tuần tự.
 ```
 ## Boosting
-Boosting là một họ thuật toán (framework/ý tưởng), còn Gradient Boosting là một thuật toán cụ thể thuộc họ Boosting.
-Quan hệ giống như:
-Machine Learning│├── Linear Regression├── Decision Tree├── SVM└── Boosting     │     ├── AdaBoost     ├── Gradient Boosting     ├── XGBoost     ├── LightGBM     └── CatBoost
-
-1. Boosting là gì?
+```bash
 Ý tưởng của Boosting:
-
-Kết hợp nhiều mô hình yếu (weak learners) để tạo thành một mô hình mạnh.
+    Kết hợp nhiều mô hình yếu (weak learners) để tạo thành một mô hình mạnh.
 
 Thông thường weak learner là:
-Decision Tree nhỏ(max_depth = 1, 2, 3)
+    Decision Tree nhỏ(max_depth = 1, 2, 3)
+
 Boosting hoạt động tuần tự:
-Model 1   ↓Model 2 sửa lỗi của Model 1   ↓Model 3 sửa lỗi của Model 2   ↓...
-Cuối cùng cộng kết quả lại.
-
-Ví dụ:
-Dự đoán giá nhà.
-Tree đầu tiên dự đoán:
-100 triệu
-Giá thật:
-120 triệu
-Sai:
-+20 triệu
-Tree thứ hai học phần sai đó:
-+15 triệu
-Còn sai:
-+5 triệu
-Tree thứ ba học tiếp:
-+4 triệu
-Kết quả cuối:
-100 + 15 + 4= 119 triệu
-
-2. AdaBoost (Boosting đời đầu)
-Thuật toán Boosting nổi tiếng đầu tiên là:
-AdaBoost
-Ý tưởng:
-
-
-Dữ liệu bị dự đoán sai sẽ được tăng trọng số.
-
-
-Các mẫu khó sẽ được chú ý nhiều hơn ở vòng sau.
-
-
-Ví dụ:
-Mẫu A: dự đoán đúng→ giảm trọng sốMẫu B: dự đoán sai→ tăng trọng số
-Tree tiếp theo tập trung học mẫu B.
-
-3. Gradient Boosting là gì?
-Gradient Boosting là một loại Boosting khác.
-Nó không dùng trọng số mẫu như AdaBoost.
-Thay vào đó:
-
-Mỗi cây mới sẽ học phần lỗi (residual) của mô hình hiện tại.
-
-
-Ví dụ:
-Giá nhà thật:
-120
-Tree 1 dự đoán:
-100
-Residual:
-120 - 100 = 20
-Tree 2 học:
-20
-Dự đoán mới:
-100 + 20 = 120
-
-Tại sao gọi là Gradient?
-Vì về mặt toán học, nó đang tối ưu hàm mất mát bằng cách đi theo hướng:
-Negative Gradient
-giống Gradient Descent.
-Ý tưởng cốt lõi là:
-Tree mới ≈ Gradient của Loss
-Nên gọi là Gradient Boosting.
-
-4. Công thức trực quan
-Giả sử đã có mô hình:
-F₀(x)
-Sau khi thêm cây thứ nhất:
-F₁(x) = F₀(x) + Tree₁(x)
-Sau khi thêm cây thứ hai:
-F₂(x) = F₁(x) + Tree₂(x)
-Tiếp tục:
-Fₘ(x) = Fₘ₋₁(x) + Treeₘ(x)
-Mỗi cây chỉ học phần sai còn lại.
-
-5. XGBoost, LightGBM, CatBoost là gì?
-Đều là các phiên bản cải tiến của Gradient Boosting.
-XGBoost
-Thêm:
-
-
-Regularization
-
-
-Pruning
-
-
-Parallelization
-
-
-Nhanh và chính xác hơn Gradient Boosting gốc.
-
-LightGBM
-Tối ưu cho:
-Dataset lớn
-Rất nhanh.
-
-CatBoost
-Tối ưu cho:
-Categorical features
-Ví dụ:
-Giới tínhThành phốNghề nghiệp
-
-Tóm tắt
-Khái niệmÝ nghĩaBoostingÝ tưởng tổng quát: nhiều mô hình yếu học tuần tự để sửa lỗi nhauAdaBoostMột thuật toán Boosting dùng trọng số mẫuGradient BoostingMột thuật toán Boosting dùng gradient/residual để sửa lỗiXGBoostPhiên bản nâng cấp của Gradient BoostingLightGBMGradient Boosting tối ưu tốc độCatBoostGradient Boosting tối ưu dữ liệu categorical
-Nói ngắn gọn:
-
-Boosting là "gia đình", Gradient Boosting là một "thành viên" trong gia đình đó. AdaBoost, Gradient Boosting, XGBoost, LightGBM, CatBoost đều thuộc nhóm Boosting.
-
-**Tại sao Boosting giảm Bias?**
-```bash
-Giả sử cây đầu:
-    - Dự đoán 2 tỷ
-    - Thực tế 3 tỷ
-    - Sai: +1 tỷ
-
-Cây sau học phần sai:
-    - +0.8 tỷ
-
-Cây sau nữa:
-    - +0.15 tỷ
-
-Sai số ngày càng nhỏ.
-=> Bias giảm.
+    Model 1
+    ↓
+    Model 2 sửa lỗi của Model 1   
+    ↓
+    Model 3 sửa lỗi của Model 2   
+    ↓
+    ...
+=> Cuối cùng cộng kết quả lại.
 ```
-## Gradient Boosting 
+**Ex**
 ```bash
-không phải là một mô hình cụ thể.
-Nó là một framework / kỹ thuật xây dựng mô hình (ensemble method).
+Dự đoán giá nhà.
+    Tree đầu tiên dự đoán: 100 triệu
+        Giá thật: 120 triệu
+        Sai: +20 triệu
+    
+    Tree thứ hai học phần sai đó: +15 triệu
+        Còn sai: +5 triệu
+    
+    Tree thứ ba học tiếp: +4 triệu
+=> Kết quả cuối: 100 + 15 + 4= 119 triệu
+```
+## AdaBoost (Boosting đời đầu)
+```bash
+Thuật toán Boosting nổi tiếng đầu tiên là: AdaBoost
+    Ý tưởng:
+        - Dữ liệu bị dự đoán sai sẽ được tăng trọng số.
+        - Các mẫu khó sẽ được chú ý nhiều hơn ở vòng sau.
+```
+**Ex**
+```bash
+Mẫu A: dự đoán đúng → giảm trọng số
+Mẫu B: dự đoán sa i→ tăng trọng số
+=> Tree tiếp theo tập trung học mẫu B.
+```
+## Gradient Boosting (không phải là một mô hình cụ thể. Nó là một framework / kỹ thuật xây dựng mô hình ensemble method)
+```bash
 
-Ví dụ dễ hiểu
-Giả sử bạn muốn dự đoán giá nhà.
-Bạn xây cây quyết định đầu tiên:
-Tree 1
-Dự đoán:
-Giá thậtDự đoán2 tỷ1.8 tỷ3 tỷ2.5 tỷ4 tỷ4.2 tỷ
-Nó vẫn còn sai.
-Sai số:
-Giá thậtDự đoánError2 tỷ1.8 tỷ+0.23 tỷ2.5 tỷ+0.54 tỷ4.2 tỷ-0.2
-
-Gradient Boosting nói:
-
-Đừng xây cây thứ hai để dự đoán giá nhà nữa.
-Hãy xây cây thứ hai để học phần sai số của cây thứ nhất.
-
-
-Tree 2 học:
-+0.2+0.5-0.2
-Sau đó:
-Prediction = Tree1 + Tree2
-
-Vẫn còn sai?
-Lại xây Tree 3 học phần sai còn lại.
-Prediction= Tree1+ Tree2+ Tree3
-
-Cứ lặp đi lặp lại:
-Prediction =Tree1+ Tree2+ Tree3+ ...+ TreeN
-Mỗi cây mới sửa lỗi cho các cây trước.
-Đó chính là ý tưởng của Boosting.
-
-Tại sao gọi là "Gradient" Boosting?
-Ban đầu có thuật toán Boosting đơn giản là AdaBoost.
-Sau này người ta nhận ra:
-
-Việc tìm lỗi để sửa có thể được diễn tả bằng Gradient Descent.
-
-Giống như Neural Network:
-Loss↓Tính gradient↓Update tham số
-
-Gradient Boosting cũng vậy.
-Ở mỗi bước:
-Loss↓Tính gradient của loss↓Huấn luyện cây mới để học gradient đó↓Cập nhật mô hình
-Nên mới có tên:
-Gradient Boosting
 
 Công thức trực quan
 Giả sử:
@@ -1159,6 +996,98 @@ XGBoost / LightGBM / CatBoost → các phiên bản tối ưu của Gradient Boo
 
 
 Nói ngắn gọn: Gradient Boosting là một thuật toán học tăng cường theo kiểu ensemble, không phải một mô hình cụ thể. Kết quả cuối cùng là một mô hình gồm nhiều cây quyết định được cộng lại với nhau.
+```
+```bash
+Gradient Boosting là một loại Boosting khác. Nó không dùng trọng số mẫu như AdaBoost.
+    Thay vào đó: Mỗi cây mới sẽ học phần lỗi (residual) của mô hình hiện tại.
+```
+**Ex**
+```bash
+Giả sử bạn muốn dự đoán giá nhà.
+
+Bạn xây cây quyết định đầu tiên:
+    Tree 1 Dự đoán:
+        Giá thật    Dự đoán
+        2 tỷ        1.8 tỷ
+        3 tỷ        2.5 tỷ
+        4 tỷ        4.2 tỷ
+    -> Nó vẫn còn sai.
+        
+        Sai số:
+            Giá thật    Dự đoán
+            2 tỷ        1.8 tỷ      +0.23 tỷ
+                        2.5 tỷ      +0.54 tỷ
+                        4.2 tỷ      -0.2
+
+    Gradient Boosting nói:
+        - Đừng xây cây thứ hai để dự đoán giá nhà nữa.
+        - Hãy xây cây thứ hai để học phần sai số của cây thứ nhất.
+
+
+    Tree 2 học:
+        +0.2
+        +0.5
+        -0.2
+    
+        Sau đó: Prediction = Tree1 + Tree2
+
+    Vẫn còn sai? Lại xây Tree 3 học phần sai còn lại.
+        Prediction= Tree1+ Tree2+ Tree3
+
+    Cứ lặp đi lặp lại:
+        Prediction =Tree1+ Tree2+ Tree3+ ...+ TreeN
+        Mỗi cây mới sửa lỗi cho các cây trước.
+        => Đó chính là ý tưởng của Boosting.
+```
+**Ex**
+```bash
+Giá nhà thật: 120
+
+Tree 1 dự đoán: 100
+    Residual: 120 - 100 = 20
+
+Tree 2 học: 20
+    Dự đoán mới: 100 + 20 = 120
+```
+**Tại sao gọi là Gradient?**
+```bash
+Vì về mặt toán học, nó đang tối ưu hàm mất mát bằng cách đi theo hướng:
+    Negative Gradient. giống Gradient Descent.
+
+Ý tưởng cốt lõi là:
+    Tree mới ≈ Gradient của Loss => Nên gọi là Gradient Boosting.
+```
+**XGBoost, LightGBM, CatBoost là gì?**
+```bash
+Đều là các phiên bản cải tiến của Gradient Boosting.
+    - XGBoost
+        Thêm:
+            + Regularization
+            + Pruning
+            + Parallelization
+        => Nhanh và chính xác hơn Gradient Boosting gốc.
+
+    - LightGBM
+        Tối ưu cho: Dataset lớn. Rất nhanh.
+
+    - CatBoost
+        Tối ưu cho: Categorical features
+```
+**Tại sao Boosting giảm Bias?**
+```bash
+Giả sử cây đầu:
+    - Dự đoán 2 tỷ
+    - Thực tế 3 tỷ
+    - Sai: +1 tỷ
+
+Cây sau học phần sai:
+    - +0.8 tỷ
+
+Cây sau nữa:
+    - +0.15 tỷ
+
+Sai số ngày càng nhỏ.
+=> Bias giảm.
 ```
 ## Entropy (độ hỗn loạn)
 ```bash

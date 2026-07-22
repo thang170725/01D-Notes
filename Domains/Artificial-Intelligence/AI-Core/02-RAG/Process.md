@@ -15,6 +15,10 @@
   - [Tool RAG (Retrival Tool)](#tool-rag-retrival-tool)
   - [SQL RAG (Không retrieve tài liệu. Retrieve schema)](#sql-rag-không-retrieve-tài-liệu-retrieve-schema)
   - [API RAG (Retrieve API](#api-rag-retrieve-api)
+  - [Hybrid RAG (Đây là loại phổ biến nhất trong doanh nghiệp)](#hybrid-rag-đây-là-loại-phổ-biến-nhất-trong-doanh-nghiệp)
+  - [Graph RAG (Không lưu vector. Mà lưu Graph)](#graph-rag-không-lưu-vector-mà-lưu-graph)
+  - [Agentic RAG (Đây là xu hướng hiện nay)](#agentic-rag-đây-là-xu-hướng-hiện-nay)
+  - [Multi-Modal RAG (Không chỉ text. Có thể retrieve Image, Video, ...)](#multi-modal-rag-không-chỉ-text-có-thể-retrieve-image-video-)
 ---
 # RAG Introduction (Tìm tài liệu trước → rồi mới trả lời)
 ```bash
@@ -602,47 +606,29 @@ Excel
 Website
 Wiki
 ...
-
 ↓
-
 Chunk
-
 ↓
-
 Embedding
-
 ↓
-
 Vector DB
-
 ↓
-
 Top K
-
 ↓
-
 LLM
-
 ↓
-
 Answer
 ```
 **Ex**
 ```bash
 Hỏi:
-Chính sách hoàn tiền là gì?
-
-↓
-
-Tìm trong PDF
-
-↓
-
-Lấy đoạn liên quan
-
-↓
-
-LLM trả lời
+    Chính sách hoàn tiền là gì?
+    ↓
+    Tìm trong PDF
+    ↓
+    Lấy đoạn liên quan
+    ↓
+    LLM trả lời
 ```
 ## Tool RAG (Retrival Tool)
 ```bash
@@ -723,235 +709,112 @@ Embedding description.
     ↓
     LLM gọi API.
 ```
-Hybrid RAG
-
-Đây là loại phổ biến nhất trong doanh nghiệp.
-
+## Hybrid RAG (Đây là loại phổ biến nhất trong doanh nghiệp)
+```bash
 Không chỉ Vector Search.
-
-Mà là
-
-User
-
-↓
-
-BM25
-
-+
-
-Embedding
-
-↓
-
-Fusion
-
-↓
-
-Top K
-
-Ví dụ
-
+    Mà là
+        User
+        ↓
+        BM25 + Embedding
+        ↓
+        Fusion
+        ↓
+        Top K
+```
+**Ex**
+```bash
 "GPT-4.1"
-
-
-Embedding đôi khi tìm không tốt.
-
-BM25 lại rất mạnh với keyword.
-
-Người ta kết hợp cả hai.
-
-BM25
-
-+
-
-Vector
-
-=
-
-Hybrid Search
-
-Milvus
-
-Weaviate
-
-Elastic
-
-Azure AI Search
-
-đều hỗ trợ.
-
-6. Graph RAG
-
-Rất hot 2 năm gần đây.
-
-Không lưu vector.
-
-Mà lưu Graph.
-
-Ví dụ
-
+    - Embedding đôi khi tìm không tốt.
+    - BM25 lại rất mạnh với keyword.
+    => Người ta kết hợp cả hai: BM25 + Vector = Hybrid Search
+        - Milvus
+        - Weaviate
+        - Elastic
+        - Azure AI Search
+        => đều hỗ trợ.
+```
+## Graph RAG (Không lưu vector. Mà lưu Graph)
+**Ex**
+```bash
 Steve Jobs
-
 ↓
-
 Founder
-
 ↓
-
 Apple
-
 ↓
-
 Developed
-
 ↓
-
 iPhone
 
+User: Ai tạo ra iPhone?
+    LLM truy vấn Graph.
+        Steve Jobs
+        ↓
+        Apple
+        ↓
+        iPhone
+=> Microsoft đang đầu tư khá mạnh vào GraphRAG. Nó tốt khi dữ liệu có nhiều quan hệ.
+```
+## Agentic RAG (Đây là xu hướng hiện nay)
+```bash
+Không retrieve một lần. Mà Agent tự quyết định.
+    User
+    ↓
+    Search
+    ↓
+    Không đủ
+    ↓
+    Search tiếp
+    ↓
+    Không đủ
+    ↓
+    Search Web
+    ↓
+    Đọc PDF
+    ↓
+    Gọi Tool
+    ↓
+    Answer
+=> Có nhiều vòng retrieve.
+```
+**Ex**
+```bash
 User
-
-Ai tạo ra iPhone?
-
-LLM truy vấn Graph.
-
-Steve Jobs
 ↓
-
-Apple
-↓
-
-iPhone
-
-Microsoft đang đầu tư khá mạnh vào GraphRAG.
-
-Nó tốt khi dữ liệu có nhiều quan hệ.
-
-7. Agentic RAG
-
-Đây là xu hướng hiện nay.
-
-Không retrieve một lần.
-
-Mà Agent tự quyết định.
-
-User
-
-↓
-
-Search
-
-↓
-
-Không đủ
-
-↓
-
-Search tiếp
-
-↓
-
-Không đủ
-
-↓
-
-Search Web
-
-↓
-
-Đọc PDF
-
-↓
-
-Gọi Tool
-
-↓
-
-Answer
-
-Có nhiều vòng retrieve.
-
-Ví dụ
-
-User
-
-↓
-
 Search PDF
-
 ↓
-
 Không thấy
-
 ↓
-
 Search Internet
-
 ↓
-
 Không thấy
-
 ↓
-
 Search SQL
-
 ↓
-
 Không thấy
-
 ↓
-
 Hỏi tiếp user
-
 ↓
-
 Answer
-
-Thằng Agent sẽ tự lập kế hoạch.
-
-8. Multi-Modal RAG
-
-Không chỉ text.
-
-Có thể retrieve
-
-Image
-
-Video
-
-Audio
-
-Table
-
-PDF
-
-PowerPoint
-
-Ví dụ
-
+=> Thằng Agent sẽ tự lập kế hoạch.
+```
+## Multi-Modal RAG (Không chỉ text. Có thể retrieve Image, Video, ...)
+**Ex**
+```bash
 Ảnh hóa đơn
-
 ↓
-
 Embedding
-
 ↓
-
 Retrieve
-
 ↓
-
 LLM
 
 Hoặc
 
 Ảnh X-ray
-
 ↓
-
 Retrieve case tương tự
-
 ↓
-
 LLM
-
-Đây là hướng đang phát triển rất mạnh.
+=> Đây là hướng đang phát triển rất mạnh.
+```
