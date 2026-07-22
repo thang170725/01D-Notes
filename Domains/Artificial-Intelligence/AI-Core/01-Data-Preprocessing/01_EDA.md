@@ -11,6 +11,8 @@
   - [Heatmap (Bản đồ nhiệt)](#heatmap-bản-đồ-nhiệt)
   - [Boxplot (Biểu đồ hộp)](#boxplot-biểu-đồ-hộp)
   - [ACF](#acf)
+  - [t-SNE (Vẽ dữ liệu nhiều chiều xuống 2D/3D để nhìn xem các nhóm có tách biệt không)](#t-sne-vẽ-dữ-liệu-nhiều-chiều-xuống-2d3d-để-nhìn-xem-các-nhóm-có-tách-biệt-không)
+  - [UMAP (Giống t-SNE nhưng nhanh hơn, giữ được cấu trúc tổng thể tốt hơn)](#umap-giống-t-sne-nhưng-nhanh-hơn-giữ-được-cấu-trúc-tổng-thể-tốt-hơn)
 ---
 # Introduction
 ```bash
@@ -174,4 +176,45 @@ print(df.isnull().mean() * 100)
 **Ex**
 ```bash 
 Nếu: ACF cao ở lag 24 → có thể dữ liệu lặp theo 24 giờ
+```
+## t-SNE (Vẽ dữ liệu nhiều chiều xuống 2D/3D để nhìn xem các nhóm có tách biệt không)
+```bash
+Chủ yếu để trực quan hóa.
+
+Ví dụ: kiểm tra ảnh mèo, chó, chim có tự động tụ thành các cụm riêng không.
+```
+## UMAP (Giống t-SNE nhưng nhanh hơn, giữ được cấu trúc tổng thể tốt hơn)
+```bash
+Thường được dùng thay t-SNE trên tập dữ liệu lớn.
+
+Ghi nhớ một câu
+    - PCA → "nén dữ liệu để mô hình học nhanh hơn".
+    - t-SNE / UMAP → "vẽ dữ liệu để con người nhìn và hiểu nó".
+```
+**Tuyến tính vs Phi tuyến tính**
+```bash
+- PCA (tuyến tính): giả sử dữ liệu có thể được mô tả bằng các đường/thành phần tuyến tính.
+- t-SNE, UMAP (phi tuyến tính): xử lý được các hình dạng phức tạp như vòng tròn, xoắn ốc, cụm cong mà PCA thường không tách được.
+
+Ví dụ rất dễ hiểu:
+    PCA (nén dữ liệu)
+        Giả sử mỗi người có:
+            - Chiều cao
+            - Cân nặng
+            - Cỡ áo
+    => Ba thông tin này liên quan khá chặt với nhau. Người cao thường nặng hơn và mặc áo lớn hơn.
+    => PCA có thể gộp chúng thành một chỉ số mới như:
+        "Kích thước cơ thể"
+        
+        Thay vì lưu 3 cột, chỉ cần 1 cột mà vẫn giữ phần lớn thông tin.
+➡️ Trong AI: giảm số đặc trưng để mô hình học nhanh hơn.
+
+    t-SNE / UMAP (vẽ dữ liệu)
+        Giả sử AI đã biến mỗi ảnh thành 1000 con số.
+
+        Con người không thể nhìn dữ liệu 1000 chiều.
+            t-SNE hoặc UMAP sẽ vẽ chúng xuống mặt phẳng 2D:
+                - Ảnh chó tụ thành một đám.
+                - Ảnh mèo tụ thành một đám khác.
+                - Ảnh chim tụ thành một đám khác.
 ```

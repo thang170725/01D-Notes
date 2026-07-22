@@ -1,3 +1,9 @@
+- [Phân loại dữ liệu](#phân-loại-dữ-liệu)
+  - [Structured Data (Dữ liệu có cấu trúc)](#structured-data-dữ-liệu-có-cấu-trúc)
+  - [Semi-structured Data (Dữ liệu bán cấu trúc)](#semi-structured-data-dữ-liệu-bán-cấu-trúc)
+  - [Unstructured Data (Dữ liệu phi cấu trúc)](#unstructured-data-dữ-liệu-phi-cấu-trúc)
+- [Format Data (Định dạng file dữ liệu)](#format-data-định-dạng-file-dữ-liệu)
+  - [CSV](#csv)
 - [Missing values (kỹ thuật xử lý giá trị thiếu)](#missing-values-kỹ-thuật-xử-lý-giá-trị-thiếu)
   - [Drop (Xóa sample hoặc cột có giá trị thiếu)](#drop-xóa-sample-hoặc-cột-có-giá-trị-thiếu)
   - [Mean Imputation (Điền giá trị trung bình của toàn cột)](#mean-imputation-điền-giá-trị-trung-bình-của-toàn-cột)
@@ -29,6 +35,7 @@
   - [Standardization (Z-score) (Đưa dữ liệu về phân phối có mean = 0, std = 1)](#standardization-z-score-đưa-dữ-liệu-về-phân-phối-có-mean--0-std--1)
   - [Min-Max Scaling](#min-max-scaling)
   - [Robust Scaling](#robust-scaling)
+  - [PCA (Nén dữ liệu bằng cách giữ lại những thông tin quan trọng nhất)](#pca-nén-dữ-liệu-bằng-cách-giữ-lại-những-thông-tin-quan-trọng-nhất)
 - [Encode (Máy học không hiểu chữ, nên phải biến thành số. Có 3 cách phổ biến)](#encode-máy-học-không-hiểu-chữ-nên-phải-biến-thành-số-có-3-cách-phổ-biến)
   - [One-Hot Encoding](#one-hot-encoding)
   - [Label Encoding (Gán số cho từng giá trị)](#label-encoding-gán-số-cho-từng-giá-trị)
@@ -39,6 +46,35 @@
   - [Class Weights (Không thay đổi dữ liệu, nhưng phạt lỗi lớp ít nặng hơn)](#class-weights-không-thay-đổi-dữ-liệu-nhưng-phạt-lỗi-lớp-ít-nặng-hơn)
 - [Data Leakage (Rò rỉ dữ liệu)](#data-leakage-rò-rỉ-dữ-liệu)
 ---
+# Phân loại dữ liệu
+## Structured Data (Dữ liệu có cấu trúc)
+```bash
+Là dữ liệu được tổ chức chặt chẽ trong các bảng (hàng và cột). Đây là "đất diễn" chính của Pandas (file CSV, Excel, SQL).
+```
+## Semi-structured Data (Dữ liệu bán cấu trúc)
+```bash
+Không nằm trong bảng nhưng có các thẻ (tags) hoặc dấu hiệu để phân biệt các thành phần. Ví dụ: file JSON, XML, HTML.
+```
+## Unstructured Data (Dữ liệu phi cấu trúc)
+```bash
+Không có định dạng cố định và chiếm phần lớn dữ liệu thế giới hiện nay. Ví dụ: Văn bản (Text), Hình ảnh, Âm thanh, Video.
+```
+# Format Data (Định dạng file dữ liệu)
+## CSV 
+```bash
+- 99% dự án AI đều dùng. CSV phù hợp khi:
+    + Dataset đã cố định
+    + Dữ liệu snapshot theo thời gian
+    + Train offline
+```
+**Vì sao AI people thích CSV?**
+```bash
+- Không phụ thuộc DB
+- Chạy ở laptop, server, cloud đều được
+- Dễ debug (mở bằng mắt)
+- Re-train lại model cũ ra đúng kết quả
+=> Trong research / training chính thức → CSV là CHUẨN
+```
 # Missing values (kỹ thuật xử lý giá trị thiếu)
 ```bash
 Một điểm rất quan trọng: 
@@ -406,6 +442,16 @@ x' = (x - median) / IQR
     + Q3: 75th percentile
     + x′: giá trị sau scaling
 ```
+## PCA (Nén dữ liệu bằng cách giữ lại những thông tin quan trọng nhất)
+```bash
+Dùng khi dữ liệu có nhiều cột (nhiều đặc trưng).
+
+Giúp giảm chiều, tăng tốc huấn luyện, giảm nhiễu.
+```
+**Ex**
+```bash
+từ 1000 đặc trưng giảm còn 50 đặc trưng.
+```
 # Encode (Máy học không hiểu chữ, nên phải biến thành số. Có 3 cách phổ biến)
 ```bash
 Có thứ tự?
@@ -516,69 +562,6 @@ Encode thành:
         TP.HCM → 0.6
         Đà Nẵng → 0.3
 ```
-PCA: Nén dữ liệu bằng cách giữ lại những thông tin quan trọng nhất.
-Dùng khi dữ liệu có nhiều cột (nhiều đặc trưng).
-Giúp giảm chiều, tăng tốc huấn luyện, giảm nhiễu.
-Ví dụ: từ 1000 đặc trưng giảm còn 50 đặc trưng.
-t-SNE: Vẽ dữ liệu nhiều chiều xuống 2D/3D để nhìn xem các nhóm có tách biệt không.
-Chủ yếu để trực quan hóa.
-Ví dụ: kiểm tra ảnh mèo, chó, chim có tự động tụ thành các cụm riêng không.
-UMAP: Giống t-SNE nhưng nhanh hơn, giữ được cấu trúc tổng thể tốt hơn.
-Thường được dùng thay t-SNE trên tập dữ liệu lớn.
-Ghi nhớ một câu
-PCA → "nén dữ liệu để mô hình học nhanh hơn".
-t-SNE / UMAP → "vẽ dữ liệu để con người nhìn và hiểu nó".
-Tuyến tính vs Phi tuyến tính
-PCA (tuyến tính): giả sử dữ liệu có thể được mô tả bằng các đường/thành phần tuyến tính.
-t-SNE, UMAP (phi tuyến tính): xử lý được các hình dạng phức tạp như vòng tròn, xoắn ốc, cụm cong mà PCA thường không tách được.
-Ví dụ rất dễ hiểu:
-PCA (nén dữ liệu)
-Giả sử mỗi người có:
-
-
-Chiều cao
-
-
-Cân nặng
-
-
-Cỡ áo
-
-
-Ba thông tin này liên quan khá chặt với nhau. Người cao thường nặng hơn và mặc áo lớn hơn.
-PCA có thể gộp chúng thành một chỉ số mới như:
-
-"Kích thước cơ thể"
-
-Thay vì lưu 3 cột, chỉ cần 1 cột mà vẫn giữ phần lớn thông tin.
-➡️ Trong AI: giảm số đặc trưng để mô hình học nhanh hơn.
-
-t-SNE / UMAP (vẽ dữ liệu)
-Giả sử AI đã biến mỗi ảnh thành 1000 con số.
-Con người không thể nhìn dữ liệu 1000 chiều.
-t-SNE hoặc UMAP sẽ vẽ chúng xuống mặt phẳng 2D:
-
-
-Ảnh chó tụ thành một đám.
-
-
-Ảnh mèo tụ thành một đám khác.
-
-
-Ảnh chim tụ thành một đám khác.
-
-
-Ta nhìn biểu đồ và thấy:
-🐶🐶🐶🐶        🐱🐱🐱🐱                    🐦🐦🐦🐦
-➡️ Trong AI: kiểm tra xem dữ liệu hoặc embedding có tự động phân nhóm tốt không.
-Tóm tắt
-
-
-PCA = "nén dữ liệu".
-
-
-t-SNE / UMAP = "vẽ dữ liệu nhiều chiều thành hình để nhìn các cụm".
-
 # Imbalanced Data (Mất cân bằng dữ liệu)
 ```bash
 Là khi dữ liệu bị lệch rất nhiều giữa các lớp.

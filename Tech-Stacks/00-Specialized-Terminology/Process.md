@@ -1,3 +1,4 @@
+- [Specialized Terminology Introduction (Thuật ngữ chuyên ngành và nghiệp vụ)](#specialized-terminology-introduction-thuật-ngữ-chuyên-ngành-và-nghiệp-vụ)
 - [Domain](#domain)
   - [Domain website (Trong mảng website)](#domain-website-trong-mảng-website)
 - [DNS (Domain Name System - domain → IP)](#dns-domain-name-system---domain--ip)
@@ -8,7 +9,10 @@
     - [HRM (Human Resource Management)](#hrm-human-resource-management)
     - [Quy trình tạo Ticket / Công việc](#quy-trình-tạo-ticket--công-việc)
 - [Work items (công việc cụ thể)](#work-items-công-việc-cụ-thể)
+- [TPA Bảo hiểm (nghiệp vụ trong ngành bảo hiểm)](#tpa-bảo-hiểm-nghiệp-vụ-trong-ngành-bảo-hiểm)
+  - [Phân loại giấy tờ](#phân-loại-giấy-tờ)
 ---
+# Specialized Terminology Introduction (Thuật ngữ chuyên ngành và nghiệp vụ)
 # Domain
 Các rủi ro liên quan domain
 
@@ -409,3 +413,25 @@ MVP	Phiên bản tối thiểu của sản phẩm	Ra mắt sớm để kiểm ch
 Cloudflare	Nền tảng hạ tầng mạng và bảo mật	Cung cấp CDN, DNS, SSL, chống DDoS, firewall, serverless (Workers), lưu trữ (R2), cơ sở dữ liệu (D1),...
 
 Với dự án AI dinh dưỡng của bạn, PRD là bước lên kế hoạch, MVP là phiên bản đầu tiên để người dùng trải nghiệm, còn Cloudflare là dịch vụ giúp triển khai và vận hành ứng dụng nhanh, an toàn và ổn định hơn.
+# TPA Bảo hiểm (nghiệp vụ trong ngành bảo hiểm)
+## Phân loại giấy tờ
+```bash
+Trong ngành bảo hiểm cần hiểu các loại giấy tờ.
+```
+**Giải thích các loại giấy tờ**
+```bash
+1. GRV                          # giấy ra viện
+2. bảng kê                      # thường là bảng kê chi phí
+3. hóa đơn                      # thường là hóa đơn giá trị gia tăng
+4. đơn thuốc                    # thường là đơn thuốc 
+5. chuẩn đoán hình ảnh          # thường là phiếu chuẩn đoán kết quả bệnh
+6. lab_test                     # thường là phiếu kết quả cuối cùng
+7. tóm tắt bệnh án              # thường là bản tóm tắt hồ sơ bệnh án
+8. claimform                    # thường là giấy yêu cầu bồi thường
+9. báo cáo y tế                 # thường là phiếu báo cáo y tế
+10. bản tt tai nạn              # thường là bản tường trình tại nạn hoặc bản tường trình vụ việc
+11. bảo hiểm y tế               # thường là thẻ bảo hiểm y tế
+12. giấy chứng nhận phẫu thuật  # thường là giấy chứng nhận phẫu thuật
+13. bảng kê type 2              # thường là phiếu thu tiền
+14. hóa đơn type 2              # thường là hóa đơn bán hàng
+```

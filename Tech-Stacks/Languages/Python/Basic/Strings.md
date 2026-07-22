@@ -19,6 +19,7 @@
   - [.rjust() \& .ljust()](#rjust--ljust)
   - [.center()](#center)
 - [Process (xử lý chuỗi)](#process-xử-lý-chuỗi)
+  - [b""](#b)
   - [in \& not in](#in--not-in-1)
   - [.join() (nối chuỗi)](#join-nối-chuỗi)
   - [.split()](#split)
@@ -42,7 +43,7 @@
   - [:](#-5)
   - [:,](#-6)
   - [:\_](#_)
-  - [:b](#b)
+  - [:b](#b-1)
   - [:d](#d)
   - [:e](#e)
   - [:E](#e-1)
@@ -252,6 +253,7 @@ x = txt.center(20, "O")
 print(x) # OOOOOOObananaOOOOOOO
 ```
 # Process (xử lý chuỗi)
+## b""
 ## in & not in
 Kiểm tra chuỗi này có nằm trong chuỗi kia hay không.
 **Ex**
