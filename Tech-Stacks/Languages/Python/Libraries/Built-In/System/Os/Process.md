@@ -14,6 +14,7 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.listdir()](#listdir)
   - [.getcwd()](#getcwd)
+  - [os.cpu\_count() (trả về Số lõi CPU mà Python nhìn thấy trên máy)](#oscpu_count-trả-về-số-lõi-cpu-mà-python-nhìn-thấy-trên-máy)
 - [Process](#process)
   - [.chdir()](#chdir)
   - [splitext()](#splitext)
@@ -233,6 +234,13 @@ Trả về đường dẫn hiện tại
 **Syn**
 ```bash
 os.getcwd()
+```
+## os.cpu_count() (trả về Số lõi CPU mà Python nhìn thấy trên máy)
+**Ex**
+```python
+import os
+
+print(os.cpu_count()) # 
 ```
 # Process
 ## .chdir()

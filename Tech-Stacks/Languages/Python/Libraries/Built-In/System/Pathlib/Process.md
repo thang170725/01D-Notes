@@ -5,6 +5,7 @@
   - [is\_dir() (Kiểm tra có phải thư mục không)](#is_dir-kiểm-tra-có-phải-thư-mục-không)
   - [exists() (Kiểm tra file có tồn tại không)](#exists-kiểm-tra-file-có-tồn-tại-không)
   - [name (Lấy tên cuối cùng)](#name-lấy-tên-cuối-cùng)
+  - [.glob() (dùng để tìm các file hoặc thư mục theo một mẫu (pattern))](#glob-dùng-để-tìm-các-file-hoặc-thư-mục-theo-một-mẫu-pattern)
 ---
 # Path (Tạo đối tượng)
 ```bash
@@ -108,4 +109,61 @@ print(folder.name) # abc123
 
 file = Path("tables/test.json")
 print(file.name) # test.json
+```
+## .glob() (dùng để tìm các file hoặc thư mục theo một mẫu (pattern))
+**Syn**
+```bash
+
+- Output: Object - interable (đối tượng có thể )
+```
+**Ex1: Tìm tất cả file .txt**
+```bash
+# Giả sử thư mục của bạn là
+# project/
+# │
+# ├── a.txt
+# ├── b.txt
+# ├── c.pdf
+# ├── image.png
+
+from pathlib import Path
+
+folder = Path("project")
+
+for file in folder.glob("*.txt"):
+    print(file)
+# project\a.txt
+# project\b.txt
+```
+**Ex2: Tìm tất cả file**
+```python
+from pathlib import Path
+
+folder = Path("project")
+
+for file in folder.glob("*"):
+    print(file)
+# a.txt
+# b.txt
+# c.pdf
+# image.png
+```
+**Ex3: Tìm thư mục con**
+```python
+Giả sử
+# project/
+# │
+# ├── data/
+# ├── images/
+# ├── test.py
+
+from pathlib import Path
+
+folder = Path("project")
+
+for item in folder.glob("*"):
+    if item.is_dir():
+        print(item)
+# project\data
+# project\images
 ```

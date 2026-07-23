@@ -3,6 +3,7 @@
   - [ZeroDivisisionError (Lỗi chia cho không)](#zerodivisisionerror-lỗi-chia-cho-không)
   - [Exception (Bắt mọi loại lỗi và xem nội dung lỗi)](#exception-bắt-mọi-loại-lỗi-và-xem-nội-dung-lỗi)
   - [ValueError (Lỗi giá trị, chuyển đổi giá trị)](#valueerror-lỗi-giá-trị-chuyển-đổi-giá-trị)
+  - [ImportError](#importerror)
 - [raise ValueError() (Chủ động ném ra lỗi và dừng chương trình.)](#raise-valueerror-chủ-động-ném-ra-lỗi-và-dừng-chương-trình)
 ---
 # Try…Except (Được dung để bắt và xử lý lỗi (exception))
@@ -78,6 +79,7 @@ while True:
     except ValueError:
         print("Error, Please again!!!")
 ```
+## ImportError
 # raise ValueError() (Chủ động ném ra lỗi và dừng chương trình.)
 **Ex**
 ```python

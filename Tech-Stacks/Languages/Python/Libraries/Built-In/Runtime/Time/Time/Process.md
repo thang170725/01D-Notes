@@ -1,10 +1,9 @@
-Time/
-├── 01_Basic_Objects.md       # Khởi tạo: date, time, datetime, now, today
-├── 02_Format_Conversion.md    # Chuyển đổi: strftime, strptime (String <-> Time)
-├── 03_Time_Arithmetic.md      # Tính toán: timedelta, khoảng cách 2 ngày, so sánh
-└── 04_Practical_Utils.md      # Tiện ích: Lấy thứ (weekday), kiểm tra hạn dùng, múi giờ- Được dung để làm việc với thời gian, như đo thời gian thực thi, lấy thời gian hiện tại, tạo độ trễ (delay), định dạng thời gian, v.v. 
-- Thư viện không cần tải. Cần import time
-
+- [.time()](#time)
+- [.sleep()](#sleep)
+- [trả về giờ hiện tại](#trả-về-giờ-hiện-tại)
+- [khi bấm lc xong chấm sẽ xuất hiện ra các thuộc tính của hàm này](#khi-bấm-lc-xong-chấm-sẽ-xuất-hiện-ra-các-thuộc-tính-của-hàm-này)
+- [perf\_counter() (Dùng để đo thời gian chính xác cao (tính cả thời gian ngủ/ sleep). Rất hữu ích để đo hiệu suất)](#perf_counter-dùng-để-đo-thời-gian-chính-xác-cao-tính-cả-thời-gian-ngủ-sleep-rất-hữu-ích-để-đo-hiệu-suất)
+---
 # .time()
 Trả về thời gian hiện tại (timesstamp) tính bằng giây kể từ 1/1/1970 (UNIX epoch).
 **Ex**
@@ -41,7 +40,6 @@ gmtime()
 Giống localtime nhưng trả về thời gian UTC (GMT).
 ctime()
 Chuyển timestamp thành một chuỗi dễ đọc.
-perf_counter()
-Dùng để đo thời gian chính xác cao (tính cả thời gian ngủ/ sleep). Rất hữu ích để đo hiệu suất.
+# perf_counter() (Dùng để đo thời gian chính xác cao (tính cả thời gian ngủ/ sleep). Rất hữu ích để đo hiệu suất)
 process_time()
 Đo thời gian CPU thực thi (không tính thời gian sleep).

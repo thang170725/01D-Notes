@@ -2,6 +2,7 @@
 - [IaaS \& PaaS \& SaaS](#iaas--paas--saas)
 - [SERVER](#server)
 - [CLOUD HOẠT ĐỘNG THẾ NÀO?](#cloud-hoạt-động-thế-nào)
+- [KIẾN TRÚC ĐÚNG CHO HỆ THỐNG ĐĂNG KÝ TÍN CHỈ (TRÊN AWS)](#kiến-trúc-đúng-cho-hệ-thống-đăng-ký-tín-chỉ-trên-aws)
 ---
 # Cloud
 ```bash
@@ -110,4 +111,80 @@ Bạn → Internet → Cloud → Server → Cloud → Internet → Bạn
     + Cloud tự tạo thêm server
     + Chia tải ra nhiều máy
     + Hết đông → tắt bớt → tiết kiệm tiền
+```
+# KIẾN TRÚC ĐÚNG CHO HỆ THỐNG ĐĂNG KÝ TÍN CHỈ (TRÊN AWS)
+```bash
+🎯 Mục tiêu: 20.000 sinh viên vào cùng lúc
+    - Không sập
+    - Không tranh chấp dữ liệu
+    - Không cần sinh viên F5 điên cuồng
+
+1️⃣ Lớp ngoài cùng: CỔNG VÀO 🚪
+    ✅ Load Balancer (ELB)
+        - Nhận toàn bộ request sinh viên
+        - Phân phối đều cho nhiều server phía sau
+    👉 Không có cái này = 1 cửa → tắc
+    
+    📌 Trường bạn lag 99% là thiếu hoặc cấu hình kém cái này
+
+2️⃣ Lớp xử lý: SERVER ỨNG DỤNG ⚙️
+    ✅ NHIỀU server (EC2 / container)
+        Không phải 1 server. Có thể:
+            - 5 cái
+            - 10 cái
+            - 50 cái (khi cao điểm)
+
+    ✅ Auto Scaling
+        - Đông → tự tạo server mới
+        - Vắng → tắt bớt
+
+    ⚠️ Điều kiện:
+        - App không được nhớ dữ liệu trong RAM
+        - Mỗi request xử lý độc lập
+    👉 Rất nhiều phần mềm trường viết sai chỗ này
+
+3️⃣ Lớp “sống còn”: DATABASE 🧠
+    💥 80% hệ thống chết ở đây
+
+    ❌ Sai lầm phổ biến
+        1 database duy nhất
+            Bị:
+                - Lock bảng
+                - Deadlock
+                - Query chậm
+
+    ✅ Cách làm đúng
+        Database riêng cho đăng ký
+            Tối ưu:
+                - Index
+                - Transaction ngắn
+
+            Có thể:
+                - Read replica
+                - Tách đọc / ghi
+
+4️⃣ VẤN ĐỀ ĐẶC BIỆT: AI CŨNG KHÓ – TRANH CHẤP SUẤT 🥊
+    100 sinh viên cùng đăng ký 1 lớp còn 1 chỗ 👉 Ai thắng?
+
+    ❌ Cách ngu (rất hay gặp)
+        - Ai gửi request trước thì thắng
+        - Database lock → lag toàn hệ thống
+
+    ✅ Cách làm đúng (cloud chuẩn)
+        - Queue (hàng chờ)
+        - Mỗi click đăng ký → vào hàng chờ
+        - Xử lý từng cái một
+        - Random / theo slot
+
+    Ví dụ:
+        - Mỗi 10 giây chọn ngẫu nhiên
+        - Hoặc chia theo khoa / năm
+    👉 Không công bằng tuyệt đối, nhưng không sập
+
+5️⃣ Cache – giảm tải cực mạnh 🚀
+    - Môn học, thời khóa biểu → cache
+    - 90% request không cần chạm database
+
+    📌 Trường thường bỏ qua vì: “Chạy được rồi mà”
+        Đến lúc cao điểm → chết
 ```

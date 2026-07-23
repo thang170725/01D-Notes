@@ -25,7 +25,7 @@
   - [.split()](#split)
   - [.strip() \& .rstrip() \& .lstrip()](#strip--rstrip--lstrip)
   - [.title()](#title)
-  - [.replace()](#replace)
+  - [.replace() (Để thay thế ký tự hoặc một chuỗi con trong chuỗi)](#replace-để-thay-thế-ký-tự-hoặc-một-chuỗi-con-trong-chuỗi)
   - [expandtabs()](#expandtabs)
   - [.lower()](#lower)
   - [.casefold() (chuyễn chuỗi thành chuỗi thường)](#casefold-chuyễn-chuỗi-thành-chuỗi-thường)
@@ -310,10 +310,7 @@ a = 'thang'
 
 print(a.upper())
 ```
-## .replace()
-```bash
-Để thay thế ký tự hoặc một chuỗi con trong chuỗi.
-```
+## .replace() (Để thay thế ký tự hoặc một chuỗi con trong chuỗi)
 **Syn**
 ```bash
 a.replace('need replace', 'replace', regex=True)
