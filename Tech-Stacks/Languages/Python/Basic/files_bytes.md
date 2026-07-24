@@ -1,9 +1,11 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [__file__ (Biến đặc biệt chứa đường dẫn file python hiện tại)](#file-biến-đặc-biệt-chứa-đường-dẫn-file-python-hiện-tại)
 - [.name](#name)
-- [open() \& .close()](#open--close)
+- [open() \& .close() (Để mở file và đóng file.)](#open--close-để-mở-file-và-đóng-file)
+- [.read() (Dùng để đọc nội dung một file)](#read-dùng-để-đọc-nội-dung-một-file)
 - [.readline()](#readline)
 - [.readlines()](#readlines)
+- [With … as (để quản lý tài nguyên tự động)](#with--as-để-quản-lý-tài-nguyên-tự-động)
 - [bytes (kiểu dữ liệu bytes)](#bytes-kiểu-dữ-liệu-bytes)
   - [.encode() \& .decode()](#encode--decode)
 ---
@@ -26,10 +28,7 @@ Trả về tên của file đang được mở.
 txt = open("D:\\workspace\Python_box\\a.txt", "rt")
 print(txt.name) # D:\workspace\Python_box\a.txt
 ```
-# open() & .close()
-```bash
-Để mở file và đóng file.
-```
+# open() & .close() (Để mở file và đóng file.)
 **Syn**
 ```bash
 open(‘data.txt’, ‘w’, encoding=’utf8’)
@@ -41,10 +40,8 @@ open(‘data.txt’, ‘w’, encoding=’utf8’)
     + "w+"  : Đọc + ghi đè	
     + "a+"  : Đọc + ghi tiếp	
     + "r+"  : Đọc + ghi (không xóa)	
-```# .read()
-```bash
-Dùng để đọc nội dung một file.
 ```
+# .read() (Dùng để đọc nội dung một file)
 **Syn**
 ```bash
 name.read(n)
@@ -56,7 +53,6 @@ txt = open("E:\\Python\Text.txt", "rt")
 print(txt.read()) # Hello world, i am Thang and i am coder, welcome to my world,
 txt.close()
 ```
-
 # .readline()
 ```bash
 Đọc nội dung file theo dòng. Chỉ đọc một dòng.
@@ -93,9 +89,10 @@ txt.close()
 ```python
 txt = open("E:\\Python\Text.txt", "wt") # Tại file Text.txt có nội dung: Hello world
 txt.write("i am from VietNam") # 'i am from VietNam' sẽ được ghi vào file
-# With … as
+```
+# With … as (để quản lý tài nguyên tự động)
 ```bash
-- with dùng để quản lý tài nguyên tự động:
+Tác dụng :
     + Tự mở → tự đóng (file, database, network, lock…)
     + Tự giải phóng tài nguyên kể cả khi code bị lỗi
     + Không cần viết try / finally

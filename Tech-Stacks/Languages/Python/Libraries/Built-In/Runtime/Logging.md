@@ -11,7 +11,7 @@
 ---
 # Logging Introduction
 ```bash
-logging là thư viện built-in (thư viện chuẩn) của Python, nên bạn không cần cài đặt.
+logging là thư viện built-in của Python, nên bạn không cần cài đặt.
     Chỉ cần: import logging là có thể sử dụng.
 
 logging dùng để làm gì?

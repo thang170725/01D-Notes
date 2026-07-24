@@ -1,5 +1,11 @@
 - [Specialized Terminology Introduction (Thuật ngữ chuyên ngành và nghiệp vụ)](#specialized-terminology-introduction-thuật-ngữ-chuyên-ngành-và-nghiệp-vụ)
 - [Domain](#domain)
+  - [Subdomain takeover](#subdomain-takeover)
+  - [DNS hijacking](#dns-hijacking)
+  - [Typosquatting (gooogle.com)](#typosquatting-goooglecom)
+  - [Phishing domain](#phishing-domain)
+  - [Expired domain reuse](#expired-domain-reuse)
+  - [Phòng thủ cơ bản](#phòng-thủ-cơ-bản)
   - [Domain website (Trong mảng website)](#domain-website-trong-mảng-website)
 - [DNS (Domain Name System - domain → IP)](#dns-domain-name-system---domain--ip)
 - [Subdomain](#subdomain)
@@ -9,25 +15,21 @@
     - [HRM (Human Resource Management)](#hrm-human-resource-management)
     - [Quy trình tạo Ticket / Công việc](#quy-trình-tạo-ticket--công-việc)
 - [Work items (công việc cụ thể)](#work-items-công-việc-cụ-thể)
+- [PRD (Product Requirements Document - là tài liệu mô tả yêu cầu của sản phẩm)](#prd-product-requirements-document---là-tài-liệu-mô-tả-yêu-cầu-của-sản-phẩm)
+- [MVP (Minimum Viable Product - là phiên bản nhỏ nhất của sản phẩm nhưng vẫn sử dụng được)](#mvp-minimum-viable-product---là-phiên-bản-nhỏ-nhất-của-sản-phẩm-nhưng-vẫn-sử-dụng-được)
+- [Cloudflare (là một công ty cung cấp các dịch vụ hạ tầng mạng và bảo mật)](#cloudflare-là-một-công-ty-cung-cấp-các-dịch-vụ-hạ-tầng-mạng-và-bảo-mật)
 - [TPA Bảo hiểm (nghiệp vụ trong ngành bảo hiểm)](#tpa-bảo-hiểm-nghiệp-vụ-trong-ngành-bảo-hiểm)
   - [Phân loại giấy tờ](#phân-loại-giấy-tờ)
 ---
 # Specialized Terminology Introduction (Thuật ngữ chuyên ngành và nghiệp vụ)
 # Domain
-Các rủi ro liên quan domain
-
-Subdomain takeover
-
-DNS hijacking
-
-Typosquatting (gooogle.com)
-
-Phishing domain
-
-Expired domain reuse
-
-🔹 7.2. Phòng thủ cơ bản
-
+## Subdomain takeover
+## DNS hijacking
+## Typosquatting (gooogle.com)
+## Phishing domain
+## Expired domain reuse
+## Phòng thủ cơ bản
+```bash
 Khóa domain (Registrar Lock)
 
 Bật DNSSEC
@@ -71,6 +73,7 @@ DNS public	DNS nội bộ
 Internet	Mạng nội bộ
 
 📌 Hacker/defender rất quan tâm AD Domain
+```
 ## Domain website (Trong mảng website)
 ```bash
 Được hiểu là một tên miền (url - trỏ tới website)
@@ -121,6 +124,7 @@ google.com A → 142.250.190.78
     + staging.example.com
 ```
 # ERP (Enterprise Resource Planning)
+```bash
 - Là hệ thống phần mềm quản lý toàn bộ hoạt động của một công ty trên một chỗ duy nhất
 → thay vì mỗi phòng ban dùng một file / phần mềm riêng.
 - Không có ERP: → dữ liệu lệch nhau
@@ -128,9 +132,10 @@ google.com A → 142.250.190.78
   - HR dùng phần mềm khác
   - Kế toán dùng phần mềm khác
 - Có ERP: Tất cả dùng một hệ thống, Thay đổi ở chỗ này → chỗ khác cập nhật theo
-
+```
 ## Các luồng nghiệp vụ cơ bản trong ERP
 ### CRM (Customer Relationship Management)
+```bash
 - Quản lý khách hàng.
 - Theo dõi khách từ lúc chưa mua → đã mua → chăm sóc sau bán
 - Ví dụ đơn giản:
@@ -138,8 +143,9 @@ google.com A → 142.250.190.78
   - Ghi lại khách đã hỏi gì, mua gì
   - Nhân viên sale gọi cho khách → cập nhật kết quả
 Mục tiêu: không quên khách, bán hàng hiệu quả hơn
-
+```
 ### HRM (Human Resource Management)
+```bash
 - Quản lý nhân sự, Quản lý con người trong công ty
 - Ví dụ:
   - Thông tin nhân viên
@@ -147,31 +153,31 @@ Mục tiêu: không quên khách, bán hàng hiệu quả hơn
   - Lương, thưởng
   - Phân quyền ai làm gì
 - Mục tiêu: quản lý nhân sự rõ ràng, minh bạch
-
+```
 ### Quy trình tạo Ticket / Công việc
+```bash
 - Tạo việc → giao người làm → theo dõi → hoàn thành
 - Ví dụ:
   - Khách báo lỗi → tạo ticket
   - Giao cho nhân viên xử lý
   - Theo dõi trạng thái: Đang làm → Chờ → Hoàn thành
 - Mục tiêu: không sót việc, ai làm gì đều rõ
+```
 # Work items (công việc cụ thể)
-```text
+```bash
 Với các work items cần tuân thủ Cycles (Chu kỳ giống sprint).
 ```
 **Cycles**
-```text
+```bash
 - Là khoảng thời gian để  hoàn thành 1 work item (Ví dụ: 5 ngày, 1 tuần).
 - Cycles có các trạng thái (đang hoạt động - work item sắp tới - hoàn thành)
 ```
 **Timeline dependencies**
-```text
+```bash
 - Là liện hệ giữa các task với nhau.
 ```
-1. PRD (Product Requirements Document)
-
-PRD là tài liệu mô tả yêu cầu của sản phẩm.
-
+# PRD (Product Requirements Document - là tài liệu mô tả yêu cầu của sản phẩm)
+```bash
 Nó trả lời các câu hỏi:
 
 Sản phẩm này dùng để làm gì?
@@ -207,11 +213,9 @@ Tiêu chí thành công
 - AI trả lời dưới 3 giây.
 
 PRD không chứa code, mà là tài liệu để Product Manager, Designer và Developer cùng hiểu sản phẩm.
-
-2. MVP (Minimum Viable Product)
-
-MVP là phiên bản nhỏ nhất của sản phẩm nhưng vẫn sử dụng được.
-
+```
+# MVP (Minimum Viable Product - là phiên bản nhỏ nhất của sản phẩm nhưng vẫn sử dụng được)
+```bash
 Ví dụ bạn muốn xây một ứng dụng giống MyFitnessPal.
 
 Ý tưởng đầy đủ:
@@ -242,11 +246,9 @@ Thay vào đó, bạn tạo MVP:
 Nếu họ thích, bạn mới phát triển thêm.
 
 MVP = phiên bản tối thiểu nhưng có giá trị sử dụng.
-
-3. Cloudflare
-
-Cloudflare là một công ty cung cấp các dịch vụ hạ tầng mạng và bảo mật.
-
+```
+# Cloudflare (là một công ty cung cấp các dịch vụ hạ tầng mạng và bảo mật)
+```bash
 Nó đứng giữa người dùng và server của bạn.
 
 User
@@ -413,6 +415,7 @@ MVP	Phiên bản tối thiểu của sản phẩm	Ra mắt sớm để kiểm ch
 Cloudflare	Nền tảng hạ tầng mạng và bảo mật	Cung cấp CDN, DNS, SSL, chống DDoS, firewall, serverless (Workers), lưu trữ (R2), cơ sở dữ liệu (D1),...
 
 Với dự án AI dinh dưỡng của bạn, PRD là bước lên kế hoạch, MVP là phiên bản đầu tiên để người dùng trải nghiệm, còn Cloudflare là dịch vụ giúp triển khai và vận hành ứng dụng nhanh, an toàn và ổn định hơn.
+```
 # TPA Bảo hiểm (nghiệp vụ trong ngành bảo hiểm)
 ## Phân loại giấy tờ
 ```bash

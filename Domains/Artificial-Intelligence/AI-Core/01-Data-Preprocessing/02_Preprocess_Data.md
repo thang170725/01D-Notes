@@ -45,6 +45,7 @@
   - [Downsampling (Giảm bớt dữ liệu lớp nhiều)](#downsampling-giảm-bớt-dữ-liệu-lớp-nhiều)
   - [Class Weights (Không thay đổi dữ liệu, nhưng phạt lỗi lớp ít nặng hơn)](#class-weights-không-thay-đổi-dữ-liệu-nhưng-phạt-lỗi-lớp-ít-nặng-hơn)
 - [Data Leakage (Rò rỉ dữ liệu)](#data-leakage-rò-rỉ-dữ-liệu)
+- [Normalize (Biến đối dữ liệu về một chuẩn chung để dễ xử lý hoặc so sánh)](#normalize-biến-đối-dữ-liệu-về-một-chuẩn-chung-để-dễ-xử-lý-hoặc-so-sánh)
 ---
 # Phân loại dữ liệu
 ## Structured Data (Dữ liệu có cấu trúc)
@@ -393,6 +394,7 @@ Giả sử bạn có 2 feature:
 Nếu không scale: Model sẽ “nghĩ” lương quan trọng hơn nhiều (vì số lớn hơn)
 Sau khi scaling về [0,1]: Cả 2 feature đều nằm cùng range → model học công bằng hơn
 ```
+
 ## Standardization (Z-score) (Đưa dữ liệu về phân phối có mean = 0, std = 1)
 **Formula**
 ```bash
@@ -633,3 +635,4 @@ Model bị ép phải quan tâm hơn tới lớp hiếm
     test_scaled = scaler.transform(test)
 👉 scaler chỉ học từ train thôi
 ```
+# Normalize (Biến đối dữ liệu về một chuẩn chung để dễ xử lý hoặc so sánh)
