@@ -3,18 +3,21 @@
 - [title() (đặt tiêu đề cửa số)](#title-đặt-tiêu-đề-cửa-số)
 - [bgcolor() (đổi màu nền)](#bgcolor-đổi-màu-nền)
 - [colormode() (chế độ màu)](#colormode-chế-độ-màu)
-- [pencolor()](#pencolor)
 - [speed() (điều chỉnh tốc độ)](#speed-điều-chỉnh-tốc-độ)
-- [hideturtle() (ẩn con rùa)](#hideturtle-ẩn-con-rùa)
 - [pensize() (độ dày nét)](#pensize-độ-dày-nét)
 - [Turle()](#turle)
+  - [.hideturtle() (ẩn con rùa)](#hideturtle-ẩn-con-rùa)
   - [.forward() (đi thẳng)](#forward-đi-thẳng)
-- [left() (quay trái)](#left-quay-trái)
+  - [.width(s)](#widths)
+  - [.pencolor()](#pencolor)
+  - [.circle() (vẽ hình tròn)](#circle-vẽ-hình-tròn)
+  - [.left() (quay trái)](#left-quay-trái)
 - [right() (quay phải)](#right-quay-phải)
-- [circle() (vẽ hình trong)](#circle-vẽ-hình-trong)
 - [tracer() (Tắt việc cập nhật liên tục)](#tracer-tắt-việc-cập-nhật-liên-tục)
 - [update()](#update)
 - [done() (giữ cửa sổ mở)](#done-giữ-cửa-sổ-mở)
+- [Screen()](#screen)
+  - [.bgcolor()](#bgcolor)
 ---
 # turtle Introduction dùng để vẽ đồ họa 2D bằng cách điều khiển một con rùa di chuyển trên màn hình)
 ```bash
@@ -75,11 +78,10 @@ done()
 ```bash
 colormode(255) # có 2 chế độ là 1 và 255
 ```
-# pencolor()
 # speed() (điều chỉnh tốc độ)
-# hideturtle() (ẩn con rùa)
 # pensize() (độ dày nét)
 # Turle()
+## .hideturtle() (ẩn con rùa)
 ## .forward() (đi thẳng)
 **Ex**
 ```python
@@ -91,9 +93,11 @@ t.forward(100)
 
 turtle.done()
 ```
-# left() (quay trái)
+## .width(s)
+## .pencolor()
+## .circle() (vẽ hình tròn)
+## .left() (quay trái)
 # right() (quay phải)
-# circle() (vẽ hình trong)
 # tracer() (Tắt việc cập nhật liên tục)
 ```bash
 Không có
@@ -251,3 +255,5 @@ bạn có thể tạo ra một họa tiết hình bông hoa rất đẹp.
 Khi nào nên học turtle?
 Nên học nếu bạn mới bắt đầu với Python và muốn hiểu trực quan về vòng lặp, hàm và tọa độ.
 Không cần tập trung nhiều nếu mục tiêu của bạn là phát triển web, AI/Machine Learning, xử lý dữ liệu hoặc tự động hóa. Trong những lĩnh vực đó, turtle hầu như không được sử dụng. Nó chủ yếu là công cụ học tập và minh họa thuật toán.
+# Screen()
+## .bgcolor()
