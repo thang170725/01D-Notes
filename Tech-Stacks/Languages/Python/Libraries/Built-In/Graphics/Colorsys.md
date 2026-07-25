@@ -1,8 +1,11 @@
-colorsys là thư viện chuẩn của Python dùng để chuyển đổi giữa các hệ màu. Nó không cần cài đặt bằng pip.
+- [Colorsys Introduction (dùng để chuyển đổi giữa các hệ màu)](#colorsys-introduction-dùng-để-chuyển-đổi-giữa-các-hệ-màu)
+- [hsv\_to\_rgb()](#hsv_to_rgb)
+---
+# Colorsys Introduction (dùng để chuyển đổi giữa các hệ màu)
+```bash
+Nó không cần cài đặt bằng pip.
+```
 
-Chỉ cần:
-
-import colorsys
 colorsys dùng để làm gì?
 
 Nó hỗ trợ chuyển đổi giữa các hệ màu phổ biến:

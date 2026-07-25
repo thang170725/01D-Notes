@@ -1,5 +1,9 @@
-- [ttk](#ttk)
 - [ttk (là phiên bản widget đẹp hơn của Tkinter)](#ttk-là-phiên-bản-widget-đẹp-hơn-của-tkinter)
+- [Button](#button)
+- [.Entry()](#entry)
+  - [.Label()](#label)
+  - [.Style()](#style)
+    - [.configure()](#configure)
   - [Combobox (Danh sách xổ xuống -dropdown)](#combobox-danh-sách-xổ-xuống--dropdown)
 - [Treeview (Hiển thị dữ liệu dạng bảng hoặc cây)](#treeview-hiển-thị-dữ-liệu-dạng-bảng-hoặc-cây)
 - [messagebox (dùng để hiện thị popup)](#messagebox-dùng-để-hiện-thị-popup)
@@ -15,45 +19,21 @@
   - [forget() (Xóa một tab)](#forget-xóa-một-tab)
   - [tabs() (Lấy danh sách tất cả tab)](#tabs-lấy-danh-sách-tất-cả-tab)
   - [index() (Lấy chỉ số của tab)](#index-lấy-chỉ-số-của-tab)
-- [columnconfigure()](#columnconfigure)
-- [Cho cả hai cột được giãn đều](#cho-cả-hai-cột-được-giãn-đều)
+- [columnconfigure() (dùng để cấu hình các cột của grid())](#columnconfigure-dùng-để-cấu-hình-các-cột-của-grid)
+- [Frame](#frame)
 ---
-# ttk
 # ttk (là phiên bản widget đẹp hơn của Tkinter)
+```bash
 tk và ttk đều là thư viện tạo giao diện trong Tkinter, nhưng chúng có sự khác biệt quan trọng:
-
-tk	ttk
-Widget giao diện cổ điển	Widget giao diện hiện đại
-Dễ đổi màu (bg, fg)	Chủ yếu dùng theme (Style) để đổi giao diện
-Nhìn khá cũ	Nhìn giống ứng dụng Windows/macOS/Linux
-Có nhiều thuộc tính màu	Ít thuộc tính màu trực tiếp hơn
-Ví dụ 1: Button
-Dùng tk.Button
-import tkinter as tk
-
-root = tk.Tk()
-
-btn = tk.Button(
-    root,
-    text="Đăng nhập",
-    bg="blue",
-    fg="white"
-)
-btn.pack()
-
-root.mainloop()
-
-Kết quả giả định:
-
-+------------------+
-| Đăng nhập        |   ← Nền xanh, chữ trắng
-+------------------+
-
-Bạn có thể đổi màu rất dễ:
-
-bg="red"
-fg="yellow"
-Dùng ttk.Button
+    tk	                        ttk
+    Widget giao diện cổ điển	Widget giao diện hiện đại
+    Dễ đổi màu (bg, fg)	        Chủ yếu dùng theme (Style) để đổi giao diện
+    Nhìn khá cũ             	Nhìn giống ứng dụng Windows/macOS/Linux
+    Có nhiều thuộc tính màu	    Ít thuộc tính màu trực tiếp hơn
+```
+# Button
+**Ex**
+```python
 import tkinter as tk
 from tkinter import ttk
 
@@ -66,113 +46,14 @@ btn = ttk.Button(
 btn.pack()
 
 root.mainloop()
-
-Kết quả giả định:
-
-┌──────────────────┐
-│   Đăng nhập      │   ← Theo giao diện hệ điều hành
-└──────────────────┘
-
-Nếu viết:
-
-ttk.Button(root, text="Đăng nhập", bg="blue")
-
-sẽ báo lỗi:
-
-TypeError:
-unknown option "-bg"
-
-vì ttk không dùng bg, fg, mà dùng Style.
-
-Ví dụ 2: Entry
-tk.Entry
-entry = tk.Entry(
-    root,
-    bg="yellow",
-    fg="red"
-)
-
-Có thể đổi màu trực tiếp.
-
-ttk.Entry
-entry = ttk.Entry(root)
-
-Không có:
-
-bg="yellow"
-
-Muốn đổi phải tạo Style.
-
-Ví dụ 3: Label
-tk
-label = tk.Label(
-    root,
-    text="Hello",
-    bg="green",
-    fg="white"
-)
-ttk
-label = ttk.Label(
-    root,
-    text="Hello"
-)
-
-Muốn đổi màu:
-
-style = ttk.Style()
-
-style.configure(
-    "My.TLabel",
-    foreground="red"
-)
-
-label = ttk.Label(
-    root,
-    text="Hello",
-    style="My.TLabel"
-)
-Khi nào dùng cái nào?
-
-Nếu chỉ học Tkinter hoặc làm giao diện đơn giản:
-
-tk.Label
-tk.Button
-tk.Entry
-
-là đủ.
-
-Nếu làm ứng dụng thực tế:
-
-ttk.Label
-ttk.Button
-ttk.Entry
-ttk.Combobox
-ttk.Treeview
-
-sẽ đẹp hơn và giao diện đồng nhất với hệ điều hành.
-
-Ví dụ kết hợp
-import tkinter as tk
-from tkinter import ttk
-
-root = tk.Tk()
-
-tk.Label(root, text="tk Label", bg="yellow").pack(pady=5)
-
-ttk.Label(root, text="ttk Label").pack(pady=5)
-
-tk.Button(root, text="tk Button", bg="lightblue").pack(pady=5)
-
-ttk.Button(root, text="ttk Button").pack(pady=5)
-
-root.mainloop()
-
-Trong ví dụ này:
-
-tk.Label có nền vàng vì hỗ trợ bg.
-ttk.Label dùng giao diện mặc định của hệ điều hành.
-tk.Button có nền xanh nhạt theo bg.
-ttk.Button có giao diện hiện đại theo theme và bỏ qua các thuộc tính như bg, fg.
+# ┌──────────────────┐
+# │   Đăng nhập      │   ← Theo giao diện hệ điều hành
+# └──────────────────┘
+```
+# .Entry()
+## .Label()
+## .Style()
+### .configure()
 ## Combobox (Danh sách xổ xuống -dropdown)
 **Syn**
 ```bash
@@ -368,8 +249,8 @@ print(frame.winfo_children())
 # ]
 ```
 ### .destroy() (xóa từng widget)
-Đây là ví dụ đơn giản nhất để hiểu destroy() khi dùng ttk.
-
+**Ex**
+```python
 import tkinter as tk
 from tkinter import ttk
 
@@ -391,105 +272,7 @@ print("Sau khi destroy:")
 print(root.winfo_children())
 
 root.mainloop()
-Giao diện trước khi destroy()
-root
-│
-└── Frame
-      │
-      ├── Label
-      ├── Entry
-      └── Button
-Kết quả giả định
-Trước khi destroy:
-[
-    .!frame.!label,
-    .!frame.!entry,
-    .!frame.!button
-]
-
-Sau khi chạy
-
-frame.destroy()
-
-thì Frame và toàn bộ widget bên trong đều bị xóa.
-
-Nếu kiểm tra:
-
-print(root.winfo_children())
-
-kết quả giả định:
-
-Sau khi destroy:
-[]
-
-vì root không còn widget con nào nữa.
-
-Ví dụ chỉ xóa một Button
-import tkinter as tk
-from tkinter import ttk
-
-root = tk.Tk()
-
-label = ttk.Label(root, text="Tên")
-label.pack()
-
-entry = ttk.Entry(root)
-entry.pack()
-
-button = ttk.Button(root, text="Lưu")
-button.pack()
-
-print("Trước:")
-print(root.winfo_children())
-
-button.destroy()
-
-print("Sau:")
-print(root.winfo_children())
-
-root.mainloop()
-Trước khi xóa
-root
-├── Label
-├── Entry
-└── Button
-
-Kết quả giả định:
-
-Trước:
-[
-    .!label,
-    .!entry,
-    .!button
-]
-Sau khi
-button.destroy()
-
-giao diện còn:
-
-root
-├── Label
-└── Entry
-
-Kết quả giả định:
-
-Sau:
-[
-    .!label,
-    .!entry
-]
-Ý nghĩa của destroy()
-
-destroy() sẽ xóa hoàn toàn widget khỏi giao diện và giải phóng tài nguyên. Sau khi gọi:
-
-button.destroy()
-
-thì button không còn tồn tại trên cửa sổ nữa và bạn không thể dùng lại chính widget đó (ví dụ gọi button.pack() sẽ gây lỗi). Nếu muốn có nút mới, bạn phải tạo lại:
-
-button = ttk.Button(root, text="Lưu")
-button.pack()
-
-Đây là điểm khác với pack_forget() hoặc grid_forget(): các phương thức đó chỉ ẩn widget, còn destroy() thì xóa hẳn widget.
+```
 ### .pack() (Đặt frame vào window)
 **Syn**
 ```bash
@@ -595,20 +378,21 @@ root.mainloop()
 ## forget() (Xóa một tab)
 ## tabs() (Lấy danh sách tất cả tab)
 ## index() (Lấy chỉ số của tab)
-# columnconfigure()
-Trong ttk, columnconfigure() không phải là widget của ttk, mà là phương thức của các widget chứa (container) như Tk, Toplevel, Frame, ttk.Frame,... dùng để cấu hình các cột của grid().
-
-Nó quyết định cách các cột thay đổi kích thước khi cửa sổ hoặc Frame được thay đổi kích thước.
-
-Cú pháp
+# columnconfigure() (dùng để cấu hình các cột của grid())
+**Syn**
+```bash
 container.columnconfigure(index, weight=...)
-container: Tk, Frame, ttk.Frame,...
-index: chỉ số cột (0, 1, 2, ...)
-weight: độ ưu tiên giãn của cột.
-0: không giãn.
-1: giãn.
-2: giãn gấp đôi cột có weight=1.
-Ví dụ 1: Không dùng columnconfigure()
+
+- Input:
+    + container: Tk, Frame, ttk.Frame,...
+    + index: chỉ số cột (0, 1, 2, ...)
+    + weight: độ ưu tiên giãn của cột.
+        - 0: không giãn.
+        - 1: giãn.
+        - 2: giãn gấp đôi cột có weight=1.
+```
+**Ex1: Không dùng columnconfigure()**
+```python
 import tkinter as tk
 from tkinter import ttk
 
@@ -619,14 +403,14 @@ ttk.Button(root, text="Button 1").grid(row=0, column=0)
 ttk.Button(root, text="Button 2").grid(row=0, column=1)
 
 root.mainloop()
-
-Khi kéo rộng cửa sổ, hai nút vẫn nằm sát nhau, khoảng trống chỉ xuất hiện bên phải.
-
-+----------------------------------+
-|[Button1][Button2]                |
-|                                  |
-+----------------------------------+
-Ví dụ 2: Dùng columnconfigure()
+# Khi kéo rộng cửa sổ, hai nút vẫn nằm sát nhau, khoảng trống chỉ xuất hiện bên phải.
+# +----------------------------------+
+# |[Button1][Button2]                |
+# |                                  |
+# +----------------------------------+
+```
+**Ex2: Dùng columnconfigure()**
+```python
 import tkinter as tk
 from tkinter import ttk
 
@@ -647,77 +431,18 @@ ttk.Button(root, text="Button 2").grid(
 
 root.mainloop()
 
-Kết quả khi kéo rộng cửa sổ:
-
-+-------------------------------------------+
-|[------Button1------][------Button2------] |
-|                                           |
-+-------------------------------------------+
-
-Ở đây:
-
-columnconfigure(..., weight=1) cho phép cột giãn.
-sticky="ew" làm nút kéo giãn theo chiều ngang để lấp đầy cột.
-Ví dụ 3: Các cột giãn không đều
-import tkinter as tk
-from tkinter import ttk
-
-root = tk.Tk()
-root.geometry("500x120")
-
-root.columnconfigure(0, weight=1)
-root.columnconfigure(1, weight=3)
-
-ttk.Label(root, text="Tên:").grid(row=0, column=0, sticky="ew")
-ttk.Entry(root).grid(row=0, column=1, sticky="ew")
-
-root.mainloop()
-
-Khi phóng to cửa sổ:
-
-+--------------------------------------------------+
-|Tên:      |--------------------------------------|
-|          |                                      |
-+--------------------------------------------------+
-Cột 0 có weight=1.
-Cột 1 có weight=3.
-
-=> Cột 1 sẽ nhận gấp 3 lần phần không gian dư so với cột 0.
-
-Minh họa weight
-
-Giả sử cửa sổ có thêm 400 pixel chiều rộng.
-
-Trường hợp 1
-root.columnconfigure(0, weight=1)
-root.columnconfigure(1, weight=1)
-
-Hai cột chia đều:
-
-200 px | 200 px
-Trường hợp 2
-root.columnconfigure(0, weight=1)
-root.columnconfigure(1, weight=3)
-
-Tổng trọng số = 1 + 3 = 4.
-
-Cột 0 nhận 400 × 1/4 = 100 px
-Cột 1 nhận 400 × 3/4 = 300 px
-100 px | 300 px
-Tóm tắt
-columnconfigure() dùng để cấu hình các cột của grid().
-Nó áp dụng cho Tk, Frame, ttk.Frame, không phải riêng một widget của ttk.
-Thuộc tính quan trọng nhất là weight, quyết định cách các cột chia phần không gian dư khi cửa sổ được thay đổi kích thước.
-Để widget thực sự giãn theo cột, thường kết hợp với sticky="ew" (ngang) hoặc sticky="nsew" (cả bốn hướng).
-
-# ttk
-frame2 = ttk.Frame(root)
-Frame dùng để làm gì?
-
+# Kết quả khi kéo rộng cửa sổ:
+# +-------------------------------------------+
+# |[------Button1------][------Button2------] |
+# |                                           |
+# +-------------------------------------------+
+```
+# Frame
+```bash
 Frame giống như một chiếc hộp để chứa các widget khác.
-
-Ví dụ:
-
+```
+**Ex**
+```python
 import tkinter as tk
 
 root = tk.Tk()
@@ -732,197 +457,4 @@ tk.Entry(frame).pack()
 tk.Button(frame, text="Lưu").pack()
 
 root.mainloop()
-
-Cấu trúc sẽ là:
-
-root
-│
-└── Frame
-      │
-      ├── Label
-      ├── Entry
-      └── Button
-
-Nếu gọi:
-
-print(root.winfo_children())
-
-Kết quả giả định:
-
-[<Frame>]
-
-Còn:
-
-print(frame.winfo_children())
-
-Kết quả giả định:
-
-[
-    <Label>,
-    <Entry>,
-    <Button>
-]
-
-Đây cũng là một ví dụ rất điển hình để hiểu cách winfo_children() hoạt động.
-Trong Tkinter, destroy() dùng để xóa một widget hoặc đóng toàn bộ cửa sổ.
-
-Có hai cách dùng phổ biến:
-
-widget.destroy() → Xóa một widget.
-root.destroy() → Đóng chương trình.
-Ví dụ 1: Xóa một Button
-import tkinter as tk
-
-root = tk.Tk()
-
-button = tk.Button(root, text="Tôi sẽ biến mất")
-button.pack()
-
-def xoa_button():
-    button.destroy()
-
-btn = tk.Button(root, text="Xóa Button", command=xoa_button)
-btn.pack()
-
-root.mainloop()
-Ban đầu
-+-----------------------+
-| [Tôi sẽ biến mất]     |
-| [Xóa Button]          |
-+-----------------------+
-Sau khi bấm "Xóa Button"
-+-----------------------+
-| [Xóa Button]          |
-+-----------------------+
-
-Nút đầu tiên đã bị xóa khỏi giao diện.
-
-Ví dụ 2: Đóng cửa sổ
-import tkinter as tk
-
-root = tk.Tk()
-
-tk.Button(
-    root,
-    text="Thoát",
-    command=root.destroy
-).pack()
-
-root.mainloop()
-
-Khi nhấn Thoát, toàn bộ cửa sổ sẽ đóng.
-
-Ví dụ 3: Xóa Label
-import tkinter as tk
-
-root = tk.Tk()
-
-label = tk.Label(root, text="Xin chào")
-label.pack()
-
-def xoa():
-    label.destroy()
-
-tk.Button(root, text="Xóa Label", command=xoa).pack()
-
-root.mainloop()
-Ban đầu
-Xin chào
-
-[Xóa Label]
-Sau khi nhấn
-[Xóa Label]
-Ví dụ 4: Xóa Entry sau khi nhập
-import tkinter as tk
-
-root = tk.Tk()
-
-entry = tk.Entry(root)
-entry.pack()
-
-def gui():
-    print(entry.get())
-    entry.destroy()
-
-tk.Button(root, text="Gửi", command=gui).pack()
-
-root.mainloop()
-
-Ví dụ:
-
-Người dùng nhập
-
-Hello
-
-Nhấn Gửi
-
-Console
-
-Hello
-
-Giao diện
-
-[Gửi]
-
-Ô nhập liệu đã biến mất.
-
-Ví dụ 5: Xóa toàn bộ Frame
-import tkinter as tk
-
-root = tk.Tk()
-
-frame = tk.Frame(root, bg="lightblue")
-frame.pack()
-
-tk.Label(frame, text="Tên").pack()
-tk.Entry(frame).pack()
-
-def xoa_form():
-    frame.destroy()
-
-tk.Button(root, text="Ẩn Form", command=xoa_form).pack()
-
-root.mainloop()
-Ban đầu
-Tên
-[________]
-
-[Ẩn Form]
-Sau khi bấm
-[Ẩn Form]
-
-Cả Frame cùng các widget bên trong đều bị xóa.
-
-Khi nào dùng destroy()?
-
-Đóng chương trình:
-
-root.destroy()
-
-Xóa một widget:
-
-label.destroy()
-
-Xóa một cửa sổ con (Toplevel):
-
-window.destroy()
-
-Xóa cả một nhóm widget bằng cách đặt chúng trong một Frame, rồi gọi:
-
-frame.destroy()
-Lưu ý
-
-Sau khi một widget đã bị destroy(), bạn không thể hiển thị lại chính widget đó bằng pack() hay grid().
-
-Ví dụ:
-
-label.destroy()
-
-label.pack()   # ❌ Lỗi
-
-Nếu muốn hiển thị lại, bạn phải tạo một widget mới:
-
-label = tk.Label(root, text="Xin chào")
-label.pack()
-
-Đó là điểm khác biệt với pack_forget() hoặc grid_forget(), vốn chỉ ẩn widget chứ không xóa hẳn nó.
+```

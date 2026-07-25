@@ -8,6 +8,7 @@
   - [.config()](#config)
   - [mainloop()](#mainloop)
     - [.wifo\_children() (lấy danh sách tất cả widget con trực tiếp của một widge)](#wifo_children-lấy-danh-sách-tất-cả-widget-con-trực-tiếp-của-một-widge)
+- [Label() (Hiển thị văn bản)](#label-hiển-thị-văn-bản)
   - [pack() (Đưa widget lên cửa sổ)](#pack-đưa-widget-lên-cửa-sổ)
 - [Component (thành phần)](#component-thành-phần)
   - [Label()](#label)
@@ -22,7 +23,7 @@
 - [StringVar (Object quản lý chuỗi)](#stringvar-object-quản-lý-chuỗi)
 - [render() (vẽ toàn bộ giao diện)](#render-vẽ-toàn-bộ-giao-diện)
   - [.grid() (dùng để sắp xếp các widget (Button, Label, Entry,...) theo dạng bảng (hàng và cột), giống như bảng trong Excel)](#grid-dùng-để-sắp-xếp-các-widget-button-label-entry-theo-dạng-bảng-hàng-và-cột-giống-như-bảng-trong-excel)
-  - [column=0      column=1](#column0------column1)
+- [Listbox()](#listbox)
 ---
 # Tkinter Introduction (dùng để xây dựng giao diện đồ họa GUI - Graphical User Interface)
 ```bash
@@ -179,8 +180,6 @@ dùng để lấy danh sách tất cả các widget con trực tiếp của mộ
 ```
 **Ex**
 ```python
-Ví dụ đơn giản:
-
 import tkinter as tk
 
 root = tk.Tk()
@@ -197,125 +196,14 @@ button.pack()
 children = root.winfo_children()
 
 print(children)
-Kết quả giả định
-[
-    <tkinter.Label object .!label>,
-    <tkinter.Entry object .!entry>,
-    <tkinter.Button object .!button>
-]
-
-Hoặc trên máy khác có thể hiện:
-
-[.!label, .!entry, .!button]
-
-Đây là một list các đối tượng widget, không phải chuỗi.
-
-Ví dụ khác
-
-Giả sử bạn có giao diện:
-
-root
-│
-├── Label("Tên")
-├── Entry
-├── Button("Lưu")
-└── Frame
-
-thì:
-
-children = root.winfo_children()
-
-print(children)
-
-Kết quả giả định:
-
-[
-    Label,
-    Entry,
-    Button,
-    Frame
-]
-
-Bạn có thể duyệt:
-
-for widget in root.winfo_children():
-    print(widget)
-
-Kết quả:
-
-.!label
-.!entry
-.!button
-.!frame
-Nếu Frame cũng có widget con
-root
-│
-├── Label
-├── Button
-└── Frame
-      │
-      ├── Entry
-      └── Button
-
-Thì:
-
-root.winfo_children()
-
-chỉ trả về:
-
-[
-    Label,
-    Button,
-    Frame
-]
-
-Muốn lấy widget bên trong Frame:
-
-frame.winfo_children()
-
-Kết quả:
-
-[
-    Entry,
-    Button
-]
-Tóm tắt
-
-Giả sử cây widget như sau:
-
-root
-├── Label
-├── Entry
-├── Button
-└── Frame
-      ├── Label
-      └── Entry
-
-Thì:
-
-root.winfo_children()
-
-➡️ Kết quả giả định:
-
-[
-    <Label>,
-    <Entry>,
-    <Button>,
-    <Frame>
-]
-
-và:
-
-frame.winfo_children()
-
-➡️ Kết quả giả định:
-
-[
-    <Label>,
-    <Entry>
-]
-
-winfo_children() chỉ lấy các widget con trực tiếp, không lấy các widget "cháu" (con của con).
+# [
+#     <tkinter.Label object .!label>,
+#     <tkinter.Entry object .!entry>,
+#     <tkinter.Button object .!button>
+# ]
+# Hoặc trên máy khác có thể hiện:
+# [.!label, .!entry, .!button]
+```
 # Label() (Hiển thị văn bản)
 **Syn**
 ```bash
@@ -363,6 +251,10 @@ title = tk.Label(
     bg="#F2F2F2",
     fg="blue"
 )
+
+- input:
+    + fg: màu chữ
+    + bg: màu nền sau chữ
 ```
 # Button() (Tạo nút bấm)
 **Syn**
@@ -370,6 +262,7 @@ title = tk.Label(
 tk.Button(parent, text="Tên nút")
 ```
 **Ex**
+```python
 import tkinter as tk
 
 root = tk.Tk()
@@ -378,10 +271,15 @@ button = tk.Button(root, text="Đăng nhập")
 button.pack()
 
 root.mainloop()
+```
 # Entry() (Ô nhập một dòng)
 **Syn**
 ```bash
-entry = tk.Entry(parent)
+entry = tk.Entry(
+    parent,
+    width=25,
+    font=("Arial", 11)
+)
 ```
 **Ex**
 ```python
@@ -544,8 +442,8 @@ window.mainloop()
 ```
 # render() (vẽ toàn bộ giao diện)
 ## .grid() (dùng để sắp xếp các widget (Button, Label, Entry,...) theo dạng bảng (hàng và cột), giống như bảng trong Excel)
-
-1. Cú pháp
+**Syn**
+```bash
 widget.grid(
     row=0,
     column=0,
@@ -556,17 +454,17 @@ widget.grid(
     columnspan=1
 )
 
-Các tham số thường dùng:
-
-Tham số	Ý nghĩa
-row	Hàng
-column	Cột
-padx	Khoảng cách trái phải
-pady	Khoảng cách trên dưới
-sticky	Căn vị trí trong ô
-rowspan	Chiếm nhiều hàng
-columnspan	Chiếm nhiều cột
-2. Ví dụ đơn giản nhất
+- Input:
+    + row       : Hàng
+    + column	: Cột
+    + padx	    : Khoảng cách trái phải
+    + pady	    : Khoảng cách trên dưới
+    + sticky	: Căn vị trí trong ô
+    + rowspan	: Chiếm nhiều hàng
+    + columnspan: Chiếm nhiều cột
+```
+**Ex**
+```python
 import tkinter as tk
 
 root = tk.Tk()
@@ -577,15 +475,14 @@ tk.Label(root, text="C").grid(row=1, column=0)
 tk.Label(root, text="D").grid(row=1, column=1)
 
 root.mainloop()
-
-Kết quả giả định
-
-+-------+-------+
-|   A   |   B   |
-+-------+-------+
-|   C   |   D   |
-+-------+-------+
-3. Ví dụ với Button
+# +-------+-------+
+# |   A   |   B   |
+# +-------+-------+
+# |   C   |   D   |
+# +-------+-------+
+```
+**Ex2: Button**
+```python
 import tkinter as tk
 
 root = tk.Tk()
@@ -596,284 +493,19 @@ tk.Button(root, text="Nút 3").grid(row=1, column=0)
 tk.Button(root, text="Nút 4").grid(row=1, column=1)
 
 root.mainloop()
-
-Kết quả
-
-+-----------+-----------+
-|  Nút 1    |  Nút 2    |
-+-----------+-----------+
-|  Nút 3    |  Nút 4    |
-+-----------+-----------+
-4. row và column
-
-Ví dụ
-
-tk.Label(root, text="Tên").grid(row=0, column=0)
-tk.Entry(root).grid(row=0, column=1)
-
-tk.Label(root, text="Tuổi").grid(row=1, column=0)
-tk.Entry(root).grid(row=1, column=1)
-
-Kết quả
-
-Tên     [________]
-
-Tuổi    [________]
-
-Ở đây:
-
-row=0
-
-column=0      column=1
-------------------------
-Tên           Entry
-
-row=1
-
-Tuổi          Entry
-5. padx và pady
-tk.Button(root, text="OK").grid(
-    row=0,
-    column=0,
-    padx=20,
-    pady=10
-)
-
-Ý nghĩa
-
-padx = khoảng cách ngang
-
-      20px
-|<---------->|
-
-+---------+
-| Button  |
-+---------+
-
-pady = khoảng cách dọc
-
-     10px
-      ↑
-+---------+
-| Button  |
-+---------+
-      ↓
-     10px
-6. columnspan
-
-Một widget có thể chiếm nhiều cột.
-
-tk.Button(root, text="Đăng nhập").grid(
-    row=2,
-    column=0,
-    columnspan=2
-)
-
-Bố cục
-
-+-----------+-----------+
-| User      | Entry     |
-+-----------+-----------+
-| Pass      | Entry     |
-+-----------+-----------+
-|     Đăng nhập         |
-+-----------------------+
-
-Nút chiếm luôn hai cột.
-
-7. rowspan
-tk.Label(root, text="MENU").grid(
-    row=0,
-    column=0,
-    rowspan=3
-)
-
-Kết quả
-
-+------+-----------+
-|      | Tên       |
-|MENU  +-----------+
-|      | Tuổi      |
-|      +-----------+
-|      | Địa chỉ   |
-+------+-----------+
-
-Label "MENU" kéo dài qua 3 hàng.
-
-8. sticky
-
-Mặc định widget nằm giữa ô.
-
-+-------------+
-|             |
-|    Button   |
-|             |
-+-------------+
-
-Có thể căn vị trí bằng sticky.
-
-Căn trái
-sticky="w"
-+-------------+
-|Button       |
-|             |
-+-------------+
-Căn phải
-sticky="e"
-+-------------+
-|       Button|
-|             |
-+-------------+
-Căn trên
-sticky="n"
-+-------------+
-|   Button    |
-|             |
-|             |
-+-------------+
-Căn dưới
-sticky="s"
-+-------------+
-|             |
-|             |
-|   Button    |
-+-------------+
-Kéo giãn ngang
-sticky="ew"
-+-----------------------+
-|#######################|
-+-----------------------+
-
-Widget kéo dài từ trái sang phải.
-
-Kéo giãn toàn bộ
-sticky="nsew"
-
-Widget sẽ lấp đầy toàn bộ ô.
-
-9. Ví dụ hoàn chỉnh
-import tkinter as tk
-
-root = tk.Tk()
-root.title("Form đăng nhập")
-
-tk.Label(root, text="Tên đăng nhập").grid(row=0, column=0)
-
-tk.Entry(root).grid(row=0, column=1)
-
-tk.Label(root, text="Mật khẩu").grid(row=1, column=0)
-
-tk.Entry(root, show="*").grid(row=1, column=1)
-
-tk.Button(
+# +-----------+-----------+
+# |  Nút 1    |  Nút 2    |
+# +-----------+-----------+
+# |  Nút 3    |  Nút 4    |
+# +-----------+-----------+
+```
+# Listbox()
+**Syn**
+```bash
+student_listbox = tk.Listbox(
     root,
-    text="Đăng nhập"
-).grid(row=2, column=0, columnspan=2, pady=10)
-
-root.mainloop()
-
-Kết quả giao diện (minh họa)
-
-+-------------------------------+
-| Tên đăng nhập | [__________]  |
-| Mật khẩu      | [**********]  |
-|                               |
-|      [ Đăng nhập ]            |
-+-------------------------------+
-10. Lưu ý quan trọng
-
-Trong cùng một container (ví dụ cùng một root hoặc cùng một Frame), không được trộn pack() và grid().
-
-❌ Sai:
-
-tk.Label(root, text="A").pack()
-tk.Button(root, text="B").grid(row=0, column=0)
-
-Điều này sẽ gây lỗi vì root đang dùng hai cách bố trí khác nhau.
-
-✔ Đúng:
-
-frame1 = tk.Frame(root)
-frame1.pack()
-
-frame2 = tk.Frame(root)
-frame2.pack()
-
-tk.Label(frame1, text="A").pack()
-tk.Button(frame2, text="B").grid(row=0, column=0)
-
-Ở đây mỗi Frame chỉ sử dụng một geometry manager.
-
-Mẹo để dễ nhớ
-
-Hãy tưởng tượng cửa sổ là một bảng ô vuông:
-
-        column
-
-          0        1        2
-      +--------+--------+--------+
-row 0 |        |        |        |
-      +--------+--------+--------+
-row 1 |        |        |        |
-      +--------+--------+--------+
-row 2 |        |        |        |
-      +--------+--------+--------+
-row = số hàng.
-column = số cột.
-columnspan = chiếm nhiều cột.
-rowspan = chiếm nhiều hàng.
-sticky = căn hoặc kéo giãn widget trong ô.
-padx, pady = thêm khoảng trống xung quanh widget.
-
-Đây là cách bố trí được dùng nhiều nhất khi tạo form đăng nhập, form nhập dữ liệu, máy tính bỏ túi, giao diện quản lý, vì nó giúp các thành phần thẳng hàng và dễ sắp xếp.
-Có. tk cũng có Frame, và ttk cũng có Frame.
-
-Ví dụ:
-
-tk.Frame
-import tkinter as tk
-
-root = tk.Tk()
-
-frame = tk.Frame(
-    root,
-    bg="lightblue",
-    width=200,
-    height=100
+    width=55,
+    height=10,
+    font=("Arial", 11)
 )
-frame.pack()
-
-root.mainloop()
-
-Kết quả giả định:
-
-+----------------------+
-|                      |
-|      Frame           |  ← nền xanh nhạt
-|                      |
-+----------------------+
-
-Bạn có thể đổi màu trực tiếp:
-
-frame = tk.Frame(
-    root,
-    bg="yellow"
-)
-ttk.Frame
-import tkinter as tk
-from tkinter import ttk
-
-root = tk.Tk()
-
-frame = ttk.Frame(root)
-frame.pack()
-
-root.mainloop()
-
-ttk.Frame sẽ dùng giao diện (theme) của hệ điều hành và không hỗ trợ:
-
-bg="yellow"   # ❌ Lỗi
-
-Muốn đổi màu thường phải dùng ttk.Style, và tùy theme mà việc đổi màu nền có thể không có tác dụng.
-
-So sánh
+```
