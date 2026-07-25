@@ -709,3 +709,220 @@ columnconfigure() dùng để cấu hình các cột của grid().
 Nó áp dụng cho Tk, Frame, ttk.Frame, không phải riêng một widget của ttk.
 Thuộc tính quan trọng nhất là weight, quyết định cách các cột chia phần không gian dư khi cửa sổ được thay đổi kích thước.
 Để widget thực sự giãn theo cột, thường kết hợp với sticky="ew" (ngang) hoặc sticky="nsew" (cả bốn hướng).
+
+# ttk
+frame2 = ttk.Frame(root)
+Frame dùng để làm gì?
+
+Frame giống như một chiếc hộp để chứa các widget khác.
+
+Ví dụ:
+
+import tkinter as tk
+
+root = tk.Tk()
+
+frame = tk.Frame(root, bg="lightgray")
+frame.pack(padx=20, pady=20)
+
+tk.Label(frame, text="Tên").pack()
+
+tk.Entry(frame).pack()
+
+tk.Button(frame, text="Lưu").pack()
+
+root.mainloop()
+
+Cấu trúc sẽ là:
+
+root
+│
+└── Frame
+      │
+      ├── Label
+      ├── Entry
+      └── Button
+
+Nếu gọi:
+
+print(root.winfo_children())
+
+Kết quả giả định:
+
+[<Frame>]
+
+Còn:
+
+print(frame.winfo_children())
+
+Kết quả giả định:
+
+[
+    <Label>,
+    <Entry>,
+    <Button>
+]
+
+Đây cũng là một ví dụ rất điển hình để hiểu cách winfo_children() hoạt động.
+Trong Tkinter, destroy() dùng để xóa một widget hoặc đóng toàn bộ cửa sổ.
+
+Có hai cách dùng phổ biến:
+
+widget.destroy() → Xóa một widget.
+root.destroy() → Đóng chương trình.
+Ví dụ 1: Xóa một Button
+import tkinter as tk
+
+root = tk.Tk()
+
+button = tk.Button(root, text="Tôi sẽ biến mất")
+button.pack()
+
+def xoa_button():
+    button.destroy()
+
+btn = tk.Button(root, text="Xóa Button", command=xoa_button)
+btn.pack()
+
+root.mainloop()
+Ban đầu
++-----------------------+
+| [Tôi sẽ biến mất]     |
+| [Xóa Button]          |
++-----------------------+
+Sau khi bấm "Xóa Button"
++-----------------------+
+| [Xóa Button]          |
++-----------------------+
+
+Nút đầu tiên đã bị xóa khỏi giao diện.
+
+Ví dụ 2: Đóng cửa sổ
+import tkinter as tk
+
+root = tk.Tk()
+
+tk.Button(
+    root,
+    text="Thoát",
+    command=root.destroy
+).pack()
+
+root.mainloop()
+
+Khi nhấn Thoát, toàn bộ cửa sổ sẽ đóng.
+
+Ví dụ 3: Xóa Label
+import tkinter as tk
+
+root = tk.Tk()
+
+label = tk.Label(root, text="Xin chào")
+label.pack()
+
+def xoa():
+    label.destroy()
+
+tk.Button(root, text="Xóa Label", command=xoa).pack()
+
+root.mainloop()
+Ban đầu
+Xin chào
+
+[Xóa Label]
+Sau khi nhấn
+[Xóa Label]
+Ví dụ 4: Xóa Entry sau khi nhập
+import tkinter as tk
+
+root = tk.Tk()
+
+entry = tk.Entry(root)
+entry.pack()
+
+def gui():
+    print(entry.get())
+    entry.destroy()
+
+tk.Button(root, text="Gửi", command=gui).pack()
+
+root.mainloop()
+
+Ví dụ:
+
+Người dùng nhập
+
+Hello
+
+Nhấn Gửi
+
+Console
+
+Hello
+
+Giao diện
+
+[Gửi]
+
+Ô nhập liệu đã biến mất.
+
+Ví dụ 5: Xóa toàn bộ Frame
+import tkinter as tk
+
+root = tk.Tk()
+
+frame = tk.Frame(root, bg="lightblue")
+frame.pack()
+
+tk.Label(frame, text="Tên").pack()
+tk.Entry(frame).pack()
+
+def xoa_form():
+    frame.destroy()
+
+tk.Button(root, text="Ẩn Form", command=xoa_form).pack()
+
+root.mainloop()
+Ban đầu
+Tên
+[________]
+
+[Ẩn Form]
+Sau khi bấm
+[Ẩn Form]
+
+Cả Frame cùng các widget bên trong đều bị xóa.
+
+Khi nào dùng destroy()?
+
+Đóng chương trình:
+
+root.destroy()
+
+Xóa một widget:
+
+label.destroy()
+
+Xóa một cửa sổ con (Toplevel):
+
+window.destroy()
+
+Xóa cả một nhóm widget bằng cách đặt chúng trong một Frame, rồi gọi:
+
+frame.destroy()
+Lưu ý
+
+Sau khi một widget đã bị destroy(), bạn không thể hiển thị lại chính widget đó bằng pack() hay grid().
+
+Ví dụ:
+
+label.destroy()
+
+label.pack()   # ❌ Lỗi
+
+Nếu muốn hiển thị lại, bạn phải tạo một widget mới:
+
+label = tk.Label(root, text="Xin chào")
+label.pack()
+
+Đó là điểm khác biệt với pack_forget() hoặc grid_forget(), vốn chỉ ẩn widget chứ không xóa hẳn nó.
