@@ -83,7 +83,83 @@ root.mainloop()
 ```bash
 self.resizable(False, False)
 ```
-## mainloop() (tạo vòng lặp giữ của sổ xuất hiện)
+## .configure() 
+
+**Syn**
+```bash
+widget.configure(option=value)
+```
+**Ex: Đổi màu nền cửa sổ**
+```python
+import tkinter as tk
+
+root = tk.Tk()
+
+root.configure(bg="yellow")
+
+root.mainloop()
+# +--------------------------+
+# |                          |
+# |                          |
+# |     nền màu vàng         |
+# |                          |
+# +--------------------------+
+```
+## .config()
+**Tại sao phải dùng config()?**
+```bash
+Khi tạo widget:
+  label = tk.Label(
+      root,
+      text="Hello",
+      bg="white"
+  )
+  => Sau này muốn đổi chữ thành "Python" thì sao?
+
+Không thể sửa lại: label = tk.Label(...) -> vì widget đã được tạo.
+
+Ta dùng:label.config(text="Python") -> để thay đổi thuộc tính.
+```
+**Ex: Đổi tiêu đề Label**
+```python
+import tkinter as tk
+
+root = tk.Tk()
+
+label = tk.Label(root, text="Hello")
+label.pack()
+
+label.config(text="Python")
+
+root.mainloop()
+# Ban đầu: Hello
+# Sau khi gọi label.config(text="Python")
+# ↓
+# Kết quả: Python
+```
+**Ex4: Đổi nội dung Label sau khi bấm Button**
+```python
+import tkinter as tk
+
+root = tk.Tk()
+
+label = tk.Label(root, text="Waiting...")
+label.pack()
+
+def click():
+    label.config(text="Clicked!")
+
+button = tk.Button(root, text="Click", command=click)
+button.pack()
+
+root.mainloop()
+# Ban đầu Waiting...
+# [ Click ]
+#     ↓
+# Nhấn nút
+#     ↓
+# Clicked! -> [ Click ]
+```
 ```bash
 Nếu không gọi hàm này, cửa sổ sẽ đóng ngay
 ```
@@ -96,8 +172,11 @@ root.mainloop()
 # Kết quả: xuất hiện một cửa sổ trống
 ```
 ### .wifo_children() (lấy danh sách tất cả widget con trực tiếp của một widge)
-winfo_children() trong Tkinter dùng để lấy danh sách tất cả các widget con trực tiếp của một widget.
-
+```bash
+dùng để lấy danh sách tất cả các widget con trực tiếp của một widget.
+```
+**Ex**
+```python
 Ví dụ đơn giản:
 
 import tkinter as tk
