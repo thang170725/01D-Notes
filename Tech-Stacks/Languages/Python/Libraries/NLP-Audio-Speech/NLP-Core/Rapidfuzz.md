@@ -1,5 +1,241 @@
 Nếu datasketch giúp bạn lọc nhanh các ứng viên có khả năng giống nhau, thì RapidFuzz giúp bạn đánh giá chính xác hai chuỗi giống nhau bao nhiêu.
+Đúng, nhưng RapidFuzz không phải là một thuật toán, mà là một thư viện (library).
 
+Bên trong RapidFuzz có nhiều thuật toán để đo độ giống nhau của chuỗi.
+
+Có thể hình dung:
+
+datasketch là một thư viện
+MinHash là một thuật toán
+MinHashLSH là một thuật toán
+rapidfuzz là một thư viện
+ratio() là một thuật toán
+partial_ratio() là một thuật toán
+token_sort_ratio() là một thuật toán
+token_set_ratio() là một thuật toán
+...
+Tại sao sau MinHash còn cần RapidFuzz?
+
+Vì MinHash làm việc trên 5-gram (set).
+
+RapidFuzz làm việc trên chuỗi gốc.
+
+Ví dụ
+
+Trang A
+
+Nguyen Van A
+
+Trang B
+
+Nguyen Van A
+
+RapidFuzz
+
+from rapidfuzz import fuzz
+
+fuzz.ratio(
+    "Nguyen Van A",
+    "Nguyen Van A"
+)
+
+Kết quả
+
+100
+
+Ví dụ 2
+
+Nguyen Van A
+
+và
+
+Nguyen Van B
+
+RapidFuzz
+
+fuzz.ratio(...)
+
+Ví dụ
+
+91.6
+
+Tức là
+
+Hai chuỗi giống khoảng 91%.
+
+MinHash thì sao?
+
+MinHash cũng thấy
+
+Nguyen Van A
+
+Nguyen Van B
+
+rất giống.
+
+Ví dụ
+
+0.95
+
+Nhưng MinHash không biết chính xác ký tự nào khác.
+
+RapidFuzz thì biết.
+
+Ví dụ OCR
+
+Trang A
+
+So CCCD:
+012345678
+
+Trang B
+
+So CCCD:
+012345679
+
+Chỉ khác
+
+8
+↓
+
+9
+
+RapidFuzz
+
+99.x
+
+Rất dễ phát hiện.
+
+Nhưng nếu
+Hello World
+
+và
+
+World Hello
+
+RapidFuzz ratio()
+
+có thể chỉ
+
+50
+
+vì thứ tự khác.
+
+Trong khi
+
+fuzz.token_sort_ratio(...)
+
+sẽ
+
+100
+
+vì nó sắp xếp từ trước khi so sánh.
+
+Đó là lý do RapidFuzz có nhiều thuật toán.
+
+Các thuật toán phổ biến
+1. ratio()
+
+So sánh toàn bộ chuỗi.
+
+fuzz.ratio(a, b)
+
+Ví dụ
+
+apple
+
+apple
+
+↓
+
+100
+2. partial_ratio()
+
+Tìm xem chuỗi nhỏ có nằm trong chuỗi lớn không.
+
+Hello World
+
+với
+
+World
+
+ratio
+
+≈62
+
+partial_ratio
+
+100
+3. token_sort_ratio()
+
+Đổi thứ tự từ rồi so.
+
+John Smith
+Smith John
+
+↓
+
+100
+4. token_set_ratio()
+
+Bỏ các từ trùng.
+
+Ví dụ
+
+Apple Apple Banana
+
+với
+
+Apple Banana
+
+↓
+
+100
+Trong pipeline OCR của bạn
+
+Hiện tại bạn đang làm
+
+OCR
+    ↓
+Normalize
+    ↓
+Character 5-gram
+    ↓
+MinHash
+    ↓
+LSH
+    ↓
+RapidFuzz
+
+Vai trò của từng bước là:
+
+Thành phần	Vai trò
+Character 5-gram	Chuyển văn bản thành tập đặc trưng.
+MinHash	Tạo signature để ước lượng Jaccard nhanh.
+MinHashLSH	Tìm nhanh các trang có khả năng giống nhau.
+RapidFuzz	So sánh trực tiếp chuỗi văn bản để xác nhận kết quả cuối cùng.
+Vì sao RapidFuzz thường đặt ở cuối?
+
+Giả sử bạn có 100.000 trang.
+
+So sánh RapidFuzz giữa mọi cặp sẽ rất tốn thời gian (O(n²) cặp).
+MinHashLSH có thể lọc xuống chỉ còn vài trăm hoặc vài nghìn candidate.
+Lúc đó mới dùng RapidFuzz để kiểm tra kỹ từng candidate.
+
+Đây chính là lý do pipeline của bạn vừa nhanh vừa có độ chính xác cao:
+
+100.000 trang
+        │
+        ▼
+MinHashLSH
+        │
+        ▼
+Chỉ còn vài trăm candidate
+        │
+        ▼
+RapidFuzz xác nhận lần cuối
+
+RapidFuzz đóng vai trò như bộ kiểm tra cuối cùng (verification step), còn MinHashLSH đóng vai trò bộ lọc ứng viên (candidate generation). Chúng bổ sung cho nhau chứ không thay thế nhau.
 Trong pipeline của bạn:
 
 OCR

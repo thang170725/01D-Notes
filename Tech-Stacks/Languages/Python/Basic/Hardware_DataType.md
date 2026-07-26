@@ -1,5 +1,7 @@
 - [id()](#id)
 - [isinstance()](#isinstance)
+- [bytes (kiểu dữ liệu bytes)](#bytes-kiểu-dữ-liệu-bytes)
+  - [.encode() \& .decode()](#encode--decode)
 ---
 # id()
 ```bash
@@ -24,3 +26,14 @@ json.loads()
 Cú pháp:
 json.loads(<variable>)
 json.dumps()
+# bytes (kiểu dữ liệu bytes)
+## .encode() & .decode()
+**Ex**
+```python
+a = "hello"
+encoded = a.encode()
+decoded = encoded.decode()
+
+print(a, encoded, decoded) # hello b'hello' hello
+# b"hello" chính là chuỗi nhị phân nhưng python hiển thị dưới dạng dễ đọ
+```

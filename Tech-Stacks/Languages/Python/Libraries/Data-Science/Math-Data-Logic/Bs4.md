@@ -18,30 +18,30 @@ soup = BeautifulSoup(html, 'html.parser')
     + 'html.parser': parser dùng để đọc HTML
 ```
 **Ex**
-```bash
-HTML
+```python
+from bs4 import BeautifulSoup
 
+html = """
 <html>
     <body>
         <h1>Hello</h1>
         <p>Python</p>
     </body>
 </html>
-```
-```python
-from bs4 import BeautifulSoup
+"""
 
-with open('test.txt', 'r') as f:
-    html = f.read()
+soup = BeautifulSoup(html, "html.parser")
 
-soup = BeautifulSoup(html, 'html.parser')
-print(type(soup))
+print(soup.h1) # <h1>Hello</h1>
 ```
 ## .text (Muốn lấy nội dung)
-## get_text() (dùng để lấy toàn bộ nội dung text bên trong một thẻ, bỏ hết các tag HTML)
+## .get_text() (dùng để lấy toàn bộ nội dung text bên trong một thẻ, bỏ hết các tag HTML)
 **Syn**
 ```bash
-get_text(separator=..., strip=True)
+get_text(
+    separator=..., 
+    strip=True
+)
 
 - Input:
     + separator=: nối các dòng bằng ký tự bất kỳ # separator=" | " Kết quả: ChatGPT | Python | Machine Learning

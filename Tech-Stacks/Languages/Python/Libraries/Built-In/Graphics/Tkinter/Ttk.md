@@ -6,6 +6,13 @@
     - [.configure()](#configure)
   - [Combobox (Danh sách xổ xuống -dropdown)](#combobox-danh-sách-xổ-xuống--dropdown)
 - [Treeview (Hiển thị dữ liệu dạng bảng hoặc cây)](#treeview-hiển-thị-dữ-liệu-dạng-bảng-hoặc-cây)
+  - [heading()](#heading)
+  - [.column() (chỉnh độ rộng cột)](#column-chỉnh-độ-rộng-cột)
+  - [.insert() (thêm dữ liệu)](#insert-thêm-dữ-liệu)
+  - [.selection() (lấy dòng đang chọn)](#selection-lấy-dòng-đang-chọn)
+  - [.delete() (xóa dòng)](#delete-xóa-dòng)
+  - [.item (cập nhật dòng)](#item-cập-nhật-dòng)
+  - [.get\_children()](#get_children)
 - [messagebox (dùng để hiện thị popup)](#messagebox-dùng-để-hiện-thị-popup)
   - [showinfo()](#showinfo)
 - [.Frame (giống như 1 cái hộp)](#frame-giống-như-1-cái-hộp)
@@ -21,6 +28,8 @@
   - [index() (Lấy chỉ số của tab)](#index-lấy-chỉ-số-của-tab)
 - [columnconfigure() (dùng để cấu hình các cột của grid())](#columnconfigure-dùng-để-cấu-hình-các-cột-của-grid)
 - [Frame](#frame)
+- [Events (xử lý sự kiện)](#events-xử-lý-sự-kiện)
+  - [bind() trong ttk không khác gì bind() trong tk. Vì các widget ttk đều kế thừa từ widget Tkinter nên đều có thể bắt sự kiện bằng bind().](#bind-trong-ttk-không-khác-gì-bind-trong-tk-vì-các-widget-ttk-đều-kế-thừa-từ-widget-tkinter-nên-đều-có-thể-bắt-sự-kiện-bằng-bind)
 ---
 # ttk (là phiên bản widget đẹp hơn của Tkinter)
 ```bash
@@ -80,8 +89,22 @@ root.mainloop()
 # Treeview (Hiển thị dữ liệu dạng bảng hoặc cây)
 **Syn**
 ```bash
-tree = ttk.Treeview(parent)
+tree = ttk.Treeview(
+  master,
+  columns,
+  show="headings",
+  height=,
+  selectmode
+)
+
+- Input:
+  + master (widget): widget cha
+  + columns (tuple, list): danh sách tên các cột 
+  + show (str): hiển thị phần nào (tree, headings)
+  + height (int): số dòng hiển thị
+  + selectmode (str): Chế độ chọn (browse, extended, none)
 ```
+## heading()
 **Ex**
 ```python
 import tkinter as tk
@@ -89,22 +112,63 @@ from tkinter import ttk
 
 root = tk.Tk()
 
-tree = ttk.Treeview(root, columns=("Tên",), show="headings")
-tree.heading("Tên", text="Tên")
-tree.insert("", "end", values=("An",))
-tree.insert("", "end", values=("Bình",))
+tree = ttk.Treeview(
+    root,
+    columns=("id", "name", "class"),
+    show="headings"
+)
 
-tree.pack()
+tree.heading("id", text="Mã SV")
+tree.heading("name", text="Tên")
+tree.heading("class", text="Lớp")
+
+tree.pack(fill="both", expand=True)
 
 root.mainloop()
-# Kết quả:
-# +-----------+
-# |   Tên     |
-# +-----------+
-# |   An      |
-# |   Bình    |
-# +-----------+
 ```
+## .column() (chỉnh độ rộng cột)
+**Syn**
+```bash
+tree.column(
+  "id",
+  width=,
+  anchor="center"
+)
+
+- Input:
+  + anchor= (str): căn lề
+    - 'center': căn giữa
+```
+## .insert() (thêm dữ liệu)
+**Syn**
+```bash
+tree.insert(
+    "",
+    tk.END,
+    values=("SV01", "Nguyễn Văn A", "CNTT1")
+)
+```
+## .selection() (lấy dòng đang chọn)
+**Syn**
+```bash
+selected = tree.selection()
+```
+## .delete() (xóa dòng)
+**syn**
+```bash
+item = tree.selection()[0]
+
+tree.delete(item)
+```
+## .item (cập nhật dòng)
+**Syn**
+```bash
+tree.item(
+    item,
+    values=("SV03", "Lê Văn C", "CNTT3")
+)
+```
+## .get_children()
 # messagebox (dùng để hiện thị popup)
 ## showinfo()
 # .Frame (giống như 1 cái hộp)
@@ -458,3 +522,138 @@ tk.Button(frame, text="Lưu").pack()
 
 root.mainloop()
 ```
+# Events (xử lý sự kiện)
+## bind() trong ttk không khác gì bind() trong tk. Vì các widget ttk đều kế thừa từ widget Tkinter nên đều có thể bắt sự kiện bằng bind().
+
+Cú pháp
+widget.bind(sequence, callback)
+Tham số
+Tham số	Kiểu	Ý nghĩa
+sequence	str	Tên sự kiện cần bắt.
+callback	callable	Hàm được gọi khi sự kiện xảy ra. Hàm phải nhận một tham số event.
+Ví dụ 1: Bắt sự kiện click Button
+import tkinter as tk
+from tkinter import ttk
+
+def on_click(event):
+    print("Đã click")
+
+root = tk.Tk()
+
+button = ttk.Button(root, text="Click")
+button.pack()
+
+button.bind("<Button-1>", on_click)
+
+root.mainloop()
+
+<Button-1> là click chuột trái.
+
+Ví dụ 2: Bắt Enter trong Entry
+import tkinter as tk
+from tkinter import ttk
+
+def on_enter(event):
+    print(event.widget.get())
+
+root = tk.Tk()
+
+entry = ttk.Entry(root)
+entry.pack()
+
+entry.bind("<Return>", on_enter)
+
+root.mainloop()
+
+Ở đây:
+
+event.widget chính là Entry.
+get() lấy nội dung người dùng nhập.
+event là gì?
+
+Khi bind() gọi callback, Tkinter truyền vào một đối tượng Event.
+
+Ví dụ
+
+def on_click(event):
+    print(event.x)
+    print(event.y)
+
+Các thuộc tính thường dùng:
+
+Thuộc tính	Ý nghĩa
+event.widget	Widget phát sinh sự kiện.
+event.x	Tọa độ chuột trong widget.
+event.y	Tọa độ Y.
+event.x_root	Tọa độ trên màn hình.
+event.y_root	Tọa độ trên màn hình.
+event.keysym	Phím được nhấn.
+event.char	Ký tự nhập.
+Với Treeview
+
+Đây là widget dùng bind() nhiều nhất.
+
+1. Chọn một dòng
+tree.bind("<<TreeviewSelect>>", on_select)
+def on_select(event):
+    item = tree.selection()[0]
+    values = tree.item(item)["values"]
+    print(values)
+
+Ví dụ kết quả
+
+['SV01', 'Nguyễn Văn A', 'CNTT1']
+2. Double Click
+tree.bind("<Double-1>", on_double_click)
+def on_double_click(event):
+    item = tree.selection()[0]
+    print(tree.item(item)["values"])
+
+<Double-1> = double click chuột trái.
+
+3. Click chuột phải
+tree.bind("<Button-3>", on_right_click)
+Các sự kiện thường dùng
+Sequence	Ý nghĩa
+<Button-1>	Click chuột trái
+<Button-2>	Chuột giữa
+<Button-3>	Chuột phải
+<Double-1>	Double click
+<Triple-1>	Triple click
+<Motion>	Di chuyển chuột
+<Enter>	Chuột đi vào widget
+<Leave>	Chuột rời widget
+<Return>	Enter
+<Escape>	Esc
+<Key>	Nhấn phím bất kỳ
+<KeyPress-a>	Nhấn phím a
+<KeyRelease>	Thả phím
+<FocusIn>	Widget nhận focus
+<FocusOut>	Widget mất focus
+<<TreeviewSelect>>	Chọn dòng trong Treeview
+<<ComboboxSelected>>	Chọn giá trị trong Combobox
+command và bind khác nhau thế nào?
+
+Đối với Button:
+
+button = ttk.Button(
+    root,
+    text="Lưu",
+    command=save
+)
+command chỉ xử lý một hành động mặc định (nhấn nút).
+
+Nếu muốn bắt thêm sự kiện chuột:
+
+button.bind("<Button-3>", show_menu)
+
+hoặc:
+
+button.bind("<Enter>", highlight)
+
+thì phải dùng bind().
+
+Quy tắc chung:
+
+Dùng command khi widget hỗ trợ hành động mặc định (Button, Menu...).
+Dùng bind() khi cần bắt các sự kiện cụ thể như chuột, bàn phím, focus hoặc các sự kiện đặc biệt của ttk như <<TreeviewSelect>> và <<ComboboxSelected>>.

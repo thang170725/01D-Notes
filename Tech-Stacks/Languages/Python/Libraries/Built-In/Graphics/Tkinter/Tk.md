@@ -4,16 +4,16 @@
   - [title() (Đật tiêu đề cho của sổ)](#title-đật-tiêu-đề-cho-của-sổ)
   - [geometry() (Đặt kích thước cửa sổ)](#geometry-đặt-kích-thước-cửa-sổ)
   - [.resizeable() (Không cho kéo dãn)](#resizeable-không-cho-kéo-dãn)
-  - [.configure()](#configure)
-  - [.config()](#config)
+  - [.configure() (thiết lập hoặc thay đổi thuộc tính của một widget)](#configure-thiết-lập-hoặc-thay-đổi-thuộc-tính-của-một-widget)
+  - [.config() (thiết lập hoặc thay đổi thuộc tính của một widget)](#config-thiết-lập-hoặc-thay-đổi-thuộc-tính-của-một-widget)
   - [mainloop()](#mainloop)
     - [.wifo\_children() (lấy danh sách tất cả widget con trực tiếp của một widge)](#wifo_children-lấy-danh-sách-tất-cả-widget-con-trực-tiếp-của-một-widge)
-- [Label() (Hiển thị văn bản)](#label-hiển-thị-văn-bản)
-  - [pack() (Đưa widget lên cửa sổ)](#pack-đưa-widget-lên-cửa-sổ)
 - [Component (thành phần)](#component-thành-phần)
-  - [Label()](#label)
+  - [Label() (Hiển thị văn bản)](#label-hiển-thị-văn-bản)
 - [Button() (Tạo nút bấm)](#button-tạo-nút-bấm)
-- [Entry() (Ô nhập một dòng)](#entry-ô-nhập-một-dòng)
+  - [Entry() (Ô nhập một dòng)](#entry-ô-nhập-một-dòng)
+    - [.get()](#get)
+    - [.delete()](#delete)
 - [Text (Ô nhập nhiều dòng)](#text-ô-nhập-nhiều-dòng)
 - [Frame (Frame là khung chứa các widget)](#frame-frame-là-khung-chứa-các-widget)
 - [Canvas (Dùng để vẽ hình)](#canvas-dùng-để-vẽ-hình)
@@ -24,6 +24,8 @@
 - [render() (vẽ toàn bộ giao diện)](#render-vẽ-toàn-bộ-giao-diện)
   - [.grid() (dùng để sắp xếp các widget (Button, Label, Entry,...) theo dạng bảng (hàng và cột), giống như bảng trong Excel)](#grid-dùng-để-sắp-xếp-các-widget-button-label-entry-theo-dạng-bảng-hàng-và-cột-giống-như-bảng-trong-excel)
 - [Listbox()](#listbox)
+- [Display (hiển thị)](#display-hiển-thị)
+  - [.pack() (Đưa widget lên cửa sổ)](#pack-đưa-widget-lên-cửa-sổ)
 ---
 # Tkinter Introduction (dùng để xây dựng giao diện đồ họa GUI - Graphical User Interface)
 ```bash
@@ -85,11 +87,20 @@ root.mainloop()
 ```bash
 self.resizable(False, False)
 ```
-## .configure() 
-
+## .configure() (thiết lập hoặc thay đổi thuộc tính của một widget)
 **Syn**
 ```bash
-widget.configure(option=value)
+widget.configure(
+    bg="yellow",
+    family="Segoe UI",
+    size=10
+)
+
+- Input:
+    + family:
+        - Segoe UI      : font hỗ trợ tiếng việt tốt nhất trên Windows
+        - DejaVu Sans   : font hỗ trợ tiếng việt tốt nhất trên Linux
+    + size=10: cỡ chữ 
 ```
 **Ex: Đổi màu nền cửa sổ**
 ```python
@@ -107,7 +118,7 @@ root.mainloop()
 # |                          |
 # +--------------------------+
 ```
-## .config()
+## .config() (thiết lập hoặc thay đổi thuộc tính của một widget)
 **Tại sao phải dùng config()?**
 ```bash
 Khi tạo widget:
@@ -204,44 +215,8 @@ print(children)
 # Hoặc trên máy khác có thể hiện:
 # [.!label, .!entry, .!button]
 ```
-# Label() (Hiển thị văn bản)
-**Syn**
-```bash
-label = tk.Label(parent, text="Nội dung")
-```
-**Ex**
-```bash
-import tkinter as tk
-
-root = tk.Tk()
-
-label = tk.Label(root, text="Xin chào")
-label.pack()
-
-root.mainloop()
-# Kết quả: Xin chào
-```
-## pack() (Đưa widget lên cửa sổ)
-```bash
-Nếu không gọi pack(), widget sẽ không xuất hiện
-```
-**Syn**
-```bash
-widget.pack(pady=10)
-```
-**Ex**
-```python
-import tkinter as tk
-
-root = tk.Tk()
-
-button = tk.Button(root, text="Click")
-button.pack()
-
-root.mainloop()
-```
 # Component (thành phần)
-## Label()
+## Label() (Hiển thị văn bản)
 **Syn**
 ```python
 title = tk.Label(
@@ -255,6 +230,18 @@ title = tk.Label(
 - input:
     + fg: màu chữ
     + bg: màu nền sau chữ
+```
+**Ex**
+```bash
+import tkinter as tk
+
+root = tk.Tk()
+
+label = tk.Label(root, text="Xin chào")
+label.pack()
+
+root.mainloop()
+# Kết quả: Xin chào
 ```
 # Button() (Tạo nút bấm)
 **Syn**
@@ -272,7 +259,7 @@ button.pack()
 
 root.mainloop()
 ```
-# Entry() (Ô nhập một dòng)
+## Entry() (Ô nhập một dòng)
 **Syn**
 ```bash
 entry = tk.Entry(
@@ -292,6 +279,127 @@ entry.pack()
 
 root.mainloop()
 # Người dùng có thể nhập: Nguyễn Văn A
+```
+### .get()
+**Ex**
+```python
+root = tk.Tk()
+    entry = tk.Entry(root)
+    entry.pack()
+    tk.Button(root, text="Gửi", command=lambda: print(entry.get())).pack()
+    root.mainloop()
+```
+### .delete()
+Entry.delete(first, last) có cú pháp:
+
+entry.delete(first, last)
+
+Trong đó:
+
+first: vị trí bắt đầu xóa.
+last: vị trí kết thúc xóa.
+Tại sao là 0?
+
+Chuỗi trong Entry được đánh số từ 0.
+
+Ví dụ:
+
+Hello
+01234
+H ở vị trí 0
+e ở vị trí 1
+l ở vị trí 2
+...
+
+Nên:
+
+entry.delete(0)
+
+chỉ xóa ký tự đầu tiên (H).
+
+Tại sao là tk.END?
+
+tk.END là hằng số của Tkinter, có nghĩa là đến cuối chuỗi.
+
+Ví dụ:
+
+entry.insert(0, "Hello")
+
+Nếu gọi:
+
+entry.delete(0, tk.END)
+
+thì:
+
+Hello
+^^^^^
+
+Tất cả ký tự từ vị trí 0 đến cuối đều bị xóa.
+
+Kết quả:
+
+(Entry rỗng)
+
+Ví dụ khác
+entry.insert(0, "Hello")
+Xóa ký tự đầu
+entry.delete(0)
+ello
+Xóa từ vị trí 1 đến 3
+entry.delete(1, 3)
+Ho
+
+vì đã xóa:
+
+e l l
+Xóa từ vị trí 2 đến cuối
+entry.delete(2, tk.END)
+He
+Tại sao không dùng delete()?
+
+Vì Entry không biết bạn muốn xóa phần nào.
+
+Khác với Text hay list, phương thức delete() của Entry bắt buộc phải chỉ rõ phạm vi cần xóa.
+
+Do đó:
+
+entry.delete()
+
+sẽ báo lỗi:
+
+TypeError: delete() missing required positional argument
+Vì sao hầu hết mọi người đều dùng
+entry.delete(0, tk.END)
+
+Sau khi người dùng nhấn Gửi, thường muốn làm trống ô nhập để nhập dữ liệu mới.
+
+Ví dụ:
+
+def submit():
+    print(entry.get())
+    entry.delete(0, tk.END)
+
+Quy trình:
+
+Nhập: Nguyễn Văn A
+        ↓
+Nhấn Gửi
+        ↓
+In: Nguyễn Văn A
+        ↓
+Entry trở thành rỗng
+
+Đây là cách chuẩn và được dùng rất phổ biến trong Tkinter.
+**Ex**
+```python
+root = tk.Tk()
+entry = tk.Entry(root)
+entry.pack()
+def submit():
+    print(entry.get())
+    entry.delete(0, tk.END)
+tk.Button(root, text="Gửi", command=submit).pack()
+root.mainloop()
 ```
 # Text (Ô nhập nhiều dòng)
 **Syn**
@@ -508,4 +616,35 @@ student_listbox = tk.Listbox(
     height=10,
     font=("Arial", 11)
 )
+```
+# Display (hiển thị)
+## .pack() (Đưa widget lên cửa sổ)
+```bash
+Nếu không gọi pack(), widget sẽ không xuất hiện
+```
+**Syn**
+```bash
+widget.pack(
+
+- Input:
+    + fill= (str)   : Widget sẽ giãn theo chiều nào nếu còn không gian trống.
+        - "x" 
+        - "y"
+        - "both"
+        - "none"
+    + expand=True (bool)    : Widget có được phép nhận phần không gian dư của widget cha hay không
+    + padx=10 (int) : Khoảng cách bên ngoài widget theo chiều ngang (trái/phải).
+    + pady=10 (int) : Khoảng cách bên ngoài widget theo chiều dọc (trên/dưới).
+)
+```
+**Ex**
+```python
+import tkinter as tk
+
+root = tk.Tk()
+
+button = tk.Button(root, text="Click")
+button.pack()
+
+root.mainloop()
 ```

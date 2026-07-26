@@ -10,6 +10,7 @@
     - [-m](#-m)
   - [Remove (Nhóm xóa)](#remove-nhóm-xóa)
     - [-D (xóa branch)](#-d-xóa-branch)
+    - [-d (xóa nhanh trên máy local)](#-d-xóa-nhanh-trên-máy-local)
 - [git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)](#git-switch-vừa-tạo-branch-vừa-checkout-sáng-branch-đó-đây-là-cách-mới)
   - [-c](#-c)
 - [git fetch](#git-fetch)
@@ -77,6 +78,11 @@ git branch -m main # đổi tên thành main
 **Ex**
 ```bash
 git branch -D main
+```
+### -d (xóa nhanh trên máy local)
+**Syn**
+```bash
+git branch -d <branch_name>
 ```
 # git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)
 ## -c

@@ -1,13 +1,13 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [__file__ (Biến đặc biệt chứa đường dẫn file python hiện tại)](#file-biến-đặc-biệt-chứa-đường-dẫn-file-python-hiện-tại)
 - [.name](#name)
-- [open() \& .close() (Để mở file và đóng file.)](#open--close-để-mở-file-và-đóng-file)
+- [open() (mở file)](#open-mở-file)
+- [.close() (Để mở file và đóng file.)](#close-để-mở-file-và-đóng-file)
 - [.read() (Dùng để đọc nội dung một file)](#read-dùng-để-đọc-nội-dung-một-file)
 - [.readline()](#readline)
 - [.readlines()](#readlines)
+- [.write() (Để ghi vào một file)](#write-để-ghi-vào-một-file)
 - [With … as (để quản lý tài nguyên tự động)](#with--as-để-quản-lý-tài-nguyên-tự-động)
-- [bytes (kiểu dữ liệu bytes)](#bytes-kiểu-dữ-liệu-bytes)
-  - [.encode() \& .decode()](#encode--decode)
 ---
 # Display (Nhóm cung cấp thông tin)
 ## __file__ (Biến đặc biệt chứa đường dẫn file python hiện tại)
@@ -28,7 +28,7 @@ Trả về tên của file đang được mở.
 txt = open("D:\\workspace\Python_box\\a.txt", "rt")
 print(txt.name) # D:\workspace\Python_box\a.txt
 ```
-# open() & .close() (Để mở file và đóng file.)
+# open() (mở file)
 **Syn**
 ```bash
 open(‘data.txt’, ‘w’, encoding=’utf8’)
@@ -41,6 +41,8 @@ open(‘data.txt’, ‘w’, encoding=’utf8’)
     + "a+"  : Đọc + ghi tiếp	
     + "r+"  : Đọc + ghi (không xóa)	
 ```
+# .close() (Để mở file và đóng file.)
+
 # .read() (Dùng để đọc nội dung một file)
 **Syn**
 ```bash
@@ -81,10 +83,8 @@ Tạo ra một mảng. Mỗi dòng trong file sẽ tương ứng với một ph�
 txt = open("E:\\Python\Text.txt", "rt")
 print(txt.readlines()) # ['Hello\n', 'My name is Thang\n', 'I am from VietNam']
 txt.close()
-```# .write()
-```bash
-Để ghi vào một file.
 ```
+# .write() (Để ghi vào một file)
 **Syn**
 ```python
 txt = open("E:\\Python\Text.txt", "wt") # Tại file Text.txt có nội dung: Hello world
@@ -179,15 +179,4 @@ else:
         out.write(f"Number of words: {num_words}\n")
         out.write(f"Occurrences of 'hello': {hello_count}\n")
         out.write('-' * 30 + '\n')
-```
-# bytes (kiểu dữ liệu bytes)
-## .encode() & .decode()
-**Ex**
-```python
-a = "hello"
-encoded = a.encode()
-decoded = encoded.decode()
-
-print(a, encoded, decoded) # hello b'hello' hello
-# b"hello" chính là chuỗi nhị phân nhưng python hiển thị dưới dạng dễ đọ
 ```

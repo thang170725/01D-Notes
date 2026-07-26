@@ -88,6 +88,259 @@ w_t+1 = w_t - lambda*lr
     - Bước một đoạn nhỏ. η (learning rate).
     - Lặp lại cho đến khi loss không giảm đáng kể nữa.
 ```
+# Jaccard
+Jaccard là gì?
+
+Jaccard Similarity là một chỉ số đo độ giống nhau giữa hai tập hợp (set).
+
+Công thức:
+
+Jaccard = (Số phần tử chung) / (Tổng số phần tử khác nhau)
+
+Hay viết toán học:
+
+J(A, B) = |A ∩ B| / |A ∪ B|
+
+Trong đó:
+
+∩ (intersection) = giao nhau
+∪ (union) = hợp
+Ví dụ 1
+
+Có hai tập
+
+A = {"apple", "banana", "cat"}
+
+B = {"apple", "banana", "dog"}
+Giao
+{
+    "apple",
+    "banana"
+}
+
+Có
+
+2 phần tử
+Hợp
+{
+    "apple",
+    "banana",
+    "cat",
+    "dog"
+}
+
+Có
+
+4 phần tử
+
+Jaccard
+
+2 / 4 = 0.5
+Ví dụ 2
+A = {
+    "apple",
+    "banana",
+    "cat"
+}
+
+B = {
+    "apple",
+    "banana",
+    "cat"
+}
+
+Giao
+
+3
+
+Hợp
+
+3
+
+Jaccard
+
+3/3 = 1
+
+=> Giống hệt nhau.
+
+Ví dụ 3
+A = {
+    "apple",
+    "banana"
+}
+
+B = {
+    "dog",
+    "fish"
+}
+
+Giao
+
+0
+
+Hợp
+
+4
+
+Jaccard
+
+0
+
+=> Không giống chút nào.
+
+Trong OCR thì sao?
+
+Sau khi tạo character 5-gram
+
+Trang A
+
+helloworld
+
+5-gram
+
+A = {
+    "hello",
+    "ellow",
+    "llowo",
+    "lowor",
+    "oworl",
+    "world"
+}
+
+Trang B
+
+helloword
+
+5-gram
+
+B = {
+    "hello",
+    "ellow",
+    "llowo",
+    "lowor",
+    "oworld"
+}
+
+Giao
+
+hello
+ellow
+llowo
+lowor
+
+= 4
+
+Hợp
+
+hello
+ellow
+llowo
+lowor
+oworl
+world
+oworld
+
+= 7
+
+Jaccard
+
+4/7
+≈0.57
+
+Đây chính là độ giống nhau của hai trang.
+
+Vậy MinHash để làm gì?
+
+Giả sử mỗi trang OCR có
+
+80.000
+
+5-gram.
+
+Nếu muốn tính Jaccard thật, ta phải so sánh
+
+len(A & B)
+len(A | B)
+
+với hai tập rất lớn.
+
+Điều này khá tốn thời gian khi phải làm cho hàng triệu cặp.
+
+MinHash sinh ra để ước lượng Jaccard.
+
+Nó tạo ra một signature nhỏ
+
+[15,82,91,...]
+
+rồi từ signature đó có thể ước lượng
+
+Jaccard ≈ 0.93
+
+mà không cần tính giao và hợp của toàn bộ 5-gram.
+
+Vậy LSH để làm gì?
+
+Giả sử có
+
+100.000 trang
+
+Không thể tính
+
+m1.jaccard(m2)
+
+cho mọi cặp.
+
+LSH giúp trả lời
+
+"Trang nào có khả năng giống?"
+
+Ví dụ
+
+Page1
+
+↓
+
+Candidate
+
+Page18
+Page502
+Page900
+
+Sau đó mới tính Jaccard cho 3 candidate này.
+
+Mối quan hệ giữa 3 thuật toán
+          Jaccard
+             ↑
+   Độ giống thật giữa hai tập
+
+             ↑
+        MinHash
+Ước lượng Jaccard nhanh
+
+             ↑
+      MinHashLSH
+Tìm nhanh candidate để khỏi
+phải so sánh tất cả
+Tóm lại
+Jaccard Similarity: thước đo chính xác độ giống giữa hai tập hợp (ví dụ tập các 5-gram).
+MinHash: tạo một chữ ký (signature) nhỏ để ước lượng giá trị Jaccard rất nhanh.
+MinHashLSH: lập chỉ mục các MinHash signature để tìm nhanh các cặp có khả năng giống nhau, tránh phải so sánh mọi cặp tài liệu.
+
+Đó cũng là lý do trong datasketch bạn sẽ thường thấy ba bước này đi cùng nhau:
+
+# 1. Tạo MinHash từ tập 5-gram
+m = MinHash(...)
+
+# 2. Đưa MinHash vào LSH
+lsh.insert(id, m)
+
+# 3. Lấy candidate từ LSH rồi mới kiểm tra
+candidate_ids = lsh.query(m)
+
+# 4. Tính Jaccard (ước lượng bằng MinHash) với từng candidate
+similarity = m.jaccard(other_m)
+
+Ở đây, m.jaccard(other_m) không tính Jaccard thật trên tập 5-gram, mà trả về ước lượng Jaccard dựa trên hai MinHash signature. Điều này giúp giữ tốc độ rất cao khi xử lý số lượng tài liệu lớn.
 # Xác suất thống kê
 ## Công thức bao hàm - loại trừ
 ```bash
