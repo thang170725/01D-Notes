@@ -119,6 +119,7 @@
 7. Tình ta hai ngã	
 8. Xin một lần ngoại lệ	
 9. Yêu em rất nhiều	
+10. người có thương
 ```
 # piano
 ```bash

@@ -12,8 +12,9 @@
   - [Label() (Hiển thị văn bản)](#label-hiển-thị-văn-bản)
 - [Button() (Tạo nút bấm)](#button-tạo-nút-bấm)
   - [Entry() (Ô nhập một dòng)](#entry-ô-nhập-một-dòng)
-    - [.get()](#get)
+    - [.get() (lấy ra dữ liệu thật của Entry)](#get-lấy-ra-dữ-liệu-thật-của-entry)
     - [.delete()](#delete)
+    - [.insert() (dùng để chèn văn bản vào ô nhập liệu)](#insert-dùng-để-chèn-văn-bản-vào-ô-nhập-liệu)
 - [Text (Ô nhập nhiều dòng)](#text-ô-nhập-nhiều-dòng)
 - [Frame (Frame là khung chứa các widget)](#frame-frame-là-khung-chứa-các-widget)
 - [Canvas (Dùng để vẽ hình)](#canvas-dùng-để-vẽ-hình)
@@ -280,116 +281,23 @@ entry.pack()
 root.mainloop()
 # Người dùng có thể nhập: Nguyễn Văn A
 ```
-### .get()
+### .get() (lấy ra dữ liệu thật của Entry)
 **Ex**
 ```python
 root = tk.Tk()
-    entry = tk.Entry(root)
-    entry.pack()
-    tk.Button(root, text="Gửi", command=lambda: print(entry.get())).pack()
-    root.mainloop()
+entry = tk.Entry(root)
+entry.pack()
+tk.Button(root, text="Gửi", command=lambda: print(entry.get())).pack()
+root.mainloop()
 ```
 ### .delete()
-Entry.delete(first, last) có cú pháp:
-
+**Syn**
+```bash
 entry.delete(first, last)
 
-Trong đó:
-
-first: vị trí bắt đầu xóa.
-last: vị trí kết thúc xóa.
-Tại sao là 0?
-
-Chuỗi trong Entry được đánh số từ 0.
-
-Ví dụ:
-
-Hello
-01234
-H ở vị trí 0
-e ở vị trí 1
-l ở vị trí 2
-...
-
-Nên:
-
-entry.delete(0)
-
-chỉ xóa ký tự đầu tiên (H).
-
-Tại sao là tk.END?
-
-tk.END là hằng số của Tkinter, có nghĩa là đến cuối chuỗi.
-
-Ví dụ:
-
-entry.insert(0, "Hello")
-
-Nếu gọi:
-
-entry.delete(0, tk.END)
-
-thì:
-
-Hello
-^^^^^
-
-Tất cả ký tự từ vị trí 0 đến cuối đều bị xóa.
-
-Kết quả:
-
-(Entry rỗng)
-
-Ví dụ khác
-entry.insert(0, "Hello")
-Xóa ký tự đầu
-entry.delete(0)
-ello
-Xóa từ vị trí 1 đến 3
-entry.delete(1, 3)
-Ho
-
-vì đã xóa:
-
-e l l
-Xóa từ vị trí 2 đến cuối
-entry.delete(2, tk.END)
-He
-Tại sao không dùng delete()?
-
-Vì Entry không biết bạn muốn xóa phần nào.
-
-Khác với Text hay list, phương thức delete() của Entry bắt buộc phải chỉ rõ phạm vi cần xóa.
-
-Do đó:
-
-entry.delete()
-
-sẽ báo lỗi:
-
-TypeError: delete() missing required positional argument
-Vì sao hầu hết mọi người đều dùng
-entry.delete(0, tk.END)
-
-Sau khi người dùng nhấn Gửi, thường muốn làm trống ô nhập để nhập dữ liệu mới.
-
-Ví dụ:
-
-def submit():
-    print(entry.get())
-    entry.delete(0, tk.END)
-
-Quy trình:
-
-Nhập: Nguyễn Văn A
-        ↓
-Nhấn Gửi
-        ↓
-In: Nguyễn Văn A
-        ↓
-Entry trở thành rỗng
-
-Đây là cách chuẩn và được dùng rất phổ biến trong Tkinter.
+- first: vị trí bắt đầu xóa.
+- last: vị trí kết thúc xóa.
+```
 **Ex**
 ```python
 root = tk.Tk()
@@ -401,6 +309,95 @@ def submit():
 tk.Button(root, text="Gửi", command=submit).pack()
 root.mainloop()
 ```
+### .insert() (dùng để chèn văn bản vào ô nhập liệu)
+
+Cú pháp
+entry.insert(index, string)
+index: vị trí bắt đầu chèn.
+string: chuỗi cần chèn.
+Ví dụ 1: Chèn vào đầu
+entry.insert(0, "SV001")
+
+Nếu ô đang rỗng:
+
+SV001
+
+Nếu ô đang có:
+
+12345
+
+thì sau khi gọi:
+
+entry.insert(0, "SV001")
+
+kết quả:
+
+SV00112345
+Ví dụ 2: Chèn vào giữa
+
+Giả sử Entry đang có
+
+ABCDE
+entry.insert(2, "123")
+
+Kết quả:
+
+AB123CDE
+
+vì vị trí 2 là sau ký tự B.
+
+Ví dụ 3: Chèn vào cuối
+
+Tkinter có hằng số tk.END
+
+entry.insert(tk.END, "XYZ")
+
+Nếu Entry đang có
+
+ABCDE
+
+thì thành
+
+ABCDEXYZ
+Các index thường dùng
+0          # đầu chuỗi
+1          # sau ký tự đầu tiên
+2          # sau ký tự thứ hai
+tk.END     # cuối chuỗi
+Kết hợp với delete()
+
+Thông thường muốn thay thế nội dung cũ, người ta làm:
+
+entry.delete(0, tk.END)
+entry.insert(0, "Nguyễn Văn A")
+
+Nếu không gọi delete(), insert() chỉ chèn thêm, không ghi đè.
+
+Trong chương trình của bạn
+
+Bạn lưu các Entry trong một dict:
+
+self.entries = {
+    "id": Entry(...),
+    "fullname": Entry(...),
+    ...
+}
+
+Khi chọn một sinh viên từ Treeview, bạn muốn hiển thị dữ liệu lên các ô nhập:
+
+values = self.table.item(selected, "values")
+
+for key, value in zip(self.entries.keys(), values):
+    self.entries[key].delete(0, tk.END)
+    self.entries[key].insert(0, value)
+
+Ở đây:
+
+self.entries[key] lấy ra đối tượng Entry.
+delete(0, tk.END) xóa nội dung cũ.
+insert(0, value) chèn giá trị mới vào từ đầu ô nhập.
+
+Đây là cách sử dụng phổ biến nhất của Entry.insert() trong các ứng dụng Tkinter.
 # Text (Ô nhập nhiều dòng)
 **Syn**
 ```bash

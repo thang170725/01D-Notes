@@ -11,10 +11,20 @@
   - [.insert() (thêm dữ liệu)](#insert-thêm-dữ-liệu)
   - [.selection() (lấy dòng đang chọn)](#selection-lấy-dòng-đang-chọn)
   - [.delete() (xóa dòng)](#delete-xóa-dòng)
-  - [.item (cập nhật dòng)](#item-cập-nhật-dòng)
-  - [.get\_children()](#get_children)
-- [messagebox (dùng để hiện thị popup)](#messagebox-dùng-để-hiện-thị-popup)
-  - [showinfo()](#showinfo)
+  - [.item](#item)
+- [Lấy dữ liệu](#lấy-dữ-liệu)
+- [Sửa dữ liệu](#sửa-dữ-liệu)
+- [Xóa dòng](#xóa-dòng)
+- [... chỉnh sửa dữ liệu ...](#-chỉnh-sửa-dữ-liệu-)
+    - [.values (lấy giá trị của selection)](#values-lấy-giá-trị-của-selection)
+  - [.get\_children() (dùng để lấy danh sách các item con của một node)](#get_children-dùng-để-lấy-danh-sách-các-item-con-của-một-node)
+  - [.index()](#index)
+- [Lấy item đang chọn](#lấy-item-đang-chọn)
+- [Lấy vị trí](#lấy-vị-trí)
+- [Lấy dữ liệu](#lấy-dữ-liệu-1)
+- [Cập nhật dữ liệu của item](#cập-nhật-dữ-liệu-của-item)
+- [Xóa item](#xóa-item)
+- [Lấy toàn bộ item](#lấy-toàn-bộ-item)
 - [.Frame (giống như 1 cái hộp)](#frame-giống-như-1-cái-hộp)
   - [.winfow\_children()](#winfow_children)
     - [.destroy() (xóa từng widget)](#destroy-xóa-từng-widget)
@@ -160,7 +170,172 @@ item = tree.selection()[0]
 
 tree.delete(item)
 ```
-## .item (cập nhật dòng)
+## .item
+item() là một trong những hàm quan trọng nhất của ttk.Treeview. Nó dùng để lấy thông tin hoặc cập nhật thông tin của một dòng (item).
+
+Mỗi dòng trong Treeview đều có một item ID (ví dụ: I001, I002).
+
+1. Lấy item ID
+
+Khi chọn một dòng:
+
+item = self.table.selection()[0]
+print(item)
+
+Ví dụ:
+
+I003
+
+I003 chính là ID của dòng.
+
+2. Lấy dữ liệu của item
+values = self.table.item(item, "values")
+
+hoặc
+
+values = self.table.item(item)["values"]
+
+Ví dụ:
+
+self.table.insert("", "end", values=("Task 1", "Demo", "2026-07-27"))
+
+thì
+
+item = self.table.selection()[0]
+
+print(self.table.item(item))
+
+ra
+
+{
+    'text': '',
+    'image': '',
+    'values': ('Task 1', 'Demo', '2026-07-27'),
+    'open': 0,
+    'tags': ''
+}
+
+Lấy riêng values:
+
+print(self.table.item(item, "values"))
+
+ra
+
+('Task 1', 'Demo', '2026-07-27')
+3. Cập nhật item
+
+Đây là cách bạn đang dùng trong update().
+
+self.table.item(
+    item,
+    values=("New Name", "New Des", "2026-07-27")
+)
+
+Sau đó dòng được cập nhật ngay.
+
+4. Đổi text
+
+Nếu Treeview có cột cây (show="tree"):
+
+tree.item(item, text="Folder A")
+5. Đổi tag
+tree.item(item, tags=("done",))
+
+rồi định nghĩa style
+
+tree.tag_configure("done", background="lightgreen")
+6. Mở / đóng node
+
+Nếu Treeview có nhiều cấp:
+
+tree.item(item, open=True)
+
+hoặc
+
+tree.item(item, open=False)
+7. Lấy tất cả thông tin
+info = tree.item(item)
+
+print(info)
+
+Ví dụ
+
+{
+    'text': '',
+    'image': '',
+    'values': ('Task', 'Demo', '2026'),
+    'open': 0,
+    'tags': ''
+}
+8. Dùng chung với các hàm khác
+selection()
+item = tree.selection()[0]
+
+↓
+
+item()
+values = tree.item(item, "values")
+
+↓
+
+update
+tree.item(item, values=("A", "B", "C"))
+
+↓
+
+delete
+tree.delete(item)
+9. Quan hệ giữa các hàm
+Treeview
+│
+├── insert()
+│      ↓
+│    trả về item id
+│
+├── selection()
+│      ↓
+│    item id
+│
+├── item(item_id)
+│      ↓
+│    lấy/cập nhật dữ liệu
+│
+├── delete(item_id)
+│
+├── index(item_id)
+│
+└── get_children()
+Ví dụ hoàn chỉnh
+item = self.table.selection()[0]
+
+# Lấy dữ liệu
+values = self.table.item(item, "values")
+
+print(values)
+
+# Sửa dữ liệu
+self.table.item(
+    item,
+    values=("Task mới", "Mô tả mới", "2026-07-27")
+)
+
+# Xóa dòng
+self.table.delete(item)
+Tóm tắt các hàm thường dùng
+Hàm	Mục đích
+insert()	Thêm một dòng mới, trả về item ID
+selection()	Lấy item ID của dòng đang được chọn
+item(item)	Lấy hoặc cập nhật dữ liệu của dòng
+delete(item)	Xóa dòng
+get_children()	Lấy tất cả item ID trong Treeview (hoặc các item con của một node)
+index(item)	Lấy vị trí (0, 1, 2, ...) của dòng trong cùng cấp
+
+Trong các ứng dụng CRUD như chương trình của bạn, quy trình phổ biến là:
+
+item = self.table.selection()[0]     # Lấy dòng đang chọn
+values = self.table.item(item, "values")  # Đọc dữ liệu
+# ... chỉnh sửa dữ liệu ...
+self.table.item(item, values=new_values)  # Cập nhật dòng
 **Syn**
 ```bash
 tree.item(
@@ -168,9 +343,158 @@ tree.item(
     values=("SV03", "Lê Văn C", "CNTT3")
 )
 ```
-## .get_children()
-# messagebox (dùng để hiện thị popup)
-## showinfo()
+**Ex**
+```python
+selected = self.table.selection()
+
+if not selected:
+    return
+
+item = self.table.item(selected[0])
+print(item) # {'text': '', 'image': '', 'values': [1, 1, 11, 1, 1, 1], 'open': 0, 'tags': ''}
+```
+### .values (lấy giá trị của selection)
+## .get_children() (dùng để lấy danh sách các item con của một node)
+**Syn**
+```bash
+tree.get_children(item=None)
+
+- item=None (hoặc ""): lấy các item ở cấp gốc (root).
+- Output: Hàm trả về một tuple chứa các item id.
+```
+**Ex1: Lấy tất cả các dòng**
+```python
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+
+tree = ttk.Treeview(root)
+tree.pack()
+
+tree.insert("", "end", text="A")
+tree.insert("", "end", text="B")
+tree.insert("", "end", text="C")
+
+print(tree.get_children()) # ('I001', 'I002', 'I003')
+```
+## .index()
+Trong ttk.Treeview, index() dùng để lấy vị trí (0-based) của một item trong danh sách các item cùng cấp.
+
+Cú pháp
+tree.index(item)
+item: ID của item (ví dụ "I001").
+Trả về: số nguyên 0, 1, 2, ...
+Ví dụ 1
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+
+tree = ttk.Treeview(root)
+tree.pack()
+
+id1 = tree.insert("", "end", text="A")
+id2 = tree.insert("", "end", text="B")
+id3 = tree.insert("", "end", text="C")
+
+print(tree.index(id1))
+print(tree.index(id2))
+print(tree.index(id3))
+
+Kết quả
+
+0
+1
+2
+Ví dụ 2: Lấy index của dòng đang chọn
+def select(event):
+    item = tree.selection()[0]
+    print(item)              # I002
+    print(tree.index(item))  # 1
+
+Nếu người dùng chọn dòng thứ hai thì:
+
+I002
+1
+Ví dụ 3: Dùng để update
+
+Nếu bạn có một list dữ liệu:
+
+jobs = [
+    Job("A", "aaa"),
+    Job("B", "bbb"),
+    Job("C", "ccc")
+]
+
+Người dùng chọn một dòng:
+
+item = tree.selection()[0]
+idx = tree.index(item)
+
+jobs[idx].name = "New name"
+
+index() giúp biết dòng đang chọn tương ứng với phần tử nào trong list.
+
+Ví dụ 4: Kết hợp get_children()
+for item in tree.get_children():
+    print(tree.index(item), tree.item(item)["values"])
+
+Kết quả
+
+0 ['A', 'aaa']
+1 ['B', 'bbb']
+2 ['C', 'ccc']
+index() khác gì iid?
+
+Giả sử:
+
+id1 = tree.insert("", "end", values=("A",))
+id2 = tree.insert("", "end", values=("B",))
+
+Ta có:
+
+print(id1)
+I001
+print(tree.index(id1))
+0
+I001 là ID của item (không đổi trừ khi bạn xóa item đó).
+0 là vị trí hiện tại của item trong Treeview.
+
+Nếu bạn xóa dòng đầu:
+
+tree.delete(id1)
+
+thì:
+
+print(tree.index(id2))
+
+sẽ là
+
+0
+
+vì id2 đã trở thành dòng đầu tiên.
+
+Các hàm thường đi cùng index()
+# Lấy item đang chọn
+item = tree.selection()[0]
+
+# Lấy vị trí
+idx = tree.index(item)
+
+# Lấy dữ liệu
+values = tree.item(item, "values")
+
+# Cập nhật dữ liệu của item
+tree.item(item, values=("New", "Data"))
+
+# Xóa item
+tree.delete(item)
+
+# Lấy toàn bộ item
+items = tree.get_children()
+
+Trong các ứng dụng CRUD như chương trình quản lý công việc của bạn, index() thường được dùng để ánh xạ giữa dòng đang chọn trong Treeview và phần tử tương ứng trong danh sách (list) mà bạn đang quản lý trong bộ nhớ.
 # .Frame (giống như 1 cái hộp)
 ```bash
 Frame trong Tkinter/ttk có thể hiểu đơn giản là một cái khung (container) để chứa các widget khác như Label, Button, Entry,...
