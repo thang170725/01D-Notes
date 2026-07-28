@@ -2,6 +2,7 @@
 - [Button](#button)
 - [.Entry()](#entry)
   - [.Label()](#label)
+  - [.get() (lấy nội dung người dùng nhập)](#get-lấy-nội-dung-người-dùng-nhập)
   - [.Style()](#style)
     - [.configure()](#configure)
   - [Combobox (Danh sách xổ xuống -dropdown)](#combobox-danh-sách-xổ-xuống--dropdown)
@@ -11,17 +12,13 @@
   - [.insert() (thêm dữ liệu)](#insert-thêm-dữ-liệu)
   - [.selection() (lấy dòng đang chọn)](#selection-lấy-dòng-đang-chọn)
   - [.delete() (xóa dòng)](#delete-xóa-dòng)
-  - [.item](#item)
-- [Lấy dữ liệu](#lấy-dữ-liệu)
-- [Sửa dữ liệu](#sửa-dữ-liệu)
-- [Xóa dòng](#xóa-dòng)
-- [... chỉnh sửa dữ liệu ...](#-chỉnh-sửa-dữ-liệu-)
+  - [.item (Nó dùng để lấy thông tin hoặc cập nhật thông tin của một dòng (item))](#item-nó-dùng-để-lấy-thông-tin-hoặc-cập-nhật-thông-tin-của-một-dòng-item)
     - [.values (lấy giá trị của selection)](#values-lấy-giá-trị-của-selection)
   - [.get\_children() (dùng để lấy danh sách các item con của một node)](#get_children-dùng-để-lấy-danh-sách-các-item-con-của-một-node)
   - [.index()](#index)
 - [Lấy item đang chọn](#lấy-item-đang-chọn)
 - [Lấy vị trí](#lấy-vị-trí)
-- [Lấy dữ liệu](#lấy-dữ-liệu-1)
+- [Lấy dữ liệu](#lấy-dữ-liệu)
 - [Cập nhật dữ liệu của item](#cập-nhật-dữ-liệu-của-item)
 - [Xóa item](#xóa-item)
 - [Lấy toàn bộ item](#lấy-toàn-bộ-item)
@@ -39,7 +36,7 @@
 - [columnconfigure() (dùng để cấu hình các cột của grid())](#columnconfigure-dùng-để-cấu-hình-các-cột-của-grid)
 - [Frame](#frame)
 - [Events (xử lý sự kiện)](#events-xử-lý-sự-kiện)
-  - [bind() trong ttk không khác gì bind() trong tk. Vì các widget ttk đều kế thừa từ widget Tkinter nên đều có thể bắt sự kiện bằng bind().](#bind-trong-ttk-không-khác-gì-bind-trong-tk-vì-các-widget-ttk-đều-kế-thừa-từ-widget-tkinter-nên-đều-có-thể-bắt-sự-kiện-bằng-bind)
+  - [bind() (dùng để bắt sự kiện)](#bind-dùng-để-bắt-sự-kiện)
 ---
 # ttk (là phiên bản widget đẹp hơn của Tkinter)
 ```bash
@@ -71,6 +68,7 @@ root.mainloop()
 ```
 # .Entry()
 ## .Label()
+## .get() (lấy nội dung người dùng nhập)
 ## .Style()
 ### .configure()
 ## Combobox (Danh sách xổ xuống -dropdown)
@@ -170,188 +168,17 @@ item = tree.selection()[0]
 
 tree.delete(item)
 ```
-## .item
-item() là một trong những hàm quan trọng nhất của ttk.Treeview. Nó dùng để lấy thông tin hoặc cập nhật thông tin của một dòng (item).
-
-Mỗi dòng trong Treeview đều có một item ID (ví dụ: I001, I002).
-
-1. Lấy item ID
-
-Khi chọn một dòng:
-
-item = self.table.selection()[0]
-print(item)
-
-Ví dụ:
-
-I003
-
-I003 chính là ID của dòng.
-
-2. Lấy dữ liệu của item
-values = self.table.item(item, "values")
-
-hoặc
-
-values = self.table.item(item)["values"]
-
-Ví dụ:
-
-self.table.insert("", "end", values=("Task 1", "Demo", "2026-07-27"))
-
-thì
-
-item = self.table.selection()[0]
-
-print(self.table.item(item))
-
-ra
-
-{
-    'text': '',
-    'image': '',
-    'values': ('Task 1', 'Demo', '2026-07-27'),
-    'open': 0,
-    'tags': ''
-}
-
-Lấy riêng values:
-
-print(self.table.item(item, "values"))
-
-ra
-
-('Task 1', 'Demo', '2026-07-27')
-3. Cập nhật item
-
-Đây là cách bạn đang dùng trong update().
-
+## .item (Nó dùng để lấy thông tin hoặc cập nhật thông tin của một dòng (item))
+**Ex: Lấy dữ liệu của item**
+```python
+values = self.table.item(item, "values") # values = self.table.item(item)["values"]
+```
+**Ex2: Cập nhật item**
+```python
 self.table.item(
     item,
     values=("New Name", "New Des", "2026-07-27")
-)
-
-Sau đó dòng được cập nhật ngay.
-
-4. Đổi text
-
-Nếu Treeview có cột cây (show="tree"):
-
-tree.item(item, text="Folder A")
-5. Đổi tag
-tree.item(item, tags=("done",))
-
-rồi định nghĩa style
-
-tree.tag_configure("done", background="lightgreen")
-6. Mở / đóng node
-
-Nếu Treeview có nhiều cấp:
-
-tree.item(item, open=True)
-
-hoặc
-
-tree.item(item, open=False)
-7. Lấy tất cả thông tin
-info = tree.item(item)
-
-print(info)
-
-Ví dụ
-
-{
-    'text': '',
-    'image': '',
-    'values': ('Task', 'Demo', '2026'),
-    'open': 0,
-    'tags': ''
-}
-8. Dùng chung với các hàm khác
-selection()
-item = tree.selection()[0]
-
-↓
-
-item()
-values = tree.item(item, "values")
-
-↓
-
-update
-tree.item(item, values=("A", "B", "C"))
-
-↓
-
-delete
-tree.delete(item)
-9. Quan hệ giữa các hàm
-Treeview
-│
-├── insert()
-│      ↓
-│    trả về item id
-│
-├── selection()
-│      ↓
-│    item id
-│
-├── item(item_id)
-│      ↓
-│    lấy/cập nhật dữ liệu
-│
-├── delete(item_id)
-│
-├── index(item_id)
-│
-└── get_children()
-Ví dụ hoàn chỉnh
-item = self.table.selection()[0]
-
-# Lấy dữ liệu
-values = self.table.item(item, "values")
-
-print(values)
-
-# Sửa dữ liệu
-self.table.item(
-    item,
-    values=("Task mới", "Mô tả mới", "2026-07-27")
-)
-
-# Xóa dòng
-self.table.delete(item)
-Tóm tắt các hàm thường dùng
-Hàm	Mục đích
-insert()	Thêm một dòng mới, trả về item ID
-selection()	Lấy item ID của dòng đang được chọn
-item(item)	Lấy hoặc cập nhật dữ liệu của dòng
-delete(item)	Xóa dòng
-get_children()	Lấy tất cả item ID trong Treeview (hoặc các item con của một node)
-index(item)	Lấy vị trí (0, 1, 2, ...) của dòng trong cùng cấp
-
-Trong các ứng dụng CRUD như chương trình của bạn, quy trình phổ biến là:
-
-item = self.table.selection()[0]     # Lấy dòng đang chọn
-values = self.table.item(item, "values")  # Đọc dữ liệu
-# ... chỉnh sửa dữ liệu ...
-self.table.item(item, values=new_values)  # Cập nhật dòng
-**Syn**
-```bash
-tree.item(
-    item,
-    values=("SV03", "Lê Văn C", "CNTT3")
-)
-```
-**Ex**
-```python
-selected = self.table.selection()
-
-if not selected:
-    return
-
-item = self.table.item(selected[0])
-print(item) # {'text': '', 'image': '', 'values': [1, 1, 11, 1, 1, 1], 'open': 0, 'tags': ''}
+) # Sau đó dòng được cập nhật ngay.
 ```
 ### .values (lấy giá trị của selection)
 ## .get_children() (dùng để lấy danh sách các item con của một node)
@@ -847,15 +674,20 @@ tk.Button(frame, text="Lưu").pack()
 root.mainloop()
 ```
 # Events (xử lý sự kiện)
-## bind() trong ttk không khác gì bind() trong tk. Vì các widget ttk đều kế thừa từ widget Tkinter nên đều có thể bắt sự kiện bằng bind().
-
-Cú pháp
+## bind() (dùng để bắt sự kiện)
+**Syn**
+```bash
 widget.bind(sequence, callback)
-Tham số
-Tham số	Kiểu	Ý nghĩa
-sequence	str	Tên sự kiện cần bắt.
-callback	callable	Hàm được gọi khi sự kiện xảy ra. Hàm phải nhận một tham số event.
-Ví dụ 1: Bắt sự kiện click Button
+
+- Input:
+  + sequence (str)  : Tên sự kiện cần bắt.
+    - "<Button-1>": bấm chuột trái.
+    - "<Return>": bắt enter
+    - "<<TreeviewSelect>>": chọn trong treeview.
+  + callback (callable) : Hàm được gọi khi sự kiện xảy ra. Hàm phải nhận một tham số event.
+```
+**Ex1: Bắt sự kiện click Button**
+```python
 import tkinter as tk
 from tkinter import ttk
 
@@ -870,10 +702,9 @@ button.pack()
 button.bind("<Button-1>", on_click)
 
 root.mainloop()
-
-<Button-1> là click chuột trái.
-
-Ví dụ 2: Bắt Enter trong Entry
+```
+**Ex2: Bắt Enter trong Entry**
+```python
 import tkinter as tk
 from tkinter import ttk
 
@@ -888,11 +719,7 @@ entry.pack()
 entry.bind("<Return>", on_enter)
 
 root.mainloop()
-
-Ở đây:
-
-event.widget chính là Entry.
-get() lấy nội dung người dùng nhập.
+```
 event là gì?
 
 Khi bind() gọi callback, Tkinter truyền vào một đối tượng Event.

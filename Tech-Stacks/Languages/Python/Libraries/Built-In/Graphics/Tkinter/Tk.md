@@ -310,94 +310,17 @@ tk.Button(root, text="Gửi", command=submit).pack()
 root.mainloop()
 ```
 ### .insert() (dùng để chèn văn bản vào ô nhập liệu)
-
-Cú pháp
+**Syn**
+```bash
 entry.insert(index, string)
-index: vị trí bắt đầu chèn.
-string: chuỗi cần chèn.
-Ví dụ 1: Chèn vào đầu
+
+- index: vị trí bắt đầu chèn.
+- string: chuỗi cần chèn.
+```
+**Ex1: Chèn vào đầu**
+```python
 entry.insert(0, "SV001")
-
-Nếu ô đang rỗng:
-
-SV001
-
-Nếu ô đang có:
-
-12345
-
-thì sau khi gọi:
-
-entry.insert(0, "SV001")
-
-kết quả:
-
-SV00112345
-Ví dụ 2: Chèn vào giữa
-
-Giả sử Entry đang có
-
-ABCDE
-entry.insert(2, "123")
-
-Kết quả:
-
-AB123CDE
-
-vì vị trí 2 là sau ký tự B.
-
-Ví dụ 3: Chèn vào cuối
-
-Tkinter có hằng số tk.END
-
-entry.insert(tk.END, "XYZ")
-
-Nếu Entry đang có
-
-ABCDE
-
-thì thành
-
-ABCDEXYZ
-Các index thường dùng
-0          # đầu chuỗi
-1          # sau ký tự đầu tiên
-2          # sau ký tự thứ hai
-tk.END     # cuối chuỗi
-Kết hợp với delete()
-
-Thông thường muốn thay thế nội dung cũ, người ta làm:
-
-entry.delete(0, tk.END)
-entry.insert(0, "Nguyễn Văn A")
-
-Nếu không gọi delete(), insert() chỉ chèn thêm, không ghi đè.
-
-Trong chương trình của bạn
-
-Bạn lưu các Entry trong một dict:
-
-self.entries = {
-    "id": Entry(...),
-    "fullname": Entry(...),
-    ...
-}
-
-Khi chọn một sinh viên từ Treeview, bạn muốn hiển thị dữ liệu lên các ô nhập:
-
-values = self.table.item(selected, "values")
-
-for key, value in zip(self.entries.keys(), values):
-    self.entries[key].delete(0, tk.END)
-    self.entries[key].insert(0, value)
-
-Ở đây:
-
-self.entries[key] lấy ra đối tượng Entry.
-delete(0, tk.END) xóa nội dung cũ.
-insert(0, value) chèn giá trị mới vào từ đầu ô nhập.
-
-Đây là cách sử dụng phổ biến nhất của Entry.insert() trong các ứng dụng Tkinter.
+```
 # Text (Ô nhập nhiều dòng)
 **Syn**
 ```bash

@@ -1,7 +1,8 @@
 - [id()](#id)
 - [isinstance()](#isinstance)
 - [bytes (kiểu dữ liệu bytes)](#bytes-kiểu-dữ-liệu-bytes)
-  - [.encode() \& .decode()](#encode--decode)
+  - [.encode()](#encode)
+  - [.decode()](#decode)
 ---
 # id()
 ```bash
@@ -27,7 +28,15 @@ Cú pháp:
 json.loads(<variable>)
 json.dumps()
 # bytes (kiểu dữ liệu bytes)
-## .encode() & .decode()
+## .encode() 
+**Ex**
+```python
+a = "hello"
+encoded = a.encode()
+
+print(type(encoded)) # <class 'bytes'>
+```
+## .decode()
 **Ex**
 ```python
 a = "hello"

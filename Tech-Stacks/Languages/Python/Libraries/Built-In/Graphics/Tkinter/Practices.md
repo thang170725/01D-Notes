@@ -1,39 +1,35 @@
-ĐỀ BÀI: BÀI TẬP LẬP TRÌNH PYTHON (TKINTER)
+- [Quản lý công việc (ôn tập kiểm tra thường xuyên 1)](#quản-lý-công-việc-ôn-tập-kiểm-tra-thường-xuyên-1)
+- [Quản lý sinh viên](#quản-lý-sinh-viên)
+- [Quản lý nhân viên](#quản-lý-nhân-viên)
+- [Quản lý sản phẩm](#quản-lý-sản-phẩm)
+---
+# Quản lý công việc (ôn tập kiểm tra thường xuyên 1)
+```bash
 Viết chương trình bằng ngôn ngữ Python thực hiện các công việc sau:
+    - Giao diện ứng dụng: Tạo một cửa sổ với tkinter, bao gồm các phần nhập thông tin công việc mới, danh sách công việc hiện tại, và các nút chức năng.
+    - Các widget cần dùng: Sử dụng Label, Entry, Text, Button:
+        + Entry để nhập tên công việc.
+        + Text hoặc Label để hiển thị danh sách công việc.
+        + Button để thêm, lưu hoặc xóa công việc.
+    - Sử dụng grid() với các thuộc tính row, column, padx, pady để sắp xếp widget trên giao diện.
+    - Gán sự kiện cho các widget bằng bind:
+    - Nhấn nút "Thêm công việc" để thêm công việc vào danh sách.
+    - Nhấn đúp vào công việc trong danh sách để hiện chi tiết.
+    - Nhấn nút "Xóa công việc" để xóa công việc khỏi danh sách.
+    - Sử dụng messagebox thông báo khi thêm thành công và xác nhận khi xóa công việc.
+    - Lưu thông tin công việc vào file JSON (tasks.json) với các thông tin như: tên công việc, mô tả, và ngày tạo.
+    - Đọc và hiển thị dữ liệu JSON khi khởi động ứng dụng.
+    - Thay đổi và cập nhật dữ liệu: Cho phép thay đổi thông tin và lưu lại vào file JSON khi cập nhật.
+```
+```python
+from __future__ import annotations
 
-Giao diện ứng dụng: Tạo một cửa sổ với tkinter, bao gồm các phần nhập thông tin công việc mới, danh sách công việc hiện tại, và các nút chức năng.
-
-Các widget cần dùng: Sử dụng Label, Entry, Text, Button:
-
-Entry để nhập tên công việc.
-
-Text hoặc Label để hiển thị danh sách công việc.
-
-Button để thêm, lưu hoặc xóa công việc.
-
-Sử dụng grid() với các thuộc tính row, column, padx, pady để sắp xếp widget trên giao diện.
-
-Gán sự kiện cho các widget bằng bind:
-
-Nhấn nút "Thêm công việc" để thêm công việc vào danh sách.
-
-Nhấn đúp vào công việc trong danh sách để hiện chi tiết.
-
-Nhấn nút "Xóa công việc" để xóa công việc khỏi danh sách.
-
-Sử dụng messagebox thông báo khi thêm thành công và xác nhận khi xóa công việc.
-
-Lưu thông tin công việc vào file JSON (tasks.json) với các thông tin như: tên công việc, mô tả, và ngày tạo.
-
-Đọc và hiển thị dữ liệu JSON khi khởi động ứng dụng.
-
-Thay đổi và cập nhật dữ liệu: Cho phép thay đổi thông tin và lưu lại vào file JSON khi cập nhật.
-
-Nếu cần tôi hỗ trợ viết luôn khung code Python / Tkinter theo đúng các yêu cầu trên thì cứ bảo tôi nhé!
 import tkinter as tk
 import json
+import xml.sax
 
-from tkinter import ttk
+from xml.dom import minidom
+from tkinter import ttk, messagebox
 from dataclasses import dataclass
 from datetime import datetime
 
@@ -55,11 +51,14 @@ class JobManager(tk.Tk):
 
         self._render()
 
+        # self._load_json()
+        # self._load_xml_sax()
+        self._load_xml_dom()
+        self.after(100, lambda: messagebox.showinfo("Thông báo", "Load data thành công"))
+
     def _render(self):
-        fields = [
-            ("name", "Tên công việc"),
-            ("des", "Mô tả công việc")
-        ]
+        fields = [("name", "Tên công việc"), ("des", "Mô tả công việc")]
+
         for i, (key, label) in enumerate(fields):
             tk.Label(self, text=label).grid(column=0, row=i)
             entry = tk.Entry(self, width=30)
@@ -89,25 +88,55 @@ class JobManager(tk.Tk):
         self.table.bind("<<TreeviewSelect>>", self._tree_selected)
     
     def _get_job(self):
-        job = Job(
-            name=self.job['name'].get(),
-            des=self.job['des'].get(),
-            date=datetime.now()
-        )
-        return job
+        return Job(name=self.job['name'].get(), des=self.job['des'].get(), date=datetime.now())
     
     def _clear_form(self):
         for entry in self.job.values():
             entry.delete(0, tk.END)
     
+    def _load_json(self):
+        with open('jobs.json', 'r', encoding="utf-8") as f: 
+            data = json.load(f)
+
+        for row in data:
+            self.table.insert("", tk.END, values=(row['name'], row['des'], row['date']))
+
+    def _load_xml_sax(self):
+        handler = MyHandler()
+        parser = xml.sax.make_parser()
+        parser.setContentHandler(handler)
+        parser.parse('jobs.xml')
+        
+        jobs = handler.jobs
+        for raw in jobs:
+            self.table.insert("", tk.END, values=(raw['name'], raw['des'], raw['date']))
+
+    def _load_xml_dom(self):
+        dom = minidom.parse("jobs.xml")
+    
+        jobs = dom.getElementsByTagName("job")
+    
+        for job in jobs:
+            name = job.getElementsByTagName("name")[0].firstChild.data
+            des = job.getElementsByTagName("des")[0].firstChild.data
+            date = job.getElementsByTagName("date")[0].firstChild.data
+    
+            self.table.insert("", tk.END, values=(name, des, date))
+
     def _tree_selected(self, events):
-        item = self.table.selection()[0]
+        self._clear_form()
+
+        selection = self.table.selection()
+        if not selection:
+            return
+        
+        item = selection[0]
         self.selected_item = item
+
         values = self.table.item(item)["values"]
         key = ["name", "des"]
         for (k, v) in zip(key, values):
             self.job[k].insert(0, v)
-
     
     def add_job(self):
         job = self._get_job()
@@ -117,6 +146,7 @@ class JobManager(tk.Tk):
 
     def update_job(self):
         job = self._get_job()
+
         self.table.item(self.selected_item, values=(job.name, job.des, job.date))
         self._clear_form()
 
@@ -138,19 +168,56 @@ class JobManager(tk.Tk):
         
         with open("jobs.json", "w") as f:
             json.dump(jobs, f)
+        
+        messagebox.showinfo("Thong bao", "luu json thanh cong")
             
-
     def save_xml_sax(self):
-        pass
+        with open('jobs.xml', 'w') as f:
+            f.write('<jobs>\n')
+            for item in self.table.get_children():
+                value = self.table.item(item)['values']
+                f.write(f'''
+                <job>
+                    <name>{value[0]}</name>
+                    <des>{value[1]}</des>
+                    <date>{value[2]}</date>
+                </job>\n''')
+            f.write('</jobs>') 
+        
+        messagebox.showinfo("Thong bao", "luu xml thanh cong")
 
     def save_xml_dom(self):
         pass
 
 
+class MyHandler(xml.sax.ContentHandler):
+    def __init__(self):
+        self.content = ""
+        self.current_job = {}
+        self.jobs = []
+
+    def startElement(self, name, attrs):
+        self.content = ""
+
+        if name == "job":
+            self.current_job = {}
+
+    def characters(self, content):
+        self.content += content
+
+    def endElement(self, name):
+        if name in ("name", "des", "date"):
+            self.current_job[name] = self.content.strip()
+
+        elif name == "job":
+            self.jobs.append(self.current_job)
+
 if __name__ == "__main__":
     app = JobManager()
     app.mainloop()
-
+```
+# Quản lý sinh viên
+```python
 from __future__ import annotations
 from tkinter import font
 from dataclasses import dataclass
@@ -716,30 +783,27 @@ class StudentHandler(ContentHandler):
 if __name__ == "__main__":
     app = Form()
     app.mainloop()
-
-'''
-Đề bài mẫu:
-
-Quản lý nhân viên
-
-Mã nhân viên
-Họ tên
-Phòng ban
-Tuổi
-Lương
-Thưởng
+```
+# Quản lý nhân viên
+```bash
+Quản lý nhân viên gồm (Mã nhân viên)
+    - Họ tên
+    - Phòng ban
+    - Tuổi
+    - Lương
+    - Thưởng
 
 Chức năng:
-
-Thêm
-Sửa
-Xóa
-Tìm kiếm
-Sắp xếp
-Thống kê
-Lưu XML bằng DOM (minidom)
-Đọc XML bằng DOM (minidom)
-'''
+    - Thêm
+    - Sửa
+    - Xóa
+    - Tìm kiếm
+    - Sắp xếp
+    - Thống kê
+    - Lưu XML bằng DOM (minidom)
+    - Đọc XML bằng DOM (minidom)
+```
+```python
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -1381,32 +1445,28 @@ if __name__ == "__main__":
     Form(root)
 
     root.mainloop()
-
-'''
-Đề bài
-
-Quản lý sản phẩm
-
+```
+# Quản lý sản phẩm
+```bash
 Thông tin sản phẩm
-
-Mã sản phẩm
-Tên sản phẩm
-Loại
-Số lượng
-Đơn giá
-Nhà sản xuất
+    - Mã sản phẩm
+    - Tên sản phẩm
+    - Loại
+    - Số lượng
+    - Đơn giá
+    - Nhà sản xuất
 
 Chức năng
-
-Thêm
-Sửa
-Xóa
-Lưu JSON
-Đọc JSON
-Tìm kiếm
-Sắp xếp
-Thống kê
-'''
+    - Thêm
+    - Sửa
+    - Xóa
+    - Lưu JSON
+    - Đọc JSON
+    - Tìm kiếm
+    - Sắp xếp
+    - Thống kê
+```
+```python
 from __future__ import annotations
 from dataclasses import dataclass, asdict
 import tkinter as tk
@@ -2005,3 +2065,4 @@ if __name__ == "__main__":
     Form(root)
 
     root.mainloop()
+```
