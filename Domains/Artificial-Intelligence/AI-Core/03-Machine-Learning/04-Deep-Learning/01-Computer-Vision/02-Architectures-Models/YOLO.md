@@ -422,4 +422,109 @@ Bước 6: Feature Pyramid / Neck
         + object lớn -> OK
         + object nhỏ -> mất hết chi tiết
 ```
+YOLO OBB (Oriented Bounding Box) và YOLO thông thường (Horizontal Bounding Box - HBB) khác nhau chủ yếu ở cách biểu diễn khung bao của vật thể.
 
+1. YOLO bình thường (HBB)
+
+YOLO thông thường dự đoán hộp chữ nhật song song với trục ảnh.
+
+Thông tin mỗi bounding box thường là:
+
+x_center
+y_center
+width
+height
+
+Ví dụ:
+
+      +----------------+
+      |                |
+      |      Car       |
+      |                |
+      +----------------+
+
+Hộp luôn thẳng đứng hoặc nằm ngang, không được xoay.
+
+2. YOLO OBB
+
+YOLO OBB dự đoán bounding box có thể xoay theo góc của vật thể.
+
+Ngoài 4 thông số trên còn có:
+
+x_center
+y_center
+width
+height
+angle (góc xoay)
+
+Ví dụ:
+
+     /--------------/
+    /              /
+   /     Ship     /
+  /              /
+ /--------------/
+
+Bounding box nghiêng theo vật thể.
+
+So sánh
+YOLO thường	YOLO OBB
+Bounding box thẳng	Bounding box có thể xoay
+4 tham số (x, y, w, h)	5 tham số (x, y, w, h, θ)
+Đơn giản, nhanh	Phức tạp hơn một chút
+Phù hợp người, xe, động vật...	Phù hợp vật thể có hướng rõ ràng
+Khi nào dùng OBB?
+
+OBB rất hữu ích khi vật thể bị nghiêng hoặc có hướng rõ ràng, ví dụ:
+
+🚢 Tàu trên ảnh vệ tinh
+✈ Máy bay
+📦 Container
+📄 Văn bản bị nghiêng
+🏠 Nhà trong ảnh vệ tinh
+🪵 Gỗ, thép trên dây chuyền sản xuất
+
+Nếu dùng YOLO thường, hộp bao sẽ chứa nhiều khoảng trống:
+
++----------------------+
+|                      |
+|     /--------/       |
+|    /  Ship  /        |
+|   /--------/         |
+|                      |
++----------------------+
+
+Trong khi YOLO OBB ôm sát vật thể:
+
+     /--------/
+    /  Ship  /
+   /--------/
+Khác nhau về dữ liệu huấn luyện
+
+YOLO thường:
+
+class x_center y_center width height
+
+Ví dụ:
+
+0 0.52 0.48 0.30 0.20
+
+YOLO OBB thường thêm thông tin góc hoặc biểu diễn bằng 4 đỉnh (tùy phiên bản và framework).
+
+Ví dụ với góc:
+
+class x_center y_center width height angle
+
+Hoặc dạng 4 góc:
+
+class x1 y1 x2 y2 x3 y3 x4 y4
+Độ chính xác
+Nếu vật thể luôn thẳng, YOLO thường là đủ.
+Nếu vật thể thường xuyên bị xoay, YOLO OBB thường cho:
+IoU cao hơn.
+Ít chồng lấn giữa các vật thể.
+Định vị chính xác hơn.
+
+Đổi lại, YOLO OBB yêu cầu dữ liệu gán nhãn theo hướng và mô hình cũng phải học thêm thông tin về góc, nên việc huấn luyện và gán nhãn phức tạp hơn.
+
+Tóm lại: YOLO thường chỉ dự đoán hộp chữ nhật song song với trục ảnh, còn YOLO OBB dự đoán hộp chữ nhật có thể xoay theo góc của vật thể. OBB đặc biệt phù hợp cho ảnh vệ tinh, tài liệu, hoặc các vật thể có hướng rõ ràng, trong khi YOLO thường phù hợp với đa số bài toán phát hiện đối tượng thông dụng.
