@@ -1,23 +1,12 @@
-Chương 2: SQL Sever
-Kiểu dữ liệu
-
-
-
-
-Char(n)
-Cố định n ký tự
-Char(10) nếu điền ‘An’ database vẫn dùng 10
-
-
-Varchar(n)
-Chỉ dùng đúng số ký tự cần
-Varchar(10) nếu điều ‘An’ database chỉ dùng 2
-
-
-
-Thêm
-Thêm dữ liệu 
-Cú pháp:
+# SQL Sever Introduction 
+# Datatype (Kiểu dữ liệu)
+```bash
+- Char(n)     : Cố định n ký tự # Char(10) nếu điền ‘An’ database vẫn dùng 10
+- Varchar(n)  : Chỉ dùng đúng số ký tự cần # Varchar(10) nếu điều ‘An’ database chỉ dùng 2
+```
+# Insert into
+**Syn**
+```bash
 INSERT INTO Users (Username, Password, Email)
 VALUES (N'admin', N'123456', N'admin@example.com');
 INSERT INTO Users (Username, Password, Email)
@@ -27,7 +16,9 @@ VALUES
     (N'user3', N'pass3', N'user3@example.com');
 INSERT INTO Users
 VALUES (1, N'test', N'1234', N'test@example.com');
-Cập nhật
+```
+# alter (Cập nhật)
+```bash
 Đổi kiểu dữ liệu cho cột
 Cú pháp:
 ALTER TABLE TenBang
@@ -37,6 +28,9 @@ ALTER COLUMN Username CHAR(50) NOT NULL;
 Sửa giá trị hiện có
 Ví dụ bảng Users có cột Username đang lưu là "lê đức thắng", bạn muốn đổi thành "thắng".
 Cú pháp:
+```
+# update
+```bash
 UPDATE Users
 SET Username = N'thắng'
 WHERE Username = N'lê đức thắng';
@@ -77,3 +71,4 @@ ALTER TABLE TenBang
 DROP COLUMN TenCot;
 ALTER TABLE UserName
 DROP COLUMN email;
+```

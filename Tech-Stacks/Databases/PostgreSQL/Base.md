@@ -1,5 +1,9 @@
-
-
+- [CREATE TABLE](#create-table)
+- [ADD COLUMN](#add-column)
+- [ALTER TABLE cars](#alter-table-cars)
+- [UPDATE](#update)
+- [INSERT INTO](#insert-into)
+---
 # CREATE TABLE
 **Ex**
 ```bash

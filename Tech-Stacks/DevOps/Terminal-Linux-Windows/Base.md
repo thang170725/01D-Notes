@@ -8,5 +8,3 @@ Terminal/              # Mình dùng file này để xem các lệnh terminal
 ├── System.md          # Mình dùng file này để thao tác với hệ thống (phần cứng, phần mềm)
 └── Software.md        # Mình dùng file này để thao tác với phần mềm cài ngoài (cài, xóa, v.v)
 ```
-
-

@@ -128,76 +128,65 @@ interface Admin extends User {
 type là:
   Một cách đặt tên cho một kiểu dữ liệu để dùng lại nhiều lần.
 ```
-1. Không dùng type
-Ví dụ một người dùng:
-let user: {  name: string;  age: number;};
-Nếu có nhiều biến:
-let user1: {  name: string;  age: number;};let user2: {  name: string;  age: number;};let user3: {  name: string;  age: number;};
-Rất dài và lặp lại.
+**Không dùng type**
+```js
+let user: {  name: string;  age: number;}; // một người dùng
 
-2. Dùng type
+// Nếu có nhiều biến:
+let user1: {  name: string;  age: number;};
+let user2: {  name: string;  age: number;};
+let user3: {  name: string;  age: number;};
+// Rất dài và lặp lại.
+```
+**Dùng type**
+```js
 type User = {  name: string;  age: number;};
-Bây giờ:
-let user1: User;let user2: User;let user3: User;
-Dễ đọc hơn nhiều.
 
-3. Ví dụ thực tế
-type User = {  name: string;  age: number;};const user: User = {  name: "Thắng",  age: 25,};
+// Bây giờ:
+let user1: User;
+let user2: User;
+let user3: User;
+// Dễ đọc hơn nhiều.
+```
+**Ex1: Ví dụ thực tế**
+```python
+type User = {  name: string;  age: number;};
+const user: User = {  name: "Thắng",  age: 25,};
 
-Nếu thiếu trường:
+# Nếu thiếu trường:
 const user: User = {  name: "Thắng",};
-TypeScript báo lỗi:
-Property 'age' is missing
-
-4. Type cho hàm
-Ví dụ hàm cộng:
+# TypeScript báo lỗi:
+# Property 'age' is missing
+```
+**Ex2: Type cho hàm**
+```js
 function add(a: number, b: number): number {  return a + b;}
-Có thể tạo type:
+
+// Có thể tạo type:
 type AddFunction = (  a: number,  b: number) => number;
-Sử dụng:
+// Sử dụng:
 const add: AddFunction = (a, b) => {  return a + b;};
-
-5. Type cho mảng
+```
+**Ex3: Type cho mảng**
+```js
 type User = {  name: string;  age: number;};
-Danh sách người dùng:
+
+// Danh sách người dùng:
 const users: User[] = [  {    name: "An",    age: 20,  },  {    name: "Bình",    age: 22,  },];
+```
+**Union Type: Cho phép nhiều kiểu dữ liệu**
+```js
+type Id = string | number; 
 
-6. Union Type
-Cho phép nhiều kiểu dữ liệu.
-type Id = string | number;
-Hợp lệ:
-let id: Id = 123;id = "abc";
-Không hợp lệ:
+// Hợp lệ:
+let id: Id = 123;
+id = "abc";
+
+// Không hợp lệ:
 id = true;
-
-Ví dụ dễ hiểu:
+```
+**Ex**
+```js
 type Status =  | "loading"  | "success"  | "error";
 let status: Status;status = "loading"; // OKstatus = "success"; // OKstatus = "abc";     // Lỗi
-
-7. Type lồng nhau
-type Address = {  city: string;  district: string;};type User = {  name: string;  age: number;  address: Address;};
-Dùng:
-const user: User = {  name: "Thắng",  age: 25,  address: {    city: "Hà Nội",    district: "Ba Vì",  },};
-
-8. Type với React Props
-Đây là nơi bạn gặp rất nhiều.
-type ButtonProps = {  text: string;  onClick: () => void;};
-function Button(props: ButtonProps) {  return (    <button onClick={props.onClick}>      {props.text}    </button>  );}
-Sử dụng:
-<Button  text="Lưu"  onClick={() => alert("Hello")}/>
-
-9. Hiểu bằng ví dụ đời thường
-Không dùng type:
-{  name: string;  age: number;  email: string;}
-lặp đi lặp lại 20 lần.
-
-Dùng type:
-type User = {  name: string;  age: number;  email: string;};
-sau đó:
-const user1: User;const user2: User;const user3: User;
-Giống như:
-Thay vì mỗi lần ghi:"Học sinh gồm tên, tuổi, lớp"Bạn đặt tên:HọcSinhRồi chỉ cần ghi:họcSinhA: HọcSinhhọcSinhB: HọcSinh
-
-Những dạng type thường gặp nhất
-// Objecttype User = {  name: string;  age: number;};// Arraytype Users = User[];// Uniontype Status =  | "loading"  | "success"  | "error";// Functiontype AddFunction = (  a: number,  b: number) => number;
-Chỉ cần nắm chắc 4 dạng này là bạn đã hiểu khoảng 80% cách dùng type trong các dự án React/Next.js phổ biến.
+```

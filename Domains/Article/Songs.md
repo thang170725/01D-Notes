@@ -107,6 +107,7 @@
 41. Phai dấu cuộc tình
 42. dừng thương
 43. chỉ bằng 1 cái gật đầu
+44. người có thương
 ```
 # Karaoke & Guitar
 ```bash

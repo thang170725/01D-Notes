@@ -1,9 +1,9 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
 ---
-# Introduction
+# Onnxruntime Introduction (engine chạy suy luận (inference) cho mô hình machine learning)
 ```bash
-- ONNX Runtime là một thư viện (library) – cụ thể là engine chạy suy luận (inference) cho mô hình machine learning.
+- ONNX Runtime là một thư viện (library) – cụ thể là.
 - Không phải framework huấn luyện như PyTorch/TensorFlow.
 - ONNX Runtime dùng để:
     + Chạy model AI đã train sẵn (inference)
