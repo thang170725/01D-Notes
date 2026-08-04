@@ -1,15 +1,100 @@
-- [YOLO Introduction](#yolo-introduction)
+- [YOLO HBB Introduction (thực hiện tác vụ phát hiện vật thể (Object Detection) trong thời gian thực)](#yolo-hbb-introduction-thực-hiện-tác-vụ-phát-hiện-vật-thể-object-detection-trong-thời-gian-thực)
   - [C2f (Cross-Stage Partial Bottleneck với hai kênh đặc trưng)](#c2f-cross-stage-partial-bottleneck-với-hai-kênh-đặc-trưng)
 - [Architecture (Kiến Trúc Mô Hình YOLO - Workflow)](#architecture-kiến-trúc-mô-hình-yolo---workflow)
+- [file yaml (Đây là file YAML mô tả dataset)](#file-yaml-đây-là-file-yaml-mô-tả-dataset)
   - [Ask (Các câu hỏi về kiến trúc mô hình YOLO)](#ask-các-câu-hỏi-về-kiến-trúc-mô-hình-yolo)
 - [Workflow khi đưa một ảnh vào YOLOv8 để detect object](#workflow-khi-đưa-một-ảnh-vào-yolov8-để-detect-object)
 ---
-# YOLO Introduction
+# YOLO HBB Introduction (thực hiện tác vụ phát hiện vật thể (Object Detection) trong thời gian thực)
+**Thư viện sử dụng YOLO**
+[Ultralytics](../../../../../../../Tech-Stacks/Programming-Languages/Python/Core/01-Libraries/AI-Libraries/00-CV/Detection/Ultralytics/Process.md)
 ```bash
-YOLO là một kiến trúc được thiết kế để thực hiện tác vụ phát hiện vật thể (Object Detection) trong thời gian thực. 
-    Cái tên "You Only Look Once" nói lên điểm cốt lõi: nó xử lý toàn bộ hình ảnh chỉ trong một lần duy nhất.
+Cái tên "You Only Look Once" nói lên điểm cốt lõi: nó xử lý toàn bộ hình ảnh chỉ trong một lần duy nhất.
+    Các version YOLOv1 -> YOLOv8 là các model cụ thể.
+```
+**Nhãn**
+```bash
+Đối với YOLO Bounding Box thông thường (HBB), mỗi object được biểu diễn bởi 5 giá trị:
+    class_id x_center y_center width height
+        Ví dụ: 2 0.625 0.4375 0.25 0.3125
 
-Các version YOLOv1 -> YOLOv8 là các model cụ thể.
+        - class_id	ID của lớp đối tượng (0, 1, 2, ...)
+        - x_center	Tọa độ x của tâm bounding box (đã chuẩn hóa từ 0 đến 1)
+        - y_center	Tọa độ y của tâm bounding box (đã chuẩn hóa từ 0 đến 1)
+        - width	    Chiều rộng của bounding box (đã chuẩn hóa)
+        - height	Chiều cao của bounding box (đã chuẩn hóa)
+```
+**Ex**
+```bash
+Giả sử ảnh có kích thước:
+    - Width = 640 pixel
+    - Height = 480 pixel
+
+Trong ảnh có một con chó.
+    Bounding box của nó là:
+        - Góc trái trên: (160, 120)
+        - Góc phải dưới: (320, 280)
+
+Bước 1. Tính chiều rộng và chiều cao
+    - width = 320 - 160 = 160 pixel
+    - height = 280 - 120 = 160 pixel
+
+Bước 2. Tính tâm
+    - x_center = (160 + 320) / 2 = 240
+    - y_center = (120 + 280) / 2 = 200
+
+Bước 3. Chuẩn hóa về khoảng [0,1]
+    YOLO không lưu pixel, mà lưu theo tỷ lệ so với kích thước ảnh.
+        - x_center = 240 / 640 = 0.375
+        - y_center = 200 / 480 = 0.4167
+        - width = 160 / 640 = 0.25
+        - height = 160 / 480 = 0.3333
+
+Nếu con chó có class_id = 0, file nhãn sẽ là:
+    0 0.375 0.4167 0.25 0.3333
+
+Minh họa: Ảnh 640 × 480
+(0,0)
++--------------------------------------------------+
+|                                                  |
+|         +--------------------+                   |
+|         |                    |                   |
+|         |       DOG          |                   |
+|         |         ●          | ← tâm             |
+|         |                    |                   |
+|         +--------------------+                   |
+|                                                  |
++--------------------------------------------------+
+
+YOLO chỉ lưu:
+    - class_id
+    - x_center
+    - y_center
+    - width
+    - height
+
+Nếu có nhiều đối tượng
+    Ví dụ ảnh có:
+        - chó (class = 0)
+        - mèo (class = 1)
+        - người (class = 2)
+
+File 0001.txt sẽ có dạng:
+0 0.32 0.48 0.21 0.30
+1 0.74 0.40 0.15 0.22
+2 0.52 0.65 0.18 0.42
+-> Mỗi dòng tương ứng với một đối tượng trong ảnh.
+```
+**Tại sao YOLO dùng tọa độ chuẩn hóa?**
+```bash
+Thay vì lưu pixel như: 240 200 160 160
+    YOLO lưu: 0.375 0.4167 0.25 0.3333
+        Nhờ vậy: 
+            - Cùng một nhãn có thể dùng cho ảnh ở nhiều độ phân giải khác nhau (640×480, 1280×960, 1920×1440, ...).
+            - Mô hình dễ học hơn vì các giá trị luôn nằm trong khoảng 0 đến 1.
+            - Không cần sửa lại nhãn nếu ảnh được resize trong quá trình huấn luyện.
+
+Lưu ý: Với YOLO OBB (Oriented Bounding Box) thì định dạng nhãn sẽ khác. Thay vì 5 giá trị (class x_center y_center width height), thường sẽ lưu thêm góc xoay hoặc 4 đỉnh của hình chữ nhật xoay, tùy theo phiên bản YOLO và công cụ gán nhãn bạn sử dụng.
 ```
 ## C2f (Cross-Stage Partial Bottleneck với hai kênh đặc trưng)
 **Tại sao YOLO lại cần C2f?**
@@ -247,6 +332,22 @@ Kết quả cuối cùng: Tensor ra khỏi khối C2f quay về kích thước l
                   └─────────────────────────────────────┘
                     (Sẵn sàng gửi sang thuật toán NMS 
                      để lọc bớt các khung trùng nhau)
+```
+# file yaml (Đây là file YAML mô tả dataset)
+**Ex**
+```bash
+train: dataset/train/images
+val: dataset/val/images
+
+nc: 2
+
+names:
+  0: cat
+  1: dog
+
+# YOLO sẽ đọc file này để biết
+# train ở đâu, validation ở đâu, có bao nhiêu class, tên class
+# Nếu sai đường dẫn thì sẽ báo lỗi ngay.
 ```
 ## Ask (Các câu hỏi về kiến trúc mô hình YOLO)
 **khi downsample từ 640x640x3 -> 20x20x256, thì 640x640x3 đúng là ảnh nhưng 20x20x256 có phải là ảnh đó nữa đâu, nó là lưu các vector đặc trưng về cạnh góc chứ thì liên quan gì đến object to nhỏ**

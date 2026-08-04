@@ -8,8 +8,6 @@
   - [-f \& --force](#-f----force)
   - [--delete (xóa nhánh trên github)](#--delete-xóa-nhánh-trên-github)
 - [git init (Tạo ra một kho lưu trữ repo)](#git-init-tạo-ra-một-kho-lưu-trữ-repo)
-- [.gitignore (hạn chế thư mục commit)](#gitignore-hạn-chế-thư-mục-commit)
-- [.git (file ghi lại lịch sử)](#git-file-ghi-lại-lịch-sử)
 - [git reset](#git-reset)
 - [git remote](#git-remote)
 - [git add](#git-add)
@@ -127,51 +125,7 @@ git init EX1 # Git sẽ tạo ra một thư mục EX1 mới và nó sẽ trở t
 1. cd vào thư mục a
 2. git init # Thư mục a sẽ trở thành kho lưu trữ repo
 ```
-# .gitignore (hạn chế thư mục commit)
-**Hạn chế thư mục push lên gitHub**
-```bash
-~/workspace/lightgbm
-├── backend
-│   └── dataset
-├── docs
-├── frontend
-└── README.md
-```
-```bash
-Muốn backend/dataset không push lên Git.
 
-Bước 1: đứng ở root project
-    - cd ~/workspace/lightgbm
-Bước 2: tạo .gitignore
-    - touch .gitignore
-Bước 3: mở file .gitignore
-    1. nano .gitignore
-    2.  thêm dòng này: backend/dataset/
-    3.  Lưu: Ctrl + O → Enter, Ctrl + X
-Bước 4: kiểm tra
-    - cat .gitignore
-    - phải ra: backend/dataset/
-Bước 5: add code
-    - git add .
-    - dataset sẽ bị bỏ qua.
-    - Kiểm tra: git status (sẽ không thấy backend/dataset)
-    - .gitignore cho project bạn có thể sau này mở rộng:
-        backend/dataset/
-        __pycache__/
-        *.pyc
-        .env
-        venv/
-```
-# .git (file ghi lại lịch sử)
-**Ex: Xóa .git và init lại từ đầu để xóa toàn bộ lịch sử repo**
-```bash
-rm -rf .git
-git init
-git add .
-git commit -m "Initial commit"
-git remote add origin <repo-url>
-git push -f origin main
-```
 # git reset 
 ```bash
 - dùng để đưa HEAD / branch / staging area quay về commit cũ hoặc trạng thái khác.

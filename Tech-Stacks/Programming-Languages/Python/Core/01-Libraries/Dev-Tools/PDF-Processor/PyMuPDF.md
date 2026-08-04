@@ -10,7 +10,7 @@
   - [insert\_image()](#insert_image)
   - [.save()](#save)
   - [.insert\_pdf()](#insert_pdf)
-- [.Matrix()](#matrix)
+- [.Matrix() (dùng để phóng to, Thu nhỏ, Xoay, Nghiêng, Dịch chuyển)](#matrix-dùng-để-phóng-to-thu-nhỏ-xoay-nghiêng-dịch-chuyển)
 - [Practices](#practices)
   - [Đọc PDF và lưu từng trang thành ảnh](#đọc-pdf-và-lưu-từng-trang-thành-ảnh)
 ---
@@ -34,6 +34,7 @@ fitz dùng để làm gì?
 2. python -c "import fitz; print(fitz.__doc__)" # Kiểm tra
 ```
 # .open() (đọc file pdf)
+**Ex**
 ```bash
 import fitz
 
@@ -84,26 +85,47 @@ print(doc[0].rect) # Rect(0.0, 0.0, 595.0, 842.0) tọa độ x0, y0, x1, y1
 ## insert_image()
 ## .save()
 ## .insert_pdf()
-# .Matrix() 
-Nếu muốn ảnh nét hơn
+# .Matrix() (dùng để phóng to, Thu nhỏ, Xoay, Nghiêng, Dịch chuyển)
+```bash
+Nó thường được dùng khi render PDF thành ảnh.
+```
+**Syn**
+```bash
+import fitz
 
-mat = fitz.Matrix(2,2)
+matrix = fitz.Matrix(a, b, c, d, e, f) # Nhưng khi mới học, bạn gần như không cần quan tâm 6 số này. Thông thường chỉ dùng 2 hoặc 3 tham số.
+```
+**Phóng to PDF (dùng nhiều nhất)**
+**Ex
+```python
+pix = page.get_pixmap() # Ảnh hơi mờ.
+
+# Muốn zoom gấp đôi:
+
+import fitz
+
+mat = fitz.Matrix(2, 2) # Zoom X = 2, Zoom Y = 2
 
 pix = page.get_pixmap(matrix=mat)
+pix.save("page.png")
 
-pix.save("page_hd.png")
+# Ảnh sẽ: rộng gấp 2, cao gấp 2 → sắc nét hơn.
+```
+**Thu nhỏ**
+**Ex**
+```python
+mat = fitz.Matrix(0.5,0.5) # Kích thước còn một nửa.
+```
+**Zoom 300 DPI: Đây là cách rất hay gặp**
+```bash
+PDF mặc định khoảng 72 DPI. Muốn 300 DPI
+```
+```python
+zoom = 300 / 72
+mat = fitz.Matrix(zoom, zoom)
 
-Trong đó
-
-Matrix(2,2)
-
-↓
-
-phóng to 2 lần
-
-↓
-
-ảnh sắc nét hơn
+pix = page.get_pixmap(matrix=mat) # Tính ra zoom = 4.1667
+```
 # Practices
 ## Đọc PDF và lưu từng trang thành ảnh
 import fitz

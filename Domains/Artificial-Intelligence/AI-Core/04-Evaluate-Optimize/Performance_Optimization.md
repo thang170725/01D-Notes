@@ -2,6 +2,11 @@
 - [TensorRT (công cụ của NVIDIA để tăng tốc model AI khi chạy trên GPU)](#tensorrt-công-cụ-của-nvidia-để-tăng-tốc-model-ai-khi-chạy-trên-gpu)
   - [TensorRT Engine](#tensorrt-engine)
 - [ONNX (định dạng model trung gian, dùng để “nói chuyện” giữa các framework)](#onnx-định-dạng-model-trung-gian-dùng-để-nói-chuyện-giữa-các-framework)
+  - [Ask (các câu hỏi về ONNX)](#ask-các-câu-hỏi-về-onnx)
+    - [ONNX có phải công ty không?](#onnx-có-phải-công-ty-không)
+    - [ONNX chỉ dành cho AI?](#onnx-chỉ-dành-cho-ai)
+    - [Tại sao ONNX lại nổi tiếng?](#tại-sao-onnx-lại-nổi-tiếng)
+    - [ONNX có thật sụ nhanh hơn các định dạng khác như pkl, pt không?](#onnx-có-thật-sụ-nhanh-hơn-các-định-dạng-khác-như-pkl-pt-không)
 - [Installation](#installation)
   - [Demo export .onnx](#demo-export-onnx)
 ---
@@ -167,12 +172,25 @@ GPU
     + Tối ưu memory
 ```
 # ONNX (định dạng model trung gian, dùng để “nói chuyện” giữa các framework)
+[Thư viện sử dụng ONNX](../../../../Tech-Stacks/Programming-Languages/Python/Core/01-Libraries/AI-Libraries/01-AI-Optimizer/ONNX-Runtime/Base.md)
+
+**ONNX là gì?**
 ```bash
-ONNX KHÔNG:
-    + train model
-    + chạy nhanh hơn
-    + ONNX chỉ là file mô tả graph model
-    -> ONNX = “PDF” của thế giới AI model
+ONNX là format chuẩn để lưu model AI: Train bằng PyTorch → export sang ONNX → chạy bằng ONNX Runtime
+```
+**ONNX Runtime dùng để làm gì?**
+```bash
+- Chạy model AI đã train sẵn (inference)
+- Tăng tốc model (CPU, GPU, TensorRT, OpenVINO…)
+- Deploy model ra production
+```
+**Ứng dụng thực tế: ONNX Runtime được dùng rất nhiều trong production**
+```bash
+- Backend AI: API nhận ảnh → chạy model → trả kết quả
+- Computer Vision: Face recognition (InsightFace dùng ONNX Runtime bên dưới)
+- Object detection: OCR
+- Mobile / Edge: Chạy model trên: Android, iOS, IoT devices
+- Web / Browser: ONNX Runtime Web (chạy bằng WebAssembly)
 ```
 **Vì sao cần ONNX?**
 ```bash
@@ -186,6 +204,225 @@ PyTorch model (.pt)
 ONNX model (.onnx)
    ↓
 TensorRT đọc & tối ưu
+```
+## Ask (các câu hỏi về ONNX)
+### ONNX có phải công ty không?
+```bash
+Không, ONNX không phải là một công ty. ONNX là một chuẩn (standard) mở để biểu diễn mô hình machine learning.
+
+Tên đầy đủ của ONNX là Open Neural Network Exchange.
+
+Ban đầu, ONNX được phát triển bởi hai công ty lớn:
+    - Microsoft
+    - Meta (lúc đó còn là Facebook)
+
+Sau đó ONNX trở thành một dự án mã nguồn mở, được nhiều công ty cùng đóng góp như Microsoft, Meta, NVIDIA, Intel, AMD,...
+```
+### ONNX chỉ dành cho AI?
+```bash
+Đúng, gần như vậy.
+
+ONNX được thiết kế cho Machine Learning, đặc biệt là:
+    - Computer Vision
+    - NLP
+    - Speech Recognition
+    - Recommendation
+    - Time Series
+    - Deep Learning nói chung
+
+Nó mô tả các phép toán như:
+    - Convolution
+    - Linear
+    - Attention
+    - LSTM
+    - BatchNorm
+    - ReLU
+    - Softmax
+    - ...
+-> Đây đều là các toán tử phục vụ mô hình AI.
+```
+### Tại sao ONNX lại nổi tiếng?
+```bash
+Vì nó giúp tách riêng quá trình huấn luyện và quá trình chạy suy luận (inference).
+
+Ví dụ:
+    - Train bằng PyTorch trên GPU NVIDIA.
+    - Xuất thành model.onnx.
+    - Chạy trên:
+    - CPU Intel
+    - GPU AMD
+    - GPU NVIDIA
+    - Windows
+    - Linux
+    - Android
+    - iPhone
+    - Edge device
+```
+### ONNX có thật sụ nhanh hơn các định dạng khác như pkl, pt không?
+```bash
+Câu trả lời ngắn là:
+
+Thường là có, nhưng không phải vì .onnx thần kỳ hơn .pt hay .pkl, mà vì engine chạy ONNX (ONNX Runtime) được tối ưu mạnh cho inference.
+
+Để hiểu rõ, cần phân biệt định dạng lưu và engine thực thi.
+
+Định dạng	Dùng với	Engine chạy
+.pkl	scikit-learn	Python + scikit-learn
+.pt	PyTorch	PyTorch
+.onnx	Mọi framework hỗ trợ ONNX	ONNX Runtime, TensorRT, OpenVINO...
+1. Với YOLO (.pt)
+
+Ví dụ:
+
+model = YOLO("yolo11n.pt")
+results = model(img)
+
+PyTorch sẽ phải:
+
+load tensor
+autograd (dù inference đã tắt)
+dispatcher
+rất nhiều lớp abstraction
+
+Nếu export:
+
+yolo export format=onnx
+
+rồi chạy
+
+session = onnxruntime.InferenceSession(...)
+
+thì ONNX Runtime sẽ:
+
+fuse Conv + BatchNorm
+tối ưu graph
+dùng SIMD
+dùng thread tốt hơn
+ít overhead Python hơn
+
+=> Thường nhanh hơn 10–50% trên CPU.
+
+2. Với scikit-learn (.pkl)
+
+Ví dụ Random Forest
+
+model = pickle.load(...)
+y = model.predict(X)
+
+Có thể convert sang ONNX
+
+RandomForest
+      ↓
+   model.onnx
+      ↓
+ONNX Runtime
+
+Lợi ích:
+
+không cần cài sklearn
+deploy C++, C#, Java dễ hơn
+đôi khi nhanh hơn
+
+Nhưng:
+
+RandomForest vốn đã rất tối ưu rồi.
+
+Thường:
+
+pkl
+≈
+onnx
+
+Chênh lệch chỉ khoảng vài phần trăm đến vài chục phần trăm tùy model.
+
+3. Với Deep Learning
+
+Đây mới là nơi ONNX phát huy sức mạnh.
+
+Ví dụ:
+
+PyTorch
+↓
+
+Conv
+↓
+
+BatchNorm
+↓
+
+ReLU
+
+PyTorch thực hiện 3 kernel.
+
+ONNX Runtime có thể gộp thành:
+
+Conv+BN+ReLU
+
+chỉ còn 1 kernel.
+
+GPU và CPU đều hưởng lợi.
+
+4. Khi nào ONNX nhanh hơn rất nhiều?
+
+Ví dụ:
+
+PyTorch
+↓
+
+ONNX
+
+↓
+
+TensorRT
+
+TensorRT còn:
+
+FP16
+INT8
+kernel fusion
+memory optimization
+CUDA kernel riêng
+
+Có khi:
+
+YOLO.pt      30 FPS
+
+↓
+
+YOLO.onnx + TensorRT
+
+↓
+
+70–150 FPS
+
+Đây là lý do hầu hết sản phẩm thương mại dùng ONNX/TensorRT thay vì chạy trực tiếp PyTorch.
+
+5. Có phải ONNX lúc nào cũng nhanh hơn?
+
+Không.
+
+Ví dụ Linear Regression
+
+y = ax+b
+
+thì:
+
+pkl
+
+và
+
+onnx
+
+gần như không khác.
+
+Hoặc Decision Tree rất nhỏ cũng vậy.
+
+Kết luận
+.pt: tốt nhất để huấn luyện (training) và phát triển với PyTorch.
+.pkl: phù hợp để lưu và tải các mô hình scikit-learn trong Python.
+.onnx: phù hợp nhất để triển khai (deployment/inference), đặc biệt khi cần tốc độ, tính di động giữa nền tảng và không muốn phụ thuộc vào framework gốc.
+
+Nếu bạn làm Computer Vision (YOLO, ResNet, UNet, Transformer...), ONNX thường là lựa chọn rất đáng cân nhắc khi triển khai. Còn với các mô hình ML truyền thống như Random Forest, XGBoost hay SVM, ONNX chủ yếu mang lại lợi ích về triển khai đa nền tảng; mức tăng tốc độ thường không lớn như với các mô hình deep learning.
 ```
 # Installation
 ```bash
