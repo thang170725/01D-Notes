@@ -7,7 +7,7 @@
 ---
 # YOLO HBB Introduction (thực hiện tác vụ phát hiện vật thể (Object Detection) trong thời gian thực)
 **Thư viện sử dụng YOLO**
-[Ultralytics](../../../../../../../Tech-Stacks/Programming-Languages/Python/Core/01-Libraries/AI-Libraries/00-CV/Detection/Ultralytics/Process.md)
+[Ultralytics](../../../../../../../Tech-Stacks/Programming-Languages/Python/Core/05-Libraries/AI-Libraries/ML/DL/00-CV/Detection/Ultralytics/Process.md)
 ```bash
 Cái tên "You Only Look Once" nói lên điểm cốt lõi: nó xử lý toàn bộ hình ảnh chỉ trong một lần duy nhất.
     Các version YOLOv1 -> YOLOv8 là các model cụ thể.
