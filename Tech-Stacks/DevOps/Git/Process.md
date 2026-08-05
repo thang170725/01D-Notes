@@ -231,6 +231,55 @@ git log --oneline --graph --all
 - --graph   : Vẽ cây branch/merge bằng ASCII
 - --all     : xem mọi branch: local branches, remote-tracking branches
 ```
+Đúng rồi, git log không cần dùng Ctrl + C.
+
+Mặc định, Git mở kết quả bằng chương trình pager (thường là less).
+
+Để thoát, chỉ cần nhấn:
+
+q
+
+(q = quit)
+
+Một số phím hữu ích khi đang xem git log
+Phím	Chức năng
+q	Thoát
+↑ / ↓	Cuộn lên/xuống
+Space	Xuống 1 trang
+b	Lên 1 trang
+g	Lên đầu
+G	Xuống cuối
+/từ_khóa	Tìm kiếm
+n	Kết quả tìm tiếp theo
+N	Kết quả tìm trước đó
+Nếu không muốn vào chế độ này
+
+Bạn có thể dùng:
+
+git log --oneline
+
+hoặc
+
+git --no-pager log
+
+Lúc này Git sẽ in kết quả ra terminal rồi trả quyền điều khiển ngay, không cần nhấn q.
+
+Tại sao Ctrl + C không hoạt động?
+
+Ctrl + C dùng để gửi tín hiệu ngắt (interrupt) cho chương trình đang chạy.
+
+Nhưng git log đã chạy xong rồi, lúc này bạn chỉ đang ở trong chương trình less để xem nội dung. less có phím điều khiển riêng, và phím chuẩn để thoát là:
+
+q
+
+Đây cũng là cách thoát khi xem:
+
+git log
+git diff
+git show
+git blame
+man
+và nhiều lệnh Unix/Linux khác sử dụng less làm pager mặc định.
 ## git diff
 ```bash
 - So sánh với commit cuối cùng, giữa nội dung cũ và mới.
