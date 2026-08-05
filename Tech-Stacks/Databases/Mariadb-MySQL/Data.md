@@ -32,6 +32,8 @@
   - [Case ... When ... then ... else ... end (biểu thức điều kiện)](#case--when--then--else--end-biểu-thức-điều-kiện)
   - [if()](#if)
 ---
+[Quay lại giới thiệu](Base.md)
+
 # Kiểu dữ liệu
 ```bash
 CHAR(n)         : Kiểu chuỗi với độ dài cố địnhv

@@ -9,9 +9,10 @@
   - [isdigit()](#isdigit)
   - [.isidentifier()](#isidentifier)
   - [.isupper() \& .islower()](#isupper--islower)
-  - [.startswith() \& .endswith()](#startswith--endswith)
+  - [.startswith() (Kiểm tra xem chuỗi có bắt đầu bằng một chuỗi hay một ký tự nào đó không)](#startswith-kiểm-tra-xem-chuỗi-có-bắt-đầu-bằng-một-chuỗi-hay-một-ký-tự-nào-đó-không)
+  - [.endswith() (Kiểm tra xem chuỗi có kết thúc bằng một chuỗi hay một ký tự nào đó không)](#endswith-kiểm-tra-xem-chuỗi-có-kết-thúc-bằng-một-chuỗi-hay-một-ký-tự-nào-đó-không)
 - [Search (Tìm kiếm)](#search-tìm-kiếm)
-  - [.find() \& .rfind()](#find--rfind)
+  - [.find() \& .rfind() (Tìm chuỗi bên trong chuỗi.)](#find--rfind-tìm-chuỗi-bên-trong-chuỗi)
   - [.index() \& .rindex()](#index--rindex)
   - [partition()](#partition)
   - [rpartition()](#rpartition)
@@ -146,22 +147,22 @@ for t in tests:
 ```bash
 - isupper islower   : Kiểm tra viết hoa, viết thường.
 ```
-## .startswith() & .endswith()
-```bash
-Kiểm tra xem chuỗi có bắt đầu, kết thúc bằng một chuỗi hay một ký tự nào đó không.
-```
+## .startswith() (Kiểm tra xem chuỗi có bắt đầu bằng một chuỗi hay một ký tự nào đó không)
 **Ex**
 ```python
 a = "Viet Nam"
 
 print(a.startswith("Viet")) # True
+```
+## .endswith() (Kiểm tra xem chuỗi có kết thúc bằng một chuỗi hay một ký tự nào đó không)
+**Ex**
+```python
+a = "Viet Nam"
+
 print(a.endswith("nam")) # False
 ```
 # Search (Tìm kiếm)
-## .find() & .rfind()
-```bash
-Tìm chuỗi bên trong chuỗi.
-```
+## .find() & .rfind() (Tìm chuỗi bên trong chuỗi.)
 **Ex**
 ```python
 a = "i am a programming"

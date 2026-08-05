@@ -260,169 +260,49 @@ Ví dụ:
 ```
 ### ONNX có thật sụ nhanh hơn các định dạng khác như pkl, pt không?
 ```bash
-Câu trả lời ngắn là:
-
-Thường là có, nhưng không phải vì .onnx thần kỳ hơn .pt hay .pkl, mà vì engine chạy ONNX (ONNX Runtime) được tối ưu mạnh cho inference.
+Câu trả lời ngắn là: Thường là có, nhưng không phải vì .onnx thần kỳ hơn .pt hay .pkl, mà vì engine chạy ONNX (ONNX Runtime) được tối ưu mạnh cho inference.
 
 Để hiểu rõ, cần phân biệt định dạng lưu và engine thực thi.
+    Định dạng	Dùng với	                Engine chạy
+    .pkl	    scikit-learn	            Python + scikit-learn
+    .pt	        PyTorch	                    PyTorch
+    .onnx	    Mọi framework hỗ trợ ONNX	ONNX Runtime, TensorRT, OpenVINO...
 
-Định dạng	Dùng với	Engine chạy
-.pkl	scikit-learn	Python + scikit-learn
-.pt	PyTorch	PyTorch
-.onnx	Mọi framework hỗ trợ ONNX	ONNX Runtime, TensorRT, OpenVINO...
 1. Với YOLO (.pt)
+    PyTorch sẽ phải:
+        - load tensor
+        - autograd (dù inference đã tắt)
+        - dispatcher
+        - rất nhiều lớp abstraction
 
-Ví dụ:
-
-model = YOLO("yolo11n.pt")
-results = model(img)
-
-PyTorch sẽ phải:
-
-load tensor
-autograd (dù inference đã tắt)
-dispatcher
-rất nhiều lớp abstraction
-
-Nếu export:
-
-yolo export format=onnx
-
-rồi chạy
-
-session = onnxruntime.InferenceSession(...)
-
-thì ONNX Runtime sẽ:
-
-fuse Conv + BatchNorm
-tối ưu graph
-dùng SIMD
-dùng thread tốt hơn
-ít overhead Python hơn
-
-=> Thường nhanh hơn 10–50% trên CPU.
+    Nếu dùng onnx thì ONNX Runtime sẽ:
+        - fuse Conv + BatchNorm
+        - tối ưu graph
+        - dùng SIMD
+        - dùng thread tốt hơn
+        - ít overhead Python hơn
+    => Thường nhanh hơn 10–50% trên CPU.
 
 2. Với scikit-learn (.pkl)
+    Lợi ích nếu export sang onnx:
+        - không cần cài sklearn
+        - deploy C++, C#, Java dễ hơn
+        - đôi khi nhanh hơn
+    
+    Nhưng: pkl ≈ onnx -> Chênh lệch chỉ khoảng vài phần trăm đến vài chục phần trăm tùy model.
 
-Ví dụ Random Forest
-
-model = pickle.load(...)
-y = model.predict(X)
-
-Có thể convert sang ONNX
-
-RandomForest
-      ↓
-   model.onnx
-      ↓
-ONNX Runtime
-
-Lợi ích:
-
-không cần cài sklearn
-deploy C++, C#, Java dễ hơn
-đôi khi nhanh hơn
-
-Nhưng:
-
-RandomForest vốn đã rất tối ưu rồi.
-
-Thường:
-
-pkl
-≈
-onnx
-
-Chênh lệch chỉ khoảng vài phần trăm đến vài chục phần trăm tùy model.
-
-3. Với Deep Learning
-
-Đây mới là nơi ONNX phát huy sức mạnh.
-
-Ví dụ:
-
-PyTorch
-↓
-
-Conv
-↓
-
-BatchNorm
-↓
-
-ReLU
-
-PyTorch thực hiện 3 kernel.
-
-ONNX Runtime có thể gộp thành:
-
-Conv+BN+ReLU
-
-chỉ còn 1 kernel.
-
-GPU và CPU đều hưởng lợi.
-
-4. Khi nào ONNX nhanh hơn rất nhiều?
-
-Ví dụ:
-
-PyTorch
-↓
-
-ONNX
-
-↓
-
-TensorRT
-
-TensorRT còn:
-
-FP16
-INT8
-kernel fusion
-memory optimization
-CUDA kernel riêng
-
-Có khi:
-
-YOLO.pt      30 FPS
-
-↓
-
-YOLO.onnx + TensorRT
-
-↓
-
-70–150 FPS
-
-Đây là lý do hầu hết sản phẩm thương mại dùng ONNX/TensorRT thay vì chạy trực tiếp PyTorch.
-
-5. Có phải ONNX lúc nào cũng nhanh hơn?
-
-Không.
-
-Ví dụ Linear Regression
-
-y = ax+b
-
-thì:
-
-pkl
-
-và
-
-onnx
-
-gần như không khác.
-
-Hoặc Decision Tree rất nhỏ cũng vậy.
-
-Kết luận
-.pt: tốt nhất để huấn luyện (training) và phát triển với PyTorch.
-.pkl: phù hợp để lưu và tải các mô hình scikit-learn trong Python.
-.onnx: phù hợp nhất để triển khai (deployment/inference), đặc biệt khi cần tốc độ, tính di động giữa nền tảng và không muốn phụ thuộc vào framework gốc.
-
-Nếu bạn làm Computer Vision (YOLO, ResNet, UNet, Transformer...), ONNX thường là lựa chọn rất đáng cân nhắc khi triển khai. Còn với các mô hình ML truyền thống như Random Forest, XGBoost hay SVM, ONNX chủ yếu mang lại lợi ích về triển khai đa nền tảng; mức tăng tốc độ thường không lớn như với các mô hình deep learning.
+3. Với Deep Learning # Đây mới là nơi ONNX phát huy sức mạnh.
+    Ví dụ:
+        PyTorch
+        ↓
+        Conv
+        ↓
+        BatchNorm
+        ↓
+        ReLU
+        -> PyTorch thực hiện 3 kernel.
+    
+    ONNX Runtime có thể gộp thành: Conv+BN+ReLU -> chỉ còn 1 kernel. GPU và CPU đều hưởng lợi.
 ```
 # Installation
 ```bash

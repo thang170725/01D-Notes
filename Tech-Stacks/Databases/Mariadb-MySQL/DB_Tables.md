@@ -33,6 +33,8 @@
 - [Transform (Nhóm làm thay đổi hình dạng bảng)](#transform-nhóm-làm-thay-đổi-hình-dạng-bảng)
   - [group by](#group-by)
 ---
+[Quay lại giới thiệu](Base.md)
+
 # Check Database (Kiểm tra database)
 ## Linux (Kiểm tra db trên linux)
 ### mysql -u root -p (Đăng nhập quyền root)

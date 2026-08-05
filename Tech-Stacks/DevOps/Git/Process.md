@@ -14,7 +14,7 @@
 - [git commit](#git-commit)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [git status (Dùng để xem trạng thái repo hiện tại)](#git-status-dùng-để-xem-trạng-thái-repo-hiện-tại)
-  - [git log](#git-log)
+  - [git log (Hiển thị lịch sử các commit)](#git-log-hiển-thị-lịch-sử-các-commit)
   - [git diff](#git-diff)
 ---
 # git config
@@ -222,10 +222,7 @@ Nghĩa:
   - file đã vào staging area
   - sẵn sàng commit
 ```
-## git log
-```bash
-Hiển thị lịch sử các commit.
-```
+## git log (Hiển thị lịch sử các commit)
 **Syn**
 ```bash
 git log --oneline --graph --all

@@ -2,6 +2,8 @@
   - [Dùng terminal](#dùng-terminal)
 - [Reset khóa kiểu int tự tăng về 1](#reset-khóa-kiểu-int-tự-tăng-về-1)
 ---
+[Quay lại giới thiệu](Base.md)
+
 # Cách tạo database mariadb trong Linux
 ## Dùng terminal
 **Step 1: truy cập vào maridb**
