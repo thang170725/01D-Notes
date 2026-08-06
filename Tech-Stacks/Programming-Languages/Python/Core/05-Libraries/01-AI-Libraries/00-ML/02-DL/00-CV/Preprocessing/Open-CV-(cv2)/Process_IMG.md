@@ -9,7 +9,7 @@
   - [.resize()](#resize)
   - [.resizeWindow()](#resizewindow)
 - [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
-  - [.shape](#shape)
+  - [.shape (Nó cho biết kích thức và một số kênh màu)](#shape-nó-cho-biết-kích-thức-và-một-số-kênh-màu)
   - [.get()](#get)
 - [Event (bắt sự kiên)](#event-bắt-sự-kiên)
   - [EVENT\_LBUTTONDOWN](#event_lbuttondown)
@@ -465,11 +465,13 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 # Display (cung cấp thông tin)
-## .shape
+## .shape (Nó cho biết kích thức và một số kênh màu)
 ```bash
-- Là một thuộc tính của mảng ảnh NumPy vì cv2.imread() trả về một numpy.ndarray. 
-- Nó cho biết kích thức và một số kênh màu.
-- Trả về 3 giá trị height, width, depth
+Là một thuộc tính của mảng ảnh NumPy vì cv2.imread() trả về một numpy.ndarray. 
+```
+**Syn**
+```bash
+- Output: Trả về 3 giá trị height, width, depth
     + h – chiểu cao của ảnh, pixels
     + w – chiều rộng của ảnh, pixels
     + 3 – số kênh màu (BGR)

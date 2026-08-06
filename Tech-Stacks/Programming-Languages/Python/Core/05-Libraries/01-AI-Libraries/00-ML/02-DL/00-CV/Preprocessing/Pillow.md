@@ -7,6 +7,7 @@
   - [.resize()](#resize)
   - [crop()](#crop)
   - [rotate()](#rotate)
+- [ImageTk](#imagetk)
 ---
 # Pillow Introduction (là thư viện xử lý ảnh phổ biến nhất trong Python)
 ```bash
@@ -230,3 +231,4 @@ Màu mặc định	RGB	BGR
 Dễ sử dụng	⭐⭐⭐⭐⭐	⭐⭐⭐⭐
 
 Khuyến nghị cho dự án YOLO của bạn: nếu mục tiêu là xây dựng pipeline dự đoán nhanh và chỉ cần đọc ảnh, resize hoặc chuyển đổi định dạng trước khi đưa vào mô hình thì Pillow là lựa chọn đơn giản và phù hợp. Nếu sau này bạn cần nhiều phép xử lý ảnh nâng cao (lọc, phát hiện biên, hình thái học, camera/video...), hãy kết hợp thêm OpenCV.
+# ImageTk

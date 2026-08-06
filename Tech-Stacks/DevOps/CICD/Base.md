@@ -1,6 +1,6 @@
-- [CI/CD (cách tự động hóa việc test + build + deploy code mỗi khi bạn push code lên Git)](#cicd-cách-tự-động-hóa-việc-test--build--deploy-code-mỗi-khi-bạn-push-code-lên-git)
+- [CI/CD Introduction (cách tự động hóa việc test + build + deploy code mỗi khi bạn push code lên Git)](#cicd-introduction-cách-tự-động-hóa-việc-test--build--deploy-code-mỗi-khi-bạn-push-code-lên-git)
 ---
-# CI/CD (cách tự động hóa việc test + build + deploy code mỗi khi bạn push code lên Git)
+# CI/CD Introduction (cách tự động hóa việc test + build + deploy code mỗi khi bạn push code lên Git)
 ```bash
 CI – Continuous Integration (Tích hợp liên tục)
    👉 Lập trình viên code xong là đẩy lên repo (Git) → hệ thống tự động làm tiếp.
@@ -87,14 +87,9 @@ Docker Registry (GHCR / Docker Hub)
 Server (VPS / EC2)
   - pull image
   - restart container
-📦 Stack mình setup mẫu
-Python 3.11
-FastAPI (hoặc Flask đều tương tự)
-Docker
-GitHub Actions (CI/CD)
-VPS (Ubuntu)
-Nginx (reverse proxy)
-🏗 1. Project structure chuẩn
+# practices
+## Demo CI/CD với python - docker - gitHub
+```bash
 app/
   main.py
   routes/
@@ -105,8 +100,9 @@ Dockerfile
 docker-compose.yml
 requirements.txt
 .github/workflows/cicd.yml
-🧪 2. Python app sample (FastAPI)
-# app/main.py
+```
+**app/main.py**
+```python
 from fastapi import FastAPI
 
 app = FastAPI()
@@ -114,8 +110,9 @@ app = FastAPI()
 @app.get("/")
 def home():
     return {"status": "ok"}
-🧪 3. Test (CI bắt buộc phải có)
-# tests/test_main.py
+```
+**tests/test_main.py**
+```python
 from fastapi.testclient import TestClient
 from app.main import app
 
@@ -125,12 +122,16 @@ def test_home():
     res = client.get("/")
     assert res.status_code == 200
     assert res.json()["status"] == "ok"
-📦 4. requirements.txt
+```
+**requirements.txt**
+```bash
 fastapi
 uvicorn
 pytest
 httpx
-🐳 5. Dockerfile (production-ready)
+```
+**Dockerfile (production-ready)**
+```bash
 FROM python:3.11-slim
 
 WORKDIR /app
@@ -143,7 +144,9 @@ COPY . .
 EXPOSE 8000
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-🧱 6. docker-compose (server chạy ổn định)
+```
+**docker-compose (server chạy ổn định)**
+```bash
 version: "3.9"
 
 services:
@@ -153,9 +156,9 @@ services:
     ports:
       - "8000:8000"
     restart: always
-⚙️ 7. CI/CD GitHub Actions (quan trọng nhất)
-# .github/workflows/cicd.yml
-
+```
+**.github/workflows/cicd.yml (CI/CD GitHub Actions)**
+```bash
 name: CI/CD Pipeline
 
 on:
@@ -185,105 +188,21 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t my-python-app:latest .
-🚀 8. Deploy stage (SSH VPS)
+          docker build -t my-python-app:latest
 
-Thêm job deploy:
-
-  deploy:
-    needs: test-build
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Deploy to VPS via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            cd /var/www/myapp
-
-            git pull origin main
-
-            docker-compose down
-            docker-compose up -d --build
-🔐 9. GitHub Secrets cần setup
-
-Trong GitHub repo:
-
-VPS_HOST = IP server
-VPS_USER = ubuntu
-VPS_SSH_KEY = private key SSH
-🖥 10. Setup VPS (Ubuntu)
-Cài Docker
-sudo apt update
-sudo apt install docker.io docker-compose -y
-sudo systemctl enable docker
-Clone project
-cd /var/www
-git clone https://github.com/your-repo/myapp.git
-cd myapp
-Run lần đầu
-docker-compose up -d --build
-🌐 11. Nginx (production reverse proxy)
-server {
-    listen 80;
-    server_name your-domain.com;
-
-    location / {
-        proxy_pass http://localhost:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
-}
-🔁 Flow hoàn chỉnh
-Dev push code
-   ↓
-GitHub Actions chạy CI:
-   - install deps
-   - run tests
-   - build Docker
-   ↓
-Nếu OK:
-   ↓
-SSH VPS
-   ↓
-pull code
-   ↓
-docker-compose restart
-   ↓
-Production updated 🚀
-⚡ Best practices (rất quan trọng)
-1. Không deploy nếu test fail
-
-→ luôn dùng needs: test-build
-
-2. Luôn dùng Docker
-
-→ tránh “works on my machine”
-
-3. Tách dev / prod config
-.env.dev
-.env.prod
-4. Không chạy app trực tiếp bằng python
-
-❌ python main.py
-✅ uvicorn + docker
-
-5. Restart tự động
-restart: always
-🔥 Nâng cấp nếu bạn muốn (level production thật)
-
-Mình có thể hướng dẫn tiếp:
-
-1. Blue-Green deployment (zero downtime)
-2. CI/CD với Docker Registry (GHCR)
-3. Kubernetes deploy (HPA, autoscale)
-4. Redis + Celery pipeline CI/CD
-5. ML CI/CD (train → validate → deploy model)
-
-Nếu bạn muốn đi “level thực chiến công ty”, nói:
-👉 “
-setup CI/CD zero downtime + Docker registry”
+deploy:
+  needs: test-build
+  runs-on: ubuntu-latest
+  steps:
+    - name: Deploy to VPS via SSH
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /var/www/myapp
+          git pull origin main
+          docker-compose down
+          docker-compose up -d --build
 ```
