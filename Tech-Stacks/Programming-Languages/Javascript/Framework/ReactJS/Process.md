@@ -135,3 +135,4 @@ key phải duy nhất trong danh sách đó.
 Nên dùng ID từ database (workout_plan_item_id, exercise_id, ...).
 Không nên dùng index nếu danh sách có thể thay đổi thứ tự hoặc thêm/xóa phần tử.
 Với một <div> đơn lẻ không nằm trong danh sách, key thường không cần thiết và React sẽ bỏ qua
+```

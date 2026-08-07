@@ -1,8 +1,6 @@
 - [Counter() (để đếm tần xuất)](#counter-để-đếm-tần-xuất)
   - [.values()](#values)
   - [.most\_common() (Trả về n phần tử xuất hiện nhiều nhất)](#most_common-trả-về-n-phần-tử-xuất-hiện-nhiều-nhất)
-  - [Counter({'a': 4, 'b': 4})](#countera-4-b-4)
-- [Defaultdict](#defaultdict)
 - [deque](#deque)
 - [.popleft()](#popleft)
 - [.pop()](#pop)
@@ -39,6 +37,7 @@ c = Counter("aaabbbbccdde")
 
 print(c.most_common(2)) # [('b', 4), ('a', 3)]
 ```
+```bash
 .elements()
 Trả ra tất cả phần tử, lặp lại theo số lần đếm.
 Cú pháp:

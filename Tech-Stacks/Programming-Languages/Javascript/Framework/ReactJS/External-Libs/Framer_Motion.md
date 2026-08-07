@@ -42,7 +42,9 @@ import { motion, AnimatePresence } from "framer-motion";
   )}
 </AnimatePresence>
 ```
-whileHover là một prop của thư viện Framer Motion (nay là Motion), dùng để xác định animation sẽ chạy khi người dùng đưa chuột (hover) lên phần tử.
+# whileHover 
+```bash
+là một prop của thư viện Framer Motion (nay là Motion), dùng để xác định animation sẽ chạy khi người dùng đưa chuột (hover) lên phần tử.
 
 Nó không phải của React.
 
@@ -187,3 +189,4 @@ Ví dụ:
 </motion.button>
 Hover → nút phóng to 5%.
 Nhấn giữ chuột → nút thu nhỏ còn 95%, tạo cảm giác đang được bấm.
+```

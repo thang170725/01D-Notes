@@ -62,16 +62,3 @@ div{
 ```bash
 Có thể là tên thẻ, id (#) hoặc class (.)
 ```
-
-Tables
-border-collapse
-Loại bỏ đường viền dư thừa đó.
-Cú pháp:
-border-collapse: value;
-value:
-    • collapse
-
-
-
-
-

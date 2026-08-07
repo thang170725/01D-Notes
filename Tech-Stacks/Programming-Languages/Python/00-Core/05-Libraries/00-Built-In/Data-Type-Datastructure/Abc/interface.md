@@ -1,3 +1,4 @@
+```bash
 from abc import ABC, abstractmethod
 
 class Animal(ABC):
@@ -17,3 +18,4 @@ class Cat(Animal):
     pass
 
 c = Cat()  # TypeError: Can't instantiate abstract class
+```

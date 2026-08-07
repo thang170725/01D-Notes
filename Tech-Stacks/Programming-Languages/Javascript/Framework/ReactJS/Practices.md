@@ -1,3 +1,4 @@
+```bash
 import { useState, useEffect, useRef } from "react";
 
 function Demo() {
@@ -25,3 +26,4 @@ function Demo() {
     </div>
   );
 }
+```

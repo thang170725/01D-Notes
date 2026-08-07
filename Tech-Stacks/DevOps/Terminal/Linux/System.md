@@ -35,6 +35,7 @@
   - [Install (cài đặt)](#install-cài-đặt)
     - [Các bước cài driver NVIDIA](#các-bước-cài-driver-nvidia)
     - [Các bước cài CUDA Tookit](#các-bước-cài-cuda-tookit)
+  - [Cài đặt NVIDIA](#cài-đặt-nvidia)
     - [Các bước cài cuDNN](#các-bước-cài-cudnn)
 - [Remove (xóa, gỡ bỏ)](#remove-xóa-gỡ-bỏ)
   - [Gỡ bỏ driver NVIDIA cũ](#gỡ-bỏ-driver-nvidia-cũ)
@@ -331,13 +332,15 @@ Thêm nvcc vào PATH
     5. source ~/.bashrc
     6. nvcc --version
 ```
-Cài đặt NVIDIA
-    1. sudo apt update
-    2. sudo apt install nvidia-smi
+## Cài đặt NVIDIA
+```bash
+1. sudo apt update
+2. sudo apt install nvidia-smi
+
 Thêm vào Path
     1. export PATH=/usr/bin:$PATH
     2. source ~/.bashrc
-
+```
 ### Các bước cài cuDNN
 ```bash
 Kiểm tra xem cuDNN đã được cài ở đâu

@@ -1,3 +1,4 @@
+```bash
 Next.js (web-ssr)
 frontend/web-ssr/
 ├── public/assets/logo.png
@@ -46,3 +47,4 @@ body {
 cd frontend/web-ssr
 npm install
 npm run dev
+```

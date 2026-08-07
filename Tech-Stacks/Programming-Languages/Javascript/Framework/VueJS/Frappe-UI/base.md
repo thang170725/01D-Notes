@@ -1,3 +1,4 @@
+- [Frappe UI](#frappe-ui)
 - [.loading](#loading)
 - [.error: Chứa thông tin lỗi nếu truy vấn thất bại.](#error-chứa-thông-tin-lỗi-nếu-truy-vấn-thất-bại)
   - [crud bằng creatListView](#crud-bằng-creatlistview)
@@ -12,7 +13,9 @@
   - [Demo đơn giản nhất](#demo-đơn-giản-nhất)
 
 ---
-Frappe UI không phải là framework của một ngôn ngữ lập trình, mà là một thư viện UI (UI library) dành cho Vue.js.
+# Frappe UI 
+```bash
+không phải là framework của một ngôn ngữ lập trình, mà là một thư viện UI (UI library) dành cho Vue.js.
 
 Cụ thể:
 

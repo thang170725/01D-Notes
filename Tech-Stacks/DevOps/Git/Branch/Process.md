@@ -13,8 +13,11 @@
     - [-d (xóa nhanh trên máy local)](#-d-xóa-nhanh-trên-máy-local)
 - [git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)](#git-switch-vừa-tạo-branch-vừa-checkout-sáng-branch-đó-đây-là-cách-mới)
   - [-c](#-c)
-- [git fetch](#git-fetch)
+- [git fetch (Lấy các thông tin về commit mới từ central, kiểm tra sự thay đổi)](#git-fetch-lấy-các-thông-tin-về-commit-mới-từ-central-kiểm-tra-sự-thay-đổi)
   - [--prune](#--prune)
+- [git rebase (Tái cơ sở cho một nhánh)](#git-rebase-tái-cơ-sở-cho-một-nhánh)
+  - [–continue](#continue)
+  - [–skip](#skip)
 - [git merge (gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union)](#git-merge-gộp-lịch-sử-commit-tức-áp-dụng-các-thay-đổi-changesdiffs-không-phải-cộng-file-kiểu-union)
 ---
 # git checkout (Tạo nhánh và chuyển sang nhánh đó (đây là cách cũ))
@@ -89,68 +92,35 @@ git branch -d <branch_name>
 ```bash
 git switch -c dev2 # -c = create
 ```
-# git fetch
+# git fetch (Lấy các thông tin về commit mới từ central, kiểm tra sự thay đổi)
+**Nó làm gì?**
 ```bash
-- Nó làm gì?
-    + Git đi hỏi GitHub:
-        - Có commit mới nào không?
-        - Có branch mới nào không?
-        - Có branch nào thay đổi không?
-    + rồi cập nhật các remote-tracking branch:
-        - origin/main
-        - origin/dev2
-    + Nó KHÔNG:
-        - không sửa code working directory của bạn
-        - không merge vào branch đang đứng
-        - không commit gì cả
-    => An toàn.
-- Ví dụ: git fetch origin = lấy thông tin / commit mới từ remote (origin) về, nhưng không merge vào branch hiện tại.
+Git đi hỏi GitHub:
+  - Có commit mới nào không?
+  - Có branch mới nào không?
+  - Có branch nào thay đổi không?
+
+rồi cập nhật các remote-tracking branch:
+  - origin/main
+  - origin/dev2
+
+Nó KHÔNG:
+  - không sửa code working directory của bạn
+  - không merge vào branch đang đứng
+  - không commit gì cả
+=> An toàn.
+```
+**Syn**
+```bash
+git fetch origin # lấy thông tin / commit mới từ remote (origin) về, nhưng không merge vào branch hiện tại.
 ```
 ## --prune
 ```bash
 git fetch --prune # --prune dọn các remote-tracking branch đã bị xóa
 ```
-commgit push –set-upstream origin nhanh_1
-Push lên central repo bằng nhanh_1 khoong phải là nhánh chính
-
-
-Tái cơ sở cho một nhánh
-Git rebase –continue
-Git rebase –skip
-
-Git reset –soft <commit id>
-Di chuyển head về vị triis commit trạng thái của stage và tất cả sử thay đổi của file được giữ nguyên
-Git reset <commit id>
-Di chuyển head về vị trí commiit reset vẫn giữ tất cả thay đổi của file, nhưng loại bỏ các thay đổi stage
-Git reset –hard <commit id>
-Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file
-Git revert <commit id>
-Quay lại commit trước đây
-bỏ qua file không cần giám sát
-
-
-
-
-
-Diff file1 file2 : tìm kiếm sự khác biệt giữa file1 và file2
-Repository : kho lưu trữ
-Commit : một đơn vị làm việc
-Branch : nhánh
-Main/ master : tên của repo chính
-Merge/ rebase : kết hợp 2 nhánh
-Develop : tên của nhánh, lập trình viên
-
-
-
-
-
-
-git fetch
-Lấy các thông tin về commit mới từ central, kiểm tra sự thay đổi.
-Cú pháp:
-    1. git fetch origin (Lệnh này giúp Git cập nhật tất cả thông tin mới từ GitHub bao gồm nhánh mới của bạn bè)
-git status
-Hiển thị trạng thái của kho lưu trữ.
+# git rebase (Tái cơ sở cho một nhánh)
+## –continue
+## –skip
 # git merge (gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union)
 ```bash
 "Fast-forward" nghĩa là gì?

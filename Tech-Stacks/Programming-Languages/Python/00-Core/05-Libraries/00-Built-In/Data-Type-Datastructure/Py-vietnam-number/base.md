@@ -1,3 +1,4 @@
+```bash
 Thư viện py-vietnam-number là một lựa chọn tuyệt vời vì nó xử lý rất tốt các quy tắc lắt léo trong tiếng Việt như "mươi", "mười", "lăm", "lẻ/linh".
 
 Dưới đây là hướng dẫn chi tiết để bạn cài đặt và test thử thư viện này.
@@ -75,3 +76,4 @@ print(num2words(12345, lang='vi'))
 Lời khuyên: Nếu bạn chỉ làm việc với tiếng Việt, py-vietnam-number thường cho kết quả đọc nghe "xuôi tai" hơn theo phong cách địa phương.
 
 Bạn đã cài đặt được thư viện chưa? Nếu gặp lỗi khi chạy lệnh pip, hãy báo mình để mình hỗ trợ sửa lỗi môi trường nhé!
+```

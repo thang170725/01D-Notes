@@ -1,3 +1,4 @@
+```bash
 async / await
 async function loadData() {
   try {
@@ -10,6 +11,7 @@ async function loadData() {
 
 
 👉 Dễ đọc hơn .then()
+```
 # computed – Giá trị tính toán
 ```bash
 - Tạo giá trị phụ thuộc vào dữ liệu khác.
@@ -176,9 +178,8 @@ user.value.name = 'An'
 user.value.age = 20
 ```
 
-# reactive – Object reactive
-Dùng khi có object nhiều field
-```vue
+# reactive – Object reactive (Dùng khi có object nhiều field)
+```js
 <script setup>
 import { reactive } from 'vue'
 
@@ -261,7 +262,7 @@ const avatar = ref('https://vuejs.org/logo.png')
   <button @click="changeColor">Đổi màu</button>
 </template>
 ```
-
+```bash
 VẬY abc LÀ GÌ? CÓ TỰ ĐẶT KHÔNG?
 
 👉 PHỤ THUỘC abc LÀ GÌ
@@ -373,6 +374,7 @@ const items = ['Vue', 'React', 'Angular']
     </li>
   </ul>
 </template>
+```
 # v-html 
 ```bash
 - Dùng để render (hiển thị) chuỗi HTML như HTML thật, thay vì hiển thị nó như text bình thường.
@@ -454,7 +456,7 @@ const handleClick = () => {
   alert('Hello Vue')
 }
 </script>
-
+```
 Câu hỏi này rất đúng chỗ cần hiểu 👍
 Mình trả lời thẳng – rõ – không vòng vo:
 
@@ -581,7 +583,7 @@ Nếu bạn muốn, bước tiếp theo mình có thể:
 🔁 Áp lại vào code thật của bạn
 
 👉 Bạn muốn tiếp phần nào?
-
+```
 # watch()
 ```bash
 - Theo dõi sự thay đổi
@@ -591,7 +593,7 @@ Nếu bạn muốn, bước tiếp theo mình có thể:
   + Validate
   + Lưu localStorage
 ```
-```vue
+```js
 <script setup>
 import { ref, watch } from 'vue'
 
@@ -616,6 +618,7 @@ watch(
   }
 )
 ```
+```bash
 immediate: true là gì?
 watch(
   source,
@@ -624,8 +627,8 @@ watch(
 )
 
 
-👉 Callback chạy ngay lần đầu, không đợi thay đổi
-
+👉 C`allback chạy ngay lần đầu, không đợi thay đổi
+```
 # watchEffect – Watch tự động
 Vue tự phát hiện dependency
 ```bash

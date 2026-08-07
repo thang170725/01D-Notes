@@ -22,6 +22,7 @@
 ```bash
 Next.js tạo route từ file.
 ```
+```bash
 Ví dụ structure:
 
 app/
@@ -642,3 +643,4 @@ dashboard → SaaS
 vì sao 80% startup web dùng NextJS để build SaaS
 
 hoặc architecture của một SaaS NextJS thật ngoài đời (auth + billing + database).
+```

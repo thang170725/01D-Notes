@@ -5,6 +5,7 @@
   - [onChangeText](#onchangetext)
 ---
 ## README.md (Hướng dẫn project)
+```bash
 1. android/
 android/
 
@@ -318,6 +319,7 @@ Ví dụ
 colors.primary
 
 spacing.md
+```
 ## App.tsx (root component)
 ```bash
 Thường chỉ:

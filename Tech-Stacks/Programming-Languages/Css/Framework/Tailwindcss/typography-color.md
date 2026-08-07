@@ -6,7 +6,7 @@
     - [from- (màu bắt đầu)](#from--màu-bắt-đầu)
     - [via- (màu ở giữa)](#via--màu-ở-giữa)
     - [to- (màu ở cuối)](#to--màu-ở-cuối)
-- [shadow](#shadow)
+- [Border (màu cho border)](#border-màu-cho-border)
 ---
 # Introduction
 ```bash
@@ -50,7 +50,8 @@
 ### from- (màu bắt đầu)
 ### via- (màu ở giữa)
 ### to- (màu ở cuối)
-✅ Border cơ bản
+# Border (màu cho border)
+```bash
 <div className="border">...</div>
 
 

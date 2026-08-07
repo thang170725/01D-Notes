@@ -1,22 +1,48 @@
 - [Data type](#data-type)
+  - [typeof](#typeof)
 - [Operator](#operator)
-  - [5](#5)
-  - [3](#3)
-- [Gán](#gán)
+  - [+](#)
+  - [-](#-)
+  - [\*](#-1)
+  - [/](#-2)
+  - [%](#-3)
+  - [\*\*](#-4)
+  - [++](#-5)
+  - [--](#--)
+  - [=](#-6)
+  - [+=](#-7)
+  - [-=](#--1)
+  - [\*=](#-8)
+  - [%=](#-9)
+  - [\*\*=](#-10)
+  - [\&=](#-11)
+  - [^=](#-12)
+  - [|=](#-13)
+  - [\<\<=](#-14)
+  - [\>\>=](#-15)
+  - [\>\>\> (Là toán tử dịch phải không dấu)](#-là-toán-tử-dịch-phải-không-dấu)
+  - [\<\<\< (Là toán tử dịch trái không dấu)](#-là-toán-tử-dịch-trái-không-dấu)
+  - [\&\&=](#-16)
+  - [||=](#-17)
+  - [??=](#-18)
+  - [\&= (Là toán tử bitwise AND (AND bit). Sử dụng phép nhân hệ nhị phân)](#-là-toán-tử-bitwise-and-and-bit-sử-dụng-phép-nhân-hệ-nhị-phân)
+  - [^= (Là phép toán XOR. Giống nhau thì trả về false (0) khác nhau trả về true (1))](#-là-phép-toán-xor-giống-nhau-thì-trả-về-false-0-khác-nhau-trả-về-true-1)
 - [Variable](#variable)
   - [var \& let \& const](#var--let--const)
   - [Spread Operator (...)](#spread-operator-)
   - [Optional Chaining Operator (Optional Chaining)](#optional-chaining-operator-optional-chaining)
 ---
 # Data type
-    • Number: Kiểu dữ liệu số.
-    • String: Kiểu dữ liệu chuỗi, kí tự.
-    • BigInt: Kiểu dữ liệu số lớn.
-    • Boolean: Kiểu true/false.
-    • Null: Không có giá trị nào thỏa mãn.
-    • Undefined: Giá trị chưa được gán hoặc giá trị không xác định.
-    • Symbol:
-    • Object: Kiểu đối tượng.
+```bash
+- Number: Kiểu dữ liệu số.
+- String: Kiểu dữ liệu chuỗi, kí tự.
+- BigInt: Kiểu dữ liệu số lớn.
+- Boolean: Kiểu true/false.
+- Null: Không có giá trị nào thỏa mãn.
+- Undefined: Giá trị chưa được gán hoặc giá trị không xác định.
+- Symbol:
+- Object: Kiểu đối tượng.
+```
 ## typeof
 ```bash
 - Để kiểm tra kiểu dữ liệu của biến.  
@@ -25,120 +51,34 @@
 ```bash
 typeof variable;
 ```
-Ví dụ về undefined
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <script>
-        var a;
-        document.write(a);
-    </script>
-</body>
-</html>
 # Operator
-JS Operators
-Phép tính
-+
-2 + 3
-5
--
-3 – 2
-1
-*
-2 * 2
-4
-/
-4/2
-2
-%
-5%2
-1
-**
-2 ** 3
-8
-++
-2++ hoặc ++2
-3
---
-2— hoặc --2
-1
-Ví dụ về cộng trước và cộng sau
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-</head>
-<body>
-    <script src="Tester.js"></script>
-</body>
-</html>
-let a = 2;
-let b = 2;
-let c = a++;
-let d = ++b;
-console.log(c + " - " + a);
-console.log(d + " - " + b);
-
-2 – 3 // c và a
-3 – 3 // d và b
-Gán
-=
-a =  2
-Giá trị của a bằng 2 trong bộ nhớ
-+=
-a += 2
-a cộng thêm 2 đơn vị
--=
-a -= 2
-a trừ đi 2 đơn vị
-*=
-a *= 2
-a = a*2
-%=
-a  %= 2
-a = a % 2
-**=
-a **= 2
-a = a**2
-&=
-x &= y
-x = x & y
-^=
-x^= y
-x =  x ^ y
-|=
-x |= y
-x = x | y
-<<=
-x <<= y
-x = x << y
->>=
-x >>= y
-y = x >> y
->>>
-Là toán tử dịch phải không dấu
-
-<<<
-Là toán tử dịch trái không dấu
-
-&&=
-Chưa học
-
-||=
-Chưa học
-
-??=
-Chưa học
-
-&=
-Là toán tử bitwise AND (AND bit). Sử dụng phép nhân hệ nhị phân.
+## +
+## -
+## *
+## /
+## %
+## **
+## ++
+## --
+## =
+## +=
+## -=
+## *=
+## %=
+## **=
+## &=
+## ^=
+## |=
+## <<=
+## >>=
+## >>> (Là toán tử dịch phải không dấu)
+## <<< (Là toán tử dịch trái không dấu)
+## &&=
+## ||=
+## ??=
+## &= (Là toán tử bitwise AND (AND bit). Sử dụng phép nhân hệ nhị phân)
+**Ex**
+```js
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -166,9 +106,9 @@ Thực hiện phép and
 1 and 1 = 1
 Kết quả được: 1000
 Đổi sang hệ thập phân được: 8
-
-^=
-Là phép toán XOR. Giống nhau thì trả về false (0) khác nhau trả về true (1).
+```
+## ^= (Là phép toán XOR. Giống nhau thì trả về false (0) khác nhau trả về true (1))
+```js
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -273,6 +213,7 @@ console.log(a);
 Thực hiện phép dịch phải 2 bit
 Kết quả được: 10
 Đổi sang hệ thập phân được: 2
+```
 # Variable
 ## var & let & const
 **Syn**

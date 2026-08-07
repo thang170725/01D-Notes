@@ -1,12 +1,13 @@
-với một dự án backend làm bằng java spring boot thì cấu trúc hệ trông sẽ như nào, thư mục nào làm nhiệm vụ nào, giải thích cho tôi
-Trong các dự án Java Spring Boot, cấu trúc thư mục thường được thiết kế theo mô hình Layered Architecture (Kiến trúc phân tầng) hoặc Clean/Hexagonal Architecture. Đối với đa số các dự án thực tế hiện nay, mô hình phân tầng theo chuẩn MVC/Controller-Service-Repository là phổ biến nhất.
+- [Spring Boot Introduction](#spring-boot-introduction)
+---
+# Spring Boot Introduction
+```bash
+Trong các dự án Java Spring Boot, cấu trúc thư mục thường được thiết kế theo mô hình Layered Architecture (Kiến trúc phân tầng) hoặc Clean/Hexagonal Architecture. 
+    Đối với đa số các dự án thực tế hiện nay, mô hình phân tầng theo chuẩn MVC/Controller-Service-Repository là phổ biến nhất.
 
 Dưới đây là sơ đồ cấu trúc thư mục chuẩn cho một dự án Spring Boot và nhiệm vụ chi tiết của từng phần.
 
 Sơ đồ cấu trúc thư mục tổng quan
-Plaintext
-
-
 my-project/
 ├── src/
 │   ├── main/
@@ -27,7 +28,7 @@ my-project/
 │   └── test/                       # Chứa mã nguồn để chạy Unit Test/Integration Test
 ├── pom.xml (hoặc build.gradle)    # Quản lý thư viện và cấu hình build dự án
 └── README.md
-Giải thích nhiệm vụ chi tiết từng thư mục
+
 1. controller/ (Tầng giao tiếp - Presentation Layer)
 Nhiệm vụ: Nơi định nghĩa các API Endpoints (URL). Thư mục này đón nhận các yêu cầu (Request) từ client (Frontend, Mobile app, Postman...), kiểm tra tính hợp lệ sơ bộ của dữ liệu (Validation) và gọi xuống tầng service để xử lý.
 
@@ -85,3 +86,4 @@ repository/ lưu vào DB thành công, trả ngược tín hiệu về Service.
 Service báo lại cho Controller, Controller đóng gói kết quả vào một dto/BookingResponseDTO kèm mã 201 Created gửi trả lại cho người dùng.
 
 Cấu trúc này giúp mã nguồn của bạn cực kỳ sáng sủa: lỗi phần nào vào đúng thư mục đó sửa, dễ viết test và nhiều người có thể cùng làm một dự án mà không bị sửa đè code của nhau.
+```

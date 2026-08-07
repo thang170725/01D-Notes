@@ -80,104 +80,66 @@ Dev1
 ## Hai dev làm song song, branch bị diverged
 ```bash
 Mục tiêu học
-Hiểu:
-    - branch bị diverged là gì
-    - pull bị báo phải merge/rebase
-    - xử lý merge commit
-    - đọc graph commit
-    - Đây là thứ đi làm gặp suốt.
-Bối cảnh
-    - Hiện main sạch sau bài 1.
-    - Giả sử hai dev cùng sửa một feature.
-    - Ta tạo branch mới:
-    - feature/profile
+    Hiểu:
+        - branch bị diverged là gì
+        - pull bị báo phải merge/rebase
+        - xử lý merge commit
+        - đọc graph commit
+        - Đây là thứ đi làm gặp suốt.
+
+    Bối cảnh
+        - Hiện main sạch sau bài 1.
+        - Giả sử hai dev cùng sửa một feature.
+        - Ta tạo branch mới:
+        - feature/profile
 ```
 ```bash
-Nhiệm vụ
 Dev1
+    Từ main:
+        1. git checkout main
+        2. git pull origin main
+        3. git checkout -b feature/profile
 
-Từ main:
+    Tạo file:
+        dev1/profile.txt
+            nội dung: Create profile page
 
-git checkout main
-git pull origin main
-git checkout -b feature/profile
+    Commit:
+        1. git add .
+        2. git commit -m "dev1 create profile page"
 
-Tạo file:
+    Push: git push -u origin feature/profile
 
-dev1/profile.txt
-
-nội dung:
-
-Create profile page
-
-Commit:
-
-git add .
-git commit -m "dev1 create profile page"
-
-Push:
-
-git push -u origin feature/profile
 Dev2
+    Lấy branch về:
+        1. git fetch
+        2. git checkout -b feature/profile origin/feature/profile
 
-Lấy branch về:
+    Thêm vào cuối file: Add avatar upload
 
-git fetch
-git checkout -b feature/profile origin/feature/profile
+    Commit:
+        1. git add .
+        2. git commit -m "dev2 add avatar upload"
+        3. git push
 
-Thêm vào cuối file:
-
-Add avatar upload
-
-Commit:
-
-git add .
-git commit -m "dev2 add avatar upload"
-git push
 Quay lại Dev1 (rất quan trọng)
+    Không pull trước. Thêm tiếp vào file: Add profile bio
 
-Không pull trước.
+    Commit:
+        1. git add .
+        2. git commit -m "dev1 add bio"
 
-Thêm tiếp vào file:
-
-Add profile bio
-
-Commit:
-
-git add .
-git commit -m "dev1 add bio"
-
-Giờ thử push:
-
-git push
-
-Phải bị reject kiểu:
-
-rejected
-fetch first
-
-Đây chính là diverged.
-
-Remote có commit Dev2
-Local có commit Dev1
-
-Hai lịch sử tách nhau.
+    Giờ thử push:
+        1. git push # Phải bị reject kiểu: rejected, fetch first -> Đây chính là diverged.
 
 Xử lý
+    Chạy: git pull origin feature/profile
+        Có thể Git hỏi strategy, nếu có:
+            git pull --no-rebase origin feature/profile
 
-Chạy:
+        Nó sẽ tạo merge commit.
 
-git pull origin feature/profile
-
-Có thể Git hỏi strategy, nếu có:
-
-git pull --no-rebase origin feature/profile
-
-Nó sẽ tạo merge commit.
-
-Push lại:
-
-git push
-Kiểm tra
-git log --oneline --graph --all
+    Push lại: git push
+    
+    Kiểm tra: git log --oneline --graph --all
 ```

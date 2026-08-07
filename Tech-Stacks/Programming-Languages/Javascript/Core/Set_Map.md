@@ -1,4 +1,7 @@
-JS Sets
+- [Sets](#sets)
+--
+# Sets
+```bash
 Là một tập hợp các giá trị duy nhất.
 Mỗi giá trị chỉ có thể xuất hiện 1 lần trong Set.
 Các giá trị có thể thuộc bất ký loại nào, giá trị nguyên thủy hoặc đối tượng.
@@ -117,3 +120,4 @@ kiểm tra kiểu dữ liệu của biến.
 </html>
 number
 function Number() { [native code] }
+```

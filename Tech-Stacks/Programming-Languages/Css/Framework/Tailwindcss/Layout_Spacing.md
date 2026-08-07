@@ -10,6 +10,7 @@
   - [flex-](#flex-)
   - [flex-row       // mặc định](#flex-row--------mặc-định)
   - [flex-col       // dọc](#flex-col--------dọc)
+  - [basis](#basis)
   - [gap](#gap)
   - [items-center](#items-center)
   - [justify-start \& justify-center \& justify-end \& justify-between \& justify-around \& justify-evenly](#justify-start--justify-center--justify-end--justify-between--justify-around--justify-evenly)
@@ -99,6 +100,7 @@ py-6   // top + bottom
 <div className="flex">...</div>
 ```
 ## flex-
+```bash
 flex-1 là một utility của Tailwind tương ứng với thuộc tính Flexbox.
 <div class="flex">  <div class="flex-1">A</div>  <div>B</div></div>
 
@@ -178,9 +180,9 @@ Input dùng flex-1 nên kéo dài chiếm toàn bộ khoảng trống còn lại
 Cách nhớ đơn giản:
 flex-1="Tao muốn giãn ra để lấy phần không gian còn thừa."
 Số 1 là tỷ lệ chia không gian trong Flexbox. Nếu có nhiều phần tử cùng flex-1, chúng sẽ chia đều phần không gian còn lại theo tỷ lệ 1 : 1 : 1 : ....
+```
 ## flex-row       // mặc định
 ## flex-col       // dọc
-```
 ## basis
 ```bash
 - Thiết lập kích thước cho các items.
@@ -342,6 +344,7 @@ inset-0: kéo full màn hình (trên, dưới, trái, phải = 0)
 </div>
 ```
 ## :
+```bash
 lg:ml-65 là sự kết hợp của:
 lg:
 và
@@ -412,5 +415,6 @@ lg:ml-65
 nghĩa là:
 @media (min-width: 1024px) {  margin-left: 260px;}
 Nếu không có cấu hình nào cho 65 thì class này thường sẽ không được Tailwind sinh CSS ra.
+```
 # min
 # z
