@@ -2,7 +2,7 @@
 - [plt.close()](#pltclose)
 - [imshow()](#imshow)
 - [matshow()](#matshow)
-- [plot()](#plot)
+- [plot() (một đường thẳng từ điểm này đến điểm kia)](#plot-một-đường-thẳng-từ-điểm-này-đến-điểm-kia)
 - [marker](#marker)
 - [scatter()](#scatter)
 - [Hist()](#hist)
@@ -81,13 +81,16 @@ digits = load_digits()
 plt.matshow(digits.images[0], cmap='gray')
 plt.show() # một hình ảnh đen trắng số 0 kích thước 8x8 px sẽ được hiện ra
 ```
-# plot()
-```bash
-- Theo mặc định, hàm plot() vẽ một đường thẳng từ điểm này đến điểm kia.
-```
+# plot() (một đường thẳng từ điểm này đến điểm kia)
 **Syn**
 ```bash
-plt.plot(x, y, 'x', linestyle='dotted')
+plt.plot(
+    Series,
+    x,
+    y, 
+    'x', 
+    linestyle='dotted'
+)
 
 - Input:
     + linestyle: thay đổi kiểu hiển thị của đường biểu diễn đồ thị

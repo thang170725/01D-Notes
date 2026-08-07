@@ -7,6 +7,5 @@ dev-notes/                                                  ```mình dùng thư 
 ├── [Domains](Domains/Base.md)                              ```mình dùng thư mục này để xem các lĩnh vực trong ngành IT```   
 ├── [System-Architectures](System-Architectures/Base.md)    ```mình dùng thư mục này để thiết kế kiến trúc hệ thống```   
 ├── [Tech-Stacks](Tech-Stacks/Base.md)                      ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   
-├── [Terminology](Terminology/Base.md)                      ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
-└── Base.md                                                 ```mình dùng thư mục này để xem tất cả kiến thức về công nghệ trong ngành CNTT```    
+└── [Terminology](Terminology/Base.md)                      ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
 ```

@@ -13,6 +13,286 @@
 - [.quit() (tắt pygame)](#quit-tắt-pygame)
 - [raise SystemExit (Thoát chương trình)](#raise-systemexit-thoát-chương-trình)
 ---
+Câu trả lời ngắn là:
+
+Có, Pygame cần cài thêm.
+Có thể làm game thương mại, nhưng không phải là lựa chọn phổ biến cho game thương mại hiện nay.
+1. Có cần cài không?
+
+Có.
+
+Pygame không nằm trong thư viện chuẩn của Python.
+
+Cài bằng:
+
+pip install pygame
+
+Kiểm tra:
+
+import pygame
+
+print(pygame.version.ver)
+2. Pygame là gì?
+
+Pygame là một thư viện giúp Python có thể:
+
+tạo cửa sổ game
+vẽ hình
+hiển thị sprite
+phát nhạc
+phát hiệu ứng âm thanh
+xử lý bàn phím
+xử lý chuột
+kiểm tra va chạm
+quản lý FPS
+
+Ví dụ
+
+pygame.init()
+
+screen = pygame.display.set_mode((800,600))
+
+while True:
+    ...
+
+Nó cung cấp gần như những thứ cơ bản nhất để viết game.
+
+3. Có làm được game thương mại không?
+
+Có.
+
+Pygame không hề giới hạn bạn.
+
+Bạn có thể làm
+
+game bán trên Steam
+game bán trên itch.io
+game phát hành miễn phí
+
+đều được.
+
+Ví dụ có khá nhiều game indie được viết bằng Pygame.
+
+4. Nhưng tại sao ít công ty dùng?
+
+Vì Pygame khá "thấp".
+
+Nó chỉ giúp bạn
+
+Tạo cửa sổ
+
+↓
+
+Đọc bàn phím
+
+↓
+
+Vẽ hình
+
+Còn tất cả những thứ khác bạn phải tự làm.
+
+Ví dụ
+
+Muốn có animation
+
+↓
+
+tự code.
+
+Muốn particle
+
+↓
+
+tự code.
+
+Muốn lighting
+
+↓
+
+tự code.
+
+Muốn camera
+
+↓
+
+tự code.
+
+Muốn UI
+
+↓
+
+tự code.
+
+5. Unity thì khác
+
+Ví dụ Unity
+
+Animation
+
+Physics
+
+Particle
+
+Lighting
+
+Tilemap
+
+UI
+
+Audio
+
+Navigation
+
+AI
+
+Profiler
+
+Build Android
+
+Build IOS
+
+đều có sẵn.
+
+6. Pygame phù hợp game nào?
+
+Rất mạnh với
+
+Game 2D
+
+Ví dụ
+
+Mario
+Flappy Bird
+Snake
+Tetris
+Breakout
+Tower Defense
+RPG 2D
+Pokemon clone
+
+Ví dụ
+
+□□□□□□□□□□
+
+😀
+
+👾
+
+💰
+
+Pygame làm rất tốt.
+
+7. Còn game 3D?
+
+Pygame gần như không dành cho 3D.
+
+Muốn 3D
+
+thường phải kết hợp
+
+OpenGL
+ModernGL
+Panda3D
+Ursina
+
+hoặc dùng Unity / Unreal.
+
+8. Hiệu năng
+
+Rất nhiều người nghĩ
+
+Python chậm → game sẽ chậm.
+
+Không hẳn.
+
+Ví dụ game
+
+Snake
+
+Flappy Bird
+
+Pacman
+
+2048
+
+Sudoku
+
+Chess
+
+chạy cực kỳ mượt.
+
+Nhưng game kiểu
+
+GTA
+
+PUBG
+
+Valorant
+
+Black Myth Wukong
+
+thì không.
+
+9. Có game nổi tiếng dùng Pygame không?
+
+Có khá nhiều game indie.
+
+Ngoài ra Pygame được dùng rất nhiều trong
+
+giáo dục
+trường đại học
+dạy AI Game
+Game Jam
+prototype
+
+Vì code rất nhanh.
+
+10. Nếu muốn làm game bán được?
+
+Hoàn toàn được.
+
+Ví dụ game
+
+Roguelike
+
+Visual Novel
+
+Puzzle
+
+Platform
+
+RPG 2D
+
+Turn-based
+
+Card Game
+
+Pygame đều làm được.
+
+Nếu gameplay hay thì vẫn bán tốt.
+
+11. Khi nào nên học Pygame?
+
+Theo mình, nếu mục tiêu của bạn là:
+
+học lập trình game,
+hiểu game loop,
+hiểu xử lý sự kiện,
+quản lý sprite, va chạm, animation,
+hoặc làm các game 2D đơn giản đến trung bình,
+
+thì Pygame là lựa chọn rất tốt vì bạn sẽ hiểu cách game hoạt động "từ bên trong".
+
+Nếu mục tiêu là:
+
+làm game 3D,
+game mobile quy mô lớn,
+game có đồ họa hiện đại,
+hoặc muốn xin việc vào các studio game,
+
+thì nên học các game engine như Unity (C#) hoặc Unreal Engine (C++/Blueprint), vì đó là những công cụ được ngành công nghiệp sử dụng rộng rãi.
+
+Tóm lại, Pygame không chỉ là "đồ chơi". Nó đủ mạnh để tạo ra các game 2D hoàn chỉnh và thậm chí có thể thương mại hóa. Tuy nhiên, với các dự án lớn, engine chuyên dụng sẽ giúp bạn phát triển nhanh hơn vì đã tích hợp sẵn rất nhiều tính năng mà Pygame yêu cầu bạn tự xây dựng.
 # .init() (Khởi tạo tất cả module của pygame - window, keyboard, sound,...)
 **Syn**
 ```bash

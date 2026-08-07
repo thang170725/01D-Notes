@@ -23,6 +23,7 @@
   - [name](#name)
   - [sep](#sep)
   - [pathsep](#pathsep)
+  - [os.walk() (dùng để duyệt toàn bộ cây thư mục bao gồm cả thư mục con mà vẫn giữ nguyên cấu trúc)](#oswalk-dùng-để-duyệt-toàn-bộ-cây-thư-mục-bao-gồm-cả-thư-mục-con-mà-vẫn-giữ-nguyên-cấu-trúc)
 - [Remove (Thao tác xóa)](#remove-thao-tác-xóa)
   - [os.remove() (xóa file)](#osremove-xóa-file)
 ---
@@ -455,21 +456,20 @@ path
 ## name
 ## sep
 ## pathsep
-os.walk() dùng để duyệt toàn bộ cây thư mục (folder và các thư mục con). Đây là hàm rất hay dùng khi xử lý dataset, ví dụ như YOLO.
-
-Cú pháp
+## os.walk() (dùng để duyệt toàn bộ cây thư mục bao gồm cả thư mục con mà vẫn giữ nguyên cấu trúc)
+**Syn**
+```bash
 import os
 
 for root, dirs, files in os.walk(path):
     ...
 
-Trong đó:
-
-root: đường dẫn của thư mục hiện tại.
-dirs: danh sách các thư mục con trong root.
-files: danh sách các file trong root.
-Ví dụ 1: In toàn bộ file
-
+- root: đường dẫn của thư mục hiện tại.
+- dirs: danh sách các thư mục con trong root.
+- files: danh sách các file trong root.
+```
+**Ex1: In toàn bộ file**
+```bash
 Giả sử cấu trúc thư mục:
 
 dataset/
@@ -484,43 +484,38 @@ dataset/
 └── labels/
     ├── a.txt
     └── b.txt
-
-Code:
-
+```
+```python
 import os
 
 for root, dirs, files in os.walk("dataset"):
     print("Thư mục:", root)
-
     print("Folder con:", dirs)
-
     print("File:", files)
-
     print("-" * 40)
 
-Kết quả:
+# Thư mục: dataset
+# Folder con: ['images', 'labels']
+# File: []
 
-Thư mục: dataset
-Folder con: ['images', 'labels']
-File: []
+# ----------------------------------------
 
-----------------------------------------
+# Thư mục: dataset/images
+# Folder con: ['train']
+# File: ['a.jpg', 'b.jpg']
 
-Thư mục: dataset/images
-Folder con: ['train']
-File: ['a.jpg', 'b.jpg']
+# ----------------------------------------
 
-----------------------------------------
+# Thư mục: dataset/images/train
+# Folder con: []
+# File: ['c.jpg', 'd.jpg']
 
-Thư mục: dataset/images/train
-Folder con: []
-File: ['c.jpg', 'd.jpg']
+# ----------------------------------------
 
-----------------------------------------
-
-Thư mục: dataset/labels
-Folder con: []
-File: ['a.txt', 'b.txt']
+# Thư mục: dataset/labels
+# Folder con: []
+# File: ['a.txt', 'b.txt']
+```
 Ví dụ 2: Lấy toàn bộ ảnh jpg
 import os
 

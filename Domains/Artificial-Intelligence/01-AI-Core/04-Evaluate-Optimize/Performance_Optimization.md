@@ -171,6 +171,155 @@ GPU
     + Giảm precision (FP32 → FP16 / INT8)
     + Tối ưu memory
 ```
+Không. Đây là một hiểu nhầm rất phổ biến.
+
+TensorRT không phải là công cụ để export sang ONNX. Ngược lại, trong đa số trường hợp TensorRT sử dụng ONNX làm đầu vào.
+
+Quan hệ của chúng như sau:
+
+PyTorch (.pt)
+       │
+       │ Export
+       ▼
+ONNX (.onnx)
+       │
+       │ TensorRT build/optimize
+       ▼
+TensorRT Engine (.engine)
+       │
+       ▼
+Inference trên GPU NVIDIA
+Vai trò của từng thành phần
+1. PyTorch (.pt)
+
+Đây là model khi bạn train xong.
+
+Ví dụ:
+
+model = YOLO("best.pt")
+
+File:
+
+best.pt
+
+Chứa:
+
+Kiến trúc model
+Trọng số
+Chỉ chạy được với PyTorch
+2. ONNX
+
+ONNX là định dạng trung gian (intermediate format).
+
+Nó giống như một "ngôn ngữ chung" để nhiều framework có thể hiểu.
+
+Ví dụ:
+
+PyTorch
+      \
+TensorFlow ---> ONNX
+      /
+Paddle
+
+Nhờ vậy bạn có thể chạy model bằng nhiều runtime khác nhau.
+
+3. TensorRT
+
+TensorRT là một Inference Engine do NVIDIA phát triển.
+
+Nó nhận model (thường là ONNX), sau đó:
+
+tối ưu graph
+fusion các layer
+chọn kernel CUDA nhanh nhất
+chuyển FP32 → FP16 hoặc INT8 (nếu muốn)
+sinh ra file .engine
+
+Ví dụ:
+
+best.onnx
+      │
+      ▼
+TensorRT
+      │
+      ▼
+best.engine
+Tại sao không export thẳng sang TensorRT?
+
+Thực tế là có thể.
+
+Ví dụ YOLO:
+
+model.export(format="engine")
+
+Nhưng bên trong YOLO thường làm gần như sau:
+
+best.pt
+    │
+    ▼
+best.onnx
+    │
+    ▼
+TensorRT
+    │
+    ▼
+best.engine
+
+Tức là ONNX vẫn thường là bước trung gian, chỉ là YOLO tự động thực hiện giúp bạn.
+
+So sánh
+Định dạng/Công cụ	Vai trò
+.pt	Model PyTorch
+.onnx	Định dạng trung gian
+TensorRT	Công cụ tối ưu và chạy model
+.engine	Model đã được TensorRT tối ưu
+Ví dụ với project YOLO của bạn
+
+Hiện tại bạn đang có:
+
+best.pt
+
+Nếu muốn chạy nhanh hơn trên GPU NVIDIA:
+
+best.pt
+     │
+     ▼
+best.onnx
+     │
+     ▼
+TensorRT
+     │
+     ▼
+best.engine
+
+Sau đó khi predict:
+
+detector = TensorRT("best.engine")
+
+Tốc độ có thể nhanh hơn PyTorch đáng kể (tùy GPU và model).
+
+Còn nếu chỉ dùng CPU?
+
+Đây là điểm rất quan trọng đối với bạn.
+
+Trước đây bạn có nói máy của bạn chỉ có CPU Intel i3, không có GPU NVIDIA.
+
+Trong trường hợp đó:
+
+❌ TensorRT không giúp ích, vì nó chỉ hoạt động trên GPU NVIDIA.
+✅ ONNX Runtime mới là lựa chọn phù hợp nếu muốn tối ưu tốc độ trên CPU.
+
+Với máy của bạn, luồng tối ưu sẽ là:
+
+best.pt
+     │
+     ▼
+best.onnx
+     │
+     ▼
+ONNX Runtime (CPU)
+
+đây là hướng có khả năng mang lại cải thiện tốc độ hơn so với chạy trực tiếp bằng PyTorch trên CPU.
 # ONNX (định dạng model trung gian, dùng để “nói chuyện” giữa các framework)
 [Thư viện sử dụng ONNX](../../../../Tech-Stacks/Programming-Languages/Python/Core/01-Libraries/AI-Libraries/01-AI-Optimizer/ONNX-Runtime/Base.md)
 
