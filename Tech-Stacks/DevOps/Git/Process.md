@@ -10,7 +10,10 @@
   - [--delete (xóa nhánh trên github)](#--delete-xóa-nhánh-trên-github)
 - [git init (Tạo ra một kho lưu trữ repo)](#git-init-tạo-ra-một-kho-lưu-trữ-repo)
 - [git reset](#git-reset)
-- [git remote](#git-remote)
+- [git remote (Dùng để kết nối môt repository git cục bộ (trên máy tính của bạn) với một repository từ xa (trên gitHub))](#git-remote-dùng-để-kết-nối-môt-repository-git-cục-bộ-trên-máy-tính-của-bạn-với-một-repository-từ-xa-trên-github)
+  - [-v (Xem remote hiện tại là gì)](#-v-xem-remote-hiện-tại-là-gì)
+  - [add](#add)
+  - [set-url (Khi bạn muốn dùng remote origin nhưng trỏ tới repo mới)](#set-url-khi-bạn-muốn-dùng-remote-origin-nhưng-trỏ-tới-repo-mới)
 - [git add](#git-add)
 - [git commit](#git-commit)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
@@ -175,18 +178,24 @@ thang -> A B C
 Code cũ trên thang biến mất.
 ```
 
-# git remote
+# git remote (Dùng để kết nối môt repository git cục bộ (trên máy tính của bạn) với một repository từ xa (trên gitHub))
 ```bash
-- Dùng để kết nối môt repository git cục bộ (trên máy tính của bạn) với một repository từ xa (trên gitHub). 
 - giúp git push và git pull. Khi bạn khởi tạo một repository mới trên máy (git init), nó chưa biết liên kết với nơi nào để push code lên
 - Dùng khi bạn đã có sẵn code trên máy và muốn đẩy dự án này lên gitHub.
 ```
+## -v (Xem remote hiện tại là gì)
 **Syn**
 ```bash
-1. Xem remote hiện tại là gì
-    git remote -v
-2. git remote add origin https://github.com/thang1707/an_toan_bao_mat_tt.git
-3. Khi bạn muốn dùng remote origin nhưng trỏ tới repo mới
+git remote -v
+```
+## add
+**Syn**
+```bash
+git remote add origin https://github.com/thang1707/an_toan_bao_mat_tt.git
+```
+## set-url (Khi bạn muốn dùng remote origin nhưng trỏ tới repo mới)
+**Syn**
+```bash
 git remote set-url origin https://github.com/thang170725/elgamal.git
 ```
 # git add

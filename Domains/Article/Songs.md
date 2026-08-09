@@ -104,7 +104,7 @@
 38. Anh vẫn ở đây	
 39. Đâu phải cho anh	
 40. Đớn đau vô cùng
-41. Phai dấu cuộc tình
+41. Phai dấu cuộc tình (c5)
 42. dừng thương
 43. chỉ bằng 1 cái gật đầu
 44. người có thương
