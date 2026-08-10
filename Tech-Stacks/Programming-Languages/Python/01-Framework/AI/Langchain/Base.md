@@ -13,6 +13,7 @@ LangChain/                  # mình dùng thư mục này để xem kiến thứ
 └── Practices.md            # mình dùng file này để xem code mẫu, bài tập
 ```
 # Introduction
+[Học RAG](../../../../../../Domains/Artificial-Intelligence/02-AI-Agent/00-RAG/Process.md)
 ```bash
 - LangChain = framework để xây dựng hệ thống dùng LLM theo pipeline.
 - Nó giúp bạn:
@@ -26,6 +27,24 @@ LangChain/                  # mình dùng thư mục này để xem kiến thứ
 - Nếu chỉ gọi OpenAI API → không cần LangChain
 - Nếu app có logic, nhiều bước → LangChain rất đáng
 ```
+1. Bộ công cụ phổ biến nhất hiện nay
+    - LangChain: Đây là framework RAG nổi tiếng nhất. Nó cung cấp gần như mọi thứ:
+        + Load PDF
+        + Chunking
+        + Embedding
+        + Vector Database
+        + Retrieval
+        + Prompt
+        + LLM
+
+        Ưu điểm:
+            - Hệ sinh thái lớn
+            - Nhiều ví dụ
+            - Hỗ trợ hầu hết model
+        Nhược điểm:
+            - Khá nặng
+            - API thay đổi thường xuyên
+            - Nhiều abstraction khiến khó hiểu bản chất
 **LangChain giải quyết vấn đề gì trong dự án thật?**
 **Ví dụ KHÔNG dùng LangChain:**
 ```bash

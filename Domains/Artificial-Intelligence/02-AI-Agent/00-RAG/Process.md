@@ -19,6 +19,15 @@
   - [Graph RAG (Không lưu vector. Mà lưu Graph)](#graph-rag-không-lưu-vector-mà-lưu-graph)
   - [Agentic RAG (Đây là xu hướng hiện nay)](#agentic-rag-đây-là-xu-hướng-hiện-nay)
   - [Multi-Modal RAG (Không chỉ text. Có thể retrieve Image, Video, ...)](#multi-modal-rag-không-chỉ-text-có-thể-retrieve-image-video-)
+- [Search (tìm kiếm thông tin)](#search-tìm-kiếm-thông-tin)
+- [Semantic Search (tìm kiếm ngữ nghĩa)](#semantic-search-tìm-kiếm-ngữ-nghĩa)
+- [Keyword Search (tìm kiếm theo từ khóa)](#keyword-search-tìm-kiếm-theo-từ-khóa)
+  - [Đúng, Hybrid Search chính là cách kết hợp:](#đúng-hybrid-search-chính-là-cách-kết-hợp)
+  - [documents](#documents)
+- [Ask](#ask)
+  - [Trong RAG có phải luôn phải nạp tài liệu vào trước không?](#trong-rag-có-phải-luôn-phải-nạp-tài-liệu-vào-trước-không)
+  - [ChatGPT, Gemini, Claude có dùng RAG để tìm web không?](#chatgpt-gemini-claude-có-dùng-rag-để-tìm-web-không)
+  - [Nếu không dùng RAG thì sao?](#nếu-không-dùng-rag-thì-sao)
 ---
 # RAG Introduction (Tìm tài liệu trước → rồi mới trả lời)
 ```bash
@@ -30,88 +39,11 @@ Thay vì:
     - AI trả lời dựa hoàn toàn vào trí nhớ
     - Thì RAG: AI đi tìm tài liệu liên quan, đọc nó, rồi trả lời dựa trên tài liệu đó
 ```
-**Trong RAG có phải luôn phải nạp tài liệu không?**
-```bash
-Không. Có hai kiểu phổ biến:
-    Kiểu 1: RAG trên tài liệu riêng
-        Ví dụ: chatbot nội bộ công ty.
-            Bạn nạp: employee_handbook.pdfcompany_policy.pdf
-            
-            Pipeline: PDF -> Chunking -> Embedding -> Vector Database -> Retrieval -> LLM
-
-            Người dùng hỏi:
-                Công ty có bao nhiêu ngày nghỉ phép?
-
-            Retriever tìm đúng đoạn trong handbook rồi đưa cho LLM.
-
-    Kiểu 2: Web RAG
-        Không có tài liệu cố định.
-        
-        Pipeline: User Query -> Search Engine -> Web Pages -> Retriever -> LLM
-        
-        Ví dụ:
-            Giá vàng hôm nay
-        Hệ thống:
-            - Search Google/Bing
-            - Lấy vài trang mới nhất
-            - Trích nội dung
-            - Đưa cho LLM trả lời
-```
-**ChatGPT, Gemini, Claude có dùng RAG để tìm web không?**
-```bash
-Có, khi bật khả năng tìm kiếm.
-
-Ví dụ bạn hỏi: Thời tiết Hà Nội hôm nay
-    LLM không thể biết chính xác vì dữ liệu huấn luyện đã cũ.
-    
-    Khi hỏi "Thời tiết Hà Nội hôm nay" thì chuyện gì xảy ra?
-        Thông thường:
-            1. User:"Thời tiết Hà Nội hôm nay?"       
-            2. LLM Router       
-            3. Phát hiện cần dữ liệu realtime       
-            4. Search API / Weather API       
-            5. Kết quả: - 31°C - Mưa rào - Độ ẩm 80%       
-            6. LLM sinh câu trả lời tự nhiên
-        => Thực tế nhiều hệ thống không đi tìm trên web tự do mà gọi thẳng API thời tiết vì dữ liệu chính xác và có cấu trúc hơn.
-        => Đây chính là RAG kết hợp web search.
-```
-**Nếu không dùng RAG thì sao?**
-```bash
-LLM chỉ dựa vào trọng số đã học.
-
-Ví dụ hỏi:
-    Thủ đô Việt Nam là gì?
-=> Không cần RAG. Vì kiến thức này đã nằm trong tham số của mô hình.
-Người ta gọi là: Parametric Memory (kiến thức nằm trong weights).
-
-Ngược lại:
-    Giá Bitcoin hiện tại là bao nhiêu?
-
-    Thông tin thay đổi từng giây. Không thể lưu trong weights.
-    Phải dùng: External Memory → RAG/Search.
-```
 **Nhóm công cụ phổ biến**
+**Langchain (Framework nổi tiến nhất xây dựng pipeline Agent trong đó có RAG)**
+[Học Framework Langchain](../../../../Tech-Stacks/Programming-Languages/Python/01-Framework/AI/Langchain/Base.md)
+**LlamaIndex (Framework sinh ra gần như chỉ để làm RAG)**
 ```bash
-1. Bộ công cụ phổ biến nhất hiện nay
-    - LangChain: Đây là framework RAG nổi tiếng nhất. Nó cung cấp gần như mọi thứ:
-        + Load PDF
-        + Chunking
-        + Embedding
-        + Vector Database
-        + Retrieval
-        + Prompt
-        + LLM
-
-        Ưu điểm:
-            - Hệ sinh thái lớn
-            - Nhiều ví dụ
-            - Hỗ trợ hầu hết model
-        Nhược điểm:
-            - Khá nặng
-            - API thay đổi thường xuyên
-            - Nhiều abstraction khiến khó hiểu bản chất
-
-    - LlamaIndex: Framework sinh ra gần như chỉ để làm RAG.
         Ưu điểm:
             - Tập trung vào retrieval
             - Dễ làm chatbot hỏi đáp tài liệu
@@ -119,8 +51,8 @@ Ngược lại:
         Nhược điểm:
             - Ít linh hoạt hơn LangChain
             - Nếu mới học RAG: LlamaIndex thường dễ tiếp cận hơn.
-
-2. Embedding Model: RAG luôn cần embedding model.
+```
+1. Embedding Model: RAG luôn cần embedding model.
     - BAAI/bge-small-en
     - BAAI/bge-large-en # Chất lượng cao hơn.
     - multilingual-e5-large # Rất tốt cho tiếng Việt.
@@ -128,7 +60,7 @@ Ngược lại:
     - OpenAI Embedding
     - text-embedding-3-small # Nếu chấp nhận trả phí.
 
-3. Vector Database: Nơi lưu embedding.
+2. Vector Database: Nơi lưu embedding.
     - FAISS # Thường dùng nhất khi học. Facebook phát triển.
         Ưu điểm:
             - Nhanh
@@ -817,4 +749,621 @@ Retrieve case tương tự
 ↓
 LLM
 => Đây là hướng đang phát triển rất mạnh.
+```
+# Search (tìm kiếm thông tin)
+# Semantic Search (tìm kiếm ngữ nghĩa)
+# Keyword Search (tìm kiếm theo từ khóa)
+## Đúng, Hybrid Search chính là cách kết hợp:
+
+Keyword Search
+      +
+Semantic Search
+      ↓
+Hybrid Search
+
+Và trong hệ thống Agent/RAG cá nhân mà bạn đang muốn xây, đây thường là cách thực tế hơn việc chỉ dùng Semantic Search.
+
+1. Ví dụ cụ thể
+
+Giả sử bạn có 5 tài liệu:
+
+doc1:
+"Project YOLO sử dụng YOLOv12 để nhận diện chó mèo."
+
+doc2:
+"Model YOLOv12 được train trên dataset 10.000 ảnh."
+
+doc3:
+"Trong project nhận diện vật thể, model được đánh giá bằng mAP50 và mAP50-95."
+
+doc4:
+"Ngày 15/07, team quyết định chuyển từ YOLOv11 sang YOLOv12."
+
+doc5:
+"Python được sử dụng để xây dựng pipeline xử lý ảnh."
+
+User hỏi:
+
+"Ngày 15/07 team quyết định dùng model nào cho project?"
+
+2. Keyword Search sẽ làm gì?
+
+Nó tìm các từ:
+
+"15/07"
+"model"
+"project"
+"quyết định"
+
+Kết quả có thể:
+
+doc4 ⭐⭐⭐⭐⭐
+doc1 ⭐⭐
+doc2 ⭐
+
+Vì doc4 chứa:
+
+"Ngày 15/07"
+"quyết định"
+"YOLOv12"
+
+→ Rất chính xác.
+
+3. Semantic Search sẽ làm gì?
+
+Embedding câu hỏi:
+
+"Ngày 15/07 team quyết định dùng model nào?"
+
+thành vector.
+
+Sau đó tìm các đoạn có ý nghĩa gần nhất.
+
+Nó có thể tìm được:
+
+doc4 ⭐⭐⭐⭐⭐
+doc1 ⭐⭐⭐⭐
+doc2 ⭐⭐⭐
+
+Ngay cả khi tài liệu viết:
+
+"Ngày 15/07, team chuyển từ YOLOv11 sang YOLOv12."
+
+thì semantic search hiểu:
+
+"chuyển sang"
+≈
+"quyết định dùng"
+4. Vậy tại sao không dùng Semantic Search luôn?
+
+Vì có những thứ semantic search không nên tự quyết định.
+
+Ví dụ:
+
+"Tìm tài liệu YOLOv12."
+
+Bạn thực sự muốn chính xác chữ:
+
+YOLOv12
+
+Nếu semantic search chỉ thấy:
+
+YOLOv11
+YOLOv12
+YOLOv8
+
+thì đôi khi ranking có thể không đúng ý bạn.
+
+Hoặc:
+
+"Tìm invoice INV-2026-001928."
+
+Đây là trường hợp keyword search cực kỳ mạnh.
+
+Semantic search không cần hiểu INV-2026-001928 có nghĩa gì; chỉ cần tìm đúng chuỗi.
+
+5. Hybrid Search giải quyết cả hai
+
+Ta cho hai hệ thống tìm độc lập:
+
+                    Query
+                      │
+             ┌────────┴────────┐
+             ↓                 ↓
+       Keyword Search     Semantic Search
+             │                 │
+             ↓                 ↓
+         Results A          Results B
+             │                 │
+             └────────┬────────┘
+                      ↓
+                 Rank Fusion
+                      ↓
+                Final Results
+
+Đây chính là ý tưởng cốt lõi.
+
+6. Ví dụ bằng điểm số
+
+Giả sử:
+
+Keyword Search
+doc4 → 0.95
+doc1 → 0.70
+doc2 → 0.50
+doc3 → 0.30
+Semantic Search
+doc4 → 0.92
+doc1 → 0.85
+doc2 → 0.75
+doc3 → 0.40
+
+Ta có thể kết hợp:
+
+final_score =
+    0.4 × keyword_score
+  + 0.6 × semantic_score
+
+Ví dụ doc4:
+
+0.4 × 0.95 + 0.6 × 0.92
+= 0.932
+
+doc1:
+
+0.4 × 0.70 + 0.6 × 0.85
+= 0.79
+
+Kết quả:
+
+doc4  0.932
+doc1  0.790
+doc2  0.650
+...
+
+→ doc4 đứng đầu.
+
+7. Nhưng thực tế thường không cộng score đơn giản như vậy
+
+Đây là điểm bạn nên biết khi sau này xây hệ thống thật.
+
+Keyword search và semantic search thường có thang điểm khác nhau.
+
+Ví dụ:
+
+BM25 score:
+3.82
+7.15
+12.4
+
+trong khi semantic:
+
+cosine similarity:
+0.91
+0.83
+0.77
+
+Không nên tùy tiện:
+
+0.4 × BM25 + 0.6 × cosine
+
+vì hai score không cùng scale.
+
+Có hai hướng phổ biến:
+
+Cách 1 — Normalize score
+BM25
+ ↓
+normalize 0 → 1
+
+cosine
+ ↓
+normalize 0 → 1
+
+ ↓
+weighted combination
+Cách 2 — RRF
+
+Dùng:
+
+Reciprocal Rank Fusion
+
+Cách này rất phổ biến vì nó kết hợp dựa trên thứ hạng thay vì cố ép hai score về cùng một scale.
+
+8. RRF hoạt động thế nào?
+
+Ví dụ:
+
+Keyword
+Rank 1 → doc4
+Rank 2 → doc1
+Rank 3 → doc2
+Semantic
+Rank 1 → doc1
+Rank 2 → doc4
+Rank 3 → doc2
+
+RRF sẽ nói:
+
+doc4:
+keyword rank 1
+semantic rank 2
+
+doc1:
+keyword rank 2
+semantic rank 1
+
+doc2:
+keyword rank 3
+semantic rank 3
+
+→ doc4 và doc1 đều được đánh giá cao.
+
+Công thức thường dùng:
+
+RRF(d) = Σ 1 / (k + rank(d))
+
+Trong đó k thường được chọn khoảng 60.
+
+Bạn không nhất thiết phải tự code công thức này; nhiều hệ thống search hỗ trợ sẵn hoặc có thể triển khai khá dễ.
+
+9. Bây giờ đến câu hỏi quan trọng nhất: "Làm thế nào dùng cả hai?"
+
+Có nhiều kiến trúc.
+
+Cách đơn giản nhất
+
+Bạn dùng:
+
+PostgreSQL + pgvector
+
+cho semantic search, đồng thời PostgreSQL làm keyword search.
+
+Ví dụ database:
+
+documents
+--------------------------------
+id
+title
+content
+embedding
+created_at
+project
+
+Bạn có:
+
+content
+
+→ keyword search.
+
+Và:
+
+embedding
+
+→ semantic search.
+
+10. Query sẽ chạy hai lần
+
+Ví dụ user hỏi:
+
+"Ngày 15/07 quyết định dùng YOLO model nào?"
+Query 1 — Keyword
+
+Database tìm:
+
+15/07
+YOLO
+model
+quyết định
+
+→ lấy top 20.
+
+Query 2 — Semantic
+
+Embedding model biến query thành:
+
+[0.123, -0.442, 0.891, ...]
+
+→ vector DB tìm top 20.
+
+Sau đó:
+
+20 keyword results
+        +
+20 semantic results
+        ↓
+      merge
+        ↓
+   deduplicate
+        ↓
+      RRF
+        ↓
+   top 5 / top 10
+
+Sau cùng mới đưa cho LLM.
+
+11. Ví dụ code Python đơn giản
+
+Không cần framework phức tạp.
+
+Ý tưởng:
+
+def hybrid_search(query):
+    keyword_results = keyword_search(query)
+    semantic_results = semantic_search(query)
+
+    results = merge_results(
+        keyword_results,
+        semantic_results
+    )
+
+    ranked = rrf(results)
+
+    return ranked[:10]
+
+Rồi Agent:
+
+def answer_question(query):
+    documents = hybrid_search(query)
+
+    context = build_context(documents)
+
+    answer = llm.generate(
+        query=query,
+        context=context
+    )
+
+    return answer
+
+Luồng:
+
+User
+ ↓
+hybrid_search()
+ ↓
+keyword + semantic
+ ↓
+top documents
+ ↓
+context
+ ↓
+LLM
+ ↓
+answer
+12. Ví dụ thực tế với PostgreSQL
+
+Nếu dùng PostgreSQL + pgvector, bạn có thể có:
+
+documents
+id	content	embedding
+1	Project dùng YOLOv12	vector
+2	Train YOLOv12 trên dataset...	vector
+3	Ngày 15/07 quyết định...	vector
+4	Pipeline xử lý ảnh...	vector
+
+Keyword search có thể dùng PostgreSQL Full Text Search.
+
+Ví dụ conceptually:
+
+SELECT *
+FROM documents
+WHERE
+    to_tsvector('simple', content)
+    @@ plainto_tsquery('simple', 'YOLOv12 15/07');
+
+Semantic:
+
+SELECT *
+FROM documents
+ORDER BY embedding <=> :query_embedding
+LIMIT 20;
+
+Sau đó application layer:
+
+keyword_results
++
+semantic_results
+        ↓
+      RRF
+        ↓
+ final_results
+13. Nhưng tôi sẽ làm thêm một bước nữa: Metadata Filter
+
+Trong Agent cá nhân của bạn, Hybrid Search nên tiến tới:
+
+                Query
+                  │
+       ┌──────────┼──────────┐
+       ↓          ↓          ↓
+    Keyword    Semantic   Metadata
+       │          │          │
+       └──────────┼──────────┘
+                  ↓
+               Fusion
+                  ↓
+              Reranker
+                  ↓
+               Top K
+                  ↓
+                 LLM
+
+Ví dụ:
+
+"Tìm những tài liệu về YOLOv12 tôi chỉnh sửa tháng trước."
+
+Ta có:
+
+Keyword:
+YOLOv12
+
+Semantic:
+"tài liệu tôi chỉnh sửa"
+
+Metadata:
+modified_at = tháng trước
+
+→ kết quả tốt hơn rất nhiều.
+
+14. Reranker là tầng tiếp theo
+
+Nếu muốn hệ thống RAG của bạn thật sự tốt, sau Hybrid Search có thể thêm:
+
+Hybrid Search
+      ↓
+   Top 50
+      ↓
+   Reranker
+      ↓
+    Top 5
+      ↓
+     LLM
+
+Ví dụ:
+
+Query:
+"Ngày 15/07 team quyết định dùng model nào?"
+
+Hybrid Search lấy 50 kết quả.
+
+Reranker đọc:
+
+query
++
+document
+
+và đánh giá:
+
+doc4 → 0.98
+doc1 → 0.72
+doc2 → 0.61
+...
+
+→ chỉ đưa 5 kết quả tốt nhất cho LLM.
+
+Đây thường hiệu quả hơn việc lấy thẳng top 5 từ vector search.
+
+15. Kiến trúc RAG hoàn chỉnh mà bạn có thể hướng tới
+
+Với Personal AI Agent bạn đang muốn xây, mình sẽ thiết kế:
+
+                       USER
+                         │
+                         ↓
+                      AGENT
+                         │
+                         ↓
+                       Query
+                         │
+          ┌──────────────┼──────────────┐
+          ↓              ↓              ↓
+      Keyword         Semantic       Metadata
+      Search          Search          Filter
+          │              │              │
+          └──────────────┼──────────────┘
+                         ↓
+                    Hybrid Fusion
+                         │
+                         ↓
+                     Top 20-50
+                         │
+                         ↓
+                      Reranker
+                         │
+                         ↓
+                       Top 5
+                         │
+                         ↓
+                       LLM
+                         │
+                         ↓
+                      Answer
+
+Và dữ liệu:
+
+                    YOUR DATA
+                        │
+        ┌───────────────┼────────────────┐
+        ↓               ↓                ↓
+      PDF             Code             Email
+        ↓               ↓                ↓
+      Chunk           Chunk            Chunk
+        │               │                │
+        └───────────────┼────────────────┘
+                        ↓
+                  Embedding Model
+                        ↓
+                  Vector Database
+Một câu để bạn nhớ
+
+Keyword Search tìm cái "giống chữ".
+
+Semantic Search tìm cái "giống nghĩa".
+
+Hybrid Search tìm cả "giống chữ + giống nghĩa".
+
+Với Agent cá nhân, mình sẽ còn thêm:
+
+Hybrid Search + Metadata Filter + Reranker
+
+Đây là kiến trúc rất đáng dùng khi bạn bắt đầu xây memory/RAG cho AI Agent của mình.
+# Ask
+## Trong RAG có phải luôn phải nạp tài liệu vào trước không?
+```bash
+Không. Có hai kiểu phổ biến:
+    Kiểu 1: RAG trên tài liệu riêng
+        Ví dụ: chatbot nội bộ công ty.
+            Bạn nạp: employee_handbook.pdfcompany_policy.pdf
+            
+            Pipeline: PDF -> Chunking -> Embedding -> Vector Database -> Retrieval -> LLM
+
+            Người dùng hỏi:
+                Công ty có bao nhiêu ngày nghỉ phép?
+
+            Retriever tìm đúng đoạn trong handbook rồi đưa cho LLM.
+
+    Kiểu 2: Web RAG
+        Không có tài liệu cố định.
+        
+        Pipeline: User Query -> Search Engine -> Web Pages -> Retriever -> LLM
+        
+        Ví dụ:
+            Giá vàng hôm nay
+        Hệ thống:
+            - Search Google/Bing
+            - Lấy vài trang mới nhất
+            - Trích nội dung
+            - Đưa cho LLM trả lời
+```
+## ChatGPT, Gemini, Claude có dùng RAG để tìm web không?
+```bash
+Có, khi bật khả năng tìm kiếm.
+
+Ví dụ bạn hỏi: Thời tiết Hà Nội hôm nay
+    LLM không thể biết chính xác vì dữ liệu huấn luyện đã cũ.
+    
+    Khi hỏi "Thời tiết Hà Nội hôm nay" thì chuyện gì xảy ra?
+        Thông thường:
+            1. User:"Thời tiết Hà Nội hôm nay?"       
+            2. LLM Router       
+            3. Phát hiện cần dữ liệu realtime       
+            4. Search API / Weather API       
+            5. Kết quả: - 31°C - Mưa rào - Độ ẩm 80%       
+            6. LLM sinh câu trả lời tự nhiên
+        => Thực tế nhiều hệ thống không đi tìm trên web tự do mà gọi thẳng API thời tiết vì dữ liệu chính xác và có cấu trúc hơn.
+        => Đây chính là RAG kết hợp web search.
+```
+## Nếu không dùng RAG thì sao?
+```bash
+LLM chỉ dựa vào trọng số đã học.
+
+Ví dụ hỏi:
+    Thủ đô Việt Nam là gì?
+=> Không cần RAG. Vì kiến thức này đã nằm trong tham số của mô hình.
+Người ta gọi là: Parametric Memory (kiến thức nằm trong weights).
+
+Ngược lại:
+    Giá Bitcoin hiện tại là bao nhiêu?
+
+    Thông tin thay đổi từng giây. Không thể lưu trong weights.
+    Phải dùng: External Memory → RAG/Search.
 ```

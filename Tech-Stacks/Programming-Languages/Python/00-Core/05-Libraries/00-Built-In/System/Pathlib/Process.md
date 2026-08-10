@@ -207,3 +207,11 @@ for item in folder.glob("*"):
 # project\images
 ```
 ## .rglob()
+**Ex: đếm file pdf**
+```python
+folder = Path(folder_path)
+
+count = 0
+for _ in folder.rglob("*.pdf"):
+    count += 1
+```

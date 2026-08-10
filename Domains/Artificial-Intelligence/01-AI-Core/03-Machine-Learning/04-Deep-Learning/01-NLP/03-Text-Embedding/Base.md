@@ -7,8 +7,8 @@
   - [N-gram](#n-gram)
 - [nomic-embed-text](#nomic-embed-text)
 - [OpenAI Embedding](#openai-embedding)
-- [embeddings/openai\_embedding.py](#embeddingsopenai_embeddingpy)
-- [embeddings/hf\_embedding.py](#embeddingshf_embeddingpy)
+  - [Ask](#ask)
+    - [OpenAI Embedding khác Hugging Face thế nào?](#openai-embedding-khác-hugging-face-thế-nào)
 - [Practices](#practices)
   - [Demo Transformer Embedding](#demo-transformer-embedding)
 ---
@@ -139,56 +139,12 @@ Dùng để:
 ```
 # nomic-embed-text
 # OpenAI Embedding
-Đúng câu hỏi này rất quan trọng nếu bạn đang làm AI/RAG/microservice. Điểm mấu chốt là:
-
-OpenAI Embedding không phải là một loại embedding khác về bản chất.
-Nó cũng là một model biến text → vector giống các embedding model trên Hugging Face. Khác nhau chủ yếu nằm ở model được train thế nào, chất lượng, kích thước vector, chi phí, tốc độ và cách triển khai.
-
+```bash
 OpenAI hiện cung cấp các embedding model như text-embedding-3-small và text-embedding-3-large.
-
-1. Trước hết: Embedding thực chất là gì?
-
-Ví dụ bạn có:
-
-"Cách sử dụng Docker"
-
-Embedding model biến nó thành một vector:
-
-[
-    0.021,
-    -0.183,
-    0.442,
-    ...
-]
-
-Ví dụ giả sử vector có 5 chiều:
-
-"Cách sử dụng Docker"
-        ↓
-[0.2, -0.7, 0.4, 0.1, 0.8]
-
-Một câu khác:
-
-"Hướng dẫn dùng Docker"
-        ↓
-[0.21, -0.69, 0.42, 0.09, 0.79]
-
-Hai vector gần nhau → hai câu có ý nghĩa tương tự.
-
-Đây chính là nền tảng của:
-
-Semantic Search
-RAG
-Recommendation
-Document Retrieval
-Duplicate Detection
-Clustering
-Similarity Search
-
-Hugging Face cũng mô tả feature extraction/embedding theo đúng hướng này: chuyển text thành vector để retrieval, reranking hoặc tính similarity giữa các câu.
-
-2. Vậy OpenAI Embedding khác Hugging Face thế nào?
-
+```
+## Ask
+### OpenAI Embedding khác Hugging Face thế nào?
+```bash
 Hãy hình dung:
 
                  EMBEDDING
@@ -203,800 +159,495 @@ Hãy hình dung:
         │                         │
     Internet                GPU / CPU của bạn
 
-Cả hai đều làm cùng một nhiệm vụ:
+Cả hai đều làm cùng một nhiệm vụ: Text → Vector Nhưng cách sử dụng khác nhau.
+    OpenAI Embedding
+        Ví dụ bạn dùng: text-embedding-3-small
 
-Text → Vector
+        Kiến trúc ứng dụng:
+            Your Python application
+                    │
+                    │ HTTPS API
+                    ↓
+            OpenAI Embedding API
+                    │
+                    ↓
+            Embedding Model
+                    │
+                    ↓
+            Vector
+                    │
+                    ↓
+            Your application
 
-Nhưng cách sử dụng khác nhau.
+        Bạn không tải model về máy.
 
-3. OpenAI Embedding
+        Bạn gửi:
+            text = "Docker là gì?"
 
-Ví dụ bạn dùng:
+            OpenAI xử lý và trả về:
+                [
+                    0.012,
+                    -0.034,
+                    0.127,
+                    ...
+                ]
 
-text-embedding-3-small
+    Hugging Face Embedding
+        Ở đây:
+            model
+              ↓
+            được download về máy
+              ↓
+            CPU/GPU của bạn
+              ↓
+            text → vector
 
-Kiến trúc ứng dụng:
+        Hugging Face cũng hỗ trợ inference qua API thay vì chạy local; tài liệu hiện tại cho phép gọi feature extraction qua InferenceClient.
+```
+Đúng, 5 nhóm bạn nêu — BAAI BGE, E5, Jina, GTE, Voyage — đều là những dòng embedding rất đáng biết nếu bạn đang xây Semantic Search / Hybrid Search / RAG cho AI Agent.
 
-Your Python application
-        │
-        │ HTTPS API
-        ↓
-OpenAI Embedding API
-        │
-        ↓
-Embedding Model
-        │
-        ↓
-Vector
-        │
-        ↓
-Your application
+Điểm quan trọng là không có model nào "mạnh nhất mọi mặt". Mỗi dòng có triết lý hơi khác nhau.
 
-Bạn không tải model về máy.
+1. Nhìn nhanh trước
+Model	Điểm mạnh chính	Multilingual	Local	Phù hợp
+BAAI BGE	Retrieval tổng quát, chất lượng tốt	⭐⭐⭐⭐	✅	RAG, semantic search
+E5	Query ↔ document retrieval	⭐⭐⭐⭐⭐	✅	Search/RAG
+Jina	Context dài, multilingual	⭐⭐⭐⭐⭐	✅/API	Tài liệu dài, RAG
+GTE	General text embedding, hiệu năng tốt	⭐⭐⭐⭐	✅	RAG/search
+Voyage	Chất lượng retrieval rất cao, API	⭐⭐⭐⭐⭐	❌*	Production RAG
 
-Bạn gửi:
+* Voyage chủ yếu được dùng qua API thay vì tự chạy model như BGE/E5/GTE.
 
-text = "Docker là gì?"
+Nếu bạn đang tự build Personal AI Agent chạy local, mình sẽ ưu tiên:
 
-OpenAI xử lý và trả về:
+BGE / E5 / Jina / GTE
 
-[
-    0.012,
-    -0.034,
-    0.127,
-    ...
-]
-Ví dụ Python
+Còn nếu chấp nhận cloud API:
 
-Bạn có thể sử dụng SDK của OpenAI:
+Voyage
 
-from openai import OpenAI
+là một lựa chọn rất đáng cân nhắc.
 
-client = OpenAI()
+2. BAAI BGE
 
-response = client.embeddings.create(
-    model="text-embedding-3-small",
-    input="Docker là gì?"
-)
+BGE = Beijing Academy of Artificial Intelligence General Embedding.
 
-embedding = response.data[0].embedding
-
-print(len(embedding))
-print(embedding[:5])
-
-Sau đó bạn lưu vector này vào:
-
-Qdrant
-Milvus
-Pinecone
-Weaviate
-Chroma
-pgvector
-...
-4. Còn Hugging Face thì sao?
-
-Hugging Face giống như một kho model.
-
-Có rất nhiều embedding model:
-
-BAAI/bge-...
-intfloat/e5-...
-thenlper/gte-...
-sentence-transformers/...
-...
-
-Ví dụ dùng Sentence Transformers:
-
-from sentence_transformers import SentenceTransformer
-
-model = SentenceTransformer("BAAI/bge-small-en-v1.5")
-
-texts = [
-    "Docker là gì?",
-    "Cách sử dụng Docker"
-]
-
-embeddings = model.encode(texts)
-
-print(embeddings.shape)
-
-Ở đây:
-
-model
-  ↓
-được download về máy
-  ↓
-CPU/GPU của bạn
-  ↓
-text → vector
-
-Hugging Face cũng hỗ trợ inference qua API thay vì chạy local; tài liệu hiện tại cho phép gọi feature extraction qua InferenceClient.
-
-5. Điểm khác biệt lớn nhất
-
-Tôi nghĩ bạn nên nhớ bảng này:
-
-	OpenAI Embedding	Hugging Face Embedding
-Model	OpenAI cung cấp	Rất nhiều model
-Chạy ở đâu	Cloud	Local hoặc cloud
-Download model	❌	✅ nếu chạy local
-GPU	Không cần quản lý	Có thể cần
-API	Rất đơn giản	Tùy model/framework
-Chi phí	Tính theo usage	Local thì chủ yếu là hạ tầng
-Custom model	Hạn chế hơn	Rất linh hoạt
-Offline	❌	✅
-Privacy	Data gửi API	Có thể giữ toàn bộ local
-Deployment	Dễ	Phức tạp hơn
-Control	Thấp hơn	Cao hơn
-6. Một điểm rất quan trọng: "Transformer model" không đồng nghĩa "Embedding model"
-
-Đây là chỗ người mới rất dễ nhầm.
+Đây là một trong những dòng embedding open-source nổi tiếng nhất.
 
 Ví dụ:
 
-BERT
-GPT
-Llama
-Qwen
-Mistral
-BGE
-E5
-GTE
-
-đều có thể liên quan đến Transformer, nhưng không phải model nào cũng nên lấy output ra làm embedding.
-
-Ví dụ:
-
-BERT
-
-ban đầu được thiết kế chủ yếu cho các NLP task.
-
-Bạn có thể lấy:
-
-hidden states
-
-của BERT:
-
-tokens
-   ↓
-Transformer
-   ↓
-hidden states
-   ↓
-[CLS]
-
-rồi biến thành vector.
-
-Nhưng điều đó không có nghĩa BERT là một embedding model tốt nhất cho semantic search.
-
-7. Đây là lý do có các model chuyên về embedding
-
-Ví dụ:
-
-BGE
-E5
-GTE
-Sentence-BERT
-
-được train/finetune đặc biệt cho:
-
-sentence similarity
-semantic search
-retrieval
-embedding
-
-Vì vậy:
-
-BERT
-
-và
-
-BGE
-
-đều là Transformer-based models.
-
-Nhưng mục tiêu sử dụng khác nhau.
-
-Có thể hình dung:
-
-                Transformer
-                     │
-       ┌─────────────┴──────────────┐
-       │                            │
-   General NLP                 Embedding
-       │                            │
-     BERT                    BGE / E5 / GTE
-       │                            │
- classification                similarity
- NER / QA / etc.               retrieval
-8. Một điều còn quan trọng hơn: embedding model được train như thế nào
-
-Đây mới là thứ quyết định embedding có tốt hay không.
-
-Ví dụ ta muốn:
-
-"How to install Docker?"
-
-gần:
-
-"Guide to installing Docker"
-
-và xa:
-
-"How to cook chicken?"
-
-Model embedding được train để:
-
-similar meaning
-       ↓
-vectors close
-
-và:
-
-different meaning
-       ↓
-vectors far
-
-Có thể hình dung:
-
-                    Vector Space
-
-       Docker
-         ●
-        ● ●
-       ●   ●
-     installation
-         
-
-                           ●
-                          ●
-                       Cooking
-
-Do đó embedding model không chỉ đơn giản là lấy hidden state của Transformer.
-
-Chất lượng của embedding phụ thuộc rất nhiều vào objective/training data.
-
-9. OpenAI Embedding nên hiểu như thế nào?
-
-Bạn có thể coi:
-
-text-embedding-3-small
-
-là:
-
-Một model embedding được OpenAI train và host sẵn, bạn chỉ cần gọi API.
-
-Còn:
-
-BAAI/bge-...
-intfloat/e5-...
-thenlper/gte-...
-
-là:
-
-Những embedding model mà bạn có thể lấy từ Hugging Face và tự chạy hoặc gọi inference provider.
-
-10. Ví dụ thực tế với RAG
-
-Giả sử bạn có 100.000 tài liệu.
-
-Bạn chia chúng:
-
-document
-   ↓
-chunking
-   ↓
-10.000 chunks
-
-Sau đó embedding:
-
-chunk 1
-   ↓
-embedding model
-   ↓
-vector 1
-
-chunk 2
-   ↓
-embedding model
-   ↓
-vector 2
-
-...
-
-Lưu vào vector database:
-
-Qdrant
-    │
-    ├── vector 1 + metadata
-    ├── vector 2 + metadata
-    ├── vector 3 + metadata
-    └── ...
-
-User hỏi:
-
-"Làm thế nào để deploy model YOLO?"
-
-Bạn embedding query:
-
-query
- ↓
-embedding model
- ↓
-query vector
-
-Sau đó:
-
-query vector
+BAAI/bge-small-en-v1.5
+BAAI/bge-base-en-v1.5
+BAAI/bge-large-en-v1.5
+BAAI/bge-m3
+
+Trong đó BGE-M3 đặc biệt đáng chú ý nếu bạn làm multilingual RAG.
+
+BGE mạnh ở đâu?
+Semantic Search
       ↓
-vector similarity search
+Document Retrieval
       ↓
-top-k chunks
-      ↓
-LLM
-      ↓
-answer
-
-Đây chính là RAG.
-
-11. Và có một quy tắc cực kỳ quan trọng
-
-Document embedding và query embedding phải dùng cùng embedding model.
+RAG
 
 Ví dụ:
 
-Documents
-    ↓
-OpenAI text-embedding-3-small
-    ↓
-vectors
+Query:
+"Tôi muốn biết cách train YOLO"
 
-thì query cũng:
+Document:
+"Training a YOLO model requires preparing
+the dataset and configuring the training parameters."
 
-Query
-    ↓
-OpenAI text-embedding-3-small
-    ↓
-vector
+Dù không trùng hoàn toàn từ khóa, BGE có thể đưa document này lên cao vì ngữ nghĩa gần nhau.
 
-Không nên:
+BGE-M3
 
-Documents → BGE
-Query     → OpenAI
+Nếu dữ liệu của bạn có:
 
-rồi đem vector so sánh trực tiếp.
+Tiếng Việt
+Tiếng Anh
+Code
+PDF
+Documentation
 
-Vì hai model tạo ra hai vector spaces khác nhau.
+thì BGE-M3 khá hấp dẫn.
 
-12. Vậy vector 1536 chiều có nghĩa gì?
+3. E5
 
-Ví dụ một embedding model trả:
+E5 là dòng embedding của Microsoft.
 
-len(vector)
+Một số model nổi tiếng:
 
-kết quả:
+intfloat/e5-base-v2
+intfloat/e5-large-v2
 
-1536
+intfloat/multilingual-e5-small
+intfloat/multilingual-e5-base
+intfloat/multilingual-e5-large
 
-thì:
+E5 rất nổi tiếng trong bài toán:
 
-text
- ↓
-[ x1, x2, x3, ..., x1536 ]
-
-Không nên hiểu:
-
-x1 = "Docker"
-x2 = "AI"
-x3 = "Python"
-
-Không phải vậy.
-
-Các chiều không có ý nghĩa đơn giản kiểu:
-
-dimension 1 = độ dài câu
-dimension 2 = chủ đề
-...
-
-Nó là một distributed representation.
-
-Nói đơn giản:
-
-Ý nghĩa của câu được phân bố trên toàn bộ vector.
-
-13. Cosine similarity
-
-Sau khi có hai vector:
-
-A = embedding("Docker là gì?")
-B = embedding("Docker dùng để làm gì?")
-
-ta tính similarity.
-
-Thường dùng cosine similarity:
-
-similarity(A, B)
-
-Nếu:
-
-0.95
-
-→ rất giống về semantic.
-
-Nếu:
-
-0.10
-
-→ rất khác.
-
-Ví dụ Python:
-
-from sklearn.metrics.pairwise import cosine_similarity
-
-score = cosine_similarity(
-    [embedding_a],
-    [embedding_b]
-)
-
-print(score)
-14. Vậy khi nào nên dùng OpenAI?
-
-Nếu kiến trúc của bạn là kiểu:
-
-app/
-├── core/
-├── config/
-├── utils/
-├── services/
-├── pipelines/
-└── main.py
-
-thì tôi sẽ tách embedding thành service/module riêng.
+query ↔ passage retrieval
 
 Ví dụ:
 
-app/
-│
-├── core/
-│
-├── config/
-│
-├── embeddings/
-│   ├── openai_embedding.py
-│   ├── hf_embedding.py
-│   └── factory.py
-│
-├── vectorstores/
-│   ├── qdrant.py
-│   └── ...
-│
-├── pipelines/
-│   └── rag_pipeline.py
-│
-└── main.py
+query:
+"GPU nào chạy được model 30B?"
 
-Sau đó:
+passage:
+"Models with approximately 30 billion
+parameters require substantial GPU memory..."
 
-def embed_text(text: str):
-    ...
+E5 được thiết kế khá rõ cho dạng quan hệ này.
 
-Pipeline chỉ cần biết:
+Một đặc điểm cần nhớ
 
-vector = embed_text(text)
+E5 thường sử dụng prefix:
 
-chứ không cần quan tâm:
+query: ...
 
-OpenAI?
-BGE?
-E5?
-GTE?
-15. Ví dụ kiến trúc rất hợp với cách bạn đang code
+cho câu hỏi và:
 
-Bạn có thể abstraction như:
+passage: ...
 
-# embeddings/openai_embedding.py
-
-def embed_text(text: str):
-    ...
-
-và:
-
-# embeddings/hf_embedding.py
-
-def embed_text(text: str):
-    ...
-
-Sau đó config:
-
-EMBEDDING_PROVIDER = "openai"
-
-Pipeline:
-
-def run_rag_pipeline(query: str):
-
-    query_vector = embed_text(query)
-
-    documents = search_vector_db(query_vector)
-
-    answer = generate_answer(
-        query,
-        documents
-    )
-
-    return answer
-
-Như vậy bạn có thể đổi:
-
-OpenAI
-   ↓
-BGE
-
-mà không phải sửa RAG pipeline.
-
-Đây chính là một ví dụ rất đẹp của cách bạn đang theo đuổi module + pipeline, không nhất thiết phải biến mọi thứ thành class.
-
-16. Khi nào chọn OpenAI, khi nào chọn Hugging Face?
-Chọn OpenAI nếu:
-Muốn triển khai nhanh
-        +
-Không muốn quản GPU
-        +
-Muốn API đơn giản
-        +
-Chấp nhận gửi dữ liệu ra API
-        +
-Muốn tập trung vào application/RAG
+cho tài liệu.
 
 Ví dụ:
 
-Startup
-POC
-RAG production
-Internal chatbot
-Document search
+query = "query: GPU nào chạy được model 30B?"
 
-rất tiện.
+document = "passage: Model 30B yêu cầu..."
 
-Chọn Hugging Face/local nếu:
-Muốn chạy offline
-        +
-Dữ liệu nhạy cảm
-        +
-Có GPU
-        +
-Muốn kiểm soát model
-        +
-Muốn fine-tune
-        +
-Muốn tự tối ưu inference
+Sau đó embedding.
 
-Ví dụ:
+Khi nào chọn E5?
 
-Enterprise
-On-premise
-Private AI
-Large-scale embedding
-Custom domain
-17. Có một điểm bạn nên đặc biệt chú ý khi làm tiếng Việt
+Nếu hệ thống của bạn chủ yếu là:
 
-Không phải:
-
-model càng lớn
+User Query
       ↓
-embedding càng tốt
+Search Documents
+      ↓
+RAG
 
-luôn đúng.
+thì E5 là lựa chọn rất hợp lý.
 
-Bạn nên benchmark trên dataset thực tế của mình.
+4. Jina
 
-Ví dụ tài liệu của bạn là:
+Jina AI có nhiều embedding model, đáng chú ý nhất là dòng:
 
-Vietnamese
-technical documents
-YOLO
-AI
-software engineering
+Jina Embeddings
 
-thì nên thử vài model:
-
-OpenAI embedding
-BGE
-E5
-GTE
-...
-
-sau đó đo:
-
-Recall@K
-Precision@K
-MRR
-NDCG
-
-thay vì chỉ nhìn model có bao nhiêu parameters.
-
-18. Tóm lại bằng một sơ đồ
-
-Bạn có thể nhớ thế này:
-
-                         EMBEDDING
-                             │
-                 text → vector representation
-                             │
-             ┌───────────────┴───────────────┐
-             │                               │
-          OpenAI                         Hugging Face
-             │                               │
-     text-embedding-*               BGE / E5 / GTE / ...
-             │                               │
-          API call                     Local / API
-             │                               │
-       không quản GPU                 tự quản hạ tầng
-             │                               │
-             └───────────────┬───────────────┘
-                             │
-                          Vector
-                             │
-                             ↓
-                       Vector Database
-                             │
-                 ┌───────────┴───────────┐
-                 │                       │
-             Qdrant                    pgvector
-                 │
-                 ↓
-             Similarity Search
-                 │
-                 ↓
-                RAG
-
-Điểm quan trọng nhất: OpenAI Embedding và embedding model trên Hugging Face không khác nhau về khái niệm. Chúng đều giải bài toán text → semantic vector. Khác biệt chủ yếu là model/training + chất lượng + deployment + chi phí + quyền kiểm soát.
-
-Nếu bạn đang học để xây RAG bằng Python theo kiến trúc app/core/utils/config/pipelines, bước tiếp theo rất đáng học là phân biệt LLM, Embedding Model, Reranker và Vector Database. Bốn thứ này thường bị trộn lẫn với nhau, nhưng khi hiểu rõ thì kiến trúc RAG sẽ sáng tỏ hẳn
-
-vậy thì openAI embedding tốt hơn đúng không
-
-Không hẳn. Nếu nói “dùng cho nhanh, ít phải vận hành, chất lượng tốt và ổn định” thì OpenAI thường là lựa chọn rất tốt. Nhưng không thể kết luận OpenAI luôn tốt hơn mọi embedding model trên Hugging Face.
-
-Có thể hiểu như này:
-
-Tiêu chí	OpenAI Embedding	Hugging Face
-Chất lượng tổng thể	⭐⭐⭐⭐⭐	⭐⭐⭐⭐–⭐⭐⭐⭐⭐
-Dễ sử dụng	⭐⭐⭐⭐⭐	⭐⭐⭐
-Không cần GPU	✅	Nếu local thì tùy
-Chạy offline	❌	✅
-Tự kiểm soát model	Thấp	Cao
-Fine-tune	Hạn chế	✅
-Chi phí	API	Local có thể rẻ hơn
-Triển khai nhanh	Rất tốt	Khá
-Tùy biến	Thấp	Rất cao
-Nếu mục tiêu của bạn là làm RAG
+Điểm nổi bật của Jina là context dài và khả năng xử lý tài liệu dài.
 
 Ví dụ:
 
 PDF
- ↓
-chunk
- ↓
-Embedding
- ↓
-Vector DB
- ↓
-Retriever
- ↓
-LLM
+│
+├── 100 pages
+├── technical documentation
+├── manuals
+└── research papers
 
-thì OpenAI embedding là lựa chọn rất hợp lý để bắt đầu.
+Đây là tình huống Jina khá hấp dẫn.
 
-Bạn không phải lo:
+Thay vì chỉ xử lý các chunk rất nhỏ:
 
-CUDA
-GPU memory
-model quantization
-batch inference
-model loading
-sentence-transformers
+500 tokens
 
-Chỉ cần:
+các model context dài cho phép bạn có nhiều không gian hơn cho document.
 
-response = client.embeddings.create(
-    model="text-embedding-3-small",
-    input=text
-)
+Jina phù hợp với:
+Technical documentation
+PDF
+Research papers
+Long documents
+Multilingual RAG
 
-vector = response.data[0].embedding
+Nếu Personal Agent của bạn sau này phải đọc:
 
-Sau đó đưa vector vào Qdrant/pgvector/etc.
+Documentation
+PDF
+Source code
+Project specification
+Meeting notes
 
-Nhưng có một trường hợp Hugging Face có thể tốt hơn
+thì Jina rất đáng thử.
 
-Giả sử bạn có một hệ thống:
+5. GTE
 
-100 triệu documents
-        ↓
-embedding hàng ngày
-        ↓
-hàng tỷ vectors
+GTE là dòng embedding của Alibaba/NLP ecosystem.
 
-Lúc này chi phí API có thể trở thành vấn đề lớn.
+Một số model:
 
-Bạn có thể lấy một embedding model như BGE/E5 phù hợp, chạy GPU nội bộ:
+thenlper/gte-base
+thenlper/gte-large
 
-                 GPU Server
-                     │
-              BGE / E5 model
-                     │
-       ┌─────────────┼─────────────┐
-       ↓             ↓             ↓
-    vector        vector        vector
-       ↓             ↓             ↓
-              Vector Database
+và các model GTE mới hơn trong hệ Qwen/GTE ecosystem.
 
-Lúc đó Hugging Face/local có thể kinh tế và linh hoạt hơn rất nhiều.
-
-Một điểm nữa: đừng chỉ nhìn "model nào mạnh hơn"
-
-Với RAG, cái bạn thực sự cần quan tâm là:
-
-Embedding quality
-       ↓
-Retrieval quality
-       ↓
-LLM nhận đúng context
-       ↓
-Answer quality
+GTE hướng tới general text embedding, tức không chỉ một task cụ thể.
 
 Ví dụ:
 
-OpenAI
-  ↓
-Top 5 documents
-  ↓
-4/5 đúng
+Semantic Search
+Classification
+Clustering
+Retrieval
+RAG
 
-so với:
+Điểm mạnh của GTE là:
 
-BGE
-  ↓
-Top 5 documents
-  ↓
-5/5 đúng
+một lựa chọn local khá cân bằng giữa chất lượng và chi phí inference.
 
-thì BGE tốt hơn cho chính bài toán RAG của bạn, dù OpenAI có thể mạnh hơn ở một số benchmark khác.
+Nếu bạn muốn chạy embedding trên workstation của mình thay vì gọi API thì GTE đáng xem.
 
-Nếu bạn mới xây hệ thống
+6. Voyage
 
-Tôi sẽ khuyên đi theo hướng:
+Voyage khác một chút.
 
-                 RAG
+Thay vì tư duy:
+
+Hugging Face
+    ↓
+download model
+    ↓
+GPU local
+
+Voyage thường được dùng theo kiểu:
+
+Your Agent
+     ↓
+HTTPS
+     ↓
+Voyage API
+     ↓
+Embedding
+     ↓
+Vector DB
+
+Nó tập trung rất mạnh vào retrieval quality cho production.
+
+Có các model dành cho:
+
+general retrieval
+multilingual retrieval
+code retrieval
+reranking
+
+Đặc biệt nếu bạn làm:
+
+Code RAG
+
+thì các model embedding chuyên cho code rất đáng chú ý.
+
+Ví dụ Agent của bạn hỏi:
+
+"Hàm nào trong project chịu trách nhiệm load YOLO model?"
+
+thì code embedding model có thể phù hợp hơn một embedding model text tổng quát.
+
+7. Đây là điểm cực kỳ quan trọng: embedding model phải phù hợp dữ liệu
+
+Không nên nghĩ:
+
+"Model nào benchmark cao nhất thì dùng model đó."
+
+Ví dụ Agent của bạn có:
+
+                DATA
                   │
-        ┌─────────┴─────────┐
-        │                   │
-    Embedding              LLM
-        │                   │
-     OpenAI             OpenAI / ...
-        │
-        ↓
-   Vector Database
-      Qdrant
+        ┌─────────┼──────────┐
+        ↓         ↓          ↓
+       PDF       TEXT       CODE
+        │         │          │
+        ↓         ↓          ↓
+     Embedding  Embedding  Code Embedding
 
-Làm cho hệ thống chạy ổn trước.
+Nếu bạn hỏi:
 
-Sau đó mới abstraction:
+"Hàm nào xử lý YOLO training?"
 
-def embed_text(text):
-    ...
+thì embedding dành cho code retrieval có thể tốt hơn embedding text tổng quát.
 
-và có thể thay:
+Nếu hỏi:
 
-OpenAI
-   ↓
-BGE
-   ↓
-E5
+"Chính sách hoàn tiền là gì?"
 
-để benchmark.
+thì text embedding là phù hợp.
 
-Nói ngắn gọn: OpenAI không phải “embedding tốt nhất”, nhưng là một trong những lựa chọn dễ dùng và mạnh nhất để bắt đầu. Nếu mục tiêu của bạn là học và xây RAG bằng Python, tôi sẽ chọn OpenAI trước, sau đó mới thử BGE/E5 để hiểu sự khác biệt
+8. Một điểm khác nhau rất quan trọng: model local vs API
+BGE / E5 / GTE / một số Jina
+
+Bạn có thể:
+
+Hugging Face
+     ↓
+download
+     ↓
+local machine
+     ↓
+GPU/CPU
+
+Ví dụ:
+
+from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("BAAI/bge-m3")
+
+embeddings = model.encode([
+    "Tôi muốn hoàn tiền",
+    "Khách hàng có thể yêu cầu refund"
+])
+
+Sau đó:
+
+embeddings
+      ↓
+Vector DB
+Voyage
+
+Thường:
+
+Your Agent
+     ↓
+HTTPS
+     ↓
+Voyage
+     ↓
+embedding
+
+Không cần:
+
+GPU
+VRAM
+model loading
+quantization
+
+Nhưng:
+
+API cost
++
+Internet dependency
++
+data leaves your infrastructure
+9. Nếu bạn xây Personal AI Agent của mình
+
+Mình sẽ chia thành 3 loại dữ liệu:
+
+                    PERSONAL DATA
+                         │
+             ┌───────────┼───────────┐
+             ↓           ↓           ↓
+            TEXT         PDF         CODE
+             │           │           │
+             ↓           ↓           ↓
+           BGE/E5      Jina/BGE    Code Embedding
+
+Sau đó:
+
+                       Vector DB
+                           │
+                           ↓
+                     Hybrid Search
+                           │
+             ┌─────────────┴─────────────┐
+             ↓                           ↓
+       Keyword Search              Semantic Search
+             │                           │
+             └─────────────┬─────────────┘
+                           ↓
+                         RRF
+                           ↓
+                       Reranker
+                           ↓
+                          LLM
+
+Đây là kiến trúc rất phù hợp với Agent mà chúng ta đang nói từ đầu.
+
+10. Nếu chỉ muốn chọn 1 model để bắt đầu
+
+Mình sẽ chọn theo tình huống:
+
+🇻🇳 Việt + Anh + tài liệu cá nhân
+
+BGE-M3
+
+⭐ multilingual
+⭐ local
+⭐ RAG
+⭐ semantic search
+⭐ phù hợp workstation
+🌎 Multilingual retrieval
+
+multilingual-E5
+
+⭐ query/document retrieval
+⭐ multilingual
+⭐ local
+📚 PDF / tài liệu dài
+
+Jina Embeddings
+
+⭐ long context
+⭐ documents
+⭐ RAG
+💻 Code + technical project
+
+Xem Jina/Voyage code-oriented embeddings hoặc các embedding model chuyên code.
+
+☁️ Muốn chất lượng tốt và không muốn vận hành embedding server
+
+Voyage API
+
+Agent
+ ↓
+HTTPS
+ ↓
+Voyage
+11. Và đừng nhầm Embedding Model với Reranker
+
+Trong hệ thống RAG tốt, hai thứ này khác nhau:
+
+Embedding Model
+     ↓
+"Trong 10.000 documents,
+20 documents nào có vẻ liên quan?"
+
+Sau đó:
+
+Reranker
+     ↓
+"Trong 20 documents này,
+5 documents nào thực sự trả lời được câu hỏi?"
+
+Cho nên pipeline hoàn chỉnh có thể là:
+
+Query
+  ↓
+Embedding
+  ↓
+Vector Search
+  ↓
+Top 50
+  ↓
+Keyword Search
+  ↓
+Hybrid/RRF
+  ↓
+Top 20
+  ↓
+Reranker
+  ↓
+Top 5
+  ↓
+LLM
+  ↓
+Answer
+
+Đây mới là kiến trúc bạn nên hướng tới, thay vì chỉ đơn giản text → embedding → vector DB → LLM.
+
+Nếu bạn muốn tự build trên PC như kiến trúc chúng ta vừa bàn, BGE-M3 + PostgreSQL/pgvector + BM25/full-text search + RRF + một reranker là một stack khởi đầu rất hợp lý.
 # Practices
 ## Demo Transformer Embedding
 ```python

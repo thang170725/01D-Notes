@@ -1,13 +1,12 @@
 - [Directory Structure](#directory-structure)
 - [Instroduction](#instroduction)
 ---
+[<<Back](../Base.md)
 # Directory Structure
-```bash
 Microservices/        # mình dùng thư mục này để xem hệ thống theo Microservices
-├── Architecture.md   # mình dùng file này để xem cách thiết kế hệ thống theo Microservice
-├── Base.md           # mình dùng file này để xem kiến thức cốt lõi và tiện ích
+├── [Architecture](Architecture.md)     ```mình dùng file này để xem cách thiết kế hệ thống theo Microservice```  
 └── Practices.md      # mình dùng file này để xem code mẫu, bài tập, ví dụ minh họa
-```
+
 # Instroduction
 ```bash
 - Microservice là kiến trúc, không phải chân lý.

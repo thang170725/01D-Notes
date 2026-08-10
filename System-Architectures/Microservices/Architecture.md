@@ -1,5 +1,6 @@
 - [Architecture](#architecture)
 ---
+[<<Back](Base.md)
 # Architecture
 **ROOT LEVEL**
 ```bash
@@ -16,6 +17,7 @@
 ├── docs/                 # tài liệu
 ├── tests/                # test integration / e2e
 ├── .env.example
+├── requirements.txt
 └── README.md
 ```
 **BACKEND - cấu trúc CHUẨN 100% (1 service)**
