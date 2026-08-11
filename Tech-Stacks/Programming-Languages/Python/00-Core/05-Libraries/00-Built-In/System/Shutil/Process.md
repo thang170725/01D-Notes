@@ -1,25 +1,29 @@
-Bạn không cần cài thêm gì:
-
-import shutil
-1️⃣ Các chức năng chính
-Hàm	Dùng để
-copy()	Copy file
-copy2()	Copy file + metadata
-copytree()	Copy cả thư mục
-move()	Di chuyển
-rmtree()	Xóa thư mục
-make_archive()	Tạo file zip
-unpack_archive()	Giải nén
-copyfileobj()	Copy giữa 2 file object
-2️⃣ Ví dụ thực tế
-✅ 1. Copy file
+- [Shutil Introduction](#shutil-introduction)
+- [copy() (Copy file)](#copy-copy-file)
+- [copy2() (Copy file + metadata)](#copy2-copy-file--metadata)
+- [copytree() (Copy cả thư mục)](#copytree-copy-cả-thư-mục)
+- [move() (Di chuyển)](#move-di-chuyển)
+- [rmtree() (Xóa thư mục)](#rmtree-xóa-thư-mục)
+- [make\_archive() (Tạo file zip)](#make_archive-tạo-file-zip)
+- [unpack\_archive() (Giải nén)](#unpack_archive-giải-nén)
+- [copyfileobj() (Copy giữa 2 file object)](#copyfileobj-copy-giữa-2-file-object)
+---
+# Shutil Introduction
+# copy() (Copy file)
+**Ex**
+```python
 import shutil
 
 shutil.copy("a.txt", "b.txt")
+```
+# copy2() (Copy file + metadata)
+# copytree() (Copy cả thư mục)
+# move() (Di chuyển)
+# rmtree() (Xóa thư mục)
+# make_archive() (Tạo file zip)
+# unpack_archive() (Giải nén)
+# copyfileobj() (Copy giữa 2 file object)
 
-📌 Copy nội dung file a.txt sang b.txt
-
-✅ 2. Copy file + giữ metadata
 shutil.copy2("a.txt", "backup/a.txt")
 
 Giữ lại:

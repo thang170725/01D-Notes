@@ -2,6 +2,9 @@
 - [futures](#futures)
   - [ThreadPoolExecutor (Dùng khi công việc chờ I/O)](#threadpoolexecutor-dùng-khi-công-việc-chờ-io)
   - [ProcessPoolExecutor (Dùng khi công việc nặng về CPU)](#processpoolexecutor-dùng-khi-công-việc-nặng-về-cpu)
+- [Future (đối tượng đại diện cho một công việc đang chạy)](#future-đối-tượng-đại-diện-cho-một-công-việc-đang-chạy)
+  - [as\_completed()](#as_completed)
+- [ProcessPoolExecutor (dùng để chạy nhiều công việc cùng lúc bằng nhiều tiến trình (process))](#processpoolexecutor-dùng-để-chạy-nhiều-công-việc-cùng-lúc-bằng-nhiều-tiến-trình-process)
 ---
 # Concurrent Introduction (dùng để thực hiện lập trình đồng thời (concurrency), giúp chạy nhiều tác vụ cùng lúc mà không cần tự quản lý thread hay process)
 # futures
@@ -39,128 +42,42 @@ with ProcessPoolExecutor() as executor:
     results = list(executor.map(heavy_algorithm, images))
 # Mỗi process chạy trên một core CPU khác nhau.
 ```
-3. Future
-
-Future là đối tượng đại diện cho một công việc đang chạy.
-
-future = executor.submit(load_image, path)
-
-image = future.result()
-
-Trong lúc chờ future.result(), thread khác vẫn có thể làm việc.
-
-4. as_completed()
-
-Nếu bạn không muốn đợi theo đúng thứ tự.
-
-Ví dụ có 100 ảnh
-
-img1   2s
-img2   0.1s
-img3   0.3s
-
-Nếu dùng
-
-executor.map(...)
-
-kết quả sẽ trả theo thứ tự
-
-img1
-img2
-img3
-
-Nếu dùng
-
-from concurrent.futures import as_completed
-
-thì sẽ trả
-
-img2
-img3
-img1
-
-Ảnh nào xử lý xong trước sẽ được lấy trước.
-
-Trong dự án YOLO của bạn
-
-Theo những gì bạn đã benchmark:
-
-Scan folder: 0.001 s
-Read images: 7.156 s
-Inference: 2~3 s
-
-Điểm nghẽn là đọc ảnh, không phải tìm file hay inference.
-
-Do đó ThreadPoolExecutor là lựa chọn phù hợp để đọc ảnh song song, ví dụ:
-
-from concurrent.futures import ThreadPoolExecutor
-import cv2
-
-with ThreadPoolExecutor(max_workers=8) as executor:
-    images = list(executor.map(cv2.imread, image_paths))
-
-Còn YOLO inference trên CPU thì không nên chạy nhiều ThreadPoolExecutor cùng lúc cho nhiều ảnh, vì bản thân phép suy luận đã tiêu tốn CPU rất lớn và các luồng sẽ cạnh tranh tài nguyên. Thay vào đó, nếu mô hình hỗ trợ, batch inference (batch > 1) thường hiệu quả hơn.
-
-Tóm tắt
-Thành phần	Dùng khi	Ví dụ
-ThreadPoolExecutor	Tác vụ I/O	Đọc ảnh, đọc file, tải dữ liệu
-ProcessPoolExecutor	Tính toán CPU nặng	Xử lý ảnh, thuật toán số học, tiền xử lý phức tạp
-Future	Theo dõi kết quả của tác vụ	submit() rồi lấy result()
-as_completed()	Lấy kết quả ngay khi hoàn thành	Xử lý các tác vụ có thời gian chạy khác nhau
-
-Với pipeline hiện tại của bạn, ThreadPoolExecutor là phần của concurrent mà bạn sẽ dùng nhiều nhất để giảm thời gian đọc ảnh.Đây là một trong những phần khó nhất khi mới học Python. Mình sẽ giải thích bằng ví dụ đời thường trước, sau đó mới đến code.
-
-from concurrent.futures import ProcessPoolExecutor, as_completed
-
-Có 2 thứ:
-
-ProcessPoolExecutor
-as_completed
-1. ProcessPoolExecutor dùng để làm gì?
-
-Nó dùng để chạy nhiều công việc cùng lúc bằng nhiều tiến trình (process).
-
-Ví dụ đời thường.
-
+# Future (đối tượng đại diện cho một công việc đang chạy)
+## as_completed()
+# ProcessPoolExecutor (dùng để chạy nhiều công việc cùng lúc bằng nhiều tiến trình (process))
+**Ex: Ví dụ đời thường**
+```bash
 Giả sử bạn có 10 quyển sách cần scan.
 
 Cách 1: Một người làm
-Người 1
-
-Sách 1
-↓
-
-Sách 2
-↓
-
-Sách 3
-↓
-
-...
-
-↓
-
-Sách 10
-
-Tổng thời gian: 10 phút
+    Người 1
+        Sách 1
+        ↓
+        Sách 2
+        ↓
+        Sách 3
+        ↓
+        ...
+        ↓
+        Sách 10
+    -> Tổng thời gian: 10 phút
 
 Cách 2: Có 5 người
-Người 1 → Sách 1
-Người 2 → Sách 2
-Người 3 → Sách 3
-Người 4 → Sách 4
-Người 5 → Sách 5
+    Người 1 → Sách 1
+    Người 2 → Sách 2
+    Người 3 → Sách 3
+    Người 4 → Sách 4
+    Người 5 → Sách 5
 
-Sau khi xong
+    Sau khi xong
+        Người 1 → Sách 6
+        Người 2 → Sách 7
+        ...
 
-Người 1 → Sách 6
-Người 2 → Sách 7
-...
-
-Tổng thời gian chỉ khoảng 2 phút.
+    -> Tổng thời gian chỉ khoảng 2 phút.
 
 ProcessPoolExecutor chính là người quản lý việc chia công việc cho nhiều "người làm" (process).
-
+```
 Ví dụ đơn giản nhất
 
 Giả sử mỗi công việc mất 2 giây.
@@ -207,7 +124,7 @@ Còn dùng 4 process
 Tổng
 
 ≈2 giây
-2. submit()
+1. submit()
 
 Thường người ta không dùng map() mà dùng
 

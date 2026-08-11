@@ -1,20 +1,10 @@
-Đúng vậy.
-
-subprocess là thư viện built-in (thư viện chuẩn) của Python, nên không cần cài đặt bằng pip.
-
-Chỉ cần:
-
-import subprocess
-
-là dùng được.
-
-subprocess dùng để làm gì?
-
-Nó dùng để tạo và quản lý một tiến trình (process) khác từ Python.
+# Subprocess Introduction (Nó dùng để tạo và quản lý một tiến trình (process) khác từ Python)
+```bash
+là thư viện built-in (thư viện chuẩn) của Python, nên không cần cài đặt bằng pip.
+    Chỉ cần: import subprocess là dùng được.
 
 Hiểu đơn giản là:
-
-Python có thể gọi một chương trình khác để chạy.
+    Python có thể gọi một chương trình khác để chạy.
 
 Ví dụ
 

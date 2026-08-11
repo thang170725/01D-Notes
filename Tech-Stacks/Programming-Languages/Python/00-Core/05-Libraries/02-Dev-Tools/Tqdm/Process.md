@@ -1,10 +1,26 @@
+- [tqdm()](#tqdm)
+---
 # tqdm()
-**Ex**
+**Syn**
+```bash
+from tqdm import tqdm
+for i in tqdm(interable, des):
+    ...
+
+- Input:
+    + des   : mô tả tiến trình
+```
+**Ex: tính tổng list có thanh tiến trình**
 ```python
 from tqdm import tqdm
 import time
 
-for i in tqdm(range(10)):
+li = [1,2,3,4]
+res = 0
+for i in tqdm(li, desc="Calc Sum List"):
+    res += i
     time.sleep(0.5) 
-# có thanh tiến trình xuất hiện và tăng lên sau mỗi 0.5s
+print(res)
+# Calc Sum List: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 4/4 [00:02<00:00,  1.99it/s]
+# 10
 ```
