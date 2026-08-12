@@ -1,6 +1,6 @@
 - [Argparse Introduction (dùng để nhận tham số từ command line/terminal khi chạy chương trình)](#argparse-introduction-dùng-để-nhận-tham-số-từ-command-lineterminal-khi-chạy-chương-trình)
 - [ArgumentParser (class dùng để tạo một bộ phân tích command-line arguments)](#argumentparser-class-dùng-để-tạo-một-bộ-phân-tích-command-line-arguments)
-  - [.add\_argument() (Nó dùng để khai báo một argument mà chương trình chấp nhận)](#add_argument-nó-dùng-để-khai-báo-một-argument-mà-chương-trình-chấp-nhận)
+  - [.add\_argument() (Nó dùng để nói cho chương trình biết: command-line của chương trình nhận những tham số nào, kiểu gì, mặc định là gì, bắt buộc hay không)](#add_argument-nó-dùng-để-nói-cho-chương-trình-biết-command-line-của-chương-trình-nhận-những-tham-số-nào-kiểu-gì-mặc-định-là-gì-bắt-buộc-hay-không)
   - [.parse\_args()](#parse_args)
 ---
 # Argparse Introduction (dùng để nhận tham số từ command line/terminal khi chạy chương trình)
@@ -47,7 +47,26 @@ Python program
 ```bash
 parser = argparse.ArgumentParser() # Sau đó bạn định nghĩa các argument mà chương trình cho phép nhận
 ```
-## .add_argument() (Nó dùng để khai báo một argument mà chương trình chấp nhận)
+## .add_argument() (Nó dùng để nói cho chương trình biết: command-line của chương trình nhận những tham số nào, kiểu gì, mặc định là gì, bắt buộc hay không)
+**Syn**
+```bash
+parser.add_argument(
+    "--name",
+    type=str,
+    default="unknown",
+    required=True,
+    help="Tên người dùng"
+)
+
+- Input:
+    + type      : kiểu dữ liệu
+    + default   : giá trị mặc định
+    + required  : có bắt buộc hay không
+    + help      : mô tả argument. Dùng để giải thích argument khi chạy
+    + choices   : giới hạn giá trị được phép
+    + action    : thay đổi cách argument hoạt động
+    + metavar   : metavar chủ yếu để đổi cách hiển thị trong --help.
+```
 ## .parse_args()
 **Ex**
 ```python

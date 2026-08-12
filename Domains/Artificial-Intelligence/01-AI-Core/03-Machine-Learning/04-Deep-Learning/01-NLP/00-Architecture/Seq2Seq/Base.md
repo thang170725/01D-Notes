@@ -1,19 +1,18 @@
-- [Introduction](#introduction)
+- [Seq2Seq Introduction (mô hình nhận một chuỗi đầu vào và tạo ra một chuỗi khác đầu ra)](#seq2seq-introduction-mô-hình-nhận-một-chuỗi-đầu-vào-và-tạo-ra-một-chuỗi-khác-đầu-ra)
 - [----- 1. Simple Seq2Seq model -----](#------1-simple-seq2seq-model------)
 - [----- 2. Mini example -----](#------2-mini-example------)
 ---
-# Introduction 
+# Seq2Seq Introduction (mô hình nhận một chuỗi đầu vào và tạo ra một chuỗi khác đầu ra)
 ```bash
-Seq2Seq - Sequence-to-Sequence là mô hình nhận một chuỗi đầu vào và tạo ra một chuỗi khác đầu ra.
-    Kiểu như:
-        - dịch câu → từ tiếng Việt sang tiếng Anh
-        - tóm tắt văn bản
-        - chatbot trả lời tin nhắn
-        - biến dãy số → dãy số khác
+Ứng dụng:
+    - dịch câu → từ tiếng Việt sang tiếng Anh
+    - tóm tắt văn bản
+    - chatbot trả lời tin nhắn
+    - biến dãy số → dãy số khác
 
-    Cấu trúc chuẩn gồm:
-        - Encoder: đọc chuỗi đầu vào, nén thông tin thành vector ngữ cảnh.
-        - Decoder: dùng vector đó để tạo chuỗi đầu ra từng bước một.
+Cấu trúc chuẩn gồm:
+    - Encoder: đọc chuỗi đầu vào, nén thông tin thành vector ngữ cảnh.
+    - Decoder: dùng vector đó để tạo chuỗi đầu ra từng bước một.
 ```
 Bài tập
 Biến chuỗi ký tự viết thường bằng chuỗi ký tự viết hoa

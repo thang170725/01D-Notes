@@ -1,4 +1,4 @@
-- [Introduction](#introduction)
+- [IO Introduction (dùng để làm việc với luồng dữ liệu (stream))](#io-introduction-dùng-để-làm-việc-với-luồng-dữ-liệu-stream)
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
   - [StringIO](#stringio)
 - [Process (Nhóm xử lý)](#process-nhóm-xử-lý)
@@ -6,9 +6,9 @@
   - [Read (Đọc dữ liệu)](#read-đọc-dữ-liệu)
   - [Seek (Con trỏ file)](#seek-con-trỏ-file)
 ---
-# Introduction
+# IO Introduction (dùng để làm việc với luồng dữ liệu (stream))
 ```bash
-- Trong Python, thư viện io dùng để làm việc với luồng dữ liệu (stream) như:
+Dùng để:
     + đọc/ghi file
     + xử lý dữ liệu dạng text hoặc bytes trong bộ nhớ
     + giả lập file mà không cần tạo file thật

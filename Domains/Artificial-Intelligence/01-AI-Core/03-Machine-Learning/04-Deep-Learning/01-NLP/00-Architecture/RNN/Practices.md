@@ -1,3 +1,99 @@
+- [Mô tả Work flow của RNN cho bài toán dự đoán từ tiếp theo](#mô-tả-work-flow-của-rnn-cho-bài-toán-dự-đoán-từ-tiếp-theo)
+- [Demo Research RNN](#demo-research-rnn)
+---
+[<<Back](Base.md)
+# Mô tả Work flow của RNN cho bài toán dự đoán từ tiếp theo
+```bash
+Cho một câu chưa hoàn chỉnh: "I love deep _" mô hình phải dự đoán từ tiếp theo "learning"
+  - Input: I love deep
+  - Output: learning
+```
+**Dataset**
+```bash
+| Sentence                 |
+| ------------------------ |
+| I love deep learning     |
+| I love machine learning  |
+| I love natural language  |
+| I enjoy deep learning    |
+| I enjoy machine learning |
+| ...                      |
+```
+**Step 1: Tokenization (chuyển câu thành token)**
+```bash
+Ví dụ câu: I love deep learning -> [I, love, deep, learning]
+```
+**Step 2: Vocabulary (tạo từ điển)**
+```bash
+| Word     | ID |
+| -------- | -- |
+| I        | 1  |
+| love     | 2  |
+| enjoy    | 3  |
+| deep     | 4  |
+| machine  | 5  |
+| natural  | 6  |
+| language | 7  |
+| learning | 8  |
+-> Vocabulary size: V = 8
+```
+**Step 3: Tạo input và target**
+```bash
+Ví dụ câu: I love deep learning -> [1, 2, 4, 8]
+  - Input: [1, 2, 4] 
+  - Output: [2, 4, 8]
+
+Tức là:
+  Input:   I     love    deep
+            ↓      ↓       ↓
+  Target: love   deep   learning
+```
+**Step 4: Encode: One hot**
+```bash
+Ví dụ từ deep vector one-hot: deep = [0 0 0 1 0 0 0 0] # Dimension: V = 8
+```
+**Step 5: Forward Pass**
+```bash
+Giả sử input sequence: I love deep
+  Step 1: word = "I"
+    - One-hot: x1 = [1 0 0 0 0 0 0 0]
+    - Giả sử trọng số: Wxh = [0.2 0.1 0.0 ...] ...
+    - Giả sử hidden state ban đầu: h0 = [0 0 0 0]
+    - Tính: ℎ1 = 𝑡𝑎𝑛ℎ(𝑊𝑥ℎ.𝑥1 + 𝑊ℎℎ.ℎ0) = [0.21, -0.13, 0.45, 0.10]
+Step 2: word = "love"
+  - x2 = [0 1 0 0 0 0 0 0]
+  - ℎ2 = 𝑡𝑎𝑛ℎ(𝑊𝑥ℎ.𝑥2 + 𝑊ℎℎ.ℎ1) = [0.35, 0.10, 0.41, 0.22]
+Step 3: word = "deep"
+  - x3 = [0 0 0 1 0 0 0 0]
+  - ℎ3 = 𝑡𝑎𝑛ℎ(𝑊𝑥ℎ.𝑥3 + 𝑊ℎℎ.ℎ2) = [0.52, 0.11, 0.33, 0.40]
+```
+**Step 6: Output Layer**
+```bash
+𝑦3 = 𝑠𝑜𝑓𝑡𝑚𝑎𝑥(𝑊ℎ𝑦.ℎ3) = [0.02, 0.01, 0.03, 0.04, 0.02, 0.03, 0.05, 0.80] # Mapping lại từ: learning -> 0.80 → dự đoán: learning
+```
+**Step 7: Loss Function: Dùng Cross Entropy**
+```bash
+- Target vector: learning = [0 0 0 0 0 0 0 1]
+- Loss: 𝐿 = −∑𝑦𝑡𝑟𝑢𝑒.log(𝑦𝑝𝑟𝑒𝑑) = −log(0.80) = 0.223
+```
+**Step 8: Backpropagation Through Time (BPTT): Gradient được lan truyền ngược theo thời gian**
+```bash
+- Chuỗi: I → love → deep
+- Gradient flow: loss -> h3 -> h2 -> h1
+- Update: Wxh, Whh, Why
+```
+**Step 9: Training Loop: Toàn bộ pipeline**
+```bash
+
+for epoch:
+  for sentence in dataset:
+     tokenize
+     convert to one-ho
+     forward pass (RNN)
+     compute loss
+     BPTT
+     update weights
+```
 # Demo Research RNN
 ```python
 import torch

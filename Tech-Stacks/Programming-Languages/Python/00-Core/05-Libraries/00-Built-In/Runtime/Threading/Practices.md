@@ -1,6 +1,6 @@
-Xử lý đa luồng & đa tiến trình
-Bài tập
-Demo threading với đọc và hiển thị camera
+# Practices
+## Demo threading với đọc và hiển thị camera
+```python
 import cv2
 import threading
 import time
@@ -30,4 +30,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
-
+```

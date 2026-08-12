@@ -1,5 +1,6 @@
-- [coroutine](#coroutine)
-- [async \& await](#async--await)
+- [Asyncio Introduction (Giúp chương trình xử lý nhiều tác vụ cùng lúc mà không cần phải chờ từng tác vụ hoàn thành trước khi chuyển sang tác vụ tiếp theo)](#asyncio-introduction-giúp-chương-trình-xử-lý-nhiều-tác-vụ-cùng-lúc-mà-không-cần-phải-chờ-từng-tác-vụ-hoàn-thành-trước-khi-chuyển-sang-tác-vụ-tiếp-theo)
+- [coroutine (Hàm có thể tạm dừng và tiếp tục)](#coroutine-hàm-có-thể-tạm-dừng-và-tiếp-tục)
+- [await (Tạm nhường quyền điều khiển cho even loop (even loop là người điều phối chương trình))](#await-tạm-nhường-quyền-điều-khiển-cho-even-loop-even-loop-là-người-điều-phối-chương-trình)
 - [.sleep() \& .gather() \& .run()](#sleep--gather--run)
   - [Bài tập](#bài-tập)
     - [Nhận diện và sửa code bị block event loop](#nhận-diện-và-sửa-code-bị-block-event-loop)
@@ -13,22 +14,22 @@
 - [.Queue() \& .put() \& .get() \& task\_done() \& .join()](#queue--put--get--task_done--join)
   - [Bài tập](#bài-tập-2)
     - [Demo](#demo)
-
-
 ---
+# Asyncio Introduction (Giúp chương trình xử lý nhiều tác vụ cùng lúc mà không cần phải chờ từng tác vụ hoàn thành trước khi chuyển sang tác vụ tiếp theo)
+```bash
+Là thư viện không cần tải.
 
-**Khái niệm**
-- Giúp chương trình xử lý nhiều tác vụ cùng lúc mà không cần phải chờ từng tác vụ hoàn thành trước khi chuyển sang tác vụ tiếp theo.
-- Chỉ dùng cho I/O không dùng cho CPU-bound.
-- Thư viện không cần tải.
-
-# coroutine
-- Hàm có thể tạm dừng và tiếp tục
-- Coroutine ≠ Thread
-  + Thread = chạy song song thật, có CPU riêng.
-  + Coroutine = chạy “từng bước một”, nhưng chia sẻ cùng 1 thread.
-  + Không cần thread, không tốn CPU nhiều, nhưng vẫn làm được nhiều việc tưởng song song nhờ await.
-**Normal**
+Lưu ý:
+    Chỉ dùng cho I/O không dùng cho CPU-bound.
+```
+# coroutine (Hàm có thể tạm dừng và tiếp tục)
+```bash
+Coroutine ≠ Thread
+  - Thread = chạy song song thật, có CPU riêng.
+  - Coroutine = chạy “từng bước một”, nhưng chia sẻ cùng 1 thread.
+  - Không cần thread, không tốn CPU nhiều, nhưng vẫn làm được nhiều việc tưởng song song nhờ await.
+```
+**Không dùng asyncio**
 ```python
 def f():
     print("A")
@@ -46,15 +47,15 @@ print(coro)
 # <coroutine object f at 0x...>
 # Chưa chạy gì cả! Nó chỉ tạo ra một “việc cần làm”.
 ```
-
-# async & await
-- await: Tạm nhường quyền điều khiển cho even loop (even loop là người điều phối chương trình)
-- Coroutine + Await
+# await (Tạm nhường quyền điều khiển cho even loop (even loop là người điều phối chương trình))
+```bash
+Coroutine + Await
   + await chỉ có nghĩa với coroutine hoặc các object awaitable.
   + Khi bạn await một coroutine:
     + Coroutine hiện tại tạm dừng
     + Event loop có thể chạy coroutine khác
     + Khi xong, tiếp tục coroutine ban đầu
+```
 ```python
 async def f():
     for i in range(3):
