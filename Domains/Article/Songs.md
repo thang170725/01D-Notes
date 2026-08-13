@@ -5,21 +5,24 @@
 - [piano](#piano)
 ---
 # Flute
+**Nhạc Hoa**
 ```bash
 1. Ngày hạnh phúc (c5)
+2. Bạch nguyệt quang và nốt chu sa (c5)
+3. Bất quá nhân gian (c5)
+4. Xích linh (c5)
+5. Quan sơn tửu (c5)
+6. Nổi gió rồi	
+7. Thời gian không sai lệnh
+```
+**Nhạc việt**
+```bash
 2. Sóng gió (c5)
-3. Bạch nguyệt quang và nốt chu sa (c5) - easy
-4. Bất quá nhân gian (c5) - hard
-5. Xích linh (c5) - hard
-6. Quan sơn tửu (c5)
 7. Bất quá nhân gian	
 8. Đáp án của bạn	
 9. Gặp mẹ trong mơ	
-10. Nổi gió rồi		
-11. Bạch nguyệt quang và nốt chu sa	S	
 12. Cô gái mở đường	
 13. Từ cửu môn hồi ức (A4)
-14. Thời gian không sai lệnh	
 15. gặp người đúng lúc	
 16. khuê mộc lang (c5)	
 17. quan sơn tửu (c5)	
