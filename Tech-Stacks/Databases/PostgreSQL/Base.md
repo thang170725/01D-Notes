@@ -6,6 +6,12 @@
   - [DROP DATABASE (xóa database)](#drop-database-xóa-database)
   - [ALTER DATABASE ... rename to ... (sửa tên database)](#alter-database--rename-to--sửa-tên-database)
 - [Schema](#schema)
+  - [information\_schema](#information_schema)
+    - [information\_schema.tables (Lấy dữ liệu từ bảng tables nằm trong schema information\_schema)](#information_schematables-lấy-dữ-liệu-từ-bảng-tables-nằm-trong-schema-information_schema)
+      - [table\_name (Đây là column của information\_schema.tables)](#table_name-đây-là-column-của-information_schematables)
+      - [table\_schema (là một column của information\_schema.tables)](#table_schema-là-một-column-của-information_schematables)
+    - [Vậy public là gì?](#vậy-public-là-gì)
+    - [Tại sao lại cần Schema?](#tại-sao-lại-cần-schema)
 - [Table](#table)
   - [CREATE TABLE (Tạo bảng)](#create-table-tạo-bảng)
 - [Data](#data)
@@ -56,6 +62,16 @@
   - [CURRENT\_DATE;](#current_date)
   - [CURRENT\_TIME;](#current_time)
   - [generated ... as identity (Column này để PostgreSQL tự sinh giá trị)](#generated--as-identity-column-này-để-postgresql-tự-sinh-giá-trị)
+- [Function](#function)
+  - [CREATE FUNCTION (tạo một function)](#create-function-tạo-một-function)
+  - [REPLACE (thay thế)](#replace-thay-thế)
+  - [LANGUAGE](#language)
+  - [AS $$ ... $$](#as---)
+  - [BEGIN ... END (là block code)](#begin--end-là-block-code)
+  - [Trigger (là một cơ chế để database tự động thực hiện một hành động khi một sự kiện xảy ra trên table)](#trigger-là-một-cơ-chế-để-database-tự-động-thực-hiện-một-hành-động-khi-một-sự-kiện-xảy-ra-trên-table)
+    - [BEFORE và AFTER](#before-và-after)
+    - [OLD và NEW](#old-và-new)
+  - [Tại sao trigger function phải RETURN NEW?](#tại-sao-trigger-function-phải-return-new)
 - [Practices](#practices)
   - [Xem cấu trúc bảng của một schema](#xem-cấu-trúc-bảng-của-một-schema)
 ---
@@ -89,214 +105,446 @@ RENAME TO new_name;
 ALTER DATABASE shop_db RENAME TO ecommerce_db;
 ```
 # Schema
-Đúng, đây là chỗ PostgreSQL dễ làm người mới thấy hơi rối, vì MySQL/SQL Server dùng khái niệm này hơi khác nhau.
-
-Hiểu đơn giản
-
+```bash
 Bạn có thể hình dung:
+    Database
+       └── Schema
+            └── Table
+-> schema giống như một cái folder để phân loại table trong database.
+```
+## information_schema
+```bash
+PostgreSQL có một hệ thống các bảng đặc biệt gọi là Information Schema. Nó chứa thông tin về chính database của bạn.
+```
+**Ex**
+```bash
+test
+├── users
+├── orders
+├── products
+└── logs
 
-Database
-   └── Schema
-        └── Table
+PostgreSQL cần lưu metadata kiểu:
+    - Có những schema nào?
+    - Có những table nào?
+    - Table nào có column gì?
+    - Column nào có datatype gì?
+    - User nào có quyền gì?
+    - ...
+-> Bạn có thể truy vấn những thông tin đó thông qua information_schema.
+```
+### information_schema.tables (Lấy dữ liệu từ bảng tables nằm trong schema information_schema)
+**Ex**
+```sql
+SELECT * FROM information_schema.tables;
 
-Trong trường hợp của bạn:
+-- Nó sẽ trả về rất nhiều column.
+-- Một số column quan trọng:
+-- table_catalog
+-- table_schema
+-- table_name
+-- table_type
+-- ...
+```
+#### table_name (Đây là column của information_schema.tables)
+#### table_schema (là một column của information_schema.tables)
+**Ex**
+```sql
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'test';
 
-insmart_medical_ocr       ← Database
-└── test                  ← Schema
-    ├── test_permission_check
-    └── HOADON_TYPE2
+Có thể tưởng tượng PostgreSQL làm:
 
-schema giống như một cái folder để phân loại table trong database.
+information_schema.tables
 
-So với MySQL
 
-MySQL làm cho chuyện này hơi "ẩn" đi.
+┌──────────────┬─────────────┐
+│ table_schema │ table_name  │
+├──────────────┼─────────────┤
+│ public       │ users       │
+│ public       │ orders      │
+│ test         │ products    │
+│ test         │ logs        │
+└──────────────┴─────────────┘
+              ↓
+        WHERE table_schema = 'test'
+              ↓
+┌──────────────┬─────────────┐
+│ table_schema │ table_name  │
+├──────────────┼─────────────┤
+│ test         │ products    │
+│ test         │ logs        │
+└──────────────┴─────────────┘
+              ↓
+       SELECT table_name
+              ↓
+products
+logs
+7. Tại sao không viết SELECT tables?
 
-Bạn thường thấy:
+Bởi vì:
 
-MySQL
-└── Database
-    ├── users
-    ├── orders
-    └── products
+tables
 
-Nhưng trong MySQL, database và schema gần như là synonym.
+là table, còn:
+
+table_name
+
+là column.
+
+SQL có cấu trúc:
+
+SELECT column
+FROM schema.table
+WHERE column = value;
 
 Ví dụ:
 
-CREATE DATABASE shop;
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'test';
+8. information_schema có những gì?
 
-USE shop;
+Đây mới là phần bạn nên học.
 
-CREATE TABLE users (...);
+Không chỉ có:
 
-Bạn có cảm giác:
+information_schema.tables
 
-shop
-└── users
+mà còn có nhiều view khác.
 
-Thực tế MySQL gọi DATABASE và SCHEMA gần như cùng một khái niệm.
+Ví dụ:
 
-SQL Server thì có schema
-
-SQL Server thực ra cũng có schema, chỉ là có thể bạn chưa để ý.
-
-Ví dụ mặc định:
-
-Database
-└── dbo
-    ├── Users
-    ├── Orders
-    └── Products
-
-dbo chính là schema.
-
-Khi bạn viết:
-
+Xem columns
 SELECT *
-FROM dbo.Users;
+FROM information_schema.columns;
 
-thì:
+Bạn sẽ thấy những thông tin như:
 
-dbo     = schema
-Users   = table
+table_schema
+table_name
+column_name
+data_type
+is_nullable
+column_default
+...
 
-SQL Server có thể có:
+Ví dụ:
 
-Database
-├── dbo
-│   ├── Users
-│   └── Orders
+SELECT
+    table_name,
+    column_name,
+    data_type
+FROM information_schema.columns
+WHERE table_schema = 'test';
+
+Có thể trả:
+
+table_name	column_name	data_type
+users	id	integer
+users	name	character varying
+users	age	integer
+products	id	integer
+products	price	numeric
+9. information_schema.tables và information_schema.columns
+
+Bạn có thể nhớ như thế này:
+
+information_schema
 │
-└── accounting
-    ├── Invoices
-    └── Payments
-PostgreSQL cũng tương tự SQL Server
-
-Database của bạn:
-
-insmart_medical_ocr
-
-bên trong:
-
-Schemas
-├── public
-├── test
+├── tables
+│   ├── table_catalog
+│   ├── table_schema
+│   ├── table_name
+│   └── table_type
+│
+├── columns
+│   ├── table_schema
+│   ├── table_name
+│   ├── column_name
+│   ├── data_type
+│   └── ...
+│
+├── views
+│
+├── routines
+│
+├── table_constraints
+│
+├── key_column_usage
+│
 └── ...
 
-Ví dụ:
+Đây là metadata của database.
 
-insmart_medical_ocr
-│
-├── public
-│   ├── users
-│   └── orders
-│
-└── test
-    ├── test_permission_check
-    └── HOADON_TYPE2
+10. Một điểm rất quan trọng: schema khác database
 
-Vì vậy khi bạn viết:
+Bạn đang có:
 
-SELECT *
-FROM test.HOADON_TYPE2;
+WHERE table_schema = 'test'
 
-thì PostgreSQL hiểu:
+test ở đây không nhất thiết là database.
 
-test       → schema
-HOADON_TYPE2 → table
-Vậy public là gì?
+Nó là schema.
 
-Đây cũng là thứ bạn sẽ gặp rất nhiều trong PostgreSQL.
+Ví dụ PostgreSQL:
 
-Một database PostgreSQL mới thường có schema mặc định tên:
+Database: company_db
+
+
+    ├── public
+    │   ├── users
+    │   └── orders
+    │
+    └── test
+        ├── users_test
+        └── orders_test
+
+Database:
+
+company_db
+
+Schema:
 
 public
+test
+
+Table:
+
+users
+orders
+users_test
+orders_test
+
+Vì vậy:
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'test';
+
+là:
+
+Trong database hiện tại, tìm các table thuộc schema test.
+
+11. Bạn có thể query metadata rất mạnh
+
+Ví dụ bạn muốn biết tất cả table:
+
+SELECT
+    table_schema,
+    table_name,
+    table_type
+FROM information_schema.tables;
+
+Chỉ lấy table thật, không lấy view:
+
+SELECT
+    table_schema,
+    table_name
+FROM information_schema.tables
+WHERE table_type = 'BASE TABLE';
+
+Chỉ lấy schema test:
+
+SELECT
+    table_name
+FROM information_schema.tables
+WHERE table_schema = 'test';
+12. Muốn xem column của một table
+
+Ví dụ:
+
+SELECT
+    column_name,
+    data_type,
+    is_nullable
+FROM information_schema.columns
+WHERE table_schema = 'test'
+  AND table_name = 'users';
+
+Kết quả có thể:
+
+column_name	data_type	is_nullable
+id	integer	NO
+name	character varying	YES
+age	integer	YES
+
+Bạn có thể đọc:
+
+column_name
+    ↓
+Tên column
+
+
+data_type
+    ↓
+Kiểu dữ liệu
+
+
+is_nullable
+    ↓
+Có cho phép NULL không
+13. Cái này rất quan trọng với database manager của bạn
+
+Nếu mục tiêu của bạn là xây database_manager_service, thì information_schema cực kỳ hữu ích.
+
+Ví dụ user gửi:
+
+database = company_db
+schema = test
+
+Service của bạn có thể chạy:
+
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = %s;
+
+Python:
+
+cursor.execute(
+    """
+    SELECT table_name
+    FROM information_schema.tables
+    WHERE table_schema = %s
+    """,
+    ("test",)
+)
+
+
+tables = cursor.fetchall()
+
+Sau đó bạn biết:
+
+[
+    ("users",),
+    ("orders",),
+    ("products",)
+]
+
+Rồi tiếp tục lấy column:
+
+cursor.execute(
+    """
+    SELECT
+        column_name,
+        data_type,
+        is_nullable
+    FROM information_schema.columns
+    WHERE table_schema = %s
+      AND table_name = %s
+    """,
+    ("test", "users")
+)
+
+Bạn có thể xây thành API:
+
+GET /schemas
+GET /schemas/test/tables
+GET /schemas/test/tables/users/columns
+
+Đây chính là cách các database management tool lấy metadata để hiển thị cấu trúc database.
+
+Cách học phần này
+
+Bạn không cần học thuộc lòng information_schema.tables ngay. Hãy nhớ mô hình:
+
+DATABASE
+   │
+   ├── SCHEMA
+   │      │
+   │      ├── TABLE
+   │      │      ├── COLUMN
+   │      │      ├── COLUMN
+   │      │      └── COLUMN
+   │      │
+   │      └── TABLE
+   │
+   └── SCHEMA
+
+và:
+
+information_schema
+        │
+        ├── tables
+        │     └── table_name
+        │     └── table_schema
+        │
+        └── columns
+              └── column_name
+              └── table_name
+              └── data_type
+
+information_schema.tables là một bảng/view chứa metadata về table; table_name và table_schema là các column trong đó. Khi bạn hiểu được cấu trúc này thì những câu SQL kiểu trên sẽ dễ đọc hơn rất nhiều.
+
+Bạn có thể tiếp tục đào sâu:
+
+Phân biệt schema, table và column bằng ví dụ PostgreSQL
+Viết truy vấn lấy cấu trúc đầy đủ của một table
+## Ask
+### MySQL, SQL Server có schema không
+**MySQL**
+```bash
+MySQL làm cho chuyện này hơi "ẩn" đi.
+    Bạn thường thấy:
+        MySQL
+        └── Database
+            ├── users
+            ├── orders
+            └── products
+-> Nhưng trong MySQL, database và schema gần như là synonym.
+```
+**SQL Server**
+```bash
+SQL Server thực ra cũng có schema, chỉ là có thể bạn chưa để ý.
+    Ví dụ mặc định:
+        Database
+        └── dbo
+            ├── Users
+            ├── Orders
+            └── Products
+    -> dbo chính là schema.
+
+    Khi bạn viết:
+        SELECT * FROM dbo.Users;
+            thì:
+                - dbo     = schema
+                - Users   = table
+```
+### Vậy public là gì?
+```bash
+Đây cũng là thứ bạn sẽ gặp rất nhiều trong PostgreSQL.
+
+Một database PostgreSQL mới thường có schema mặc định tên: public
 
 Nếu bạn tạo:
-
-CREATE TABLE users (
-    id INT
-);
-
-thì mặc định nó thường nằm ở:
-
-public.users
-
-Bạn có thể viết rõ:
-
-CREATE TABLE public.users (
-    id INT
-);
-
-Còn bảng của bạn nằm trong schema test, nên:
-
-CREATE TABLE test.HOADON_TYPE2 (...);
-Tại sao lại cần Schema?
-
+    CREATE TABLE users (
+        id INT
+    );
+-> thì mặc định nó thường nằm ở: public.users
+```
+### Tại sao lại cần Schema?
+```bash
 Đây là điểm schema thực sự hữu ích.
+    Bạn có thể có:
+        insmart_medical_ocr
+        │
+        ├── production
+        │   └── HOADON_TYPE2
+        │
+        ├── test
+        │   └── HOADON_TYPE2
+        │
+        └── dev
+            └── HOADON_TYPE2
+    -> Cùng tên HOADON_TYPE2 nhưng nằm ở 3 schema khác nhau, hoàn toàn được.
 
-Bạn có thể có:
-
-insmart_medical_ocr
-│
-├── production
-│   └── HOADON_TYPE2
-│
-├── test
-│   └── HOADON_TYPE2
-│
-└── dev
-    └── HOADON_TYPE2
-
-Cùng tên HOADON_TYPE2 nhưng nằm ở 3 schema khác nhau, hoàn toàn được.
-
-Bạn truy cập:
-
-SELECT * FROM production.HOADON_TYPE2;
-
-hoặc:
-
-SELECT * FROM test.HOADON_TYPE2;
-
-hoặc:
-
-SELECT * FROM dev.HOADON_TYPE2;
-
-Đây chính là lý do schema rất tiện để tách dev / test / production mà không nhất thiết phải tạo 3 database riêng.
-
-Một cách nhớ rất dễ
-Hệ quản trị	Cấu trúc thường thấy
-MySQL	database → table
-SQL Server	database → schema → table
-PostgreSQL	database → schema → table
-
-Nhưng MySQL cũng có khái niệm schema, chỉ là MySQL coi schema gần như đồng nghĩa với database, nên bạn ít thấy tầng riêng biệt đó.
-
-Còn PostgreSQL:
-
-Database
-    ↓
-Schema
-    ↓
-Table
-    ↓
-Column
-
-Trong trường hợp của bạn:
-
-insmart_medical_ocr
-        ↓
-       test
-        ↓
-HOADON_TYPE2
-
-nên câu SQL CREATE TABLE test.HOADON_TYPE2 là hoàn toàn chuẩn.
-
-Tiếp tục tìm hiểu PostgreSQL:
-
-Phân biệt database, schema và table
-Kiểm tra schema test và bảng HOADON_TYPE2
+    Bạn truy cập:
+        - SELECT * FROM production.HOADON_TYPE2;
+        - SELECT * FROM test.HOADON_TYPE2;
+        - SELECT * FROM dev.HOADON_TYPE2;
+    -> Đây chính là lý do schema rất tiện để tách dev / test / production mà không nhất thiết phải tạo 3 database riêng.
+```
 # Table
 ## CREATE TABLE (Tạo bảng)
 **Ex**
@@ -654,6 +902,945 @@ CREATE TABLE users (
     id INT GENERATED ALWAYS AS IDENTITY
 );
 ```
+# Function 
+## CREATE FUNCTION (tạo một function)
+**Ex**
+```sql
+CREATE FUNCTION test.update_update_date() -- có nghĩa: Tạo một function tên update_update_date trong schema test.
+```
+## REPLACE (thay thế)
+**Ex**
+```sql
+CREATE OR REPLACE FUNCTION 
+-- Có nghĩa: 
+-- Nếu function chưa tồn tại → tạo mới.
+-- Nếu đã tồn tại → thay nội dung function cũ bằng nội dung mới.
+```
+## LANGUAGE
+**Ex**
+```sql
+LANGUAGE plpgsql 
+-- nói cho PostgreSQL:
+-- Code bên trong function được viết bằng ngôn ngữ PL/pgSQL.
+-- PostgreSQL có nhiều cách viết function, nhưng plpgsql là cái bạn sẽ gặp rất thường xuyên.
+```
+## AS $$ ... $$
+**Syn**
+```bash
+AS $$
+BEGIN
+    ...
+END;
+$$;
+
+# có nghĩa: Phần code nằm giữa $$ và $$ chính là function body.
+```
+**Ex**
+```sql
+CREATE FUNCTION hello()
+RETURNS text
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN 'Hello';
+END;
+$$;
+
+SELECT hello(); -- chạy hàm
+```
+## BEGIN ... END (là block code)
+**Syn**
+```bash
+BEGIN
+    code
+END;
+```
+**Ex**
+```sql
+CREATE FUNCTION hello()
+RETURNS text
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    RETURN 'Hello';
+END;
+$$;
+```
+## Trigger (là một cơ chế để database tự động thực hiện một hành động khi một sự kiện xảy ra trên table)
+```bash
+Bạn có thể hiểu cực đơn giản:
+    Trigger = "Nếu chuyện A xảy ra → tự động làm chuyện B."
+```
+**Ex1: Ví dụ đời thường**
+```bash
+Giả sử bạn có cửa tự động:
+    Có người bước vào
+          ↓
+    Cảm biến phát hiện
+          ↓
+    Cửa tự động mở
+
+Trong PostgreSQL:
+    Có người UPDATE dữ liệu
+          ↓
+    Trigger phát hiện
+          ↓
+    Function tự động chạy
+```
+**Ex2**
+```bash
+Bạn có table:
+    CREATE TABLE users (
+        id SERIAL PRIMARY KEY,
+        name TEXT,
+        updated_at TIMESTAMP
+    );
+
+Bạn muốn: 
+    - Mỗi lần users bị UPDATE thì updated_at tự động đổi thành thời gian hiện tại.
+    - Nếu không có trigger, mỗi lần update bạn phải viết:
+```
+**Không có trigger**
+```sql
+UPDATE users
+SET
+    name = 'Thang',
+    updated_at = CURRENT_TIMESTAMP
+WHERE id = 1; 
+-- Rất dễ quên updated_at.
+```
+**Có Trigger**
+```bash
+Bạn tạo trigger:
+    UPDATE users
+          ↓
+    Trigger phát hiện
+          ↓
+    Tự động cập nhật updated_at
+
+Sau đó application chỉ cần:
+    UPDATE users
+    SET name = 'Thang'
+    WHERE id = 1;
+-> Database tự động xử lý: name = 'Thang', updated_at = CURRENT_TIMESTAMP
+```
+**Trigger không phải Function**
+```bash
+Đây là chỗ người mới rất dễ nhầm. Hai cái có vai trò khác nhau:
+    - Trigger -> Khi nào chạy?
+    - Function -> Chạy cái gì?
+```
+**Trigger không cần application gọi**
+```bash
+Đây là điểm rất hay. Application Python:
+    cursor.execute("""
+        UPDATE users
+        SET name = %s
+        WHERE id = %s
+    """, ("Nam", 1))
+
+Python không cần biết có trigger.
+
+Database tự:
+    Python -> UPDATE -> PostgreSQL -> Trigger -> Function -> UPDATE_DATE = NOW() -> Đây là lý do trigger rất mạnh.
+```
+**Nhưng trigger cũng có mặt trái**
+```bash
+Không nên lạm dụng trigger. Vì application nhìn thấy:
+    UPDATE users ...
+
+    nhưng thực tế database có thể âm thầm làm:
+        UPDATE users -> trigger 1 -> function -> INSERT audit -> trigger 2 -> ... -> Nếu có rất nhiều trigger, việc debug có thể trở nên khó.
+```
+### BEFORE và AFTER
+### OLD và NEW
+## Tại sao trigger function phải RETURN NEW?
+```bash
+NEW -> sửa NEW.updated_at -> RETURN NEW -> PostgreSQL sử dụng row mới này
+
+Đặc biệt với: BEFORE UPDATE thì RETURN NEW cho PostgreSQL biết:
+    "Đây là phiên bản row mà bạn nên tiếp tục xử lý."
+```
+
+11. Bây giờ đến phần quan trọng nhất: NEW
+
+Function của bạn có:
+
+NEW."UPDATE_DATE"
+
+NEW là một record đặc biệt mà PostgreSQL cung cấp cho trigger function.
+
+Đừng hiểu NEW là biến bạn tự tạo.
+
+PostgreSQL tự đưa nó cho bạn.
+
+Ví dụ table:
+
+CREATE TABLE test.users (
+    id integer,
+    name text,
+    "UPDATE_DATE" timestamp
+);
+
+Có row:
+
+id | name  | UPDATE_DATE
+---+-------+-------------------
+1  | Thang | 2026-08-01
+
+Khi chạy:
+
+UPDATE test.users
+SET name = 'Nam'
+WHERE id = 1;
+
+Trigger function có thể nhìn thấy row mới thông qua:
+
+NEW
+
+Nó đại diện cho:
+
+row sau khi UPDATE
+12. OLD là gì?
+
+Ngoài NEW, trigger còn có:
+
+OLD
+
+Để hiểu:
+
+OLD = row trước khi thay đổi
+
+
+NEW = row sau khi thay đổi
+
+Ví dụ:
+
+Trước UPDATE:
+
+
+OLD
+id = 1
+name = Thang
+
+
+Sau UPDATE:
+
+
+NEW
+id = 1
+name = Nam
+13. NEW."UPDATE_DATE" nghĩa là gì?
+
+Đây:
+
+NEW."UPDATE_DATE"
+
+có thể đọc:
+
+Giá trị column UPDATE_DATE của row mới.
+
+Giống Python:
+
+new["UPDATE_DATE"]
+
+hoặc object:
+
+new.UPDATE_DATE
+14. Dòng quan trọng nhất
+
+Function của bạn:
+
+NEW."UPDATE_DATE" = CURRENT_TIMESTAMP;
+
+nghĩa là:
+
+Gán thời gian hiện tại vào column UPDATE_DATE của row mới.
+
+Ví dụ trước update:
+
+id | name  | UPDATE_DATE
+---+-------+-------------------
+1  | Thang | 2026-08-01 10:00
+
+Bạn chạy:
+
+UPDATE test.users
+SET name = 'Nam'
+WHERE id = 1;
+
+Trigger chạy:
+
+NEW."UPDATE_DATE" = CURRENT_TIMESTAMP;
+
+Kết quả:
+
+id | name | UPDATE_DATE
+---+------+-------------------
+1  | Nam  | 2026-08-14 08:40
+
+Bạn không cần tự:
+
+UPDATE_DATE = ...
+
+trong từng câu UPDATE nữa.
+
+15. CURRENT_TIMESTAMP
+CURRENT_TIMESTAMP
+
+là thời điểm hiện tại của database/session.
+
+Ví dụ:
+
+SELECT CURRENT_TIMESTAMP;
+
+Có thể ra:
+
+2026-08-14 08:40:25.123+07
+16. RETURN NEW
+
+Đây là phần cực kỳ quan trọng với trigger BEFORE.
+
+Function:
+
+BEGIN
+    NEW."UPDATE_DATE" = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+
+Có nghĩa:
+
+Nhận row mới
+    ↓
+Thay đổi UPDATE_DATE
+    ↓
+Trả row mới lại cho PostgreSQL
+
+Tức:
+
+NEW
+ ↓
+modify
+ ↓
+RETURN NEW
+ ↓
+PostgreSQL tiếp tục UPDATE
+17. Tại sao phải RETURN NEW?
+
+Vì đây là:
+
+BEFORE UPDATE
+
+Trigger chạy trước khi UPDATE thực sự được thực hiện.
+
+PostgreSQL cho trigger function cơ hội:
+
+"Hãy xem/chỉnh sửa row này trước khi tôi lưu nó."
+
+Bạn chỉnh:
+
+NEW."UPDATE_DATE"
+
+xong phải:
+
+RETURN NEW;
+
+để nói:
+
+"OK, dùng row này để UPDATE."
+
+18. Bây giờ đến Trigger
+
+Function mới chỉ là:
+
+Một function
+
+Nó chưa tự chạy.
+
+Bạn cần Trigger:
+
+CREATE TRIGGER ...
+
+Trigger có nhiệm vụ:
+
+Theo dõi một table và gọi function khi một event xảy ra.
+
+Ví dụ:
+
+UPDATE table
+     ↓
+Trigger phát hiện
+     ↓
+Gọi function
+     ↓
+Function sửa NEW.UPDATE_DATE
+19. CREATE TRIGGER
+
+Code:
+
+CREATE TRIGGER trg_hoadon_type2_update_date
+
+Tạo trigger có tên:
+
+trg_hoadon_type2_update_date
+
+Tên này do bạn tự đặt.
+
+Ví dụ cũng có thể:
+
+CREATE TRIGGER update_timestamp
+
+Không có gì đặc biệt về tên trg_.
+
+Người ta thường đặt prefix:
+
+trg_
+
+để nhìn vào biết đây là trigger.
+
+20. BEFORE
+
+Đoạn:
+
+BEFORE UPDATE
+
+nghĩa là:
+
+Trigger chạy trước khi UPDATE được thực hiện.
+
+Có:
+
+BEFORE
+AFTER
+INSTEAD OF
+
+Bạn sẽ gặp nhiều nhất:
+
+BEFORE
+AFTER
+
+Ví dụ:
+
+BEFORE UPDATE
+UPDATE request
+     ↓
+TRIGGER
+     ↓
+UPDATE database
+
+Còn:
+
+AFTER UPDATE
+
+là:
+
+UPDATE database
+     ↓
+TRIGGER
+21. UPDATE
+BEFORE UPDATE
+
+UPDATE là event kích hoạt trigger.
+
+Các event phổ biến:
+
+INSERT
+UPDATE
+DELETE
+TRUNCATE
+
+Ví dụ:
+
+BEFORE INSERT
+
+→ trước khi thêm row.
+
+AFTER INSERT
+
+→ sau khi thêm row.
+
+BEFORE UPDATE
+
+→ trước khi sửa row.
+
+AFTER UPDATE
+
+→ sau khi sửa row.
+
+BEFORE DELETE
+
+→ trước khi xóa row.
+
+22. ON test."HOADON_TYPE2"
+ON test."HOADON_TYPE2"
+
+nghĩa là:
+
+Trigger này được gắn vào table HOADON_TYPE2 trong schema test.
+
+Cấu trúc:
+
+test
+ ↓
+schema
+
+
+"HOADON_TYPE2"
+ ↓
+table
+23. Tại sao "HOADON_TYPE2" có dấu "?
+
+Đây là một điểm SQL rất đáng học.
+
+PostgreSQL phân biệt:
+
+HOADON_TYPE2
+
+và:
+
+"HOADON_TYPE2"
+
+PostgreSQL mặc định fold unquoted identifier thành lowercase.
+
+Ví dụ:
+
+CREATE TABLE Users (...);
+
+thực tế PostgreSQL coi tên là:
+
+users
+
+Nhưng:
+
+CREATE TABLE "Users" (...);
+
+thì tên thực sự là:
+
+Users
+
+và phải viết đúng:
+
+SELECT *
+FROM "Users";
+
+Tương tự:
+
+"HOADON_TYPE2"
+
+giữ nguyên chữ hoa.
+
+Đây là lý do database schema cũ thường xuất hiện rất nhiều:
+
+"HOADON_TYPE2"
+"UPDATE_DATE"
+24. FOR EACH ROW
+
+Đây là phần rất quan trọng.
+
+FOR EACH ROW
+
+nghĩa là:
+
+Trigger chạy một lần cho mỗi row bị ảnh hưởng.
+
+Ví dụ:
+
+UPDATE test.users
+SET age = age + 1;
+
+Có:
+
+1,000 rows
+
+thì:
+
+FOR EACH ROW
+
+→ function chạy 1,000 lần.
+
+25. FOR EACH STATEMENT
+
+Ngược lại:
+
+FOR EACH STATEMENT
+
+thì:
+
+UPDATE users
+SET age = age + 1;
+
+dù update:
+
+1 row
+
+hay:
+
+1,000,000 rows
+
+trigger chỉ chạy:
+
+1 lần
+
+Đây là khác biệt cực kỳ quan trọng:
+
+FOR EACH ROW
+    1 row → 1 lần
+    100 rows → 100 lần
+
+
+FOR EACH STATEMENT
+    1 row → 1 lần
+    100 rows → 1 lần
+26. EXECUTE FUNCTION
+
+Cuối cùng:
+
+EXECUTE FUNCTION test.update_update_date();
+
+nghĩa là:
+
+Khi trigger được kích hoạt, hãy gọi function test.update_update_date().
+
+Đây là lúc hai phần kết nối với nhau:
+
+FUNCTION
+test.update_update_date()
+        ↑
+        │
+EXECUTE FUNCTION
+        │
+        ↑
+TRIGGER
+trg_hoadon_type2_update_date
+27. Đọc toàn bộ code bằng tiếng Việt
+
+Code của bạn:
+
+CREATE OR REPLACE FUNCTION test.update_update_date()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    NEW."UPDATE_DATE" = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
+
+Đọc thành:
+
+Tạo hoặc thay thế một trigger function tên update_update_date trong schema test.
+
+Function này trả về TRIGGER và được viết bằng PL/pgSQL.
+
+Khi được gọi, lấy row mới (NEW), cập nhật column UPDATE_DATE thành thời gian hiện tại, rồi trả row mới lại.
+
+Sau đó:
+
+CREATE TRIGGER trg_hoadon_type2_update_date
+BEFORE UPDATE ON test."HOADON_TYPE2"
+FOR EACH ROW
+EXECUTE FUNCTION test.update_update_date();
+
+Đọc thành:
+
+Tạo trigger trg_hoadon_type2_update_date.
+
+Trigger chạy trước mỗi UPDATE trên table test."HOADON_TYPE2".
+
+Với mỗi row bị update, gọi function test.update_update_date().
+
+28. Toàn bộ flow
+
+Đây là thứ bạn nên nhớ nhất:
+
+User/Application
+       │
+       │
+       ▼
+UPDATE test."HOADON_TYPE2"
+       │
+       ▼
+PostgreSQL phát hiện:
+BEFORE UPDATE
+       │
+       ▼
+Trigger
+trg_hoadon_type2_update_date
+       │
+       ▼
+EXECUTE FUNCTION
+test.update_update_date()
+       │
+       ▼
+NEW
+       │
+       ▼
+NEW."UPDATE_DATE"
+       │
+       ▼
+CURRENT_TIMESTAMP
+       │
+       ▼
+RETURN NEW
+       │
+       ▼
+PostgreSQL thực hiện UPDATE
+29. Tự viết một Trigger từ đầu
+
+Bây giờ thử một ví dụ đơn giản hơn.
+
+Giả sử:
+
+CREATE TABLE test.users (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    updated_at TIMESTAMP
+);
+
+Bạn muốn:
+
+Mỗi khi user được update → tự động cập nhật updated_at.
+
+Bước 1 — Function
+CREATE OR REPLACE FUNCTION test.set_updated_at()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+
+
+    RETURN NEW;
+END;
+$$;
+Bước 2 — Trigger
+CREATE TRIGGER trg_users_updated_at
+BEFORE UPDATE ON test.users
+FOR EACH ROW
+EXECUTE FUNCTION test.set_updated_at();
+Bước 3 — Test
+
+Insert:
+
+INSERT INTO test.users(name)
+VALUES ('Thang');
+
+Sau đó:
+
+UPDATE test.users
+SET name = 'Duc Thang'
+WHERE id = 1;
+
+Trigger tự động:
+
+updated_at = CURRENT_TIMESTAMP
+30. Trigger có thể làm nhiều thứ hơn
+
+Ví dụ:
+
+Tự động update timestamp
+UPDATE
+ ↓
+updated_at = NOW()
+Kiểm tra dữ liệu
+INSERT
+ ↓
+kiểm tra
+ ↓
+nếu sai → RAISE EXCEPTION
+Audit
+
+Ví dụ:
+
+users
+   ↓
+UPDATE
+   ↓
+trigger
+   ↓
+user_audit
+
+Lưu:
+
+ai sửa?
+sửa lúc nào?
+giá trị cũ?
+giá trị mới?
+Tự động tạo dữ liệu liên quan
+INSERT order
+      ↓
+trigger
+      ↓
+insert order_log
+31. OLD + NEW rất quan trọng
+
+Ví dụ audit:
+
+CREATE OR REPLACE FUNCTION test.audit_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+
+    INSERT INTO test.user_audit(
+        old_name,
+        new_name
+    )
+    VALUES (
+        OLD.name,
+        NEW.name
+    );
+
+
+    RETURN NEW;
+
+
+END;
+$$;
+
+Nếu:
+
+OLD.name = 'Thang'
+NEW.name = 'Duc'
+
+thì audit lưu:
+
+old_name | new_name
+---------+---------
+Thang    | Duc
+
+Bạn sẽ gặp OLD và NEW rất nhiều khi làm Trigger.
+
+32. OLD và NEW phụ thuộc event
+
+Đây là bảng rất đáng nhớ:
+
+Event	OLD	NEW
+INSERT	❌	✅
+UPDATE	✅	✅
+DELETE	✅	❌
+
+Tại sao?
+
+INSERT
+
+Chưa có row cũ:
+
+OLD ❌
+NEW ✅
+UPDATE
+
+Có cả trước và sau:
+
+OLD ✅
+NEW ✅
+DELETE
+
+Có row trước khi xóa nhưng không còn row mới:
+
+OLD ✅
+NEW ❌
+33. Một lỗi người mới rất hay mắc
+
+Đừng viết:
+
+BEFORE DELETE
+...
+NEW.name
+
+Vì DELETE không có NEW.
+
+Phải:
+
+OLD.name
+
+Tương tự INSERT không có OLD.
+
+34. IF trong Trigger Function
+
+Sau khi hiểu function cơ bản, bạn có thể viết:
+
+CREATE OR REPLACE FUNCTION test.check_age()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+BEGIN
+
+
+    IF NEW.age < 0 THEN
+        RAISE EXCEPTION 'Age cannot be negative';
+    END IF;
+
+
+    RETURN NEW;
+
+
+END;
+$$;
+
+Đây chính là lúc PL/pgSQL bắt đầu giống programming language:
+
+IF
+THEN
+ELSE
+LOOP
+FOR
+DECLARE
+EXCEPTION
+35. Lộ trình học mình khuyên bạn
+
+Đừng nhảy ngay vào những trigger phức tạp.
+
+Học theo thứ tự:
+
+1. SQL cơ bản
+   ↓
+2. SELECT / INSERT / UPDATE / DELETE
+   ↓
+3. Schema / Table / Column
+   ↓
+4. information_schema
+   ↓
+5. PostgreSQL Function
+   ↓
+6. PL/pgSQL
+   ↓
+7. BEGIN / END
+   ↓
+8. Variables
+   ↓
+9. IF / ELSE
+   ↓
+10. LOOP / FOR
+   ↓
+11. RETURN
+   ↓
+12. Trigger
+   ↓
+13. OLD / NEW
+   ↓
+14. BEFORE / AFTER
+   ↓
+15. FOR EACH ROW
+   ↓
+16. Trigger Function
+   ↓
+17. Transaction / Exception
+   ↓
+18. Audit Trigger
+
+Quan trọng nhất: Function và Trigger không phải hai thứ hoàn toàn độc lập. Trong đoạn code bạn đưa, Function chứa logic, còn Trigger quyết định khi nào logic đó được chạy.
+
+FUNCTION = "Làm gì?"
+TRIGGER  = "Khi nào làm?"
+
+Đây là cách đơn giản nhất để bạn bắt đầu đọc những SQL script lớn của PostgreSQL.
+
+Tiếp tục khám phá:
+
+Thực hành trigger cập nhật updated_at
+Viết trigger kiểm tra dữ liệu bằng IF
 # Practices
 ## Xem cấu trúc bảng của một schema
 ```sql
