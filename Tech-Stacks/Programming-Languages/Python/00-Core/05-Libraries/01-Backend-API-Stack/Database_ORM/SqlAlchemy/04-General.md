@@ -1,7 +1,7 @@
 - [Create (Nhóm khởi tạo và cấu hình)](#create-nhóm-khởi-tạo-và-cấu-hình)
   - [create\_engine() (Để tạo hoặc kết nối database)](#create_engine-để-tạo-hoặc-kết-nối-database)
   - [MetaData](#metadata)
-    - [.create\_all()](#create_all)
+    - [.create\_all() (Tạo bảng trong db)](#create_all-tạo-bảng-trong-db)
   - [Table](#table)
     - [Column()](#column)
 - [Search (Nhóm tìm kiếm để lấy dữ liệu)](#search-nhóm-tìm-kiếm-để-lấy-dữ-liệu)
@@ -1106,3 +1106,6 @@ SessionLocal = async_sessionmaker(
 )
 ```
 ### AsyncSession 
+async def get_db():
+    async with SessionLocal() as db:
+        yield db

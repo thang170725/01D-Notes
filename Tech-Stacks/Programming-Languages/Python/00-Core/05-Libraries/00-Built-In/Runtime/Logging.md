@@ -4,6 +4,7 @@
 - [.getLogger() (hàm để lấy hoặc tạo một đối tượng Logger)](#getlogger-hàm-để-lấy-hoặc-tạo-một-đối-tượng-logger)
   - [.info()](#info)
   - [.debug()](#debug)
+  - [.exception()](#exception)
   - [setLevel() (dùng để đặt mức log tối thiểu mà Logger hoặc Handler sẽ xử lý)](#setlevel-dùng-để-đặt-mức-log-tối-thiểu-mà-logger-hoặc-handler-sẽ-xử-lý)
   - [.addHandler() (dùng để gắn thêm một Handler vào Logger)](#addhandler-dùng-để-gắn-thêm-một-handler-vào-logger)
 - [Formatter()](#formatter)
@@ -154,6 +155,7 @@ logger.warning("Đây là warning")
 # INFO:root:Đây là info
 # WARNING:root:Đây là warning
 ```
+## .exception()
 ## setLevel() (dùng để đặt mức log tối thiểu mà Logger hoặc Handler sẽ xử lý)
 ```bash
 Các mức log từ thấp đến cao:

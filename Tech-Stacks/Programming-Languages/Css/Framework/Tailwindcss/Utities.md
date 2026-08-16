@@ -1,5 +1,5 @@
 - [!important](#important)
-- [@layer (giúp Tailwind quản lý thứ tự ưu tiên và hỗ trợ tree-shaking (loại bỏ CSS không dùng))](#layer-giúp-tailwind-quản-lý-thứ-tự-ưu-tiên-và-hỗ-trợ-tree-shaking-loại-bỏ-css-không-dùng)
+- [layer (quản lý thứ tự ưu tiên và hỗ trợ tree-shaking)](#layer-quản-lý-thứ-tự-ưu-tiên-và-hỗ-trợ-tree-shaking)
   - [@layer base (Dùng cho các style nền tảng)](#layer-base-dùng-cho-các-style-nền-tảng)
   - [@layer components (Dùng cho các component tái sử dụng)](#layer-components-dùng-cho-các-component-tái-sử-dụng)
 - [@layer utilities (Dùng để tạo utility class giống như utility của Tailwind)](#layer-utilities-dùng-để-tạo-utility-class-giống-như-utility-của-tailwind)
@@ -39,7 +39,7 @@ color: blue;
 color: red !important;
 -->
 ```
-# @layer (giúp Tailwind quản lý thứ tự ưu tiên và hỗ trợ tree-shaking (loại bỏ CSS không dùng))
+# layer (quản lý thứ tự ưu tiên và hỗ trợ tree-shaking)
 ```bash
 Là một tính năng của Tailwind CSS dùng để đăng ký CSS vào các layer của Tailwind.
 

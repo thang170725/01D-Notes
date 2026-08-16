@@ -3,9 +3,9 @@
   - [unique key](#unique-key)
   - [index](#index)
 - [insert into](#insert-into)
-- [delete](#delete)
-  - [Xóa dữ liệu một hoặc nhiều hàng](#xóa-dữ-liệu-một-hoặc-nhiều-hàng)
-  - [on delete cascade](#on-delete-cascade)
+- [delete (xóa dữ liệu)](#delete-xóa-dữ-liệu)
+  - [delete from ... where (Xóa dữ liệu một hoặc nhiều hàng)](#delete-from--where-xóa-dữ-liệu-một-hoặc-nhiều-hàng)
+  - [... on delete cascade (dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY))](#-on-delete-cascade-dùng-để-tự-động-xóa-dữ-liệu-con-khi-dữ-liệu-cha-bị-xóa-trong-quan-hệ-khóa-ngoại-foreign-key)
 - [Update](#update)
   - [update](#update-1)
 - [Search (tìm kiếm, lọc, xem dữ liệu)](#search-tìm-kiếm-lọc-xem-dữ-liệu)
@@ -102,29 +102,22 @@ VALUES
 (2, 102, 'Trần Thị B', 'Khoa học máy tính', 'KHMT01'),
 (3, 103, 'Lê Văn C', 'Hệ thống thông tin', 'HTTT01');
 ```
-# delete
-## Xóa dữ liệu một hoặc nhiều hàng
+# delete (xóa dữ liệu)
+## delete from ... where (Xóa dữ liệu một hoặc nhiều hàng)
+**Syn**
+```bash
+DELETE FROM ten_bang WHERE dieu_kien;
+```
 **Ex**
 ```sql
-DELETE FROM Students
-WHERE studentId = 's001';
-DELETE FROM Students
-WHERE className = 'IT01';
+DELETE FROM Students WHERE studentId = 's001';
+```
+**Ex2: Xóa bằng in**
+```sql
 DELETE FROM Users
 WHERE userId IN ('s001', 's002', 's003');
 ```
-```bash
-dùng để xóa dữ liệu (record/row) trong bảng.
-```
-**Syn**
-```bash
-DELETE FROM ten_bang
-WHERE dieu_kien;
-```
-## on delete cascade
-```bash
-dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY).
-```
+## ... on delete cascade (dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY))
 **Ex**
 ```sql
 FOREIGN KEY (program_id)

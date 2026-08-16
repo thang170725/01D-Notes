@@ -611,12 +611,17 @@ rows = session.query(User.id, User.name).all() # [(1, 'Alice'), (2, 'Bob')] → 
     + filter không cần import vì nó là phương thức của class
 - filter thường dùng cho ORM. Đây là style ORM cũ. where được recommanded
 ```
-**Syn: filter**
+**Syn**
 ```bash
-.filter(User.username == "admin") # WHERE username = 'admin'
+query = session.query(User).filter(User.email == email)
+
+- Output: Nó trả về một query/statement đã được thêm điều kiện lọc # WHERE username = 'admin'
+```
+**Syn2**
+```bash
+stmt = select(User).filter(User.email == email)
 ```
 **Ex**
-**Model**
 ```python
 class User(Base):
     __tablename__ = "users"
@@ -625,11 +630,28 @@ class User(Base):
     username = Column(String)
     age = Column(Integer)
 
-user = db.query(User).filter(User.username == "thang").first() # SELECT * FROM users WHERE username = 'thang' LIMIT 1;
-
+query = db.query(User).filter(User.username == "thang").first() # SELECT * FROM users WHERE username = 'thang' LIMIT 1;
+query.first()
 # user là object User
 # Hoặc None
 ```
+**Ex2**
+Với SQLAlchemy 2.x
+
+Nếu bạn đang dùng kiểu mới:
+
+stmt = select(User).filter(User.email == email)
+
+thì filter() trả về Select statement, chưa query DB.
+
+Sau đó:
+
+result = await session.execute(stmt)
+
+
+user = result.scalar_one_or_none()
+
+→ user mới là User hoặc None.
 ### like()
 ### filter_by() (lọc theo tên thuộc tính của model)
 ```bash
