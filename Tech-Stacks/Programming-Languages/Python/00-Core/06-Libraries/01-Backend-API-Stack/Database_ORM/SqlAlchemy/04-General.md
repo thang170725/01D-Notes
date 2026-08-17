@@ -56,16 +56,18 @@ engine = create_engine(
     echo=
 )
 
-- "dialect+driver://username:password@host:port/database"
-    + dialect	: mysql, postgresql, sqlite, oracle
-    + driver	: pymysql, psycopg2, cx_oracle
-    + username	: root
-    + password	: 123456
-    + host	    : localhost
-    + port	    : 3306, 5432
-    + database	: test_db
-- pool_pre_ping : dùng để kiểm tra xem kết nối (connection) trong connection pool còn sống hay không trước khi cấp nó cho ứng dụng
-- echo      : True là bất chế độ log in ra các cấu SQL
+- Input:
+    + "dialect+driver://username:password@host:port/database"
+        - dialect	: mysql, postgresql, sqlite, oracle
+        - driver	: pymysql, psycopg2, cx_oracle
+        - username	: root
+        - password	: 123456
+        - host	    : localhost
+        - port	    : 3306, 5432
+        - database	: test_db
+    + pool_pre_ping : dùng để kiểm tra xem kết nối (connection) trong connection pool còn sống hay không trước khi cấp nó cho ứng dụng
+    + echo      : True là bất chế độ log in ra các cấu SQL
+    + pool_recycle=3600 (int): Connection cũ quá 1 giờ -> SQLAlchemy đóng/thay connection đó -> Tạo connection mới khi cần
 ```
 ## MetaData
 ```bash

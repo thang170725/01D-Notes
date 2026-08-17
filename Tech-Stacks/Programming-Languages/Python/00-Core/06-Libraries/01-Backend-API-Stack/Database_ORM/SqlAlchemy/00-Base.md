@@ -6,4 +6,5 @@ SqlAlchemy/                     # mình dùng thư mục này để xem kiến t
 ├── General.md                  # mình dùng file này để khởi tạo, cấu hình, xem những cái chung của ORM & Core
 ├── Core_Operations.md          # mình dùng file này để thao tác thuần
 ├── [03-ORM](03-ORM.md)                         ```Mình dùng file này để thao tác với ORM```  
+├── [03-General](04-General.md)                 ```Mình dùng file này để xem nhưng hàm chung của ORM và CORE```  
 └── Practices.md                # mình dùng file này để xem bài tập, code mẫu

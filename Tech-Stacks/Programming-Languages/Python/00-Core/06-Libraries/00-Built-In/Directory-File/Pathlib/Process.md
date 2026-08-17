@@ -5,7 +5,7 @@
   - [.cwd() (thư mục làm việc hiện tại)](#cwd-thư-mục-làm-việc-hiện-tại)
   - [.iterdir() (Nó sẽ duyệt tất cả file và thư mục con)](#iterdir-nó-sẽ-duyệt-tất-cả-file-và-thư-mục-con)
   - [is\_dir() (Kiểm tra có phải thư mục không)](#is_dir-kiểm-tra-có-phải-thư-mục-không)
-  - [exists() (Kiểm tra file có tồn tại không)](#exists-kiểm-tra-file-có-tồn-tại-không)
+  - [.exists() (Kiểm tra file có tồn tại không)](#exists-kiểm-tra-file-có-tồn-tại-không)
   - [.name (Lấy tên cuối cùng)](#name-lấy-tên-cuối-cùng)
   - [.glob() (dùng để tìm các file hoặc thư mục theo một mẫu (pattern))](#glob-dùng-để-tìm-các-file-hoặc-thư-mục-theo-một-mẫu-pattern)
   - [.rglob()](#rglob)
@@ -128,7 +128,7 @@ for item in Path("tables").iterdir():
 # tables\a.txt
 # False
 ```
-## exists() (Kiểm tra file có tồn tại không)
+## .exists() (Kiểm tra file có tồn tại không)
 **Ex**
 ```python
 from pathlib import Path

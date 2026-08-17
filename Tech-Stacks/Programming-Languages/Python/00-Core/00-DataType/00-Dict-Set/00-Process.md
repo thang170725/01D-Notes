@@ -145,9 +145,10 @@ print(list(data.values())) # [850, 2, 10, 200000]
 ### .get() (trả về value của một key nào đó)
 **Syn**
 ```bash
-a = <variable>.get(<key>, default)
+a = <variable>.get(<key>, default) 
 
-- Nếu key chưa có thì trả về giá trị defaule
+- Input:
+  + default: Nếu key chưa có thì trả về giá trị defaule
 ```
 **Ex1**
 ```python
