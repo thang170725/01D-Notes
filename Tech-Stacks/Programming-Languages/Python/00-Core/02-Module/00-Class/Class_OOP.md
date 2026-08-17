@@ -31,6 +31,7 @@
   - [duck typing (Python-style)](#duck-typing-python-style)
 - [callable()](#callable)
 - [hasattr() (dùng để kiểm tra xem một đối tượng (object) có thuộc tính (attribute) hoặc phương thức (method) hay không)](#hasattr-dùng-để-kiểm-tra-xem-một-đối-tượng-object-có-thuộc-tính-attribute-hoặc-phương-thức-method-hay-không)
+- [getattr()](#getattr)
 ---
 ```bash
 - Nơi chứa các phương pháp xử lý trong lớp.
@@ -721,3 +722,132 @@ s = Student()
 print(hasattr(s, "hello")) # True
 print(hasattr(s, "name")) # False
 ```
+# getattr()
+getattr() trong Python dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi.
+
+Cú pháp:
+
+getattr(object, "attribute_name")
+1. Ví dụ đơn giản
+class User:
+    name = "Thang"
+
+
+user = User()
+
+
+print(user.name)
+
+Tương đương với:
+
+print(getattr(user, "name"))
+
+Kết quả:
+
+Thang
+
+Điểm quan trọng là "name" ở đây là string, nên bạn có thể truyền biến:
+
+attribute = "name"
+
+
+print(getattr(user, attribute))
+2. Vì sao dùng getattr() trong logging?
+
+Trong code của bạn:
+
+log_level = "INFO"
+
+
+level = getattr(logging, log_level)
+
+
+print(level)
+
+Kết quả:
+
+20
+
+Bởi vì trong module logging có:
+
+logging.DEBUG    # 10
+logging.INFO     # 20
+logging.WARNING  # 30
+logging.ERROR    # 40
+logging.CRITICAL # 50
+
+Nên:
+
+getattr(logging, "INFO")
+
+thực chất là lấy:
+
+logging.INFO
+
+Và:
+
+getattr(logging, "ERROR")
+
+tương đương:
+
+logging.ERROR
+
+Đây chính là lý do code:
+
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+
+
+logging.basicConfig(
+    level=getattr(logging, log_level),
+)
+
+có thể biến:
+
+LOG_LEVEL=DEBUG
+
+thành:
+
+logging.DEBUG
+
+một cách động.
+
+3. getattr() có giá trị mặc định
+
+Bạn có thể truyền argument thứ 3:
+
+getattr(object, "attribute", default)
+
+Ví dụ:
+
+class User:
+    name = "Thang"
+
+
+user = User()
+
+
+print(getattr(user, "name", "Unknown"))
+print(getattr(user, "age", 18))
+
+Kết quả:
+
+Thang
+18
+
+Nếu không có age, thay vì lỗi AttributeError, nó trả về 18.
+
+Vì vậy với logging bạn có thể viết:
+
+level = getattr(logging, log_level, logging.INFO)
+
+Nếu .env có:
+
+LOG_LEVEL=ABC
+
+thì:
+
+getattr(logging, "ABC", logging.INFO)
+
+sẽ trả về logging.INFO.
+
+Đây là cách khá hay để viết setup_logging() gọn hơn.
