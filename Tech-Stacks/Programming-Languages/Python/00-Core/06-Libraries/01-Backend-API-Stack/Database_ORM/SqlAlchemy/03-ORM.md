@@ -1,3 +1,4 @@
+- [SQLAlchemy Model](#sqlalchemy-model)
 - [Create \& Config (tạo \& cấu hình hệ thống)](#create--config-tạo--cấu-hình-hệ-thống)
   - [Connection Setup (Thiết lập kết nối)](#connection-setup-thiết-lập-kết-nối)
     - [sessionmaker() (Tạo "nhà máy" sinh ra các session, nơi bạn làm việc với db bằng ORM)](#sessionmaker-tạo-nhà-máy-sinh-ra-các-session-nơi-bạn-làm-việc-với-db-bằng-orm)
@@ -6,8 +7,9 @@
   - [Model Definition](#model-definition)
     - [declarative\_base() (tạo một base class để các model class kế thừa - cách cũ)](#declarative_base-tạo-một-base-class-để-các-model-class-kế-thừa---cách-cũ)
     - [DeclarativeBase (tạo một base class để các model class kế thừa - cách mới)](#declarativebase-tạo-một-base-class-để-các-model-class-kế-thừa---cách-mới)
-    - [__table\_args__](#table_args)
-  - [Constraints \& Index](#constraints--index)
+      - [__table\_args__ (là một thuộc tính đặc biệt của SQLAlchemy ORM, dùng để cấu hình các tùy chọn ở mức bảng (table-level), thay vì mức column)](#table_args-là-một-thuộc-tính-đặc-biệt-của-sqlalchemy-orm-dùng-để-cấu-hình-các-tùy-chọn-ở-mức-bảng-table-level-thay-vì-mức-column)
+    - [Constraints (Ràng buộc)](#constraints-ràng-buộc)
+    - [Index (chỉ mục)](#index-chỉ-mục)
     - [UniqueConstraint](#uniqueconstraint)
     - [Index](#index)
     - [ForeignKey](#foreignkey)
@@ -37,6 +39,20 @@
 - [Delete (Nhóm xóa)](#delete-nhóm-xóa)
   - [Session.delete()](#sessiondelete)
 ---
+# SQLAlchemy Model
+**Ex**
+```bash
+class Document(Base):
+    __tablename__ = "documents"
+
+    id = Column(Integer, primary_key=True)
+    OCR_DOC_ID = Column(String)
+# Đây là SQLAlchemy Model. Nó là cách Python của bạn mô tả database/table.
+# Có thể hiểu:
+# SQLAlchemy Model
+#   ↓
+# "Database mà tôi mong muốn có cấu trúc như thế này"
+```
 # Create & Config (tạo & cấu hình hệ thống)
 ## Connection Setup (Thiết lập kết nối)
 ### sessionmaker() (Tạo "nhà máy" sinh ra các session, nơi bạn làm việc với db bằng ORM)
@@ -168,9 +184,8 @@ from sqlalchemy.orm import DeclarativeBase
 class Base(DeclarativeBase):
     pass
 ```
-### __table_args__
+#### __table_args__ (là một thuộc tính đặc biệt của SQLAlchemy ORM, dùng để cấu hình các tùy chọn ở mức bảng (table-level), thay vì mức column)
 ```bash
-- Đây là biến đặc biệt trong ORM model. Dùng để cấu hình thêm cho table ngoài các Column.
 - Có thể chứa:
     + UniqueConstraint
     + Index
@@ -178,10 +193,56 @@ class Base(DeclarativeBase):
     + CheckConstraint
     + Engine options (MySQL, Postgres…)
 ```
-## Constraints & Index
-```bash
-Ràng buộc và chỉ mục
+**Ex**
+```python
+class User(Base):
+    __tablename__ = "users"
+    __table_args__ = {"schema": "test"} # Bảng users nằm trong schema test
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+# SQLAlchemy sẽ hiểu tương đương với:
+# CREATE TABLE test.users (
+#     id INTEGER PRIMARY KEY,
+#     name VARCHAR
+# );
 ```
+**Ex2: Tuple. Dùng khi muốn khai báo constraint / index / table option**
+```python
+class User(Base):
+    __tablename__ = "users"
+
+
+    __table_args__ = (
+        UniqueConstraint("email"),
+    )
+
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String)
+
+# SQL sẽ tương đương ý tưởng:
+# CREATE TABLE users (
+#     id INTEGER PRIMARY KEY,
+#     email VARCHAR,
+#     UNIQUE (email)
+# );
+```
+**Ex3: Tuple + Dictionary. Đây là dạng rất quan trọng vì bạn có thể vừa khai báo constraint/index vừa cấu hình table**
+```python
+class User(Base):
+    __tablename__ = "users"
+    __table_args__ = (
+        UniqueConstraint("email"),
+        {"schema": "test"}
+    )
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String)
+```
+### Constraints (Ràng buộc)
+### Index (chỉ mục)
 ### UniqueConstraint
 **Syn**
 ```bash

@@ -6,7 +6,7 @@
     - [Column()](#column)
 - [Search (Nhóm tìm kiếm để lấy dữ liệu)](#search-nhóm-tìm-kiếm-để-lấy-dữ-liệu)
   - [select() (Là các mới của query)](#select-là-các-mới-của-query)
-  - [select\_from()](#select_from)
+  - [select\_from() (dùng để chỉ định bảng/model nào sẽ làm nguồn chính (FROM) của câu SQL)](#select_from-dùng-để-chỉ-định-bảngmodel-nào-sẽ-làm-nguồn-chính-from-của-câu-sql)
   - [.where() (lấy đôi tượng có điều kiện)](#where-lấy-đôi-tượng-có-điều-kiện)
   - [.join()](#join)
   - [order\_by()](#order_by)
@@ -23,12 +23,13 @@
     - [.mappings()](#mappings)
     - [.first() (Lấy 1 dòng đầu tiên hoặc None)](#first-lấy-1-dòng-đầu-tiên-hoặc-none)
     - [scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)](#scalars-dùng-để-lấy-ra-giá-trị-đầu-tiên-của-mỗi-hàng-row-trong-kết-quả-truy-vấn)
+    - [scalar\_one()](#scalar_one)
     - [scalar\_one\_or\_none() (dùng để lấy một giá trị duy nhất từ kết quả query)](#scalar_one_or_none-dùng-để-lấy-một-giá-trị-duy-nhất-từ-kết-quả-query)
   - [.update()](#update)
     - [one\_or\_none()](#one_or_none)
-  - [func](#func)
+- [func (dùng để gọi SQL functions (hàm của database))](#func-dùng-để-gọi-sql-functions-hàm-của-database)
     - [.sum()](#sum)
-    - [.count()](#count)
+  - [.count() (dùng để đếm)](#count-dùng-để-đếm)
     - [.now()](#now)
     - [.coalesce() (Trả về giá trị đầu tiên khác NULL trong danh sách các giá trị)](#coalesce-trả-về-giá-trị-đầu-tiên-khác-null-trong-danh-sách-các-giá-trị)
     - [round()](#round)
@@ -217,7 +218,278 @@ result = session.execute(stmt).mappings().all()
 
 [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}]
 ```
-## select_from()
+## select_from() (dùng để chỉ định bảng/model nào sẽ làm nguồn chính (FROM) của câu SQL)
+```bash
+Nói đơn giản:
+    select_from(X) ≈ FROM X
+```
+**Syn**
+```bash
+from sqlalchemy import select
+
+stmt = select(...).select_from(...) # stmt = select(User).select_from(User) SQL gần tương đương: SELECT * FROM user;
+```
+**Ex**
+```python
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+
+class Order(Base):
+    __tablename__ = "orders"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer)
+    amount = Column(Integer)
+
+# SELECT users.name, orders.amount
+# FROM users
+# JOIN orders ON users.id = orders.user_id;
+stmt = (
+    select(User.name, Order.amount)
+    .select_from(User)
+    .join(Order, User.id == Order.user_id)
+)
+
+# Ở đây: .select_from(User) nói với SQLAlchemy: "Hãy bắt đầu câu SQL từ bảng users."
+# Sau đó: .join(Order, User.id == Order.user_id) thêm bảng orders.
+```
+3. Hiểu bằng cách đối chiếu SQL
+
+SQL thuần:
+
+SELECT users.name, orders.amount
+FROM users
+JOIN orders
+    ON users.id = orders.user_id;
+
+SQLAlchemy:
+
+stmt = (
+    select(User.name, Order.amount)
+    .select_from(User)
+    .join(Order, User.id == Order.user_id)
+)
+
+Có thể hình dung:
+
+select(...)
+    ↓
+SELECT users.name, orders.amount
+
+
+select_from(User)
+    ↓
+FROM users
+
+
+join(Order, ...)
+    ↓
+JOIN orders ON users.id = orders.user_id
+4. Ví dụ select_from() với nhiều bảng
+
+Giả sử có:
+
+User
+Order
+Product
+
+Quan hệ:
+
+User
+ ↓
+Order
+ ↓
+Product
+
+Bạn muốn:
+
+SELECT
+    users.name,
+    products.name,
+    orders.amount
+FROM users
+JOIN orders
+    ON users.id = orders.user_id
+JOIN products
+    ON products.id = orders.product_id;
+
+SQLAlchemy:
+
+stmt = (
+    select(
+        User.name,
+        Product.name,
+        Order.amount
+    )
+    .select_from(User)
+    .join(Order, User.id == Order.user_id)
+    .join(Product, Product.id == Order.product_id)
+)
+5. select_from() khác gì select()?
+
+Đây là điểm quan trọng.
+
+Không dùng select_from()
+stmt = select(User.name)
+
+SQLAlchemy tự suy ra:
+
+SELECT users.name
+FROM users;
+Dùng select_from()
+stmt = (
+    select(User.name)
+    .select_from(User)
+)
+
+Kết quả vẫn gần như:
+
+SELECT users.name
+FROM users;
+
+=> Vì vậy trong trường hợp này select_from() không cần thiết.
+
+6. Trường hợp select_from() thực sự có ý nghĩa
+
+Ví dụ bạn select một biểu thức liên quan đến nhiều bảng:
+
+stmt = (
+    select(User.name, Order.amount)
+    .select_from(User)
+    .join(Order, User.id == Order.user_id)
+)
+
+select() đang chọn:
+
+User.name
+Order.amount
+
+SQLAlchemy có thể tự suy ra FROM, nhưng select_from(User) giúp bạn chủ động xác định điểm bắt đầu.
+
+Điều này đặc biệt hữu ích khi query phức tạp.
+
+7. select_from() với join()
+
+Một cách rất dễ nhớ:
+
+select(...)
+.select_from(A)
+.join(B, ...)
+.join(C, ...)
+
+tương ứng:
+
+SELECT ...
+FROM A
+JOIN B ON ...
+JOIN C ON ...
+
+Ví dụ:
+
+stmt = (
+    select(User.name, Order.amount)
+    .select_from(User)
+    .join(
+        Order,
+        User.id == Order.user_id
+    )
+)
+
+Tương đương:
+
+SELECT users.name, orders.amount
+FROM users
+JOIN orders
+    ON users.id = orders.user_id;
+8. select_from() có thể nhận join() luôn
+
+Bạn cũng có thể viết:
+
+stmt = (
+    select(User.name, Order.amount)
+    .select_from(
+        User.join(Order, User.id == Order.user_id)
+    )
+)
+
+Ý tưởng là:
+
+select_from(
+    User JOIN Order
+)
+
+Tuy nhiên với ORM SQLAlchemy hiện đại, cách thường dễ đọc hơn là:
+
+stmt = (
+    select(User.name, Order.amount)
+    .select_from(User)
+    .join(Order, User.id == Order.user_id)
+)
+9. Một điểm rất quan trọng: select_from() không nhất thiết quyết định cuối cùng FROM
+
+Đây là chỗ dễ nhầm.
+
+Ví dụ:
+
+stmt = (
+    select(User.name)
+    .select_from(Order)
+)
+
+Bạn có thể nghĩ SQL sẽ là:
+
+SELECT users.name
+FROM orders;
+
+Nhưng User.name lại yêu cầu bảng users, nên SQLAlchemy có thể đưa users vào FROM nữa.
+
+Vì vậy:
+
+select_from() không đơn giản là "ép SQLAlchemy chỉ dùng đúng bảng này".
+
+Nó thiết lập hoặc bổ sung nguồn FROM, còn SQLAlchemy vẫn xây dựng toàn bộ FROM clause dựa trên các phần còn lại của query.
+
+10. Cách nhớ cực ngắn
+
+Bạn có thể nhớ:
+
+select(...)
+
+= SELECT cái gì?
+
+select_from(...)
+
+= FROM bảng nào?
+
+join(...)
+
+= JOIN bảng nào?
+
+where(...)
+
+= WHERE điều kiện gì?
+
+Ví dụ:
+
+stmt = (
+    select(User.name, Order.amount)     # SELECT
+    .select_from(User)                  # FROM
+    .join(Order, User.id == Order.user_id)  # JOIN
+    .where(Order.amount > 100)          # WHERE
+)
+
+Tư duy theo SQL:
+
+SELECT users.name, orders.amount
+FROM users
+JOIN orders
+    ON users.id = orders.user_id
+WHERE orders.amount > 100;
+
+Nếu bạn đang học SQLAlchemy 2.x, mình khuyên nên nắm chắc 5 thứ theo thứ tự: select() → where() → join() → select_from() → group_by()/having(). Trong đó select_from() sẽ dễ hiểu nhất sau khi bạn đã hiểu join().
 ## .where() (lấy đôi tượng có điều kiện)
 ```bash
 - where() dùng được cho cả Core và ORM trong SQLAlchemy mới (2.0 style).
@@ -734,6 +1006,7 @@ db.execute(stmt).scalars().all() # thì chỉ lấy cột đầu tiên:
 # [1, 2]
 # vì scalars() luôn lấy cột đầu tiên của mỗi row.
 ```
+### scalar_one()
 ### scalar_one_or_none() (dùng để lấy một giá trị duy nhất từ kết quả query)
 ```bash
 Nó có ý nghĩa như sau:
@@ -994,9 +1267,9 @@ scalar_one_or_none()	Giá trị của cột đầu tiên (ví dụ ORM object ho
 one_or_none()	Toàn bộ một row (tuple/Row)	select(User, HealthMetric.height, HealthMetric.weight), select(User, Role), hoặc bất kỳ truy vấn nào có từ 2 cột trở lên
 
 Quy tắc nhớ nhanh: nếu select() của bạn chỉ có một cột, scalar_one_or_none() thường là lựa chọn gọn gàng. Nếu select() có nhiều cột hoặc nhiều entity, hãy dùng one_or_none() để giữ lại toàn bộ dữ liệu rồi unpack từng phần.
-## func
+# func (dùng để gọi SQL functions (hàm của database))
 ```bash
-- func trong SQLAlchemy dùng để gọi SQL functions (hàm của database) 
+- func trong SQLAlchemy 
     + COUNT()
     + SUM()
     + NOW()
@@ -1014,16 +1287,12 @@ stmt = (
     .group_by(Product.category_id)
 )
 ```
-### .count()
-**Ex: COUNT**
-**SQL thuần**
-```sql
-SELECT COUNT(id) FROM users;
-```
+## .count() (dùng để đếm)
+**Ex**
 ```python
 from sqlalchemy import func
 
-stmt = select(func.count(User.id))
+stmt = select(func.count(User.id)) # SELECT COUNT(id) FROM users
 ```
 ### .now()
 ```bash

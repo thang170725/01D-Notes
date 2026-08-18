@@ -6,10 +6,13 @@
   - [DROP DATABASE (xóa database)](#drop-database-xóa-database)
   - [ALTER DATABASE ... rename to ... (sửa tên database)](#alter-database--rename-to--sửa-tên-database)
 - [Schema](#schema)
-  - [information\_schema](#information_schema)
-    - [information\_schema.tables (Lấy dữ liệu từ bảng tables nằm trong schema information\_schema)](#information_schematables-lấy-dữ-liệu-từ-bảng-tables-nằm-trong-schema-information_schema)
+  - [information\_schema (PostgreSQL có một hệ thống các bảng đặc biệt gọi là Information Schema. Nó chứa thông tin về chính database của bạn)](#information_schema-postgresql-có-một-hệ-thống-các-bảng-đặc-biệt-gọi-là-information-schema-nó-chứa-thông-tin-về-chính-database-của-bạn)
+    - [.tables (dùng để xem thông tin về các bảng trong database)](#tables-dùng-để-xem-thông-tin-về-các-bảng-trong-database)
       - [table\_name (Đây là column của information\_schema.tables)](#table_name-đây-là-column-của-information_schematables)
       - [table\_schema (là một column của information\_schema.tables)](#table_schema-là-một-column-của-information_schematables)
+    - [.column (xem thông tin về cột của các bảng trong)](#column-xem-thông-tin-về-cột-của-các-bảng-trong)
+  - [Ask](#ask)
+    - [MySQL, SQL Server có schema không](#mysql-sql-server-có-schema-không)
     - [Vậy public là gì?](#vậy-public-là-gì)
     - [Tại sao lại cần Schema?](#tại-sao-lại-cần-schema)
 - [Table](#table)
@@ -72,8 +75,7 @@
     - [BEFORE và AFTER](#before-và-after)
     - [OLD và NEW](#old-và-new)
   - [Tại sao trigger function phải RETURN NEW?](#tại-sao-trigger-function-phải-return-new)
-- [Practices](#practices)
-  - [Xem cấu trúc bảng của một schema](#xem-cấu-trúc-bảng-của-một-schema)
+  - [Xem cấu trúc cột của 1 bảng](#xem-cấu-trúc-cột-của-1-bảng)
 ---
 # PostgreSQL Introduction
 # Database
@@ -111,11 +113,54 @@ Bạn có thể hình dung:
        └── Schema
             └── Table
 -> schema giống như một cái folder để phân loại table trong database.
+
+Database Schema là gì?
+
+Schema là cấu trúc hiện tại của database.
+
+Ví dụ PostgreSQL hiện tại có:
+
+database: document_db
+
+
+table: documents
+
+
++----+-------------+
+| id | OCR_DOC_ID  |
++----+-------------+
+| 1  | ABC001      |
+| 2  | ABC002      |
++----+-------------+
+
+Cấu trúc của bảng:
+
+documents
+├── id          INTEGER
+└── OCR_DOC_ID  VARCHAR
+
+Đây chính là database schema hiện tại.
+
+Nó mô tả:
+
+Có những table nào?
+Table có những column nào?
+Kiểu dữ liệu là gì?
+Primary key là gì?
+Foreign key là gì?
+Index nào tồn tại?
+Constraint nào tồn tại?
+
+Ví dụ:
+
+CREATE TABLE documents (
+    id INTEGER PRIMARY KEY,
+    OCR_DOC_ID VARCHAR
+);
+
+Đây là SQL tạo ra schema.
 ```
-## information_schema
-```bash
-PostgreSQL có một hệ thống các bảng đặc biệt gọi là Information Schema. Nó chứa thông tin về chính database của bạn.
-```
+## information_schema (PostgreSQL có một hệ thống các bảng đặc biệt gọi là Information Schema. Nó chứa thông tin về chính database của bạn)
 **Ex**
 ```bash
 test
@@ -133,7 +178,7 @@ PostgreSQL cần lưu metadata kiểu:
     - ...
 -> Bạn có thể truy vấn những thông tin đó thông qua information_schema.
 ```
-### information_schema.tables (Lấy dữ liệu từ bảng tables nằm trong schema information_schema)
+### .tables (dùng để xem thông tin về các bảng trong database)
 **Ex**
 ```sql
 SELECT * FROM information_schema.tables;
@@ -154,333 +199,42 @@ SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'test';
 
-Có thể tưởng tượng PostgreSQL làm:
-
-information_schema.tables
-
-
-┌──────────────┬─────────────┐
-│ table_schema │ table_name  │
-├──────────────┼─────────────┤
-│ public       │ users       │
-│ public       │ orders      │
-│ test         │ products    │
-│ test         │ logs        │
-└──────────────┴─────────────┘
-              ↓
-        WHERE table_schema = 'test'
-              ↓
-┌──────────────┬─────────────┐
-│ table_schema │ table_name  │
-├──────────────┼─────────────┤
-│ test         │ products    │
-│ test         │ logs        │
-└──────────────┴─────────────┘
-              ↓
-       SELECT table_name
-              ↓
-products
-logs
-7. Tại sao không viết SELECT tables?
-
-Bởi vì:
-
-tables
-
-là table, còn:
-
-table_name
-
-là column.
-
-SQL có cấu trúc:
-
-SELECT column
-FROM schema.table
-WHERE column = value;
-
-Ví dụ:
-
-SELECT table_name
-FROM information_schema.tables
-WHERE table_schema = 'test';
-8. information_schema có những gì?
-
-Đây mới là phần bạn nên học.
-
-Không chỉ có:
-
-information_schema.tables
-
-mà còn có nhiều view khác.
-
-Ví dụ:
-
-Xem columns
-SELECT *
-FROM information_schema.columns;
-
-Bạn sẽ thấy những thông tin như:
-
-table_schema
-table_name
-column_name
-data_type
-is_nullable
-column_default
-...
-
-Ví dụ:
-
+-- Có thể tưởng tượng PostgreSQL làm:
+-- information_schema.tables
+-- ┌──────────────┬─────────────┐
+-- │ table_schema │ table_name  │
+-- ├──────────────┼─────────────┤
+-- │ public       │ users       │
+-- │ public       │ orders      │
+-- │ test         │ products    │
+-- │ test         │ logs        │
+-- └──────────────┴─────────────┘
+--   ↓
+-- WHERE table_schema = 'test'
+--   ↓
+-- ┌──────────────┬─────────────┐
+-- │ table_schema │ table_name  │
+-- ├──────────────┼─────────────┤
+-- │ test         │ products    │
+-- │ test         │ logs        │
+-- └──────────────┴─────────────┘
+--   ↓
+--    SELECT table_name
+--   ↓
+-- products
+-- logs
+```
+### .column (xem thông tin về cột của các bảng trong)
+**Ex: xem kiểu dữ liệu của các field trong tất cả table thuộc một schema PostgreSQL**
+```sql
 SELECT
     table_name,
     column_name,
     data_type
 FROM information_schema.columns
-WHERE table_schema = 'test';
-
-Có thể trả:
-
-table_name	column_name	data_type
-users	id	integer
-users	name	character varying
-users	age	integer
-products	id	integer
-products	price	numeric
-9. information_schema.tables và information_schema.columns
-
-Bạn có thể nhớ như thế này:
-
-information_schema
-│
-├── tables
-│   ├── table_catalog
-│   ├── table_schema
-│   ├── table_name
-│   └── table_type
-│
-├── columns
-│   ├── table_schema
-│   ├── table_name
-│   ├── column_name
-│   ├── data_type
-│   └── ...
-│
-├── views
-│
-├── routines
-│
-├── table_constraints
-│
-├── key_column_usage
-│
-└── ...
-
-Đây là metadata của database.
-
-10. Một điểm rất quan trọng: schema khác database
-
-Bạn đang có:
-
-WHERE table_schema = 'test'
-
-test ở đây không nhất thiết là database.
-
-Nó là schema.
-
-Ví dụ PostgreSQL:
-
-Database: company_db
-
-
-    ├── public
-    │   ├── users
-    │   └── orders
-    │
-    └── test
-        ├── users_test
-        └── orders_test
-
-Database:
-
-company_db
-
-Schema:
-
-public
-test
-
-Table:
-
-users
-orders
-users_test
-orders_test
-
-Vì vậy:
-
-SELECT table_name
-FROM information_schema.tables
-WHERE table_schema = 'test';
-
-là:
-
-Trong database hiện tại, tìm các table thuộc schema test.
-
-11. Bạn có thể query metadata rất mạnh
-
-Ví dụ bạn muốn biết tất cả table:
-
-SELECT
-    table_schema,
-    table_name,
-    table_type
-FROM information_schema.tables;
-
-Chỉ lấy table thật, không lấy view:
-
-SELECT
-    table_schema,
-    table_name
-FROM information_schema.tables
-WHERE table_type = 'BASE TABLE';
-
-Chỉ lấy schema test:
-
-SELECT
-    table_name
-FROM information_schema.tables
-WHERE table_schema = 'test';
-12. Muốn xem column của một table
-
-Ví dụ:
-
-SELECT
-    column_name,
-    data_type,
-    is_nullable
-FROM information_schema.columns
-WHERE table_schema = 'test'
-  AND table_name = 'users';
-
-Kết quả có thể:
-
-column_name	data_type	is_nullable
-id	integer	NO
-name	character varying	YES
-age	integer	YES
-
-Bạn có thể đọc:
-
-column_name
-    ↓
-Tên column
-
-
-data_type
-    ↓
-Kiểu dữ liệu
-
-
-is_nullable
-    ↓
-Có cho phép NULL không
-13. Cái này rất quan trọng với database manager của bạn
-
-Nếu mục tiêu của bạn là xây database_manager_service, thì information_schema cực kỳ hữu ích.
-
-Ví dụ user gửi:
-
-database = company_db
-schema = test
-
-Service của bạn có thể chạy:
-
-SELECT table_name
-FROM information_schema.tables
-WHERE table_schema = %s;
-
-Python:
-
-cursor.execute(
-    """
-    SELECT table_name
-    FROM information_schema.tables
-    WHERE table_schema = %s
-    """,
-    ("test",)
-)
-
-
-tables = cursor.fetchall()
-
-Sau đó bạn biết:
-
-[
-    ("users",),
-    ("orders",),
-    ("products",)
-]
-
-Rồi tiếp tục lấy column:
-
-cursor.execute(
-    """
-    SELECT
-        column_name,
-        data_type,
-        is_nullable
-    FROM information_schema.columns
-    WHERE table_schema = %s
-      AND table_name = %s
-    """,
-    ("test", "users")
-)
-
-Bạn có thể xây thành API:
-
-GET /schemas
-GET /schemas/test/tables
-GET /schemas/test/tables/users/columns
-
-Đây chính là cách các database management tool lấy metadata để hiển thị cấu trúc database.
-
-Cách học phần này
-
-Bạn không cần học thuộc lòng information_schema.tables ngay. Hãy nhớ mô hình:
-
-DATABASE
-   │
-   ├── SCHEMA
-   │      │
-   │      ├── TABLE
-   │      │      ├── COLUMN
-   │      │      ├── COLUMN
-   │      │      └── COLUMN
-   │      │
-   │      └── TABLE
-   │
-   └── SCHEMA
-
-và:
-
-information_schema
-        │
-        ├── tables
-        │     └── table_name
-        │     └── table_schema
-        │
-        └── columns
-              └── column_name
-              └── table_name
-              └── data_type
-
-information_schema.tables là một bảng/view chứa metadata về table; table_name và table_schema là các column trong đó. Khi bạn hiểu được cấu trúc này thì những câu SQL kiểu trên sẽ dễ đọc hơn rất nhiều.
-
-Bạn có thể tiếp tục đào sâu:
-
-Phân biệt schema, table và column bằng ví dụ PostgreSQL
-Viết truy vấn lấy cấu trúc đầy đủ của một table
+WHERE table_schema = 'ten_schema'
+ORDER BY table_name, ordinal_position;
+```
 ## Ask
 ### MySQL, SQL Server có schema không
 **MySQL**
@@ -1841,6 +1595,7 @@ Tiếp tục khám phá:
 
 Thực hành trigger cập nhật updated_at
 Viết trigger kiểm tra dữ liệu bằng IF
+```
 # Practices
 ## Xem cấu trúc bảng của một schema
 ```sql
@@ -1848,3 +1603,8 @@ SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'test';
 ```
+## Xem cấu trúc cột của 1 bảng
+SELECT column_name
+FROM information_schema.columns
+WHERE table_schema = 'test'
+  AND table_name = 'users';

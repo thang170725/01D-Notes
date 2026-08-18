@@ -6,7 +6,8 @@
   - [Phishing domain](#phishing-domain)
   - [Expired domain reuse](#expired-domain-reuse)
   - [Phòng thủ cơ bản](#phòng-thủ-cơ-bản)
-  - [Domain website (Trong mảng website)](#domain-website-trong-mảng-website)
+- [Website Terminology (thuật ngữ mảng website)](#website-terminology-thuật-ngữ-mảng-website)
+  - [Domain website (Được hiểu là một tên miền (url) trỏ tới website)](#domain-website-được-hiểu-là-một-tên-miền-url-trỏ-tới-website)
 - [DNS (Domain Name System - domain → IP)](#dns-domain-name-system---domain--ip)
 - [Subdomain](#subdomain)
 - [ERP (Enterprise Resource Planning)](#erp-enterprise-resource-planning)
@@ -35,10 +36,8 @@
 - Không public subdomain dev
 - HTTPS + HSTS
 ```
-## Domain website (Trong mảng website)
-```bash
-Được hiểu là một tên miền (url - trỏ tới website)
-```
+# Website Terminology (thuật ngữ mảng website)
+## Domain website (Được hiểu là một tên miền (url) trỏ tới website)
 **Cấu trúc một domain**
 ```bash
 www.sub.example.com

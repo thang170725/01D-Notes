@@ -26,6 +26,15 @@ logging dùng để làm gì?
         - Dữ liệu đầu vào là gì
         - Mất bao lâu để xử lý
 ```
+**Các mức log trong logging**
+```bash
+5 mức chính theo thứ tự từ nhẹ → nghiêm trọng:
+    1. DEBUG ← chi tiết để developer debug
+    2. INFO ← chương trình đang chạy bình thường
+    3. WARNING ← có vấn đề nhưng chương trình vẫn tiếp tục
+    4. ERROR ← một thao tác đã thất bại
+    5. CRITICAL ← lỗi cực kỳ nghiêm trọng, có thể khiến hệ thống không thể tiếp tục
+```
 ## stdout (standard output)
 ```bash
 là luồng xuất chuẩn của chương trình. Thông thường, nó được hiển thị trên cửa sổ Terminal/Command Prompt.

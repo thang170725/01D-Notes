@@ -1,10 +1,14 @@
+- [Class Introduction (chứa các phương pháp xử lý trong lớp)](#class-introduction-chứa-các-phương-pháp-xử-lý-trong-lớp)
 - [class](#class)
   - [__dict__](#dict)
   - [__init__() \& __str__() \& __len__()](#init--str--len)
   - [__mro__](#mro)
-  - [__call__()](#call)
-  - [__getitem__()](#getitem)
-  - [__add__() \& __sub__() \& __mul__() \& __truediv__()](#add--sub--mul--truediv)
+  - [__call__() (Toán tử gọi object như hàm)](#call-toán-tử-gọi-object-như-hàm)
+  - [__getitem__() (Toán tử truy cập index)](#getitem-toán-tử-truy-cập-index)
+  - [__add__() (Tự động được gọi đến khi dùng toán tử +.)](#add-tự-động-được-gọi-đến-khi-dùng-toán-tử-)
+  - [__sub__() (Tự động được gọi đến khi dùng toán tử -)](#sub-tự-động-được-gọi-đến-khi-dùng-toán-tử--)
+  - [__mul__() (Tự động được gọi đến khi dùng toán tử \*)](#mul-tự-động-được-gọi-đến-khi-dùng-toán-tử-)
+  - [__truediv__() (Tự động được gọi đến khi dùng toán tử /)](#truediv-tự-động-được-gọi-đến-khi-dùng-toán-tử-)
   - [__floordiv__() \& __mod__() \&  __divmod__()](#floordiv--mod---divmod)
   - [__iadd()__ \& __isub__() \& __imul__() \& __itruediv__() __iffloordiv__ \& __imod__() \& __ipow__()](#iadd--isub--imul--itruediv-iffloordiv--imod--ipow)
   - [__lt__() \& __gt__() \& __eq__() \& __ne__() \& __le__() \& __ge__()](#lt--gt--eq--ne--le--ge)
@@ -19,6 +23,21 @@
   - [__setitem__() \& delitem\_\_() \& __contains__()](#setitem--delitem__--contains)
   - [__iter__() \& __next__()](#iter--next)
   - [__enter__() \& exit()](#enter--exit)
+  - [__getattr__() (khi attribute không tồn tại)](#getattr-khi-attribute-không-tồn-tại)
+  - [__getattribute__() (mọi lần truy cập attribute)](#getattribute-mọi-lần-truy-cập-attribute)
+  - [__delattr__()](#delattr)
+  - [__int__() (int(obj))](#int-intobj)
+  - [__float__() (float(obj))](#float-floatobj)
+  - [__complex__() (complex(obj))](#complex-complexobj)
+  - [__index__() (dùng trong slicing)](#index-dùng-trong-slicing)
+  - [__new__() (tạo instance (trước __init__))](#new-tạo-instance-trước-init)
+  - [__del__() (destructor)](#del-destructor)
+  - [__hash__() (dùng làm key dict / set)](#hash-dùng-làm-key-dict--set)
+  - [__hash__() (dùng làm key dict / set)](#hash-dùng-làm-key-dict--set-1)
+  - [__class__](#class-1)
+  - [__slots__](#slots)
+  - [__sizeof__()](#sizeof)
+  - [__dir__()](#dir)
   - [__get__() \& __set__() \& __delete()__](#get--set--delete)
   - [__set\_name__()](#set_name)
   - [__name__](#name)
@@ -31,11 +50,12 @@
   - [duck typing (Python-style)](#duck-typing-python-style)
 - [callable()](#callable)
 - [hasattr() (dùng để kiểm tra xem một đối tượng (object) có thuộc tính (attribute) hoặc phương thức (method) hay không)](#hasattr-dùng-để-kiểm-tra-xem-một-đối-tượng-object-có-thuộc-tính-attribute-hoặc-phương-thức-method-hay-không)
-- [getattr()](#getattr)
+- [getattr() ( dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi)](#getattr--dùng-để-lấy-một-attribute-của-object-bằng-tên-được-truyền-dưới-dạng-chuỗi)
+- [dir() (dùng để xem một object có những thuộc tính (attribute), method, tên biến... nào)](#dir-dùng-để-xem-một-object-có-những-thuộc-tính-attribute-method-tên-biến-nào)
 ---
+# Class Introduction (chứa các phương pháp xử lý trong lớp)
 ```bash
-- Nơi chứa các phương pháp xử lý trong lớp.
-- Class có 5 tiêu chí:
+Class có 5 tiêu chí:
     1. Đóng gói (Encapsulation)
     2. Kế thừa (Inheritance)
     3. Đa hình (Polymorphism)
@@ -77,7 +97,16 @@ class User:
         pass
 u = User("An", 20)
 print(u.__dict__) # {'name': 'An', 'age': 20}
-print(User.__dict__) # {'__module__': '__main__', '__init__': <function User.__init__ at 0x7a9eec38ac20>, 'calc_age': <function User.calc_age at 0x7a9eec38bac0>, 'calc_salary': <function User.calc_salary at 0x7a9eec38bd00>, '__dict__': <attribute '__dict__' of 'User' objects>, '__weakref__': <attribute '__weakref__' of 'User' objects>, '__doc__': None}
+print(User.__dict__) 
+# {
+#   '__module__': '__main__', 
+#   '__init__': <function User.__init__ at 0x7a9eec38ac20>, 
+#   'calc_age': <function User.calc_age at 0x7a9eec38bac0>, 
+#   'calc_salary': <function User.calc_salary at 0x7a9eec38bd00>, 
+#   '__dict__': <attribute '__dict__' of 'User' objects>,
+#   '__weakref__': <attribute '__weakref__' of 'User' objects>, 
+#   '__doc__': None
+# }
 ```
 **Ex2: Lấy các phương thức trong class**
 ```python
@@ -118,10 +147,7 @@ print(p)
 print(len(p))
 ```
 ## __mro__
-## __call__()
-```bash
-- __call__ : Toán tử gọi object như hàm
-```
+## __call__() (Toán tử gọi object như hàm)
 **Ex**
 ```python
 class Counter:
@@ -131,10 +157,7 @@ class Counter:
 c = Counter()
 c()  # Object được gọi như hàm!
 ```
-## __getitem__()
-```bash
-- __getitem__   : Toán tử truy cập index.
-```
+## __getitem__() (Toán tử truy cập index)
 **Ex**
 ```python
 class MyList:
@@ -147,14 +170,10 @@ class MyList:
 m = MyList([10, 20, 30])
 print(m[1])  # 20
 ```
-## __add__() & __sub__() & __mul__() & __truediv__()
-**Syn**
-```bash
-- __add__       : Tự động được gọi đến khi dùng toán tử +.
-- __sub__       : Tự động được gọi đến khi dùng toán tử -.
-- __mul__       : Tự động được gọi đến khi dùng toán tử *.
-- __truediv__   : Tự động được gọi đến khi dùng toán tử /.
-```
+## __add__() (Tự động được gọi đến khi dùng toán tử +.)
+## __sub__() (Tự động được gọi đến khi dùng toán tử -)
+## __mul__() (Tự động được gọi đến khi dùng toán tử *)
+## __truediv__() (Tự động được gọi đến khi dùng toán tử /)
 **Ex: cộng, trừ, nhân, chia phân số**
 ```python
 class Fraction:
@@ -407,21 +426,21 @@ for x in c:
 # 3
 ```
 ## __enter__() & exit()
-__getattr__()     # khi attribute không tồn tại
-__getattribute__()# mọi lần truy cập attribute    
-__delattr__()
-__int__()     # int(obj)
-__float__()   # float(obj)
-__complex__() # complex(obj)
-__index__()   # dùng trong slicing
-__new__()     # tạo instance (trước __init__)
-__del__()     # destructor
-__hash__()    # dùng làm key dict / set
-__hash__()    # dùng làm key dict / set
-__class__
-__slots__
-__sizeof__()
-__dir__()
+## __getattr__() (khi attribute không tồn tại)
+## __getattribute__() (mọi lần truy cập attribute)  
+## __delattr__()
+## __int__() (int(obj))
+## __float__() (float(obj))
+## __complex__() (complex(obj))
+## __index__() (dùng trong slicing)
+## __new__() (tạo instance (trước __init__))
+## __del__() (destructor)
+## __hash__() (dùng làm key dict / set)
+## __hash__() (dùng làm key dict / set)
+## __class__
+## __slots__
+## __sizeof__()
+## __dir__()
 ## __get__() & __set__() & __delete()__
 **Syn**
 ```bash
@@ -722,132 +741,39 @@ s = Student()
 print(hasattr(s, "hello")) # True
 print(hasattr(s, "name")) # False
 ```
-# getattr()
-getattr() trong Python dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi.
-
-Cú pháp:
-
+# getattr() ( dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi)
+**Syn**
+```bash
 getattr(object, "attribute_name")
-1. Ví dụ đơn giản
+```
+**Ex**
+```python
 class User:
     name = "Thang"
 
-
 user = User()
-
 
 print(user.name)
-
-Tương đương với:
-
-print(getattr(user, "name"))
-
-Kết quả:
-
-Thang
-
-Điểm quan trọng là "name" ở đây là string, nên bạn có thể truyền biến:
-
-attribute = "name"
-
-
-print(getattr(user, attribute))
-2. Vì sao dùng getattr() trong logging?
-
-Trong code của bạn:
-
-log_level = "INFO"
-
-
-level = getattr(logging, log_level)
-
-
-print(level)
-
-Kết quả:
-
-20
-
-Bởi vì trong module logging có:
-
-logging.DEBUG    # 10
-logging.INFO     # 20
-logging.WARNING  # 30
-logging.ERROR    # 40
-logging.CRITICAL # 50
-
-Nên:
-
-getattr(logging, "INFO")
-
-thực chất là lấy:
-
-logging.INFO
-
-Và:
-
-getattr(logging, "ERROR")
-
-tương đương:
-
-logging.ERROR
-
-Đây chính là lý do code:
-
-log_level = os.getenv("LOG_LEVEL", "INFO").upper()
-
-
-logging.basicConfig(
-    level=getattr(logging, log_level),
-)
-
-có thể biến:
-
-LOG_LEVEL=DEBUG
-
-thành:
-
-logging.DEBUG
-
-một cách động.
-
-3. getattr() có giá trị mặc định
-
-Bạn có thể truyền argument thứ 3:
-
-getattr(object, "attribute", default)
-
-Ví dụ:
-
-class User:
+print(getattr(user, "name")) # Thang
+# Điểm quan trọng là "name" ở đây là string, nên bạn có thể truyền biến
+```
+# dir() (dùng để xem một object có những thuộc tính (attribute), method, tên biến... nào)
+**Ex**
+```python
+class Person:
     name = "Thang"
 
+    def hello(self):
+        print("Hello")
 
-user = User()
-
-
-print(getattr(user, "name", "Unknown"))
-print(getattr(user, "age", 18))
-
-Kết quả:
-
-Thang
-18
-
-Nếu không có age, thay vì lỗi AttributeError, nó trả về 18.
-
-Vì vậy với logging bạn có thể viết:
-
-level = getattr(logging, log_level, logging.INFO)
-
-Nếu .env có:
-
-LOG_LEVEL=ABC
-
-thì:
-
-getattr(logging, "ABC", logging.INFO)
-
-sẽ trả về logging.INFO.
-
-Đây là cách khá hay để viết setup_logging() gọn hơn.
+person = Person()
+print(dir(person))
+# [
+#     '__class__',
+#     '__dict__',
+#     '__module__',
+#     ...
+#     'hello',
+#     'name'
+# ]
+```
