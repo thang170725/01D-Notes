@@ -6,7 +6,7 @@
   - [.start()](#start)
   - [.end()](#end)
   - [.group()](#group)
-- [compile() (dùng để biên dịch (compile) một biểu thức chính quy (regex) thành một đối tượng regex để có thể tái sử dụng nhiều lần mà không cần viết lại mẫu)](#compile-dùng-để-biên-dịch-compile-một-biểu-thức-chính-quy-regex-thành-một-đối-tượng-regex-để-có-thể-tái-sử-dụng-nhiều-lần-mà-không-cần-viết-lại-mẫu)
+  - [.fullmatch() (dùng để kiểm tra toàn bộ chuỗi có khớp với một pattern hay không)](#fullmatch-dùng-để-kiểm-tra-toàn-bộ-chuỗi-có-khớp-với-một-pattern-hay-không)
 - [Practices](#practices)
   - [Bắt email](#bắt-email)
   - [Nhập một số nguyên có 5 chữ số](#nhập-một-số-nguyên-có-5-chữ-số)
@@ -158,6 +158,213 @@ for m in re.finditer(r"\d+", text):
 # 56 9
 # Lấy được nội dung và vị trí.
 ```
+## .fullmatch() (dùng để kiểm tra toàn bộ chuỗi có khớp với một pattern hay không)
+**Syn**
+```bash
+re.fullmatch(pattern, string)
+
+- Output
+    + Match object → khớp
+    + None → không khớp
+```
+**Ex: Kiểm tra toàn bộ chuỗi chỉ gồm chữ số**
+```python
+import re
+
+if re.fullmatch(r"\d+", "12345"):
+    print("Đây là số")
+```
+```
+
+1. fullmatch() khác search() như thế nào?
+
+Đây là điểm rất quan trọng.
+
+search()
+re.search(r"\d+", "abc123xyz")
+
+→ khớp, vì nó tìm thấy 123 ở bên trong chuỗi.
+
+fullmatch()
+re.fullmatch(r"\d+", "abc123xyz")
+
+→ không khớp.
+
+Vì yêu cầu của fullmatch() là:
+
+TOÀN BỘ:
+abc123xyz
+^^^^^^^^^
+
+phải khớp pattern \d+.
+
+3. Liên quan trực tiếp đến case của bạn
+
+Bạn muốn kiểm tra:
+
+"594666.67" → số
+"gia123.com" → không phải số
+
+Có thể dùng:
+
+import re
+
+
+pattern = r"-?\d+(\.\d+)?"
+
+Sau đó:
+
+if re.fullmatch(pattern, val_str):
+    print("Là số")
+else:
+    print("Không phải số")
+Các trường hợp
+re.fullmatch(r"-?\d+(\.\d+)?", "123")
+
+→ Match ✅
+
+re.fullmatch(r"-?\d+(\.\d+)?", "594666.67")
+
+→ Match ✅
+
+re.fullmatch(r"-?\d+(\.\d+)?", "-123.45")
+
+→ Match ✅
+
+Nhưng:
+
+re.fullmatch(r"-?\d+(\.\d+)?", "gia123.com")
+
+→ None ❌
+
+re.fullmatch(r"-?\d+(\.\d+)?", "abc123")
+
+→ None ❌
+
+re.fullmatch(r"-?\d+(\.\d+)?", "123abc")
+
+→ None ❌
+
+4. Giải thích pattern
+
+Pattern:
+
+r"-?\d+(\.\d+)?"
+
+tách ra:
+
+-?
+-
+
+Dấu - có thể xuất hiện 0 hoặc 1 lần.
+
+Nên cả hai đều được:
+
+123
+-123
+\d+
+\d
+
+= một chữ số từ 0-9.
+
++
+
+= xuất hiện ít nhất 1 lần.
+
+Vậy:
+
+\d+
+
+khớp:
+
+1
+12
+123
+594666
+(\.\d+)?
+
+Phần này dành cho số thập phân:
+
+.
+
+Nhưng trong regex, . có ý nghĩa đặc biệt nên phải viết:
+
+\.
+
+sau đó:
+
+\d+
+
+→ phải có ít nhất một chữ số sau dấu chấm.
+
+Ví dụ:
+
+.67
+.5
+.123
+
+Toàn bộ:
+
+(\.\d+)?
+
+có ? nên phần decimal là optional.
+
+Do đó:
+
+123
+123.45
+
+đều hợp lệ.
+
+5. Nếu chỉ muốn kiểm tra số dương
+
+Không cho phép -:
+
+pattern = r"\d+(\.\d+)?"
+
+Ví dụ:
+
+123       ✅
+594666.67 ✅
+-123      ❌
+6. Nếu muốn bắt buộc phải có phần thập phân
+
+Ví dụ chỉ chấp nhận:
+
+123.45
+594666.67
+
+thì:
+
+pattern = r"-?\d+\.\d+"
+
+Khi đó:
+
+123        ❌
+123.45     ✅
+-123.45    ✅
+7. Với parser của bạn
+
+Tôi sẽ viết:
+
+import re
+
+
+NUMBER_PATTERN = r"-?\d+(\.\d+)?"
+
+
+if re.fullmatch(NUMBER_PATTERN, val_str):
+    return int(float(val_str))
+
+Nhưng nhớ rằng:
+
+594666.67 → 594666
+
+là cắt phần thập phân.
+
+Nếu bạn muốn làm tròn thì logic sẽ khác.
+
+Một điểm nữa: nếu OCR của bạn có dạng "594,666.67" hoặc "594.666,67" thì pattern trên không match. Khi đó cần thiết kế regex theo đúng format số mà dữ liệu OCR của bạn thực tế sinh ra.
 # compile() (dùng để biên dịch (compile) một biểu thức chính quy (regex) thành một đối tượng regex để có thể tái sử dụng nhiều lần mà không cần viết lại mẫu)
 ```bash
 Khi nào nên dùng compile()?

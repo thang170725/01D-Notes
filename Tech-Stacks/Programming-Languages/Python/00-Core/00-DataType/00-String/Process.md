@@ -6,7 +6,7 @@
   - [.count() (Đếm xem một ký tự nào đó xuất hiện bao nhiêu lần)](#count-đếm-xem-một-ký-tự-nào-đó-xuất-hiện-bao-nhiêu-lần)
 - [Check (Kiểm tra)](#check-kiểm-tra)
   - [in (Kiểm tra chuỗi này có nằm trong chuỗi kia hay không)](#in-kiểm-tra-chuỗi-này-có-nằm-trong-chuỗi-kia-hay-không)
-  - [isdigit() (Kiểm tra xem có phải kiểu số không. Trả về true false)](#isdigit-kiểm-tra-xem-có-phải-kiểu-số-không-trả-về-true-false)
+  - [isdigit() (Kiểm tra xem có phải kiểu số không)](#isdigit-kiểm-tra-xem-có-phải-kiểu-số-không)
   - [.isidentifier() (kiểm tra chuỗi là một định danh hợp lệ)](#isidentifier-kiểm-tra-chuỗi-là-một-định-danh-hợp-lệ)
   - [.isupper() \& .islower()](#isupper--islower)
   - [.startswith() (Kiểm tra xem chuỗi có bắt đầu bằng một chuỗi hay một ký tự nào đó không)](#startswith-kiểm-tra-xem-chuỗi-có-bắt-đầu-bằng-một-chuỗi-hay-một-ký-tự-nào-đó-không)
@@ -91,10 +91,12 @@ print("thang" in a) # True
 a = "le duc thang"
 print("thang" not in a) # False
 ```
-## isdigit() (Kiểm tra xem có phải kiểu số không. Trả về true false)
+## isdigit() (Kiểm tra xem có phải kiểu số không)
 **Syn**
 ```bash
 <variable>.isdigit()
+
+- Output: Trả về true false
 ```
 ## .isidentifier() (kiểm tra chuỗi là một định danh hợp lệ)
 ```bash

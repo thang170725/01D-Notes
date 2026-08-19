@@ -1,6 +1,6 @@
 - [function](#function)
-  - [\*args](#args)
-  - [\*\*kwargs](#kwargs)
+  - [\*args (Hàm sẽ nhận được một bộ đối số và có thể truy cập theo list)](#args-hàm-sẽ-nhận-được-một-bộ-đối-số-và-có-thể-truy-cập-theo-list)
+  - [\*\*kwargs (Hàm sẽ nhận được một từ điển đối số và có thể truy cập được vào các mục tương ứng)](#kwargs-hàm-sẽ-nhận-được-một-từ-điển-đối-số-và-có-thể-truy-cập-được-vào-các-mục-tương-ứng)
   - [Keyword Arguments](#keyword-arguments)
   - [Keyword-Only Arguments](#keyword-only-arguments)
   - [lambda (hàm ẩn danh)](#lambda-hàm-ẩn-danh)
@@ -10,20 +10,14 @@
 - [map](#map)
 ---
 # function
-## *args
-```bash
-- Hàm sẽ nhận được một bộ đối số và có thể truy cập theo list.
-```
+## *args (Hàm sẽ nhận được một bộ đối số và có thể truy cập theo list)
 **Ex**
 ```python
 def my_function(*kids):
   print("The youngest child is " + kids[2])
 my_function("Emil", "Tobias", "Linus") # The youngest child is Linus
 ```
-## **kwargs
-```bash
-- Hàm sẽ nhận được một từ điển đối số và có thể truy cập được vào các mục tương ứng.
-```
+## **kwargs (Hàm sẽ nhận được một từ điển đối số và có thể truy cập được vào các mục tương ứng)
 **Ex**
 ```python
 def my_function(**kid):

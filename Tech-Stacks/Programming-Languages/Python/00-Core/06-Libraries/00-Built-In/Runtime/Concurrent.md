@@ -5,6 +5,9 @@
 - [Future (đối tượng đại diện cho một công việc đang chạy)](#future-đối-tượng-đại-diện-cho-một-công-việc-đang-chạy)
   - [as\_completed()](#as_completed)
 - [ProcessPoolExecutor (dùng để chạy nhiều công việc cùng lúc bằng nhiều tiến trình (process))](#processpoolexecutor-dùng-để-chạy-nhiều-công-việc-cùng-lúc-bằng-nhiều-tiến-trình-process)
+- [Nếu chạy bình thường: 2s -\> 2s -\> 2s -\> 2s -\> 8 giây](#nếu-chạy-bình-thường-2s---2s---2s---2s---8-giây)
+- [Còn dùng 4 process: 2s. 1 2 3 4 cùng chạy Tổng ≈ 2 giây](#còn-dùng-4-process-2s-1-2-3-4-cùng-chạy-tổng--2-giây)
+  - [.submit()](#submit)
 ---
 # Concurrent Introduction (dùng để thực hiện lập trình đồng thời (concurrency), giúp chạy nhiều tác vụ cùng lúc mà không cần tự quản lý thread hay process)
 # futures
@@ -78,10 +81,8 @@ Cách 2: Có 5 người
 
 ProcessPoolExecutor chính là người quản lý việc chia công việc cho nhiều "người làm" (process).
 ```
-Ví dụ đơn giản nhất
-
-Giả sử mỗi công việc mất 2 giây.
-
+**Ex**
+```python
 from concurrent.futures import ProcessPoolExecutor
 import time
 
@@ -92,39 +93,10 @@ def work(x):
 with ProcessPoolExecutor(max_workers=4) as executor:
     results = executor.map(work, [1, 2, 3, 4])
 
-print(list(results))
-
-Kết quả
-
-[1, 4, 9, 16]
-
-Nếu chạy bình thường
-
-2s
-↓
-
-2s
-↓
-
-2s
-↓
-
-2s
-
-Tổng
-
-8 giây
-
-Còn dùng 4 process
-
-2s
-
-1 2 3 4 cùng chạy
-
-Tổng
-
-≈2 giây
-1. submit()
+print(list(results)) # [1, 4, 9, 16]
+# Nếu chạy bình thường: 2s -> 2s -> 2s -> 2s -> 8 giây
+# Còn dùng 4 process: 2s. 1 2 3 4 cùng chạy Tổng ≈ 2 giây
+## .submit()
 
 Thường người ta không dùng map() mà dùng
 

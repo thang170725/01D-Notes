@@ -51,7 +51,7 @@ os.getcwd()
 ```python
 import os
 
-print(os.cpu_count()) # 
+print(os.cpu_count()) 
 ```
 # os.path (Nhóm làm việc với đường dẫn)
 ## .dirname() (Lấy thư mục cha của file hoặc thư mục)

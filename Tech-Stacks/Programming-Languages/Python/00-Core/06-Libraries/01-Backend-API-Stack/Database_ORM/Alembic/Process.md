@@ -4,12 +4,13 @@
   - [alembic current (Kiểm tra database hiện tại đang ở migration/version nào)](#alembic-current-kiểm-tra-database-hiện-tại-đang-ở-migrationversion-nào)
   - [alembic\_version](#alembic_version)
   - [alembic\_version](#alembic_version-1)
+  - [alembic heads (Xem migration nào đang là HEAD mới nhất)](#alembic-heads-xem-migration-nào-đang-là-head-mới-nhất)
 - [op (operation object)](#op-operation-object)
   - [.create\_table()](#create_table)
   - [.drop\_table()](#drop_table)
   - [.add\_column()](#add_column)
   - [drop\_column()](#drop_column)
-  - [alter\_column()](#alter_column)
+  - [alter\_column() (thay đổi một column đã tồn tại)](#alter_column-thay-đổi-một-column-đã-tồn-tại)
   - [.create\_foreign\_key()](#create_foreign_key)
   - [.drop\_constraint()](#drop_constraint)
   - [.create\_index()](#create_index)
@@ -109,6 +110,22 @@ Database sau đó trở thành:
 ## alembic current (Kiểm tra database hiện tại đang ở migration/version nào)
 ```bash
 Nó không thay đổi database, chỉ đọc trạng thái hiện tại.
+
+alembic current → Hỏi: "Database đang ở đâu?"
+    Ví dụ: Migration history:
+        A
+        ↓
+        B
+        ↓
+        C (head)
+
+    Database hiện tại đang ở: A
+        Bạn chạy: alembic current → A
+
+    Sau đó: alembic upgrade head
+        Alembic chạy: A → B → C
+    
+    Chạy lại: alembic current → C (head)
 ```
 **Ex**
 ```bash
@@ -123,94 +140,7 @@ alembic current
 # đang là HEAD
 # Tức là database của bạn đã chạy đến migration mới nhất.
 ```
-Liên hệ với alembic upgrade head
 
-Hai lệnh này khác nhau:
-
-alembic current
-
-→ Hỏi: "Database đang ở đâu?"
-
-alembic upgrade head
-
-→ Ra lệnh: "Đưa database lên phiên bản mới nhất."
-
-Ví dụ:
-
-Migration history:
-
-
-A
-↓
-B
-↓
-C (head)
-
-Database hiện tại đang ở:
-
-A
-
-Bạn chạy:
-
-alembic current
-
-→
-
-A
-
-Sau đó:
-
-alembic upgrade head
-
-Alembic chạy:
-
-A → B → C
-
-Chạy lại:
-
-alembic current
-
-→
-
-C (head)
-Trong trường hợp của bạn
-
-Bạn vừa chạy:
-
-alembic upgrade head
-
-và thấy:
-
-Running upgrade de4d21dd12ae -> 3ee781b36280
-
-Bây giờ chạy:
-
-alembic current
-
-nếu thấy:
-
-3ee781b36280 (head)
-
-thì có nghĩa:
-
-Database của bạn đã ở đúng migration mới nhất.
-
-Một cách nhớ rất đơn giản
-alembic current
-        ↓
-"Đang ở đâu?"
-
-alembic history
-        ↓
-"Có những migration nào?"
-
-alembic upgrade head
-        ↓
-"Đi đến mới nhất."
-
-alembic downgrade -1
-        ↓
-"Lùi lại 1 migration."
 stamp trong Alembic có thể hiểu đơn giản là “đánh dấu database đang ở migration nào”.
 
 Vì vậy:
@@ -326,6 +256,7 @@ upgrade = làm thật
 stamp = chỉ nói cho Alembic biết trạng thái
 
 Với trường hợp bạn vừa chạy alembic upgrade head và thấy Running upgrade de4d21dd12ae -> 3ee781b36280, thì không cần stamp head nữa — Alembic đã tự cập nhật alembic_version rồi.
+## alembic heads (Xem migration nào đang là HEAD mới nhất)
 # op (operation object)
 ## .create_table()
 ```bash
@@ -370,18 +301,24 @@ Xóa cột
 ```bash
 op.drop_column("table_name", "age")
 ```
-## alter_column()
-```bash
-Để sửa cột.
-```
+## alter_column() (thay đổi một column đã tồn tại)
 **Ex**
-```python
+```bash
 op.alter_column(
     "users",
     "email",
     existing_type=sa.String(255),
-    nullable=False
+    nullable=False,
+    new_column_name="general_info_email",
+    schema='test'
 )
+
+- Input:
+    + "users": tên bảng
+    + "email": tên cột
+    + existing_type=sa.     : Kiểu dữ liệu hiện tại của column đang tồn tại trong database là gì
+    + new_column_name=str   : tên cột mới mới đổi tên thành
+    + schema=str    : tên schema
 ```
 ## .create_foreign_key()
 ```bash
