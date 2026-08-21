@@ -15,17 +15,19 @@
     - [\[\] \& .update()](#--update)
     - [\*\* (unpack dict)](#-unpack-dict)
 - [Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)](#set-không-được-sắp-xếp-theo-thứ-tự-không-thể-thay-đổi-và-không-cho-phép-các-giá-trị-trùng-lặp)
-  - [.clear()](#clear)
-  - [del](#del)
-  - [.remove()](#remove)
-  - [.discard()](#discard)
-  - [.intersection()](#intersection)
+  - [.clear() (Để xóa toàn bộ set)](#clear-để-xóa-toàn-bộ-set)
+  - [del (Để xóa toàn bộ set. Del sẽ xóa cả giá trị set và biến set)](#del-để-xóa-toàn-bộ-set-del-sẽ-xóa-cả-giá-trị-set-và-biến-set)
+  - [.remove() (Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa từ ném ra lỗi)](#remove-để-xóa-một-phần-tử-ra-khỏi-set-nếu-không-tìm-thấy-phần-tử-cần-xóa-từ-ném-ra-lỗi)
+  - [.discard() (Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa thì bỏ qua lệnh này)](#discard-để-xóa-một-phần-tử-ra-khỏi-set-nếu-không-tìm-thấy-phần-tử-cần-xóa-thì-bỏ-qua-lệnh-này)
+  - [.intersection() (Trả về một set mới chỉ chứa các phần tử có trong cả 2 set cũ)](#intersection-trả-về-một-set-mới-chỉ-chứa-các-phần-tử-có-trong-cả-2-set-cũ)
   - [\& (tìm phần tử chung)](#-tìm-phần-tử-chung)
-  - [.union()](#union)
+  - [.union() (Trả về một set mới với các giá trị phần tử là 2 set cũ)](#union-trả-về-một-set-mới-với-các-giá-trị-phần-tử-là-2-set-cũ)
   - [.add() (Để thêm một phần tử vào trong một set)](#add-để-thêm-một-phần-tử-vào-trong-một-set)
 - [.update() (Để thêm các mục từ tập hợp khác vào tập hợp hiện tại)](#update-để-thêm-các-mục-từ-tập-hợp-khác-vào-tập-hợp-hiện-tại)
   - [intersection\_update() (Chỉ giữ lại các phần tử trùng lặp, nhưng nó sẽ thay đổi tập hợp gốc thay vì trả về tập hợp mới)](#intersection_update-chỉ-giữ-lại-các-phần-tử-trùng-lặp-nhưng-nó-sẽ-thay-đổi-tập-hợp-gốc-thay-vì-trả-về-tập-hợp-mới)
   - [.pop() (xóa một mục, nhưng phương thức này sẽ xóa một mục ngẫu nhiên, do đó bạn không thể chắc chắn mục nào sẽ bị xóa)](#pop-xóa-một-mục-nhưng-phương-thức-này-sẽ-xóa-một-mục-ngẫu-nhiên-do-đó-bạn-không-thể-chắc-chắn-mục-nào-sẽ-bị-xóa)
+- [Practices](#practices)
+  - [Lấy giá trị ở set này có nhưng set khác không có](#lấy-giá-trị-ở-set-này-có-nhưng-set-khác-không-có)
 ---
 # Dictionary (lưu dữ liệu theo cặp key: value để tra cứu nhanh)
 ## {} & dict (Để tạo dict)
@@ -251,7 +253,6 @@ thisdict["color"] = "red"
 print(thisdict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964, 'color': 'red'}
 ```
 ### ** (unpack dict)
-
 # Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)
 ```bash
 Sử dụng set để:
@@ -274,10 +275,7 @@ print(thisset)
 # {True, 2, 'apple', 'banana', 'cherry'}
 # 1 không xuất hiện vì nó coi 1 và true là phần tử trùng lặp.
 ```
-## .clear()
-```bash
-Để xóa toàn bộ set.
-```
+## .clear() (Để xóa toàn bộ set)
 **Syn** 
 ```bash
 <variable>.clear()
@@ -289,10 +287,7 @@ mySet.clear()
 
 print(mySet) # set()
 ```
-## del
-```bash
-Để xóa toàn bộ set. Del sẽ xóa cả giá trị set và biến set.
-```
+## del (Để xóa toàn bộ set. Del sẽ xóa cả giá trị set và biến set)
 **Syn** 
 ```bash
 del <variable>
@@ -309,10 +304,7 @@ print(mySet)
 #     ^^^^^
 # NameError: name 'mySet' is not defined
 ```
-## .remove()
-```bash
-Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa từ ném ra lỗi.
-```
+## .remove() (Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa từ ném ra lỗi)
 **Syn** 
 ```bash
 <variable>.remove(value)
@@ -323,10 +315,7 @@ mySet= {"apple", "banana"}
 mySet.remove("banana")
 print(mySet) # {'apple'}
 ```
-## .discard()
-```bash
-Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa thì bỏ qua lệnh này.
-```
+## .discard() (Để xóa một phần tử ra khỏi set. Nếu không tìm thấy phần tử cần xóa thì bỏ qua lệnh này)
 **Syn**
 ```bash
 <variable>.discard(value)
@@ -337,10 +326,7 @@ mySet= {"apple", "banana"}
 mySet.discard("banana")
 print(mySet) # {'apple'}
 ```
-## .intersection()
-```bash
-Trả về một set mới chỉ chứa các phần tử có trong cả 2 set cũ.
-```
+## .intersection() (Trả về một set mới chỉ chứa các phần tử có trong cả 2 set cũ)
 **Syn** 
 ```bash
 <variable1>.intersection(<variable2>)
@@ -363,10 +349,7 @@ Set = mySet & orther
 
 print(Set) # {'Lemon', 'orange'}
 ```
-## .union()
-```bash
-Trả về một set mới với các giá trị phần tử là 2 set cũ.
-```
+## .union() (Trả về một set mới với các giá trị phần tử là 2 set cũ)
 **Syn**
 ```bash
 <variable>.union(<variable1>, <variable2>, …)
@@ -435,4 +418,12 @@ x = mySet.pop()
 
 print(x) # orange
 print(mySet) # {'apple', 'banana', 'Lemon', 'Passion'}
+```
+# Practices
+## Lấy giá trị ở set này có nhưng set khác không có
+```python
+a = set(["a", "b", "d", "f"])
+b = set(["d", "a", "c", "b"])
+
+print(a-b) # {'f'}
 ```

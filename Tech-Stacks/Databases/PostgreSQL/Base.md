@@ -434,9 +434,7 @@ SELECT * FROM users ORDER BY age DESC;
 ## LIMIT (Giới hạn số record)
 **Ex**
 ```sql
-SELECT *
-FROM users
-LIMIT 10;
+SELECT * FROM users LIMIT 10;
 ```
 ## OFFSET (Bỏ qua một số record)
 **Ex**

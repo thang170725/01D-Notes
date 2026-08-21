@@ -12,7 +12,7 @@
     - [Index (chỉ mục)](#index-chỉ-mục)
     - [UniqueConstraint](#uniqueconstraint)
     - [Index](#index)
-    - [ForeignKey](#foreignkey)
+    - [ForeignKey (dùng để tạo ràng buộc khóa ngoại (foreign key constraint) giữa các bảng)](#foreignkey-dùng-để-tạo-ràng-buộc-khóa-ngoại-foreign-key-constraint-giữa-các-bảng)
     - [ForeignKeyConstraint](#foreignkeyconstraint)
     - [relationship (lấy dữ liệu liên quan giữa các bảng bằng object, không cần viết JOIN)](#relationship-lấy-dữ-liệu-liên-quan-giữa-các-bảng-bằng-object-không-cần-viết-join)
   - [Data Types](#data-types)
@@ -36,6 +36,8 @@
 - [Insert (thêm mới vào db)](#insert-thêm-mới-vào-db)
   - [.add() (đưa object vào session chưa ghi xuống db)](#add-đưa-object-vào-session-chưa-ghi-xuống-db)
 - [add\_all()](#add_all)
+- [Update (Nhóm cập nhật)](#update-nhóm-cập-nhật)
+  - [.flush() (Dùng để đẩy các thay đổi từ bộ nhớ session xuống database nhưng chưa commit transaction)](#flush-dùng-để-đẩy-các-thay-đổi-từ-bộ-nhớ-session-xuống-database-nhưng-chưa-commit-transaction)
 - [Delete (Nhóm xóa)](#delete-nhóm-xóa)
   - [Session.delete()](#sessiondelete)
 ---
@@ -267,10 +269,7 @@ Index(
     ...
 )
 ```
-### ForeignKey 
-```bash
-dùng để tạo ràng buộc khóa ngoại (foreign key constraint) giữa các bảng.
-```
+### ForeignKey (dùng để tạo ràng buộc khóa ngoại (foreign key constraint) giữa các bảng)
 **Syn**
 ```bash
 ForeignKey("users.id", ondelete="CASCADE")
@@ -806,27 +805,9 @@ session.commit()
 # add_all() 
 ```bash
 Được sử dụng trong SQLAlchemy ORM, không phải Core.
-
-Trong code của bạn:
-
-db.add_all(instances)
-
-thì db là:
-
-from sqlalchemy.orm import Session
-
-=> Đây là ORM.
-
-Phân biệt nhanh
-Cách	SQLAlchemy	Ví dụ
-Session.add()	ORM	db.add(user)
-Session.add_all()	ORM	db.add_all(users)
-Session.execute()	Cả ORM/Core	db.execute(...)
-insert()	Core	insert(User)
-select()	Core / ORM	select(User)
-
-Ví dụ ORM của bạn:
-
+```
+**Ex**
+```python
 instances = [
     BangKeCPKB(...),
     BangKeCPKB(...),
@@ -837,58 +818,10 @@ instances = [
 db.add_all(instances)
 db.commit()
 
-Ở đây BangKeCPKB là ORM Model:
-
-class BangKeCPKB(Base):
-    __tablename__ = "BANGKE_CPKB"
-
-nên:
-
-Model instance
-      ↓
-db.add_all()
-      ↓
-SQLAlchemy ORM Session
-      ↓
-INSERT SQL
-      ↓
-db.commit()
-Còn Core sẽ kiểu khác
-from sqlalchemy import insert
-
-
-stmt = insert(BangKeCPKB).values(
-    patient_name="Nguyen Van A",
-    patient_code="123"
-)
-
-
-db.execute(stmt)
-db.commit()
-
-Không cần tạo:
-
-BangKeCPKB(...)
-
-Trong dự án hiện tại của bạn, bạn đang dùng ORM khá rõ ràng:
-
-class BangKeCPKB(Base)
-
-→
-
-BangKeCPKB(...)
-
-→
-
-db.add_all(instances)
-
-→
-
-db.commit()
-
-Đó là ORM.
-
-Một lưu ý: nếu bạn đang insert hàng chục nghìn/hàng trăm nghìn records, lúc đó có thể cân nhắc Session.execute(insert(...)) hoặc các bulk-oriented API vì add_all() vẫn đi qua cơ chế ORM và có overhead quản lý object.
+# Ở đây BangKeCPKB là ORM Model:
+# class BangKeCPKB(Base):
+#    __tablename__ = "BANGKE_CPKB"
+```
 # Update (Nhóm cập nhật)
 ## .flush() (Dùng để đẩy các thay đổi từ bộ nhớ session xuống database nhưng chưa commit transaction)
 ```bash
