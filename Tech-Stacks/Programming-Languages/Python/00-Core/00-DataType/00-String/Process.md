@@ -235,7 +235,7 @@ print(x) # OOOOOOObananaOOOOOOO
 ```bash
 Lấy tất cả các mục trong một iterable và nối chúng thành một chuỗi. Một chuỗi phải được chỉ định làm dấu phân cách.
 ```
-**Syn**
+**Ex**
 ```python
 myTuple = ("John", "Peter", "Vicky")
 x = "#".join(myTuple)
@@ -243,6 +243,12 @@ x = "#".join(myTuple)
 print(x) # John#Peter#Vicky
 a = ['1', '2', '3']
 print(" => ".join(a)) # 1 => 2 => 3
+```
+**Ex2**
+```python
+a = ["abc"]
+group_doc_id = ",".join(str(d) for d in a)
+print(group_doc_id) # abc
 ```
 ## .split() (Để tách chuỗi và gán thành một mảng)
 **Syn**

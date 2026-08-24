@@ -1,4 +1,5 @@
 - [Architecture](#architecture)
+- [Cấu trúc hệ thông luồng tự động bằng python](#cấu-trúc-hệ-thông-luồng-tự-động-bằng-python)
 ---
 [<<Back](Base.md)
 # Architecture
@@ -124,3 +125,4 @@ frontend/
     └── README.md
 └── web-ssr/                     # Next.js
 ```
+# Cấu trúc hệ thông luồng tự động bằng python
