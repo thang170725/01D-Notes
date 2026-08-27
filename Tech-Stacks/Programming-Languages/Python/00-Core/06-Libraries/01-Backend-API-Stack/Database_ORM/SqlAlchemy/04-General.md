@@ -942,6 +942,10 @@ row["name"]
 row["meal_type"]
 ```
 ### .first() (Lấy 1 dòng đầu tiên hoặc None)
+**Syn**
+```bash
+- Output: Trả về dạng class của Model SQLAlchemy # <OcrMessage(...)>
+```
 ### scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)
 **Không dùng scalars()**
 ```python

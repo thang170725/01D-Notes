@@ -1,8 +1,10 @@
++ [<<Back](../Base.md)
 - [Giải tích](#giải-tích)
   - [Đạo hàm](#đạo-hàm)
   - [Gradient (gom tất cả đạo hàm thành một mũi tên)](#gradient-gom-tất-cả-đạo-hàm-thành-một-mũi-tên)
   - [Gradient descent](#gradient-descent)
   - [Jaccard (Jaccard Similarity là một chỉ số đo độ giống nhau giữa hai tập hợp)](#jaccard-jaccard-similarity-là-một-chỉ-số-đo-độ-giống-nhau-giữa-hai-tập-hợp)
+  - [Chain Rule (Quy tắc dây chuyền)](#chain-rule-quy-tắc-dây-chuyền)
 - [Xác suất thống kê](#xác-suất-thống-kê)
   - [Công thức bao hàm - loại trừ](#công-thức-bao-hàm---loại-trừ)
   - [Định lý Bayes (cập nhật xác suất khi có thêm thông tin mới)](#định-lý-bayes-cập-nhật-xác-suất-khi-có-thêm-thông-tin-mới)
@@ -108,6 +110,550 @@ Hợp: {"apple", "banana", "cat", "dog"} -> Có 4 phần tử
 
 Jaccard = 2 / 4 = 0.5
 ```
+## Chain Rule (Quy tắc dây chuyền)
+Chain Rule (quy tắc dây chuyền) là quy tắc dùng để tính đạo hàm của một hàm nằm bên trong một hàm khác.
+
+Trong AI/Deep Learning, đây là một trong những thứ quan trọng nhất, vì Backpropagation thực chất sử dụng Chain Rule để tính gradient.
+
+1. Bắt đầu bằng một ví dụ rất đơn giản
+
+Giả sử:
+
+y=(3x+2)
+2
+
+Ở đây có 2 hàm lồng nhau:
+
+x
+↓
+3x + 2
+↓
+(3x + 2)²
+↓
+y
+
+Đặt:
+
+u=3x+2
+
+thì:
+
+y=u
+2
+
+Ta có:
+
+du
+dy
+	​
+
+=2u
+
+và:
+
+dx
+du
+	​
+
+=3
+
+Chain Rule nói rằng:
+
+dx
+dy
+	​
+
+=
+du
+dy
+	​
+
+dx
+du
+	​
+
+	​
+
+
+Thay vào:
+
+dx
+dy
+	​
+
+=2u×3
+
+vì u=3x+2:
+
+dx
+dy
+	​
+
+=6(3x+2)
+	​
+
+2. Tại sao gọi là "Chain"?
+
+Vì các đạo hàm nối với nhau thành một chuỗi:
+
+x→u→y
+
+nên:
+
+dx
+dy
+	​
+
+=
+du
+dy
+	​
+
+⋅
+dx
+du
+	​
+
+
+Nhìn rất giống:
+
+du
+dy
+	​
+
+×
+dx
+du
+	​
+
+=
+dx
+dy
+	​
+
+
+Đây là trực giác khá tốt để nhớ công thức.
+
+3. Ví dụ dễ hơn nữa
+
+Giả sử:
+
+z=x
+2
+
+sau đó:
+
+y=3z
+
+Ta có:
+
+x
+↓
+x² = z
+↓
+3z = y
+
+Đạo hàm:
+
+dx
+dz
+	​
+
+=2x
+dz
+dy
+	​
+
+=3
+
+Theo Chain Rule:
+
+dx
+dy
+	​
+
+=
+dz
+dy
+	​
+
+dx
+dz
+	​
+
+
+nên:
+
+dx
+dy
+	​
+
+=3(2x)=6x
+4. Đây chính là thứ xảy ra trong Neural Network
+
+Đây mới là phần quan trọng đối với AI.
+
+Một neuron đơn giản:
+
+z=wx+b
+
+sau đó activation:
+
+a=f(z)
+
+sau đó loss:
+
+L=loss(a,y)
+
+Toàn bộ computation graph:
+
+x
+↓
+z = wx + b
+↓
+a = f(z)
+↓
+Loss
+
+Ta muốn biết:
+
+∂w
+∂L
+	​
+
+
+Nhưng Loss phụ thuộc vào w gián tiếp:
+
+w
+↓
+z
+↓
+a
+↓
+L
+
+Vì vậy dùng Chain Rule:
+
+∂w
+∂L
+	​
+
+=
+∂a
+∂L
+	​
+
+∂z
+∂a
+	​
+
+∂w
+∂z
+	​
+
+	​
+
+
+Đây chính là backpropagation.
+
+5. Ví dụ cụ thể
+
+Giả sử:
+
+z=wx
+a=z
+2
+L=a
+
+Tức là:
+
+w
+↓
+z = wx
+↓
+a = z²
+↓
+L = a
+
+Ta muốn:
+
+dw
+dL
+	​
+
+
+Chain Rule:
+
+dw
+dL
+	​
+
+=
+da
+dL
+	​
+
+dz
+da
+	​
+
+dw
+dz
+	​
+
+
+Tính từng đoạn:
+
+da
+dL
+	​
+
+=1
+dz
+da
+	​
+
+=2z
+dw
+dz
+	​
+
+=x
+
+nên:
+
+dw
+dL
+	​
+
+=1×2z×x
+
+và vì:
+
+z=wx
+
+nên:
+
+dw
+dL
+	​
+
+=2wx
+2
+	​
+
+6. Tại sao Backpropagation cần Chain Rule?
+
+Giả sử neural network:
+
+x
+ ↓
+Layer 1
+ ↓
+Layer 2
+ ↓
+Layer 3
+ ↓
+Loss
+
+Bạn muốn biết:
+
+Weight ở Layer 1 nên thay đổi như thế nào để Loss giảm?
+
+Loss không phụ thuộc trực tiếp vào weight đó.
+
+Nó phụ thuộc:
+
+weight
+   ↓
+Layer 1 output
+   ↓
+Layer 2 output
+   ↓
+Layer 3 output
+   ↓
+Loss
+
+Chain Rule cho phép truyền gradient ngược:
+
+Loss
+ ↓
+gradient
+ ↓
+Layer 3
+ ↓
+gradient
+ ↓
+Layer 2
+ ↓
+gradient
+ ↓
+Layer 1
+ ↓
+gradient
+ ↓
+weight
+
+Đây chính là:
+
+Backpropagation = dùng Chain Rule trên computation graph để tính gradient.
+
+7. Một ví dụ Neural Network cực nhỏ
+
+Giả sử:
+
+x=2
+w=3
+
+Forward:
+
+z=wx=6
+
+Activation:
+
+a=z
+2
+=36
+
+Loss:
+
+L=a=36
+
+Ta muốn biết:
+
+Nếu thay đổi w, Loss thay đổi bao nhiêu?
+
+Chain:
+
+w→z→a→L
+
+Gradient:
+
+dw
+dL
+	​
+
+=
+da
+dL
+	​
+
+×
+dz
+da
+	​
+
+×
+dw
+dz
+	​
+
+
+Thay số:
+
+=1×12×2
+=24
+
+Nghĩa là tại điểm hiện tại:
+
+tăng w một lượng rất nhỏ → Loss tăng khoảng 24 lần lượng thay đổi đó.
+
+Gradient này sau đó được optimizer sử dụng:
+
+w
+new
+	​
+
+=w−η
+dw
+dL
+	​
+
+
+Ví dụ learning rate:
+
+η=0.01
+
+thì:
+
+w
+new
+	​
+
+=3−0.01(24)=2.76
+8. Một cách nhìn cực kỳ quan trọng
+
+Bạn đang học:
+
+Matrix
+Eigenvalue
+Eigenvector
+Chain Rule
+FastText
+LoRA
+...
+
+Nếu mục tiêu là hiểu Deep Learning từ gốc, thì Chain Rule nên được nối với:
+
+Function
+   ↓
+Derivative
+   ↓
+Partial derivative
+   ↓
+Gradient
+   ↓
+Chain Rule
+   ↓
+Computation Graph
+   ↓
+Backpropagation
+   ↓
+Gradient Descent
+   ↓
+Neural Network training
+
+Đây là một chuỗi kiến thức rất quan trọng.
+
+9. Câu cần nhớ
+
+Đừng chỉ học thuộc:
+
+dx
+dy
+	​
+
+=
+du
+dy
+	​
+
+dx
+du
+	​
+
+
+Hãy hiểu:
+
+Nếu x ảnh hưởng đến y thông qua nhiều bước trung gian, Chain Rule cho phép ta nhân các gradient của từng bước lại để biết ảnh hưởng cuối cùng của x lên y.
+
+Ví dụ:
+
+x
+ ↓
+u
+ ↓
+v
+ ↓
+y
+
+ảnh hưởng của x lên y
+
+= ảnh hưởng của u lên y
+× ảnh hưởng của v lên u
+× ảnh hưởng của x lên v
+
+Và đó chính xác là cách gradient được truyền ngược từ Loss về các weight trong neural network.
 # Xác suất thống kê
 ## Công thức bao hàm - loại trừ
 ```bash
@@ -550,6 +1096,8 @@ A =
 ```
 #### Spectral norm (chuẩn quang phổ - đo “mức phóng đại lớn nhất” của matrix)
 ## Eigenvalue & Eigenvector (những hướng đặc biệt của vũ trụ)
+**Cần hiểu được những thứ này trước khi vào học Eigenvalue & Eigenvector**
+[Ma trận](#matrix-ma-trận)
 ```bash
 - Thông thường: ma trận sẽ xoay, kéo, bóp méo vector NHƯNG có vài hướng đặc biệt mà: sau biến đổi, hướng không đổi. Chỉ bị kéo dài hoặc co lại. Đó là eigenvector.
 
@@ -593,7 +1141,7 @@ x = [1,2], lamda=5, lamda=-1
 ```
 ## SVD (giải phẫu mọi phép biến đổi)
 ```bash
-- Đây là một trong những ý tưởng đẹp nhất của đại số tuyến tính.
+Đây là một trong những ý tưởng đẹp nhất của đại số tuyến tính.
 - Ý tưởng lớn MỌI ma trận đều có thể phân tích thành:
     + A = UΣV**T
 - Ý nghĩa vật lý cực đẹp SVD nói rằng:
@@ -643,8 +1191,38 @@ Nó chỉ quan tâm:
     + Feature A và B có hay đi chung không?
 ```
 ## eigenvector & eigenvalue
+**Cần học những kiến thức này trước khi chuyển đến Eigenvector & Eigenvalue**  
+[Ma trận](#matrix-ma-trận)
+
+**Eigenvector**
 ```bash
-- eigenvector   : Hướng đặc biệt không bị đổi hướng khi qua ma trận
+Thông thường: Vector ban đầu -> ma trận -> vector mới
+    Vector mới có thể:
+        - dài hơn
+        - ngắn hơn 
+        - đối hướng
+Nhưng có một số vector đặc biệt mà sau khi nhân với ma trận: nó vẫn nằm trên cùng một đường thẳng với vector ban đầu.
+-> Đó chính là eigenvector.
+```
+**Ex: Ví dụ về Eigenvector**
+```bash
+Lấy ma trận: A=[[2, 0], [0, 3]]
+    Nhìn nó như phép biến đổi:
+        - x → nhân 2
+        - y → nhân 3
+
+Lấy vector: v=[1, 0]
+
+Tính: Av=[[2, 0], [0, 3]].[1, 0]=[2, 0]
+
+Ban đầu: (1,0)
+Sau: (2,0)
+-> Nó không đổi hướng, chỉ dài gấp 2.
+
+Vậy: v=[1, 0] là eigenvector.
+Và: λ=2 là eigenvalue. Bởi vì: Av=2v
+```
+```bash
 - eiganvalue    : mức độ phóng to thu nhỏ theo hướng đó.
     + eigenvalue > 1: nổ (độ dài tăng vô hạn)
     + eigenvalue < 1: triệt (về 0)

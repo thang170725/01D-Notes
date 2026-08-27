@@ -1,9 +1,9 @@
 - [Embedding Introduction (vector ngữ nghĩa được học từ dữ liệu)](#embedding-introduction-vector-ngữ-nghĩa-được-học-từ-dữ-liệu)
 - [Word2Vec (nhận token id của vocab -\> vector số embedding)](#word2vec-nhận-token-id-của-vocab---vector-số-embedding)
-  - [CBOW (Continuous Bag of Words)](#cbow-continuous-bag-of-words)
-  - [Skip-Gram](#skip-gram)
-- [Glove (Global Vectors)](#glove-global-vectors)
-- [FastText](#fasttext)
+  - [CBOW (Continuous Bag of Words Dùng các từ xung quanh (context) để dự đoán từ đích (target))](#cbow-continuous-bag-of-words-dùng-các-từ-xung-quanh-context-để-dự-đoán-từ-đích-target)
+  - [Skip-Gram (Dùng từ trung tâm để đoán các từ xung quanh)](#skip-gram-dùng-từ-trung-tâm-để-đoán-các-từ-xung-quanh)
+- [Glove (Global Vectors. Nhìn toàn bộ thống kê corpus)](#glove-global-vectors-nhìn-toàn-bộ-thống-kê-corpus)
+- [FastText (biến text thành vector)](#fasttext-biến-text-thành-vector)
   - [N-gram](#n-gram)
 - [nomic-embed-text](#nomic-embed-text)
 - [OpenAI Embedding](#openai-embedding)
@@ -30,7 +30,9 @@ Dùng để:
     - Tìm từ đồng nghĩa
     - Làm input cho model NLP
 ```
-## CBOW (Continuous Bag of Words)
+## CBOW (Continuous Bag of Words Dùng các từ xung quanh (context) để dự đoán từ đích (target))
+**Thư viện dùng cho CBOW**
+- [gensim]()
 ```bash
 Nhiệm vụ:
     Đoán từ ở giữa từ các từ xung quanh.
@@ -45,12 +47,9 @@ Ví dụ:
 
 Dùng để train Word2Vec
 ```
-## Skip-Gram 
+## Skip-Gram (Dùng từ trung tâm để đoán các từ xung quanh)
 ```bash
 Ngược với CBOW.
-
-Nhiệm vụ:
-    Dùng từ trung tâm để đoán các từ xung quanh.
 
 Ví dụ:
     Tôi ăn phở vào buổi sáng
@@ -65,13 +64,8 @@ Ví dụ:
 
 Dùng để train Word2Vec.
 ```
-# Glove (Global Vectors)
+# Glove (Global Vectors. Nhìn toàn bộ thống kê corpus)
 ```bash
-- Word2Vec:
-    Nhìn từng câu
-- GloVe:
-    Nhìn toàn bộ thống kê corpus
-
 Ví dụ đếm:
     King xuất hiện với Queen bao nhiêu lần
 
@@ -81,7 +75,7 @@ Dùng để:
     - Sinh word embedding
     - Từng rất phổ biến trước BERT
 ```
-# FastText 
+# FastText (biến text thành vector)
 ```bash
 Do Meta AI phát triển.
 
@@ -99,8 +93,13 @@ Ví dụ:
 Embedding từ: = tổng embedding các n-gram
 
 Ưu điểm:
-    - Hiểu từ hiếm
-    - Hiểu từ chưa từng gặp (OOV)
+- Hiểu từ hiếm
+- Hiểu từ chưa từng gặp (OOV)
+- train cực nhanh
+- model nhỏ
+- ít tài nguyên
+- không cần GPU mạnh
+- hiệu quả tốt với text classification cơ bản
 
 Ví dụ:
     chatgptxyz
@@ -109,6 +108,19 @@ Ví dụ:
         Không biết
     FastText:
         Đoán được nhờ các n-gram
+```
+**Khi nào FastText đáng dùng**
+```bash
+Trường hợp 1: Dataset nhỏ
+- Ví dụ bạn chỉ có: 50.000 câu và muốn classification spam / not spam
+
+Trường hợp 2: Từ mới / từ hiếm
+
+Trường hợp 3: Ngôn ngữ có morphology mạnh
+
+Trường hợp 4: Text có typo
+
+Trường hợp 5: Classification cần tốc độ cực nhanh
 ```
 ## N-gram
 ```bash
