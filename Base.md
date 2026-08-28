@@ -1,6 +1,6 @@
 - [Directory Structure](#directory-structure)
 ---
-[Back](README.md)
+[<<Back](README.md)
 # Directory Structure
 dev-notes/                                                  ```mình dùng thư mục này là second brain```    
 ├── [Companies](Companies/Base.md)                          ```mình dùng thư mục này để xem giới thiệu về các công ty công nghệ (các dịch vụ của họ)```   

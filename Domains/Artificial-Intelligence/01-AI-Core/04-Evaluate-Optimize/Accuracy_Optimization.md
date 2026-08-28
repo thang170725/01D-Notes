@@ -34,10 +34,12 @@
   - [PRC (Precision-Recall Curve, đồ thị giữa Recall (TPR) và Precision)](#prc-precision-recall-curve-đồ-thị-giữa-recall-tpr-và-precision)
   - [PR-AUC](#pr-auc)
 - [Optimizer (thuật toán tối ưu)](#optimizer-thuật-toán-tối-ưu)
-  - [SGD (Stochastic Gradient Descent)](#sgd-stochastic-gradient-descent)
+  - [Gradient Descent / SGD (Stochastic Gradient Descent)](#gradient-descent--sgd-stochastic-gradient-descent)
   - [Momentum (SGD + quán tính)](#momentum-sgd--quán-tính)
   - [RMSprop](#rmsprop)
-  - [Adam (Momentum+RMSprop)](#adam-momentumrmsprop)
+  - [Adam (Adaptive Moment Estimation quyết định mỗi bước cập nhật trọng số của model nên đi bao xa và theo hướng nào)](#adam-adaptive-moment-estimation-quyết-định-mỗi-bước-cập-nhật-trọng-số-của-model-nên-đi-bao-xa-và-theo-hướng-nào)
+    - [Ask](#ask)
+      - [Adam thông minh hơn SGD ở đâu?](#adam-thông-minh-hơn-sgd-ở-đâu)
   - [AdamW (Adam nhưng sửa lỗi lớn nhất của Adam)](#adamw-adam-nhưng-sửa-lỗi-lớn-nhất-của-adam)
 - [Learning rate (tối ưu learning rate)](#learning-rate-tối-ưu-learning-rate)
   - [Learning Rate Scheduler (cơ chế tự động điều chỉnh learning rate)](#learning-rate-scheduler-cơ-chế-tự-động-điều-chỉnh-learning-rate)
@@ -69,19 +71,18 @@ Dùng cả trong hồi quy và phân loại
 ```
 ### L2 (Ridge) (Thêm hình phạt)
 ```bash
-Ý tưởng:
-    Ép các trọng số nhỏ lại.
+Ý tưởng: Ép các trọng số nhỏ lại.
 
-    Ví dụ:
-        Trước:
-            - w1 = 100
-            - w2 = 50
-            - w3 = 80
-        Sau L2:
-            - w1 = 10
-            - w2 = 5
-            - w3 = 8
-        Nhưng hiếm khi về đúng 0.
+Ví dụ:
+    Trước:
+        - w1 = 100
+        - w2 = 50
+        - w3 = 80
+    Sau L2:
+        - w1 = 10
+        - w2 = 5
+        - w3 = 8
+    Nhưng hiếm khi về đúng 0.
 
 Tác dụng
     - Giảm overfitting
@@ -99,8 +100,7 @@ Tác dụng:
 ```
 ### L1 (Lasso) (Thêm hình phạt)
 ```bash
-Ý tưởng:
-    Ép nhiều trọng số về đúng 0.
+Ý tưởng: Ép nhiều trọng số về đúng 0.
 
 Ví dụ:
     Trước:
@@ -716,7 +716,7 @@ Nhưng thực tế:
     => PR-AUC sẽ phản ánh điều này ngay lập tức.
 ```
 # Optimizer (thuật toán tối ưu)
-## SGD (Stochastic Gradient Descent)
+## Gradient Descent / SGD (Stochastic Gradient Descent)
 ```bash
 Ý tưởng:
     - Sai ở đâu → sửa ở đó.
@@ -737,7 +737,11 @@ Ví dụ:
 ```
 **Fomula**
 ```bash
-W = W - learning_rate × gradient
+Wt+1 = Wt - learning_rate × gradient
+
+- Wt: weight hiện tại
+- learning rate: tốc độ học 
+- gradient
 ```
 ## Momentum (SGD + quán tính)
 **Ex**
@@ -775,7 +779,7 @@ RMSprop tự điều chỉnh learning rate cho từng trọng số.
     Nhược điểm
         - Có nhiều hyperparameter hơn
 ```
-## Adam (Momentum+RMSprop)
+## Adam (Adaptive Moment Estimation quyết định mỗi bước cập nhật trọng số của model nên đi bao xa và theo hướng nào)
 ```bash
 Nó vừa:
     - nhớ hướng di chuyển trước đó
@@ -794,6 +798,250 @@ Nó vừa:
 Nhược điểm
     - Đôi khi generalization kém hơn SGD một chút
 ```
+### Ask
+#### Adam thông minh hơn SGD ở đâu?
+```bash
+Adam = Adaptive Moment Estimation.
+
+Nó theo dõi hai thứ của gradient:
+
+Thứ nhất: hướng/trung bình gradient
+
+Adam lưu:
+
+$$ m_t $$
+
+Có thể hiểu đơn giản là:
+
+"Trong vài bước vừa rồi, gradient thường đi theo hướng nào?"
+
+Thứ hai: độ lớn của gradient
+
+Adam lưu:
+
+$$ v_t $$
+
+Có thể hiểu:
+
+"Gradient gần đây thường lớn hay nhỏ?"
+
+Sau đó Adam dùng cả hai để điều chỉnh update.
+
+Ý tưởng đại khái:
+
+              Gradient
+                 ↓
+        ┌────────┴────────┐
+        ↓                 ↓
+   hướng trung bình    độ lớn gradient
+        ↓                 ↓
+       m_t               v_t
+        └────────┬────────┘
+                 ↓
+             Adam
+                 ↓
+          update weight
+```
+Vì sao gọi là "Adaptive"?
+
+Vì learning rate hiệu dụng có thể khác nhau giữa các parameter.
+
+Ví dụ neural network có:
+
+W1 → gradient rất lớn
+W2 → gradient rất nhỏ
+
+Adam có thể tự điều chỉnh mức update:
+
+W1 → bước nhỏ hơn
+W2 → bước tương đối lớn hơn
+
+Thay vì tất cả weight đều sử dụng cùng một cách update đơn giản như SGD.
+
+Đây là một trong những lý do Adam rất phổ biến trong deep learning.
+
+5. Adam thực sự update như thế nào?
+
+Nếu bạn muốn hiểu sâu bản chất thì đây là phần đáng học.
+
+Gradient tại bước \(t\):
+
+$$ g_t = \nabla_\theta L_t $$
+
+Adam tính:
+
+$$ m_t = \beta_1m_{t-1}+(1-\beta_1)g_t $$
+
+và:
+
+$$ v_t = \beta_2v_{t-1}+(1-\beta_2)g_t^2 $$
+
+Sau đó bias correction:
+
+$$ \hat m_t = \frac{m_t}{1-\beta_1^t} $$ $$ \hat v_t = \frac{v_t}{1-\beta_2^t} $$
+
+Cuối cùng:
+
+$$ \theta_{t+1} = \theta_t - \alpha \frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon} $$
+
+Đừng vội học thuộc công thức.
+
+Hãy hiểu:
+
+m_t
+↓
+theo dõi hướng gradient
+
+v_t
+↓
+theo dõi độ lớn gradient
+
+m_t / sqrt(v_t)
+↓
+điều chỉnh gradient
+
+α
+↓
+learning rate
+
+↓
+update weight
+6. Adam khác AdamW thế nào?
+
+Cái này rất hay bị nhầm.
+
+Bạn sẽ thường thấy:
+
+optimizer = Adam(...)
+
+hoặc:
+
+optimizer = AdamW(...)
+
+AdamW không đơn giản chỉ là "Adam phiên bản mới".
+
+Điểm quan trọng là cách weight decay được áp dụng.
+
+AdamW tách weight decay khỏi adaptive gradient update, giúp regularization hoạt động đúng/ổn định hơn trong nhiều trường hợp.
+
+Vì vậy trong deep learning hiện đại, bạn sẽ gặp:
+
+Adam
+AdamW
+SGD
+
+rất thường xuyên.
+
+7. Khi nào dùng Adam?
+
+Một rule thực tế:
+
+Dùng Adam khi
+đang train neural network
+muốn model hội tụ tương đối nhanh
+chưa có nhiều kinh nghiệm tuning optimizer
+gradient có scale khác nhau
+bài toán phức tạp
+
+Ví dụ:
+
+model = MyNeuralNetwork()
+
+optimizer = torch.optim.Adam(
+    model.parameters(),
+    lr=1e-3
+)
+
+Sau đó training:
+
+optimizer.zero_grad()
+
+output = model(x)
+
+loss = criterion(output, y)
+
+loss.backward()
+
+optimizer.step()
+
+loss.backward():
+
+tính gradient
+
+optimizer.step():
+
+Adam dùng gradient đó để cập nhật weight.
+
+8. Một cách nhìn rất quan trọng
+
+Bạn có thể phân biệt:
+
+              Neural Network
+                   │
+                   │
+             parameters θ
+                   │
+                   ↓
+              Forward pass
+                   │
+                   ↓
+              prediction
+                   │
+                   ↓
+                  Loss
+                   │
+                   ↓
+             Backpropagation
+                   │
+                   ↓
+               Gradient
+                   │
+                   ↓
+             ┌───────────┐
+             │   Adam    │
+             └───────────┘
+                   │
+                   ↓
+          updated parameters
+
+Cho nên:
+
+Backpropagation và Adam không phải một thứ.
+
+Backpropagation → tính gradient.
+Adam → sử dụng gradient để update parameters.
+
+Đây là distinction rất quan trọng khi học deep learning.
+
+9. Và một điểm nữa: Adam không "học" model
+
+Ví dụ bạn có:
+
+CNN + Adam
+
+Adam không phải CNN.
+
+CNN      → kiến trúc model
+Adam     → optimizer
+Loss     → tiêu chí cần tối ưu
+Dataset  → dữ liệu
+
+Ví dụ:
+
+ResNet + CrossEntropyLoss + AdamW
+
+có nghĩa:
+
+ResNet: model
+CrossEntropyLoss: đo model sai bao nhiêu
+AdamW: cách điều chỉnh weight để loss giảm
+Nếu đang học sâu về ML
+
+Mình khuyên bạn học theo chuỗi này:
+
+Gradient Descent → SGD → Momentum → RMSProp → Adam → AdamW
+
+Khi hiểu được chuỗi này, bạn sẽ thấy Adam không phải một thuật toán xuất hiện từ đâu đó, mà nó là sự kết hợp ý tưởng của Momentum + adaptive learning rate. Đây mới là phần bản chất đáng hiểu.
 ## AdamW (Adam nhưng sửa lỗi lớn nhất của Adam)
 ```bash
 Weight Decay (L2 Regularization)

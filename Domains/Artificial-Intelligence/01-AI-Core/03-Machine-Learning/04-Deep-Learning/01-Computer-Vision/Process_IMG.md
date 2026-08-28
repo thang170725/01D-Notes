@@ -60,8 +60,8 @@
   - [Color Jitter](#color-jitter)
   - [Gaussian Noise](#gaussian-noise)
   - [Gaussian Blur](#gaussian-blur)
-  - [Median Filter](#median-filter)
-  - [Bilateral Filter](#bilateral-filter)
+  - [Median Filter (Dùng để loại bỏ salt-pepper noise)](#median-filter-dùng-để-loại-bỏ-salt-pepper-noise)
+  - [Bilateral Filter (Giữ cạnh khi làm mịn)](#bilateral-filter-giữ-cạnh-khi-làm-mịn)
   - [Histogram Equalization (Tăng tương phản cho toàn ảnh)](#histogram-equalization-tăng-tương-phản-cho-toàn-ảnh)
 ---
 # Shape (xử lý hình dạng)
@@ -205,12 +205,8 @@ Các trường hợp cụ thể thường áp dụng CLAHE bao gồm:
 Thêm nhiễu
 ``` 
 ## Gaussian Blur
-## Median Filter
-```bash
-- Dùng để loại bỏ salt-pepper noise
-```
-## Bilateral Filter
-```bash
-Giữ cạnh khi làm mịn
-```
+## Median Filter (Dùng để loại bỏ salt-pepper noise)
+**Thư viện thường dùng**
+[MedianBlur OpenCV](../../../../../../Tech-Stacks/Programming-Languages/Python/00-Core/06-Libraries/01-AI-Libraries/00-ML/02-DL/00-CV/Preprocessing/OpenCV/Process_IMG.md#medianblur)
+## Bilateral Filter (Giữ cạnh khi làm mịn)
 ## Histogram Equalization (Tăng tương phản cho toàn ảnh)

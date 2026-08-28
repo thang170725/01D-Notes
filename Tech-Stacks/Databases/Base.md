@@ -1,10 +1,11 @@
++ [<<Back](../Base.md)
 - [Directory Structure](#directory-structure)
 - [Ask](#ask)
   - [So sánh PostgreSQL và MySQL](#so-sánh-postgresql-và-mysql)
 ---
 # Directory Structure
 Databases/                                                  ```mình dùng thư mục này để xem kiến thức về CSDL```    
-├── [Companies](Companies/Base.md)                          ```mình dùng thư mục này để xem giới thiệu về các công ty công nghệ (các dịch vụ của họ)```   
+├── [Mariadb-MySQL](Mariadb-MySQL/Base.md)                  ```mình dùng thư mục này để xem kiến thức về mariadb và mysql```   
 ├── [Domains](Domains/Base.md)                              ```mình dùng thư mục này để xem các lĩnh vực trong ngành IT```   
 ├── [PostgreSQL](PostgreSQL/Base.md)                        ```mình dùng thư mục này để xem kiến thức về postgreSQL```   
 ├── [Tech-Stacks](Tech-Stacks/Base.md)                      ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   

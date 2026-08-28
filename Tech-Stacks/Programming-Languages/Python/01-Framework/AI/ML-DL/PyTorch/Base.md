@@ -1,5 +1,5 @@
 - [Directory structure](#directory-structure)
-- [Introduction](#introduction)
+- [Pytorch Introduction (thường dùng để xây dựng và huấn luyện mô hình học sâu (deep learning))](#pytorch-introduction-thường-dùng-để-xây-dựng-và-huấn-luyện-mô-hình-học-sâu-deep-learning)
 - [Installation](#installation)
 ---
 # Directory structure
@@ -11,10 +11,11 @@ PyTorch/
     ├── 04_Data_Pipeline.md   # Xử lý dữ liệu
     └── 05_Optimization.md    # Loss functions, Optimizers (SGD, Adam)Torch
 ```
-# Introduction
+# Pytorch Introduction (thường dùng để xây dựng và huấn luyện mô hình học sâu (deep learning))
+**Document**
+[Tài liệu PyTorch](https://pytorch.org/)
 ```bash
 - PyTorch là một thư viện của python nhưng nhiều người gọi nó là framework vì đầy đủ sức mạnh của một framework (end-to-end)
-- PyTorch dùng để xây dựng và huấn luyện mô hình học sâu (deep learning).
 ```
 # Installation
 ```bash

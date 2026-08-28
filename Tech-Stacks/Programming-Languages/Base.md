@@ -1,19 +1,18 @@
++ [<<Back](../Base.md)
 - [Directory Structure](#directory-structure)
 - [Ask](#ask)
   - [Tại sao phải viết code?](#tại-sao-phải-viết-code)
   - [Tại sao phải học lập trình?](#tại-sao-phải-học-lập-trình)
   - [Có phải ai cũng cần học lập trình?](#có-phải-ai-cũng-cần-học-lập-trình)
 ---
-[<<Back](../Base.md)
 # Directory Structure
-Programming-Languages                   ```mình dùng thư mục này để xem kiến thức về ngôn ngữ lập trình```  
-├── Python      # mình dùng thư mục này để xem kiến thức về Python
-├── Javascript  # mình dùng thư mục này để xem kiến thức về Javascript
-├── Html        # mình dùng thư mục này để xem kiến thức về Html      
-├── Css         # mình dùng thư mục này để xem kiến thức về Css
-├── Java        # mình dùng thư mục này để xem kiến thức về Java
-├── Java        # mình dùng thư mục này để xem kiến thức về Java
-└── [Python](Python/Base.md)         ```mình dùng thư mục này để xem kiến thức về Python```  
+Programming-Languages/                  ```mình dùng thư mục này để xem kiến thức về ngôn ngữ lập trình```  
+├── Javascript  # mình dùng thư mục này để xem kiến thức về Javascript  
+├── Html        # mình dùng thư mục này để xem kiến thức về Html       
+├── Css         # mình dùng thư mục này để xem kiến thức về Css  
+├── Java        # mình dùng thư mục này để xem kiến thức về Java  
+├── Java        # mình dùng thư mục này để xem kiến thức về Java  
+└── [Python](Python/Base.md)            ```mình dùng thư mục này để xem kiến thức về Python```  
         
 # Ask
 ## Tại sao phải viết code?
