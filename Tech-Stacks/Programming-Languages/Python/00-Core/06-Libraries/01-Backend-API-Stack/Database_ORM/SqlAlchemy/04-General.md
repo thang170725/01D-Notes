@@ -946,6 +946,112 @@ row["meal_type"]
 ```bash
 - Output: Trả về dạng class của Model SQLAlchemy # <OcrMessage(...)>
 ```
+Được hiểu ý bạn. result.first() hoàn toàn có thể dùng, nhưng nó trả về khác kiểu so với scalars().first().
+
+Code của bạn:
+
+async def get_by_email(email: str, db: AsyncSession):
+    user = await db.execute(
+        select(User).where(User.email == email)
+    )
+    return user.first()
+Vấn đề là output
+
+Với:
+
+select(User)
+
+execute() trả về Result chứa Row, chứ không trực tiếp là User.
+
+Vì vậy:
+
+user.first()
+
+sẽ trả về dạng:
+
+(User(...),)
+
+tức là Row chứa User, không phải bản thân User.
+
+Còn scalars().first()
+result = await db.execute(
+    select(User).where(User.email == email)
+)
+
+return result.scalars().first()
+
+sẽ trả:
+
+User(...)
+
+hoặc:
+
+None
+
+Đây là lý do scalars() được dùng.
+
+Nhìn trực quan
+
+Giả sử DB có:
+
+User
+id = 1
+email = "abc@gmail.com"
+name = "Thắng"
+first()
+result.first()
+
+→
+
+(User(id=1, email="abc@gmail.com", name="Thắng"),)
+scalars().first()
+result.scalars().first()
+
+→
+
+User(id=1, email="abc@gmail.com", name="Thắng")
+Nếu bạn muốn lấy trực tiếp User
+
+Với repository get_by_email() của bạn, mình sẽ viết:
+
+async def get_by_email(email: str, db: AsyncSession):
+    result = await db.execute(
+        select(User).where(User.email == email)
+    )
+
+    return result.scalars().first()
+
+Hoặc nếu email chắc chắn UNIQUE:
+
+async def get_by_email(email: str, db: AsyncSession):
+    result = await db.execute(
+        select(User).where(User.email == email)
+    )
+
+    return result.scalar_one_or_none()
+
+Không phải scalars() để thay thế first(). Hai cái làm hai việc khác nhau:
+
+scalars() → lấy User ra khỏi Row
+first()   → lấy phần tử đầu tiên
+
+Nên:
+
+result.scalars().first()
+
+có nghĩa gần như:
+
+"Lấy User từ kết quả, rồi lấy User đầu tiên."
+
+Còn:
+
+result.first()
+
+là:
+
+"Lấy Row đầu tiên."
+
+Đây là lý do mình thêm scalars() vào.
 ### scalars() (dùng để lấy ra giá trị đầu tiên của mỗi hàng (row) trong kết quả truy vấn)
 **Không dùng scalars()**
 ```python
@@ -979,7 +1085,7 @@ print(users)
 #     <User id=3>
 # ]
 
-Nó tự lấy phần tử đầu tiên của mỗi row.
+# Nó tự lấy phần tử đầu tiên của mỗi row.
 ```
 **Ex**
 ```python
@@ -1015,6 +1121,19 @@ db.execute(stmt).scalars().all() # thì chỉ lấy cột đầu tiên:
 ```bash
 Nó có ý nghĩa như sau:
     "Tôi kỳ vọng query này trả về đúng 1 dòng hoặc không có dòng nào."
+```
+**Syn**
+```bash
+result = await db.execute(
+    select(User).where(User.email == email)
+)
+
+user = result.scalar_one_or_none()
+
+- Output:
+    + Có đúng 1 user → User object
+    + Không có       → None
+    + Có > 1 user → ERROR
 ```
 ## .update()
 **Ex**

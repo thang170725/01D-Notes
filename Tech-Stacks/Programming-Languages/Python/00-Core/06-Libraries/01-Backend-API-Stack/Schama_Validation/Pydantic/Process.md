@@ -19,27 +19,28 @@ data = user.model_dump(
     mode="json"
 )
 
-- exclude_none  : Loại bỏ phần tử có giá trị là None
-- exclude_unset : True / Fasle
-    + Client chỉ gửi fullname
-        {
-          "fullname": "Thang"
-        }
-    + Nếu dùng: payload.model_dump()
-        Kết quả: Nó tự thêm cả field default.
-            {
-              "fullname": "Thang",
-              "age": 18,
-              "address": None
-            }
-    + Nếu dùng: payload.model_dump(exclude_unset=True)
-        Kết quả: Chỉ lấy field thực sự được gửi lên.
+- Input:
+    + exclude_none  : Loại bỏ phần tử có giá trị là None
+    + exclude_unset : True / Fasle
+        - Client chỉ gửi fullname
             {
               "fullname": "Thang"
             }
-- include       : chỉ lấy một vài field
-- exclude       : bỏ một vài field
-- mode          : trả về một định dạng
+        - Nếu dùng: payload.model_dump()
+            Kết quả: Nó tự thêm cả field default.
+                {
+                  "fullname": "Thang",
+                  "age": 18,
+                  "address": None
+                }
+        - Nếu dùng: payload.model_dump(exclude_unset=True)
+            Kết quả: Chỉ lấy field thực sự được gửi lên.
+                {
+                  "fullname": "Thang"
+                }
+    + include       : chỉ lấy một vài field
+    + exclude       : bỏ một vài field
+    + mode          : trả về một định dạng
 ```
 **Ex**
 ```python

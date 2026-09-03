@@ -177,7 +177,6 @@ main  -> A B C
 thang -> A B C
 Code cũ trên thang biến mất.
 ```
-
 # git remote (Dùng để kết nối môt repository git cục bộ (trên máy tính của bạn) với một repository từ xa (trên gitHub))
 ```bash
 - giúp git push và git pull. Khi bạn khởi tạo một repository mới trên máy (git init), nó chưa biết liên kết với nơi nào để push code lên

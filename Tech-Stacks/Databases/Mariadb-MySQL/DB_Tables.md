@@ -1,7 +1,7 @@
 + [<<Back](../Base.md)
 - [Check Database (Kiểm tra database)](#check-database-kiểm-tra-database)
   - [Linux (Kiểm tra db trên linux)](#linux-kiểm-tra-db-trên-linux)
-    - [mysql -u root -p (Đăng nhập quyền root)](#mysql--u-root--p-đăng-nhập-quyền-root)
+    - [sudo mysql/mariadb -u root -p (Đăng nhập quyền root)](#sudo-mysqlmariadb--u-root--p-đăng-nhập-quyền-root)
     - [mysql --version | mysql -V](#mysql---version--mysql--v)
     - [mariadb --version](#mariadb---version)
     - [systemctl status ...](#systemctl-status-)
@@ -17,6 +17,7 @@
   - [alter table ... add column ... (Thêm cột vào bảng)](#alter-table--add-column--thêm-cột-vào-bảng)
   - [add constraint ... foreign key ... references (Thêm khóa ngoài)](#add-constraint--foreign-key--references-thêm-khóa-ngoài)
 - [Delete (Xóa)](#delete-xóa)
+  - [DROP DATABASE ... (xóa database)](#drop-database--xóa-database)
   - [TRUNCATE TABLE ... (Khuyên dùng nếu bạn muốn xóa sạch dữ liệu và reset ID về 1)](#truncate-table--khuyên-dùng-nếu-bạn-muốn-xóa-sạch-dữ-liệu-và-reset-id-về-1)
   - [drop table ... (Xóa bảng)](#drop-table--xóa-bảng)
   - [alter table ... drop column (xóa cột trong bảng)](#alter-table--drop-column-xóa-cột-trong-bảng)
@@ -36,7 +37,7 @@
 ---
 # Check Database (Kiểm tra database)
 ## Linux (Kiểm tra db trên linux)
-### mysql -u root -p (Đăng nhập quyền root)
+### sudo mysql/mariadb -u root -p (Đăng nhập quyền root)
 ### mysql --version | mysql -V
 **Ex**
 ```bash
@@ -157,6 +158,11 @@ ON UPDATE CASCADE -- Nếu khóa chính ở bảng cha thay đổi, bảng con t
 ON DELETE RESTRICT; -- Không cho phép xóa dữ liệu ở bảng cha nếu bảng con vẫn đang tham chiếu tới nó
 ```
 # Delete (Xóa)
+## DROP DATABASE ... (xóa database)
+**Syn**
+```bash
+DROP DATABASE ten_database;
+```
 ## TRUNCATE TABLE ... (Khuyên dùng nếu bạn muốn xóa sạch dữ liệu và reset ID về 1)
 **Syn**
 ```bash

@@ -662,6 +662,246 @@ users = session.query(User).all() # [User(...), User(...)] → List object ORM
 ```python
 rows = session.query(User.id, User.name).all() # [(1, 'Alice'), (2, 'Bob')] → List tuple
 ```
+tại sao db.query lại không dùng await được
+Vì await không có nghĩa là "chạy hàm này với database", mà nó có nghĩa là:
+
+Chờ một coroutine / awaitable hoàn thành.
+
+Và db.query() của SQLAlchemy Session là API synchronous, nó không trả về coroutine.
+
+1. Với Session bình thường
+
+Ví dụ:
+
+from sqlalchemy.orm import Session
+
+def get_by_email(email: str, db: Session):
+    return db.query(User).filter(User.email == email).first()
+
+Khi chạy:
+
+db.query(User)
+
+SQLAlchemy thực hiện theo kiểu synchronous.
+
+Nó trả về một Query object:
+
+db.query()
+   ↓
+Query object
+   ↓
+.first()
+   ↓
+User
+
+Không có coroutine ở đây.
+
+Vì vậy:
+
+await db.query(User)
+
+❌ Không hợp lệ.
+
+2. await thực sự chờ cái gì?
+
+Ví dụ:
+
+async def get_data():
+    result = await some_async_function()
+
+Ở đây:
+
+some_async_function()
+
+trả về một coroutine.
+
+await có thể chờ coroutine đó.
+
+Ví dụ:
+
+result = await db.execute(...)
+
+Trong AsyncSession, execute() được thiết kế asynchronous nên:
+
+db.execute()
+     ↓
+coroutine
+     ↓
+await
+     ↓
+Result
+3. Đây là lý do AsyncSession dùng execute
+
+Với:
+
+db: AsyncSession
+
+bạn viết:
+
+result = await db.execute(
+    select(User).where(User.email == email)
+)
+
+Flow:
+
+select(User)
+      ↓
+db.execute()
+      ↓
+coroutine
+      ↓
+await
+      ↓
+Result
+
+Sau đó:
+
+user = result.scalars().first()
+
+scalars() và first() không cần await, bởi vì chúng đang xử lý Result đã có sẵn trong memory, không phải đang chờ database nữa.
+
+4. Còn db.query() thì sao?
+
+query() thuộc API của:
+
+Session
+
+chứ không phải cách query chính của:
+
+AsyncSession
+
+Ví dụ synchronous:
+
+db: Session
+
+user = (
+    db.query(User)
+    .filter(User.email == email)
+    .first()
+)
+
+Toàn bộ:
+
+query()
+filter()
+first()
+
+đều là synchronous API.
+
+Nên không có:
+
+await
+5. Một cách nhìn rất dễ hiểu
+
+Hãy tưởng tượng:
+
+Sync
+result = db.query(User).first()
+
+Python:
+
+Gọi DB
+  ↓
+Đứng chờ
+  ↓
+DB trả kết quả
+  ↓
+Tiếp tục
+
+Thread đang bị block trong lúc chờ.
+
+Async
+result = await db.execute(select(User))
+
+Python:
+
+Gọi DB
+  ↓
+"Trong lúc DB xử lý, tôi đi làm việc khác"
+  ↓
+DB xong
+  ↓
+quay lại đây
+  ↓
+tiếp tục
+
+Đây là lý do bạn dùng:
+
+async def
+
++:
+
+AsyncSession
+
+thì phải dùng API async tương ứng.
+
+6. Quan trọng: async def không biến mọi thứ thành async
+
+Đây là chỗ rất nhiều người mới dùng async bị nhầm.
+
+Bạn viết:
+
+async def get_user():
+    user = db.query(User).first()
+
+không có nghĩa db.query() tự nhiên trở thành async.
+
+async def chỉ cho phép function của bạn sử dụng:
+
+await
+
+với những thứ thực sự awaitable.
+
+Ví dụ:
+
+async def test():
+    x = normal_function()       # OK
+    y = await async_function()  # OK
+
+Nhưng:
+
+await normal_function()
+
+❌ Không được nếu normal_function() không trả về awaitable.
+
+7. Áp vào code của bạn
+
+Bạn đang dùng:
+
+db: AsyncSession
+
+thì nên thống nhất:
+
+from sqlalchemy import select
+
+async def get_by_email(
+    email: str,
+    db: AsyncSession
+):
+    result = await db.execute(
+        select(User).where(User.email == email)
+    )
+
+    return result.scalars().first()
+
+Ở đây:
+
+await db.execute(...)
+
+✅ vì database operation là async.
+
+Còn:
+
+result.scalars().first()
+
+❌ không cần await vì nó chỉ lấy dữ liệu từ Result.
+
+Nhớ 3 dòng này là đủ:
+Session       → db.query()     → không await
+AsyncSession  → db.execute()   → await
+Result        → scalars/first  → không await
+
+Và await không phải thứ dùng cho "database query" nói chung; nó dùng cho operation trả về awaitable.
 ## .get()
 # Filtering (Bộ lọc)
 ## .filter() (Lọc theo điều kiện)

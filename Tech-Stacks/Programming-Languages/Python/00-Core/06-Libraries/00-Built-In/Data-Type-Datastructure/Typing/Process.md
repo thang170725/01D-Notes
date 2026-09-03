@@ -1,3 +1,10 @@
+- [Dict](#dict)
+- [List](#list)
+- [Protocol](#protocol)
+- [Tuple](#tuple)
+- [TypeDict (mô tả kiểu dictionary trong đó mỗi key có kiểu dữ liệu xác định)](#typedict-mô-tả-kiểu-dictionary-trong-đó-mỗi-key-có-kiểu-dữ-liệu-xác-định)
+- [Annotated (gắn thêm metadata cho một kiểu dữ liệu)](#annotated-gắn-thêm-metadata-cho-một-kiểu-dữ-liệu)
+---
 # Dict 
 ```python
 from typing import Dict

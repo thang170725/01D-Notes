@@ -7,6 +7,70 @@
 1. pip install langchain_community
 2. pip install langchain_ollama
 ```
+Được. Nếu bạn muốn dùng langchain_ollama, cách đơn giản nhất là chạy Qwen/Qwen2.5-1.5B-Instruct qua Ollama trước, sau đó LangChain gọi model bằng ChatOllama.
+
+1. Cài thư viện
+pip install langchain-ollama
+2. Đảm bảo model đã có trong Ollama
+
+Nếu Ollama có model Qwen tương ứng:
+
+ollama pull qwen2.5:1.5b
+
+Sau đó test trực tiếp:
+
+ollama run qwen2.5:1.5b
+3. Test bằng LangChain
+
+Tạo test_qwen.py:
+
+from langchain_ollama import ChatOllama
+
+llm = ChatOllama(
+    model="qwen2.5:1.5b",
+    temperature=0,
+)
+
+response = llm.invoke("Giải thích RNN là gì trong 3 câu.")
+
+print(response.content)
+
+Chạy:
+
+python test_qwen.py
+
+Nếu thành công, flow của bạn sẽ là:
+
+Python
+   ↓
+LangChain
+   ↓
+langchain_ollama
+   ↓
+Ollama
+   ↓
+Qwen2.5 1.5B
+Nếu bạn muốn test đúng kiểu Chat
+
+ChatOllama nhận message nên có thể viết:
+
+from langchain_ollama import ChatOllama
+from langchain_core.messages import HumanMessage
+
+llm = ChatOllama(
+    model="qwen2.5:1.5b",
+    temperature=0,
+)
+
+messages = [
+    HumanMessage(content="Bạn là trợ lý AI. Hãy giải thích Seq2Seq là gì.")
+]
+
+response = llm.invoke(messages)
+
+print(response.content)
+
+Lưu ý: Qwen/Qwen2.5-1.5B-Instruct trên Hugging Face và qwen2.5:1.5b trong Ollama không phải là hai cách gọi trực tiếp cho cùng một registry model. Nếu bạn bắt buộc muốn chạy chính xác file model Hugging Face Qwen/Qwen2.5-1.5B-Instruct qua Ollama, cần kiểm tra/đóng gói model đó vào format mà Ollama hỗ trợ trước.
 # Create (Nhóm khởi tạo)
 ## ChatOllama() (khởi tạo một đối tượng LLM)
 ```bash
