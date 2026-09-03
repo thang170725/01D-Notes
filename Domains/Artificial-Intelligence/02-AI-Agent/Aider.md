@@ -1,8 +1,25 @@
 - [Aider Introduction (là một AI coding assistant chạy trong terminal, giúp bạn viết và sửa code bằng cách chat với AI)](#aider-introduction-là-một-ai-coding-assistant-chạy-trong-terminal-giúp-bạn-viết-và-sửa-code-bằng-cách-chat-với-ai)
 - [Installation](#installation)
 - [Cấu hình API key](#cấu-hình-api-key)
-- [run](#run)
-- [Ask](#ask)
+- [aider --model ... (khởi động Aider)](#aider---model--khởi-động-aider)
+- [/add (thêm file vào context)](#add-thêm-file-vào-context)
+- [/drop (bỏ file khỏi context)](#drop-bỏ-file-khỏi-context)
+- [/read-only (đọc file nhưng không cho sửa)](#read-only-đọc-file-nhưng-không-cho-sửa)
+- [/ls (xem các file đang được Aider quản lý)](#ls-xem-các-file-đang-được-aider-quản-lý)
+- [/diff (xem thay đổi)](#diff-xem-thay-đổi)
+- [/undo (hoàn tác thay đổi gần nhất)](#undo-hoàn-tác-thay-đổi-gần-nhất)
+- [/commit (commit git)](#commit-commit-git)
+- [/git status](#git-status)
+- [/git diff](#git-diff)
+- [/run](#run)
+- [/ask](#ask)
+- [/architect](#architect)
+- [/help](#help)
+- [/clear](#clear)
+- [/reset](#reset)
+- [/tokens](#tokens)
+- [/model](#model)
+- [Ask](#ask-1)
   - [So sánh Aider và Cursor](#so-sánh-aider-và-cursor)
   - [Nên chọn Cursor hay Aider?](#nên-chọn-cursor-hay-aider)
   - [nên cài Aider vào môi trường ảo hay global](#nên-cài-aider-vào-môi-trường-ảo-hay-global)
@@ -42,10 +59,90 @@ Cách 2: Cài bằng pipx (Cách TỐI ƯU NHẤT để dùng Aider ở MỌI D�
 ```bash
 $env:GEMINI_API_KEY="chuỗi_api_key_vừa_copy"
 ```
-# run
+**Các provider khác**
+```bash
+| Provider             | Environment variable | Ví dụ model         |
+| -------------------- | -------------------- | ------------------- |
+| Google Gemini        | `GEMINI_API_KEY`     | `gemini/...`        |
+| OpenAI / ChatGPT API | `OPENAI_API_KEY`     | `gpt-...`, `o3-...` |
+| Anthropic Claude     | `ANTHROPIC_API_KEY`  | `claude-...`        |
+| DeepSeek             | `DEEPSEEK_API_KEY`   | `deepseek/...`      |
+| Qwen                 | tùy API/provider     | tùy model/provider  |
+```
+# aider --model ... (khởi động Aider)
+**Ex**
 ```bash
 aider --model gemini/gemini-1.5-flash
 ```
+# /add (thêm file vào context)
+**Ex1: thêm một file vào context**
+```bash
+/add app/main.py
+```
+**Ex2: thêm nhiều file vào context**
+```bash
+/add app/main.py app/utils.py
+```
+# /drop (bỏ file khỏi context)
+**Ex**
+```bash
+/drop app/main.py # Hữu ích khi context quá lớn
+```
+# /read-only (đọc file nhưng không cho sửa)
+**Ex**
+```bash
+/read-only README.md
+```
+# /ls (xem các file đang được Aider quản lý)
+```bash
+Rất hay dùng để kiểm tra Aider hiện đang có những file nào trong context
+```
+**Ex**
+```bash
+/ls
+```
+# /diff (xem thay đổi)
+**Syn**
+```bash
+/diff # sau khi Aider sửa code, xem chính xác nó đã thay đổi gì
+```
+# /undo (hoàn tác thay đổi gần nhất)
+**Syn**
+```bash
+/undo
+```
+**Ex**
+```bash
+Bạn: sửa hàm create_table
+
+Aider: đã sửa...
+
+Bạn:
+/diff
+
+Bạn thấy sửa sai.
+
+Bạn:
+/undo
+```
+# /commit (commit git)
+```bash
+Aider có thể tạo Git commit cho những thay đổi nó thực hiện
+```
+**Syn**
+```bash
+/commit
+```
+# /git status
+# /git diff
+# /run
+# /ask
+# /architect
+# /help
+# /clear
+# /reset
+# /tokens
+# /model
 # Ask 
 ## So sánh Aider và Cursor
 ```bash
