@@ -23,6 +23,7 @@
   - [GaussianBlur()](#gaussianblur)
   - [MedianBlur()](#medianblur)
 - [Edge Process (xử lý cạnh)](#edge-process-xử-lý-cạnh)
+  - [Sobel()](#sobel)
   - [Canny()](#canny)
 - [Color Process (Xử lý màu sắc)](#color-process-xử-lý-màu-sắc)
   - [.cvtColor()](#cvtcolor)
@@ -666,6 +667,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 ```
 # Edge Process (xử lý cạnh)
+## Sobel()
 ## Canny()
 ```bash
 - Là hàm dùng để phát hiện cạnh trong ảnh, rất phổ biến và hiệu quả.

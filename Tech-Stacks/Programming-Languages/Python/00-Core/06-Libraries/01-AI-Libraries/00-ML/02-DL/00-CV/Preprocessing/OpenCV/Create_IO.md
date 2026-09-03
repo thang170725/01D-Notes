@@ -1,5 +1,5 @@
 - [Read (Nhóm đọc, lấy)](#read-nhóm-đọc-lấy)
-  - [imread()](#imread)
+  - [imread() (để đọc một hình ảnh từ ổ đĩa và lưu nó dưới dạng một mảng NumPy để xử lý trong các ứng dụng xử lý ảnh)](#imread-để-đọc-một-hình-ảnh-từ-ổ-đĩa-và-lưu-nó-dưới-dạng-một-mảng-numpy-để-xử-lý-trong-các-ứng-dụng-xử-lý-ảnh)
   - [VideoCapture() \& .read() \& .release()](#videocapture--read--release)
 - [Create \& Config (Nhóm tạo \& cấu hình)](#create--config-nhóm-tạo--cấu-hình)
   - [NameWindow()](#namewindow)
@@ -16,10 +16,7 @@
   - [imencode](#imencode)
 ---
 # Read (Nhóm đọc, lấy)
-## imread()
-```bash
-- Được sử dụng để đọc một hình ảnh từ ổ đĩa và lưu nó dưới dạng một mảng NumPy để xử lý trong các ứng dụng xử lý ảnh.
-```
+## imread() (để đọc một hình ảnh từ ổ đĩa và lưu nó dưới dạng một mảng NumPy để xử lý trong các ứng dụng xử lý ảnh)
 **Syn**
 ```bash
 cv2.imread(filename, flags)

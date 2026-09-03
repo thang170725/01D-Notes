@@ -14,6 +14,7 @@
     - [Binomial](#binomial)
     - [Central Limit Theorem (CLT) (Định lý giới hạn trung tâm)](#central-limit-theorem-clt-định-lý-giới-hạn-trung-tâm)
   - [P-value (xác suất để kết quả “lạ như bạn thấy” xảy ra nếu giả thuyết ban đầu là đúng)](#p-value-xác-suất-để-kết-quả-lạ-như-bạn-thấy-xảy-ra-nếu-giả-thuyết-ban-đầu-là-đúng)
+  - [KL Divergence](#kl-divergence)
 - [Đại số tuyến tính](#đại-số-tuyến-tính)
   - [Scalar (đại lượng vô hướng)](#scalar-đại-lượng-vô-hướng)
   - [Vector (một trạng thái, vị trí trong không gian)](#vector-một-trạng-thái-vị-trí-trong-không-gian)
@@ -858,6 +859,193 @@ Nếu P-value = 0.01
     👉 nghĩa là: chỉ 1% khả năng xảy ra
     ➡️ Quá hiếm → đồng xu có thể bị lệch
 ```
+## KL Divergence
+
+KL Divergence = Kullback–Leibler Divergence.
+
+Nó trả lời câu hỏi:
+
+"Phân phối Q khác phân phối P bao nhiêu?"
+
+Giả sử:
+
+P = phân phối thật
+Q = phân phối model dự đoán
+
+KL Divergence đo mức độ Q không giống P.
+
+Công thức:
+
+$$ D_{KL}(P||Q) = \sum_x P(x)\log\frac{P(x)}{Q(x)} $$
+2. Ví dụ rất đơn giản
+
+Giả sử có 3 class:
+
+        Cat    Dog    Bird
+
+P       0.7    0.2    0.1
+Q       0.6    0.3    0.1
+
+P là phân phối thật:
+
+Cat  = 70%
+Dog  = 20%
+Bird = 10%
+
+Q là model dự đoán:
+
+Cat  = 60%
+Dog  = 30%
+Bird = 10%
+
+KL sẽ cho biết:
+
+Q lệch khỏi P bao nhiêu.
+
+Nếu:
+
+P = Q
+
+thì:
+
+$$ D_{KL}(P||Q)=0 $$
+
+Càng khác nhau → KL càng lớn.
+
+3. Nhưng KL không phải khoảng cách thông thường
+
+Đây là điểm rất quan trọng.
+
+KL Divergence:
+
+D_KL(P || Q)
+
+không đối xứng.
+
+Có thể:
+
+D_KL(P || Q) ≠ D_KL(Q || P)
+
+Nó cũng không phải metric theo nghĩa toán học thông thường.
+
+Vì vậy đừng hình dung:
+
+"Khoảng cách giữa hai điểm."
+
+Mà nên hình dung:
+
+"Mức độ mất thông tin khi dùng Q để xấp xỉ P."
+
+4. KL Divergence dùng để làm gì?
+
+Có khá nhiều ứng dụng.
+
+Trường hợp 1: So sánh hai probability distributions
+
+Ví dụ:
+
+P = distribution thật
+Q = distribution dự đoán
+
+Bạn muốn biết model đang lệch như thế nào.
+
+Trường hợp 2: Knowledge Distillation
+
+Đây là một ứng dụng rất quan trọng trong Deep Learning.
+
+Bạn có:
+
+Teacher model
+      ↓
+probability distribution
+      ↓
+Student model
+      ↓
+probability distribution
+
+Ví dụ teacher:
+
+Cat   0.70
+Dog   0.20
+Bird  0.10
+
+Student:
+
+Cat   0.60
+Dog   0.30
+Bird  0.10
+
+Bạn muốn student học phân phối output của teacher.
+
+KL Divergence có thể được dùng để ép:
+
+Student distribution ≈ Teacher distribution
+Trường hợp 3: VAE
+
+Trong Variational Autoencoder, KL Divergence là thành phần rất quan trọng của loss.
+
+Bạn sẽ gặp:
+
+$$ Loss = Reconstruction\ Loss + KL\ Divergence $$
+
+Trong đó:
+
+Reconstruction loss
+→ latent representation phải giữ thông tin cần thiết
+
+KL divergence
+→ ép latent distribution gần một prior distribution
+   thường là N(0, I)
+
+Đây là một ứng dụng rất quan trọng nếu sau này bạn học generative models.
+
+Trường hợp 4: Reinforcement Learning / policy
+
+Ví dụ:
+
+old policy
+      ↓
+π_old(a|s)
+
+new policy
+      ↓
+π_new(a|s)
+
+KL có thể được dùng để kiểm soát:
+
+policy mới không được thay đổi quá xa policy cũ.
+
+5. Một điểm rất quan trọng: KL và Cross Entropy
+
+Hai cái này rất dễ bị nhầm.
+
+Có quan hệ:
+
+$$ H(P,Q) = H(P) + D_{KL}(P||Q) $$
+
+Trong đó:
+
+H(P)       = Entropy
+H(P,Q)     = Cross Entropy
+D_KL(P||Q) = KL Divergence
+
+Nếu P cố định:
+
+H(P)
+
+là constant.
+
+Do đó:
+
+Minimize Cross Entropy
+
+về bản chất tương đương với:
+
+Minimize KL Divergence
+
+trong trường hợp phù hợp.
+
+Đây là lý do khi học classification bạn thường thấy Cross Entropy hơn là trực tiếp dùng KL.
 # Đại số tuyến tính
 ## Scalar (đại lượng vô hướng) 
 ```bash

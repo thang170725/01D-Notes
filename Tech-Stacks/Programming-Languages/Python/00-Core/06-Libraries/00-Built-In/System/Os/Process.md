@@ -8,6 +8,7 @@
   - [.join() (Ghép đường dẫn)](#join-ghép-đường-dẫn)
   - [.basename() (Dùng để lấy tên file hoặc tên thư mục cuối cùng từ một đường dẫn)](#basename-dùng-để-lấy-tên-file-hoặc-tên-thư-mục-cuối-cùng-từ-một-đường-dẫn)
   - [os.path.splitext() (Dùng để tách tên file và phần mở rộng)](#ospathsplitext-dùng-để-tách-tên-file-và-phần-mở-rộng)
+  - [os.path.getsize() (dùng để lấy kích thước của một file, tính bằng byte)](#ospathgetsize-dùng-để-lấy-kích-thước-của-một-file-tính-bằng-byte)
   - [check (kiểm tra)](#check-kiểm-tra)
     - [.path.exists() (Dùng để kiểm tra xem một đường dẫn (file hoặc thư mục) có tồn tại hay không)](#pathexists-dùng-để-kiểm-tra-xem-một-đường-dẫn-file-hoặc-thư-mục-có-tồn-tại-hay-không)
     - [.path.isfile() (Chỉ kiểm tra file)](#pathisfile-chỉ-kiểm-tra-file)
@@ -329,6 +330,23 @@ train\c.jpg
 test\d.jpg
 
 Đây là lý do relpath() thường được dùng cùng os.walk(): os.walk() giúp lấy đường dẫn đầy đủ của từng file, còn relpath() chuyển chúng thành đường dẫn tương đối, giúp bạn dễ dàng tái tạo cấu trúc thư mục ở nơi khác hoặc ánh xạ giữa images/ và labels/ trong các dự án như YOLO.
+## os.path.getsize() (dùng để lấy kích thước của một file, tính bằng byte)
+**Syn**
+```bash
+os.path.getsize(path)
+
+- Input:
+    + path: đường dẫn tới file.
+- Output: một số nguyên (int) biểu thị kích thước file tính bằng byte.
+```
+**Ex**
+```python
+import os
+
+size = os.path.getsize(r"D:\data\test.json")
+
+print(size) # 10240, Có nghĩa là file test.json có kích thước: 10240 bytes ≈ 10 KB.
+```
 ## check (kiểm tra)
 ### .path.exists() (Dùng để kiểm tra xem một đường dẫn (file hoặc thư mục) có tồn tại hay không)
 **Syn**

@@ -2,7 +2,7 @@
 - [Sequential() (Khởi tạo mô hình mạng nơ ron)](#sequential-khởi-tạo-mô-hình-mạng-nơ-ron)
 - [.train() (Bật chế độ training mode)](#train-bật-chế-độ-training-mode)
 - [.Linear()](#linear)
-  - [Conv2d()](#conv2d)
+- [Conv2d()](#conv2d)
     - [.weight (xem weight của conv2d)](#weight-xem-weight-của-conv2d)
 - [tensor đầu ra của mô hình](#tensor-đầu-ra-của-mô-hình)
     - [.eval()](#eval)
@@ -38,7 +38,7 @@ import torch.nn as nn
 fc = nn.Linear(10, 5)
 print(fc) # Linear(in_features=10, out_features=5, bias=True)
 ```
-## Conv2d()
+# Conv2d()
 **Syn**
 ```bash
 torch.nn.Conv2d(

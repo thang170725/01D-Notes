@@ -746,20 +746,16 @@ Wt+1 = Wt - learning_rate × gradient
 ## Momentum (SGD + quán tính)
 **Ex**
 ```bash
-- SGD = đi bộ
-- Momentum = đẩy quả bóng
-    Nếu nhiều bước liên tiếp cùng hướng:
-        → đi nhanh hơn
-
-    Nếu gặp chỗ lồi lõm nhỏ:
-        → vẫn lăn qua được
+Nếu SGD = đi bộ thì Momentum = đẩy quả bóng
+    - Nếu nhiều bước liên tiếp cùng hướng → đi nhanh hơn
+    - Nếu gặp chỗ lồi lõm nhỏ → vẫn lăn qua được
     
-    Ưu điểm
-        - Nhanh hơn SGD
-        - Ít rung hơn
+Ưu điểm
+    - Nhanh hơn SGD
+    - Ít rung hơn
 
-    Nhược điểm
-        - Vẫn phải tự chọn learning rate khá cẩn thận
+Nhược điểm
+    - Vẫn phải tự chọn learning rate khá cẩn thận
 ```
 ## RMSprop
 ```bash
