@@ -90,3 +90,15 @@ Trong Tailwind có 3 layer chính:
 /* sử dụng y hệt utility mặc định của Tailwind. */
 ```
 # @apply
+```bash
+để tự custom className trong file css
+```
+**Ex**
+```css
+.input-light {
+    @apply w-full pl-10 pr-3 py-2.5 rounded-xl text-sm transition-all;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #0f172a;
+  }
+```

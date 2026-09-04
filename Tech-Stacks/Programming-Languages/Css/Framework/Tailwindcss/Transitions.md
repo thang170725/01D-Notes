@@ -5,6 +5,8 @@
   - [ease-in-out](#ease-in-out)
   - [delay-](#delay-)
   - [duration-](#duration-)
+- [hover](#hover)
+- [focus](#focus)
 ---
 # transition-colors (hiệu ứng chuyển động của màu sắc)
 **Ex**
@@ -45,3 +47,14 @@ Hover vào / ra đều mượt
 <li className="p-2 hover:bg-[oklch(50%_0.066_243.157)] transition-colors delay-500">
 ```
 ## duration-
+# hover
+```html
+<button class="bg-sky-500 hover:bg-sky-700 ...">Save changes</button>
+```
+# focus
+**Ex**
+```html
+<button class="bg-violet-500 hover:bg-violet-600 focus:outline-2 focus:outline-offset-2 focus:outline-violet-500 active:bg-violet-700 ...">
+  Save changes
+</button>
+```

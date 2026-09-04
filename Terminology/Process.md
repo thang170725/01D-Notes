@@ -10,6 +10,7 @@
   - [Domain website (Được hiểu là một tên miền (url) trỏ tới website)](#domain-website-được-hiểu-là-một-tên-miền-url-trỏ-tới-website)
 - [Computer Network (mạng máy tính)](#computer-network-mạng-máy-tính)
   - [DNS (Domain Name System dùng để phân giải tên miền)](#dns-domain-name-system-dùng-để-phân-giải-tên-miền)
+  - [proxy](#proxy)
 - [Subdomain](#subdomain)
 - [ERP (Enterprise Resource Planning)](#erp-enterprise-resource-planning)
   - [Các luồng nghiệp vụ cơ bản trong ERP](#các-luồng-nghiệp-vụ-cơ-bản-trong-erp)
@@ -78,6 +79,7 @@ New gTLD (mới)
 ```bash
 google.com A → 142.250.190.78
 ```
+## proxy
 # Subdomain
 ```bash
 📌 Trong thực tế:

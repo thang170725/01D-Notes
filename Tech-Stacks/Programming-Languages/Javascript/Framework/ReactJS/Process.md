@@ -1,5 +1,16 @@
+- [eslint.config.js (là công cụ soi code và báo cho bạn những vấn đề trong code JavaScript/React)](#eslintconfigjs-là-công-cụ-soi-code-và-báo-cho-bạn-những-vấn-đề-trong-code-javascriptreact)
+- [oxlint.config.js (là công cụ soi code và báo cho bạn những vấn đề trong code JavaScript/React)](#oxlintconfigjs-là-công-cụ-soi-code-và-báo-cho-bạn-những-vấn-đề-trong-code-javascriptreact)
+- [package-lock.json (Project này cần những package nào)](#package-lockjson-project-này-cần-những-package-nào)
+- [vite.config.js (nói xem project này muốn vite hoạt động như thế nào)](#viteconfigjs-nói-xem-project-này-muốn-vite-hoạt-động-như-thế-nào)
 - [div key=""](#div-key)
 ---
+# eslint.config.js (là công cụ soi code và báo cho bạn những vấn đề trong code JavaScript/React)
+# oxlint.config.js (là công cụ soi code và báo cho bạn những vấn đề trong code JavaScript/React)
+```bash
+Oxlint là một linter mới hơn, được xây dựng trong hệ sinh thái Oxc và tập trung mạnh vào tốc độ. Vite hiện hỗ trợ chọn Oxlint làm linter mặc định cho template React, còn ESLint vẫn là lựa chọn chính thức
+```
+# package-lock.json (Project này cần những package nào)
+# vite.config.js (nói xem project này muốn vite hoạt động như thế nào)
 # div key=""
 ```bash
 key là một thuộc tính đặc biệt (special prop) giúp React nhận diện duy nhất mỗi phần tử trong một danh sách để tối ưu việc render và cập nhật UI.
