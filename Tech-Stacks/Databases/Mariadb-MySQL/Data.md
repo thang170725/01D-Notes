@@ -13,7 +13,7 @@
   - [select ... limit](#select--limit)
   - [select ... order by](#select--order-by)
   - [union all](#union-all)
-  - [Having](#having)
+  - [Having (dùng để lọc kết quả sau khi GROUP BY)](#having-dùng-để-lọc-kết-quả-sau-khi-group-by)
 - [like (truy vấn dữ liệu theo điều kiện)](#like-truy-vấn-dữ-liệu-theo-điều-kiện)
   - [REGEXP (công cụ khớp mẫu cực mạnh)](#regexp-công-cụ-khớp-mẫu-cực-mạnh)
 - [Math (Nhóm xử lý tính toán)](#math-nhóm-xử-lý-tính-toán)
@@ -203,111 +203,42 @@ SELECT name FROM B;
 -- | Bình  |
 -- | Cường |
 ```
-## Having
-HAVING trong SQL dùng để lọc kết quả sau khi GROUP BY.
-
+## Having (dùng để lọc kết quả sau khi GROUP BY)
+```bash
 Cách nhớ cực đơn giản:
-
-WHERE lọc từng dòng → HAVING lọc từng nhóm.
-
-Ví dụ
-
+  WHERE lọc từng dòng → HAVING lọc từng nhóm.
+```
+**Ex**
+```bash
 Giả sử bảng Employee:
-
-department	salary
-IT	100
-IT	200
-IT	300
-HR	100
-HR	150
-Sales	500
+  department	salary
+  IT	        100
+  IT	        200
+  IT	        300
+  HR	        100
+  HR	        150
+  Sales	      500
 
 Bạn muốn tìm những phòng ban có tổng lương > 500:
-
+```
+```bash
 SELECT department, SUM(salary) AS total_salary
 FROM Employee
 GROUP BY department
 HAVING SUM(salary) > 500;
-
-Kết quả:
-
-IT     600
-
-Vì:
-
-IT    → 100 + 200 + 300 = 600  ✅
-HR    → 100 + 150 = 250       ❌
-Sales → 500                    ❌
-Tại sao không dùng WHERE?
-
-Bạn không thể viết kiểu:
-
-WHERE SUM(salary) > 500
-
-vì SUM(salary) chỉ được tính sau khi GROUP BY.
+# IT     600
+# Vì:
+# IT    → 100 + 200 + 300 = 600  ✅
+# HR    → 100 + 150 = 250       ❌
+# Sales → 500                    ❌
+```
+**Tại sao không dùng WHERE?**
+```bash
+Bạn không thể viết kiểu: WHERE SUM(salary) > 500
 
 SQL có thể hình dung thứ tự xử lý như:
-
-FROM
- ↓
-WHERE          ← lọc từng row
- ↓
-GROUP BY       ← gom row thành group
- ↓
-HAVING         ← lọc group
- ↓
-SELECT
- ↓
-ORDER BY
-Một ví dụ rất hay gặp trên LeetCode
-
-Tìm những người xuất hiện ít nhất 2 lần:
-
-SELECT email
-FROM Person
-GROUP BY email
-HAVING COUNT(*) >= 2;
-
-Ở đây:
-
-GROUP BY email
-
-gom:
-
-a@gmail.com → 3 rows
-b@gmail.com → 1 row
-c@gmail.com → 2 rows
-
-Sau đó:
-
-HAVING COUNT(*) >= 2
-
-lọc group:
-
-a@gmail.com ✅
-b@gmail.com ❌
-c@gmail.com ✅
-⭐ Mẹo nhớ
-
-Nếu điều kiện liên quan đến một row:
-
-WHERE
-
-Ví dụ:
-
-WHERE salary > 5000
-
-Nếu điều kiện liên quan đến kết quả GROUP BY / COUNT / SUM / AVG / MAX / MIN:
-
-HAVING
-
-Ví dụ:
-
-HAVING COUNT(*) > 5
-HAVING AVG(salary) > 5000
-HAVING SUM(salary) > 100000
-
-Cứ thấy GROUP BY + muốn lọc theo COUNT/SUM/AVG/... → nghĩ ngay đến HAVING.
+  FROM -> WHERE (lọc từng row) -> GROUP BY (gom row thành group) -> HAVING (lọc group) -> SELECT -> ORDER BY
+```
 # like (truy vấn dữ liệu theo điều kiện)
 **Ex**
 ```sql

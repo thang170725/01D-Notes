@@ -1,4 +1,6 @@
++ [<<Back](Base.md)
 - [Open AI Introduction (là một công ty nghiên cứu và phát triển AI, nổi tiếng nhất với dòng mô hình GPT và sản phẩm ChatGPT)](#open-ai-introduction-là-một-công-ty-nghiên-cứu-và-phát-triển-ai-nổi-tiếng-nhất-với-dòng-mô-hình-gpt-và-sản-phẩm-chatgpt)
+- [Codex](#codex)
 ---
 # Open AI Introduction (là một công ty nghiên cứu và phát triển AI, nổi tiếng nhất với dòng mô hình GPT và sản phẩm ChatGPT)
 ```bash
@@ -15,19 +17,6 @@
                      AI Models + Tools
 
 Hiện tại OpenAI cung cấp cả sản phẩm cho người dùng cuối, doanh nghiệp, và developer xây ứng dụng AI.
-
-1. OpenAI là công ty gì?
-
-OpenAI .
-
-Nhưng nếu bạn là developer, điều quan trọng hơn là:
-
-OpenAI không chỉ bán ChatGPT. OpenAI cung cấp model + API + agent + công cụ để bạn xây ứng dụng AI của riêng mình.
-
-Đây mới là phần rất đáng quan tâm với bạn.
-
-Ví dụ:
-
 OpenAI
    │
    ├── ChatGPT
@@ -41,55 +30,33 @@ OpenAI
    │
    └── Business / Enterprise
          └── AI cho tổ chức
-2. Sản phẩm quan trọng nhất: ChatGPT
 
-ChatGPT là sản phẩm mà người dùng cuối tương tác trực tiếp.
+Sản phẩm quan trọng nhất: ChatGPT
+   ChatGPT là sản phẩm mà người dùng cuối tương tác trực tiếp.
 
-Bạn có thể dùng nó cho:
-
-hỏi đáp
-học tập
-lập trình
-phân tích dữ liệu
-phân tích file
-xử lý hình ảnh
-nghiên cứu
-viết tài liệu
-tạo nội dung
-làm việc với các công cụ
-thực hiện những workflow nhiều bước
+   Bạn có thể dùng nó cho:
+      - hỏi đáp
+      - học tập
+      - lập trình
+      - phân tích dữ liệu
+      - phân tích file
+      - xử lý hình ảnh
+      - nghiên cứu
+      - viết tài liệu
+      - tạo nội dung
+      - làm việc với các công cụ
+      - thực hiện những workflow nhiều bước
+      - ...
 
 OpenAI hiện cũng đang phát triển ChatGPT theo hướng agent, tức là không chỉ "trả lời câu hỏi" mà có thể thực hiện một chuỗi hành động để hoàn thành công việc. ChatGPT agent có khả năng sử dụng công cụ, duyệt web, chạy code, phân tích và tạo các deliverable như spreadsheet hoặc presentation.
+```
+**Ex: agentic workflow**
+```bash
+Bạn: "Phân tích 3 đối thủ của công ty tôi và tạo báo cáo"
 
-Ví dụ truyền thống:
-
-Bạn:
-"Phân tích dataset này"
-
-ChatGPT:
-→ trả lời
-
-Còn agentic workflow:
-
-Bạn:
-"Phân tích 3 đối thủ của công ty tôi
-và tạo báo cáo"
-
-Agent:
-    ↓
-Research web
-    ↓
-Thu thập dữ liệu
-    ↓
-Phân tích
-    ↓
-Tổng hợp
-    ↓
-Tạo report
-
-Đây là một sự thay đổi khá lớn trong cách sử dụng AI.
-
-3. ChatGPT Work
+Agent: Research web -> Thu thập dữ liệu -> Phân tích -> Tổng hợp -> Tạo report -> Đây là một sự thay đổi khá lớn trong cách sử dụng AI.
+```
+1. ChatGPT Work
 
 Một hướng mới của ChatGPT là phân biệt:
 
@@ -117,10 +84,8 @@ và viết test."
 
 Đây là cách bạn có thể hình dung.
 
-4. Codex — cái này đặc biệt đáng chú ý với bạn
-
-Vì bạn đang làm Python/AI nên Codex rất đáng để tìm hiểu.
-
+# Codex
+```bash
 Codex là coding agent của OpenAI.
 
 Nó không đơn giản chỉ là:
@@ -170,7 +135,7 @@ Run all tests after modification."
 
 Đây là kiểu task mà Codex hướng tới.
 
-5. Và bây giờ đến phần quan trọng nhất với bạn: OpenAI API
+1. Và bây giờ đến phần quan trọng nhất với bạn: OpenAI API
 
 Nếu bạn đang xây:
 

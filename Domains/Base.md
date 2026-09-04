@@ -3,11 +3,12 @@
 ---
 # Directory Structure
 Domains/                                                            ```mình dùng thư mục này để xem kiến thức của các lĩnh vực trong CNTT ```  
+ ├── [Article](Article/Base.md)                                     ```mình dùng file này để xem kiến thức về lĩnh vực Nghệ thuật```  
  ├── [Artifical-Intelligence](Artificial-Intelligence/Base.md)      ```mình dùng file này để xem kiến thức về lĩnh vực AI```   
- ├── Cloud/                       # mình dùng file này để xem kiến thức về lĩnh vực Cloud
- ├── Data-Analyst/                # mình dùng file này để xem kiến thức về lĩnh vực phân tích dữ liệu
- ├── Embedded/                    # mình dùng file này để xem kiến thức về lĩnh vực nhúng
- ├── Hacking/                     # mình dùng file này để xem kiến thức về lĩnh vực Hack 
- ├── Math/                        # mình dùng file này để xem kiến thức về lĩnh vực toán học
- ├── Reinforcement-Learning/      # mình dùng file này để xem kiến thức về lĩnh vực học tăng cường
- ├── Web-Technology/              # mình dùng file này để xem kiến thức về lĩnh vực web
+ ├── [Cloud](Cloud/00-Core.md)                                      ```mình dùng file này để xem kiến thức về lĩnh vực Cloud```  
+ ├── [Data-Analyst](Data-Analyst/Process.md)                        ```mình dùng file này để xem kiến thức về lĩnh vực phân tích dữ liệu```   
+ ├── [Embedded](Embedded/Base.md)                                   ```mình dùng file này để xem kiến thức về lĩnh vực nhúng```  
+ ├── [Graphics](Graphics/base.md)                                   ```mình dùng file này để xem kiến thức về lĩnh vực Hack```    
+ ├── [Hacking](Hacking/Computer.md)                                 ```mình dùng file này để xem kiến thức về lĩnh vực toán học```  
+ ├── [Reinforcement-Learning](Reinforcement-Learning/base.md)       ```mình dùng file này để xem kiến thức về lĩnh vực học tăng cường```  
+ └── [Web-Technology](Web-Technology/Base.md)                       ```mình dùng file này để xem kiến thức về lĩnh vực web```     

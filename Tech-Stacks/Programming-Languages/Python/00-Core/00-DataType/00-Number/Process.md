@@ -73,7 +73,7 @@ print(res, type(res)) # 1 <class 'int'>
 **Ex**
 ```python
 a = 8
-res = 2 << a # 1000 -> 1000000
+res = 2 << a # 10 -> 1000000000 nghĩa là dịch số 2 sang a bit
 print(res, type(res)) # 512 <class 'int'>
 ```
 ## | (OR)

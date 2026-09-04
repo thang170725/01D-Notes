@@ -8,7 +8,8 @@
   - [Phòng thủ cơ bản](#phòng-thủ-cơ-bản)
 - [Website Terminology (thuật ngữ mảng website)](#website-terminology-thuật-ngữ-mảng-website)
   - [Domain website (Được hiểu là một tên miền (url) trỏ tới website)](#domain-website-được-hiểu-là-một-tên-miền-url-trỏ-tới-website)
-- [DNS (Domain Name System - domain → IP)](#dns-domain-name-system---domain--ip)
+- [Computer Network (mạng máy tính)](#computer-network-mạng-máy-tính)
+  - [DNS (Domain Name System dùng để phân giải tên miền)](#dns-domain-name-system-dùng-để-phân-giải-tên-miền)
 - [Subdomain](#subdomain)
 - [ERP (Enterprise Resource Planning)](#erp-enterprise-resource-planning)
   - [Các luồng nghiệp vụ cơ bản trong ERP](#các-luồng-nghiệp-vụ-cơ-bản-trong-erp)
@@ -20,6 +21,8 @@
 - [MVP (Minimum Viable Product - là phiên bản nhỏ nhất của sản phẩm nhưng vẫn sử dụng được)](#mvp-minimum-viable-product---là-phiên-bản-nhỏ-nhất-của-sản-phẩm-nhưng-vẫn-sử-dụng-được)
 - [TPA Bảo hiểm (nghiệp vụ trong ngành bảo hiểm)](#tpa-bảo-hiểm-nghiệp-vụ-trong-ngành-bảo-hiểm)
   - [Phân loại giấy tờ](#phân-loại-giấy-tờ)
+  - [Ask](#ask)
+    - [Claim trong lĩnh vực bảo hiểm là gì?](#claim-trong-lĩnh-vực-bảo-hiểm-là-gì)
 ---
 # Specialized Terminology Introduction (Thuật ngữ chuyên ngành và nghiệp vụ)
 # Domain
@@ -69,7 +72,8 @@ New gTLD (mới)
     - .cloud
     - .app
 ```
-# DNS (Domain Name System - domain → IP)
+# Computer Network (mạng máy tính)
+## DNS (Domain Name System dùng để phân giải tên miền)
 **Ex**
 ```bash
 google.com A → 142.250.190.78
@@ -188,6 +192,621 @@ Nếu làm hết ngay sẽ mất rất lâu. Thay vào đó, bạn tạo MVP:
 => MVP = phiên bản tối thiểu nhưng có giá trị sử dụng.
 ```
 # TPA Bảo hiểm (nghiệp vụ trong ngành bảo hiểm)
+**Luồng nghiệp vụ**
+```bash
+                                      ┌───────────────────────────────┐
+                                      │      ĐẠI HỘI CỔ ĐÔNG         │
+                                      │       Shareholders            │
+                                      └───────────────┬───────────────┘
+                                                      │
+                                                      ▼
+                                      ┌───────────────────────────────┐
+                                      │       HỘI ĐỒNG QUẢN TRỊ      │
+                                      │     Board of Directors        │
+                                      │ - Định hướng chiến lược       │
+                                      │ - Giám sát                    │
+                                      │ - Bổ nhiệm lãnh đạo           │
+                                      └───────────────┬───────────────┘
+                                                      │
+                                                      ▼
+                                      ┌───────────────────────────────┐
+                                      │       TỔNG GIÁM ĐỐC / CEO     │
+                                      │ - Điều hành toàn công ty      │
+                                      └───────────────┬───────────────┘
+                                                      │
+          ┌───────────────────────────────────────────┼───────────────────────────────────────────┐
+          │                                           │                                           │
+          ▼                                           ▼                                           ▼
+┌──────────────────────┐                   ┌──────────────────────┐                   ┌──────────────────────┐
+│ KHỐI KINH DOANH      │                   │ KHỐI NGHIỆP VỤ BH    │                   │ KHỐI HỖ TRỢ          │
+│ Business             │                   │ Insurance Operations │                   │ Corporate Support    │
+└──────────┬───────────┘                   └──────────┬───────────┘                   └──────────┬───────────┘
+           │                                          │                                          │
+           │                                          │                                          │
+   ┌───────┼────────┐                   ┌─────────────┼─────────────────┐              ┌──────────┼───────────┐
+   │       │        │                   │             │                 │              │          │           │
+   ▼       ▼        ▼                   ▼             ▼                 ▼              ▼          ▼           ▼
+Marketing Sales  Customer            Product      Underwriting     Servicing          HR        Admin      Legal
+         /Agent  Service                                           /Policy Admin                              │
+                                                                                                              │
+                                                                                                              ▼
+                                                                                                         Compliance
+
+
+================================================================================================================
+                                      QUY TRÌNH KINH DOANH CHÍNH
+================================================================================================================
+
+
+[1] MARKETING / TIẾP CẬN KHÁCH HÀNG
+            │
+            │ quảng cáo, campaign, giới thiệu sản phẩm
+            ▼
+┌──────────────────────────────┐
+│       KHÁCH HÀNG TIỀM NĂNG   │
+│          Prospect             │
+└───────────────┬──────────────┘
+                │
+                │ quan tâm sản phẩm
+                ▼
+┌──────────────────────────────┐
+│       SALES / AGENT          │
+│ - Tư vấn                     │
+│ - Giải thích quyền lợi       │
+│ - Báo phí                    │
+│ - Thu thập thông tin         │
+└───────────────┬──────────────┘
+                │
+                ▼
+
+
+[2] THẨM ĐỊNH TRƯỚC KHI CẤP BẢO HIỂM
+
+┌──────────────────────────────┐
+│        UNDERWRITING          │
+│ - Đánh giá rủi ro            │
+│ - Kiểm tra sức khỏe          │
+│ - Kiểm tra nghề nghiệp       │
+│ - Xem lịch sử bảo hiểm       │
+│ - Quyết định điều kiện BH    │
+└───────────────┬──────────────┘
+                │
+                ├──────────────► Reject
+                │
+                ├──────────────► Accept with conditions
+                │
+                ▼
+             Accept
+                │
+                ▼
+
+
+[3] PHÁT HÀNH HỢP ĐỒNG
+
+┌──────────────────────────────┐
+│       POLICY ADMIN           │
+│ - Tạo hợp đồng               │
+│ - Cấp policy number          │
+│ - Ghi nhận quyền lợi         │
+│ - Ghi nhận phí               │
+│ - Ghi nhận người thụ hưởng   │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│      INSURANCE POLICY        │
+│      HỢP ĐỒNG BẢO HIỂM       │
+└───────────────┬──────────────┘
+                │
+                ▼
+
+
+[4] QUẢN LÝ HỢP ĐỒNG / SERVICING
+
+┌──────────────────────────────┐
+│          SERVICING           │
+│ - Đổi thông tin khách hàng   │
+│ - Gia hạn                    │
+│ - Thu phí                    │
+│ - Thay đổi quyền lợi         │
+│ - Đổi người thụ hưởng        │
+│ - Cấp lại hợp đồng           │
+│ - Tra cứu quyền lợi          │
+└───────────────┬──────────────┘
+                │
+                │
+                │ hợp đồng còn hiệu lực
+                ▼
+
+
+================================================================================================================
+                                        KHI CÓ SỰ KIỆN BẢO HIỂM
+================================================================================================================
+
+
+                         ┌──────────────────────────────┐
+                         │         KHÁCH HÀNG           │
+                         │ - Người được bảo hiểm        │
+                         │ - Người thụ hưởng            │
+                         └───────────────┬──────────────┘
+                                         │
+                                         │ xảy ra sự kiện
+                                         │
+                                         │ VD:
+                                         │ - Nằm viện
+                                         │ - Tai nạn
+                                         │ - Phẫu thuật
+                                         │ - Bệnh hiểm nghèo
+                                         │ - Tử vong
+                                         ▼
+
+
+[5] CLAIM SUBMISSION
+
+┌──────────────────────────────┐
+│       CLAIM FORM             │
+│ - Điền yêu cầu bồi thường    │
+│ - Policy number              │
+│ - Thông tin người BH         │
+│ - Sự kiện bảo hiểm           │
+│ - Số tiền yêu cầu            │
+└───────────────┬──────────────┘
+                │
+                │ kèm tài liệu
+                ▼
+
+┌─────────────────────────────────────────┐
+│          CLAIM DOCUMENTS                │
+│                                         │
+│ - Claim Form                            │
+│ - CCCD / thông tin KH                   │
+│ - Giấy ra viện                          │
+│ - Hóa đơn viện phí                      │
+│ - Đơn thuốc                             │
+│ - Kết quả xét nghiệm                    │
+│ - Chẩn đoán                             │
+│ - Hồ sơ bệnh án                         │
+│ - Giấy chứng tử                         │
+│ - Chứng từ khác                         │
+└──────────────────┬──────────────────────┘
+                   │
+                   ▼
+
+
+[6] CUSTOMER SERVICE / CLAIM INTAKE
+
+┌──────────────────────────────┐
+│      CUSTOMER SERVICE        │
+│ - Hướng dẫn khách hàng       │
+│ - Tiếp nhận yêu cầu          │
+│ - Giải đáp thắc mắc          │
+│ - Kiểm tra sơ bộ             │
+└───────────────┬──────────────┘
+                │
+                ▼
+
+┌──────────────────────────────┐
+│        CLAIM INTAKE          │
+│ - Tạo Claim ID               │
+│ - Gom giấy tờ                │
+│ - Scan hồ sơ                 │
+│ - Kiểm tra số lượng tài liệu │
+│ - Đóng thành bộ hồ sơ        │
+└───────────────┬──────────────┘
+                │
+                ▼
+
+
+[7] DOCUMENT PROCESSING / AI / OCR
+
+┌──────────────────────────────────────┐
+│              AI / OCR                │
+│                                      │
+│ 1. OCR                              │
+│    PDF/Image ───────────► Text        │
+│                                      │
+│ 2. Document Classification           │
+│    ├─ Invoice                        │
+│    ├─ Prescription                   │
+│    ├─ Discharge Summary              │
+│    ├─ Lab Result                     │
+│    ├─ Claim Form                     │
+│    └─ Other                          │
+│                                      │
+│ 3. Data Extraction                   │
+│    ├─ Patient name                   │
+│    ├─ Hospital                       │
+│    ├─ Diagnosis                      │
+│    ├─ Amount                         │
+│    ├─ Admission date                 │
+│    └─ Discharge date                 │
+│                                      │
+│ 4. Table Extraction                  │
+│                                      │
+│ 5. Validation / Normalization        │
+│                                      │
+│ 6. Structured Output                 │
+│    JSON / Database record            │
+└──────────────────┬───────────────────┘
+                   │
+                   │ structured data
+                   ▼
+
+┌──────────────────────────────┐
+│       CLAIM DATABASE         │
+│ / Claim Management System    │
+└───────────────┬──────────────┘
+                │
+                ▼
+
+
+[8] CLAIM PROCESSING
+
+┌──────────────────────────────────────┐
+│          CLAIM PROCESSOR             │
+│                                      │
+│ - Kiểm tra đủ hồ sơ                  │
+│ - Kiểm tra thông tin OCR             │
+│ - Kiểm tra policy                    │
+│ - Kiểm tra người được BH             │
+│ - Kiểm tra thời hạn hợp đồng         │
+│ - Kiểm tra quyền lợi                 │
+│ - Kiểm tra điều khoản loại trừ       │
+│ - Kiểm tra lịch sử claim             │
+│ - Tính quyền lợi có thể được hưởng   │
+└──────────────────┬───────────────────┘
+                   │
+                   ├──────────────► Thiếu hồ sơ
+                   │                    │
+                   │                    ▼
+                   │          Customer Service
+                   │                    │
+                   │                    ▼
+                   │             yêu cầu bổ sung
+                   │                    │
+                   │                    ▼
+                   │                Customer
+                   │
+                   ▼
+
+
+[9] CLAIM ASSESSMENT
+
+                  ┌──────────────────────────────┐
+                  │       CLAIM ASSESSOR         │
+                  │ - Đánh giá hồ sơ             │
+                  │ - Xác minh bệnh / sự kiện    │
+                  │ - Kiểm tra điều khoản        │
+                  │ - Tính số tiền chi trả       │
+                  └──────────────┬───────────────┘
+                                 │
+             ┌───────────────────┼────────────────────┐
+             │                   │                    │
+             ▼                   ▼                    ▼
+       Policy Check        Benefit Check        Document Check
+             │                   │                    │
+             └───────────────────┼────────────────────┘
+                                 │
+                                 ▼
+
+
+[10] FRAUD / RISK CHECK
+
+                         ┌──────────────────────────────┐
+                         │        FRAUD CHECK           │
+                         │ - Claim bất thường           │
+                         │ - Claim trùng                │
+                         │ - Hóa đơn bất thường         │
+                         │ - Hospital pattern           │
+                         │ - Lịch sử claim đáng ngờ     │
+                         └──────────────┬───────────────┘
+                                        │
+                         ┌──────────────┴──────────────┐
+                         │                             │
+                         ▼                             ▼
+                    Normal Case                  Suspicious
+                         │                             │
+                         │                             ▼
+                         │                  Fraud Investigation
+                         │                             │
+                         └──────────────┬──────────────┘
+                                        ▼
+
+
+[11] CLAIM DECISION
+
+                         ┌──────────────────────────────┐
+                         │          DECISION            │
+                         └──────────────┬───────────────┘
+                                        │
+                     ┌──────────────────┼──────────────────┐
+                     │                  │                  │
+                     ▼                  ▼                  ▼
+                  Approve            Reject         Request Info
+                     │                  │                  │
+                     │                  │                  └────► Customer
+                     │                  │
+                     │                  └────► Customer Service
+                     │                           │
+                     │                           ▼
+                     │                     Thông báo từ chối
+                     ▼
+
+
+[12] APPROVAL HIERARCHY
+
+                ┌──────────────────────────────┐
+                │     CLAIM SUPERVISOR         │
+                │     Level 1 Approval         │
+                └──────────────┬───────────────┘
+                               │
+                     số tiền lớn hơn limit
+                               │
+                               ▼
+                ┌──────────────────────────────┐
+                │       CLAIM MANAGER          │
+                │       Level 2 Approval       │
+                └──────────────┬───────────────┘
+                               │
+                     số tiền rất lớn
+                               │
+                               ▼
+                ┌──────────────────────────────┐
+                │ HEAD OF CLAIMS / DIRECTOR    │
+                │ Level 3 Approval             │
+                └──────────────┬───────────────┘
+                               │
+                               ▼
+
+
+[13] FINANCE / ACCOUNTING
+
+┌──────────────────────────────┐
+│          FINANCE             │
+│ - Nhận lệnh chi trả          │
+│ - Kiểm tra thông tin bank    │
+│ - Chuẩn bị payment           │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│         ACCOUNTING           │
+│ - Hạch toán                  │
+│ - Ghi nhận chi phí claim     │
+│ - Đối soát                   │
+│ - Báo cáo                    │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│            BANK              │
+│      Chuyển khoản tiền       │
+└───────────────┬──────────────┘
+                │
+                ▼
+
+
+[14] KHÁCH HÀNG NHẬN TIỀN
+
+┌──────────────────────────────┐
+│          CUSTOMER            │
+│                              │
+│       Nhận tiền bảo hiểm     │
+└───────────────┬──────────────┘
+                │
+                ▼
+┌──────────────────────────────┐
+│      CUSTOMER SERVICE        │
+│ - Thông báo kết quả          │
+│ - Giải thích quyết định      │
+│ - Hỗ trợ khiếu nại           │
+└──────────────────────────────┘
+
+
+================================================================================================================
+                                         CÁC PHÒNG BAN HỖ TRỢ
+================================================================================================================
+
+
+CEO
+ │
+ ├── IT / TECHNOLOGY
+ │     │
+ │     ├── Infrastructure
+ │     │     ├── Server
+ │     │     ├── Network
+ │     │     ├── Cloud
+ │     │     └── Storage
+ │     │
+ │     ├── Application Development
+ │     │     ├── Claim System
+ │     │     ├── Policy System
+ │     │     ├── CRM
+ │     │     └── Internal Apps
+ │     │
+ │     ├── Helpdesk
+ │     │
+ │     ├── Database Administration
+ │     │
+ │     └── Cyber Security
+ │
+ ├── DATA
+ │     │
+ │     ├── Data Engineering
+ │     ├── Data Warehouse
+ │     ├── BI / Reporting
+ │     ├── Analytics
+ │     ├── Data Governance
+ │     └── AI / ML / OCR
+ │
+ ├── FINANCE
+ │     │
+ │     ├── Accounting
+ │     ├── Treasury
+ │     ├── Payment
+ │     ├── Budget
+ │     ├── Tax
+ │     └── Financial Reporting
+ │
+ ├── LEGAL
+ │     │
+ │     ├── Hợp đồng
+ │     ├── Tư vấn pháp lý
+ │     └── Tranh chấp
+ │
+ ├── COMPLIANCE
+ │     │
+ │     ├── Tuân thủ pháp luật
+ │     ├── Quy định bảo hiểm
+ │     ├── AML / KYC nếu áp dụng
+ │     └── Internal policy
+ │
+ ├── RISK MANAGEMENT
+ │     │
+ │     ├── Insurance Risk
+ │     ├── Operational Risk
+ │     ├── Financial Risk
+ │     ├── Cyber Risk
+ │     └── Fraud Risk
+ │
+ ├── INTERNAL AUDIT
+ │     │
+ │     ├── Kiểm tra quy trình
+ │     ├── Kiểm soát nội bộ
+ │     └── Báo cáo HĐQT
+ │
+ ├── HR
+ │     │
+ │     ├── Recruitment
+ │     ├── Payroll
+ │     ├── Training
+ │     ├── Performance
+ │     └── Employee Benefits
+ │
+ ├── ADMIN
+ │     │
+ │     ├── Reception
+ │     ├── Văn phòng
+ │     ├── Tài sản
+ │     └── Hậu cần
+ │
+ ├── PROCUREMENT
+ │     │
+ │     ├── Mua laptop
+ │     ├── Mua server
+ │     ├── License phần mềm
+ │     ├── Vendor
+ │     └── Contract mua sắm
+ │
+ └── CORPORATE COMMUNICATION
+       │
+       ├── PR
+       ├── Truyền thông nội bộ
+       ├── Thương hiệu
+       └── Quan hệ công chúng
+
+
+================================================================================================================
+                                       CÁC BÊN NGOÀI CÔNG TY
+================================================================================================================
+
+
+                              INSURANCE COMPANY
+                                      │
+       ┌──────────────────────────────┼───────────────────────────────┐
+       │                              │                               │
+       ▼                              ▼                               ▼
+┌───────────────┐             ┌───────────────┐               ┌───────────────┐
+│   CUSTOMER    │             │   HOSPITAL    │               │     BANK      │
+│ Khách hàng    │             │ Bệnh viện     │               │ Ngân hàng     │
+└───────────────┘             └───────────────┘               └───────────────┘
+                                      │
+                                      │ hồ sơ y tế
+                                      ▼
+                                    Claim
+
+       ┌──────────────────────────────┼───────────────────────────────┐
+       │                              │                               │
+       ▼                              ▼                               ▼
+┌───────────────┐             ┌───────────────┐               ┌───────────────┐
+│   REGULATOR   │             │ REINSURANCE   │               │    VENDOR     │
+│ Cơ quan QL    │             │ Tái bảo hiểm  │               │ Nhà cung cấp  │
+└───────────────┘             └───────────────┘               └───────────────┘
+
+
+================================================================================================================
+                                   TÓM TẮT LUỒNG TOÀN CÔNG TY
+================================================================================================================
+
+
+Marketing
+   │
+   ▼
+Sales / Agent
+   │
+   ▼
+Customer
+   │
+   ▼
+Underwriting
+   │
+   ▼
+Policy Issuance
+   │
+   ▼
+Servicing
+   │
+   ▼
+Insurance Event
+   │
+   ▼
+Claim Form
+   │
+   ▼
+Claim Documents
+   │
+   ▼
+Customer Service / Claim Intake
+   │
+   ▼
+AI / OCR
+   │
+   ▼
+Structured Data / Database
+   │
+   ▼
+Claim Processor
+   │
+   ▼
+Claim Assessor
+   │
+   ├────────► Fraud / Risk
+   │
+   ▼
+Decision
+   │
+   ├────────► Reject ───────► Customer
+   │
+   └────────► Approve
+                  │
+                  ▼
+            Supervisor
+                  │
+                  ▼
+            Claim Manager
+                  │
+                  ▼
+               Finance
+                  │
+                  ▼
+             Accounting
+                  │
+                  ▼
+                Bank
+                  │
+                  ▼
+              Customer
+```
 ## Phân loại giấy tờ
 ```bash
 Trong ngành bảo hiểm cần hiểu các loại giấy tờ.
@@ -208,4 +827,87 @@ Trong ngành bảo hiểm cần hiểu các loại giấy tờ.
 12. giấy chứng nhận phẫu thuật  # thường là giấy chứng nhận phẫu thuật
 13. bảng kê type 2              # thường là phiếu thu tiền
 14. hóa đơn type 2              # thường là hóa đơn bán hàng
+```
+## Ask 
+### Claim trong lĩnh vực bảo hiểm là gì?
+```bash
+Claim = yêu cầu bồi thường / yêu cầu giải quyết quyền lợi bảo hiểm.
+
+Ví dụ khách hàng mua bảo hiểm sức khỏe, đi bệnh viện và phát sinh viện phí. Sau đó khách gửi hồ sơ cho công ty bảo hiểm để yêu cầu thanh toán.
+
+Quy trình có thể hình dung:
+
+Khách hàng → gửi claim → công ty bảo hiểm thẩm định → duyệt/từ chối → chi trả
+
+Ví dụ:
+
+Customer submits a claim for medical expenses.
+→ Khách hàng gửi yêu cầu bồi thường chi phí y tế.
+
+Trong hệ thống bảo hiểm, claim thường không chỉ là một tờ giấy mà có thể là một hồ sơ/case gồm:
+
+Claim ID
+Thông tin khách hàng
+Hợp đồng bảo hiểm
+Ngày xảy ra sự kiện
+Loại tổn thất/quyền lợi
+Số tiền yêu cầu
+Chứng từ
+Kết quả thẩm định
+Số tiền được chi trả
+2. Claim Form là gì?
+
+Claim Form = mẫu đơn yêu cầu bồi thường / mẫu khai yêu cầu giải quyết quyền lợi bảo hiểm.
+
+Đây là form mà khách hàng hoặc bên liên quan điền để tạo một claim.
+
+Ví dụ Claim Form có các trường:
+
+Claim Form
+
+Policy Number:     POL123456
+Customer Name:     Nguyen Van A
+Date of Incident:  01/09/2026
+Claim Type:        Medical
+Amount Claimed:    10,000,000 VND
+
+Description:
+...
+
+Attachments:
+- Hospital bill
+- Medical report
+- Prescription
+
+Sau khi submit Claim Form → hệ thống tạo Claim.
+
+Nói đơn giản:
+
+Claim Form = cái form để khai báo
+Claim = hồ sơ/yêu cầu bồi thường được tạo ra từ đó
+
+3. "Bên/phòng Claim" là gì?
+
+Nếu trong công ty bảo hiểm người ta nói:
+
+"Chuyển hồ sơ sang bên Claim."
+
+thì bên Claim thường là bộ phận giải quyết bồi thường/quyền lợi bảo hiểm.
+
+Họ có thể phụ trách:
+
+Receive claim → Check documents → Assess → Approve/Reject → Calculate payout → Payment
+
+Ví dụ:
+
+Sales: bán bảo hiểm
+Underwriting: thẩm định/risk trước khi cấp hợp đồng
+Policy/Operations: quản lý hợp đồng
+Claim: xử lý yêu cầu bồi thường
+Finance: xử lý tài chính/chi trả
+
+Một điểm dễ nhầm là Claim không nhất thiết chỉ là "bồi thường". Trong bảo hiểm nhân thọ/sức khỏe, nó còn có thể bao gồm giải quyết quyền lợi bảo hiểm như tử vong, nằm viện, phẫu thuật, bệnh hiểm nghèo, đáo hạn... tùy sản phẩm.
+
+Nếu bạn đang làm hệ thống/phần mềm bảo hiểm, mình có thể giải thích tiếp cho bạn Claim → Claim Form → Claim Assessment → Claim Decision → Payment và 
+database của từng phần thường thiết kế như thế nào.
 ```

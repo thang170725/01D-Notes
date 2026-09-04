@@ -9,5 +9,5 @@ Computer-Networking/                                        ```mình dùng thư 
 ├── [System-Architectures](System-Architectures/Base.md)    ```mình dùng thư mục này để thiết kế kiến trúc hệ thống```   
 ├── [Tech-Stacks](Tech-Stacks/Base.md)                      ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   
 └── [Terminology](Terminology/Base.md)                      ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
-```
+
 # Computer-Networking Introduction (Thuật ngữ về mạng máy tính)
