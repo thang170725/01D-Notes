@@ -24,6 +24,8 @@
   - [–soft](#soft)
   - [–hard (Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file)](#hard-di-chuyển-con-trỏ-head-về-vị-trí-commit-reset-và-loại-bỏ-tất-cả-sử-thay-đổi-của-file)
 - [Git revert (Quay lại commit trước đây)](#git-revert-quay-lại-commit-trước-đây)
+- [git rm](#git-rm)
+  - [git rm --cached ...](#git-rm---cached-)
 ---
 # git config
 **Syn**
@@ -279,3 +281,10 @@ chạy: git diff
 ## –soft 
 ## –hard (Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file)
 # Git revert (Quay lại commit trước đây)
+# git rm
+## git rm --cached ...
+**Ex**
+```bash
+git rm --cached secret.json
+git rm --cached local_data.json
+```

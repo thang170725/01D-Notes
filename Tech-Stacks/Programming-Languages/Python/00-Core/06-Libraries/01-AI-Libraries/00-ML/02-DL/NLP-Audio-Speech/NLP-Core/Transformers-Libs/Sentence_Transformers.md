@@ -50,6 +50,9 @@ print(embeddings.shape) # (4, 384). 4 câu Mỗi câu là một vector 384 chi�
 ```
 # util
 ## cos_sim() (hàm cosin để so sánh 2 vector)
+```bash
+Thích hợp khi input truyền vào là tensor
+```
 **Ex1: So sánh hai câu**
 ```python
 from sentence_transformers import SentenceTransformer
