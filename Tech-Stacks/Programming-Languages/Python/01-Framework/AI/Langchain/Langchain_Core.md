@@ -12,6 +12,9 @@
 - [RunnableParallel](#runnableparallel)
 - [PromptTemplate (Nhóm thiết lập khuôn mẫu)](#prompttemplate-nhóm-thiết-lập-khuôn-mẫu)
   - [.from\_template()](#from_template)
+- [@tool (biến một python function thành một tool mà LLM/Agent có thể gọi)](#tool-biến-một-python-function-thành-một-tool-mà-llmagent-có-thể-gọi)
+- [Đây chỉ là Python function](#đây-chỉ-là-python-function)
+- [LangChain biến nó thành một StructuredTool](#langchain-biến-nó-thành-một-structuredtool)
 ---
 # Introduction
 ```bash
@@ -288,3 +291,27 @@ prompt = PromptTemplate.from_template(
 # prompt = một object template. CHƯA có giá trị thật
 # from_template = khai báo khuôn mẫu
 ```
+# @tool (biến một python function thành một tool mà LLM/Agent có thể gọi)
+```bash
+Điểm quan trọng là: @tool(...) không phải để chạy function ngay. Nó là khai báo metadata + schema + function để LangChain biết tool này tên gì, nhận input gì và làm gì.
+```
+**Syn**
+```bash
+@tool(
+    "get_user_info",
+    args_schema=GetUserInfoInput
+)
+
+- Input:
+    + "get_user_info": là tên của tool, LLM sẽ nhìn thấy tool với tên này
+    + args_schema=GetUserInfoInput: nói với LangChain: Input của tool này phải tuân theo schema GetUserInfoInput.
+**Ex1**
+```python
+def get_user_info():
+    return "..."
+# Đây chỉ là Python function
+
+@tool("get_user_info", args_schema=GetUserInfoInput)
+def get_user_info() -> str:
+    ...
+# LangChain biến nó thành một StructuredTool

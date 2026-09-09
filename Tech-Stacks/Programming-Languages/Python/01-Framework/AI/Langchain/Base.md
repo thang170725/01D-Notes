@@ -4,14 +4,13 @@
 - [Installation](#installation)
 ---
 # Directory Structure
-```bash
 LangChain/                  # mình dùng thư mục này để xem kiến thức về langchain
 ├── Base.md                 # mình dùng file này để xem kiến thức, tiện ích
 ├── Create_Config_IO.md     # mình dùng file này để khởi tạo, cấu hình, IO
 ├── Process.md              # mình dùng file này để xem mọi thao tác xử lý trong langchain
 ├── Results.md              # mình dùng file này để xem mọi thứ mà lanchain trả về
-└── Practices.md            # mình dùng file này để xem code mẫu, bài tập
-```
+└── [Langchain_Ollama](Langchain_Ollama.md)         ```mình dùng file này để xem kiến thức về thư viện langchain_ollama```  
+
 # Introduction
 [Học RAG](../../../../../../Domains/Artificial-Intelligence/02-AI-Agent/00-RAG/Process.md)
 ```bash

@@ -7,12 +7,13 @@
     - [-a (Để xem nhánh trên cả local + remote.)](#-a-để-xem-nhánh-trên-cả-local--remote)
     - [-r (liệt kê remote-tracking branches)](#-r-liệt-kê-remote-tracking-branches)
   - [Update (Nhóm cập cật)](#update-nhóm-cập-cật)
-    - [-m](#-m)
+    - [-m (đổi tên nhánh)](#-m-đổi-tên-nhánh)
+    - [-M (đổi tên nhánh và force)](#-m-đổi-tên-nhánh-và-force)
   - [Remove (Nhóm xóa)](#remove-nhóm-xóa)
     - [-D (xóa branch)](#-d-xóa-branch)
     - [-d (xóa nhanh trên máy local)](#-d-xóa-nhanh-trên-máy-local)
 - [git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)](#git-switch-vừa-tạo-branch-vừa-checkout-sáng-branch-đó-đây-là-cách-mới)
-  - [-c](#-c)
+  - [-c (tạo nhánh mới đồng thời chuyển qua nhánh mới)](#-c-tạo-nhánh-mới-đồng-thời-chuyển-qua-nhánh-mới)
 - [git fetch (Lấy các thông tin về commit mới từ central, kiểm tra sự thay đổi)](#git-fetch-lấy-các-thông-tin-về-commit-mới-từ-central-kiểm-tra-sự-thay-đổi)
   - [--prune](#--prune)
 - [git rebase (Tái cơ sở cho một nhánh)](#git-rebase-tái-cơ-sở-cho-một-nhánh)
@@ -71,10 +72,14 @@ git branch -r
 # branch feature/login
 ```
 ## Update (Nhóm cập cật)
-### -m
+### -m (đổi tên nhánh)
 **Ex**
 ```bash
 git branch -m main # đổi tên thành main
+```
+### -M (đổi tên nhánh và force)
+```bash
+tức là -M = -m + force
 ```
 ## Remove (Nhóm xóa)
 ### -D (xóa branch)
@@ -88,7 +93,7 @@ git branch -D main
 git branch -d <branch_name>
 ```
 # git switch (vừa tạo branch vừa checkout sáng branch đó đây là cách mới)
-## -c
+## -c (tạo nhánh mới đồng thời chuyển qua nhánh mới)
 ```bash
 git switch -c dev2 # -c = create
 ```
@@ -125,7 +130,8 @@ git fetch --prune # --prune dọn các remote-tracking branch đã bị xóa
 ```bash
 "Fast-forward" nghĩa là gì?
   Lịch sử kiểu này:
-    A---B---C   (dev1)         \          D---E (feature/login)
+    A---B---C   (dev1)
+             \          D---E (feature/login)
   
   Nếu dev1 vẫn ở C và feature/login chỉ đi tiếp từ đó:
     Git chỉ kéo con trỏ:

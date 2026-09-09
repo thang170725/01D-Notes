@@ -44,13 +44,13 @@ rm –d EX1 # Thư mục rỗng EX1 bị xóa
 rm –r EX1 # Thư mục EX1 sẽ bị xóa
 ```
 # echo (ghi dữ liệu vào file)
-**Ex1: không ghi đề**
+**Ex1: không ghi đè**
 ```bash
 echo “text” >> name.txt # Tạo file name.txt có nội dung là text, không ghi đè.
 ```
 **Ex2: ghi đè**
 ```bash
-echo “text” > name.txt # Tạo file name.txt có nội dung là text,ghi đè nếu đã có nội dung từ trước.
+echo “text” > name.txt # Tạo file name.txt có nội dung là text, ghi đè nếu đã có nội dung từ trước.
 ```
 # touch (tạo file)
 ```bash

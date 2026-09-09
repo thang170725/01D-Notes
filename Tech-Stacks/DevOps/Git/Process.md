@@ -1,3 +1,5 @@
+- [git –-version (Hiển thị thông tin phiên bản của git)](#git--version-hiển-thị-thông-tin-phiên-bản-của-git)
+- [Git –-help (hiển thị ra các câu lệnh hướng dẫn)](#git--help-hiển-thị-ra-các-câu-lệnh-hướng-dẫn)
 - [git config](#git-config)
 - [git clone](#git-clone)
 - [git pull (Lấy dữ liệu \& hợp nhất)](#git-pull-lấy-dữ-liệu--hợp-nhất)
@@ -19,7 +21,7 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [git status (Dùng để xem trạng thái repo hiện tại)](#git-status-dùng-để-xem-trạng-thái-repo-hiện-tại)
   - [git log (Hiển thị lịch sử các commit)](#git-log-hiển-thị-lịch-sử-các-commit)
-  - [git diff](#git-diff)
+  - [git diff (So sánh với commit cuối cùng, giữa nội dung cũ và mới. Dùng để xem sự khác biệt)](#git-diff-so-sánh-với-commit-cuối-cùng-giữa-nội-dung-cũ-và-mới-dùng-để-xem-sự-khác-biệt)
 - [git reset](#git-reset-1)
   - [–soft](#soft)
   - [–hard (Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file)](#hard-di-chuyển-con-trỏ-head-về-vị-trí-commit-reset-và-loại-bỏ-tất-cả-sử-thay-đổi-của-file)
@@ -27,6 +29,8 @@
 - [git rm](#git-rm)
   - [git rm --cached ...](#git-rm---cached-)
 ---
+# git –-version (Hiển thị thông tin phiên bản của git)
+# Git –-help (hiển thị ra các câu lệnh hướng dẫn)
 # git config
 **Syn**
 ```bash
@@ -251,11 +255,12 @@ git log --oneline --graph --all
 ```bash
 Để thoát, chỉ cần nhấn: q # (q = quit)
 ```
-## git diff
+**Ex**
 ```bash
-- So sánh với commit cuối cùng, giữa nội dung cũ và mới.
-- Dùng để xem sự khác biệt
+PS D:\workspace\learn_project> git log --oneline --graph --all
+* df75c47 (HEAD -> main) Initial project
 ```
+## git diff (So sánh với commit cuối cùng, giữa nội dung cũ và mới. Dùng để xem sự khác biệt)
 **Ex1**
 ```bash
 git diff # Xem xem nội dung đã thay đổi với lần commit gần nhất hay chưa

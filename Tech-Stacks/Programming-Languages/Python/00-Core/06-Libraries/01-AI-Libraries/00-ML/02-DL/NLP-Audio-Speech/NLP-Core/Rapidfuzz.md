@@ -1,460 +1,31 @@
-Nếu datasketch giúp bạn lọc nhanh các ứng viên có khả năng giống nhau, thì RapidFuzz giúp bạn đánh giá chính xác hai chuỗi giống nhau bao nhiêu.
-Đúng, nhưng RapidFuzz không phải là một thuật toán, mà là một thư viện (library).
-
-Bên trong RapidFuzz có nhiều thuật toán để đo độ giống nhau của chuỗi.
-
-Có thể hình dung:
-
-datasketch là một thư viện
-MinHash là một thuật toán
-MinHashLSH là một thuật toán
-rapidfuzz là một thư viện
-ratio() là một thuật toán
-partial_ratio() là một thuật toán
-token_sort_ratio() là một thuật toán
-token_set_ratio() là một thuật toán
-...
-Tại sao sau MinHash còn cần RapidFuzz?
-
-Vì MinHash làm việc trên 5-gram (set).
-
-RapidFuzz làm việc trên chuỗi gốc.
-
-Ví dụ
-
-Trang A
-
-Nguyen Van A
-
-Trang B
-
-Nguyen Van A
-
-RapidFuzz
-
-from rapidfuzz import fuzz
-
-fuzz.ratio(
-    "Nguyen Van A",
-    "Nguyen Van A"
-)
-
-Kết quả
-
-100
-
-Ví dụ 2
-
-Nguyen Van A
-
-và
-
-Nguyen Van B
-
-RapidFuzz
-
-fuzz.ratio(...)
-
-Ví dụ
-
-91.6
-
-Tức là
-
-Hai chuỗi giống khoảng 91%.
-
-MinHash thì sao?
-
-MinHash cũng thấy
-
-Nguyen Van A
-
-Nguyen Van B
-
-rất giống.
-
-Ví dụ
-
-0.95
-
-Nhưng MinHash không biết chính xác ký tự nào khác.
-
-RapidFuzz thì biết.
-
-Ví dụ OCR
-
-Trang A
-
-So CCCD:
-012345678
-
-Trang B
-
-So CCCD:
-012345679
-
-Chỉ khác
-
-8
-↓
-
-9
-
-RapidFuzz
-
-99.x
-
-Rất dễ phát hiện.
-
-Nhưng nếu
-Hello World
-
-và
-
-World Hello
-
-RapidFuzz ratio()
-
-có thể chỉ
-
-50
-
-vì thứ tự khác.
-
-Trong khi
-
-fuzz.token_sort_ratio(...)
-
-sẽ
-
-100
-
-vì nó sắp xếp từ trước khi so sánh.
-
-Đó là lý do RapidFuzz có nhiều thuật toán.
-
-Các thuật toán phổ biến
-1. ratio()
-
-So sánh toàn bộ chuỗi.
-
-fuzz.ratio(a, b)
-
-Ví dụ
-
-apple
-
-apple
-
-↓
-
-100
-2. partial_ratio()
-
-Tìm xem chuỗi nhỏ có nằm trong chuỗi lớn không.
-
-Hello World
-
-với
-
-World
-
-ratio
-
-≈62
-
-partial_ratio
-
-100
-3. token_sort_ratio()
-
-Đổi thứ tự từ rồi so.
-
-John Smith
-Smith John
-
-↓
-
-100
-4. token_set_ratio()
-
-Bỏ các từ trùng.
-
-Ví dụ
-
-Apple Apple Banana
-
-với
-
-Apple Banana
-
-↓
-
-100
-Trong pipeline OCR của bạn
-
-Hiện tại bạn đang làm
-
-OCR
-    ↓
-Normalize
-    ↓
-Character 5-gram
-    ↓
-MinHash
-    ↓
-LSH
-    ↓
-RapidFuzz
-
-Vai trò của từng bước là:
-
-Thành phần	Vai trò
-Character 5-gram	Chuyển văn bản thành tập đặc trưng.
-MinHash	Tạo signature để ước lượng Jaccard nhanh.
-MinHashLSH	Tìm nhanh các trang có khả năng giống nhau.
-RapidFuzz	So sánh trực tiếp chuỗi văn bản để xác nhận kết quả cuối cùng.
-Vì sao RapidFuzz thường đặt ở cuối?
-
-Giả sử bạn có 100.000 trang.
-
-So sánh RapidFuzz giữa mọi cặp sẽ rất tốn thời gian (O(n²) cặp).
-MinHashLSH có thể lọc xuống chỉ còn vài trăm hoặc vài nghìn candidate.
-Lúc đó mới dùng RapidFuzz để kiểm tra kỹ từng candidate.
-
-Đây chính là lý do pipeline của bạn vừa nhanh vừa có độ chính xác cao:
-
-100.000 trang
-        │
-        ▼
-MinHashLSH
-        │
-        ▼
-Chỉ còn vài trăm candidate
-        │
-        ▼
-RapidFuzz xác nhận lần cuối
-
-RapidFuzz đóng vai trò như bộ kiểm tra cuối cùng (verification step), còn MinHashLSH đóng vai trò bộ lọc ứng viên (candidate generation). Chúng bổ sung cho nhau chứ không thay thế nhau.
-Trong pipeline của bạn:
-
-OCR
-↓
-Normalize
-↓
-Character 5-gram
-↓
-MinHash
-↓
-LSH
-↓
-Candidate
-↓
-RapidFuzz
-↓
-Duplicate chắc chắn
-
-RapidFuzz thường là bước cuối để xác nhận hai văn bản có thực sự giống nhau hay không.
-
-1. RapidFuzz là gì?
-
+- [RapidFuzz Introduction](#rapidfuzz-introduction)
+- [Installation](#installation)
+- [fuzz (là module chứa các hàm tính độ giống giữa hai chuỗi)](#fuzz-là-module-chứa-các-hàm-tính-độ-giống-giữa-hai-chuỗi)
+  - [radio (So sánh toàn bộ chuỗi)](#radio-so-sánh-toàn-bộ-chuỗi)
+  - [.token\_sort\_ratio() (Dùng khi hai câu có cùng từ nhưng khác thứ tự)](#token_sort_ratio-dùng-khi-hai-câu-có-cùng-từ-nhưng-khác-thứ-tự)
+  - [.partial\_ratio() (Dùng khi một chuỗi nằm bên trong chuỗi còn lại)](#partial_ratio-dùng-khi-một-chuỗi-nằm-bên-trong-chuỗi-còn-lại)
+  - [token\_set\_ratio() (Bỏ các từ trùng)](#token_set_ratio-bỏ-các-từ-trùng)
+- [process](#process)
+---
+# RapidFuzz Introduction 
+```bash
 RapidFuzz là thư viện bên thứ ba dùng để so khớp chuỗi (fuzzy string matching).
-
-Cài đặt:
-
+    Bên trong RapidFuzz có nhiều thuật toán để đo độ giống nhau của chuỗi.
+```
+**Fuzzy Matching**
+```bash
+Giả sử có hai chuỗi: hello world và helo world
+    Hai chuỗi này không giống hệt nhau.
+        Nếu dùng: s1 == s2 # False
+        
+        Nhưng con người vẫn thấy chúng rất giống.
+            RapidFuzz sẽ trả về 95% độ giống. -> Đó gọi là Fuzzy Matching.
+```
+# Installation
+```bash
 pip install rapidfuzz
-
-Import:
-
-from rapidfuzz import fuzz
-
-hoặc
-
-from rapidfuzz import process
-2. Fuzzy Matching là gì?
-
-Giả sử có hai chuỗi
-
-hello world
-
-và
-
-helo world
-
-Hai chuỗi này không giống hệt nhau.
-
-Nếu dùng
-
-s1 == s2
-
-kết quả
-
-False
-
-Nhưng con người vẫn thấy chúng rất giống.
-
-RapidFuzz sẽ trả về
-
-95%
-
-độ giống.
-
-Đó gọi là Fuzzy Matching.
-
-3. fuzz dùng để làm gì?
-
-fuzz là module chứa các hàm tính độ giống giữa hai chuỗi.
-
-Ví dụ
-
-from rapidfuzz import fuzz
-
-Sau đó dùng
-
-fuzz.ratio(...)
-
-hoặc
-
-fuzz.partial_ratio(...)
-
-...
-
-4. fuzz.ratio()
-
-Đây là hàm đơn giản và dùng nhiều nhất.
-
-Cú pháp
-
-score = fuzz.ratio(s1, s2)
-
-Trả về
-
-0 → 100
-100 = giống hoàn toàn
-0 = khác hoàn toàn
-Ví dụ 1
-from rapidfuzz import fuzz
-
-s1 = "hello world"
-s2 = "hello world"
-
-print(fuzz.ratio(s1, s2))
-
-Kết quả
-
-100.0
-Ví dụ 2
-from rapidfuzz import fuzz
-
-s1 = "hello world"
-s2 = "helo world"
-
-print(fuzz.ratio(s1, s2))
-
-Giả sử
-
-95.2
-Ví dụ 3
-from rapidfuzz import fuzz
-
-print(
-    fuzz.ratio(
-        "apple",
-        "banana"
-    )
-)
-
-Giả sử
-
-18.0
-5. fuzz.partial_ratio()
-
-Dùng khi
-
-một chuỗi nằm bên trong chuỗi còn lại.
-
-Ví dụ
-
-Hello World
-
-và
-
-World
-
-ratio
-
-fuzz.ratio(
-    "Hello World",
-    "World"
-)
-
-Giả sử
-
-62
-
-Trong khi
-
-fuzz.partial_ratio(
-    "Hello World",
-    "World"
-)
-
-cho
-
-100
-
-vì
-
-World
-
-xuất hiện nguyên vẹn.
-
-6. fuzz.token_sort_ratio()
-
-Dùng khi
-
-hai câu có cùng từ
-
-nhưng khác thứ tự.
-
-Ví dụ
-
-apple banana orange
-
-và
-
-orange apple banana
-
-Nếu dùng
-
-ratio()
-
-có thể chỉ được
-
-70
-
-Nhưng
-
-token_sort_ratio()
-
-sẽ
-
-tách từ
-sắp xếp
-so sánh
-
-Ví dụ
-
-from rapidfuzz import fuzz
-
-s1 = "apple banana orange"
-s2 = "orange apple banana"
-
-print(fuzz.token_sort_ratio(s1, s2))
-
-Kết quả
-
-100
+```
+# fuzz (là module chứa các hàm tính độ giống giữa hai chuỗi)
 7. fuzz.token_set_ratio()
 
 Đây là hàm rất hay.
@@ -622,3 +193,50 @@ Nếu dùng MinHash + LSH trước, bạn có thể chỉ còn vài nghìn hoặ
 Sau đó mới áp dụng RapidFuzz cho các ứng viên này để xác nhận.
 
 Đó cũng chính là lý do pipeline MinHashLSH → RapidFuzz được sử dụng rất phổ biến trong các hệ thống phát hiện near-duplicate documents: MinHashLSH giúp lọc nhanh, còn RapidFuzz giúp đánh giá chính xác độ giống giữa các chuỗi văn bản.
+## radio (So sánh toàn bộ chuỗi)
+**Syn**
+```bash
+fuzz.ratio(a, b)
+
+- Output:
+    + 0 → 100
+    + 100 = giống hoàn toàn
+    + 0 = khác hoàn toàn
+```
+**Ex1**
+```python
+Ví dụ 1
+from rapidfuzz import fuzz
+
+s1 = "hello world"
+s2 = "hello world"
+
+print(fuzz.ratio(s1, s2)) # 100.0
+```
+## .token_sort_ratio() (Dùng khi hai câu có cùng từ nhưng khác thứ tự)
+**Ex**
+```bash
+apple banana orange và orange apple banana
+
+Nếu dùng ratio()
+    có thể chỉ được: 70
+    
+Nhưng token_sort_ratio()
+    sẽ: tách từ -> sắp xếp -> so sánh
+```
+**Ex2**
+```python
+from rapidfuzz import fuzz
+
+s1 = "apple banana orange"
+s2 = "orange apple banana"
+
+print(fuzz.token_sort_ratio(s1, s2)) # 100
+```
+## .partial_ratio() (Dùng khi một chuỗi nằm bên trong chuỗi còn lại)
+**Ex**
+```python
+fuzz.partial_ratio("Hello World", "World")
+```
+## token_set_ratio() (Bỏ các từ trùng)
+# process

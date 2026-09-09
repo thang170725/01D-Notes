@@ -8,7 +8,7 @@
   - [setLevel() (dùng để đặt mức log tối thiểu mà Logger hoặc Handler sẽ xử lý)](#setlevel-dùng-để-đặt-mức-log-tối-thiểu-mà-logger-hoặc-handler-sẽ-xử-lý)
   - [.addHandler() (dùng để gắn thêm một Handler vào Logger)](#addhandler-dùng-để-gắn-thêm-một-handler-vào-logger)
 - [Formatter()](#formatter)
-- [StreamHandler() (dùng để ghi log ra một luồng (stream))](#streamhandler-dùng-để-ghi-log-ra-một-luồng-stream)
+- [StreamHandler() (dùng để ghi log ra một luồng stream)](#streamhandler-dùng-để-ghi-log-ra-một-luồng-stream)
   - [FileHandler](#filehandler)
 - [Hiển thị trên màn hình](#hiển-thị-trên-màn-hình)
 - [Ghi vào file](#ghi-vào-file)
@@ -407,57 +407,13 @@ Hình dung dễ nhớ
 
 addHandler() giống như cắm thêm một "đầu ra" cho Logger. Mỗi lần Logger tạo log, nó sẽ gửi bản sao của log đến tất cả các Handler đã được thêm bằng addHandler().
 # Formatter()
-# StreamHandler() (dùng để ghi log ra một luồng (stream))
-Trong logging.StreamHandler
+# StreamHandler() (dùng để ghi log ra một luồng stream)
+**Syn**
+```bash
 import logging
 
 handler = logging.StreamHandler()
 
-Mặc định tương đương:
-
-import logging
-import sys
-
-handler = logging.StreamHandler(sys.stderr)
-
-Nghĩa là log sẽ được ghi vào stderr.
-
-Nếu muốn ghi vào stdout:
-
-import logging
-import sys
-
-handler = logging.StreamHandler(sys.stdout)
-Tại sao phải tách stdout và stderr?
-
-Ví dụ chạy chương trình:
-
-python demo.py > output.txt
-stdout sẽ được ghi vào output.txt.
-stderr vẫn hiển thị trên màn hình.
-
-Ví dụ:
-
-import sys
-
-print("Kết quả")
-sys.stderr.write("Lỗi!\n")
-
-Chạy:
-
-python demo.py > output.txt
-
-Màn hình:
-
-Lỗi!
-
-Nội dung output.txt:
-
-Kết quả
-
-Đó là lý do logging mặc định dùng stderr: log và thông báo lỗi không bị lẫn với kết quả đầu ra (stdout) của chương trình.
-**Syn**
-```bash
 - Output: mặc định là màn hình (console - sys.stderr). Ngoài ra, bạn cũng có thể ghi ra sys.stdout.
 ```
 **Ex1: StreamHandler cơ bản**
