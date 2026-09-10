@@ -1,9 +1,220 @@
-- [Fenwick Tree (là một cấu trúc dữ liệu dùng để cập nhật giá trị của một phần tử trong mảng)](#fenwick-tree-là-một-cấu-trúc-dữ-liệu-dùng-để-cập-nhật-giá-trị-của-một-phần-tử-trong-mảng)
+- [Dijkstra's Algorithm (thuật toán dùng để tìm đường đi ngắn nhất)](#dijkstras-algorithm-thuật-toán-dùng-để-tìm-đường-đi-ngắn-nhất)
 - [số chẵn và số lẻ](#số-chẵn-và-số-lẻ)
 - [DFS](#dfs)
 - [LeetCode 1038 - Medium](#leetcode-1038---medium)
 - [Leetcode - 2181](#leetcode---2181)
 ---
+# Dijkstra's Algorithm (thuật toán dùng để tìm đường đi ngắn nhất)
+**Tư duy cốt lõi của Dijkstra**
+```bash
+Bước 1: Chọn node có distance nhỏ nhất
+Bước 2: Thử đi qua các cạnh của nó
+    Ví dụ:
+        - A → C = 3
+        - C → B = 2
+
+    thì thử: distance[C] + 2 = 3 + 2 = 5
+Bước 3: Nếu đường mới tốt hơn thì cập nhật
+```
+**Dijkstra đang được ứng dụng ở đâu?**
+```bash
+🗺️ GPS / bản đồ
+🌐 Network routing
+    Hãy tưởng tượng Internet:
+
+Router A
+   |
+   +---- Router B
+   |
+   +---- Router C
+            |
+            +---- Router D
+
+Mỗi connection có một cost.
+
+Routing algorithm cần tìm:
+
+A → D
+
+theo đường có cost thấp nhất.
+
+Một ví dụ kinh điển là OSPF (Open Shortest Path First), sử dụng thuật toán shortest-path dựa trên Dijkstra để tính đường đi trong một mạng.
+
+🎮 Game
+
+Trong game:
+
+Player
+   ↓
+Map
+
+NPC cần tìm đường:
+
+S → → → → → E
+
+Mỗi ô có thể có cost:
+
+Road       = 1
+Grass      = 2
+Mud        = 5
+Mountain   = 10
+
+Dijkstra có thể tìm:
+
+Đường có tổng cost nhỏ nhất, chứ không nhất thiết ít ô nhất.
+
+10. Một ví dụ rất hay để hiểu bản chất
+
+Giả sử bạn đi từ A đến D.
+
+       1
+   A ------ B
+   |        |
+  10        1
+   |        |
+   C ------ D
+       1
+
+Có hai đường:
+
+Đường 1
+A → C → D
+
+10 + 1 = 11
+Đường 2
+A → B → D
+
+1 + 1 = 2
+
+Dijkstra tìm được:
+
+A → B → D
+
+Không phải vì nó có ít node hơn, mà vì:
+
+TOTAL COST = 2
+
+Đây chính là bản chất của shortest path.
+
+11. Dijkstra khác BFS ở đâu?
+
+Đây là câu hỏi phỏng vấn rất hay.
+
+BFS
+A
+├── B
+├── C
+└── D
+
+Mỗi bước coi như cost:
+
+1
+
+BFS tìm:
+
+Ít cạnh nhất.
+
+Dijkstra
+A --100--> B
+A --1----> C
+C --1----> B
+
+BFS có thể thích:
+
+A → B
+
+vì chỉ 1 cạnh.
+
+Nhưng Dijkstra thấy:
+
+A → C → B
+= 1 + 1
+= 2
+
+tốt hơn:
+
+A → B
+= 100
+
+Nên:
+
+BFS tối ưu số bước.
+Dijkstra tối ưu tổng trọng số.
+
+12. Một điểm rất quan trọng: tại sao Dijkstra hoạt động?
+
+Đây là insight thuật toán mà bạn nên hiểu thay vì chỉ học thuộc code.
+
+Giả sử Dijkstra chọn:
+
+A → C
+
+với:
+
+distance[C] = 5
+
+và C là node chưa xử lý có khoảng cách nhỏ nhất.
+
+Vì mọi edge đều có weight ≥ 0, nên nếu đi vòng qua một node khác trước khi đến C:
+
+A → X → ... → C
+
+thì tổng cost không thể tự nhiên giảm xuống dưới 5.
+
+Do đó, khi Dijkstra chọn node có distance nhỏ nhất, nó có thể chốt khoảng cách đó.
+
+Đây chính là lý do điều kiện:
+
+weight >= 0
+
+quan trọng đến vậy.
+
+13. Nếu học DSA, bạn nên nhớ Dijkstra theo flow này
+
+Đừng học thuộc code trước. Hãy nhớ:
+
+        Graph
+          │
+          ▼
+Có trọng số?
+     /          \
+   No            Yes
+   │              │
+   ▼              ▼
+  BFS       Weight có âm?
+                  /   \
+                Yes    No
+                 │      │
+                 ▼      ▼
+          Bellman-Ford Dijkstra
+
+Và bản thân Dijkstra:
+
+distance[start] = 0
+distance[others] = ∞
+
+        ↓
+
+Chọn node chưa xử lý
+có distance nhỏ nhất
+
+        ↓
+
+Relax tất cả hàng xóm
+
+        ↓
+
+Có đường mới tốt hơn?
+        │
+       Yes
+        ↓
+Update distance
+
+        ↓
+
+Lặp lại
+
+Nếu bạn đang học LeetCode, Dijkstra là một thuật toán rất đáng học sau BFS/DFS. Đặc biệt, khi gặp đề có các cụm như "minimum cost", "shortest time", "minimum distance", "weighted graph", bạn nên lập tức nghĩ đến Dijkstra (sau đó kiểm tra xem có trọng số âm hay không).
 # Fenwick Tree (là một cấu trúc dữ liệu dùng để cập nhật giá trị của một phần tử trong mảng)
 ```bash
 Tính tổng tiền tố (Prefix Sum) rất nhanh.

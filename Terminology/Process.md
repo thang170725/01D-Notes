@@ -11,6 +11,9 @@
 - [Computer Network (mạng máy tính)](#computer-network-mạng-máy-tính)
   - [DNS (Domain Name System dùng để phân giải tên miền)](#dns-domain-name-system-dùng-để-phân-giải-tên-miền)
   - [proxy](#proxy)
+  - [nslookup ...](#nslookup-)
+  - [Test-NetConnection -ComputerName 123.123.123.123 -Port 80](#test-netconnection--computername-123123123123--port-80)
+  - [gRPC](#grpc)
 - [Subdomain](#subdomain)
 - [ERP (Enterprise Resource Planning)](#erp-enterprise-resource-planning)
   - [Các luồng nghiệp vụ cơ bản trong ERP](#các-luồng-nghiệp-vụ-cơ-bản-trong-erp)
@@ -80,6 +83,552 @@ New gTLD (mới)
 google.com A → 142.250.190.78
 ```
 ## proxy
+## nslookup ...
+**Ex**
+```bash
+PS C:\Users\thang.ld> nslookup sv.haui.edu.vn
+Server:  HO-ADC-01.insmart.com.vn
+Address:  192.168.1.2
+
+Non-authoritative answer:
+Name:    sv.haui.edu.vn
+Address:  103.140.39.111
+```
+## Test-NetConnection -ComputerName 123.123.123.123 -Port 80
+## gRPC 
+gRPC là một framework/protocol dùng để cho các service giao tiếp với nhau qua mạng.
+
+Nếu nói đơn giản:
+
+gRPC = một cách để Backend A gọi hàm của Backend B qua network, gần giống như gọi một function bình thường.
+
+Nó đặc biệt phổ biến trong microservices.
+
+1. Ví dụ thực tế
+
+Giả sử hệ thống của bạn có:
+
+                    ┌──────────────┐
+                    │   Frontend   │
+                    └──────┬───────┘
+                           │ HTTP
+                           ▼
+                    ┌──────────────┐
+                    │  API Server  │
+                    └──────┬───────┘
+                           │
+                    gRPC   │
+                           ▼
+              ┌──────────────────────┐
+              │  User Service       │
+              └──────────────────────┘
+
+API Server muốn lấy thông tin user.
+
+Nếu dùng REST:
+
+GET /users/123
+
+Nếu dùng gRPC, bạn có thể định nghĩa một function:
+
+GetUser(user_id)
+
+Sau đó API Server gọi:
+
+user = user_service.GetUser(user_id=123)
+
+Nhưng User Service thực tế nằm trên một server khác.
+
+gRPC sẽ lo phần:
+
+API Server
+    │
+    │ serialize request
+    ▼
+   Network
+    │
+    ▼
+User Service
+    │
+    │ deserialize
+    ▼
+GetUser(...)
+    │
+    ▼
+response
+
+Tức là bạn có cảm giác như đang gọi function, nhưng thực chất function đó chạy ở service khác.
+
+2. gRPC viết tắt của gì?
+
+gRPC ban đầu được hiểu là:
+
+Google Remote Procedure Call
+
+Trong đó quan trọng nhất là:
+
+RPC = Remote Procedure Call
+
+Tức là:
+
+Gọi một procedure/function ở một máy khác thông qua network.
+
+Ví dụ bình thường:
+
+result = add(10, 20)
+
+Function add() chạy trong process của bạn.
+
+RPC:
+
+result = remote_add(10, 20)
+
+Function thực tế chạy ở:
+
+Server B
+
+Bạn đang ở:
+
+Server A
+
+gRPC chính là một framework rất phổ biến để thực hiện kiểu giao tiếp này.
+
+3. gRPC khác REST API như thế nào?
+
+Đây là phần rất đáng hiểu.
+
+REST thường:
+
+Client
+   │
+   │ HTTP
+   │ GET /users/123
+   ▼
+Server
+
+Response thường là JSON:
+
+{
+  "id": 123,
+  "name": "Thang"
+}
+
+gRPC thường:
+
+Client
+   │
+   │ HTTP/2
+   │
+   │ binary data
+   ▼
+Server
+
+Dữ liệu thường được serialize bằng:
+
+Protocol Buffers (Protobuf)
+
+Ví dụ định nghĩa service:
+
+service UserService {
+    rpc GetUser(GetUserRequest)
+        returns (User);
+}
+
+Request:
+
+message GetUserRequest {
+    int32 user_id = 1;
+}
+
+Response:
+
+message User {
+    int32 id = 1;
+    string name = 2;
+}
+
+Sau đó gRPC có thể generate code cho Python, Go, Java, C#, C++...
+
+4. Tại sao phải dùng .proto?
+
+Đây là điểm khác REST rất rõ.
+
+Bạn có thể coi .proto là hợp đồng (contract) giữa hai service.
+
+Ví dụ:
+
+syntax = "proto3";
+
+service UserService {
+    rpc GetUser(GetUserRequest)
+        returns (User);
+}
+
+message GetUserRequest {
+    int32 user_id = 1;
+}
+
+message User {
+    int32 id = 2;
+    string name = 3;
+}
+
+Nó nói rõ:
+
+UserService
+    │
+    └── GetUser()
+          │
+          ├── Input: GetUserRequest
+          │
+          └── Output: User
+
+Service A và Service B đều dựa trên contract này.
+
+5. REST giống gọi URL
+
+REST:
+
+POST /api/users
+
+body:
+
+{
+    "name": "Thang"
+}
+
+Bạn phải biết:
+
+URL
+HTTP method
+headers
+JSON format
+status code
+
+gRPC:
+
+UserService.CreateUser(...)
+
+Contract đã định nghĩa sẵn:
+
+rpc CreateUser(CreateUserRequest)
+    returns (User);
+
+Client có thể gọi như một method:
+
+response = stub.CreateUser(
+    CreateUserRequest(name="Thang")
+)
+
+Đây là lý do RPC có cảm giác rất giống function call.
+
+6. Tại sao gRPC nhanh?
+
+Một lý do quan trọng là Protobuf + binary serialization.
+
+REST thường:
+
+{
+    "id": 123,
+    "name": "Thang"
+}
+
+Đây là text.
+
+gRPC thường serialize thành binary:
+
+01001001 00101010 ...
+
+Binary thường:
+
+nhỏ hơn JSON
+serialize/deserialize nhanh
+truyền qua network hiệu quả
+
+Ngoài ra gRPC sử dụng HTTP/2, có các tính năng như multiplexing và streaming.
+
+7. gRPC rất mạnh ở Streaming
+
+REST thường kiểu:
+
+Request
+   ↓
+Response
+
+gRPC hỗ trợ nhiều kiểu:
+
+Unary
+
+Giống REST:
+
+Client ───── Request ─────> Server
+Client <──── Response ───── Server
+Server streaming
+Client ───── Request ─────> Server
+
+Client <──── Response 1 ─── Server
+Client <──── Response 2 ─── Server
+Client <──── Response 3 ─── Server
+Client <──── Response 4 ─── Server
+
+Ví dụ:
+
+Server liên tục gửi dữ liệu về client.
+
+Client streaming
+Client ── data 1 ──>
+Client ── data 2 ──>
+Client ── data 3 ──>
+Client ── data 4 ──>
+
+              Server
+                 │
+                 ▼
+              Response
+Bidirectional streaming
+
+Cả hai bên cùng stream:
+
+Client                 Server
+
+  ───── data ─────────>
+  <───── data ─────────
+  ───── data ─────────>
+  <───── data ─────────
+  ───── data ─────────>
+  <───── data ─────────
+
+Cái này rất hữu ích cho những hệ thống realtime hoặc xử lý stream.
+
+8. gRPC thường được dùng ở đâu?
+
+Đặc biệt là:
+
+Microservices
+
+Ví dụ một công ty có:
+
+                  API Gateway
+                       │
+          ┌────────────┼────────────┐
+          │            │            │
+          ▼            ▼            ▼
+      User Service  Payment      Order
+          │          Service     Service
+          │            │            │
+          └────── gRPC ─────────────┘
+
+Các service giao tiếp nội bộ với nhau bằng gRPC.
+
+Ví dụ:
+
+Order Service
+      │
+      │ GetUser(user_id)
+      ▼
+User Service
+
+rồi:
+
+Order Service
+      │
+      │ CheckPayment(...)
+      ▼
+Payment Service
+9. Tại sao không dùng REST hết?
+
+REST hoàn toàn có thể dùng cho microservices.
+
+Nhưng khi hệ thống lớn:
+
+Service A
+    ↓
+Service B
+    ↓
+Service C
+    ↓
+Service D
+
+có rất nhiều request nội bộ.
+
+gRPC có lợi thế:
+
+✓ nhanh
+✓ binary
+✓ HTTP/2
+✓ strongly typed
+✓ contract rõ ràng
+✓ code generation
+✓ streaming
+
+Nên nhiều hệ thống chọn:
+
+                    Internet
+                       │
+                       ▼
+                REST / GraphQL
+                       │
+                       ▼
+                 API Gateway
+                       │
+                ┌──────┴──────┐
+                │             │
+              gRPC          gRPC
+                │             │
+                ▼             ▼
+             Service A     Service B
+10. Một kiến trúc rất thực tế
+
+Ví dụ hệ thống bán hàng:
+
+Frontend
+   │
+   │ HTTPS / REST
+   ▼
+API Gateway
+   │
+   ├──── gRPC ────> User Service
+   │
+   ├──── gRPC ────> Product Service
+   │
+   ├──── gRPC ────> Order Service
+   │
+   └──── gRPC ────> Payment Service
+
+Frontend không nhất thiết phải biết gRPC.
+
+Frontend chỉ cần:
+
+GET /api/products/123
+
+Gateway nhận request:
+
+GET /api/products/123
+
+rồi bên trong gọi:
+
+ProductService.GetProduct(123)
+
+bằng gRPC.
+
+11. Liên hệ với project Backend của bạn
+
+Nếu backend của bạn hiện tại kiểu:
+
+Frontend
+    │
+    │ HTTP
+    ▼
+FastAPI
+    │
+    ├── PostgreSQL
+    ├── AI Agent
+    ├── Redis
+    └── ...
+
+thì bạn chưa nhất thiết cần gRPC.
+
+Nhưng nếu sau này tách thành:
+
+                FastAPI
+                   │
+       ┌───────────┼────────────┐
+       │           │            │
+       ▼           ▼            ▼
+ User Service   AI Service   Tool Service
+       │           │            │
+       └───── gRPC ┴────── gRPC ┘
+
+thì gRPC bắt đầu rất có ý nghĩa.
+
+Ví dụ:
+
+FastAPI
+   │
+   │ "Hãy chạy AI Agent này"
+   ▼
+AI Service
+   │
+   │
+   └── xử lý LangGraph
+
+Thay vì AI Service phải expose REST endpoint như:
+
+POST /run-agent
+
+thì có thể định nghĩa:
+
+rpc RunAgent(RunAgentRequest)
+    returns (RunAgentResponse);
+
+và service khác gọi:
+
+response = ai_stub.RunAgent(request)
+12. Một câu cực kỳ quan trọng
+
+Bạn có thể phân biệt thế này:
+
+REST
+↓
+"Gửi HTTP request tới URL"
+
+gRPC
+↓
+"Gọi một method/function của remote service"
+
+Nhưng gRPC vẫn truyền qua network.
+
+Nó không phải là gọi function thần kỳ không cần network.
+
+Bên dưới vẫn là:
+
+Client
+   │
+   │ serialize
+   ▼
+Network
+   │
+   ▼
+Server
+   │
+   │ deserialize
+   ▼
+Function
+   │
+   ▼
+Response
+Tóm lại
+	REST	gRPC
+Giao tiếp	HTTP	HTTP/2
+Data phổ biến	JSON	Protobuf
+Kiểu gọi	URL/API	Method/RPC
+Type safety	Thường lỏng hơn	Rất mạnh
+Performance	Tốt	Thường rất tốt
+Streaming	Có nhưng không phải trọng tâm	Rất mạnh
+Microservices	Có	Rất phổ biến
+Browser gọi trực tiếp	Rất thuận tiện	Không thuận tiện bằng
+Internal service-to-service	Tốt	Rất phù hợp
+
+Mental model nên nhớ:
+
+                    API bên ngoài
+                         │
+                    REST/GraphQL
+                         │
+                         ▼
+                   API Gateway
+                         │
+               ┌─────────┴─────────┐
+               │                   │
+             gRPC                 gRPC
+               │                   │
+               ▼                   ▼
+         User Service        AI Service
+                                   │
+                                   ▼
+                              LangGraph
+
+Nếu bạn đang học Backend + Microservices, sau Dijkstra thì mình khuyên hiểu tiếp HTTP → REST → RPC → gRPC → Protobuf → Microservices, vì chúng liên kết với nhau khá chặt.
 # Subdomain
 ```bash
 📌 Trong thực tế:
