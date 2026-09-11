@@ -8,6 +8,7 @@
 - [Framework](#framework)
   - [Starlette](#starlette)
 - [Nginx (là một Web Server và Reverse Proxy)](#nginx-là-một-web-server-và-reverse-proxy)
+- [SSE (cơ chế để server chủ động gửi dữ liệu liên tục về client qua một HTTP connection đang mở)](#sse-cơ-chế-để-server-chủ-động-gửi-dữ-liệu-liên-tục-về-client-qua-một-http-connection-đang-mở)
 ---
 # Cookie (tờ giấy ghi chú mà website gửi cho trình duyệt giữ hộ)
 ```bash
@@ -803,4 +804,26 @@ Nhưng production thì sao? Một website có thể có 1000 request/s Hoặc 10
         Nginx
         ↓
         FastAPI
+```
+# SSE (cơ chế để server chủ động gửi dữ liệu liên tục về client qua một HTTP connection đang mở)
+**SSE khác API bình thường thế nào?**  
+*API bình thường*
+```bash
+FE ───── request ─────> BE
+FE <──── toàn bộ JSON ── BE
+```
+*Ex*
+```bash
+{
+  "answer": "Xin chào, tôi có thể giúp gì?"
+}
+```
+*SSE*
+```bash
+FE ───── request ─────> BE
+       connection giữ mở
+FE <──── "Xin"
+FE <──── " chào"
+FE <──── " bạn"
+FE <──── [DONE]
 ```
