@@ -16,7 +16,7 @@
 - [Create \& Config (Nhóm tạo \& cấu hình)](#create--config-nhóm-tạo--cấu-hình)
   - [.mkdir()](#mkdir)
   - [os.makedirs() (Tạo thư mục, kể cả khi các thư mục cha chưa tồn tại)](#osmakedirs-tạo-thư-mục-kể-cả-khi-các-thư-mục-cha-chưa-tồn-tại)
-  - [getenv](#getenv)
+  - [getenv (đọc các giá trị từ biến môi trường .env)](#getenv-đọc-các-giá-trị-từ-biến-môi-trường-env)
 - [Process](#process)
   - [.chdir()](#chdir)
   - [relpath()](#relpath)
@@ -429,13 +429,12 @@ os.makedirs("build/pdf/output")
 #     └── output/
 # Nếu build và pdf chưa tồn tại thì Python sẽ tự tạo.
 ```
-## getenv
+## getenv (đọc các giá trị từ biến môi trường .env)
 ```bash
 - Biến môi trường thường dùng để:
   + Lưu cấu hình (API key, DB URL, port…)
   + Tránh hard-code giá trị nhạy cảm trong code
   + Dễ thay đổi theo môi trường (dev / test / production)
-=> getenv giúp bạn đọc các giá trị này trong runtime
 ```
 **Syn**
 ```bash

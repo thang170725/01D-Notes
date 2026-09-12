@@ -1,7 +1,7 @@
++ [<<Back](Base.md)
 - [Mô tả Work flow của RNN cho bài toán dự đoán từ tiếp theo](#mô-tả-work-flow-của-rnn-cho-bài-toán-dự-đoán-từ-tiếp-theo)
 - [Demo Research RNN](#demo-research-rnn)
 ---
-[<<Back](Base.md)
 # Mô tả Work flow của RNN cho bài toán dự đoán từ tiếp theo
 ```bash
 Cho một câu chưa hoàn chỉnh: "I love deep _" mô hình phải dự đoán từ tiếp theo "learning"
