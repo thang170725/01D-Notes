@@ -1,4 +1,5 @@
 - [Installation](#installation)
+- [ollama list](#ollama-list)
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
   - [ChatOllama() (khởi tạo một đối tượng LLM)](#chatollama-khởi-tạo-một-đối-tượng-llm)
 ---
@@ -7,6 +8,7 @@
 1. pip install langchain_community
 2. pip install langchain_ollama
 ```
+# ollama list
 Được. Nếu bạn muốn dùng langchain_ollama, cách đơn giản nhất là chạy Qwen/Qwen2.5-1.5B-Instruct qua Ollama trước, sau đó LangChain gọi model bằng ChatOllama.
 
 1. Cài thư viện
