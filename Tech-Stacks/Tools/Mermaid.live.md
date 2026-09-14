@@ -11,6 +11,8 @@
 - [Practices](#practices)
 ---
 # Mermaid Live Introduction (vẽ sơ đồ bằng code, rất phổ biến trong lập trình và tài liệu kỹ thuật)
+**Trang web**
+[Mermaid live](https://mermaid.ai/app/dashboard)
 ```bash
 Hiểu đơn giản: Thay vì bạn dùng chuột kéo từng ô như Draw.io, 
     bạn viết -> Mermaid sẽ tự biến đoạn code đó thành sơ đồ: User → API → Database → API → User
