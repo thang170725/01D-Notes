@@ -10,6 +10,7 @@
 - [Get-NetIPConfiguration (xem IP, Gateway, DNS)](#get-netipconfiguration-xem-ip-gateway-dns)
 - [Get-NetIPAddress -AddressFamily IPv4](#get-netipaddress--addressfamily-ipv4)
 - [Get-NetRoute -AddressFamily IPv4](#get-netroute--addressfamily-ipv4)
+- [tree /F](#tree-f)
 ---
 # Kiểm tra xem cổng có bị ai chiếm không
 ```bash
@@ -107,3 +108,4 @@ PS C:\Users\thang.ld> Get-NetRoute -AddressFamily IPv4
 # 1       127.0.0.0/8                                    0.0.0.0                                          256 75       ActiveStore
 # 5       0.0.0.0/0                                      192.168.9.1                                        0 25       ActiveStore
 ```
+# tree /F
