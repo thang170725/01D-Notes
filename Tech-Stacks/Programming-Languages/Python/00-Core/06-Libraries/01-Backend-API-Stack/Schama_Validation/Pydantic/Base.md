@@ -1,5 +1,5 @@
 - [directory structure](#directory-structure)
-- [Introduction](#introduction)
+- [Pydantic Introduction (Với Pydantic, bạn tạo ra một "khung bảo vệ". Dữ liệu đi vào phải đi qua cái khung này)](#pydantic-introduction-với-pydantic-bạn-tạo-ra-một-khung-bảo-vệ-dữ-liệu-đi-vào-phải-đi-qua-cái-khung-này)
 - [Installation](#installation)
 ---
 # directory structure
@@ -10,9 +10,9 @@ Pydantic/                   # mình dùng thư mục này để xem kiến thứ
 ├── Process.md              # mình dùng file để thao tác với dữ liệu
 └── Base.md                 # mình dùng file để xem kiến thức và tiện ích
 ```
-# Introduction
+# Pydantic Introduction (Với Pydantic, bạn tạo ra một "khung bảo vệ". Dữ liệu đi vào phải đi qua cái khung này)
 ```bash
-- Trong Python thông thường, bạn có thể truyền bất cứ thứ gì vào một đối tượng. Với Pydantic, bạn tạo ra một "khung bảo vệ". Dữ liệu đi vào phải đi qua cái khung này:
+- Trong Python thông thường, bạn có thể truyền bất cứ thứ gì vào một đối tượng. 
   + Nếu đúng kiểu: Nó được chấp nhận.
   + Nếu sai kiểu nhưng có thể sửa: Nó sẽ tự động được ép kiểu (ví dụ chuỗi "10" thành số 10).
   + Nếu sai hoàn toàn: Nó sẽ chặn lại và báo lỗi chi tiết.
