@@ -9,51 +9,48 @@ this is a document information technology (a-z)
 ```
 # Arrchitecture Directory
 ```bash
-PS D:\01D-Notes> tree /F
-Folder PATH listing for volume New Volume
-Volume serial number is 085F-C800
 D:.
 │   .gitignore
 │   Base.md
 │   README.md
 │   Temp.md
-│
+│   
 ├───Companies
 │       Base.md
 │       CloudFlare.md
 │       Hugging_Face.md
 │       Jina_AI.md
 │       OpenAI.md
-│
+│       
 ├───Domains
 │   │   Base.md
-│   │
+│   │   
 │   ├───Article
 │   │       Base.md
 │   │       Songs.md
 │   │       Verse.md
-│   │
+│   │       
 │   ├───Artificial-Intelligence
 │   │   │   Base.md
-│   │   │
+│   │   │   
 │   │   ├───00-Math-Core
 │   │   │       Base.md
-│   │   │
+│   │   │       
 │   │   ├───01-AI-Core
 │   │   │   ├───01-Data-Preprocessing
 │   │   │   │       01_EDA.md
 │   │   │   │       02_Preprocess_Data.md
 │   │   │   │       Base.md
-│   │   │   │
+│   │   │   │       
 │   │   │   ├───03-Machine-Learning
 │   │   │   │   │   Base.md
-│   │   │   │   │
+│   │   │   │   │   
 │   │   │   │   ├───00-ML-Math
 │   │   │   │   │       Activation_Functions.md
 │   │   │   │   │       Base.md
 │   │   │   │   │       Loss_Cost_Functions.md
 │   │   │   │   │       Math_Core.md
-│   │   │   │   │
+│   │   │   │   │       
 │   │   │   │   ├───01-Models
 │   │   │   │   │   ├───Supervised-Learning
 │   │   │   │   │   │   │   KNN.md
@@ -188,6 +185,7 @@ D:.
 │   │       │   Aider.md
 │   │       │   MCP.md
 │   │       │   Process.md
+│   │       │   vLLM.md
 │   │       │
 │   │       └───00-RAG
 │   │               Practices.md
@@ -561,7 +559,7 @@ D:.
 │   │   │   │       │   │   ├───Multi-Processing
 │   │   │   │       │   │   │       Base.md
 │   │   │   │       │   │   │       Process.md
-│   │   │   │       │   │   │       
+│   │   │   │       │   │   │
 │   │   │   │       │   │   ├───Threading
 │   │   │   │       │   │   │       Base.md
 │   │   │   │       │   │   │       Practices.md
@@ -672,7 +670,7 @@ D:.
 │   │   │   │       │   │       │   │       Process.md
 │   │   │   │       │   │       │   │
 │   │   │   │       │   │       │   └───Model-APIs
-│   │   │   │       │   │       │       ├───Google
+│   │   │   │       │   │       │       ├───Google-Genai
 │   │   │   │       │   │       │       │       Base.md
 │   │   │   │       │   │       │       │       Process.md
 │   │   │   │       │   │       │       │
@@ -686,7 +684,7 @@ D:.
 │   │   │   │       │   │           │   │
 │   │   │   │       │   │           │   ├───Pydub
 │   │   │   │       │   │           │   │       pydub.md
-│   │   │   │       │   │           │   │
+│   │   │   │       │   │           │   │       
 │   │   │   │       │   │           │   ├───Pyttsx3
 │   │   │   │       │   │           │   │       pyttsx3.md
 │   │   │   │       │   │           │   │
@@ -703,7 +701,7 @@ D:.
 │   │   │   │       │   │               │   Gensim.md
 │   │   │   │       │   │               │   Rapidfuzz.md
 │   │   │   │       │   │               │   Unidecode.md
-│   │   │   │       │   │               │   
+│   │   │   │       │   │               │
 │   │   │   │       │   │               ├───Ast
 │   │   │   │       │   │               │       ast.md
 │   │   │   │       │   │               │
@@ -763,7 +761,6 @@ D:.
 │   │   │   │       │   │           05-Practices.md
 │   │   │   │       │   │
 │   │   │   │       │   ├───Network-client
-│   │   │   │       │   │   │   email.md
 │   │   │   │       │   │   │   Smtplib.md
 │   │   │   │       │   │   │
 │   │   │   │       │   │   ├───Paho
@@ -799,13 +796,14 @@ D:.
 │   │   │   │       │
 │   │   │   │       ├───01-Data-Science
 │   │   │   │       │   ├───01-Data-Processing
+│   │   │   │       │   │       Bs4.md
+│   │   │   │       │   │       Email.md
 │   │   │   │       │   │       Ijson.md
 │   │   │   │       │   │       Info.md
 │   │   │   │       │   │       Pyspark.md
 │   │   │   │       │   │       Rank_bm25.md
 │   │   │   │       │   │
 │   │   │   │       │   ├───Math-Data-Logic
-│   │   │   │       │   │   │   Bs4.md
 │   │   │   │       │   │   │   Datasketch.md
 │   │   │   │       │   │   │
 │   │   │   │       │   │   ├───Intergrate
@@ -963,6 +961,7 @@ D:.
 │   └───Tools
 │       │   Apache-Airflow.md
 │       │   HubSpot.md
+│       │   LocalStack.md
 │       │   Mermaid.live.md
 │       │   Ngrok.md
 │       │   Toml.md
@@ -973,6 +972,7 @@ D:.
 └───Terminology
     │   Base.md
     │   Process.md
+    │   SDK.md
     │
     └───Computer-Networking
             Base.md

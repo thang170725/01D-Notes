@@ -1,12 +1,14 @@
++ [<<Back](../Base.md)
 - [Directory Structure](#directory-structure)
 - [Ask](#ask)
   - [Nên thiết quy tắc cho hệ thông như thế nào?](#nên-thiết-quy-tắc-cho-hệ-thông-như-thế-nào)
 ---
 # Directory Structure
-System-Architectures/                           ```mình dùng thư mục này để  học tư duy thiết kế hệ thống```
-├── Layered-Monolith/  # mình dùng thư mục này để thiết kế theo Layered-Monolith
-├── Microservies/      # mình dùng thư mục này để thiết kế hệ thống theo Microservices
-└── Modular-Monolith/  # mình dùng thư mục này để thiết kế theo Modular-Monolith
+System-Architectures/                              ```mình dùng thư mục này để  học tư duy thiết kế hệ thống```  
+├── [Layered Monolith](Layered-Monolith/Base.md)   ```mình dùng thư mục này để thiết kế theo Layered-Monolith```  
+├── [Microservies](Microservices/Base.md)          ```mình dùng thư mục này để thiết kế hệ thống theo Microservices```  
+├── [Modular Monolith](Modular-Monolith/Base.md)   ```mình dùng thư mục này để thiết kế theo Modular-Monolith```   
+└── [Async & Sync](Async-Sync.md)                  ```mình dùng thư mục này để thiết kế theo Modular-Monolith```   
 
 # Ask
 ## Nên thiết quy tắc cho hệ thông như thế nào?
