@@ -25,7 +25,11 @@ Nó chứa các class và hàm để làm việc với mô hình AI của Google
 from google import genai
 
 client = genai.Client(api_key="YOUR_API_KEY")
+
+- Input: 
+    + api_key=str: key của gemini
 ```
+**Ex**
 ```python
 from google import genai
 
@@ -62,8 +66,7 @@ response = client.models.embed_content(
     + model: Model embedding                 
     + contents: Văn bản cần chuyển thành vector 
     + config: Cấu hình embedding              
-- Output:
-    + response: Kết quả là một object          
+- Output: Kết quả là một object          
 ```
 ##### .embeddings
 ###### .values

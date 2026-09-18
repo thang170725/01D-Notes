@@ -3,6 +3,8 @@
 - [package-lock.json (Project này cần những package nào)](#package-lockjson-project-này-cần-những-package-nào)
 - [vite.config.js (nói xem project này muốn vite hoạt động như thế nào)](#viteconfigjs-nói-xem-project-này-muốn-vite-hoạt-động-như-thế-nào)
 - [div key=""](#div-key)
+- [meta](#meta)
+  - [meta.env (dùng để import biến từ env)](#metaenv-dùng-để-import-biến-từ-env)
 ---
 # eslint.config.js (là công cụ soi code và báo cho bạn những vấn đề trong code JavaScript/React)
 # oxlint.config.js (là công cụ soi code và báo cho bạn những vấn đề trong code JavaScript/React)
@@ -146,4 +148,10 @@ key phải duy nhất trong danh sách đó.
 Nên dùng ID từ database (workout_plan_item_id, exercise_id, ...).
 Không nên dùng index nếu danh sách có thể thay đổi thứ tự hoặc thêm/xóa phần tử.
 Với một <div> đơn lẻ không nằm trong danh sách, key thường không cần thiết và React sẽ bỏ qua
+```
+# meta
+## meta.env (dùng để import biến từ env)
+**Syn**
+```bash
+const apiUrl = import.meta.env.VITE_API_URL;
 ```
