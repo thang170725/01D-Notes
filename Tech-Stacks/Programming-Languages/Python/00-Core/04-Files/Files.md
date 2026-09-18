@@ -42,7 +42,6 @@ open(‘data.txt’, ‘w’, encoding=’utf8’)
     + "r+"  : Đọc + ghi (không xóa)	
 ```
 # .close() (Để mở file và đóng file.)
-
 # .read() (Dùng để đọc nội dung một file)
 **Syn**
 ```bash

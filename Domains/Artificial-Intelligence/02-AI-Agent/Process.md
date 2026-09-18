@@ -10,6 +10,7 @@
   - [khi cho AI gọi API tức là đang cho AI đọc thẳng dữ liệu vào db thì có sợ bị lộ thông tin không, em sẽ xử lý bằng cách nào](#khi-cho-ai-gọi-api-tức-là-đang-cho-ai-đọc-thẳng-dữ-liệu-vào-db-thì-có-sợ-bị-lộ-thông-tin-không-em-sẽ-xử-lý-bằng-cách-nào)
 - [Ask (Câu hỏi liên quan đến tích hợp AI Agent)](#ask-câu-hỏi-liên-quan-đến-tích-hợp-ai-agent)
 - [Vector Index](#vector-index)
+- [ADK](#adk)
 ---
 # Embedding (chuyển dữ liệu thành vector số)
 **Ex**
@@ -482,3 +483,106 @@ Các thuật toán phổ biến.
     - IVF
     - PQ
 ```
+# ADK 
+Nếu bạn đang nói trong ngữ cảnh AI Agent, thì ADK = Agent Development Kit.
+
+Nó khác SDK ở chỗ ADK tập trung vào việc xây dựng AI Agent, chứ không chỉ cung cấp công cụ để gọi một API.
+
+So sánh nhanh
+SDK
+└── Bộ công cụ để developer sử dụng một service/platform
+
+ADK
+└── Bộ công cụ để developer xây dựng AI Agent
+
+Ví dụ:
+
+                 AI Agent
+                    │
+        ┌───────────┼───────────┐
+        ▼           ▼           ▼
+       LLM        Tools       Memory
+        │           │           │
+        └───────────┼───────────┘
+                    ▼
+              Agent Runtime
+
+Một ADK thường cung cấp sẵn các thành phần như:
+
+Agent
+Tool
+LLM integration
+Memory / Session
+Agent orchestration
+Workflow
+Multi-agent
+Tool calling
+Evaluation
+Runtime / execution
+Liên hệ với thứ bạn đang làm
+
+Bạn đang xây LangGraph kiểu:
+
+START
+  ↓
+rewrite
+  ↓
+retrieve
+  ↓
+agent
+  ↓
+execute tool
+  ↓
+result_evaluator
+  ↓
+agent / rewrite / final
+
+Đây chính là Agent orchestration.
+
+Nếu dùng một ADK, thay vì tự xây rất nhiều phần như:
+
+StateGraph(...)
+add_node(...)
+add_edge(...)
+conditional_edges(...)
+AgentState(...)
+tool execution
+memory
+...
+
+ADK có thể cung cấp abstraction để xây Agent ở mức cao hơn.
+
+SDK vs ADK
+
+Ví dụ tưởng tượng:
+
+SDK
+│
+├── client.chat()
+├── client.files()
+├── client.users()
+└── client.embeddings()
+
+ADK
+│
+├── Agent(...)
+├── Tool(...)
+├── Memory(...)
+├── Session(...)
+├── Runner(...)
+└── MultiAgent(...)
+
+Nói ngắn gọn:
+
+SDK giúp bạn "dùng một dịch vụ".
+ADK giúp bạn "xây một Agent".
+
+Và một điểm rất quan trọng: ADK không phải một loại LLM và cũng không phải inference engine như vLLM/Ollama.
+
+LLM       = bộ não
+vLLM      = engine chạy bộ não
+SDK       = bộ công cụ để gọi dịch vụ
+ADK       = bộ công cụ để xây Agent
+LangGraph = framework để điều phối workflow/Agent
+
+Nếu bạn đang phân vân “LangGraph vs ADK vs LangChain khác nhau ở tầng nào?”, thì đó là một câu hỏi rất đáng làm rõ vì 3 cái này khá dễ bị chồng khái niệm.

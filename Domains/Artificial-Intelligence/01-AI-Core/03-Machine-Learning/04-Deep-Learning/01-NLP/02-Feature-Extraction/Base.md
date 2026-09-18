@@ -3,6 +3,12 @@
   - [Ask (các câu hỏi liên quan đến TF-IDF)](#ask-các-câu-hỏi-liên-quan-đến-tf-idf)
 - [Attention](#attention)
 - [N-gram (cách tạo feature từ text)](#n-gram-cách-tạo-feature-từ-text)
+  - [Ask](#ask)
+    - [Vậy n-gram có phải embedding không?](#vậy-n-gram-có-phải-embedding-không)
+    - [N-gram liên quan gì đến FastText?](#n-gram-liên-quan-gì-đến-fasttext)
+    - [Khi nào dùng word n-gram?](#khi-nào-dùng-word-n-gram)
+    - [Khi nào dùng character n-gram?](#khi-nào-dùng-character-n-gram)
+  - [Character n-gram (là kỹ thuật chia một chuỗi văn bản thành các đoạn con liên tiếp dài đúng n ký tự)](#character-n-gram-là-kỹ-thuật-chia-một-chuỗi-văn-bản-thành-các-đoạn-con-liên-tiếp-dài-đúng-n-ký-tự)
 ---
 # BoW (Bag of Words - Lấy các token rồi đếm số lần xuất hiện)
 ```bash
@@ -359,292 +365,99 @@ thay vì
 
 1 chuyên gia
 # N-gram (cách tạo feature từ text)
-    • Phổ biến với TF-IDF và BoW → Hiểu concept, không cần học sâu
-    • Ý tưởng đơn giản: chia chuỗi ký tự/word thành các nhóm liên tiếp độ dài N.
-        ◦ Unigram = từng token / từ riêng lẻ.
-        ◦ Bigram = từng cặp từ liên tiếp.
-        ◦ Trigram = bộ 3 từ liên tiếp.
-    • nắm bắt ngữ cảnh cục bộ (ví dụ “New York” là bigram, có ý nghĩa khác so với hai từ riêng). Dùng trong: language modelling, feature cho classification, spelling correction, autocomplete.
+```bash
+Ý tưởng đơn giản: chia chuỗi ký tự/word thành các nhóm liên tiếp độ dài N.
+    - Unigram = từng token / từ riêng lẻ.
+    - Bigram = từng cặp từ liên tiếp.
+    - Trigram = bộ 3 từ liên tiếp.
+
+nắm bắt ngữ cảnh cục bộ (ví dụ “New York” là bigram, có ý nghĩa khác so với hai từ riêng). Dùng trong: language modelling, feature cho classification, spelling correction, autocomplete.
     • Ví dụ dễ hiểu (word-level):
         ◦ Câu: “tôi yêu học AI”
         ◦ Unigrams: [“tôi”, “yêu”, “học”, “AI”]
         ◦ Bigrams: [“tôi yêu”, “yêu học”, “học AI”]
     • Ưu: đơn giản, hiệu quả cho nhiều task.
     • Nhược: số lượng feature bùng nổ khi N tăng; cần smoothing cho language model.
-Khi nào nên dùng n-gram?
+```
+**Nhược điểm**
+```bash
+Nếu tăng N quá lớn: unigram, bigram, trigram, 4-gram, 5-gram, ... -> số lượng feature tăng rất nhanh.
+    Ví dụ: 100,000 vocabulary -> thì số possible bigram/trigram có thể cực kỳ lớn.
 
-Điểm quan trọng nhất:
-
-Dùng n-gram khi một từ riêng lẻ không đủ thông tin, và bạn muốn giữ một phần context cục bộ.
-
-Ví dụ:
-
-not good
-
-Nếu chỉ dùng unigram:
-
-not
-good
-
-Model thấy:
-
-good
-
-và có thể nghĩ đây là positive.
-
-Nhưng nếu dùng bigram:
-
-not good
-
-thì model có một feature rất mạnh biểu diễn ý nghĩa phủ định.
-
-3. Ví dụ sentiment analysis
-
+    Vấn đề: n tăng -> feature space tăng -> memory tăng -> sparse matrix rất lớn -> training chậm
+```
+**Khi nào nên dùng n-gram?**
+```bash
+- Dùng n-gram khi một từ riêng lẻ không đủ thông tin, và bạn muốn giữ một phần context cục bộ.
+    Ví dụ: not good
+        - Nếu chỉ dùng unigram:
+            + not
+            + good
+            
+            Model thấy: good và có thể nghĩ đây là positive.
+        - Nhưng nếu dùng bigram: not good
+            + thì model có một feature rất mạnh biểu diễn ý nghĩa phủ định.
+```
+**Ex: Ví dụ sentiment analysis**
+```bash
 Dataset:
+    I love this movie
+    I hate this movie
+    This movie is not good
+    This movie is very good
+```
+**Ứng dụng**
+[FastText](../03-Text-Embedding/Base.md#fasttext-biến-text-thành-vector)
 
-I love this movie
-I hate this movie
-This movie is not good
-This movie is very good
-
-Nếu chỉ unigram:
-
-not
-good
-
-Bạn có thể có:
-
-not = -0.3
-good = +0.8
-
-Model phải tự kết hợp chúng.
-
-Nhưng nếu có bigram:
-
-not good
-
-thì:
-
-"not good" = -0.9
-
-Model dễ học hơn.
-
-Workflow:
-
-"I think this movie is not good"
-              ↓
-          tokenize
-              ↓
-       unigram + bigram
-              ↓
-"I", "think", "this", ...
-"this movie", "movie is", "is not", "not good"
-              ↓
-       TF-IDF / CountVectorizer
-              ↓
-           vectors
-              ↓
-      Logistic Regression
-              ↓
-          Negative
-
-Đây là một use case rất kinh điển.
-
-4. N-gram đặc biệt hữu ích với TF-IDF
-
-Đây là cặp rất hay đi cùng nhau:
-
-N-gram + TF-IDF
-
-Ví dụ:
-
-"I love machine learning"
-
-dùng:
-
-TfidfVectorizer(ngram_range=(1, 2))
-
-sẽ tạo:
-
-unigram:
-I
-love
-machine
-learning
-
-bigram:
-I love
-love machine
-machine learning
-
-Sau đó TF-IDF biến chúng thành vector.
-
-Ví dụ rất đơn giản:
-
-                  I  love  machine  learning  I love  machine learning
-document 1        .2 .8    .4       .7        .6      .9
-
-→ Đây mới là feature extraction.
-
-5. Vậy n-gram có phải embedding không?
-
+## Ask
+### Vậy n-gram có phải embedding không?
+```bash
 Không nên gọi n-gram là embedding.
 
-Phân biệt:
+N-gram biến: "I love machine learning" -> "I love", "love machine", "machine learning", v.v
+    -> Nó tạo ra text units/features.
 
-N-gram
-"I love machine learning"
-        ↓
-"I love"
-"love machine"
-"machine learning"
-
-Nó tạo ra text units/features.
-
-Embedding
-"machine learning"
-        ↓
-[0.12, -0.32, 0.71, ...]
-
-Nó tạo ra dense vector mang thông tin biểu diễn.
-
-6. N-gram còn có loại character n-gram
-
-Đây là phần liên quan trực tiếp đến FastText mà bạn vừa hỏi.
-
-Ví dụ:
-
-playing
-
-Character n-gram có thể tạo:
-
-pla
-play
-lay
-layi
-ayin
-ying
-ing
-
-FastText dùng những character n-gram này để học representation.
+Embedding: "machine learning" -> [0.12, -0.32, 0.71, ...]
+    -> Nó tạo ra dense vector mang thông tin biểu diễn.
+```
+### N-gram liên quan gì đến FastText?
+```bash
+N-gram còn có loại character n-gram:
+    Ví dụ: playing
+        Character n-gram có thể tạo: pla, play, lay, layi, ayin, ying, ing, v.v
+            -> FastText dùng những character n-gram này để học representation.
 
 Cho nên:
-
-N-gram
-   │
-   ├── word n-gram
-   │      └── TF-IDF
-   │
-   └── character n-gram
-          └── FastText
-
-Đây là mối liên hệ rất quan trọng.
-
-7. Khi nào dùng word n-gram?
+    N-gram
+       │
+       ├── word n-gram
+       │      └── TF-IDF
+       │
+       └── character n-gram
+              └── FastText
+```
+### Khi nào dùng word n-gram?
+```bash
 Dùng khi cụm từ có ý nghĩa quan trọng.
-
-Ví dụ:
-
-"New York"
-"machine learning"
-"credit card"
-"not good"
-"very good"
-"customer service"
-
-Unigram:
-
-New
-York
-
-không mạnh bằng:
-
-New York
-
-Tương tự:
-
-credit
-card
-
-vs:
-
-credit card
-
-Nếu bài toán của bạn phụ thuộc nhiều vào phrase, word n-gram rất hữu ích.
-
-8. Khi nào dùng character n-gram?
-
+    Ví dụ: "New York", "machine learning", "credit card", "not good", "very good", "customer service", v.v
+        - Unigram: New, York -> không mạnh bằng New York
+```
+### Khi nào dùng character n-gram?
+```bash
 Dùng khi bạn quan tâm đến:
+    - typo
+    - từ hiếm
+    - từ mới
+    - morphology
+    - tên riêng
+    - mã sản phẩm
+    - URL
+    - text không chuẩn
 
-typo
-từ hiếm
-từ mới
-morphology
-tên riêng
-mã sản phẩm
-URL
-text không chuẩn
-
-Ví dụ:
-
-iphone
-iphon
-iphon14
-iphone14
-
-Character n-gram có thể giúp các từ này có feature chung.
-
-Hoặc:
-
-hello
-helo
-helllo
-
-Character n-gram có thể nhận ra chúng khá giống nhau.
-
-Đây cũng là lý do character n-gram rất hay trong spam detection, search, OCR text, v.v.
-
-9. N-gram có một nhược điểm lớn
-
-Nếu tăng N quá lớn:
-
-unigram
-bigram
-trigram
-4-gram
-5-gram
-...
-
-số lượng feature tăng rất nhanh.
-
-Ví dụ:
-
-100,000 vocabulary
-
-thì số possible bigram/trigram có thể cực kỳ lớn.
-
-Vấn đề:
-
-n tăng
- ↓
-feature space tăng
- ↓
-memory tăng
- ↓
-sparse matrix rất lớn
- ↓
-training chậm
-
-Do đó trong thực tế thường bắt đầu:
-
-ngram_range=(1, 2)
-
-hoặc:
-
-ngram_range=(1, 3)
-
-chứ không phải cứ N càng lớn càng tốt.
-
+Ví dụ: 
+    - iphone, iphon, iphon14, iphone14, v.v -> Character n-gram có thể giúp các từ này có feature chung.
+    - hello, helo, helllo, v.v -> Character n-gram có thể nhận ra chúng khá giống nhau.
+```
 10. Một workflow rất điển hình
 
 Nếu bạn có bài toán:
@@ -757,3 +570,29 @@ Transformer
 BERT/GPT
 
 Ở mỗi bước, bạn đang giải quyết một hạn chế của representation trước đó. Nếu bạn đang học theo hướng muốn hiểu “tại sao người ta phát minh ra model tiếp theo?”, thì chính chuỗi này là một roadmap rất tốt.
+## Character n-gram (là kỹ thuật chia một chuỗi văn bản thành các đoạn con liên tiếp dài đúng n ký tự)
+```bash
+Nó được dùng rất nhiều trong:
+    - Phát hiện văn bản trùng lặp (duplicate detection)
+    - MinHash
+    - LSH (Locality Sensitive Hashing)
+    - So sánh độ giống nhau của văn bản
+
+Ý tưởng rất đơn giản:
+    Trượt một cửa sổ dài 5 ký tự từ trái sang phải, mỗi lần dịch 1 ký tự.
+
+Ví dụ 1
+    Chuỗi: abcdefghi
+
+    Character 5-gram sẽ là
+        1. abcde
+        2. bcdef
+        3. cdefg
+        4. defgh
+        5. efghi
+```
+**Tại sao phải dùng n-gram?**
+```bash
+Nếu so sánh từng từ: hello world với hello word
+    thì: world ≠ word -> mất hẳn sự tương đồng. -> Trong khi đó character 5-gram vẫn giữ được nhiều phần giống nhau.
+```

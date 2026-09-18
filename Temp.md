@@ -2450,3 +2450,379 @@ Bạn nên bắt đầu ghép chúng thành một project production-like, ví d
      Logs + Distributed Trace
 
 Khi bạn tự thiết kế, code, test, Dockerize, deploy và debug một hệ thống như vậy, các keyword như RESTful, OAuth2, RBAC, Redis, Kafka, RAG, HNSW, CI/CD, Kubernetes, Observability, Saga... sẽ không còn là những thuật ngữ rời rạc nữa. Bạn sẽ hiểu tại sao người ta cần chúng và khi nào nên dùng chúng.
+
+# giải thích cho tôi mấy cái này là gì "awq, gptq, gguf, ggml, exllama, google adk, quality inspection  "
+Được. Các từ này thực ra không cùng một loại nên dễ gây rối. Nếu đặt trong hệ sinh thái LLM, bạn có thể chia chúng thành 4 nhóm:
+
+                    LLM ecosystem
+                         │
+       ┌─────────────────┼─────────────────┐
+       │                 │                 │
+   Model format      Inference         Agent
+   / Quantization     engine/runtime   framework
+       │                 │                 │
+   AWQ / GPTQ        ExLlama          Google ADK
+   GGUF / GGML
+                         │
+                         ▼
+                  Quality Inspection
+                    (kiểm tra chất lượng)
+1. AWQ là gì?
+
+AWQ = Activation-aware Weight Quantization
+
+Nó là một phương pháp quantization (lượng tử hóa) model.
+
+LLM bình thường có thể lưu weight ở:
+
+FP16
+→ mỗi parameter ~16 bit
+
+AWQ có thể lượng tử hóa xuống kiểu:
+
+INT4
+→ mỗi weight ~4 bit
+
+Ví dụ:
+
+Llama 7B FP16
+        │
+        │ AWQ quantization
+        ▼
+Llama 7B AWQ 4-bit
+
+Mục đích:
+
+giảm VRAM
+giảm kích thước model
+có thể tăng tốc inference
+vẫn giữ chất lượng tương đối tốt
+
+Điểm đáng chú ý của AWQ là nó không đơn giản ép tất cả weight xuống 4-bit như nhau; nó sử dụng thông tin về activation để xác định những weight quan trọng hơn.
+
+2. GPTQ là gì?
+
+GPTQ cũng là một phương pháp quantization.
+
+Tương tự:
+
+FP16
+  │
+  │ GPTQ
+  ▼
+INT4
+
+Bạn có thể thấy model được phát hành dưới dạng:
+
+Qwen-...-GPTQ-Int4
+Llama-...-GPTQ-4bit
+
+Nó có mục tiêu tương tự AWQ:
+
+Model lớn
+   ↓
+quantization
+   ↓
+model nhỏ hơn
+   ↓
+ít VRAM hơn
+AWQ vs GPTQ
+
+Đừng hiểu:
+
+AWQ = model
+GPTQ = model
+
+Mà đúng hơn:
+
+AWQ  = phương pháp quantization
+GPTQ = phương pháp quantization
+3. GGUF là gì?
+
+GGUF là một model file format.
+
+Đây là điểm khác với AWQ/GPTQ.
+
+Ví dụ:
+
+model.gguf
+
+là một file chứa model theo format GGUF.
+
+GGUF rất phổ biến trong hệ sinh thái:
+
+llama.cpp
+Ollama
+local LLM
+CPU inference
+GPU inference
+
+Bạn có thể gặp:
+
+Q4_K_M.gguf
+Q5_K_M.gguf
+Q8_0.gguf
+
+Trong đó:
+
+Q4
+Q5
+Q8
+
+thường liên quan đến mức quantization.
+
+Ví dụ:
+
+Qwen
+ │
+ └── GGUF
+      ├── Q4_K_M
+      ├── Q5_K_M
+      └── Q8_0
+4. GGML là gì?
+
+GGML ban đầu là tên của một thư viện/tensor library được Georgi Gerganov tạo ra và nó trở thành nền tảng quan trọng cho hệ sinh thái llama.cpp.
+
+Sau này, GGUF được tạo ra để thay thế format GGML cũ.
+
+Có thể hiểu lịch sử đơn giản:
+
+GGML
+  │
+  │ phát triển
+  ▼
+GGUF
+
+Ngày nay nếu bạn thấy:
+
+model.ggml
+
+thì đó thường là format/model ecosystem cũ.
+
+Nếu thấy:
+
+model.gguf
+
+thì đó là format hiện đại hơn trong hệ sinh thái llama.cpp/Ollama.
+
+Nhớ:
+GGML → cũ
+GGUF → mới hơn
+5. ExLlama là gì?
+
+ExLlama là inference engine/runtime tối ưu cho việc chạy các LLM quantized, đặc biệt trong hệ sinh thái GPU NVIDIA.
+
+Ví dụ:
+
+GPTQ model
+     │
+     ▼
+ ExLlama
+     │
+     ▼
+ NVIDIA GPU
+
+ExLlama tập trung mạnh vào inference hiệu năng cao cho các model quantized.
+
+Có thể gặp:
+
+ExLlama
+ExLlamaV2
+ExLlamaV3
+
+Điểm quan trọng:
+
+ExLlama không phải model và cũng không phải phương pháp quantization.
+
+Ví dụ:
+
+Qwen
+ │
+ └── GPTQ 4-bit
+       │
+       ▼
+    ExLlama
+       │
+       ▼
+      GPU
+6. Google ADK là gì?
+
+Cái này khác hoàn toàn 5 cái trên.
+
+Google ADK = Google Agent Development Kit.
+
+Nó là framework/toolkit để xây dựng AI Agent.
+
+Ví dụ:
+
+             Google ADK
+                 │
+       ┌─────────┼─────────┐
+       ▼         ▼         ▼
+     Agent     Tools     Session
+       │
+       ▼
+      LLM
+
+Bạn có thể xây Agent kiểu:
+
+User
+ ↓
+Agent
+ ├── search tool
+ ├── database tool
+ ├── API tool
+ └── another agent
+ ↓
+Answer
+
+Nó gần với thứ bạn đang làm bằng LangGraph hơn nhiều so với AWQ/GPTQ.
+
+7. Quality Inspection là gì?
+
+Cái này cũng không phải model format hay inference engine.
+
+Quality Inspection = kiểm tra chất lượng.
+
+Trong AI/LLM context, nó có thể có nhiều nghĩa tùy hệ thống.
+
+Ví dụ với LLM Agent:
+
+User question
+      ↓
+    Agent
+      ↓
+  Tool result
+      ↓
+Quality Inspection
+      ↓
+Có đúng không?
+Có thiếu không?
+Có lỗi không?
+      ↓
+Final answer
+
+Nó rất gần với node:
+
+result_evaluator
+
+mà bạn đang xây trong LangGraph.
+
+Ví dụ:
+
+Agent gọi:
+get_user_info()
+
+       ↓
+
+Tool trả:
+{
+    "name": "John",
+    "email": null
+}
+
+       ↓
+
+Quality Inspection
+
+       ↓
+
+Phát hiện:
+email chưa có
+
+       ↓
+
+Agent quyết định:
+retrieve / gọi tool khác / hỏi user
+8. Gom tất cả lại
+
+Đây là phần quan trọng nhất:
+
+Tên	Nó là gì?	Nhóm
+AWQ	Phương pháp quantization	Model optimization
+GPTQ	Phương pháp quantization	Model optimization
+GGUF	Model file format	Model format
+GGML	Library/format ecosystem cũ	Model/runtime ecosystem
+ExLlama	Inference engine/runtime	Model inference
+Google ADK	Agent Development Kit	Agent framework
+Quality Inspection	Kiểm tra chất lượng output/result	Evaluation / Agent workflow
+9. Một ví dụ hoàn chỉnh
+
+Giả sử bạn muốn chạy Qwen 7B local.
+
+Bạn có thể có:
+
+                 Qwen 7B
+                    │
+        ┌───────────┴───────────┐
+        │                       │
+      GPTQ                    GGUF
+        │                       │
+        ▼                       ▼
+    ExLlama                  llama.cpp
+        │                       │
+        ▼                       ▼
+       GPU                 CPU/GPU
+
+Hoặc:
+
+Qwen 7B
+   │
+   │ AWQ
+   ▼
+Qwen 7B AWQ 4-bit
+   │
+   ▼
+vLLM
+   │
+   ▼
+OpenAI-compatible API
+
+Trong khi đó tầng Agent lại là:
+
+                  Your Application
+                        │
+                        ▼
+                  LangGraph
+                  / Google ADK
+                        │
+                        ▼
+                      Agent
+                        │
+            ┌───────────┼───────────┐
+            ▼           ▼           ▼
+           LLM         Tools      Memory
+            │
+            ▼
+       vLLM / Ollama
+            │
+            ▼
+       Qwen / Llama
+
+Và sau khi Agent/tool chạy:
+
+Agent
+  ↓
+Tool
+  ↓
+Result
+  ↓
+Quality Inspection
+  ↓
+ ┌───────────────┐
+ │               │
+OK             ERROR
+ │               │
+ ▼               ▼
+Final         Retry / Agent
+Cách nhớ cực ngắn
+AWQ / GPTQ  → giảm kích thước model
+GGUF        → format lưu model
+GGML        → hệ sinh thái cũ liên quan llama.cpp
+ExLlama     → chạy model quantized
+vLLM        → chạy/serve LLM hiệu năng cao
+Google ADK  → xây AI Agent
+LangGraph   → điều phối workflow/Agent
+Quality Inspection → kiểm tra kết quả
+
+Đặc biệt đừng xếp chúng ngang hàng. AWQ, GPTQ, GGUF nằm ở tầng model/format, ExLlama và vLLM ở tầng inference, còn Google ADK và LangGraph ở tầng agent/orchestration.

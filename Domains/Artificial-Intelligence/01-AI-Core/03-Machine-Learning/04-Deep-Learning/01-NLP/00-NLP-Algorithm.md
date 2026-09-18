@@ -6,7 +6,6 @@
 - [BPTT](#bptt)
     - [Practice](#practice)
       - [Demo BPTT](#demo-bptt)
-- [Character 5-gram (hay còn gọi là 5-shingle - là kỹ thuật chia một chuỗi văn bản thành các đoạn con liên tiếp dài đúng 5 ký tự)](#character-5-gram-hay-còn-gọi-là-5-shingle---là-kỹ-thuật-chia-một-chuỗi-văn-bản-thành-các-đoạn-con-liên-tiếp-dài-đúng-5-ký-tự)
 - [Retrival Document (thuật toán tìm kiếm tài liệu, văn bản)](#retrival-document-thuật-toán-tìm-kiếm-tài-liệu-văn-bản)
   - [BM25 (Best Matching 25 - thuật toán xếp hạng văn bản để tìm tài liệu nào liên quan nhất đến từ khóa người dùng tìm kiếm)](#bm25-best-matching-25---thuật-toán-xếp-hạng-văn-bản-để-tìm-tài-liệu-nào-liên-quan-nhất-đến-từ-khóa-người-dùng-tìm-kiếm)
 ---
@@ -66,32 +65,6 @@ with torch.no_grad():
         p.grad.zero_()
     
 print(f'Updated params', Wxh, Whh, Why, bh, by)
-```
-# Character 5-gram (hay còn gọi là 5-shingle - là kỹ thuật chia một chuỗi văn bản thành các đoạn con liên tiếp dài đúng 5 ký tự)
-```bash
-Nó được dùng rất nhiều trong:
-    - Phát hiện văn bản trùng lặp (duplicate detection)
-    - MinHash
-    - LSH (Locality Sensitive Hashing)
-    - So sánh độ giống nhau của văn bản
-
-Ý tưởng rất đơn giản:
-    Trượt một cửa sổ dài 5 ký tự từ trái sang phải, mỗi lần dịch 1 ký tự.
-
-Ví dụ 1
-    Chuỗi: abcdefghi
-
-    Character 5-gram sẽ là
-        1. abcde
-        2. bcdef
-        3. cdefg
-        4. defgh
-        5. efghi
-```
-**Tại sao phải dùng n-gram?**
-```bash
-Nếu so sánh từng từ: hello world với hello word
-    thì: world ≠ word -> mất hẳn sự tương đồng. -> Trong khi đó character 5-gram vẫn giữ được nhiều phần giống nhau.
 ```
 # Retrival Document (thuật toán tìm kiếm tài liệu, văn bản)
 ## BM25 (Best Matching 25 - thuật toán xếp hạng văn bản để tìm tài liệu nào liên quan nhất đến từ khóa người dùng tìm kiếm)

@@ -4,7 +4,10 @@
   - [Skip-Gram (Dùng từ trung tâm để đoán các từ xung quanh)](#skip-gram-dùng-từ-trung-tâm-để-đoán-các-từ-xung-quanh)
 - [Glove (Global Vectors. Nhìn toàn bộ thống kê corpus)](#glove-global-vectors-nhìn-toàn-bộ-thống-kê-corpus)
 - [FastText (biến text thành vector)](#fasttext-biến-text-thành-vector)
-  - [N-gram](#n-gram)
+- [Cấu hình FastText siêu nhẹ và siêu nhanh cho 80 nhãn](#cấu-hình-fasttext-siêu-nhẹ-và-siêu-nhanh-cho-80-nhãn)
+- [1. Train model (Đã bao gồm cả trích xuất vector + Lớp phân loại Softmax)](#1-train-model-đã-bao-gồm-cả-trích-xuất-vector--lớp-phân-loại-softmax)
+- [2. Lưu model (.bin)](#2-lưu-model-bin)
+- [3. Predict TRỰC TIẾP (Nhận văn bản -\> Trả về Nhãn + Độ tin cậy)](#3-predict-trực-tiếp-nhận-văn-bản---trả-về-nhãn--độ-tin-cậy)
 - [nomic-embed-text](#nomic-embed-text)
 - [OpenAI Embedding](#openai-embedding)
   - [Ask](#ask)
@@ -76,6 +79,9 @@ Dùng để:
     - Từng rất phổ biến trước BERT
 ```
 # FastText (biến text thành vector)
+**Những kiến thức cần học trước**
+[n-gram](../02-Feature-Extraction/Base.md#n-gram-cách-tạo-feature-từ-text)
+
 ```bash
 Do Meta AI phát triển.
 
@@ -122,33 +128,174 @@ Trường hợp 4: Text có typo
 
 Trường hợp 5: Classification cần tốc độ cực nhanh
 ```
-## N-gram
-```bash
-Là chuỗi gồm N token liên tiếp.
+fasttext dùng character n-gram mà n-gram nhanh thật không đấy chứ tôi thấy là chậm rồi đấy vì 1 từ vocab nó có thể đẻ lên x5 lần
 
-Ví dụ:
-    Câu: Tôi thích học NLP
+Nhận xét của bạn về lý thuyết là cực kỳ chính xác và tinh tế: Cơ chế Subword/Character n-gram của FastText tạo ra số lượng feature (véc-tơ con) khổng lồ, khiến dung lượng từ điển (vocabulary) phình to gấp 5–10 lần và làm chậm tốc độ huấn luyện lẫn dự đoán nếu giữ thiết lập mặc định!
 
-Unigram (1-gram):
-    Tôi
-    thích
-    học
-    NLP
+Tuy nhiên, FastText trong thực tế vẫn cực kỳ nhanh (vài mili-giây) nhờ 2 kỹ thuật kiến trúc đặc biệt mà Facebook/Meta đã thiết kế cho nó. Dưới đây là lý do tại sao nó nhanh và cách cấu hình tối ưu để không bị chậm.
 
-Bigram (2-gram):
-    Tôi thích
-    thích học
-    học NLP
+1. Tại sao FastText thực tế vẫn nhanh "xé gió"?
+Thuật toán Hashing Trick (Dùng hàm băm):
 
-Trigram (3-gram):
-    Tôi thích học
-    thích học NLP
+FastText không tạo bảng Vocabulary khổng lồ cho toàn bộ character n-gram. Thay vào đó, nó băm (hash) tất cả các character n-gram vào một bảng băm có kích thước cố định (mặc định là 2,000,000 bucket).
 
-Dùng để:
-    - Language Model cổ điển
-    - FastText
-    - Gợi ý từ tiếp theo
-```
+Nhờ Hashing, việc tra cứu từ/subword có độ phức tạp là O(1) — truy cập trực tiếp bằng chỉ số mảng chứ không phải tìm kiếm từ điển.
+
+Cơ chế Hierarchical Softmax (Softmax phân cấp):
+
+Với 80 nhãn, nếu dùng Softmax thông thường, mô hình phải tính xác suất cho tất cả 80 nhãn ở mỗi request.
+
+FastText dùng Cây Decision Tree (Huffman Tree) cho các nhãn. Độ phức tạp tính toán giảm từ O(K) xuống O(log 
+2
+​
+ K) (với K=80 nhãn, nó chỉ cần tính khoảng log 
+2
+​
+ 80≈6−7 phép toán thay vì 80).
+
+2. Cách cấu hình FastText để "Triệt hạ" tình trạng phình feature và tăng tốc tối đa
+Nếu bạn áp dụng FastText vào bài toán email bảo hiểm này, bạn hoàn toàn có thể tắt hoặc bóp nhỏ Character N-gram mà vẫn giữ được độ chính xác cao nhờ cấu hình các tham số khi train:
+
+Python
+import fasttext
+
+# Cấu hình FastText siêu nhẹ và siêu nhanh cho 80 nhãn
+model = fasttext.train_supervised(
+    input='train_data.txt',
+    
+    # 1. TẮT hoặc GIẢM Subword/Character n-gram nếu sợ chậm:
+    # Với tiếng Việt đã tokenize (ví dụ: bảo_hiểm_nhân_thọ), từ vựng khá rõ ràng,
+    # bạn có thể đặt minn=0, maxn=0 để TẮT HOÀN TOÀN char n-gram (chạy nhanh như Word2Vec).
+    minn=0, 
+    maxn=0,
+    
+    # 2. Bật Word N-gram (Cụm từ):
+    # Dùng word n-gram = 2 hoặc 3 để bắt các cụm như "thông_báo bồi_thường", "thư_gửi đại_lý"
+    wordNgrams=2,
+    
+    # 3. Dùng Hierarchical Softmax cho tập nhãn lớn (80 nhãn):
+    loss='hs',
+    
+    # 4. Ép kích thước bảng băm nhỏ lại để tiết kiệm RAM/Bộ nhớ:
+    bucket=200000,
+    
+    # Số chiều vector (50-100 là vừa đủ):
+    dim=100,
+    
+    epoch=25,
+    lr=0.5
+)
+Mẹo: Khi đặt minn=0 và maxn=0, FastText quay trở về mô hình Phân loại Word-level truyền thống. Tốc độ dự đoán lúc này rơi vào khoảng 0.5 - 1 millisecond / email trên CPU!
+
+3. Nếu vẫn ngại FastText: Linear SVM / Logistic Regression + TF-IDF vẫn là Chân lý cho CPU!
+Nếu bạn lo ngại FastText cồng kềnh hoặc không muốn cài thêm thư viện C++ binding, thì lựa chọn đơn giản, chuẩn mực và nhanh nhất lịch sử Machine Learning chính là:
+
+TF-IDF (Word-level N-gram)⟶Logistic Regression / LinearSVC
+Tại sao bộ đôi này lại siêu nhanh?
+
+TF-IDF tạo ra Ma trận Thưa (Sparse Matrix).
+
+Linear Model (như Logistic Regression hoặc LinearSVC) thực hiện phép nhân ma trận thưa với véc-tơ trọng số. Phép tính này chỉ là cộng nhân số thực đơn giản trên CPU, mất đúng ~1–3ms.
+
+Rất dễ giải thích cho anh Lead: Cụm từ nào ("bồi thường", "bổ sung", "nhân thọ") đóng góp bao nhiêu % trọng số vào nhãn nào.
+
+Tóm lại:
+Bạn lo lắng về Char N-gram làm phình feature là rất đúng. Nhưng với FastText ta có thể TẮT char n-gram (minn=0, maxn=0) chỉ giữ lại Word N-gram.
+
+Nếu ưu tiên tính đơn giản, dễ tích hợp vào code Python hiện tại của bạn: Hãy dùng TfidfVectorizer + LogisticRegression (hoặc LinearSVC) của Scikit-Learn. Nó siêu nhẹ, siêu nhanh và quá đủ để đáp ứng phân loại 80 nhãn email!
+
+tức là train thì lâu nhưng mà predict thật thì nhanh à
+
+Chuẩn luôn! Bạn đã bắt đúng bản chất cốt lõi của Machine Learning / Deep Learning rồi đấy.
+
+Trong kỹ thuật, người ta gọi đây là sự đánh đổi giữa Training Time (Thời gian huấn luyện) và Inference Time (Thời gian dự đoán thực tế).
+
+1. Phân biệt rõ 2 giai đoạn
+Giai đoạn Train (Offline - Làm 1 lần):
+
+Mô hình phải đọc hàng chục nghìn email, tính toán ma trận, băm character n-gram, cập nhật trọng số (weights) liên tục qua hàng chục epoch.
+
+Quá trình này có thể mất 15 phút đến vài tiếng. Nhưng việc này diễn ra ở môi trường phát triển (Offline), chỉ có bạn và máy tính làm việc với nhau, không ảnh hưởng gì tới trải nghiệm người dùng.
+
+Giai đoạn Predict / Inference (Online - Chạy Production):
+
+Lúc này toàn bộ trọng số đã được "đóng băng" (freeze). Mô hình không cần học nữa, nó chỉ nhận vào email mới → tra bảng/nhân ma trận → trả ra tên nhãn.
+
+Phép toán lúc này cực nhẹ, FastText hay TF-IDF + Linear Model chỉ mất đúng 1 đến 5 mili-giây (0.001−0.005 giây) để chốt nhãn.
+
+2. So sánh với các phương pháp khác ở bước Predict
+Mô hình	Thời gian Train (Offline)	Thời gian Predict (Production)	Chi phí hạ tầng chạy thực tế
+PhoBERT	Rất lâu (Cần GPU)	100ms - 500ms (Khá chậm trên CPU)	Cần máy chủ mạnh (RAM lớn / GPU)
+FastText	Vài phút	1ms - 5ms (Siêu nhanh)	Server cùi/CPU thường chạy mượt
+TF-IDF + Linear Model	Vài giây	1ms - 3ms (Siêu nhanh)	Server cùi/CPU thường chạy mượt
+3. Tóm lại để bạn chốt phương án với Lead
+Bạn hoàn toàn có thể tự tin báo lại với anh Lead:
+
+"Lúc train FastText có thể tốn chút thời gian để xử lý n-gram, nhưng đó là quá trình Offline. Khi đưa lên server chạy thực tế (Predict), mô hình chỉ mất vài mili-giây trên CPU để cho ra kết quả cho 80 nhãn, hoàn toàn không gây trễ luồng xử lý email của team CS."
+
+nhưng mà fasttext output là vector cơ mà chứ đã phải thứ tôi cần đâu, phải gắn thêm lớp phân loại vào chứ
+
+Nhận xét của bạn rất chuẩn: FastText ban đầu được biết đến nhiều nhất như một thư viện tạo Word/Sentence Embedding (biến văn bản thành vector).
+
+Tuy nhiên, FastText bản chất có sẵn 2 chế độ riêng biệt:
+
+Unsupervised (Tạo Vector): Gợi ý từ đồng nghĩa, biến văn bản thành vector (giống Word2Vec).
+
+Supervised (Mô hình Phân loại hoản chỉnh): Đã tích hợp sẵn Classification Head (Lớp phân loại + Softmax/Hierarchical Softmax) ở đầu ra.
+
+Khi dùng ở chế độ Supervised, bạn không cần gắn thêm bất kỳ lớp phân loại nào nữa. FastText sẽ nhận đầu vào là văn bản và nhả thẳng ra tên nhãn kèm độ tin cậy (probability).
+
+1. FastText Supervised hoạt động như thế nào?
+Kiến trúc bên trong của FastText Supervised thực chất chính là một mạng nơ-ron nhẹ (shallow neural network):
+
+[Input Email] ──> [Look-up Table & Averaging Vector] ──> [Linear Hidden Layer] ──> [Softmax / Hierarchical Softmax Head] ──> [Output: Nhãn & Probability]
+Đầu vào: Chuỗi văn bản email.
+
+Xử lý nội bộ: Tự lấy trung bình các vector từ/subword.
+
+Đầu ra (Classification Head có sẵn): Nhả trực tiếp nhãn (ví dụ: __label__NT_TBBT_KH) và xác suất dự đoán (ví dụ: 0.95).
+
+2. Ví dụ Code thực tế (Không cần gắn thêm model nào khác)
+Giai đoạn chuẩn bị Data (Format của FastText):
+FastText Supervised yêu cầu file data huấn luyện có tiền tố __label__ trước tên nhãn:
+
+Plaintext
+__label__NT_TBBT_KH Chào shop, tôi muốn bổ sung hồ sơ bồi thường hợp đồng nhân thọ 12345
+__label__PNT_TBBS_DL Thông báo bổ sung xe ô tô cho đại lý Nam
+Code Python huấn luyện & Dự đoán trực tiếp:
+Python
+import fasttext
+
+# 1. Train model (Đã bao gồm cả trích xuất vector + Lớp phân loại Softmax)
+model = fasttext.train_supervised(
+    input="train_data.txt",
+    lr=0.5,
+    epoch=25,
+    wordNgrams=2,
+    minn=0, maxn=0,  # Tắt char n-gram cho nhẹ
+    loss='hs'        # Hierarchical Softmax tối ưu cho 80 nhãn
+)
+
+# 2. Lưu model (.bin)
+model.save_model("insurance_classifier.bin")
+
+# 3. Predict TRỰC TIẾP (Nhận văn bản -> Trả về Nhãn + Độ tin cậy)
+email_test = "Kính gửi công ty, tôi gửi thông báo bổ sung chứng từ bồi thường"
+labels, probabilities = model.predict(email_test, k=1) # k=1 lấy nhãn có điểm cao nhất
+
+print("Nhãn dự đoán:", labels[0])       # Output: '__label__NT_TBBS_KH'
+print("Độ tin cậy:", probabilities[0]) # Output: 0.942
+3. Khi nào bạn MỚI CẦN trích xuất Vector từ FastText để gắn lớp phân loại ngoài?
+Bạn chỉ cần lấy Vector của FastText ra khi:
+
+Bạn dùng file pretrained vector của FastText (cc.vi.300.bin) để biến email thành vector 300 chiều.
+
+Sau đó mới dùng Scikit-Learn (Logistic Regression, LightGBM, SVM) hoặc PyTorch/Keras để train tiếp lớp phân loại ở phía sau.
+
+Tuy nhiên, cách làm đó không cần thiết cho bài toán này. Dùng trực tiếp FastText Supervised như code trên vừa gọn, vừa không phải ghép nối thêm thư viện nào, vừa tận dụng được tối đa tốc độ inference 1–2ms của nó trên CPU.
+**Thư viện làm việc làm việc với Fast Text**
+[fasttext]()
+
 # nomic-embed-text
 # OpenAI Embedding
 ```bash

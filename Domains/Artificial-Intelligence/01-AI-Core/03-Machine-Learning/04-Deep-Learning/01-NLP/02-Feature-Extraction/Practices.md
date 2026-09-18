@@ -1,3 +1,6 @@
+- [Demo code thuần research BoW (Bag of Word)](#demo-code-thuần-research-bow-bag-of-word)
+- [Demo code thuần research TF-IDF](#demo-code-thuần-research-tf-idf)
+---
 # Demo code thuần research BoW (Bag of Word)
 ```python
 from collections import Counter

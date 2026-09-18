@@ -1,3 +1,8 @@
+- [Bs4 Introduction (dùng để phân tích (parse) HTML hoặc XML)](#bs4-introduction-dùng-để-phân-tích-parse-html-hoặc-xml)
+- [BeautifulSoup (biến nó thành các object để truy cập như tree)](#beautifulsoup-biến-nó-thành-các-object-để-truy-cập-như-tree)
+  - [.text (Muốn lấy nội dung)](#text-muốn-lấy-nội-dung)
+  - [.get\_text() (dùng để lấy toàn bộ nội dung text bên trong một thẻ, bỏ hết các tag HTML)](#get_text-dùng-để-lấy-toàn-bộ-nội-dung-text-bên-trong-một-thẻ-bỏ-hết-các-tag-html)
+---
 # Bs4 Introduction (dùng để phân tích (parse) HTML hoặc XML)
 ```bash
 Nó biến chuỗi HTML thành một cây (tree) các object để bạn dễ dàng:
