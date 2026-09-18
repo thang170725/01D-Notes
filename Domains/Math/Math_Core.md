@@ -1,3 +1,4 @@
++ [<<Back](../Base.md)
 - [Dijkstra's Algorithm (thuật toán dùng để tìm đường đi ngắn nhất)](#dijkstras-algorithm-thuật-toán-dùng-để-tìm-đường-đi-ngắn-nhất)
 - [số chẵn và số lẻ](#số-chẵn-và-số-lẻ)
 - [DFS](#dfs)

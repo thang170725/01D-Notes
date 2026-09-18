@@ -1,3 +1,4 @@
++ [<<Back](00-Core.md)
 - [Ask (Các câu hỏi về cloud)](#ask-các-câu-hỏi-về-cloud)
   - [Vấn đề các trường đại học có sử dụng cloud không?](#vấn-đề-các-trường-đại-học-có-sử-dụng-cloud-không)
   - [Giải pháp giảm tải cho db khi nhiều request?](#giải-pháp-giảm-tải-cho-db-khi-nhiều-request)

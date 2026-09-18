@@ -1,13 +1,17 @@
-- [Cloud](#cloud)
++ [<<Back](../Base.md)
+- [Architechture Directory](#architechture-directory)
+- [Cloud Introdoction (Cách sử dụng máy tính, lưu trữ, phần mềm… thông qua Internet, mà bạn không cần sở hữu máy thật)](#cloud-introdoction-cách-sử-dụng-máy-tính-lưu-trữ-phần-mềm-thông-qua-internet-mà-bạn-không-cần-sở-hữu-máy-thật)
 - [IaaS \& PaaS \& SaaS](#iaas--paas--saas)
 - [SERVER](#server)
 - [CLOUD HOẠT ĐỘNG THẾ NÀO?](#cloud-hoạt-động-thế-nào)
 - [KIẾN TRÚC ĐÚNG CHO HỆ THỐNG ĐĂNG KÝ TÍN CHỈ (TRÊN AWS)](#kiến-trúc-đúng-cho-hệ-thống-đăng-ký-tín-chỉ-trên-aws)
 ---
-# Cloud
-```bash
-Cách sử dụng máy tính, lưu trữ, phần mềm… thông qua Internet, mà bạn không cần sở hữu máy thật
-```
+# Architechture Directory
+Cloud/                         ```mình dùng thư mục này để xem kiến thức của các lĩnh vực trong CNTT ```  
+ ├── [00-Core](00-Core.md)     ```mình dùng file này để xem kiến thức về lĩnh vực Nghệ thuật```   
+ └── [AWS](AWS.md)             ```mình dùng file này để xem kiến thức về lĩnh vực web```  
+    
+# Cloud Introdoction (Cách sử dụng máy tính, lưu trữ, phần mềm… thông qua Internet, mà bạn không cần sở hữu máy thật)
 **Trước khi có cloud thì sao?**
 ```bash
 - Giả sử bạn mở một quán cà phê và muốn:

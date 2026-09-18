@@ -1,3 +1,4 @@
++ [<<Back](../Base.md)
 - [Computer Introduction (tất tần tật về máy tính)](#computer-introduction-tất-tần-tật-về-máy-tính)
 - [Cách máy tính thao tác với những dòng code](#cách-máy-tính-thao-tác-với-những-dòng-code)
   - [interpreter (Dịch và chạy từng dòng)](#interpreter-dịch-và-chạy-từng-dòng)

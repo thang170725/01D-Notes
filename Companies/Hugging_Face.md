@@ -3,6 +3,8 @@
 - [Ask](#ask)
   - ["trên Hugging Face" chọn model open-weight bao nhiêu tham số thì đủ mạnh để làm một trợ lý đa năng kiểu ChatGPT?](#trên-hugging-face-chọn-model-open-weight-bao-nhiêu-tham-số-thì-đủ-mạnh-để-làm-một-trợ-lý-đa-năng-kiểu-chatgpt)
   - [Phải dùng gpu tương ứng bao nhiêu thì mới dùng được các model AI, cpu có dùng được không?](#phải-dùng-gpu-tương-ứng-bao-nhiêu-thì-mới-dùng-được-các-model-ai-cpu-có-dùng-được-không)
+  - [Tại sao 70B 4-bit vẫn cần ~40GB?](#tại-sao-70b-4-bit-vẫn-cần-40gb)
+  - [Có thể dùng RAM thay cho VRAM không?](#có-thể-dùng-ram-thay-cho-vram-không)
   - [Nên lựa chọn RAM, CPU, GPU như thế nào nếu muốn tự xây một ChatGPT mini?](#nên-lựa-chọn-ram-cpu-gpu-như-thế-nào-nếu-muốn-tự-xây-một-chatgpt-mini)
 ---
 # Hugging Face Introduction
@@ -82,128 +84,21 @@ Nếu mục tiêu là “một model làm được hầu hết mọi thứ”. N
                 - inference engine
                 - multi-GPU
         
-        Nhưng có một điều rất quan trọng
-
-Bạn hỏi:
-    “bao nhiêu tham số mới được cho là tốt để xử lý hầu hết mọi tác vụ hỏi đáp ví dụ ChatGPT hoặc Gemini…”
-
-    Không nên lấy ChatGPT/Gemini làm mốc parameter count. Bởi vì OpenAI và Google không công bố parameter count chính thức của các model frontier hiện đại, nên những con số kiểu:
-        - GPT-4 = 1.76T
-        - Gemini = 1.5T
-        - GPT-5 = xxxT
-        - Gemini = xxxT
-
-trên Internet phần lớn là ước tính hoặc tin đồn, không phải thông số chính thức.
-
-Thậm chí GPT-4 technical report cũng không công bố số parameter.
-
-Và đặc biệt: MoE làm cho việc nhìn số B bị sai
-
-Ví dụ tưởng tượng:
-
-Model A
-Total = 70B
-Dense
-Active = 70B
-
-và:
-
-Model B
-Total = 400B
-MoE
-Active = 20B
-
-Không thể kết luận:
-
-400B > 70B
-→ B chắc chắn mạnh hơn
-
-Vì Model B chỉ kích hoạt khoảng 20B tham số cho mỗi token.
-
-Một ví dụ thực tế khác: Qwen3.8-Max được công bố ở mức 2.4T total parameters, nhưng kiến trúc MoE chỉ kích hoạt khoảng 95B parameters/request.
-
-Vì vậy khi xem Hugging Face, bạn nên nhìn:
-
-Parameters
-+
-Architecture
-+
-Active parameters
-+
-Training quality
-+
-Reasoning capability
-+
-Context length
-+
-Benchmark
-+
-Instruction tuning
-
-chứ không chỉ:
-
-7B
-14B
-32B
-70B
-Nếu đặt mục tiêu giống “ChatGPT”
-
-Mình sẽ hình dung thế này:
-
-                    GENERAL AI ASSISTANT
-                           │
-          ┌────────────────┼────────────────┐
-          ↓                ↓                ↓
-       7–8B             14–35B            70B+
-       khá               mạnh             rất mạnh
-          │                │                │
-       local             local/server      server
-
-Nếu chỉ cần chatbot tốt:
-
-7–8B
-
-Nếu muốn AI assistant đa năng khá mạnh:
-
-14B
-
-Nếu muốn AI assistant rất mạnh nhưng vẫn còn khả năng self-host:
-
-30–35B
-
-Nếu muốn open-weight ở phân khúc rất mạnh:
-
-70B+
-
-Còn nếu muốn cạnh tranh với frontier models, hiện nay phải nhìn sang các MoE hàng trăm tỷ đến hàng nghìn tỷ total parameters, nhưng đó là một bài toán hạ tầng hoàn toàn khác. Thị trường hiện đã có các model công bố tới hàng nghìn tỷ tham số; chẳng hạn Reuters đưa tin Qwen3.8-Max ở 2.4T total và Kimi K3 ở khoảng 2.8T.
-
-Nếu bạn đang định chọn một model trên Hugging Face để tự chạy
-
-Thì mình khuyên đừng bắt đầu bằng câu hỏi “bao nhiêu B?”.
-
-Hãy bắt đầu bằng:
-
-Tôi có bao nhiêu VRAM?
-        ↓
-1 GPU hay nhiều GPU?
-        ↓
-Muốn tốc độ bao nhiêu token/s?
-        ↓
-Tiếng Việt quan trọng không?
-        ↓
-Có cần code không?
-        ↓
-Có cần reasoning không?
-        ↓
-Có cần đọc PDF/image không?
-        ↓
-Có cần RAG/tool calling không?
-
-Ví dụ nếu bạn nói với mình:
-
-“Tôi có RTX 4090 24GB và muốn chạy một AI local trên Hugging Face, có thể hỏi đáp tiếng Việt + code + đọc tài liệu + reasoning, càng giống ChatGPT càng tốt.”
-
-thì mình có thể lọc cụ thể các model Hugging Face hiện nay theo 7B / 14B / 32B / 70B, tính luôn VRAM khi chạy FP16, INT8, 4-bit và tốc độ dự kiến, rồi nói cho bạn model nào đáng chọn nhất.
+                GENERAL AI ASSISTANT
+                       │
+      ┌────────────────┼────────────────┐
+      ↓                ↓                ↓
+   7–8B             14–35B            70B+
+   khá               mạnh             rất mạnh
+      │                │                │
+   local             local/server      server
+```
+```bash
+- Nếu chỉ cần chatbot tốt -> 7–8B
+- Nếu muốn AI assistant đa năng khá mạnh: 14B
+- Nếu muốn AI assistant rất mạnh nhưng vẫn còn khả năng self-host: 30–35B
+- Nếu muốn open-weight ở phân khúc rất mạnh: 70B+
+- Còn nếu muốn cạnh tranh với frontier models, hiện nay phải nhìn sang các MoE hàng trăm tỷ đến hàng nghìn tỷ total parameters, nhưng đó là một bài toán hạ tầng hoàn toàn khác. Thị trường hiện đã có các model công bố tới hàng nghìn tỷ tham số; chẳng hạn Reuters đưa tin Qwen3.8-Max ở 2.4T total và Kimi K3 ở khoảng 2.8T.
 ```
 ## Phải dùng gpu tương ứng bao nhiêu thì mới dùng được các model AI, cpu có dùng được không?
 ```bash
@@ -254,103 +149,38 @@ Ví dụ bạn có: RTX 3060 12GB
         - 14B     █████████████
         - 30B     ████████████████████████
         - Model: 30B–35B ở 4-bit có thể vừa hoặc gần vừa VRAM tùy model/context/runtime. -> Đây là lý do nhiều người thích RTX 4090 24GB để chạy LLM local.
-
-3. Nhưng tại sao 70B 4-bit vẫn cần ~40GB?
-
-Vì:
-
-70B parameters × 4 bit
-
-xấp xỉ:
-
-35 GB
-
-chỉ tính phần trọng số.
+```
+## Tại sao 70B 4-bit vẫn cần ~40GB?
+```bash
+Vì: 70B parameters × 4 bit xấp xỉ: 35 GB -> chỉ tính phần trọng số.
 
 Sau đó còn:
-
-weights
-+ KV cache
-+ activations
-+ CUDA/runtime overhead
-+ context
-
-nên thực tế không nên nghĩ:
-
-“35 GB thì GPU 35 GB là chạy ngon.”
-
-Thường cần dư VRAM.
-
-4. Có thể dùng RAM thay cho VRAM không?
-
-Có.
-
-Đây là điểm rất quan trọng.
+    - weights
+    - KV cache
+    - activations
+    - CUDA/runtime overhead
+    - context
+-> Thường cần dư VRAM.
+```
+## Có thể dùng RAM thay cho VRAM không?
+```bash
+Có. Thậm chí chỉ CPU + RAM cũng được
 
 Ví dụ máy:
-
-CPU: Ryzen 9
-RAM: 64 GB
-GPU: RTX 3060 12 GB
-
-Bạn có thể chạy model lớn hơn 12GB bằng cách offload một phần model vào RAM.
+    - CPU: Ryzen 9
+    - RAM: 64 GB
+    - GPU: RTX 3060 12 GB
+-> Bạn có thể chạy model lớn hơn 12GB bằng cách offload một phần model vào RAM.
 
 Ví dụ:
+             Model 30B
+                │
+       ┌────────┴────────┐
+       ↓                 ↓
+   GPU VRAM           System RAM
+    12 GB               32 GB
 
-                 Model 30B
-                    │
-           ┌────────┴────────┐
-           ↓                 ↓
-       GPU VRAM           System RAM
-        12 GB               32 GB
-
-Nhưng tốc độ sẽ giảm đáng kể vì GPU phải trao đổi dữ liệu với RAM qua PCIe.
-
-5. Thậm chí chỉ CPU + RAM cũng được
-
-Ví dụ:
-
-CPU
-AMD Ryzen 9
-       +
-RAM 64 GB
-       ↓
-Qwen / Llama / Mistral 30B
-       ↓
-CPU inference
-
-Chạy được.
-
-Nhưng không nên kỳ vọng trải nghiệm giống ChatGPT.
-
-Ví dụ bạn gửi:
-
-Hãy phân tích tài liệu này...
-
-Model có thể phải mất khá lâu mới sinh đủ câu trả lời.
-
-Trong khi GPU có thể phản hồi nhanh hơn nhiều.
-
-6. Một thứ nữa rất quan trọng: RAM không giống VRAM
-
-Ví dụ bạn có:
-
-RAM = 64 GB
-VRAM = 8 GB
-
-không có nghĩa GPU có 72 GB VRAM.
-
-Hai bộ nhớ khác nhau:
-
-CPU
- │
- └── RAM 64 GB
-          │
-        PCIe
-          │
-GPU ── VRAM 8 GB
-
-LLM có thể nằm một phần ở RAM, một phần ở VRAM, nhưng việc truyền dữ liệu giữa chúng có overhead.
+-> Nhưng tốc độ sẽ giảm đáng kể vì GPU phải trao đổi dữ liệu với RAM qua PCIe.
 ```
 ## Nên lựa chọn RAM, CPU, GPU như thế nào nếu muốn tự xây một ChatGPT mini?
 ```bash

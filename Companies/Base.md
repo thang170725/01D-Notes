@@ -5,11 +5,12 @@
   - [Tại sao phải nghiên cứu các công ty công nghệ](#tại-sao-phải-nghiên-cứu-các-công-ty-công-nghệ)
 ---
 # Directory Structure
-Companies/                                                  ```mình dùng thư mục này là second brain```    
-├── [CloudFlare](CloudFlare.md.md)                         ```mình dùng thư mục này để xem giới thiệu về Hugging Face```  
-├── [Hugging_Face](Hugging_Face.md)                         ```mình dùng thư mục này để xem giới thiệu về Hugging Face```    
-├── [Jina_AI](Jina_AI.md)                      ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   
-└── [OpenAI](OpenAI.md)                      ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
+Companies/                              ```mình dùng thư mục này là second brain```    
+├── [CloudFlare](CloudFlare.md)         ```mình dùng thư mục này để xem giới thiệu về Hugging Face```  
+├── [Hugging_Face](Hugging_Face.md)     ```mình dùng thư mục này để xem giới thiệu về Hugging Face```    
+├── [Jina_AI](Jina_AI.md)               ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   
+└── [OpenAI](OpenAI.md)                 ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
+
 # Companies Introduction (thư mục này chuyên nghiên cứu về các công ty công nghệ trên thế giới)
 # Ask
 ## Tại sao phải nghiên cứu các công ty công nghệ
