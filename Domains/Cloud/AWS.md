@@ -22,6 +22,8 @@
 - [Amazon SNS (Simple Notification Service) (Dịch vụ chuyên gửi tin nhắn/email tự động)](#amazon-sns-simple-notification-service-dịch-vụ-chuyên-gửi-tin-nhắnemail-tự-động)
 - [Serverless](#serverless)
   - [AWS Lambda](#aws-lambda)
+- [ALB (Application Load Balancer là bộ cân bằng tải ứng dụng)](#alb-application-load-balancer-là-bộ-cân-bằng-tải-ứng-dụng)
+- [ECS (Elastic Container Service là dịch vụ điều phối container)](#ecs-elastic-container-service-là-dịch-vụ-điều-phối-container)
 ---
 # AWS (Amazon Web Services)
 ```bash
@@ -399,4 +401,64 @@ Sự an toàn tuyệt đối của Cách 2 (Dùng IAM Role): Khi bạn gán mộ
 ```bash
 Hiện tại, các hàm AWS Lambda có một giới hạn cứng là chỉ được chạy tối đa 15 phút cho một yêu cầu. 
     - Nếu tác vụ của bạn là render một bộ phim 3D dài 2 tiếng, hay huấn luyện một mô hình AI (Machine Learning) mất cả ngày trời, thì Lambda chắc chắn sẽ "gục ngã" và bạn bắt buộc phải dùng máy chủ truyền thống (EC2).
+```
+# ALB (Application Load Balancer là bộ cân bằng tải ứng dụng)
+```bash
+ALB là bộ cân bằng tải hoạt động ở Lớp 7 (Application Layer) trong mô hình OSI. Nhiệm vụ chính của nó là nhận tất cả lưu lượng truy cập (HTTP/HTTPS) từ người dùng internet và tự động điều phối (phân phối) các yêu cầu đó đến các máy chủ hoặc container phía sau.
+
+Tính năng cốt lõi:
+
+Điều hướng thông minh (Routing): Phân phối truy cập dựa trên đường dẫn URL (Path-based) hoặc tên miền (Host-based).
+
+Ví dụ: Request tới [api.myshop.com/users](https://api.myshop.com/users) được gửi đến Container User, còn [api.myshop.com/orders](https://api.myshop.com/orders) được gửi đến Container Order.
+
+Health Check (Kiểm tra sức khỏe): Liên tục kiểm tra xem container/máy chủ nào còn sống. Nếu một container bị sập, ALB sẽ dừng gửi truy cập đến container đó và chuyển hướng sang container khác khỏe mạnh.
+
+Quản lý SSL/TLS: Đảm nhận việc giải mã HTTPS ngay tại ALB (SSL Termination), giảm tải công việc tính toán cho ứng dụng phía sau.
+```
+# ECS (Elastic Container Service là dịch vụ điều phối container)
+```bash
+ECS là dịch vụ quản lý và điều phối container (Container Orchestration) do chính AWS phát triển. Nó giúp bạn chạy, mở rộng và quản lý các ứng dụng Docker trên một cụm máy chủ mà không cần phải tự cài đặt các công cụ phức tạp như Kubernetes.
+
+Các thành phần chính của ECS:
+
+Task Definition: Bản thiết kế (blueprint) mô tả ứng dụng chạy như thế nào (dùng Docker Image nào, cần bao nhiêu CPU/RAM, cài biến môi trường gì).
+
+Task: Một thể hiện (instance) đang chạy thực tế của Task Definition (tương đương với một Docker Container đang chạy).
+
+Service: Thành phần đảm bảo số lượng Task mong muốn luôn luôn hoạt động. Nếu một Task bị sập, ECS Service sẽ tự động đẻ ra một Task mới thay thế.
+
+2 chế độ chạy (Launch Type) của ECS:
+
+EC2 Launch Type: Bạn tự quản lý các máy chủ EC2, ECS sẽ thả các Docker Container lên máy chủ của bạn.
+
+AWS Fargate (Serverless): Bạn không cần quản lý máy chủ. Bạn chỉ cần khai báo "Tôi muốn chạy container này với 1 vCPU và 2GB RAM", AWS sẽ tự lo hạ tầng phía dưới.
+
+3. ALB và ECS phối hợp với nhau như thế nào?
+Khi kết hợp ALB và ECS, bạn sẽ có một hạ tầng hoàn chỉnh, tự động co giãn và chịu lỗi cao:
+
+Người dùng gửi yêu cầu truy cập vào ứng dụng qua domain (ví dụ: [https://my-app.com](https://my-app.com)).
+
+ALB tiếp nhận yêu cầu, giải mã HTTPS và chuyển tiếp request vào mạng riêng (Private Subnet).
+
+ECS nhận request từ ALB và đưa vào các Task (Container) đang chạy phía sau.
+
+Khi truy cập tăng đột biến, ECS Auto Scaling sẽ tự động nhân bản thêm nhiều Task (Container). Ngay lập tức, ECS sẽ đăng ký các Task mới này với ALB để ALB phân chia tải sang.
+
+Plaintext
+[ Người dùng ]
+      │ (HTTPS)
+      ▼
+   [ ALB ]  ◄── (Cân bằng tải & kiểm tra Health Check)
+   ├───┬───┤
+   │   │   │
+   ▼   ▼   ▼
+ ┌──────────────┐
+ │  ECS Service │
+ │ ┌──────────┐ │
+ │ │ Task 1   │ │ (Container)
+ │ ├──────────┤ │
+ │ │ Task 2   │ │ (Container)
+ │ └──────────┘ │
+ └──────────────┘
 ```

@@ -92,7 +92,7 @@ Ví dụ với Logistic Regression:
 ```
 # TF-IDF (biến token thành feature vector)
 ```bash
-Là cách  cho NLP truyền thống. 
+Là cách cho NLP truyền thống. 
     Khác với embedding là cách biến token thành vector ngữ nghĩa cho Deep Learning và LLM.
 ```
 **Workflow của TF-IDF**

@@ -1,6 +1,6 @@
-- [Introduction](#introduction)
+- [SVM Introduction](#svm-introduction)
 ---
-# Introduction
+# SVM Introduction
 ```bash
 - SVM là thuật toán học có giám sát (supervised learning) trong Machine Learning.
 - Thường dùng cho:
@@ -59,7 +59,7 @@ Bước 5: Support Vectors
         + B(2,2)
         + C(4,4)
     - Vì chúng nằm sát đường phân chia nhất. Điều thú vị là: Chỉ vài điểm support vector quyết định mô hình.
-Step6: Hàm tối ưu của SVM
+Step 6: Hàm tối ưu của SVM
     - SVM giải bài toán tối ưu: min 1/2.∥w∥**2
         + với điều kiện: yi.(w**T.xi + b) ≥ 1
     - Ý nghĩa:
