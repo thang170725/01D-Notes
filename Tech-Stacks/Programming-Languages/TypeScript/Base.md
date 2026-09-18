@@ -1,15 +1,15 @@
-- [Introduction](#introduction)
++ [<<Back](../Base.md)
+- [Typescript Introduction (JavaScript + Static Type)](#typescript-introduction-javascript--static-type)
 - [Installation \& Run](#installation--run)
   - [Typescript + NodeJS](#typescript--nodejs)
 ---
-# Introduction
+# Typescript Introduction (JavaScript + Static Type)
 ```bash
-- TypeScript = JavaScript + Static Type
-- TypeScript giúp:
-    + bắt lỗi trước khi chạy
-    + autocomplete cực mạnh
-    + code dễ maintain
-    + TS compile → JS
+TypeScript giúp:
+    - bắt lỗi trước khi chạy
+    - autocomplete cực mạnh
+    - code dễ maintain
+    - TS compile → JS
 ```
 **Extentions VSCode**
 ```bash

@@ -1,3 +1,4 @@
++ [<<Back](Base.md)
 - [Variable](#variable)
   - [let](#let)
   - [Generic (type động)](#generic-type-động)

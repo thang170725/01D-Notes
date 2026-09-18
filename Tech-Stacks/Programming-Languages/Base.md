@@ -4,7 +4,18 @@
   - [Đừng viết code thừa](#đừng-viết-code-thừa)
   - [Comment không phải lúc nào cũng tốt](#comment-không-phải-lúc-nào-cũng-tốt)
   - [Đừng để function có quá nhiều tham số](#đừng-để-function-có-quá-nhiều-tham-số)
-- [do something](#do-something)
+  - [Đừng lặp code (DRY Don't Repeat Yourself)](#đừng-lặp-code-dry-dont-repeat-yourself)
+  - [Error handling](#error-handling)
+  - [Exception tốt hơn return "magic value"](#exception-tốt-hơn-return-magic-value)
+  - [Class cũng phải có trách nhiệm rõ ràng](#class-cũng-phải-có-trách-nhiệm-rõ-ràng)
+  - [Cohesion và Coupling](#cohesion-và-coupling)
+    - [High Cohesion](#high-cohesion)
+    - [Low Coupling](#low-coupling)
+  - [Đừng phụ thuộc implementation nếu không cần](#đừng-phụ-thuộc-implementation-nếu-không-cần)
+  - [Test (Clean Code không chỉ là format code mà code tốt phải dễ test)](#test-clean-code-không-chỉ-là-format-code-mà-code-tốt-phải-dễ-test)
+  - [Refactoring là công việc liên tục](#refactoring-là-công-việc-liên-tục)
+  - [Code smell (Một phần tư duy quan trọng của Clean Code là biết nhận ra code smell)](#code-smell-một-phần-tư-duy-quan-trọng-của-clean-code-là-biết-nhận-ra-code-smell)
+  - [Clean Code không đồng nghĩa với "code đẹp"](#clean-code-không-đồng-nghĩa-với-code-đẹp)
 - [Ask](#ask)
   - [Tại sao phải viết code?](#tại-sao-phải-viết-code)
   - [Tại sao phải học lập trình?](#tại-sao-phải-học-lập-trình)
@@ -18,6 +29,7 @@ Programming-Languages/                  ```mình dùng thư mục này để xem
 ├── Java        # mình dùng thư mục này để xem kiến thức về Java  
 ├── Java        # mình dùng thư mục này để xem kiến thức về Java  
 └── [Python](Python/Base.md)            ```mình dùng thư mục này để xem kiến thức về Python```  
+└── [Typescript](TypeScript/Base.md)    ```mình dùng thư mục này để xem kiến thức về Python``` 
 
 # Clean Code (Code không chỉ cần chạy đúng mà phải dễ đọc, dễ hiểu, dễ thay đổi và khó làm hỏng)
 **Tài liệu về clean code**
@@ -115,24 +127,16 @@ class User:
 
 create_user(user) # Code sẽ dễ đọc hơn.
 ```
-Đừng lặp code — DRY
-
-DRY = Don't Repeat Yourself.
-
-Ví dụ:
-
+## Đừng lặp code (DRY Don't Repeat Yourself)
+**Ex**
+```python
 price1 = price * 0.9
 price2 = price * 0.9
 price3 = price * 0.9
 
-Nếu logic giảm giá thay đổi:
-
-10% → 15%
-
-bạn phải sửa nhiều chỗ.
+# Nếu logic giảm giá thay đổi: 10% → 15% -> bạn phải sửa nhiều chỗ.
 
 Tách:
-
 def apply_discount(price):
     return price * 0.9
 
@@ -141,33 +145,9 @@ Sau đó:
 apply_discount(price1)
 apply_discount(price2)
 apply_discount(price3)
-8. Nhưng đừng "DRY quá mức"
-
-Đây là nuance rất quan trọng.
-
-Không phải cứ code giống nhau là phải gom lại.
-
-Ví dụ hôm nay:
-
-calculate_user_price()
-calculate_product_price()
-
-có vẻ giống nhau.
-
-Bạn gom thành:
-
-calculate_price()
-
-Nhưng 2 logic này thực chất có thể thay đổi độc lập trong tương lai.
-
-Khi đó abstraction sớm có thể làm code khó hiểu hơn.
-
-Vì vậy:
-
-Đừng chỉ nhìn code giống nhau; hãy nhìn xem chúng có cùng ý nghĩa và cùng lý do để thay đổi hay không.
-
-9. Error handling cũng là một phần của thiết kế
-
+```
+## Error handling
+```bash
 Đừng để code:
 
 try:
@@ -187,11 +167,10 @@ except UserNotFoundError:
 Tức là:
 
 Biết mình đang bắt lỗi gì và tại sao.
-
-10. Exception tốt hơn return "magic value"
-
-Ví dụ:
-
+```
+## Exception tốt hơn return "magic value"
+**Ex**
+```python
 def get_user(id):
     return -1
 
@@ -212,9 +191,9 @@ except UserNotFoundError:
     ...
 
 Ý nghĩa rõ hơn rất nhiều.
-
-11. Class cũng phải có trách nhiệm rõ ràng
-
+```
+## Class cũng phải có trách nhiệm rõ ràng
+```python
 Không nên có:
 
 class UserManager:
@@ -240,12 +219,10 @@ Ví dụ:
 UserService
     ↓
 UserRepository
-12. Cohesion và Coupling
-
-Đây là hai khái niệm cực kỳ quan trọng khi code lớn.
-
-High Cohesion
-
+```
+## Cohesion và Coupling
+### High Cohesion
+```bash
 Một class/function nên chứa những thứ liên quan chặt chẽ với nhau.
 
 UserService
@@ -265,9 +242,9 @@ UserService
  └── generate_pdf
 
 → cohesion thấp.
-
-Low Coupling
-
+```
+### Low Coupling
+```bash
 Các module không nên phụ thuộc quá chặt vào nhau.
 
 Ví dụ:
@@ -287,7 +264,7 @@ Repository Interface
      │
      ├── MySQLRepository
      └── PostgreSQLRepository
-13. Code nên dễ thay đổi
+1.  Code nên dễ thay đổi
 
 Đây có lẽ là một trong những mục tiêu lớn nhất của Clean Code.
 
@@ -308,10 +285,10 @@ bên dưới có thể thay implementation.
 Thay vì code khắp nơi:
 
 stripe.PaymentIntent.create(...)
-14. Đừng phụ thuộc implementation nếu không cần
-
-Ví dụ:
-
+```
+## Đừng phụ thuộc implementation nếu không cần
+**Ex**
+```python
 class OrderService:
     def __init__(self):
         self.db = MySQLDatabase()
@@ -331,15 +308,10 @@ repository = MySQLOrderRepository()
 service = OrderService(repository)
 
 Đây là Dependency Injection.
-
-15. Test rất quan trọng
-
-Clean Code không chỉ là format code.
-
-Code tốt phải dễ test.
-
-Ví dụ:
-
+```
+## Test (Clean Code không chỉ là format code mà code tốt phải dễ test)
+**Ex**
+```python
 def calculate_discount(price, percentage):
     return price * (1 - percentage)
 
@@ -357,9 +329,9 @@ rất khó test.
 Một dấu hiệu:
 
 Nếu một function cực kỳ khó viết unit test, có khả năng design của nó đang có vấn đề.
-
-16. Refactoring là công việc liên tục
-
+```
+## Refactoring là công việc liên tục
+```bash
 Clean Code không có nghĩa:
 
 "Viết một lần và code sẽ clean mãi."
@@ -391,11 +363,9 @@ def process_order(order):
     save_order(order)
 
 Code ngày càng rõ.
-
-17. Code smell
-
-Một phần tư duy quan trọng của Clean Code là biết nhận ra code smell.
-
+```
+## Code smell (Một phần tư duy quan trọng của Clean Code là biết nhận ra code smell)
+```bash
 Ví dụ thấy:
 
 if ...
@@ -427,9 +397,9 @@ x = x + 1
 thì nên dừng lại và hỏi:
 
 "Có vấn đề về design ở đây không?"
-
-18. Clean Code không đồng nghĩa với "code đẹp"
-
+```
+## Clean Code không đồng nghĩa với "code đẹp"
+```bash
 Đây là điều mình muốn bạn nhớ nhất.
 
 Clean Code không phải:
@@ -448,54 +418,7 @@ Code
  ├── Dễ sửa
  ├── Dễ mở rộng
  └── Khó vô tình phá vỡ
-19. Nếu chỉ nhớ 10 điều
-
-Nếu bạn không muốn đọc cả cuốn sách, hãy nhớ 10 điều này:
-
-1. Đặt tên có ý nghĩa
-        ↓
-2. Function nhỏ
-        ↓
-3. Một function một trách nhiệm
-        ↓
-4. Class có trách nhiệm rõ ràng
-        ↓
-5. Không lặp code vô lý
-        ↓
-6. Không abstraction quá sớm
-        ↓
-7. Error handling rõ ràng
-        ↓
-8. Giảm coupling
-        ↓
-9. Viết code dễ test
-        ↓
-10. Refactor liên tục
-20. Và có một câu mình nghĩ rất đáng nhớ
-
-Khi bạn code:
-
-Đừng chỉ nghĩ "máy có chạy được không?"
-
-Hãy nghĩ thêm:
-
-"3 tháng nữa, một developer khác đọc đoạn code này có hiểu nó không?"
-
-Đó gần như là tinh thần của Clean Code.
-
-Đặc biệt với những project backend/microservice kiểu bạn đang tìm hiểu, Clean Code sẽ bắt đầu quan trọng hơn rất nhiều khi code chuyển từ:
-
-1 file
-   ↓
-5 file
-   ↓
-20 file
-   ↓
-100 file
-   ↓
-nhiều service
-
-Ở quy mô nhỏ, code bẩn vẫn chạy được. Ở quy mô lớn, code bẩn làm tốc độ phát triển giảm cực mạnh và bug tăng lên.
+```
 # Ask
 ## Tại sao phải viết code?
 ```bash
