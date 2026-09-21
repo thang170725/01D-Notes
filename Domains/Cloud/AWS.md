@@ -25,6 +25,8 @@
   - [AWS Lambda](#aws-lambda)
 - [ALB (Application Load Balancer là bộ cân bằng tải ứng dụng)](#alb-application-load-balancer-là-bộ-cân-bằng-tải-ứng-dụng)
 - [ECS (Elastic Container Service là dịch vụ điều phối container)](#ecs-elastic-container-service-là-dịch-vụ-điều-phối-container)
+- [Amazon SQS (Simple Queue Service là dịch vụ hàng đợi tin nhắn của AWS)](#amazon-sqs-simple-queue-service-là-dịch-vụ-hàng-đợi-tin-nhắn-của-aws)
+- [Bucket (thùng chứa để lưu trữ dữ liệu)](#bucket-thùng-chứa-để-lưu-trữ-dữ-liệu)
 ---
 # AWS (Amazon Web Services)
 ```bash
@@ -463,3 +465,295 @@ Plaintext
  │ └──────────┘ │
  └──────────────┘
 ```
+# Amazon SQS (Simple Queue Service là dịch vụ hàng đợi tin nhắn của AWS)
+```bash
+SQS giống như một hộp thư trung gian giữa các ứng dụng.
+
+Ví dụ bạn có hệ thống đặt hàng:
+
+Khách hàng
+   │
+   ▼
+Web/API
+   │
+   │ Gửi yêu cầu tạo đơn
+   ▼
+┌──────────────────────┐
+│        SQS           │
+│  "order-queue"       │
+│                      │
+│  Order A             │
+│  Order B             │
+│  Order C             │
+└──────────────────────┘
+   │
+   │ Worker lấy từng message
+   ▼
+Ứng dụng xử lý đơn hàng
+
+Thay vì API phải tự xử lý đơn hàng ngay lập tức, nó có thể đưa yêu cầu vào SQS rồi trả kết quả cho khách hàng.
+
+Một chương trình khác gọi là consumer/worker sẽ lấy message từ SQS và xử lý sau.
+
+2. Tại sao cần SQS?
+
+Giả sử không có SQS:
+
+User
+ │
+ ▼
+API
+ │
+ ▼
+Xử lý đơn hàng
+ │
+ ▼
+Database
+
+Nếu cùng lúc có 10.000 người đặt hàng, API có thể bị quá tải.
+
+Có SQS:
+
+10.000 User
+     │
+     ▼
+    API
+     │
+     ▼
+┌─────────────────┐
+│      SQS        │
+│                 │
+│ Order 1         │
+│ Order 2         │
+│ Order 3         │
+│ ...             │
+│ Order 10000     │
+└─────────────────┘
+     │
+     ▼
+ Worker 1
+ Worker 2
+ Worker 3
+ ...
+
+SQS giúp tách phần gửi yêu cầu và phần xử lý yêu cầu.
+
+Đây là một trong những khái niệm rất quan trọng khi học AWS.
+
+3. SQS có những thành phần cơ bản nào?
+
+Bạn có thể hình dung:
+
+Producer
+   │
+   │ Send Message
+   ▼
+┌─────────────────┐
+│      Queue      │
+│                 │
+│ Message 1       │
+│ Message 2       │
+│ Message 3       │
+└─────────────────┘
+   │
+   │ Receive Message
+   ▼
+Consumer
+Producer
+
+Là chương trình gửi message vào SQS.
+
+Ví dụ:
+
+Website
+Backend
+Lambda
+Application
+Queue
+
+Là hàng đợi chứa message.
+
+Ví dụ:
+
+my-first-queue
+Message
+
+Là dữ liệu được gửi vào queue.
+
+Ví dụ:
+
+{
+    "order_id": 123,
+    "product": "Laptop",
+    "quantity": 1
+}
+Consumer
+
+Là chương trình lấy message từ queue để xử lý.
+```
+# Bucket (thùng chứa để lưu trữ dữ liệu)
+**Hình dung đơn giản**
+```bash
+Nếu coi S3 giống như một ổ đĩa:
+    S3
+    │
+    ├── Bucket 1: my-first-bucket
+    │   ├── hello.txt
+    │   ├── image.png
+    │   └── data.csv
+    │
+    ├── Bucket 2: backup-bucket
+    │   ├── backup1.zip
+    │   └── backup2.zip
+    │
+    └── Bucket 3: log-bucket
+        ├── log1.txt
+        └── log2.txt
+-> Bucket = nơi chứa các file/object
+```
+Tại sao AWS lại cần Bucket?
+
+Khi bạn muốn lưu dữ liệu lên S3, bạn không lưu trực tiếp kiểu:
+
+S3 → hello.txt
+
+mà thường sẽ:
+
+S3
+ ↓
+Bucket
+ ↓
+Object
+
+Ví dụ:
+
+S3
+ ↓
+my-first-bucket
+ ↓
+hello.txt
+
+Có thể hiểu giống như:
+
+Máy tính
+ ↓
+Folder
+ ↓
+File
+
+Nhưng Bucket không hoàn toàn giống folder. Bucket là đơn vị chứa cấp cao nhất trong S3, còn các "folder" trong S3 về bản chất thường được biểu diễn bằng key/prefix của object.
+
+4. Ví dụ thực tế
+
+Giả sử bạn làm một website bán hàng.
+
+Bạn có thể tạo:
+
+product-images
+
+để chứa ảnh sản phẩm:
+
+product-images
+├── iphone.jpg
+├── laptop.jpg
+├── mouse.jpg
+└── keyboard.jpg
+
+Một bucket khác:
+
+user-uploads
+
+để chứa file người dùng upload:
+
+user-uploads
+├── user1/avatar.png
+├── user2/avatar.png
+└── user3/avatar.png
+
+Một bucket khác:
+
+database-backups
+
+để chứa backup:
+
+database-backups
+├── backup-2026-09-20.zip
+├── backup-2026-09-21.zip
+└── backup-2026-09-22.zip
+5. Bucket và Object liên quan với nhau thế nào?
+
+Bạn có thể nhớ công thức:
+
+S3
+ │
+ └── Bucket
+       │
+       └── Object
+
+Ví dụ:
+
+S3
+ │
+ └── my-first-bucket
+       │
+       ├── hello.txt
+       ├── image.jpg
+       └── data.json
+
+Khi bạn chạy:
+
+aws --endpoint-url=http://localhost:4566 \
+    s3api list-buckets
+
+→ bạn đang hỏi:
+
+"S3 hiện có những bucket nào?"
+
+Còn:
+
+aws --endpoint-url=http://localhost:4566 \
+    s3api list-objects-v2 \
+    --bucket my-first-bucket
+
+→ bạn đang hỏi:
+
+"Trong bucket my-first-bucket hiện có những object nào?"
+
+6. Liên hệ với những gì bạn vừa học
+
+Bạn đã thực hành:
+
+s3api create-bucket
+
+→ Tạo bucket
+
+s3api list-buckets
+
+→ Liệt kê bucket
+
+s3api delete-object
+
+→ Xóa object trong bucket
+
+s3api delete-bucket
+
+→ Xóa bucket
+
+Nên có thể hình dung toàn bộ S3 như sau:
+
+                    AWS S3
+                      │
+          ┌───────────┴───────────┐
+          │                       │
+     my-first-bucket          api-bucket
+          │                       │
+      ┌───┼───┐               ┌───┴───┐
+      │   │   │               │       │
+   hello  a   b             api.txt  data.json
+   .txt  .jpg .csv
+
+Chỉ cần nhớ một câu:
+
+Bucket là nơi chứa các Object trong Amazon S3.
+
+Trong bài LocalStack tiếp theo, khi bạn đã hiểu Bucket → Object, phần quan trọng tiếp theo là object key là gì và tại sao S3 lại dùng --key, vì bạn đã gặp nó trong lệnh s3api delete-object.

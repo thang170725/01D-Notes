@@ -1,5 +1,7 @@
 + [<<Back](Base.md)
 - [LocalStack Introduction (là một môi trường giả lập AWS chạy ngay trên máy local của bạn)](#localstack-introduction-là-một-môi-trường-giả-lập-aws-chạy-ngay-trên-máy-local-của-bạn)
+- [Installation](#installation)
+  - [Linux](#linux)
 ---
 # LocalStack Introduction (là một môi trường giả lập AWS chạy ngay trên máy local của bạn)
 ```bash
@@ -19,4 +21,30 @@ Giả sử backend Python của bạn upload file lên S3.
     Với LocalStack, bạn có thể cấu hình: Python Backend -> localhost:4566 -> LocalStack -> Fake S3 (Bạn vẫn dùng SDK như boto3, nhưng request được gửi tới LocalStack thay vì AWS)
 
 LocalStack thường chạy bằng Docker
+```
+# Installation
+## Linux
+**1: Kiểm tra Docker**
+```bash
+1. docker --version
+2. docker compose version
+
+Nếu chưa có Docker, cài:
+    1. sudo apt update
+    2. sudo apt install -y docker.io docker-compose-v2
+    3. sudo usermod -aG docker $USER # Cho user hiện tại dùng Docker không cần sudo
+    4. newgrp docker # Sau đó logout/login lại hoặc chạy
+
+Kiểm tra:
+1. docker run hello-world
+```
+**2: Cài LocalStack CLI**
+```bash
+1. 
+docker run --rm -it \
+  -p 4566:4566 \
+  -e SERVICES=s3,sqs,dynamodb,lambda \
+  localstack/localstack:4.3.0
+
+2. Mở terminal thứ 2 và chạy: curl http://localhost:4566/_localstack/health
 ```

@@ -2,7 +2,7 @@
 - [Architechture Directory](#architechture-directory)
 - [Cloud Introdoction (Cách sử dụng máy tính, lưu trữ, phần mềm… thông qua Internet, mà bạn không cần sở hữu máy thật)](#cloud-introdoction-cách-sử-dụng-máy-tính-lưu-trữ-phần-mềm-thông-qua-internet-mà-bạn-không-cần-sở-hữu-máy-thật)
 - [IaaS \& PaaS \& SaaS](#iaas--paas--saas)
-- [SERVER](#server)
+- [Server](#server)
 - [CLOUD HOẠT ĐỘNG THẾ NÀO?](#cloud-hoạt-động-thế-nào)
 - [KIẾN TRÚC ĐÚNG CHO HỆ THỐNG ĐĂNG KÝ TÍN CHỈ (TRÊN AWS)](#kiến-trúc-đúng-cho-hệ-thống-đăng-ký-tín-chỉ-trên-aws)
 ---
@@ -59,10 +59,9 @@ Cloud/                         ```mình dùng thư mục này để xem kiến t
     + Bạn thuê: Máy tính (CPU, RAM, ổ cứng)
     + Bạn tự: Cài Windows / Linux, Cài phần mềm, Bảo mật, Quản lý server
 ```
-# SERVER
+# Server
 ```bash
-- Server = một cái máy tính
-- Nhưng:
+Server là một cái máy tính nhưng:
     + Chạy 24/7
     + Kết nối Internet liên tục
     + Để phục vụ người khác, không phải để bạn dùng cá nhân
