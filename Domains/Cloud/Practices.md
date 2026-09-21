@@ -1,10 +1,9 @@
 + [<<Back](00-Core.md)
-- [Ask (Các câu hỏi về cloud)](#ask-các-câu-hỏi-về-cloud)
-  - [Vấn đề các trường đại học có sử dụng cloud không?](#vấn-đề-các-trường-đại-học-có-sử-dụng-cloud-không)
-  - [Giải pháp giảm tải cho db khi nhiều request?](#giải-pháp-giảm-tải-cho-db-khi-nhiều-request)
+- [Vấn đề các trường đại học có sử dụng cloud không?](#vấn-đề-các-trường-đại-học-có-sử-dụng-cloud-không)
+- [Giải pháp giảm tải cho db khi nhiều request?](#giải-pháp-giảm-tải-cho-db-khi-nhiều-request)
+- [Các bước để deploy một dự án phần mềm lên aws để người dùng có thể sử dụng được?](#các-bước-để-deploy-một-dự-án-phần-mềm-lên-aws-để-người-dùng-có-thể-sử-dụng-được)
 ---
-# Ask (Các câu hỏi về cloud)
-## Vấn đề các trường đại học có sử dụng cloud không?
+# Vấn đề các trường đại học có sử dụng cloud không?
 ```bash
 Vấn đề: “AWS đã auto scale rồi sao vẫn lag?”
     👉 Vì “chạy trên AWS” ≠ “dùng đúng cách AWS”
@@ -79,7 +78,7 @@ Netflix:
     - Tốn công
     - Trường thường… không muốn đầu tư 😅
 ```
-## Giải pháp giảm tải cho db khi nhiều request?
+# Giải pháp giảm tải cho db khi nhiều request?
 ```bash
 Tách db nhưng
     ❌ Tách theo “chức năng” là sai
@@ -165,4 +164,84 @@ Tách db nhưng
 
 6️⃣ Một câu nói rất “đời” trong ngành 😄
     “FK là luxury, không phải necessity.” (Khóa ngoại là đồ xa xỉ, không phải bắt buộc)
+```
+# Các bước để deploy một dự án phần mềm lên aws để người dùng có thể sử dụng được?
+**1. Chuẩn bị project**
+```bash
+Frontend: React
+Backend: Node.js
+Database: PostgreSQL
+```
+**2. Đưa code lên GitHub**
+```bash
+Laptop
+   ↓
+Git
+   ↓
+GitHub
+```
+**3. Deploy Backend**
+```bash
+Có thể dùng: AWS ECS / EC2 / Lambda
+
+Ví dụ dễ hiểu: Node.js API -> Docker -> AWS ECS -> https://api.example.com -> AWS lúc này đang chạy backend của bạn.
+```
+**4. Deploy Database**
+```bash
+Ví dụ PostgreSQL: PostgreSQL -> AWS RDS
+
+Backend kết nối: User -> Frontend -> Backend -> RDS
+```
+**5. Deploy frontend**
+```bash
+Frontend React sau khi build thành các file: index.html, JS, CSS, images
+    có thể đặt trên: S3 và thường dùng CloudFront để phân phối website nhanh hơn.
+```
+**6. Gắn Domain**
+```bash
+Bạn mua: example.com
+
+Sau đó dùng: Route S3 để trỏ domain đến hệ thống AWS.
+
+Ví dụ:
+    - example.com -> CloudFront -> S3
+    - api.example.com -> Load Balancer / ECS -> Backend
+```
+**7. Bật HTTPS**
+```bash
+Dùng: AWS Certificate Manager (ACM)
+    để có: https://example.com thay vì http://example.com
+```
+**8. Cuối cùng người dùng truy cập**
+```bash
+Người dùng gõ: https://example.com
+
+Luồng có thể là:
+                 AWS
+                  │
+User              │
+ │                │
+ ↓                │
+example.com       │
+ ↓                │
+Route 53          │
+ ↓                │
+CloudFront        │
+ ↓                │
+S3 ───────────────┘
+ │
+ ↓
+Frontend
+ │
+ │ API request
+ ↓
+Load Balancer
+ ↓
+ECS
+ ↓
+Backend
+ ↓
+RDS
+ ↓
+Database
 ```

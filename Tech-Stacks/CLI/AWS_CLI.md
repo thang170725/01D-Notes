@@ -1,5 +1,9 @@
+- [Installation](#installation)
+- [aws --version](#aws---version)
+- [aws configure](#aws-configure)
 - [aws s3](#aws-s3)
   - [aws s3 ls (các đơn giản để liệt kê bucket)](#aws-s3-ls-các-đơn-giản-để-liệt-kê-bucket)
+  - [aws s3 rm (Xóa file trên S3)](#aws-s3-rm-xóa-file-trên-s3)
 - [aws s3api (nhóm lệnh AWS CLI dùng để gọi trực tiếp các API của Amazon S3)](#aws-s3api-nhóm-lệnh-aws-cli-dùng-để-gọi-trực-tiếp-các-api-của-amazon-s3)
   - [Ask](#ask)
     - [s3 và s3api khác nhau thế nào?](#s3-và-s3api-khác-nhau-thế-nào)
@@ -21,9 +25,36 @@
 - [aws lambda](#aws-lambda)
 - [aws ec2](#aws-ec2)
 ---
+# Installation
+```bash
+1. sudo apt update
+2. sudo apt install -y awscli
+3. aws --version # kiểm tra
+```
+**Dùng Snap**
+```bash
+sudo snap install aws-cli --classic
+```
+# aws --version
+# aws configure
+**Ex**
+```bash
+aws configure
+
+Nhập:
+
+AWS Access Key ID: test
+AWS Secret Access Key: test
+Default region name: ap-southeast-1
+Default output format: json
+```
 # aws s3
-Xóa object và bucket
-6.1. Xóa file trên S3
+## aws s3 ls (các đơn giản để liệt kê bucket)
+**Ex**
+```bash
+aws --endpoint-url=http://localhost:4566 s3 ls
+```
+## aws s3 rm (Xóa file trên S3)
 aws --endpoint-url=http://localhost:4566 \
     s3 rm s3://my-first-bucket/hello.txt
 
@@ -70,7 +101,6 @@ Hello LocalStack S3
 👉 Đây chính là thao tác tương đương khi làm việc với S3 thật.
 
 Làm xong nói next step.
-## aws s3 ls (các đơn giản để liệt kê bucket)
 # aws s3api (nhóm lệnh AWS CLI dùng để gọi trực tiếp các API của Amazon S3)
 **Kiến thức cần học trước**
 [Bucket trong AWS](../../Domains/Cloud/AWS.md#bucket-thùng-chứa-để-lưu-trữ-dữ-liệu)

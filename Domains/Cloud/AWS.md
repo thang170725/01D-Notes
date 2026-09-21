@@ -2,7 +2,7 @@
 - [AWS (Amazon Web Services)](#aws-amazon-web-services)
 - [Region (khu vực địa lý)](#region-khu-vực-địa-lý)
   - [Availability Zone (AZ) (1 data center hoặc 1 cụm data center trong cùng 1 Region)](#availability-zone-az-1-data-center-hoặc-1-cụm-data-center-trong-cùng-1-region)
-  - [EC2](#ec2)
+  - [EC2 (1 máy tính ảo chạy trong AWS)](#ec2-1-máy-tính-ảo-chạy-trong-aws)
   - [DATABASE TRÊN AWS (RDS)](#database-trên-aws-rds)
   - [MFA (Tăng thêm lớp bảo mật để bảo vệ tài khoản)](#mfa-tăng-thêm-lớp-bảo-mật-để-bảo-vệ-tài-khoản)
   - [Truy cập từ máy tính cá nhân lên AWS cloud](#truy-cập-từ-máy-tính-cá-nhân-lên-aws-cloud)
@@ -115,16 +115,16 @@ Ví dụ:
     + Rẻ hơn Tokyo
     + Nhiều dịch vụ hơn VN (hiện tại)
 ```
-## EC2
+## EC2 (1 máy tính ảo chạy trong AWS)
 ```bash
-- EC2 = 1 máy tính ảo chạy trong AWS
-- Nó có:
-    + CPU
-    + RAM
-    + Ổ cứng
-    + Hệ điều hành (Linux / Windows)
-    + IP riêng / IP public
-- Khác laptop của bạn ở chỗ:
+Nó có:
+    - CPU
+    - RAM
+    - Ổ cứng
+    - Hệ điều hành (Linux / Windows)
+    - IP riêng / IP public
+
+Khác laptop của bạn ở chỗ:
     + Không có màn hình
     + Không có chuột
     + Điều khiển từ xa qua Internet
@@ -421,32 +421,24 @@ Quản lý SSL/TLS: Đảm nhận việc giải mã HTTPS ngay tại ALB (SSL Te
 ```
 # ECS (Elastic Container Service là dịch vụ điều phối container)
 ```bash
-ECS là dịch vụ quản lý và điều phối container (Container Orchestration) do chính AWS phát triển. Nó giúp bạn chạy, mở rộng và quản lý các ứng dụng Docker trên một cụm máy chủ mà không cần phải tự cài đặt các công cụ phức tạp như Kubernetes.
+Nó giúp bạn chạy, mở rộng và quản lý các ứng dụng Docker trên một cụm máy chủ mà không cần phải tự cài đặt các công cụ phức tạp như Kubernetes.
 
 Các thành phần chính của ECS:
-
-Task Definition: Bản thiết kế (blueprint) mô tả ứng dụng chạy như thế nào (dùng Docker Image nào, cần bao nhiêu CPU/RAM, cài biến môi trường gì).
-
-Task: Một thể hiện (instance) đang chạy thực tế của Task Definition (tương đương với một Docker Container đang chạy).
-
-Service: Thành phần đảm bảo số lượng Task mong muốn luôn luôn hoạt động. Nếu một Task bị sập, ECS Service sẽ tự động đẻ ra một Task mới thay thế.
+    - Task Definition: Bản thiết kế (blueprint) mô tả ứng dụng chạy như thế nào (dùng Docker Image nào, cần bao nhiêu CPU/RAM, cài biến môi trường gì).
+    - Task: Một thể hiện (instance) đang chạy thực tế của Task Definition (tương đương với một Docker Container đang chạy).
+    - Service: Thành phần đảm bảo số lượng Task mong muốn luôn luôn hoạt động. Nếu một Task bị sập, ECS Service sẽ tự động đẻ ra một Task mới thay thế.
 
 2 chế độ chạy (Launch Type) của ECS:
-
-EC2 Launch Type: Bạn tự quản lý các máy chủ EC2, ECS sẽ thả các Docker Container lên máy chủ của bạn.
-
-AWS Fargate (Serverless): Bạn không cần quản lý máy chủ. Bạn chỉ cần khai báo "Tôi muốn chạy container này với 1 vCPU và 2GB RAM", AWS sẽ tự lo hạ tầng phía dưới.
-
-3. ALB và ECS phối hợp với nhau như thế nào?
+    - EC2 Launch Type: Bạn tự quản lý các máy chủ EC2, ECS sẽ thả các Docker Container lên máy chủ của bạn.
+    - AWS Fargate (Serverless): Bạn không cần quản lý máy chủ. Bạn chỉ cần khai báo "Tôi muốn chạy container này với 1 vCPU và 2GB RAM", AWS sẽ tự lo hạ tầng phía dưới.
+```
+**ALB và ECS phối hợp với nhau như thế nào?**
+```bash
 Khi kết hợp ALB và ECS, bạn sẽ có một hạ tầng hoàn chỉnh, tự động co giãn và chịu lỗi cao:
-
-Người dùng gửi yêu cầu truy cập vào ứng dụng qua domain (ví dụ: [https://my-app.com](https://my-app.com)).
-
-ALB tiếp nhận yêu cầu, giải mã HTTPS và chuyển tiếp request vào mạng riêng (Private Subnet).
-
-ECS nhận request từ ALB và đưa vào các Task (Container) đang chạy phía sau.
-
-Khi truy cập tăng đột biến, ECS Auto Scaling sẽ tự động nhân bản thêm nhiều Task (Container). Ngay lập tức, ECS sẽ đăng ký các Task mới này với ALB để ALB phân chia tải sang.
+    1. Người dùng gửi yêu cầu truy cập vào ứng dụng qua domain (ví dụ: [https://my-app.com](https://my-app.com)).
+    2. ALB tiếp nhận yêu cầu, giải mã HTTPS và chuyển tiếp request vào mạng riêng (Private Subnet).
+    3. ECS nhận request từ ALB và đưa vào các Task (Container) đang chạy phía sau.
+    4. Khi truy cập tăng đột biến, ECS Auto Scaling sẽ tự động nhân bản thêm nhiều Task (Container). Ngay lập tức, ECS sẽ đăng ký các Task mới này với ALB để ALB phân chia tải sang.
 
 Plaintext
 [ Người dùng ]

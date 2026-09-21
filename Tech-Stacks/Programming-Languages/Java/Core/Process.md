@@ -1,12 +1,16 @@
 - [Display (Cung cấp thông tin)](#display-cung-cấp-thông-tin)
 	- [System.out.println() (xuất một nội dung ra màn hình có xuống dòng)](#systemoutprintln-xuất-một-nội-dung-ra-màn-hình-có-xuống-dòng)
+	- [System.out.print() (in nội dung không xuống dòng)](#systemoutprint-in-nội-dung-không-xuống-dòng)
+	- [System.out.printf() (in nội dung theo một định dạng nào đó)](#systemoutprintf-in-nội-dung-theo-một-định-dạng-nào-đó)
 - [variable (biến)](#variable-biến)
 	- [public (Instance variable - biến toàn cục)](#public-instance-variable---biến-toàn-cục)
-	- [Static variable](#static-variable)
-- [Data Type (kiểu dữ liệu)](#data-type-kiểu-dữ-liệu)
+	- [Static variable (Biến static có thể chia sẻ nó ở tất cả mọi thể hiện của lớp)](#static-variable-biến-static-có-thể-chia-sẻ-nó-ở-tất-cả-mọi-thể-hiện-của-lớp)
 	- [Boolean](#boolean)
-	- [Integer (Số nguyên)](#integer-số-nguyên)
+- [Integer (Số nguyên)](#integer-số-nguyên)
+	- [parseInt](#parseint)
 	- [Float (Số thực)](#float-số-thực)
+- [Long](#long)
+	- [.parseLong()](#parselong)
 - [math](#math)
 	- [BigInteger() (dùng để tạo ra một số nguyên cực lớn)](#biginteger-dùng-để-tạo-ra-một-số-nguyên-cực-lớn)
 		- [.valueOf() (Tạo ra một đối tượng lớp Integer có giá trị cụ thể)](#valueof-tạo-ra-một-đối-tượng-lớp-integer-có-giá-trị-cụ-thể)
@@ -21,19 +25,89 @@
 - [Operators](#operators)
 	- [++](#)
 	- [--](#--)
-- [String](#string)
+- [String (Là kiểu chuỗi)](#string-là-kiểu-chuỗi)
+	- [int -\> String](#int---string)
+	- [Long.toString() (ép từ long -\> String)](#longtostring-ép-từ-long---string)
+- [char (Là kiểu ký tự. 2 byte)](#char-là-kiểu-ký-tự-2-byte)
+	- [int -\> char](#int---char)
+	- [.charAt() (Chỉ chuyển được một ký tự)](#charat-chỉ-chuyển-được-một-ký-tự)
+- [Character (Là kiểu đối tượng với kiểu char gốc. lớp này có một số phương thức hữu ích để tao tác với ký tự)](#character-là-kiểu-đối-tượng-với-kiểu-char-gốc-lớp-này-có-một-số-phương-thức-hữu-ích-để-tao-tác-với-ký-tự)
+- [Instanceof (Để so sánh variable với kiểu dữ liệu trả về true hoặc false)](#instanceof-để-so-sánh-variable-với-kiểu-dữ-liệu-trả-về-true-hoặc-false)
+- [Math (Để xử lý dữ liệu số)](#math-để-xử-lý-dữ-liệu-số)
+	- [Math.pow() (Để tính lũy thừa)](#mathpow-để-tính-lũy-thừa)
+	- [.Abs() (tính giá trị tuyệt đối kiễu dữ liệu)](#abs-tính-giá-trị-tuyệt-đối-kiễu-dữ-liệu)
+	- [.Acos() (tính acos của góc)](#acos-tính-acos-của-góc)
+	- [.addExact() (tính tổng các đối số của nó, ném ra một ngoại lệ nếu kết quả làm tràn một int)](#addexact-tính-tổng-các-đối-số-của-nó-ném-ra-một-ngoại-lệ-nếu-kết-quả-làm-tràn-một-int)
+	- [.Asin() (tính asin của một góc)](#asin-tính-asin-của-một-góc)
+	- [Atan() (tính atan của một góc)](#atan-tính-atan-của-một-góc)
+	- [Atan2() (tính atan2)](#atan2-tính-atan2)
+	- [Cbrt()](#cbrt)
+	- [Ceil() (trả về giá trị nguyên nhỏ nhất lớn hơn hoặc bằng đối)](#ceil-trả-về-giá-trị-nguyên-nhỏ-nhất-lớn-hơn-hoặc-bằng-đối)
+	- [copySign()](#copysign)
+	- [Cos() (tính cosin của một góc)](#cos-tính-cosin-của-một-góc)
+	- [Coah()](#coah)
+	- [decrementExact()](#decrementexact)
+	- [Exp()](#exp)
+	- [Expml()](#expml)
+	- [Floor() (trả về giá trị nguyên lớn nhỏ hơn hoặc bằng đối số)](#floor-trả-về-giá-trị-nguyên-lớn-nhỏ-hơn-hoặc-bằng-đối-số)
+	- [floorDiv() (trả về giá trị lớn nhất nhỏ hơn hoặc bằng thương đại số)](#floordiv-trả-về-giá-trị-lớn-nhất-nhỏ-hơn-hoặc-bằng-thương-đại-số)
+	- [floorMod()](#floormod)
+	- [getExpoment()](#getexpoment)
+	- [hypot()](#hypot)
+	- [IEEErementExact()](#ieeerementexact)
+	- [incrementExact()](#incrementexact)
+	- [Log() (trả về logarit cơ số e)](#log-trả-về-logarit-cơ-số-e)
+	- [Log10() (trả về logarit cơ số 10)](#log10-trả-về-logarit-cơ-số-10)
+	- [Log1p() (trả về logarit tự nhiên của tổng dối số và 1)](#log1p-trả-về-logarit-tự-nhiên-của-tổng-dối-số-và-1)
+	- [Max() (tìm giá trị lớn hơn)](#max-tìm-giá-trị-lớn-hơn)
+	- [Min() (tìm giá trị nhỏ hơn)](#min-tìm-giá-trị-nhỏ-hơn)
+	- [multiplyExact()](#multiplyexact)
+	- [negateExact()](#negateexact)
+	- [NextAfter()](#nextafter)
+	- [NextDown()](#nextdown)
+	- [NextUp()](#nextup)
+	- [Round() (làm tròn và trả về số double)](#round-làm-tròn-và-trả-về-số-double)
+	- [Scalb()](#scalb)
+	- [Signum](#signum)
+	- [Sin](#sin)
+	- [Sqrt](#sqrt)
+	- [SubtractExact](#subtractexact)
+	- [Tan](#tan)
+	- [Tanh](#tanh)
+	- [toDegree](#todegree)
+	- [toIntExact](#tointexact)
+	- [ToRadians()](#toradians)
+	- [Ulp()](#ulp)
+	- [Random](#random)
+		- [Math.random() (Để sinh ra 1 số thực ngẫu nhiên từ 0 -\> 1)](#mathrandom-để-sinh-ra-1-số-thực-ngẫu-nhiên-từ-0---1)
+- [Random (Để sinh ra số ngẫu nhiên)](#random-để-sinh-ra-số-ngẫu-nhiên)
+	- [random.nextInt() (Để sinh ra số ngẫu nhiên từ 0 đến bound)](#randomnextint-để-sinh-ra-số-ngẫu-nhiên-từ-0-đến-bound)
+- [If … Else (Là cấu trúc lệnh điều kiện)](#if--else-là-cấu-trúc-lệnh-điều-kiện)
+- [Ternary Operator (toán tử 3 ngôi Là cấu trúc câu điều kiện sử dụng cú pháp khác)](#ternary-operator-toán-tử-3-ngôi-là-cấu-trúc-câu-điều-kiện-sử-dụng-cú-pháp-khác)
+- [Switch ... case (Là cấu trúc câu điều kiện)](#switch--case-là-cấu-trúc-câu-điều-kiện)
+- [Loop](#loop)
+	- [While loop (Là cấu trúc lặp không có giới hạn lần lặp)](#while-loop-là-cấu-trúc-lặp-không-có-giới-hạn-lần-lặp)
+	- [For loop (Để lặp lại một khổi mã với một số lần nhất định)](#for-loop-để-lặp-lại-một-khổi-mã-với-một-số-lần-nhất-định)
+	- [Break (Để thoát khỏi vòng lặp)](#break-để-thoát-khỏi-vòng-lặp)
+	- [Continue (Để chuyển sang một vòng lặp tiếp theo)](#continue-để-chuyển-sang-một-vòng-lặp-tiếp-theo)
+	- [For-each loop (Là cấu trúc lặp duyệt qua phần tử. Thích hợp cho Array, String, …)](#for-each-loop-là-cấu-trúc-lặp-duyệt-qua-phần-tử-thích-hợp-cho-array-string-)
+	- [Labelled for loop (Là cấu trúc lặp được gán nhãn. Thích hợp trong vòng lặp lồng nhau)](#labelled-for-loop-là-cấu-trúc-lặp-được-gán-nhãn-thích-hợp-trong-vòng-lặp-lồng-nhau)
+	- [Do-while loop (Là cấu trúc lặp không có giới hạn lần lặp. và được lặp ít nhất một lần)](#do-while-loop-là-cấu-trúc-lặp-không-có-giới-hạn-lần-lặp-và-được-lặp-ít-nhất-một-lần)
+- [Arrays (Dùng để lưu trữ có các thành phần dữ liệu cùng kiểu)](#arrays-dùng-để-lưu-trữ-có-các-thành-phần-dữ-liệu-cùng-kiểu)
+	- [length (Xác định số phần tử có trong mảng)](#length-xác-định-số-phần-tử-có-trong-mảng)
+- [Object](#object)
+- [ArrayList (ArrayList được sử dụng như một mảng động để lưu trữ phần tử)](#arraylist-arraylist-được-sử-dụng-như-một-mảng-động-để-lưu-trữ-phần-tử)
+	- [size() (Trả về số lượng phần tử có trong ArrayList)](#size-trả-về-số-lượng-phần-tử-có-trong-arraylist)
+	- [add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)](#add-nó-được-sử-dụng-để-nối-thêm-phần-tử-được-chỉ-định-vào-cuối-hoặc-một-vị-trí-bất-kì-trong-một-danh-sách)
+	- [isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)](#isempty-để-kiểm-tra-xem-một-arraylist-có-phần-tử-hay-không)
+	- [remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)](#remove-xóa-một-phần-tử-trong-arraylist-tham-số-truyền-vào-có-thể-là-một-đối-tượng-hoặc-một-số)
+	- [removeAll() (xóa hết phần tử có trong ArrayList value)](#removeall-xóa-hết-phần-tử-có-trong-arraylist-value)
+	- [contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)](#contains-kiểm-tra-xem-có-tồn-tại-value-trong-arraylist-hay-không)
+	- [set() (Để gán phần tử)](#set-để-gán-phần-tử)
 ---
 # Display (Cung cấp thông tin)
 ## System.out.println() (xuất một nội dung ra màn hình có xuống dòng)
 **Ex**
-```java
-
-## System.out.print() 
-## System.out.printf()
-```bash
-- Dùng để , không xuống dòng, hoặc theo một định dạng nào đó.
-```
-**Ex: chạy chương trinh**
 ```java
 public class test {
     public static void main(String[] args) {
@@ -43,6 +117,8 @@ public class test {
 // thang@PhatToNhuLai:~/workspace/test/HEALTH_CARE_WEBSITE$ java test.java
 // hello world!!!
 ```
+## System.out.print() (in nội dung không xuống dòng)
+## System.out.printf() (in nội dung theo một định dạng nào đó)
 # variable (biến)
 ## public (Instance variable - biến toàn cục)
 **Ex**
@@ -64,10 +140,7 @@ class Solution {
 // 10
 // 20
 ```
-## Static variable
-```bash
-Biến static. Có thể chia sẻ nó ở tất cả mọi thể hiện của lớp. 
-```
+## Static variable (Biến static có thể chia sẻ nó ở tất cả mọi thể hiện của lớp)
 **Ex**
 ```java
 class Solution {
@@ -76,31 +149,55 @@ class Solution {
 		n *= 2;
 	}
 	public static void main(String[] args) {
-	// không cần khai báo đối tượng
-		System.out.println(n);
+		// không cần khai báo đối tượng
+		System.out.println(n); // 10
 		age();
-		System.out.println(n);
+		System.out.println(n); // 20
 	}
 }
-# 10
-# 20
 ```
-# Data Type (kiểu dữ liệu)
 ## Boolean
 ```bash
 boolean: 1 bit
 ```
-## Integer (Số nguyên)
+# Integer (Số nguyên)
 ```bash
 byte: 1 byte
 short: 2 byte
 int: 4 byte
 long: 8 byte
 ```
+## parseInt
+**Ex**
+```java
+int <name> = Integer.parseInt(<variable>);
+class Person{
+	public static void main(String[] args) {
+		String a = "200";
+		int b = Integer.parseInt(a);
+		b +=200;
+		System.out.println(b); // 400
+	}
+} 
+```
 ## Float (Số thực)
 ```bash
 float: 4 byte
 double: 8 byte
+```
+# Long
+## .parseLong()
+**Syn**
+```java
+long <name> = Long.parseLong(<variable>);
+class Person{
+	public static void main(String[] args) {
+		String a = "200";
+		long b = Long.parseLong(a);
+		b +=200;
+		System.out.println(b); // 400
+	}
+}
 ```
 # math
 ## BigInteger() (dùng để tạo ra một số nguyên cực lớn)
@@ -159,1214 +256,43 @@ class Solution{
 // 10 
 // 8
 ```
-# String
+# String (Là kiểu chuỗi)
+## int -> String
+**Syn**
 ```bash
-char
-Là kiểu ký tự. 2 byte
-String
-Là kiểu chuỗi.
-Character
-Là kiểu đối tượng với kiểu char gốc. lớp này có một số phương thức hữu ích để tao tác với ký tự.
-Ép kiểu
-int -> char
-Cú pháp:
-(char) variable_int;
-int -> String
-Cú pháp:
-    • String <name> = String.valueOf(<variable>);
-    • String <name> = Integer.toString(<variable>);
+String <name> = String.valueOf(<variable>);
+String <name> = Integer.toString(<variable>);
+```
+**Ex**
+```python
 class Person{
 	public static void main(String[] args) {
 		int a = 10;
 		String s = String.valueOf(a);
 		String t = Integer.toString(a);
-		System.out.println(s + 10);
-		System.out.println(t+10);
+		System.out.println(s + 10); // 20
+		System.out.println(t+10); // 20
 	}
 }
-20
-20
-
-String -> char
-Chỉ chuyển được một ký tự.
-Cú pháp:
-<Variable>.charAt(0);
-String -> int
-Cú pháp:
-int <name> = Integer.parseInt(<variable>);
-class Person{
-	public static void main(String[] args) {
-		String a = "200";
-		int b = Integer.parseInt(a);
-		b +=200;
-		System.out.println(b);
-	}
-}
-400
-String -> long
-Cú pháp:
-long <name> = Long.parseLong(<variable>);
-class Person{
-	public static void main(String[] args) {
-		String a = "200";
-		long b = Long.parseLong(a);
-		b +=200;
-		System.out.println(b);
-	}
-}
-400
-long -> String
-Cú pháp:
-    • String <name> = String.valueOf(<variable>);
-    • String <name> = Long.toString(<variable>);
+```
+## Long.toString() (ép từ long -> String)
+**Syn**
+```bash
+String <name> = String.valueOf(<variable>);
+String <name> = Long.toString(<variable>);
+```
+**Ex**
+```java
 class Person{
 	public static void main(String[] args) {
 		int a = 10;
 		String s = String.valueOf(a);
 		String t = Long.toString(a);
-		System.out.println(s + 10);
-		System.out.println(t+10);
+		System.out.println(s + 10); // 1010
+		System.out.println(t+10); // 1010
 	}
 }
-1010
-1010
-Instanceof
-Để so sánh variable với kiểu dữ liệu trả về true hoặc false.
-Math - number
-Để xử lý dữ liệu số.
-Math.pow()
-Để tính lũy thừa
-phải có từ khóa Math. ở đằng trước các phương thức.
-Modifier and type
-Phương pháp và mô tả
-Static Kiểu_dữ_liệu
-Abs(Kiểu_dữ_liệu a) – tính giá trị tuyệt đối kiễu dữ liệu
-Static float
-Acos(Kiểu_dữu_liệu a) – tính acos của góc
-
-addExact(int x, int y) tính tổng các đối số của nó, ném ra một ngoại lệ nếu kết quả làm tràn một int
-
-Asin(Kiểu_dữ_liệu a) – tính asin của một góc
-
-Atan(Kiểu_dữ_liệu a) – tính atan của một góc
-
-Atan2(Kiểu_dữ_liệu a) – tính atan2 
-
-Cbrt(Kiểu_dữ_liệu a)
-
-Ceil(Kiểu_dữ_liệu a) – trả về giá trị nguyên nhỏ nhất lớn hơn hoặc bằng đối
-
-copySign(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b)
-
-Cos(Kiểu_dữ_liệu a) tính cosin của một góc
-
-Coah(Kiểu_dữ_liệu a)
-
-decrementExact(Kiểu_dữ_liệu a)
-
-Exp(Kiểu_dữ_liệu a)
-
-Expml(Kiểu_dữ_liệu a)
-
-Floor(Kiểu_dữ_liệu a) – trả về giá trị nguyên lớn nhỏ hơn hoặc bằng đối số
-
-floorDiv(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b) – trả về giá trị lớn nhất nhỏ hơn hoặc bằng thương đại số
-
-floorMod(Kiểu_dữ_liệu a)
-
-getExpoment(Kiểu_dữ_liệu a)
-hypot(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b)
-
-IEEErementExact(Kiểu_dữ_liệu a)
-
-incrementExact(Kiểu_dữ_liệu a)
-
-Log(Kiểu_dữ_liệu a) – trả về logarit cơ số e
-
-Log10(Kiểu_dữ_liệu a) – trả về logarit cơ số 10
-
-Log1p(Kiểu_dữ_liệu a) – trả về logarit tự nhiên của tổng dối số và 1
-
-Max(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b) – tìm giá trị lớn hơn
-
-Min(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b) – tìm giá trị nhỏ hơn
-
-multiplyExact(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b)
-
-negateExact(Kiểu_dữ_liệu a)
-
-
-NextAfter(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b)
-
-NextDown(Kiểu_dữ_liệu a, Kiểu_dữ_liệu b)
-
-NextUp(Kiểu_dữ_liệu a)
-
-Round(Kiểu_dữ_liệu a) – làm tròn và trả về số double
-
-Scalb()
-
-Signum
-
-Sin
-
-Sqrt
-
-SubtractExact
-
-Tan
-
-Tanh
-
-toDegree
-
-toIntExact
-
-ToRadians()
-
-Ulp()
-Random
-Math.random()
-Để sinh ra 1 số thực ngẫu nhiên từ 0 -> 1.
-Thuật toán tạo ra 100 số ngẫu hiên từ 0 -> 100 bằng java
-class Solution {	
-	public static void main(String[] args) {
-		for(int i = 0; i < 101; i++) {
-			int a = (int)(Math.random()*101);
-			System.out.print(a + " ");
-		}
-	}
-}
-
-Thuật toán trò chơi trúng thưởng với xác suất 2%
-class Solution {
-	
-	public static void main(String[] args) {
-		for(int i = 0; i < 101; i++) {
-			double a = Math.random();
-			System.out.print((a<0.02)?"bạn đã trúng thưởng":"rất tiếc, bạn không trúng thưởng");
-			System.out.println();
-		}
-	}
-}
-
-Random (một lớp riêng)
-Để sinh ra số ngẫu nhiên.
-Cần import java.util.Random;
-random.nextInt(int bound)
-Để sinh ra số ngẫu nhiên từ 0 đến bound
-Java Booleans
-Java If … Else
-if – else statement
-Là cấu trúc lệnh điều kiện.
-Ternary Operator (toán tử 3 ngôi)
-Là cấu trúc câu điều kiện sử dụng cú pháp khác.
-Thuật toán kiểm tra tính chẵn lẻ của một số nguyên. Ví dụ input = 4, result = “Even”.
-import java.util.Scanner;
-class Solution{
-	static boolean isEBasic(int n) {
-		if(n%2 == 0) {
-			return true;
-		} return false;
-	}
-	static boolean isETerOperater(int n) {
-		return (n%2 == 0) ? true : false;
-	}
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int input = sc.nextInt();
-		// if else basic
-		if(isEBasic(input)) System.out.print("Even" + "\n");
-		else System.out.print("Odd");
-		// TernaryOperater
-		System.out.println((isETerOperater(input)) ? "Even" : "Odd");
-	}
-}
-14
-Even
-Even
-Switch Statement
-Là cấu trúc câu điều kiện.
-Cú pháp:
-switch(expression){
-case value1:
-// code
-break;
-case valse2:
-// code
-break;
-…
-}
-1.  Roman to Integer – leetcode
-https://www.youtube.com/watch?v=tsmrUi5M1JU
-class Solution {
-    public static int ChangeInt(char str){
-        switch(str){
-            case 'I' : return 1;
-            case 'V' : return 5;
-            case 'X' : return 10;
-            case 'L' : return 50;
-            case 'C' : return 100;
-            case 'D' : return 500;
-            case 'M' : return 1000;
-            default : return 0;
-        }
-    }
-
-    public int romanToInt(String s) {
-        int total = 0;
-        for(int i = 0; i < s.length() - 1; i++){
-            if(ChangeInt(s.charAt(i)) < ChangeInt(s.charAt(i+1))){
-                total -= ChangeInt(s.charAt(i));
-            }           
-            else total += ChangeInt(s.charAt(i));
-        }
-        return total + ChangeInt(s.charAt(s.length()-1));
-    }
-}
-
-
-Java Switch
-Java While loop
-Là cấu trúc lặp không có giới hạn lần lặp.
-9. Palindrome Number – leetcode
-class Solution {
-    public boolean isPalindrome(int x) {
-        if(x < 0 || (x != 0 && x%10==0)) return false;
-        int reversed = 0;
-        while(x > reversed){
-            reversed = (reversed*10) + (x%10);
-            x /= 10;
-        }
-        return x == reversed || (x == reversed/10);
-    }
-}
-
-
-For loop
-Để lặp lại một khổi mã với một số lần nhất định. Hữu ích trongg việc phải thực thi một điều gì đó cứ lặp đi lặp lại.
-Break
-Để thoát khỏi vòng lặp.
-Continue
-Để chuyển sang một vòng lặp tiếp theo.
-Simple for loop
-Là cấu trúc lặp cơ bản nhất.
-121. Best Time to Buy and Shell Stock
-class Solution {
-    public int maxProfit(int[] prices) {
-       int max = 0;
-       int buy = prices[0];
-       for(int i=1; i<prices.length; i++){
-        if(buy > prices[i]){
-            buy = prices[i];
-        }else if(prices[i] - buy > max){
-            max = prices[i] - buy;
-        }
-       }
-       return max;
-    }
-}
-
-For-each loop
-Là cấu trúc lặp duyệt qua phần tử. Thích hợp cho Array, String, …
-Labelled for loop
-Là cấu trúc lặp được gán nhãn. Thích hợp trong vòng lặp lồng nhau.
-class Solution{
-
-	public static void main(String[] args) {
-		for(int i = 0; i < 4; i++) {
-			aa:
-			for(int j = 0; j < 4; j++) {
-				if(j==2) continue aa;
-				System.out.print(i + " " + j + "\n");
-			}
-		}
-		
-	}
-}
-0 0
-0 1
-0 3
-1 0
-1 1
-1 3
-2 0
-2 1
-2 3
-3 0
-3 1
-3 3
-
-Do-while loop
-Là cấu trúc lặp không có giới hạn lần lặp. và được lặp ít nhất một lần.
-Cú pháp:
-do {
-      // code;
-} while();
-Tạo vòng lặp với bước nhảy là 0.5
-public class Build{
-	public static void main(String[] args) {
-		for(double i = 0; i <= 10; i+=0.5) {
-			System.out.println("Hello World");
-		}
-	}
-}
-
-Thuật toán tìm ước trung lớn nhất của 2 số nguyên
-class Solution{
-	static int GreatestCommonDivisor(int a, int b) {
-		int result =  1;
-		int i = 2;
-		while(i <= a || i <= b) {
-			if(a%i == 0 && b%i == 0) {
-				a /= i;
-				b /= i;
-				result *= i;
-			} else {
-				i++;
-			}		
-		}
-		return result;
-	}
-	public static void main(String[] args) {
-		System.out.println(GreatestCommonDivisor(38, 24));
-	}
-}
-2
-Cải tiến code:
-class Solution{
-	static int GreatestCommonDivisor(int a, int b) {
-		while (b != 0) {
-			int temp = a % b;
-			a = b;
-			b = temp;
-		}
-		return a;
-	}
-	public static void main(String[] args) {
-		System.out.println(GreatestCommonDivisor(35, 12));
-	}
-}
-1
-
-Phương thức trả về một mảng
-class Solution {
-	static int[] a(){
-		int [] b = {1,2};
-		return b;
-	}
-	public static void main(String args[]) {
-		int [] a = a();
-		System.out.println(a[1]);
-		
-	}
-}
-
-Thuật toán trả về chỉ số của 2 phần tử trong mảng khi tổng của chúng bằng target
-class Solution {
-    public int[] twoSum(int[] nums, int target) {
-        int a = 0;
-        int b = 0;
-        for(int i = 0; i < nums.length; i++){
-            for(int j = i+1; j < nums.length; j++){
-                if(nums[i]+nums[j] == target){
-                    a = i;
-                    b = j;
-                    
-                }
-            }
-        }
-        int[] result = {a,b};
-        return result;
-    }
-}
-[1,2,3,6] target: 8
-[1,3] vì 2+6 = 8
-Cải tiến code:
-class Solution {
-    public int[] twoSum(int[] nums, int target) {
-       int arr[]=new int[2];
-        int i,j;
-        for(i=1;i<nums.length;i++){
-             for(j=i;j<nums.length;j++){
-                if(nums[j]+nums[j-i]==target){
-                    arr[0]=j;
-                    arr[1]=j-i;
-                     return arr;
-                }
-             }
-        }
-        return arr;
-        }
-    }
-
-
-Bài tập
-Tạo đối tượng
-Code1:
-class Intro{
-	Intro(){
-		System.out.print("Hello, welcome to Java");
-	}
-}
-public class Solution {
-	public static void main(String[] args) {
-		new Intro();
-	}
-}
-
-public class Run_01 {
-	
-	public Run_01(String name, int age, String address){
-		System.out.println(name + " - " + age + " - " + address);
-	}
-	
-    public static void main(String[] args) {
-        Run_01 one = new Run_01("Le Duc Thang", 19, "Phú Đa");
-        Run_01 second = new Run_01("Le Khanh Toan", 21, "Phú Đa");
-    }
-}
-Truy cập vào thuộc tính của một đối tượng
-
-Class Person{
-	String greeting = "What's up?";
-	String angry = "What are you doing??";
-}
-public class Solution {
-	public static void main(String[] args) {
-		System.out.println(new Person().angry);
-	}
-}
-Sử dụng đối tượng (Object) yêu cầu người dùng nhập vào tên, tuổi, địa chỉ sau đó in ra màn hình
-
-import java.util.Scanner;
-
-public class Run_01 {
-	
-	public Run_01(String name, int age, String address) {
-		System.out.println("Name: " + name + " - " + "Age: " + age + " - " + "Address: " + address);
-	}
-	
-	private static final Scanner sr = new Scanner(System.in);
-	
-	public static void main(String[] args) {
-		System.out.print("Name: ");
-		String name = sr.nextLine();
-		System.out.print("Age: ");
-		int age = sr.nextInt();
-		sr.nextLine();
-		System.out.print("Address: ");
-		String address = sr.nextLine();
-		Run_01 object = new Run_01(name, age, address); // tạo đối tượng và in ra màn hình
-		}
-}
-Java Method (function)
-Là phương thức trong một số ngôn ngữ khác goiji là function.
-Cú pháp:
-[<private|public|…>] <void|int|…> <name> (<var1>, <var2>, …) [<exception>] 
-{khối lệnh} 
-Trong đó:
-- private: phương thức chỉ được truy xuất trong bản thân lớp
-- public: phương thức được truy xuất ở bất kì vị trí nào. Lớp được truy xuất chung cho package khác, mặc định chỉ có các đoạn mã trong cùng một gối mới có quyền truy xuất nó
-- public static: là một modifier
-- protected: chỉ các lớp dẫn xuất của lớp chứa phương thức này mới được truy xuất
-- default: truy xuất ngầm ngầm định khi không có khai báo cụ thể cho phương thức, phương thức chỉ có thể truy xuất trong cùng gói
-- static, class: phương thức tác động không phụ thuộc vào đối tượng cụ thể
-- abstract: phương thức không cài đặt gì, nó sẽ được phát triển trong các lớp dẫn xuất từ lớp này ab
-- final: lớp hằng không có lớp con, không kế thừa
-- native: phương thức được viết bằng ngôn ngữ khác, gần giống với abstract nhưng có cài đặt lại ở lướp dẫn xuất
-- synchronyzed: nhất quán về dữ liệu khi có 2 phương thức cùng truy cập đồng thời. tác dụng cho thread
-- var1,var2: các đối số để truyền giá trị xử lý vào cho phương thức. nó có thể không có
-Java Arrays
-Dùng để lưu trữ có các thành phần dữ liệu cùng kiểu, liên tiếp nhau. Truy cập phần tử qua chỉ mục. Kích thước cố định.
-Ưu điểm: Mảng rất đơn giản và thuận tiện để lưu trữ các phần tử theo một thứ tự nhất định.
-Nhược điểm: Mảng không linh hoạt, vì chúng ta phải xác định kích thước N của mảng trước. Phải sử dụng chỉ số nguyên để truy cập vào phần tử của mảng.
-Arrays 1 level
-Cú pháp:
-    • <data type>[] <tên> = new <data type>[<kích_thước>];
-    • <data type> <tên>[] = new <data type>[<kích_thước>];
-    • <data type>[] <tên> = {“”, “”, …};
-    • …
-length
-Xác định số phần tử có trong mảng.
-class Solution{
-    public static void main(String[] args) {
-       int [] n = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-       System.out.println(n.length);
-    }
-}
-21
-Sử dụng hàm trả về mảng
-public class Solution{	
-	static int[] Arr() {
-		int [] a = {1,2,3,4,5};
-		return a;
-	}
-	public static void main(String[] args) {
-		int[] a = Arr();
-		for (int i : a) {
-			System.out.print(i);
-		}
-		System.out.println();
-		for (int i : Arr()) {
-			System.out.print(i);
-		}
-	}
-}
-12345
-12345
-12345
-Thay đổi giá trị của phần tử trong mảng
-Java chpo phép thay đổi giá trị phần tử trong mảng nhưng không cho phép thay đổi kích thước mảng tĩnh khi đã khởi tao.
-class Solution{
-	public static void main(String[] args) {
-		int [] arr = {1,2,3,4};
-		arr[0] = 3;
-		for (int i : arr) {
-			System.out.println(i);
-		}		
-	}
-}
-3
-Nhập xuất mảng 1 chiều
-import java.util.Scanner;
-public class content{
-	private static int n;
-	private static int[] m;
-	void nhap(Scanner sr) {
-		System.out.print("n = "); n = sr.nextInt();
-	}
-	void mang(int[] m, Scanner sr) {
-		for(int i = 0; i < n; i++) {
-			m[i] = sr.nextInt();
-		}
-	}
-	void xuat(int[] m) {
-		for(int i = 0; i < n; i++) {
-			System.out.println("m[" + i + "]" + " = " + m[i]);
-		}
-	}
-	public static void main(String[] args) {
-		Scanner sr = new Scanner(System.in);
-		content oB = new content();
-		oB.nhap(sr);
-		m = new int[n];
-		oB.mang(m, sr);
-		oB.xuat(m);
-	}
-}
-
-
-import java.util.Scanner;
-public class content{
-	private static int n;
-	private static int[] m;
-	private static final Scanner sr = new Scanner(System.in);
-	static void nhap() {
-		System.out.print("n = "); n = sr.nextInt();
-	}
-	static void mang() {
-		for(int i = 0; i < n; i++) {
-			m[i] = sr.nextInt();
-		}
-	}
-	static void xuat() {
-		for(int i = 0; i < n; i++) {
-			System.out.println("m[" + i + "]" + " = " + m[i]);
-		}
-	}
-	public static void main(String[] args) {
-		nhap();
-		m = new int[n];
-		mang();
-		xuat();
-	}
-}
-
-
-import java.util.Scanner;
-public class content{
-	private int n;
-	private int[] m;
-	private static final Scanner sr = new Scanner(System.in);
-	void nhap() {
-		System.out.print("n = "); n = sr.nextInt();
-		m = new int[this.n];
-	}
-	void mang() {
-		for(int i = 0; i < n; i++) {
-			m[i] = sr.nextInt();
-		}
-	}
-	void xuat() {
-		for(int i = 0; i < n; i++) {
-			System.out.println("m[" + i + "]" + " = " + m[i]);
-		}
-	}
-	public static void main(String[] args) {
-		content oB = new content();
-		oB.nhap();
-		oB.mang();
-		oB.xuat();
-	}
-}
-
-Thuật toán in ra phần tử có số phần tử lớn hơn hoặc bằng n/2 
-class Solution {
-    public int majorityElement(int[] nums) {
-        int count = 1;
-        int result = nums[0];
-        for(int i = 1; i < nums.length; i++){
-            if(nums[i] == result){
-                count++;
-            } else{
-                count--;
-                if(count == 0){
-                    result = nums[i];
-                    count = 1;
-                }
-            }
-        }
-        return result;
-    }
-}
-
-Thuật toán kiểm tra xem chuỗi ransomNote có được tạo từ những kí tự ở magazine hay không, mỗi ký tự ở magazine được sử dung đúng một lần
-class Solution {
-    public boolean canConstruct(String ransomNote, String magazine) {
-       int[] count = new int[26];
-       for(char c : magazine.toCharArray()){
-        count[c-'a']++;
-       }
-       for(char c : ransomNote.toCharArray()){
-        if(count[c-'a']==0) return false;
-        count[c-'a']--;
-       }
-       return true;
-    }
-}
-Magazine: aabz
-ransomNote: zaba
-true
-Cải tiến code:
-class Solution {
-    public boolean canConstruct(String ransomNote, String magazine) {
-        int[] lastIndexOfChInMagazine = new int[26];
-        for(char ch : ransomNote.toCharArray()){
-            int i = magazine.indexOf(ch, lastIndexOfChInMagazine[ch%26]);
-            if(i < 0 ) return false;
-            lastIndexOfChInMagazine[ch%26] = i + 1;
-        }
-        return true;
-    }
-}
-
-Một sô nguyên lớn được biểu diễn dưới dạng một mảng, tăng số đó lên 1 đơn vị, số nguyên lớn đó không chứa số không đứng đầu.
-class Solution {
-    public int[] plusOne(int[] digits) {
-        for (int i = digits.length - 1; i >= 0; i--) {
-            if(digits[i]<9){
-                digits[i]++;
-                return digits;
-            }
-            digits[i] = 0;
-        }
-        int[] newDigits = new int[digits.length+1];
-        newDigits[0] = 1;
-        return newDigits;
-    }
-}
-[1,2,3,4] -> [1,2,3,5]
-[9,9] ->  [1,0,0]
-Thuật toán đếm số phần tử khác nhau trong một mảng
-class Solution {
-    public int removeDuplicates(int[] nums) {
-        int count = 0;
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[count] != nums[i]) {
-                count++;
-                nums[count] = nums[i];
-            }
-        }
-        return count + 1;
-    }
-}
-
-27.Remove Element – leetcode
-https://www.youtube.com/watch?v=pGKDzt0gk-A
-class Solution {
-    public int removeElement(int[] nums, int val) {
-        int count = 0;
-        for(int i = 0; i < nums.length; i++){
-            if(nums[i] != val){
-                nums[count] = nums[i];
-                count++;
-            } 
-        }
-        return count;
-    }
-}
-
-35. Search insert position – leetcode
-https://www.youtube.com/watch?v=p07ahfFzMi0
-class Solution {
-    public int searchInsert(int[] nums, int target) {
-        int left = 0;
-        int right = nums.length-1;
-        while(left <= right){
-// không dùng (right+left) / 2 vì để tránh tràn số khi cộng
-            int mid = left + (right-left) / 2;
-            if(nums[mid] == target) return mid;
-            else if(nums[mid] > target) right = mid - 1;
-            else left = mid + 1;
-        }
-        return left;
-    }
-}
-
-88. Merge Sorted Array – leetcode
-import java.util.*;
-class Solution {
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        for(int i = 0; i < n; i++){
-            nums1[m+i] = nums2[i];
-        }
-        for(int i = 0; i < nums1.length; i++){
-            for(int j = i + 1; j < nums1.length; j++){
-                if(nums1[i] > nums1[j]) {
-                    int temp = nums1[j];
-                    nums1[j] = nums1[i];
-                    nums1[i] = temp;
-                }
-            }
-        }
-    }
-}
-
-Cải tiến code:
-class Solution {
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        if(n == 0) return;
-        int index1 = m - 1;
-        int index2 = n - 1;
-        for (int i = m + n - 1; i >= 0; i--) {
-            if (index2 < 0) {
-                break;
-            }
-            if(index1 >= 0 && nums1[index1] > nums2[index2]){
-                nums1[i] = nums1[index1];
-                index1--;
-            }else{
-                nums1[i] = nums2[index2];
-                index2--;
-            }
-        }   
-    }
-}
-
-108. Convert Sorted Array to Binary Search Tree
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-class Solution {
-    public TreeNode sortedArrayToBST(int[] nums) {
-        return helper(nums, 0, nums.length - 1);
-    }
-
-    private TreeNode helper(int[] nums, int left, int right) {
-        if (left > right) {
-            return null;
-        }
-
-        int mid = left + (right - left) / 2;
-        TreeNode root = new TreeNode(nums[mid]);
-        root.left = helper(nums, left, mid - 1);
-        root.right = helper(nums, mid + 1, right);
-        return root;
-    }
-}
-
-
-
-Arrays Object
-Quản lý danh sách sinh viên
-class student{
-	String name, room, sex;
-	student(String name, String room, String sex){
-		this.name = name;
-		this.room = room;
-		this.sex = sex;
-	}
-	@Override
-	public String toString() {
-		return "student [name=" + name + ", room=" + room + ", sex=" + sex + "]";
-	}
-}
-public class Solution{
-	public static void main(String[] args) {
-		student [] list = new student[2];
-		student sv1 = new student("JSON", "12A1", "male");
-		student sv2 = new student("MICK", "12A1", "female");
-		list[0] = sv1;
-		list[1] = sv2;
-		for (student student : list) {
-			System.out.println(student);
-		}
-	}
-}
-student [name=JSON, room=12A1, sex=male]
-student [name=MICK, room=12A1, sex=female]
-
-
-
-Java ArrayList
-Là một lớp kế thừa AbtractList và triển khai của List Interface trong collections framework nên nó sẽ có một vài đặc điểm và phương thức tương đồng với List. ArrayList được sử dụng như một mảng động để lưu trữ phần tử.
-Cần import java.util.ArrayList
-Lưu ý:
-- có thể chứa các phần tử trùng lặp
-- Duy trì thứ thự các phần tử được thêm vào
-- ArrayList là không đồng bộ (non-synchronized)
-- cho phép truy cập ngẫu nhiên vì nó lưu trữ dữ liệu chỉ mục
-- Thao tác chậm vì cần nhiều sự dịch chuyển nếu bất kỳ phần nào bị xóa khỏi danh sách.
-Cú pháp:
-ArrayList list = new ArrayList(); // non-generric – kiểu cũ
-ArrayList<String> list = new ArrayList<String>() // generic – kiểu mới
-size()
-Trả về số lượng phần tử có trong ArrayList.
-add()
-Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách
-import java.util.ArrayList;
-public class SinhVien {
-	public static void main(String[] args) {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("le duc thang");
-		list.add("le khanh toan");
-		System.out.println(list);
-	}
-}
-[le duc thang, le khanh toan]
-
-import java.util.ArrayList;
-public class SinhVien {
-	public static void main(String[] args) {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("le duc thang");
-		list.add("le khanh toan");
-		System.out.println(list);
-		list.add(1, "nguyen minh duc");
-		System.out.println(list);
-	}
-}
-* [le duc thang, le khanh toan]
-* [le duc thang, nguyen minh duc, le khanh toan]
-
-isEmpty()
-để kiểm tra xem một ArrayList có phần tử hay không
-remove(Obj) or remove(int index)
-xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số.
-removeAll(value)
-xóa hết phần tử có trong ArrayList value.
-contains(value)
-Kiểm tra xem có tồn tại value trong ArrayList hay không
-set(i, e)
-Để gán phần tử e vào vị trí i của ArrayList()
-Bài tập
-Bài tập in danh sách các đối tượng nhập từ bàn phím của lớp sinh viên có thuộc tính gồm họ và tên, tuổi, địa chỉ. (Sử dụng ArrayList để in danh sách ra màn hình)
-
-import java.util.*;
-
-class SinhVien{
-	private String fullName;
-	private int age;
-	private String address;
-	
-	public SinhVien() {}
-	
-	public SinhVien(String fullName, int age, String address) {
-		this.fullName = fullName;
-		this.age = age;
-		this.address = address;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-}
-
-class Main{
-	private ArrayList<SinhVien> list;
-	public static Scanner sc = new Scanner(System.in);
-	
-	public void Input() {
-		 list = new ArrayList<>();
-		 System.out.print("The number of student list: ");
-		 int n = sc.nextInt(); sc.nextLine();
-		 for(int i = 0; i < n; i++) {
-			 System.out.println("Student " + (i+1));
-			 System.out.print("Full name: "); String fullName = sc.nextLine();
-			 System.out.print("Age: "); int age = sc.nextInt(); sc.nextLine();
-			 System.out.print("Address: "); String address = sc.nextLine();
-			 SinhVien sinhVien = new SinhVien(fullName, age, address);
-			 list.add(sinhVien);
-		 }
-	}
-	
-	public void Print() {
-		System.out.printf("%25s%20s%25s\n", "Full name", "Age", "Address");
-		for(SinhVien value : list) {
-			System.out.printf("%25s%20d%25s\n", value.getFullName(), value.getAge(), value.getAddress() );
-		}
-	}
-	public static void main(String[] args) {
-		Main run = new Main();
-		run.Input();
-		run.Print();
-	}
-}
-Cho đối tượng sinh viên có các thuộc tính là fullName, age, address. Xây dựng phương thức kiểm tra xem sinh viên đó có tồn tại trong danh sách hay không (thuật toán tìm kiếm sinh viên).
-
-Cách 1: Kiểm tra theo tên
-public boolean checkExist(SinhVien[] sinhVien, String searchName) {
-	for(SinhVien value : sinhVien) {
-		if(value.getFullName().equalsIgnoreCase(searchName)) {
-			return true;
-		}	
-	}
-	return false;
-}
-
-Cách 2: Kiểm tra theo cả một đối tượng. lưu ý với cách này ta cần phải xây dựng thêm phương thức equal bên trong lớp đối tượng.
-
-import java.util.*;
-class SinhVien{
-	private String fullName;
-	private int age;
-	private String address;
-	
-	public SinhVien() {}
-	public SinhVien(String fullName, int age, String address) {
-		this.fullName = fullName;
-		this.age = age;
-		this.address = address;
-	}
-	@Override
-	public int hashCode() {
-		return Objects.hash(address, age, fullName);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SinhVien other = (SinhVien) obj;
-		return Objects.equals(address, other.address) && age == other.age && Objects.equals(fullName, other.fullName);
-	}
-	
-	
-	
-	
-}
-public class test { 
-	public static ArrayList<SinhVien> arr = new ArrayList<SinhVien>();
-	public static boolean kiemtra(SinhVien sv) {
-		return arr.contains(sv);
-	}
-	public static void main(String[] args) { 
-		SinhVien sv1 = new SinhVien("Le Duc Thang", 19, "Phu Da");
-		arr.add(sv1);
-		SinhVien sv2 = new SinhVien("Le Duc Thang", 19, "Phu Da");
-		System.out.println(kiemtra(sv2)); // false
-	}
-}
-
-Cho đối tượng sinh viên có các thuộc tính là fullName, age, address. Xây dựng phương thức kiểm tra xem sinh viên đó có tồn tại trong danh sách hay không. Nếu có thì xuất thông tin sinh viên đó ra màn hình.
-
-Cách 1
-import java.util.*;
-class SinhVien{
-	private String fullName;
-	private int age;
-	private String address;
-	
-	public SinhVien() {}
-	public SinhVien(String fullName, int age, String address) {
-		this.fullName = fullName;
-		this.age = age;
-		this.address = address;
-	}
-	
-	public String getFullName() {
-		return fullName;
-	}
-	@Override
-	public String toString() {
-		return "SinhVien [fullName=" + fullName + ", age=" + age + ", address=" + address + "]";
-	}
-}
-public class test { 
-	public static ArrayList<SinhVien> arr = new ArrayList<SinhVien>();
-	public static void checkExist(String searchName) {
-		for(SinhVien value : arr) {
-			if(value.getFullName().equalsIgnoreCase(searchName)) {
-				System.out.println(value.toString());
-			}	
-		}
-	}
-	public static void main(String[] args) { 
-		SinhVien sv1 = new SinhVien("Le Duc Thang", 19, "Phu Da");
-		arr.add(sv1);
-		SinhVien sv2 = new SinhVien("Le Duc Thang1", 20, "Phu Da");
-		arr.add(sv2);
-		checkExist("Le Duc thang1");
-	}
-}
-
-Cách 2
-public void kiemtra2() {
-		System.out.print("ma can kiem tra: "); String ma = sc.nextLine();
-		boolean a = true;
-		for(SinhVien value : sv) {
-			if(value.getMaSinhVien().equalsIgnoreCase(ma)) {
-				a = true;
-				break;
-			} else {
-				a = false;
-			}
-		}
-		
-		if(a) {
-			for(SinhVien value : sv) {
-				if(value.getMaSinhVien().equalsIgnoreCase(ma)) {
-					System.out.println("True");
-					System.out.printf("%-30s%-30s%-30d%-30s\n", value.getMaSinhVien(), value.getHoVaTen(), value.getTuoi(), value.getDiaChi());
-				}
-			}
-		} else {
-			System.out.println("khong co");
-		}
-	}
-
-Xây dựng phương thức xóa thông tin sinh viên dựa vào tên của sinh viên.
-
-Cách 1:
-public void RemoveList(String name) {
-	list.removeIf(sv -> sv.getFullName().equalsIgnoreCase(name));
-}
-
-Cách 2:
-	public void xoa() {
-		System.out.print("ma sinh vien muon xoa: ");
-		String maSinhVien = sc.nextLine();
-		for (SinhVien sinhVien : list) {
-			if (sinhVien.getMaSinhVien().equalsIgnoreCase(maSinhVien)) {
-				list.remove(sinhVien);
-				break;
-			}
-		}
-
-	}
-Cho đối tượng sinh viên có các thuộc tính là fullName, age, address. Xây dựng phương thức kiểm tra xem sinh viên đó có tồn tại trong danh sách hay không. Nếu có thì xóa thông tin đó.
-
-import java.util.*;
-class SinhVien{
-	private String fullName;
-	private int age;
-	private String address;
-	
-	public SinhVien() {}
-	public SinhVien(String fullName, int age, String address) {
-		this.fullName = fullName;
-		this.age = age;
-		this.address = address;
-	}
-	public String getAddress() {
-		return address;
-	}
-	@Override
-	public String toString() {
-		return "SinhVien [fullName=" + fullName + ", age=" + age + ", address=" + address + "]";
-	}
-}
-public class test { 
-	public static ArrayList<SinhVien> arr = new ArrayList<SinhVien>();
-	public static void Remove(String address) {
-		boolean a = true;
-		for(SinhVien value : arr) {
-			if(value.getAddress().equalsIgnoreCase(address)) {
-				a = true;
-				arr.remove(value);
-				break;
-			} else {
-				a = false;
-			}
-		}
-		if(!a) {
-			System.out.println("khong co dia chi can xoa");
-		}
-	}
-	public static void main(String[] args) { 
-		SinhVien sv1 = new SinhVien("Le Duc Thang", 19, "Phu Da");
-		arr.add(sv1);
-		SinhVien sv2 = new SinhVien("Le Duc Thang1", 20, "duc thuong");
-		arr.add(sv2);
-		System.out.println(arr.toString());
-		Remove("phu tho");
-		System.out.println(arr.toString());
-	}
-}
-Char
-Để làm việc với ký tự.
-Sử dụng bảng mã ASCII áp dụng vào chữ cái
-
-String
-length()
-Trả về độ dài của một chuỗi.
-Cú pháp:
-<variable>.length();
-public class Chuoi {
-	public static void main(String[] args) {
-		String a;
-		Scanner sr = new Scanner(System.in);
-		a = sr.nextLine();
-		System.out.println(a.length());
-	}
-}
-
-charAt(value)
-Lấy ra ký tự tại vị trí value trong độ dài của chuỗi.
-import java.util.Scanner;
-public class Chuoi {
-	public static void main(String[] args) {
-		String a;
-		Scanner sr = new Scanner(System.in);
-		a = sr.nextLine();
-		System.out.println(a.charAt(0));
-	}
-}
-
+```
 toUpperCase()
 Trả về kí tự viết hoa hoặc trả về chuỗi in hoa hết.
 Cú pháp:
@@ -1484,7 +410,7 @@ public class Chuoi {
 }
 false
 true
-28. Find the index of the First Occurrence in a String
+1.  Find the index of the First Occurrence in a String
 class Solution {
     public int strStr(String haystack, String needle) {
         if(needle.length() == 0) return  0;
@@ -1849,8 +775,252 @@ class MyRegex{
     }
     
 }
+# char (Là kiểu ký tự. 2 byte)
+## int -> char
+**Syn**
+```bash
+(char) variable_int;
+```
+## .charAt() (Chỉ chuyển được một ký tự)
+**Syn**
+```bash
+<Variable>.charAt(0);
+```
+# Character (Là kiểu đối tượng với kiểu char gốc. lớp này có một số phương thức hữu ích để tao tác với ký tự)
+# Instanceof (Để so sánh variable với kiểu dữ liệu trả về true hoặc false)
+# Math (Để xử lý dữ liệu số)
+## Math.pow() (Để tính lũy thừa)
+## .Abs() (tính giá trị tuyệt đối kiễu dữ liệu)
+## .Acos() (tính acos của góc)
+## .addExact() (tính tổng các đối số của nó, ném ra một ngoại lệ nếu kết quả làm tràn một int)
+## .Asin() (tính asin của một góc)
+## Atan() (tính atan của một góc)
+## Atan2() (tính atan2) 
+## Cbrt()
+## Ceil() (trả về giá trị nguyên nhỏ nhất lớn hơn hoặc bằng đối)
+## copySign()
+## Cos() (tính cosin của một góc)
+## Coah()
+## decrementExact()
+## Exp()
+## Expml()
+## Floor() (trả về giá trị nguyên lớn nhỏ hơn hoặc bằng đối số)
+## floorDiv() (trả về giá trị lớn nhất nhỏ hơn hoặc bằng thương đại số)
+## floorMod()
+## getExpoment()
+## hypot()
+## IEEErementExact()
+## incrementExact()
+## Log() (trả về logarit cơ số e)
+## Log10() (trả về logarit cơ số 10)
+## Log1p() (trả về logarit tự nhiên của tổng dối số và 1)
+## Max() (tìm giá trị lớn hơn)
+## Min() (tìm giá trị nhỏ hơn)
+## multiplyExact()
+## negateExact()
+## NextAfter()
+## NextDown()
+## NextUp()
+## Round() (làm tròn và trả về số double)
+## Scalb()
+## Signum
+## Sin
+## Sqrt
+## SubtractExact
+## Tan
+## Tanh
+## toDegree
+## toIntExact
+## ToRadians()
+## Ulp()
+## Random
+### Math.random() (Để sinh ra 1 số thực ngẫu nhiên từ 0 -> 1)
+**Ex: Thuật toán tạo ra 100 số ngẫu hiên từ 0 -> 100 bằng java**
+```java
+class Solution {	
+	public static void main(String[] args) {
+		for(int i = 0; i < 101; i++) {
+			int a = (int)(Math.random()*101);
+			System.out.print(a + " ");
+		}
+	}
+}
+```
+**Ex2: Thuật toán trò chơi trúng thưởng với xác suất 2%**
+```java
+class Solution {
+	
+	public static void main(String[] args) {
+		for(int i = 0; i < 101; i++) {
+			double a = Math.random();
+			System.out.print((a<0.02)?"bạn đã trúng thưởng":"rất tiếc, bạn không trúng thưởng");
+			System.out.println();
+		}
+	}
+}
+```
+# Random (Để sinh ra số ngẫu nhiên)
+```bash
+Cần import java.util.Random;
+```
+## random.nextInt() (Để sinh ra số ngẫu nhiên từ 0 đến bound)
+# If … Else (Là cấu trúc lệnh điều kiện)
+# Ternary Operator (toán tử 3 ngôi Là cấu trúc câu điều kiện sử dụng cú pháp khác)
+# Switch ... case (Là cấu trúc câu điều kiện)
+**Syn**
+```bash
+switch(expression){
+case value1:
+// code
+break;
+case valse2:
+// code
+break;
+…
+}
+```
+# Loop
+## While loop (Là cấu trúc lặp không có giới hạn lần lặp)
+## For loop (Để lặp lại một khổi mã với một số lần nhất định)
+**Ex**
+```java
+class Solution{
 
+	public static void main(String[] args) {
+		for(int i = 0; i < 4; i++) {
+			aa:
+			for(int j = 0; j < 4; j++) {
+				if(j==2) continue aa;
+				System.out.print(i + " " + j + "\n");
+			}
+		}
+		
+	}
+}
+// 0 0
+// 0 1
+// 0 3
+// 1 0
+// 1 1
+// 1 3
+// 2 0
+// 2 1
+// 2 3
+// 3 0
+// 3 1
+// 3 3
+```
+## Break (Để thoát khỏi vòng lặp)
+## Continue (Để chuyển sang một vòng lặp tiếp theo)
+## For-each loop (Là cấu trúc lặp duyệt qua phần tử. Thích hợp cho Array, String, …)
+## Labelled for loop (Là cấu trúc lặp được gán nhãn. Thích hợp trong vòng lặp lồng nhau)
+## Do-while loop (Là cấu trúc lặp không có giới hạn lần lặp. và được lặp ít nhất một lần)
+**Syn**
+```bash
+do {
+      // code;
+} while();
+```
+# Arrays (Dùng để lưu trữ có các thành phần dữ liệu cùng kiểu)
+**Syn**
+```bash
+<data type>[] <tên> = new <data type>[<kích_thước>];
+<data type> <tên>[] = new <data type>[<kích_thước>];
+<data type>[] <tên> = {“”, “”, …};
+…
+```
+## length (Xác định số phần tử có trong mảng)
+**Ex**
+```java
+class Solution{
+    public static void main(String[] args) {
+       int [] n = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
+       System.out.println(n.length); // 21
+    }
+}
+```
+# Object
+**Ex: Quản lý danh sách sinh viên**
+```java
+class student{
+	String name, room, sex;
+	student(String name, String room, String sex){
+		this.name = name;
+		this.room = room;
+		this.sex = sex;
+	}
+	@Override
+	public String toString() {
+		return "student [name=" + name + ", room=" + room + ", sex=" + sex + "]";
+	}
+}
+public class Solution{
+	public static void main(String[] args) {
+		student [] list = new student[2];
+		student sv1 = new student("JSON", "12A1", "male");
+		student sv2 = new student("MICK", "12A1", "female");
+		list[0] = sv1;
+		list[1] = sv2;
+		for (student student : list) {
+			System.out.println(student);
+		}
+	}
+}
+// student [name=JSON, room=12A1, sex=male]
+// student [name=MICK, room=12A1, sex=female]
+```
+# ArrayList (ArrayList được sử dụng như một mảng động để lưu trữ phần tử)
+```bash
+Cần import java.util.ArrayList
 
+Lưu ý:
+- có thể chứa các phần tử trùng lặp
+- Duy trì thứ thự các phần tử được thêm vào
+- ArrayList là không đồng bộ (non-synchronized)
+- cho phép truy cập ngẫu nhiên vì nó lưu trữ dữ liệu chỉ mục
+- Thao tác chậm vì cần nhiều sự dịch chuyển nếu bất kỳ phần nào bị xóa khỏi danh sách.
+```
+**Syn**
+```bash
+ArrayList list = new ArrayList(); // non-generric – kiểu cũ
+ArrayList<String> list = new ArrayList<String>() // generic – kiểu mới
+```
+## size() (Trả về số lượng phần tử có trong ArrayList)
+## add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)
+**Ex**
+```java
+import java.util.ArrayList;
+public class SinhVien {
+	public static void main(String[] args) {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("le duc thang");
+		list.add("le khanh toan");
+		System.out.println(list);
+	}
+}
+// [le duc thang, le khanh toan]
+```
+**Ex2**
+```java
+import java.util.ArrayList;
+public class SinhVien {
+	public static void main(String[] args) {
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("le duc thang");
+		list.add("le khanh toan");
+		System.out.println(list);
+		list.add(1, "nguyen minh duc");
+		System.out.println(list);
+	}
+}
+// * [le duc thang, le khanh toan]
+// * [le duc thang, nguyen minh duc, le khanh toan]
+```
+## isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)
+## remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)
+## removeAll() (xóa hết phần tử có trong ArrayList value)
+## contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)
+## set() (Để gán phần tử)
 Static boolean matches(String regex, CharSequence input)
 Nó biên dịch biểu thức chính quy và tìm kiếm các chuỗi con từ chuỗi input phù hợp với mẫu regex
 string[] split(CharSequence input)
@@ -4694,4 +3864,3 @@ class Solution{
 		System.out.println(a);
 	}
 }
-```
