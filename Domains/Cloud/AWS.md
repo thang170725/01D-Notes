@@ -25,6 +25,7 @@
   - [AWS Lambda](#aws-lambda)
 - [ALB (Application Load Balancer là bộ cân bằng tải ứng dụng)](#alb-application-load-balancer-là-bộ-cân-bằng-tải-ứng-dụng)
 - [ECS (Elastic Container Service là dịch vụ điều phối container)](#ecs-elastic-container-service-là-dịch-vụ-điều-phối-container)
+- [Amazon SQS (Simple Queue Service là dịch vụ hàng đợi tin nhắn của AWS)](#amazon-sqs-simple-queue-service-là-dịch-vụ-hàng-đợi-tin-nhắn-của-aws)
 ---
 # AWS (Amazon Web Services)
 ```bash
@@ -462,4 +463,130 @@ Plaintext
  │ │ Task 2   │ │ (Container)
  │ └──────────┘ │
  └──────────────┘
+```
+# Amazon SQS (Simple Queue Service là dịch vụ hàng đợi tin nhắn của AWS)
+```bash
+SQS giống như một hộp thư trung gian giữa các ứng dụng.
+
+Ví dụ bạn có hệ thống đặt hàng:
+
+Khách hàng
+   │
+   ▼
+Web/API
+   │
+   │ Gửi yêu cầu tạo đơn
+   ▼
+┌──────────────────────┐
+│        SQS           │
+│  "order-queue"       │
+│                      │
+│  Order A             │
+│  Order B             │
+│  Order C             │
+└──────────────────────┘
+   │
+   │ Worker lấy từng message
+   ▼
+Ứng dụng xử lý đơn hàng
+
+Thay vì API phải tự xử lý đơn hàng ngay lập tức, nó có thể đưa yêu cầu vào SQS rồi trả kết quả cho khách hàng.
+
+Một chương trình khác gọi là consumer/worker sẽ lấy message từ SQS và xử lý sau.
+
+2. Tại sao cần SQS?
+
+Giả sử không có SQS:
+
+User
+ │
+ ▼
+API
+ │
+ ▼
+Xử lý đơn hàng
+ │
+ ▼
+Database
+
+Nếu cùng lúc có 10.000 người đặt hàng, API có thể bị quá tải.
+
+Có SQS:
+
+10.000 User
+     │
+     ▼
+    API
+     │
+     ▼
+┌─────────────────┐
+│      SQS        │
+│                 │
+│ Order 1         │
+│ Order 2         │
+│ Order 3         │
+│ ...             │
+│ Order 10000     │
+└─────────────────┘
+     │
+     ▼
+ Worker 1
+ Worker 2
+ Worker 3
+ ...
+
+SQS giúp tách phần gửi yêu cầu và phần xử lý yêu cầu.
+
+Đây là một trong những khái niệm rất quan trọng khi học AWS.
+
+3. SQS có những thành phần cơ bản nào?
+
+Bạn có thể hình dung:
+
+Producer
+   │
+   │ Send Message
+   ▼
+┌─────────────────┐
+│      Queue      │
+│                 │
+│ Message 1       │
+│ Message 2       │
+│ Message 3       │
+└─────────────────┘
+   │
+   │ Receive Message
+   ▼
+Consumer
+Producer
+
+Là chương trình gửi message vào SQS.
+
+Ví dụ:
+
+Website
+Backend
+Lambda
+Application
+Queue
+
+Là hàng đợi chứa message.
+
+Ví dụ:
+
+my-first-queue
+Message
+
+Là dữ liệu được gửi vào queue.
+
+Ví dụ:
+
+{
+    "order_id": 123,
+    "product": "Laptop",
+    "quantity": 1
+}
+Consumer
+
+Là chương trình lấy message từ queue để xử lý.
 ```
