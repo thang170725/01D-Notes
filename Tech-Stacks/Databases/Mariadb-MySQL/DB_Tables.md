@@ -34,6 +34,7 @@
   - [full join | full outer join (Lấy tất cả của cả hai bên Khớp thì ghép Không khớp thì bên còn lại là NULL)](#full-join--full-outer-join-lấy-tất-cả-của-cả-hai-bên-khớp-thì-ghép-không-khớp-thì-bên-còn-lại-là-null)
 - [Transform (Nhóm làm thay đổi hình dạng bảng)](#transform-nhóm-làm-thay-đổi-hình-dạng-bảng)
   - [group by](#group-by)
+- [as](#as)
 ---
 # Check Database (Kiểm tra database)
 ## Linux (Kiểm tra db trên linux)
@@ -288,3 +289,4 @@ Mariadb không hỗ trợ trực tiếp outer join mà phải kết hợp left j
 ```bash
 Dùng để gom các dòng có cùng giá trị lại thành một nhóm
 ```
+# as 

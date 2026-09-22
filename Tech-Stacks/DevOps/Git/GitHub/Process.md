@@ -2,6 +2,8 @@
   - [PAT (Personal Acess Token - dùng để xác thực tài khoản)](#pat-personal-acess-token---dùng-để-xác-thực-tài-khoản)
   - [SSH (dùng để xác thực tài khoản sử dụng cặp khóa)](#ssh-dùng-để-xác-thực-tài-khoản-sử-dụng-cặp-khóa)
 - [GitHub Actions (tự động hóa quy trình phát triển phần mềm (CI/CD – Continuous Integration / Continuous Delivery).)](#github-actions-tự-động-hóa-quy-trình-phát-triển-phần-mềm-cicd--continuous-integration--continuous-delivery)
+- [gitingest (dùng để tóm tắt github repo)](#gitingest-dùng-để-tóm-tắt-github-repo)
+- [gitdiagram (dugnf để vẽ diagram repo)](#gitdiagram-dugnf-để-vẽ-diagram-repo)
 - [Practices](#practices)
   - [Cách dùng SSH key để push/pull](#cách-dùng-ssh-key-để-pushpull)
 - [Ask (câu hỏi)](#ask-câu-hỏi)
@@ -107,6 +109,18 @@ Dùng khi git/gitHub yêu cầu tài khoản và mật khẩu: nếu remote là 
         Một nhóm các bước chạy trên máy ảo
         - Step
         Các lệnh cụ thể (run command hoặc dùng action có sẵn)
+```
+# gitingest (dùng để tóm tắt github repo)
+**Cách sử dụng**
+```bash
+1. Truy cập vào một đường dẫn repo gitHub
+2. từ url tìm và đổi từ github -> gitingest
+```
+# gitdiagram (dugnf để vẽ diagram repo)
+**Cách sử dụng**
+```bash
+1. Truy cập vào một đường dẫn repo gitHub
+2. từ url tìm và đổi từ github -> gitdiagram
 ```
 # Practices
 ## Cách dùng SSH key để push/pull

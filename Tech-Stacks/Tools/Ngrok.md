@@ -1,5 +1,17 @@
-tôi muốn ngrok là tạo một đường hầm. vs dụ tôi có một web phải chạy 4 terminal fe, be, với fe chạy port 5173, be chạy 3651, đã dùng cors kết nối chạy bình thường nhưng tôi muốn tạo tôi đường hầm để gửi link cho bạn tôi test thử dùng thử web thì chỉ cần tạo ngrok với http 5173 của website thôi à, khi dùng là họ tự có thể call được đến be à
-
+- [Ngrok Introduction (tạo một đường hầm cho người dùng trên internet truy cập được vào mạng local)](#ngrok-introduction-tạo-một-đường-hầm-cho-người-dùng-trên-internet-truy-cập-được-vào-mạng-local)
+- [Ask](#ask)
+  - [Trường hợp tạo đường hầm cho người dùng test website chạy trên mạng local](#trường-hợp-tạo-đường-hầm-cho-người-dùng-test-website-chạy-trên-mạng-local)
+---
+# Ngrok Introduction (tạo một đường hầm cho người dùng trên internet truy cập được vào mạng local)
+# Ask
+## Trường hợp tạo đường hầm cho người dùng test website chạy trên mạng local
+```bash
+Có một web phải chạy 4 terminal:
+   - fe chạy port 5173
+   - be chạy 3651 
+   - đã dùng cors kết nối chạy bình thường 
+```
+```bash
 Đúng, nhưng có một điểm rất quan trọng: nếu frontend của bạn chạy 5173 và backend chạy 3651, thì chỉ ngrok port 5173 chưa chắc backend tự truy cập được.
 
 Có 2 trường hợp.
@@ -155,3 +167,4 @@ thì kiến trúc nên là:
 => Thường chỉ cần ngrok 5173, miễn là FE proxy API sang BE 3651.
 
 Nếu bạn đưa mình vite.config.* + file .env của FE + đoạn code cấu hình axios/fetch gọi BE, mình có thể chỉ chính xác cần sửa những dòng nào để web của bạn chạy qua đúng một link ngrok.
+```

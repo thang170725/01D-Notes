@@ -3,9 +3,6 @@
 ---
 # Directory Structure
 Python/                                                
-├── [00-Core](00-Core/Base.md)                              ```mình dùng thư mục này để xem học cơ bản lệnh python```   
-├── [Domains](Domains/Base.md)                              ```mình dùng thư mục này để xem các lĩnh vực trong ngành IT```   
-├── [System-Architectures](System-Architectures/Base.md)    ```mình dùng thư mục này để thiết kế kiến trúc hệ thống```   
-├── [Tech-Stacks](Tech-Stacks/Base.md)                      ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   
-├── [Terminology](Terminology/Base.md)                      ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
-└── [Command](Command.md)                                   ```mình dùng file này để xem các câu lệnh CLI python```   
+├── [00-Core](00-Core/Base.md)                 ```mình dùng thư mục này để xem học cơ bản lệnh python```   
+├── [01-Framework](01-Framework/)              ```minhg dùng thư mục này để học các framework của python```   
+└── [Command](Command.md)                      ```mình dùng file này để xem các câu lệnh CLI python```   

@@ -24,6 +24,8 @@
 - [Keyword Search (tìm kiếm theo từ khóa)](#keyword-search-tìm-kiếm-theo-từ-khóa)
   - [Đúng, Hybrid Search chính là cách kết hợp:](#đúng-hybrid-search-chính-là-cách-kết-hợp)
   - [documents](#documents)
+- [Reranker là tầng tiếp theo](#reranker-là-tầng-tiếp-theo)
+- [Kiến trúc RAG](#kiến-trúc-rag)
 - [Ask](#ask)
   - [Trong RAG có phải luôn phải nạp tài liệu vào trước không?](#trong-rag-có-phải-luôn-phải-nạp-tài-liệu-vào-trước-không)
   - [ChatGPT, Gemini, Claude có dùng RAG để tìm web không?](#chatgpt-gemini-claude-có-dùng-rag-để-tìm-web-không)
@@ -1204,108 +1206,69 @@ modified_at = tháng trước
 
 → kết quả tốt hơn rất nhiều.
 
-14. Reranker là tầng tiếp theo
+# Reranker là tầng tiếp theo
+**Ex**
+```bash
+Query: "Ngày 15/07 team quyết định dùng model nào?"
 
-Nếu muốn hệ thống RAG của bạn thật sự tốt, sau Hybrid Search có thể thêm:
+1. Hybrid Search lấy 50 kết quả.
+2. Reranker đọc: query + document và đánh giá:
+    - doc4 → 0.98
+    - doc1 → 0.72
+    - doc2 → 0.61
+    - ...
+    → chỉ đưa 5 kết quả tốt nhất cho LLM. Đây thường hiệu quả hơn việc lấy thẳng top 5 từ vector search.
+```
+# Kiến trúc RAG
+**Ex1**
+```bash
+                   USER
+                     │
+                     ↓
+                  AGENT
+                     │
+                     ↓
+                   Query
+                     │
+      ┌──────────────┼──────────────┐
+      ↓              ↓              ↓
+  Keyword         Semantic       Metadata
+  Search          Search          Filter
+      │              │              │
+      └──────────────┼──────────────┘
+                     ↓
+                Hybrid Fusion
+                     │
+                     ↓
+                 Top 20-50
+                     │
+                     ↓
+                  Reranker
+                     │
+                     ↓
+                   Top 5
+                     │
+                     ↓
+                   LLM
+                     │
+                     ↓
+                  Answer
 
-Hybrid Search
-      ↓
-   Top 50
-      ↓
-   Reranker
-      ↓
-    Top 5
-      ↓
-     LLM
-
-Ví dụ:
-
-Query:
-"Ngày 15/07 team quyết định dùng model nào?"
-
-Hybrid Search lấy 50 kết quả.
-
-Reranker đọc:
-
-query
-+
-document
-
-và đánh giá:
-
-doc4 → 0.98
-doc1 → 0.72
-doc2 → 0.61
-...
-
-→ chỉ đưa 5 kết quả tốt nhất cho LLM.
-
-Đây thường hiệu quả hơn việc lấy thẳng top 5 từ vector search.
-
-15. Kiến trúc RAG hoàn chỉnh mà bạn có thể hướng tới
-
-Với Personal AI Agent bạn đang muốn xây, mình sẽ thiết kế:
-
-                       USER
-                         │
-                         ↓
-                      AGENT
-                         │
-                         ↓
-                       Query
-                         │
-          ┌──────────────┼──────────────┐
-          ↓              ↓              ↓
-      Keyword         Semantic       Metadata
-      Search          Search          Filter
-          │              │              │
-          └──────────────┼──────────────┘
-                         ↓
-                    Hybrid Fusion
-                         │
-                         ↓
-                     Top 20-50
-                         │
-                         ↓
-                      Reranker
-                         │
-                         ↓
-                       Top 5
-                         │
-                         ↓
-                       LLM
-                         │
-                         ↓
-                      Answer
-
-Và dữ liệu:
-
-                    YOUR DATA
-                        │
-        ┌───────────────┼────────────────┐
-        ↓               ↓                ↓
-      PDF             Code             Email
-        ↓               ↓                ↓
-      Chunk           Chunk            Chunk
-        │               │                │
-        └───────────────┼────────────────┘
-                        ↓
-                  Embedding Model
-                        ↓
-                  Vector Database
-Một câu để bạn nhớ
-
-Keyword Search tìm cái "giống chữ".
-
-Semantic Search tìm cái "giống nghĩa".
-
-Hybrid Search tìm cả "giống chữ + giống nghĩa".
-
-Với Agent cá nhân, mình sẽ còn thêm:
-
-Hybrid Search + Metadata Filter + Reranker
-
-Đây là kiến trúc rất đáng dùng khi bạn bắt đầu xây memory/RAG cho AI Agent của mình.
+Dữ liệu:
+                YOUR DATA
+                    │
+    ┌───────────────┼────────────────┐
+    ↓               ↓                ↓
+  PDF             Code             Email
+    ↓               ↓                ↓
+  Chunk           Chunk            Chunk
+    │               │                │
+    └───────────────┼────────────────┘
+                    ↓
+              Embedding Model
+                    ↓
+              Vector Database
+```
 # Ask
 ## Trong RAG có phải luôn phải nạp tài liệu vào trước không?
 ```bash

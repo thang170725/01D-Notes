@@ -1,8 +1,9 @@
 - [Directory Structure](#directory-structure)
 ---
 # Directory Structure
-Architecture/               # mình dùng thư mục này để xem kiến trúc trong NLP
+00-Architecture/                          ```mình dùng thư mục này để xem kiến trúc trong NLP```  
 ├── [RNN](RNN/Base.md)                    ```mình dùng thư mục này để xem kiến trúc RNN```  
+├── [GRU](GRU/Base.md)                    ```mình dùng thư mục này để xem kiến trúc GRU```  
 ├── Architecture/             # mình dùng thư mục này để xem các kiến trúc trong NLP
 ├── Math_Technical/           # mình dùng thư mục này để xem các kĩ thuật và toán học trong NLP
 ├── Practices.md                # mình dùng file này để xem code mẫu, bài tập

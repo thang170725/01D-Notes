@@ -3,19 +3,20 @@
   - [unique key](#unique-key)
   - [index](#index)
 - [insert into](#insert-into)
-- [delete (xóa dữ liệu)](#delete-xóa-dữ-liệu)
-  - [delete from ... where (Xóa dữ liệu một hoặc nhiều hàng)](#delete-from--where-xóa-dữ-liệu-một-hoặc-nhiều-hàng)
-  - [... on delete cascade (dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY))](#-on-delete-cascade-dùng-để-tự-động-xóa-dữ-liệu-con-khi-dữ-liệu-cha-bị-xóa-trong-quan-hệ-khóa-ngoại-foreign-key)
 - [Update](#update)
   - [update (cập nhật dữ liệu)](#update-cập-nhật-dữ-liệu)
 - [Search (tìm kiếm, lọc, xem dữ liệu)](#search-tìm-kiếm-lọc-xem-dữ-liệu)
   - [Select (xem dữ liệu trong bảng)](#select-xem-dữ-liệu-trong-bảng)
-  - [select ... limit](#select--limit)
-  - [select ... order by](#select--order-by)
-  - [union all](#union-all)
+    - [limit (số dòng cần xem)](#limit-số-dòng-cần-xem)
+    - [order by (Xem dữ liệu được sắp xếp có thứ tự)](#order-by-xem-dữ-liệu-được-sắp-xếp-có-thứ-tự)
+    - [where (xem có điểu kiện)](#where-xem-có-điểu-kiện)
+  - [union all (nối kết quả của nhiều câu SELECT lại với nhau giữ nguyên tất cả dữ liệu)](#union-all-nối-kết-quả-của-nhiều-câu-select-lại-với-nhau-giữ-nguyên-tất-cả-dữ-liệu)
   - [Having (dùng để lọc kết quả sau khi GROUP BY)](#having-dùng-để-lọc-kết-quả-sau-khi-group-by)
 - [like (truy vấn dữ liệu theo điều kiện)](#like-truy-vấn-dữ-liệu-theo-điều-kiện)
   - [REGEXP (công cụ khớp mẫu cực mạnh)](#regexp-công-cụ-khớp-mẫu-cực-mạnh)
+- [Delete (xóa dữ liệu)](#delete-xóa-dữ-liệu)
+  - [delete from ... where (Xóa dữ liệu một hoặc nhiều hàng)](#delete-from--where-xóa-dữ-liệu-một-hoặc-nhiều-hàng)
+  - [... on delete cascade (dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY))](#-on-delete-cascade-dùng-để-tự-động-xóa-dữ-liệu-con-khi-dữ-liệu-cha-bị-xóa-trong-quan-hệ-khóa-ngoại-foreign-key)
 - [Math (Nhóm xử lý tính toán)](#math-nhóm-xử-lý-tính-toán)
   - [count (Dùng để đếm số dòng trong mỗi nhóm)](#count-dùng-để-đếm-số-dòng-trong-mỗi-nhóm)
   - [sum (Để cộng tổng các giá trị trong 1 cột hoặc khác cột)](#sum-để-cộng-tổng-các-giá-trị-trong-1-cột-hoặc-khác-cột)
@@ -103,28 +104,6 @@ VALUES
 (2, 102, 'Trần Thị B', 'Khoa học máy tính', 'KHMT01'),
 (3, 103, 'Lê Văn C', 'Hệ thống thông tin', 'HTTT01');
 ```
-# delete (xóa dữ liệu)
-## delete from ... where (Xóa dữ liệu một hoặc nhiều hàng)
-**Syn**
-```bash
-DELETE FROM ten_bang WHERE dieu_kien;
-```
-**Ex**
-```sql
-DELETE FROM Students WHERE studentId = 's001';
-```
-**Ex2: Xóa bằng in**
-```sql
-DELETE FROM Users
-WHERE userId IN ('s001', 's002', 's003');
-```
-## ... on delete cascade (dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY))
-**Ex**
-```sql
-FOREIGN KEY (program_id)
-REFERENCES workout_programs(id)
-ON DELETE CASCADE
-```
 # Update
 ## update (cập nhật dữ liệu)
 **Ex: update - set - where**
@@ -135,21 +114,7 @@ WHERE id = 5;
 ```
 # Search (tìm kiếm, lọc, xem dữ liệu)
 ## Select (xem dữ liệu trong bảng)
-## select ... limit
-```bash
-SELECT * FROM Students limit 50;
-
-- limit: số dòng cần xem.
-```
-## select ... order by
-```bash
-Xem dữ liệu được sắp xếp có thứ tự
-```
-**Syn**
-```bash
-SELECT * FROM your_table ORDER BY name ASC;
-```
-**Hiển thị nhiều field của nhiều bảng**
+**Ex: Hiển thị nhiều field của nhiều bảng**
 ```sql
 SELECT
     s.studentId,
@@ -159,25 +124,23 @@ SELECT
     u.email,
     u.role
 FROM Students s
-JOIN Users u ON s.userId = u.userId;
 ```
-**Hiển thị nhiều field của nhiều bảng có điều kiện**
+### limit (số dòng cần xem)
+**Ex**
+```bash
+SELECT * FROM Students limit 50;
+```
+### order by (Xem dữ liệu được sắp xếp có thứ tự)
+**Syn**
+```bash
+SELECT * FROM your_table ORDER BY name ASC;
+```
+### where (xem có điểu kiện)
+**Ex: Hiển thị nhiều field của nhiều bảng có điều kiện**
 ```sql
-SELECT
-    c.courseName,
-    s.fullNameStudent,
-    t.fullNameTeacher,
-    t.department
-FROM Courses c
-JOIN Students s ON c.studentId = s.studentId
-JOIN Teachers t ON c.teacherId = t.teacherId;
-Xem danh sách gắn với một điều kiện nào đó:
 SELECT * FROM Courses WHERE courseId = '2';
 ```
-## union all
-```bash
-UNION ALL = nối kết quả của nhiều câu SELECT lại với nhau (giữ nguyên tất cả dữ liệu)
-```
+## union all (nối kết quả của nhiều câu SELECT lại với nhau giữ nguyên tất cả dữ liệu)
 **Ex**
 ```bash
 bảng A:
@@ -258,6 +221,28 @@ SELECT * FROM exercises WHERE name LIKE '%Mountain%'
 - 'G{3}': Chính xác n lần
 - "G{3,}": Ít nhất n lần
 - '[ABC]': Một ký tự trong tập
+```
+# Delete (xóa dữ liệu)
+## delete from ... where (Xóa dữ liệu một hoặc nhiều hàng)
+**Syn**
+```bash
+DELETE FROM ten_bang WHERE dieu_kien;
+```
+**Ex**
+```sql
+DELETE FROM Students WHERE studentId = 's001';
+```
+**Ex2: Xóa bằng in**
+```sql
+DELETE FROM Users
+WHERE userId IN ('s001', 's002', 's003');
+```
+## ... on delete cascade (dùng để tự động xóa dữ liệu con khi dữ liệu cha bị xóa trong quan hệ khóa ngoại (FOREIGN KEY))
+**Ex**
+```sql
+FOREIGN KEY (program_id)
+REFERENCES workout_programs(id)
+ON DELETE CASCADE
 ```
 # Math (Nhóm xử lý tính toán)
 ## count (Dùng để đếm số dòng trong mỗi nhóm)

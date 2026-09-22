@@ -27,6 +27,7 @@
 - [ECS (Elastic Container Service là dịch vụ điều phối container)](#ecs-elastic-container-service-là-dịch-vụ-điều-phối-container)
 - [Amazon SQS (Simple Queue Service là dịch vụ hàng đợi tin nhắn của AWS)](#amazon-sqs-simple-queue-service-là-dịch-vụ-hàng-đợi-tin-nhắn-của-aws)
 - [Bucket (thùng chứa để lưu trữ dữ liệu)](#bucket-thùng-chứa-để-lưu-trữ-dữ-liệu)
+- [vps (virtual private server là một máy chủ ảo)](#vps-virtual-private-server-là-một-máy-chủ-ảo)
 ---
 # AWS (Amazon Web Services)
 ```bash
@@ -749,3 +750,147 @@ Chỉ cần nhớ một câu:
 Bucket là nơi chứa các Object trong Amazon S3.
 
 Trong bài LocalStack tiếp theo, khi bạn đã hiểu Bucket → Object, phần quan trọng tiếp theo là object key là gì và tại sao S3 lại dùng --key, vì bạn đã gặp nó trong lệnh s3api delete-object.
+# vps (virtual private server là một máy chủ ảo)
+Thay vì bạn mua một máy server vật lý, nhà cung cấp cloud sẽ chia một máy chủ vật lý lớn thành nhiều máy chủ ảo.
+
+Ví dụ:
+
+Máy chủ vật lý
+│
+├── VPS 1 → Ubuntu
+├── VPS 2 → Ubuntu
+├── VPS 3 → Windows
+└── VPS 4 → Ubuntu
+
+Mỗi VPS có tài nguyên riêng như:
+
+CPU
+RAM
+ổ đĩa
+mạng
+hệ điều hành
+
+Bạn có thể SSH vào VPS và sử dụng nó gần giống như một máy Linux bình thường.
+
+2. Trong AWS, VPS là gì?
+
+AWS không thường gọi sản phẩm của họ là "VPS".
+
+Dịch vụ tương đương và quan trọng nhất là Amazon EC2 (Elastic Compute Cloud).
+
+Ví dụ bạn tạo một EC2:
+
+AWS
+└── EC2 Instance
+    ├── Ubuntu
+    ├── 2 vCPU
+    ├── 4 GB RAM
+    ├── 30 GB SSD
+    └── Public IP
+
+Sau đó từ máy của bạn:
+
+ssh ubuntu@<PUBLIC_IP>
+
+Bạn sẽ vào được máy Ubuntu trên AWS.
+
+Sau khi SSH vào, bạn có thể chạy:
+
+sudo apt update
+sudo apt install nginx
+
+rồi chạy website, API, Docker, database... tùy nhu cầu.
+
+3. VPS khác gì máy tính của bạn?
+
+Ví dụ máy Ubuntu của bạn:
+
+Laptop/PC
+└── Ubuntu
+    ├── CPU
+    ├── RAM
+    └── SSD
+
+EC2:
+
+AWS Data Center
+└── EC2
+    ├── CPU
+    ├── RAM
+    ├── SSD
+    └── Internet
+
+Điểm khác biệt quan trọng là EC2 nằm trong data center của AWS và có thể được truy cập qua Internet nếu bạn cấu hình mạng cho phép.
+
+4. EC2 dùng để làm gì?
+
+Ví dụ bạn có backend:
+
+Android App
+     │
+     │ HTTPS
+     ▼
+   EC2
+     │
+     ├── Nginx
+     ├── Backend API
+     └── Docker
+          │
+          └── Database
+
+Hoặc đơn giản hơn:
+
+Internet
+    │
+    ▼
+EC2 Ubuntu
+    │
+    └── Website
+
+Đây là một trong những cách phổ biến để deploy server lên AWS.
+
+5. VPS thường có những gì?
+
+Một VPS thường có:
+
+Thành phần	Ví dụ
+CPU	2 vCPU
+RAM	4 GB
+Disk	50 GB
+OS	Ubuntu 24.04
+IP	Public IP
+Network	Internet
+Quyền	root/sudo
+
+Trong AWS, các thông số này được thể hiện thông qua EC2 instance type, EBS volume, network interface, security group...
+
+Ví dụ:
+
+EC2
+│
+├── Instance type: t3.small
+├── OS: Ubuntu
+├── EBS: 30 GB
+├── Security Group
+└── Public IPv4
+6. Một điểm rất quan trọng khi học AWS
+
+Đừng hiểu:
+
+AWS = VPS
+
+Mà nên hiểu:
+
+AWS
+│
+├── EC2       → máy chủ ảo
+├── S3        → lưu trữ file/object
+├── SQS       → hàng đợi message
+├── DynamoDB  → database NoSQL
+├── Lambda    → chạy code không cần quản lý server
+├── RDS       → database được AWS quản lý
+└── VPC       → mạng riêng trên AWS
+
+EC2 chính là thứ bạn nên nghĩ đến khi nghe "VPS trên AWS".
+
+Và vì bạn đang học LocalStack, phần tiếp theo rất đáng học là EC2 hoạt động như thế nào, SSH vào EC2 ra sao, Security Group là gì và Public IP/Private IP khác nhau thế nào.

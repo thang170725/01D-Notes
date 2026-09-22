@@ -12,6 +12,10 @@
 - [OpenAI Embedding](#openai-embedding)
   - [Ask](#ask)
     - [OpenAI Embedding khác Hugging Face thế nào?](#openai-embedding-khác-hugging-face-thế-nào)
+- [BAAI BGE (Beijing Academy of Artificial Intelligence General Embedding)](#baai-bge-beijing-academy-of-artificial-intelligence-general-embedding)
+  - [BGE-M3](#bge-m3)
+- [E5 (là dòng embedding của Microsoft)](#e5-là-dòng-embedding-của-microsoft)
+- [Jina Embeddings](#jina-embeddings)
 - [Practices](#practices)
   - [Demo Transformer Embedding](#demo-transformer-embedding)
 ---
@@ -387,121 +391,63 @@ Voyage
 
 là một lựa chọn rất đáng cân nhắc.
 
-2. BAAI BGE
-
-BGE = Beijing Academy of Artificial Intelligence General Embedding.
-
+# BAAI BGE (Beijing Academy of Artificial Intelligence General Embedding)
+```bash
 Đây là một trong những dòng embedding open-source nổi tiếng nhất.
-
-Ví dụ:
-
-BAAI/bge-small-en-v1.5
-BAAI/bge-base-en-v1.5
-BAAI/bge-large-en-v1.5
-BAAI/bge-m3
-
-Trong đó BGE-M3 đặc biệt đáng chú ý nếu bạn làm multilingual RAG.
-
-BGE mạnh ở đâu?
-Semantic Search
-      ↓
-Document Retrieval
-      ↓
-RAG
-
-Ví dụ:
-
-Query:
-"Tôi muốn biết cách train YOLO"
-
-Document:
-"Training a YOLO model requires preparing
-the dataset and configuring the training parameters."
-
-Dù không trùng hoàn toàn từ khóa, BGE có thể đưa document này lên cao vì ngữ nghĩa gần nhau.
-
-BGE-M3
-
+```
+**BGE mạnh ở đâu?**
+```bash
+Query: "Tôi muốn biết cách train YOLO"
+Document: "Training a YOLO model requires preparing the dataset and configuring the training parameters."
+-> Dù không trùng hoàn toàn từ khóa, BGE có thể đưa document này lên cao vì ngữ nghĩa gần nhau.
+```
+## BGE-M3
+```bash
 Nếu dữ liệu của bạn có:
-
-Tiếng Việt
-Tiếng Anh
-Code
-PDF
-Documentation
-
+    - Tiếng Việt
+    - Tiếng Anh
+    - Code
+    - PDF
+    - Documentation
 thì BGE-M3 khá hấp dẫn.
-
-3. E5
-
-E5 là dòng embedding của Microsoft.
-
-Một số model nổi tiếng:
-
-intfloat/e5-base-v2
-intfloat/e5-large-v2
-
-intfloat/multilingual-e5-small
-intfloat/multilingual-e5-base
-intfloat/multilingual-e5-large
-
-E5 rất nổi tiếng trong bài toán:
-
-query ↔ passage retrieval
-
-Ví dụ:
-
-query:
-"GPU nào chạy được model 30B?"
-
-passage:
-"Models with approximately 30 billion
-parameters require substantial GPU memory..."
-
-E5 được thiết kế khá rõ cho dạng quan hệ này.
-
-Một đặc điểm cần nhớ
-
-E5 thường sử dụng prefix:
-
-query: ...
-
-cho câu hỏi và:
-
-passage: ...
-
-cho tài liệu.
-
-Ví dụ:
-
-query = "query: GPU nào chạy được model 30B?"
-
-document = "passage: Model 30B yêu cầu..."
-
-Sau đó embedding.
-
-Khi nào chọn E5?
-
-Nếu hệ thống của bạn chủ yếu là:
-
-User Query
-      ↓
-Search Documents
-      ↓
-RAG
-
-thì E5 là lựa chọn rất hợp lý.
-
-4. Jina
-
-Jina AI có nhiều embedding model, đáng chú ý nhất là dòng:
-
-Jina Embeddings
-
+```
+# E5 (là dòng embedding của Microsoft)
+```bash
+E5 rất nổi tiếng trong bài toán: query ↔ passage retrieval
+```
+**Ex**
+```bash
+query: "GPU nào chạy được model 30B?"
+passage: "Models with approximately 30 billion parameters require substantial GPU memory..."
+-> E5 được thiết kế khá rõ cho dạng quan hệ này.
+```
+**Khi nào chọn E5?**
+```bash
+Nếu hệ thống của bạn chủ yếu là: User Query -> Search Documents -> RAG
+    -> thì E5 là lựa chọn rất hợp lý.
+```
+# Jina Embeddings
+```bash
 Điểm nổi bật của Jina là context dài và khả năng xử lý tài liệu dài.
 
-Ví dụ:
 
+Jina phù hợp với:
+    - Technical documentation
+    - PDF
+    - Research papers
+    - Long documents
+    - Multilingual RAG
+
+Nếu Personal Agent của bạn sau này phải đọc:
+    - Documentation
+    - PDF
+    - Source code
+    - Project specification
+    - Meeting notes
+-> thì Jina rất đáng thử.
+```
+**Ex**
+```bash
 PDF
 │
 ├── 100 pages
@@ -509,32 +455,11 @@ PDF
 ├── manuals
 └── research papers
 
-Đây là tình huống Jina khá hấp dẫn.
+Thay vì chỉ xử lý các chunk rất nhỏ: 500 tokens
+    - các model context dài cho phép bạn có nhiều không gian hơn cho document.
+```
 
-Thay vì chỉ xử lý các chunk rất nhỏ:
-
-500 tokens
-
-các model context dài cho phép bạn có nhiều không gian hơn cho document.
-
-Jina phù hợp với:
-Technical documentation
-PDF
-Research papers
-Long documents
-Multilingual RAG
-
-Nếu Personal Agent của bạn sau này phải đọc:
-
-Documentation
-PDF
-Source code
-Project specification
-Meeting notes
-
-thì Jina rất đáng thử.
-
-5. GTE
+1. GTE
 
 GTE là dòng embedding của Alibaba/NLP ecosystem.
 
