@@ -8,14 +8,15 @@
 - [relative](#relative)
 - [flex (Hộp linh hoạt)](#flex-hộp-linh-hoạt)
   - [flex-](#flex-)
-  - [flex-row       // mặc định](#flex-row--------mặc-định)
-  - [flex-col       // dọc](#flex-col--------dọc)
-  - [basis](#basis)
+  - [flex-row](#flex-row)
+  - [flex-col](#flex-col)
+  - [basis (Thiết lập kích thước cho các items)](#basis-thiết-lập-kích-thước-cho-các-items)
   - [gap](#gap)
   - [items-center](#items-center)
   - [justify-start \& justify-center \& justify-end \& justify-between \& justify-around \& justify-evenly](#justify-start--justify-center--justify-end--justify-between--justify-around--justify-evenly)
   - [items-start \& items-end \& items-stretch](#items-start--items-end--items-stretch)
   - [flex-wrap](#flex-wrap)
+  - [(shrink dùng để cho phép một flex item bị co lại khi container không đủ chỗ)](#shrink-dùng-để-cho-phép-một-flex-item-bị-co-lại-khi-container-không-đủ-chỗ)
 - [grid](#grid)
   - [grid-cols](#grid-cols)
   - [col-span](#col-span)
@@ -181,12 +182,9 @@ Cách nhớ đơn giản:
 flex-1="Tao muốn giãn ra để lấy phần không gian còn thừa."
 Số 1 là tỷ lệ chia không gian trong Flexbox. Nếu có nhiều phần tử cùng flex-1, chúng sẽ chia đều phần không gian còn lại theo tỷ lệ 1 : 1 : 1 : ....
 ```
-## flex-row       // mặc định
-## flex-col       // dọc
-## basis
-```bash
-- Thiết lập kích thước cho các items.
-```
+## flex-row    
+## flex-col     
+## basis (Thiết lập kích thước cho các items)
 **Syn**
 ```bash
 basis-<number>
@@ -272,6 +270,28 @@ Căn flex box theo chiều dọc.
 ## flex-wrap
 ```bash
 Tự xuống dòng.
+```
+## (shrink dùng để cho phép một flex item bị co lại khi container không đủ chỗ)
+**Ex**
+```html
+<div className="flex">
+    <div className="w-64 shrink"></div>
+    <div className="w-64"></div>
+</div>
+<!-- Khi tổng kích thước các phần tử lớn hơn container, phần tử có shrink có thể bị thu nhỏ. -->
+```
+**Ex2: shrink-0**
+```html
+<div className="flex">
+    <div className="w-64 shrink-0">Sidebar</div>
+    <div className="flex-1">Content</div>
+</div>
+<!-- shrink-0: → Không cho phần tử bị co lại.-->
+┌──────────────┬───────────────────────────────┐
+│   Sidebar    │           Content             │
+│   256px      │                               │
+└──────────────┴───────────────────────────────┘
+<!-- Bạn muốn sidebar luôn giữ 256px: -->
 ```
 # grid
 ## grid-cols

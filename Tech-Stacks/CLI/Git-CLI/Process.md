@@ -5,10 +5,10 @@
 - [git pull (Lấy dữ liệu \& hợp nhất)](#git-pull-lấy-dữ-liệu--hợp-nhất)
   - [--no-rebase (Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge))](#--no-rebase-bắt-git-dùng-merge-không-dùng-rebase-nghĩa-là-fetch--merge)
   - [git config pull (đây là các cách pull cũ)](#git-config-pull-đây-là-các-cách-pull-cũ)
-- [git push](#git-push)
-  - [-u](#-u)
-  - [-f \& --force](#-f----force)
-  - [–set-upstream](#set-upstream)
+- [Run (Nhóm thực thi)](#run-nhóm-thực-thi)
+  - [git push](#git-push)
+    - [-u | --set-upstream (push lên github đồng thời git nhớ url để lần sau pull push)](#-u----set-upstream-push-lên-github-đồng-thời-git-nhớ-url-để-lần-sau-pull-push)
+    - [-f | --force](#-f----force)
   - [--delete (xóa nhánh trên github)](#--delete-xóa-nhánh-trên-github)
 - [git init (Tạo ra một kho lưu trữ repo)](#git-init-tạo-ra-một-kho-lưu-trữ-repo)
 - [git reset](#git-reset)
@@ -21,13 +21,17 @@
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [git status (Dùng để xem trạng thái repo hiện tại)](#git-status-dùng-để-xem-trạng-thái-repo-hiện-tại)
   - [git log (Hiển thị lịch sử các commit)](#git-log-hiển-thị-lịch-sử-các-commit)
+    - [--oneline (Rút gọn mỗi commit thành 1 dòng)](#--oneline-rút-gọn-mỗi-commit-thành-1-dòng)
+    - [--graph (Vẽ cây branch/merge bằng ASCII)](#--graph-vẽ-cây-branchmerge-bằng-ascii)
+    - [--all (xem mọi branch: local branches, remote-tracking branches)](#--all-xem-mọi-branch-local-branches-remote-tracking-branches)
   - [git diff (So sánh với commit cuối cùng, giữa nội dung cũ và mới. Dùng để xem sự khác biệt)](#git-diff-so-sánh-với-commit-cuối-cùng-giữa-nội-dung-cũ-và-mới-dùng-để-xem-sự-khác-biệt)
 - [git reset](#git-reset-1)
   - [–soft](#soft)
   - [–hard (Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file)](#hard-di-chuyển-con-trỏ-head-về-vị-trí-commit-reset-và-loại-bỏ-tất-cả-sử-thay-đổi-của-file)
 - [Git revert (Quay lại commit trước đây)](#git-revert-quay-lại-commit-trước-đây)
-- [git rm](#git-rm)
-  - [git rm --cached ...](#git-rm---cached-)
+- [Remove (nhóm xóa)](#remove-nhóm-xóa)
+  - [git rm](#git-rm)
+    - [git rm --cached (không cho git theo dõi một file)](#git-rm---cached-không-cho-git-theo-dõi-một-file)
 ---
 # git –-version (Hiển thị thông tin phiên bản của git)
 # Git –-help (hiển thị ra các câu lệnh hướng dẫn)
@@ -78,8 +82,9 @@ git config pull.rebase false # tương đương với git pull --no-rebase
 git config pull.rebase true # git pull --rebase
 git config pull.ff only # git pull --ff-only
 ```
-# git push
-## -u
+# Run (Nhóm thực thi)
+## git push
+### -u | --set-upstream (push lên github đồng thời git nhớ url để lần sau pull push)
 **Ex**
 ```bash
 git push -u origin feature/login
@@ -93,6 +98,7 @@ git push -u origin feature/login
     + Sau đó Git nhớ:
         - pull từ đâu
         - push tới đâu
+        - lần sau chỉ cần chạy git push hoặc git pull
 
 # Lần đầu: git push -u origin feature/login
 # Các lần sau chỉ cần: git push hoặc git pull
@@ -115,12 +121,11 @@ git push -u origin feature/login # rõ ràng nhất.
 # Tư duy Lần đầu: git push -u origin feature/login = "Đẩy branch này lên GitHub và nhớ đây là branch remote của tôi."
 # Sau đó: git pushgit pull là đủ.
 ```
-## -f & --force
+### -f | --force
 **Ex**
 ```bash
 git push -f origin main # force push đè GitHub
 ```
-## –set-upstream 
 ## --delete (xóa nhánh trên github)
 ```bash
 git push origin --delete feature/login # xóa branch trên gitHub
@@ -246,11 +251,14 @@ Nghĩa:
 **Syn**
 ```bash
 git log --oneline --graph --all
-
-- --oneline : Rút gọn mỗi commit thành 1 dòng
-- --graph   : Vẽ cây branch/merge bằng ASCII
-- --all     : xem mọi branch: local branches, remote-tracking branches
 ```
+### --oneline (Rút gọn mỗi commit thành 1 dòng)
+**Ex**
+```bash
+git log --oneline -6
+```
+### --graph (Vẽ cây branch/merge bằng ASCII)
+### --all (xem mọi branch: local branches, remote-tracking branches)
 **Cách thoát khỏi git log**
 ```bash
 Để thoát, chỉ cần nhấn: q # (q = quit)
@@ -286,8 +294,9 @@ chạy: git diff
 ## –soft 
 ## –hard (Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file)
 # Git revert (Quay lại commit trước đây)
-# git rm
-## git rm --cached ...
+# Remove (nhóm xóa)
+## git rm
+### git rm --cached (không cho git theo dõi một file)
 **Ex**
 ```bash
 git rm --cached secret.json

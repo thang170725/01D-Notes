@@ -1,6 +1,8 @@
-# Introduction
+- [Introduction](#introduction)
+- [Installation](#installation)
+---
+# Passlib Introduction (là một thư viện dùng để mã hóa hash và xác thực mật khẩu một cách an toàn trong Python)
 ```bash
-- Thư viện passlib[bcrypt] là một thư viện dùng để mã hóa (hash) và xác thực mật khẩu một cách an toàn trong Python.
 - passlib là thư viện hỗ trợ:
     + Hash mật khẩu
     + Xác thực mật khẩu

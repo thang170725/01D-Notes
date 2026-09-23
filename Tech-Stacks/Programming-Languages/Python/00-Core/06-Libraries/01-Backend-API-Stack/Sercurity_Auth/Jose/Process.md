@@ -1,10 +1,10 @@
 - [Create](#create)
-  - [jwt.encode](#jwtencode)
+  - [jwt.encode() (Dùng để tạo hoặc ký JWT token)](#jwtencode-dùng-để-tạo-hoặc-ký-jwt-token)
 ---
 # Create
-## jwt.encode()
+## jwt.encode() (Dùng để tạo hoặc ký JWT token)
 ```bash
-- Dùng để tạo (ký) JWT token từ:
+Ứng dụng trong:
     + Payload (dữ liệu)
     + Secret key
     + Thuật toán mã hóa
@@ -15,9 +15,10 @@
 ```bash
 jwt.encode(payload, key, algorithm="HS256")
 
-- payload   : dict chứa dữ liệu (user_id, exp…)
-- key       : secret key để ký
-- algorithm : thuật toán ký (thường là "HS256")
+- Input:
+  + payload   : dict chứa dữ liệu (user_id, exp…)
+  + key       : secret key để ký
+  + algorithm : thuật toán ký (thường là "HS256")
 ```
 **Ex**
 ```python

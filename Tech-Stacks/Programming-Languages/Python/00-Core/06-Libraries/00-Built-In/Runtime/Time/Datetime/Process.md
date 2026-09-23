@@ -3,10 +3,11 @@
 - [Create](#create)
   - [datetime()](#datetime)
 - [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
-  - [.now()](#now)
+  - [.now() (Lấy thời gian hiện tại)](#now-lấy-thời-gian-hiện-tại)
   - [.weekday()](#weekday)
 - [date.today()](#datetoday)
-  - [timezone.utc](#timezoneutc)
+- [timezone](#timezone)
+  - [timezone.utc (Lấy thời gian theo timezone)](#timezoneutc-lấy-thời-gian-theo-timezone)
 ---
 # timedelta()
 **Syn**
@@ -62,10 +63,11 @@ print(dt)
 - [Create](#create)
   - [datetime()](#datetime)
 - [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
-  - [.now()](#now)
+  - [.now() (Lấy thời gian hiện tại)](#now-lấy-thời-gian-hiện-tại)
   - [.weekday()](#weekday)
 - [date.today()](#datetoday)
-  - [timezone.utc](#timezoneutc)
+- [timezone](#timezone)
+  - [timezone.utc (Lấy thời gian theo timezone)](#timezoneutc-lấy-thời-gian-theo-timezone)
 ---
 # Create
 ## datetime() 
@@ -78,10 +80,7 @@ dt = datetime(2024, 12, 25, 10, 30, 0)
 print(dt)
 ```
 # Display (cung cấp thông tin)
-## .now()
-```bash
-Lấy thời gian hiện tại.
-```
+## .now() (Lấy thời gian hiện tại)
 **Ex**
 ```python
 from datetime import datetime
@@ -108,10 +107,8 @@ Chỉ lấy ngày
 today = date.today()
 print(today) # 2026-01-12
 ```
-## timezone.utc
-```bash
-Lấy thời gian theo timezone
-```
+# timezone
+## timezone.utc (Lấy thời gian theo timezone)
 ```python
 from datetime import datetime, timezone
 

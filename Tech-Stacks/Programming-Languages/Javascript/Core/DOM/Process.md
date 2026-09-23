@@ -83,7 +83,7 @@
   - [Waiting](#waiting)
   - [wheel](#wheel)
   - [Value](#value)
-  - [.preventDefault()](#preventdefault)
+  - [.preventDefault() (Mặc định trình duyệt reload trang JS dùng preventDefault để chặn reload và tự xử lý logic)](#preventdefault-mặc-định-trình-duyệt-reload-trang-js-dùng-preventdefault-để-chặn-reload-và-tự-xử-lý-logic)
   - [onSubmit](#onsubmit)
   - [target](#target)
   - [.value](#value-1)
@@ -624,14 +624,10 @@ function Alert(){
 function Display(value){
      alert(value);
 ```
-## .preventDefault()
+## .preventDefault() (Mặc định trình duyệt reload trang JS dùng preventDefault để chặn reload và tự xử lý logic)
+**Syn**
 ```bash
-- Mặc định: trình duyệt reload trang
-- JS dùng event.preventDefault() để chặn reload và tự xử lý logic
-```
-## onSubmit
-```bash
-- submit là event của <form>. Khi bấm nút submit hoặc Enter → form emit event submit
+e.preventDefault()
 ```
 **Ex1**
 ```js
@@ -646,6 +642,10 @@ form.addEventListener('submit', async (event) => {
 })
 
 // Đây là cách chuẩn – hiện đại – production
+```
+## onSubmit
+```bash
+- submit là event của <form>. Khi bấm nút submit hoặc Enter → form emit event submit
 ```
 **Ex3: Lấy dữ liệu từ form khi onSubmit**
 ```bash

@@ -1,5 +1,6 @@
 - [Try Catch Finally](#try-catch-finally)
   - [throw new Error()](#throw-new-error)
+    - [.message](#message)
 ---
 # Try Catch Finally
 ## throw new Error() 
@@ -7,6 +8,7 @@
 - DỪNG ngay lập tức code trong try
 - Tạo ra một object Error và chuyển sang catch
 ```
+### .message
 **Ex**
 ```js
 // Khi bạn viết:

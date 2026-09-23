@@ -12,7 +12,8 @@
     - [.items() (Dùng để lấy ra các cặp key, value)](#items-dùng-để-lấy-ra-các-cặp-key-value)
   - [Process (nhóm xử lý)](#process-nhóm-xử-lý)
     - [.copy()](#copy)
-    - [\[\] \& .update()](#--update)
+    - [\[\] (Để thay đổi values của keys hoặc thêm keys-values mới)](#-để-thay-đổi-values-của-keys-hoặc-thêm-keys-values-mới)
+    - [.update() (để thay đổi values của keys)](#update-để-thay-đổi-values-của-keys)
     - [\*\* (unpack dict)](#-unpack-dict)
 - [Set (không được sắp xếp theo thứ tự, không thể thay đổi và không cho phép các giá trị trùng lặp)](#set-không-được-sắp-xếp-theo-thứ-tự-không-thể-thay-đổi-và-không-cho-phép-các-giá-trị-trùng-lặp)
   - [.clear() (Để xóa toàn bộ set)](#clear-để-xóa-toàn-bộ-set)
@@ -213,11 +214,8 @@ mydict = thisdict.copy()
 
 print(mydict) # {'brand': 'Ford', 'model': 'Mustang', 'year': 1964}
 ```
-### [] & .update()
-```bash
-- []        : Để thay đổi values của keys hoặc thêm keys-values mới.
-- update    : để thay đổi values của keys.
-```
+### [] (Để thay đổi values của keys hoặc thêm keys-values mới)
+### .update() (để thay đổi values của keys)
 **Ex1: update**
 ```python
 di = {
