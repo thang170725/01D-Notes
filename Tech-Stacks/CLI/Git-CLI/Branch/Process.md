@@ -17,18 +17,16 @@
 - [git fetch (Lấy các thông tin về commit mới từ central, kiểm tra sự thay đổi)](#git-fetch-lấy-các-thông-tin-về-commit-mới-từ-central-kiểm-tra-sự-thay-đổi)
   - [--prune](#--prune)
 - [git rebase (Tái cơ sở cho một nhánh)](#git-rebase-tái-cơ-sở-cho-một-nhánh)
-- [print("Hello from main")](#printhello-from-main)
-- [sửa file conflict](#sửa-file-conflict)
-- [test code](#test-code)
-- [1. đang ở feature branch](#1-đang-ở-feature-branch)
-- [2. lấy main mới nhất](#2-lấy-main-mới-nhất)
-- [3. đưa feature lên nền main mới nhất](#3-đưa-feature-lên-nền-main-mới-nhất)
-- [4. nếu conflict:](#4-nếu-conflict)
-- [sửa file](#sửa-file)
-- [5. nếu muốn hủy](#5-nếu-muốn-hủy)
-- [6. sau khi thành công](#6-sau-khi-thành-công)
+  - [--abort](#--abort)
+  - [-i](#-i)
   - [–continue](#continue)
   - [–skip](#skip)
+- [pick (giữ commit)](#pick-giữ-commit)
+- [reword (đổi commit message)](#reword-đổi-commit-message)
+- [edit (dừng lại để chỉnh commit)](#edit-dừng-lại-để-chỉnh-commit)
+- [squash (gộp commit vào commit trước)](#squash-gộp-commit-vào-commit-trước)
+- [fixup (gộp commit, bỏ message của nó)](#fixup-gộp-commit-bỏ-message-của-nó)
+- [drop (xóa commit)](#drop-xóa-commit)
 - [git merge (gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union)](#git-merge-gộp-lịch-sử-commit-tức-áp-dụng-các-thay-đổi-changesdiffs-không-phải-cộng-file-kiểu-union)
 - [`cherry-pick`, `interactive rebase`  dùng như thế nào](#cherry-pick-interactive-rebase--dùng-như-thế-nào)
 ---
@@ -135,437 +133,169 @@ git fetch origin # lấy thông tin / commit mới từ remote (origin) về, nh
 git fetch --prune # --prune dọn các remote-tracking branch đã bị xóa
 ```
 # git rebase (Tái cơ sở cho một nhánh)
-git rebase là một trong những phần quan trọng nhất của Git. Nếu hiểu đúng bản chất, bạn sẽ thấy nó khá đơn giản.
-
-1. Rebase dùng để làm gì?
-
+**Ex**
+```bash
 Giả sử bạn có:
-
-A---B---C   main
-     \
-      D---E   feature
+  A---B---C   main
+       \
+        D---E   feature
 
 Bạn đang làm ở branch feature, trong khi main đã có thêm commit C.
 
 Bạn muốn đưa các thay đổi của main vào feature.
 
 Có 2 cách phổ biến:
+  Cách 1: merge
+    1. git checkout feature
+    2. git merge main
+    Kết quả:
+      A---B---C------M   feature
+           \        /
+            D------E
+    -> Có thêm một merge commit M.
 
-Cách 1: merge
-git checkout feature
-git merge main
-
-Kết quả:
-
-A---B---C------M   feature
-     \        /
-      D------E
-
-Có thêm một merge commit M.
-
-Cách 2: rebase
-git checkout feature
-git rebase main
-
-Git sẽ "bê" các commit D, E lên trên C:
-
-A---B---C---D'---E'   feature
-
-Lưu ý: D', E' không phải commit cũ, mà là các commit mới có nội dung tương đương.
-
-2. Mental model dễ nhớ
-
-Hãy nghĩ:
-
-merge = nối hai lịch sử lại với nhau
-
-rebase = đặt lại nền của branch
-
-Ví dụ ban đầu:
-
-main:     A---B---C
-               \
-feature:        D---E
-
-Bạn nói:
-
-"Feature của tôi được xây dựng từ B, nhưng giờ main đã lên C. Tôi muốn feature của tôi như thể nó được phát triển từ C ngay từ đầu."
-
-Thì:
-
-git rebase main
-
-Kết quả:
-
-main:     A---B---C
-                  \
-feature:           D'---E'
-3. Quy trình rebase thường dùng
-
-Ví dụ bạn đang code trên:
-
-feature/login
-
-và muốn cập nhật nó theo main.
+  Cách 2: rebase
+    1. git checkout feature
+    2. git rebase main
+    
+    Git sẽ "bê" các commit D, E lên trên C:
+      A---B---C---D'---E'   feature
+      Lưu ý: D', E' không phải commit cũ, mà là các commit mới có nội dung tương đương.
+```
+**Quy trình rebase thường dùng**
+```bash
+Ví dụ bạn đang code trên: feature/login và muốn cập nhật nó theo main.
 
 Bước 1: kiểm tra branch
-git branch
-
-Ví dụ:
-
-* feature/login
-  main
-
-Dấu * cho biết bạn đang ở feature/login.
+  git branch
+  # * feature/login - Dấu * cho biết bạn đang ở feature/login.
+  #   main
 
 Bước 2: lấy thông tin mới nhất từ remote
-git fetch origin
-
-Lệnh này cập nhật thông tin về remote nhưng không tự merge code vào branch của bạn.
+  git fetch origin # Lệnh này cập nhật thông tin về remote nhưng không tự merge code vào branch của bạn.
 
 Bước 3: rebase lên main mới nhất
-git rebase origin/main
+  git rebase origin/main # Đang đứng trên feature/login, lấy origin/main làm nền mới, rồi đặt các commit của feature/login lên trên nền đó.
 
-Git sẽ lấy các commit của bạn rồi đặt chúng lên origin/main.
+  Ví dụ
+    Ban đầu:
+      main:          A──B──C
+                          \
+      feature/login:       D──E
 
-Ví dụ:
+      Trong đó:
+      - A B C: code trên main
+      - D E: code bạn đang làm trên feature/login
+      
+    Sau khi người khác cập nhật main:
+      main:          A──B──C──F──G
+                          \
+      feature/login:       D──E
 
-Trước:
+    Bạn đang đứng ở: git branch
+      * feature/login
+        main
 
-origin/main: A---B---C
+    Sau:
+      git fetch origin
+      git rebase origin/main
 
-feature:          \---D---E
+    Git sẽ làm thành:
+      main:          A──B──C──F──G
+                               \
+      feature/login:            D'──E'
 
-Sau:
+    Tức là:
+      feature/login = code mới nhất của main + code của bạn.
+      Còn nếu muốn gộp feature/login vào main thì phải làm ngược lại
+        Ví dụ:
+          git switch main
+          git merge feature/login
 
-origin/main: A---B---C
-                    \
-feature:             D'---E'
-4. Nếu xảy ra conflict thì sao?
+          Khi đó mới là:
+            main:          A──B──C──F──G──D──E
 
-Đây là phần quan trọng nhất.
+          Tức là đưa code của feature/login vào main.
+          
+          Vì vậy 2 câu lệnh này hoàn toàn khác nhau
+          
+          Đang ở feature:
+            git rebase origin/main → main làm nền cho feature.
+              
+              main ────────────────┐
+                                   ↓
+              feature ───────────── code của feature
 
-Ví dụ:
+          Đang ở main: git merge feature/login → đưa feature vào main.
+            feature ─────────────┐
+                                 ↓
+            main ─────────────── code của feature
 
-git rebase origin/main
+          Và có một chi tiết quan trọng: origin/main là main trên remote, không nhất thiết là branch main local của bạn.
 
-Git báo:
+          Vì vậy chuỗi:
+            git switch feature/login
+            git fetch origin
+            git rebase origin/main
 
-CONFLICT (content): Merge conflict in app.py
+          rất hợp lý khi mục đích là:
+            "Tôi đang làm feature, hãy cập nhật feature của tôi dựa trên main mới nhất, nhưng đừng đưa feature của tôi vào main."
 
-Git dừng lại.
+          Nếu bạn muốn, mình có thể giải thích tiếp `merge` vs `rebase` bằng một sơ đồ commit rất trực quan, vì đây là chỗ người mới dùng Git rất dễ nhầm.
+```
+**Nếu xảy ra conflict thì sao?**
+```bash
+Nếu: git rebase origin/main
+  Git báo: CONFLICT (content): Merge conflict in app.py -> Git dừng lại.
 
 Bạn mở app.py:
-
 <<<<<<< HEAD
 print("Hello from main")
 =======
 print("Hello from feature")
 >>>>>>> abc123
-
-Bạn tự quyết định code đúng là gì.
-
-Ví dụ sửa thành:
-
-print("Hello from feature")
-
-Sau đó:
-
-git add app.py
-
-Rồi:
-
-git rebase --continue
-5. Nếu còn conflict
-
-Git có thể tiếp tục báo conflict.
-
-Bạn cứ lặp:
-
-fix conflict
-    ↓
-git add <file>
-    ↓
-git rebase --continue
-    ↓
-fix conflict tiếp nếu có
-
-Cho đến khi:
-
-Successfully rebased and updated refs/heads/feature/login.
-6. Nếu thấy rebase quá rối thì hủy
-
-Bạn có thể quay lại trạng thái trước khi rebase:
-
-git rebase --abort
-
-Ví dụ:
-
-feature trước rebase
-        ↓
-git rebase origin/main
-        ↓
-CONFLICT
-        ↓
-không muốn xử lý nữa
-        ↓
-git rebase --abort
-        ↓
-quay lại trạng thái trước rebase
-
-Đây là một lệnh rất đáng nhớ.
-
-7. Một ví dụ thực tế đầy đủ
-
-Giả sử bạn có:
-
-main
- ├── A
- ├── B
- └── C
-
-feature
- ├── D
- └── E
-
-Bạn đang ở feature.
-
-Trước tiên:
-
-git status
-
-Nếu có code chưa commit thì nên xử lý trước.
-
-Sau đó:
-
-git fetch origin
-git rebase origin/main
-
-Nếu không conflict:
-
-Done
-
-Nếu conflict:
-
-# sửa file conflict
-
-git add .
-git rebase --continue
-
-Nếu tiếp tục conflict thì lại sửa → git add → git rebase --continue.
-
-Nếu muốn bỏ:
-
-git rebase --abort
-8. Một điểm rất quan trọng: rebase làm thay đổi commit history
-
-Đây là lý do phải cẩn thận.
-
-Ví dụ trước:
-
-A---B---D---E
-
-Sau rebase:
-
-A---B---C---D'---E'
-
-D' và E' có commit hash mới.
-
-Vì vậy:
-
-Không nên tùy tiện rebase một branch mà nhiều người khác đang cùng làm.
-
-Ví dụ branch:
-
-feature/thang-login
-
-chỉ mình bạn làm → rebase thường khá an toàn.
-
-Nhưng branch:
-
-main
-develop
-team-shared-feature
-
-nhiều người cùng dựa vào → cần cực kỳ cẩn thận.
-
-9. Rebase rồi push thì sao?
-
-Đây là chỗ người mới hay gặp lỗi.
-
-Bạn đã push:
-
-remote feature:
-
-A---B---D---E
-
-Sau đó local rebase:
-
-A---B---C---D'---E'
-
-Nếu chạy:
-
-git push
-
-có thể Git từ chối:
-
-rejected
-non-fast-forward
-
-Vì lịch sử remote và local đã khác nhau.
-
-Trong trường hợp branch chỉ mình bạn sử dụng, thường dùng:
-
-git push --force-with-lease
-
-Nên ưu tiên:
-
-git push --force-with-lease
-
-thay vì:
-
-git push --force
-
---force-with-lease an toàn hơn vì Git sẽ kiểm tra xem remote có bị người khác cập nhật ngoài dự kiến hay không.
-
-10. git rebase -i là gì?
-
-Ngoài việc cập nhật branch, rebase còn có một tính năng cực kỳ hay:
-
-git rebase -i HEAD~3
-
--i = interactive.
-
-Ví dụ bạn có:
-
-A---B---C---D
-
-Bạn muốn chỉnh 3 commit gần nhất:
+-> Bạn tự quyết định code đúng là gì.
+
+Sau đó: git add app.py
+
+Rồi: git rebase --continue
+```
+## --abort
+**Ex**
+```bash
+feature trước rebase -> git rebase origin/main -> CONFLICT -> không muốn xử lý nữa -> git rebase --abort -> quay lại trạng thái trước rebase
+```
+## -i
+**Ex**
+```bash
+git rebase -i HEAD~3 # -i = interactive.
+```
+**Ex2**
+```bash
+A---B---C---D -> Bạn muốn chỉnh 3 commit gần nhất:
 
 git rebase -i HEAD~3
 
 Git mở:
-
-pick abc123 Add login
-pick def456 Fix login
-pick ghi789 Fix login again
+  pick abc123 Add login
+  pick def456 Fix login
+  pick ghi789 Fix login again
 
 Bạn có thể đổi:
+  pick abc123 Add login
+  squash def456 Fix login
+  squash ghi789 Fix login again
 
-pick abc123 Add login
-squash def456 Fix login
-squash ghi789 Fix login again
-
-Kết quả:
-
-A---B---C'
-
-Ba commit được gộp thành một commit.
-
-11. Các keyword quan trọng của interactive rebase
-pick    = giữ commit
-reword  = đổi commit message
-edit    = dừng lại để chỉnh commit
-squash  = gộp commit vào commit trước
-fixup   = gộp commit, bỏ message của nó
-drop    = xóa commit
-
-Ví dụ bạn có:
-
-A
-B Add login
-C Fix typo
-D Fix another typo
-E Add test
-
-Bạn có thể biến thành:
-
-A
-B Add login
-C Add test
-
-bằng cách squash/drop các commit không cần thiết.
-
-12. Merge vs Rebase
-	merge	rebase
-Giữ nguyên history	✅	❌
-Tạo merge commit	Có thể	❌
-History sạch	⭐⭐⭐	⭐⭐⭐⭐⭐
-Thay đổi commit hash	❌	✅
-An toàn với shared branch	✅	Cẩn thận
-Thường dùng trên feature branch	✅	✅
-13. Workflow mà bạn sẽ gặp rất nhiều
-
-Giả sử team có:
-
-main
-
-Bạn tạo:
-
-feature/login
-
-Trong lúc bạn code, người khác merge code vào main.
-
-Bạn muốn cập nhật feature:
-
-git fetch origin
-git rebase origin/main
-
-Sau đó:
-
-# test code
-
-git push --force-with-lease
-
-Cuối cùng tạo PR:
-
-main
-  │
-  ├── A
-  ├── B
-  ├── C
-  │
-  └── feature/login
-          D'
-          E'
-
-History rất sạch.
-
-14. Một workflow thực tế nên nhớ
-
-Nếu bạn đang làm feature branch cá nhân:
-
-# 1. đang ở feature branch
-git status
-
-# 2. lấy main mới nhất
-git fetch origin
-
-# 3. đưa feature lên nền main mới nhất
-git rebase origin/main
-
-# 4. nếu conflict:
-# sửa file
-git add .
-git rebase --continue
-
-# 5. nếu muốn hủy
-git rebase --abort
-
-# 6. sau khi thành công
-git push --force-with-lease
-Chỉ cần nhớ 4 câu này:
-git fetch
-    ↓
-git rebase origin/main
-    ↓
-fix conflict → git add → git rebase --continue
-    ↓
-git push --force-with-lease
-
-Điểm quan trọng nhất: rebase không phải là "merge nhưng khác cú pháp". Nó viết lại lịch sử commit bằng cách tạo lại các commit của branch trên một base mới. Vì vậy nó rất hữu ích để giữ history sạch, nhưng phải cẩn thận với branch đã được người khác sử dụng.
+Kết quả: A---B---C'
+```
 ## –continue
 ## –skip
+# pick (giữ commit)
+# reword (đổi commit message)
+# edit (dừng lại để chỉnh commit)
+# squash (gộp commit vào commit trước)
+# fixup (gộp commit, bỏ message của nó)
+# drop (xóa commit)
 # git merge (gộp lịch sử commit, tức áp dụng các thay đổi (changes/diffs), không phải cộng file kiểu union)
 ```bash
 "Fast-forward" nghĩa là gì?
