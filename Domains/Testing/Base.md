@@ -1,89 +1,53 @@
-**Testing:** Viết **Unit Test** (JUnit cho Spring Boot, PyTest cho Python) và Integration Test . tôi muốn hỏi là nếu muốn test tự động thì thông thường dùng gì
+- [Automation Testing](#automation-testing)
+---
+# Automation Testing
+```bash
+Test tự động trong phát triển phần mềm, thì thông thường không phải chỉ dùng một tool, mà là test framework + tool chạy test tự động + CI/CD.
 
-Đúng. Nếu bạn nói “test tự động” trong phát triển phần mềm, thì thông thường không phải chỉ dùng một tool, mà là test framework + tool chạy test tự động + CI/CD.
-
-1. Cơ bản nhất: Test Framework
-
-Tùy ngôn ngữ:
-
-Công nghệ	Unit Test thường dùng	Integration Test
-Java / Spring Boot	JUnit 5	JUnit + Spring Boot Test
-Python	PyTest	PyTest
-JavaScript / TypeScript	Jest / Vitest	Jest / Vitest
-C#	xUnit / NUnit	xUnit / NUnit
-Go	testing	testing
-
-Ví dụ Python:
-
-def add(a, b):
-    return a + b
-
-Test:
-
-def test_add():
-    assert add(2, 3) == 5
-
-Chạy:
-
-pytest
-
-Đây đã là automated test rồi.
-
-Bạn không cần tự ngồi kiểm tra:
-
-2 + 3 = 5 ?
-
-Mỗi lần code thay đổi, chạy pytest, framework tự kiểm tra.
+1. Cơ bản nhất: Test Framework Tùy ngôn ngữ:
+    Công nghệ	                Unit Test thường dùng	        Integration Test
+    Java / Spring Boot	        JUnit 5	JUnit + Spring Boot     Test
+    Python	                    PyTest	                        PyTest
+    JavaScript / TypeScript	    Jest / Vitest	                Jest / Vitest
+    C#	                        xUnit / NUnit	                xUnit / NUnit
+    Go	                        testing	                        testing
 
 2. Nhưng "tự động" ở mức cao hơn là CI/CD
+    Đây mới là thứ thường được nói đến khi team nói: "Mỗi lần push code thì tự động chạy test."
 
-Đây mới là thứ thường được nói đến khi team nói:
+    Ví dụ dùng:
+        - GitHub Actions
+        - GitLab CI/CD
+        - Jenkins
+        - Azure DevOps
+        - CircleCI
 
-"Mỗi lần push code thì tự động chạy test."
+    Ví dụ GitHub Actions:
+        Developer
+           │
+           │ git push
+           ▼
+        GitHub
+           │
+           ▼
+        GitHub Actions
+           │
+           ├── install dependencies
+           │
+           ├── run unit tests
+           │
+           ├── run integration tests
+           │
+           ├── build application
+           │
+           └── deploy nếu mọi thứ OK
 
-Ví dụ dùng:
-
-GitHub Actions
-GitLab CI/CD
-Jenkins
-Azure DevOps
-CircleCI
-
-Ví dụ GitHub Actions:
-
-Developer
-   │
-   │ git push
-   ▼
-GitHub
-   │
-   ▼
-GitHub Actions
-   │
-   ├── install dependencies
-   │
-   ├── run unit tests
-   │
-   ├── run integration tests
-   │
-   ├── build application
-   │
-   └── deploy nếu mọi thứ OK
-
-Ví dụ bạn push:
-
-git push origin feature/login
-
-GitHub Actions tự chạy:
-
-pytest
-
-Nếu:
-
-100 tests
-100 passed
-
-→ CI pass.
+    Ví dụ bạn push: git push origin feature/login
+        GitHub Actions tự chạy: pytest
+            Nếu:
+                - 100 tests
+                - 100 passed
+            → CI pass.
 
 Nếu:
 
@@ -388,3 +352,4 @@ thì họ thường đang kỳ vọng bạn biết viết test, còn nếu ghi t
 CI/CD / Automated Testing
 
 thì nên biết cách đưa test vào GitHub Actions / GitLab CI / Jenkins để mỗi lần push hoặc tạo PR, test tự chạy.
+```

@@ -23,17 +23,7 @@ Airflow không sinh ra để xử lý hàng triệu dòng dữ liệu.
 ```
 **Ex: Ví dụ pipeline AI của bạn:**
 ```bash
-Raw JSON
-   ↓
-Validate data
-   ↓
-Transform data
-   ↓
-Create JSON
-   ↓
-Create table
-   ↓
-Train model
+Raw JSON -> Validate data -> Transform data -> Create JSON -> Create table -> Train model
 
 Airflow có thể quản lý toàn bộ quy trình này:
     Task A: Load JSON

@@ -1,71 +1,11 @@
-trong android studio có 3 cách làm mobile app là. 1 kéo thả, 2 - code bằng java. 3 - code bằng xml đúng không
+- [Ask](#ask)
+  - [Trong android studio có 3 cách làm mobile app là kéo thả, code bằng java, code bằng xml đúng không](#trong-android-studio-có-3-cách-làm-mobile-app-là-kéo-thả-code-bằng-java-code-bằng-xml-đúng-không)
+---
 
-Gần đúng, nhưng có một chỗ bạn đang nhầm: XML không phải là ngôn ngữ lập trình thay thế Java.
-
-Trong Android Studio, nếu nói về cách xây dựng giao diện/app truyền thống thì có thể hiểu như sau:
-
-1. Kéo thả giao diện (Visual/Layout Editor)
-
-Bạn dùng Design view để kéo các thành phần như:
-
-Button
-TextView
-ImageView
-EditText
-
-Android Studio sẽ tạo/chỉnh sửa XML layout phía sau.
-
-Kéo Button vào màn hình
-        ↓
-Android Studio
-        ↓
-XML được tạo/chỉnh sửa
-2. Code Java/Kotlin
-
-Đây là phần logic của ứng dụng.
-
-Ví dụ Java:
-
-Button button = findViewById(R.id.button);
-
-button.setOnClickListener(v -> {
-    // xử lý khi click
-});
-
-Hoặc hiện nay Android thường dùng Kotlin:
-
-button.setOnClickListener {
-    // xử lý khi click
-}
-3. Code XML
-
-XML chủ yếu dùng để mô tả giao diện trong cách làm Android Views truyền thống.
-
-Ví dụ:
-
-<Button
-    android:id="@+id/button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Click me" />
-
-Sau đó Java/Kotlin xử lý logic:
-
-XML
- ↓
-Giao diện
-
-Java/Kotlin
- ↓
-Logic + xử lý sự kiện
-Vì vậy không nên gọi là "3 cách"
-
-Chính xác hơn là:
-
-Cách/thành phần	Dùng để làm gì
-Kéo thả	Cách trực quan để tạo giao diện
-XML	Khai báo giao diện
-Java/Kotlin	Viết logic ứng dụng
+# Ask
+## Trong android studio có 3 cách làm mobile app là kéo thả, code bằng java, code bằng xml đúng không
+```bash
+Không
 
 Và Android hiện nay còn có Jetpack Compose, cho phép viết UI trực tiếp bằng Kotlin, không cần XML:
 

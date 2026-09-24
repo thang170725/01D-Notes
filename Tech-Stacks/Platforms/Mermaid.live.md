@@ -8,7 +8,15 @@
 - [Vẽ hình thoi](#vẽ-hình-thoi)
 - [Vẽ hình tròn](#vẽ-hình-tròn)
 - [subgraph (gom nhóm các bước xử lý lâij thành từng khung riêng biệt có tiêu đề)](#subgraph-gom-nhóm-các-bước-xử-lý-lâij-thành-từng-khung-riêng-biệt-có-tiêu-đề)
+- [Vẽ mũi tên nhọn](#vẽ-mũi-tên-nhọn)
+- [Vẽ đường thẳng](#vẽ-đường-thẳng)
+- [Vẽ nét đứt](#vẽ-nét-đứt)
+- [Vẽ nét đứt có mũi tên](#vẽ-nét-đứt-có-mũi-tên)
+- [Vẽ mũi tên nét đậm](#vẽ-mũi-tên-nét-đậm)
+- [Thêm nhãn lên đường nối](#thêm-nhãn-lên-đường-nối)
+- [Tùy chỉnh Màu sắc và Giao diện](#tùy-chỉnh-màu-sắc-và-giao-diện)
 - [Practices](#practices)
+  - [Demo một flowchart đơn giản](#demo-một-flowchart-đơn-giản)
 ---
 # Mermaid Live Introduction (vẽ sơ đồ bằng code, rất phổ biến trong lập trình và tài liệu kỹ thuật)
 **Trang web**
@@ -95,72 +103,48 @@ subgraph PREP["① QUERY PREPARATION"]
     REWRITE["rewrite<br/>Rewrite User Query"]
 end
 ```
-subgraph ID["Tên hiển thị"]: Bắt đầu một nhóm.
-
-Chèn các Node thuộc nhóm đó vào giữa.
-
-end: Kết thúc nhóm.
-
-4. Tạo Liên kết (Arrows / Edges) & Nhãn trên đường nối
-Các kiểu đường nối:
+# Vẽ mũi tên nhọn
+```bash
 A --> B: Mũi tên nhọn (Thường dùng nhất).
-
+```
+# Vẽ đường thẳng
+```bash
 A --- B: Đường thẳng không mũi tên.
-
+```
+# Vẽ nét đứt
+```bash
 A -.- B: Đường nét đứt.
-
+```
+# Vẽ nét đứt có mũi tên
+```bash
 A -.-> B: Đường nét đứt có mũi tên.
-
+```
+# Vẽ mũi tên nét đậm
+```bash
 A ==> B: Đường mũi tên nét đậm.
-
-Thêm nhãn (Text) lên đường nối:
-Có 2 cách viết phổ biến:
-
-Cách 1 (Dùng thanh đứng |text| - Giống trong code của bạn):
-
-Đoạn mã
+```
+# Thêm nhãn lên đường nối
+**Syn**
+```bash
 AGENT -->|CALL_TOOL| EXECUTE
-Cách 2 (Viết trực tiếp -- text -->):
-
-Đoạn mã
 AGENT -- CALL_TOOL --> EXECUTE
-5. Tùy chỉnh Màu sắc & Giao diện (Styling with Classes)
-Để sơ đồ nhìn chuyên nghiệp hơn, Mermaid cho phép bạn định nghĩa các bộ màu (Class) và gán cho từng Node.
-
-Bước 1: Định nghĩa bộ màu (classDef)
-Cú pháp: classDef tên_class property:value,property:value...
-
-Đoạn mã
+```
+# Tùy chỉnh Màu sắc và Giao diện
+**Syn**
+```bash
+classDef tên_class property:value,property:value...
+```
+**Ex**
+```bash
 classDef startEnd fill:#1f2937,color:#fff,stroke:#111827,stroke-width:2px
-fill:#1f2937: Màu nền của Node.
-
-color:#fff: Màu chữ.
-
-stroke:#111827: Màu viền.
-
-stroke-width:2px: Độ dày viền.
-
-Bước 2: Gán bộ màu cho các Node (class)
-Cú pháp: class danh_sách_node tên_class
-
-Đoạn mã
-class START,END startEnd
-class EXECUTE,RESULT_EVAL tool
-(Gán class startEnd cho cả 2 node START và END cùng một lúc).
-
-🛠️ Bài tập thực hành nhỏ cho bạn
-Dựa trên các cú pháp trên, bạn hãy thử tự gõ lại một đoạn Mermaid ngắn về Luồng làm sạch OCR đơn giản:
-
-Có START (Oval) → đọc file JSON.
-
-Đưa vào subgraph tên là "Processing".
-
-Rẽ nhánh: Nếu file lỗi → Báo lỗi; Nếu đúng → Save vào DB.
-
-END (Oval).
-
-Bạn có muốn gõ thử đoạn mã đó ra đây để tôi kiểm tra cú pháp giúp bạn không?
+# fill:#1f2937: Màu nền của Node.
+# color:#fff: Màu chữ.
+# stroke:#111827: Màu viền.
+# stroke-width:2px: Độ dày viền.
+```
 # Practices
+## Demo một flowchart đơn giản
+```bash
 flowchart TD
     START([USER])
 
@@ -207,3 +191,4 @@ flowchart TD
     class RETRIEVE rag
     class EXECUTE,RESULT_EVAL tool
     class DECISION decision
+```

@@ -1,7 +1,8 @@
-- [Create](#create)
+- [jwt](#jwt)
   - [jwt.encode() (Dùng để tạo hoặc ký JWT token)](#jwtencode-dùng-để-tạo-hoặc-ký-jwt-token)
+  - [.decode](#decode)
 ---
-# Create
+# jwt
 ## jwt.encode() (Dùng để tạo hoặc ký JWT token)
 ```bash
 Ứng dụng trong:
@@ -39,4 +40,21 @@ data = {
 token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
 print(token) # eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwiZXhwIjoxNzcwOTkxNDE2fQ.ynFDrGXqpffkG3fucbG6pIhxy-lfMxWuaDoNzHaFlWU
+```
+## .decode
+**Ex**
+```python
+from jose import jwt
+
+payload = jwt.decode(
+    token,
+    "my-secret-key",
+    algorithms=["HS256"]
+)
+
+print(payload)
+# {
+#     "sub": "user123",
+#     "role": "admin"
+# }
 ```

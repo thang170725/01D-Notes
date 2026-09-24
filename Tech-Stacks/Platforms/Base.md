@@ -8,4 +8,4 @@ Tools/                                                  ```mình dùng thư mụ
 ├── [LocalStack](LocalStack.md)                         ```mình dùng thư mục này để thiết kế kiến trúc hệ thống```   
 ├── [Mermaid.live](Mermaid.live.md)                     ```mình dùng thư mục này để xem tất cả kiến thức về lĩnh vục trong CNTT```   
 └── [Ngrok](Ngrok.md)                                   ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
-└── [Toml](Toml.md)                                   ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   
+└── [Toml](Toml.md)                                     ```mình dùng thư mục này để xem tất cả thuật ngữ chuyên ngành IT```   

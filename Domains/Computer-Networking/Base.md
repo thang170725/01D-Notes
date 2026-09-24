@@ -1,5 +1,8 @@
 + [<<Back](../Base.md)
-- [Paseto](#paseto)
+- [Paseto (Platform-Agnostic Security Tokens là một chuẩn token dùng để xác thực và truyền thông tin có tính bảo mật giữa client và server, tương tự mục đích của JWT)](#paseto-platform-agnostic-security-tokens-là-một-chuẩn-token-dùng-để-xác-thực-và-truyền-thông-tin-có-tính-bảo-mật-giữa-client-và-server-tương-tự-mục-đích-của-jwt)
+- [Ask](#ask)
+  - [PASETO khác JWT ở đâu?](#paseto-khác-jwt-ở-đâu)
+  - [Tại sao người ta dùng PASETO?](#tại-sao-người-ta-dùng-paseto)
 - [Domain](#domain)
 - [Chuẩn giao tiếp](#chuẩn-giao-tiếp)
   - [ASGI (Asynchronous Server Gateway Interface là chuẩn giao tiếp giữa Web server Và ứng dụng Python)](#asgi-asynchronous-server-gateway-interface-là-chuẩn-giao-tiếp-giữa-web-server-và-ứng-dụng-python)
@@ -9,258 +12,130 @@
 - [SSE (cơ chế để server chủ động gửi dữ liệu liên tục về client qua một HTTP connection đang mở)](#sse-cơ-chế-để-server-chủ-động-gửi-dữ-liệu-liên-tục-về-client-qua-một-http-connection-đang-mở)
 - [WebSocket (Các để Frontend và backend giữ kết nối liên tục, từ đó hai bên có thể gửi dữ liệu cho nhau ngày lập tức)](#websocket-các-để-frontend-và-backend-giữ-kết-nối-liên-tục-từ-đó-hai-bên-có-thể-gửi-dữ-liệu-cho-nhau-ngày-lập-tức)
 ---
-# Paseto
-PASETO là viết tắt của Platform-Agnostic Security Tokens — một chuẩn token dùng để xác thực và truyền thông tin có tính bảo mật giữa client và server, tương tự mục đích của JWT.
-
+# Paseto (Platform-Agnostic Security Tokens là một chuẩn token dùng để xác thực và truyền thông tin có tính bảo mật giữa client và server, tương tự mục đích của JWT)
+```bash
 Nếu vừa học JWT thì bạn có thể hiểu:
-
-PASETO là một lựa chọn thay thế JWT, được thiết kế với mục tiêu giảm các lựa chọn nguy hiểm/cấu hình sai trong JWT.
-
-1. Đặt JWT và PASETO cạnh nhau
-
+  PASETO là một lựa chọn thay thế JWT, được thiết kế với mục tiêu giảm các lựa chọn nguy hiểm/cấu hình sai trong JWT.
+```
+**Đặt JWT và PASETO cạnh nhau**
+```bash
 JWT:
-
-Client
-  │
-  │ JWT
-  ▼
-Server
+  Client
+    │
+    │ JWT
+    ▼
+  Server
 
 PASETO:
+  Client
+    │
+    │ PASETO
+    ▼
+  Server
 
-Client
-  │
-  │ PASETO
-  ▼
-Server
-
-Cả hai đều có thể được dùng để:
-
-Login
-  ↓
-Server xác thực
-  ↓
-Tạo token
-  ↓
-Client giữ token
-  ↓
-Client gửi token trong các request
-  ↓
-Server xác minh token
-2. Vấn đề của JWT là gì?
-
-JWT rất phổ biến và không phải là một công nghệ "không an toàn".
-
-Vấn đề là JWT cho phép khá nhiều lựa chọn về thuật toán và cách sử dụng.
+Cả hai đều có thể được dùng để: 
+  Login -> Server xác thực -> Tạo token -> Client giữ token -> Client gửi token trong các request -> Server xác minh token
+```
+**Vấn đề của JWT là gì?**
+```bash
+JWT rất phổ biến và không phải là một công nghệ "không an toàn". Vấn đề là JWT cho phép khá nhiều lựa chọn về thuật toán và cách sử dụng.
 
 Ví dụ JWT có:
-
-alg = HS256
-alg = RS256
-alg = ES256
-...
+  alg = HS256
+  alg = RS256
+  alg = ES256
+  ...
 
 Nếu developer cấu hình sai thuật toán, key, validation, expiration... thì có thể tạo ra lỗ hổng.
 
 PASETO cố gắng đưa ra một API/format có ít lựa chọn nguy hiểm hơn.
 
 Mental model:
-
-JWT:
-
-"Bạn có rất nhiều option.
-Hãy cấu hình đúng."
-
-PASETO:
-
-"Tôi giới hạn các option
-để khó cấu hình sai hơn."
-3. PASETO có 2 kiểu rất quan trọng
-
+  - JWT: "Bạn có rất nhiều option. Hãy cấu hình đúng."
+  - PASETO: "Tôi giới hạn các option để khó cấu hình sai hơn."
+```
+**PASETO có 2 kiểu rất quan trọng**
+```bash
 PASETO có hai mục đích chính:
+  PASETO
+  ├── Local
+  └── Public
 
-PASETO
-├── Local
-└── Public
-Local
+Local Dùng khi muốn token có tính bí mật + xác thực. Nói đơn giản:
+  Server
+     │
+     │ encrypt
+     ▼
+  PASETO Local Token
+-> Nội dung bên trong được mã hóa.
 
-Dùng khi muốn token có tính bí mật + xác thực.
+Public: Dùng khi muốn token có thể được đọc nhưng cần đảm bảo:
+  Token thực sự được ký bởi server và không bị sửa.
 
-Nói đơn giản:
+  Server
+     │
+     │ sign
+     ▼
+  PASETO Public Token
+-> Nó tương tự ý tưởng JWT ký bằng public/private key.
+```
+**Ex**
+```bash
+Giả sử server muốn nói: {"user_id": 123, "role": "admin", "exp": 1789000000}
+  Server tạo token.
+    - Với JWT: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxMjMsInJvbGUiOiJhZG1pbiJ9.signature
+    - Với PASETO, token có format khác, ví dụ dạng: v4.public.eyJ1c2VyX2lkIjoxMjN9.signature... hoặc với local: v4.local.......
 
-Server
-   │
-   │ encrypt
-   ▼
-PASETO Local Token
+Điểm cần nhớ là: JWT ≠ PASETO -> Chúng là hai chuẩn token khác nhau.
+```
+# Ask
+## PASETO khác JWT ở đâu?
+```bash
+                        JWT	                                              PASETO
+Mục đích	              Authentication / authorization / data transport	  Tương tự
+Format	                header.payload.signature	                        version.purpose.payload...
+Có encryption	          Có thể dùng JWE	                                  Có Local
+Có signing	            Có JWS	                                          Có Public
+Nhiều algorithm option	Có	                                              Ít hơn
+Khả năng cấu hình sai	  Tương đối nhiều	Thiết kế                          giảm bớt
+Độ phổ biến	            Rất cao	                                          Thấp hơn
+Ecosystem	              Rất lớn	                                          Nhỏ hơn
 
-Nội dung bên trong được mã hóa.
-
-Public
-
-Dùng khi muốn token có thể được đọc nhưng cần đảm bảo:
-
-Token thực sự được ký bởi server và không bị sửa.
-
-Server
-   │
-   │ sign
-   ▼
-PASETO Public Token
-
-Nó tương tự ý tưởng JWT ký bằng public/private key.
-
-4. Ví dụ
-
-Giả sử server muốn nói:
-
-{
-    "user_id": 123,
-    "role": "admin",
-    "exp": 1789000000
-}
-
-Server tạo token.
-
-Với JWT:
-
-eyJhbGciOiJIUzI1NiJ9
-.
-eyJ1c2VyX2lkIjoxMjMsInJvbGUiOiJhZG1pbiJ9
-.
-signature
-
-Với PASETO, token có format khác, ví dụ dạng:
-
-v4.public.eyJ1c2VyX2lkIjoxMjN9.signature...
-
-hoặc với local:
-
-v4.local.......
-
-Điểm cần nhớ là:
-
-JWT ≠ PASETO
-
-Chúng là hai chuẩn token khác nhau.
-
-5. PASETO khác JWT ở đâu?
-	JWT	PASETO
-Mục đích	Authentication / authorization / data transport	Tương tự
-Format	header.payload.signature	version.purpose.payload...
-Có encryption	Có thể dùng JWE	Có Local
-Có signing	Có JWS	Có Public
-Nhiều algorithm option	Có	Ít hơn
-Khả năng cấu hình sai	Tương đối nhiều	Thiết kế giảm bớt
-Độ phổ biến	Rất cao	Thấp hơn
-Ecosystem	Rất lớn	Nhỏ hơn
-6. Một điểm cực kỳ quan trọng
-
-Đừng hiểu:
-
-PASETO = JWT nhưng an toàn hơn tuyệt đối
-
-Không chính xác.
-
-Bảo mật còn phụ thuộc vào:
-
-Token
- +
-Key management
- +
-Expiration
- +
-Storage
- +
-Transport HTTPS
- +
-Authorization
- +
-Server implementation
+Một điểm cực kỳ quan trọng. Đừng hiểu:
+  - PASETO = JWT nhưng an toàn hơn tuyệt đối Không chính xác.
+    Bảo mật còn phụ thuộc vào:
+      Token + Key management + Expiration + Storage + Transport HTTPS + Authorization + Server implementation
 
 Ví dụ bạn dùng PASETO nhưng để token vào nơi không an toàn hoặc để token sống quá lâu thì vẫn có vấn đề.
 
-7. Liên hệ với câu hỏi Cookie → JWT lúc nãy
+Liên hệ với câu hỏi Cookie → JWT lúc nãy. Bạn đang đi đúng một chuỗi kiến thức:
+  HTTP -> Cookie -> Session -> JWT -> PASETO
 
-Bạn đang đi đúng một chuỗi kiến thức:
-
-HTTP
- │
- ▼
-Cookie
- │
- ▼
-Session
- │
- ▼
-JWT
- │
- ▼
-PASETO
-
-Nhưng thực tế chúng không phải các phiên bản nối tiếp nhau.
-
-Đúng hơn:
-
-                Authentication
-                      │
-          ┌───────────┴───────────┐
-          │                       │
-       Session                 Token
-          │                       │
-          ▼                ┌──────┴──────┐
-    Session Cookie          JWT         PASETO
-8. Vậy tại sao người ta dùng PASETO?
-
+Nhưng thực tế chúng không phải các phiên bản nối tiếp nhau. Đúng hơn:
+            Authentication
+      ┌───────────┴───────────┐
+      │                       │
+   Session                 Token
+      │                       │
+      ▼                ┌──────┴──────┐
+Session Cookie          JWT         PASETO
+```
+## Tại sao người ta dùng PASETO?
+```bash
 Một backend có thể quyết định:
-
-Login
-  ↓
-Tạo PASETO
-  ↓
-Client
-  ↓
-Authorization: Bearer <PASETO>
-  ↓
-API
-  ↓
-Verify PASETO
-  ↓
-user_id
-  ↓
-Authorization
+  Login -> Tạo PASETO -> Client -> Authorization: Bearer <PASETO> -> API -> Verify PASETO -> user_id -> Authorization
 
 Mục tiêu là có một token mechanism đơn giản hơn về mặt lựa chọn cryptographic primitives và khó cấu hình sai hơn so với một số cách dùng JWT.
 
-9. Nếu bạn đang học Backend, nhớ thế này
-
-Cookie:
-
-Cơ chế lưu/gửi dữ liệu của browser.
-
-Session:
-
-Trạng thái đăng nhập được server quản lý.
-
-JWT:
-
-Một chuẩn token có cấu trúc, thường được ký.
-
-PASETO:
-
-Một chuẩn security token khác, thiết kế với các lựa chọn cryptographic hạn chế hơn để giảm khả năng dùng sai.
-
-Và cả JWT/PASETO đều có thể được đặt bên trong Cookie:
-
-Cookie:
-    access_token=<JWT>
-
-hoặc:
-
-Cookie:
-    access_token=<PASETO>
-
-Đây là điểm rất quan trọng: Cookie là "container/cơ chế truyền", còn JWT/PASETO là "loại token".
+Nếu bạn đang học Backend, nhớ thế này
+  - Cookie: Cơ chế lưu/gửi dữ liệu của browser.
+  - Session: Trạng thái đăng nhập được server quản lý.
+  - JWT: Một chuẩn token có cấu trúc, thường được ký.
+  - PASETO: Một chuẩn security token khác, thiết kế với các lựa chọn cryptographic hạn chế hơn để giảm khả năng dùng sai.
+  - Và cả JWT/PASETO đều có thể được đặt bên trong Cookie:
+    + Cookie: access_token=<JWT> hoặc: Cookie access_token=<PASETO>
+-> Đây là điểm rất quan trọng: Cookie là "container/cơ chế truyền", còn JWT/PASETO là "loại token".
+```
 # Domain 
 ```bash 
 - Là địa chỉ website trên Internet để người dùng truy cập.
