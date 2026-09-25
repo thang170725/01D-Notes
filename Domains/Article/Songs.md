@@ -17,38 +17,35 @@
 7. Thời gian không sai lệnh
 8. Bất quá nhân gian (A4, c5)
 9. Đáp án của bạn (c5)
+10. Từ cửu môn hồi ức (A4)
+11. quan sơn tửu (c5)
+12. Tát nhật lãng rực rỡ (c5)	
+13. Hoang (dizi D, A4)
+14. Biệt tri kỷ (dizi D, c5)	
+15. bến thượng hải (c5)	
+16. Phi điểu và ve sầu (c5)	
+17. Bích thượng quan
+18. kiếp sau vấn muốn lập gia đình vói em (c5)
+19. yến vô hiết
+20. thiên sơn vạn thủy của em (c5)
+21. Phi điểu và ve sầu (c5)
+22. tây vương nữ quốc
+23. gặp người đúng lúc
 ```
 **Nhạc việt**
 ```bash
 1. 50 năm về sau (c5)
 2. Sóng gió (c5)
-9. Gặp mẹ trong mơ	
-12. Cô gái mở đường	
-13. Từ cửu môn hồi ức (A4)
-15. gặp người đúng lúc	
-16. khuê mộc lang (c5)	
-17. quan sơn tửu (c5)	
-18. sóng gió (c5)	
-19. Tát nhật lãng rực rỡ (c5)	
-20. Giấc mơ trưa (c5, A4)	
-21. Thương ly biệt (c5, dizi D)	
-22. Hoang (dizi D, A4)	
-23. Biệt tri kỷ (dizi D, c5)	
-24. bến thượng hải (c5)	
-25. Phi điểu và ve sầu (c5)	
-25. Gặp em đúng lúc
-26. Thiên sơn vạn thủy của em (C5)
-27. Proud of you (C5)
-28. windy hill (c5)
-29. Phi điểu và ve sầu (c5)
-30. Kiếp sau vẫn muốn lập gia đình với em (C5, D)
-31. futari no kimochi (c5)
-32. yến vô hiết
-33. thiên sơn vạn thủy của em (c5)
-34. quê tôi (c5)
-35. kiếp sau vấn muốn lập gia đình vói em (c5)
-36. Hoang (dizi D)
-37. Bích thượng quan
+3. Gặp mẹ trong mơ	
+4. Cô gái mở đường	
+5. khuê mộc lang (c5)		
+6. Giấc mơ trưa (c5, A4)	
+7. Thương ly biệt (c5, dizi D)	
+8. Gặp em đúng lúc
+9. Proud of you (C5)
+10. futari no kimochi (c5)
+11. quê tôi (c5)
+12. bèo dạt mây trôi 
 ```
 # Gutar
 ```bash
