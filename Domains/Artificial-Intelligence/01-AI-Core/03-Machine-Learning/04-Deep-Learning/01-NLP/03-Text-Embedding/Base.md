@@ -4,13 +4,14 @@
   - [Skip-Gram (Dùng từ trung tâm để đoán các từ xung quanh)](#skip-gram-dùng-từ-trung-tâm-để-đoán-các-từ-xung-quanh)
 - [Glove (Global Vectors. Nhìn toàn bộ thống kê corpus)](#glove-global-vectors-nhìn-toàn-bộ-thống-kê-corpus)
 - [FastText (biến text thành vector)](#fasttext-biến-text-thành-vector)
-- [Cấu hình FastText siêu nhẹ và siêu nhanh cho 80 nhãn](#cấu-hình-fasttext-siêu-nhẹ-và-siêu-nhanh-cho-80-nhãn)
+  - [Ask](#ask)
+    - [fasttext có thật sự nhanh?](#fasttext-có-thật-sự-nhanh)
 - [1. Train model (Đã bao gồm cả trích xuất vector + Lớp phân loại Softmax)](#1-train-model-đã-bao-gồm-cả-trích-xuất-vector--lớp-phân-loại-softmax)
 - [2. Lưu model (.bin)](#2-lưu-model-bin)
 - [3. Predict TRỰC TIẾP (Nhận văn bản -\> Trả về Nhãn + Độ tin cậy)](#3-predict-trực-tiếp-nhận-văn-bản---trả-về-nhãn--độ-tin-cậy)
 - [nomic-embed-text](#nomic-embed-text)
 - [OpenAI Embedding](#openai-embedding)
-  - [Ask](#ask)
+  - [Ask](#ask-1)
     - [OpenAI Embedding khác Hugging Face thế nào?](#openai-embedding-khác-hugging-face-thế-nào)
 - [BAAI BGE (Beijing Academy of Artificial Intelligence General Embedding)](#baai-bge-beijing-academy-of-artificial-intelligence-general-embedding)
   - [BGE-M3](#bge-m3)
@@ -88,6 +89,7 @@ Dùng để:
 
 ```bash
 Do Meta AI phát triển.
+    FastText có thể được xem là Deep Learning, cụ thể là một mô hình neural network khá đơn giản.
 
 Ý tưởng:
     Một từ được tạo từ nhiều n-gram ký tự.
@@ -132,65 +134,27 @@ Trường hợp 4: Text có typo
 
 Trường hợp 5: Classification cần tốc độ cực nhanh
 ```
-fasttext dùng character n-gram mà n-gram nhanh thật không đấy chứ tôi thấy là chậm rồi đấy vì 1 từ vocab nó có thể đẻ lên x5 lần
+**Thư viện thao tác với FastText**
+[FastText](../../../../../../../Tech-Stacks/Programming-Languages/01-Python/00-Core/06-Libraries/01-AI-Libraries/00-ML/02-DL/NLP-Audio-Speech/NLP-Core/FastText.md)
 
-Nhận xét của bạn về lý thuyết là cực kỳ chính xác và tinh tế: Cơ chế Subword/Character n-gram của FastText tạo ra số lượng feature (véc-tơ con) khổng lồ, khiến dung lượng từ điển (vocabulary) phình to gấp 5–10 lần và làm chậm tốc độ huấn luyện lẫn dự đoán nếu giữ thiết lập mặc định!
+## Ask 
+### fasttext có thật sự nhanh?
+```bash
+Cơ chế Subword/Character n-gram của FastText tạo ra số lượng feature (véc-tơ con) khổng lồ, khiến dung lượng từ điển (vocabulary) phình to gấp 5–10 lần và làm chậm tốc độ huấn luyện lẫn dự đoán nếu giữ thiết lập mặc định!
 
 Tuy nhiên, FastText trong thực tế vẫn cực kỳ nhanh (vài mili-giây) nhờ 2 kỹ thuật kiến trúc đặc biệt mà Facebook/Meta đã thiết kế cho nó. Dưới đây là lý do tại sao nó nhanh và cách cấu hình tối ưu để không bị chậm.
 
 1. Tại sao FastText thực tế vẫn nhanh "xé gió"?
-Thuật toán Hashing Trick (Dùng hàm băm):
-
-FastText không tạo bảng Vocabulary khổng lồ cho toàn bộ character n-gram. Thay vào đó, nó băm (hash) tất cả các character n-gram vào một bảng băm có kích thước cố định (mặc định là 2,000,000 bucket).
-
-Nhờ Hashing, việc tra cứu từ/subword có độ phức tạp là O(1) — truy cập trực tiếp bằng chỉ số mảng chứ không phải tìm kiếm từ điển.
-
-Cơ chế Hierarchical Softmax (Softmax phân cấp):
-
-Với 80 nhãn, nếu dùng Softmax thông thường, mô hình phải tính xác suất cho tất cả 80 nhãn ở mỗi request.
-
-FastText dùng Cây Decision Tree (Huffman Tree) cho các nhãn. Độ phức tạp tính toán giảm từ O(K) xuống O(log 
-2
-​
- K) (với K=80 nhãn, nó chỉ cần tính khoảng log 
-2
-​
- 80≈6−7 phép toán thay vì 80).
+    Thuật toán Hashing Trick (Dùng hàm băm):
+        - FastText không tạo bảng Vocabulary khổng lồ cho toàn bộ character n-gram. Thay vào đó, nó băm (hash) tất cả các character n-gram vào một bảng băm có kích thước cố định (mặc định là 2,000,000 bucket).
+        - Nhờ Hashing, việc tra cứu từ/subword có độ phức tạp là O(1) — truy cập trực tiếp bằng chỉ số mảng chứ không phải tìm kiếm từ điển.
+    Cơ chế Hierarchical Softmax (Softmax phân cấp):
+        - Với 80 nhãn, nếu dùng Softmax thông thường, mô hình phải tính xác suất cho tất cả 80 nhãn ở mỗi request.
+        - FastText dùng Cây Decision Tree (Huffman Tree) cho các nhãn. Độ phức tạp tính toán giảm từ O(K) xuống O(log 2 K) (với K=80 nhãn, nó chỉ cần tính khoảng log 2 80≈6−7 phép toán thay vì 80).
 
 2. Cách cấu hình FastText để "Triệt hạ" tình trạng phình feature và tăng tốc tối đa
 Nếu bạn áp dụng FastText vào bài toán email bảo hiểm này, bạn hoàn toàn có thể tắt hoặc bóp nhỏ Character N-gram mà vẫn giữ được độ chính xác cao nhờ cấu hình các tham số khi train:
-
-Python
-import fasttext
-
-# Cấu hình FastText siêu nhẹ và siêu nhanh cho 80 nhãn
-model = fasttext.train_supervised(
-    input='train_data.txt',
-    
-    # 1. TẮT hoặc GIẢM Subword/Character n-gram nếu sợ chậm:
-    # Với tiếng Việt đã tokenize (ví dụ: bảo_hiểm_nhân_thọ), từ vựng khá rõ ràng,
-    # bạn có thể đặt minn=0, maxn=0 để TẮT HOÀN TOÀN char n-gram (chạy nhanh như Word2Vec).
-    minn=0, 
-    maxn=0,
-    
-    # 2. Bật Word N-gram (Cụm từ):
-    # Dùng word n-gram = 2 hoặc 3 để bắt các cụm như "thông_báo bồi_thường", "thư_gửi đại_lý"
-    wordNgrams=2,
-    
-    # 3. Dùng Hierarchical Softmax cho tập nhãn lớn (80 nhãn):
-    loss='hs',
-    
-    # 4. Ép kích thước bảng băm nhỏ lại để tiết kiệm RAM/Bộ nhớ:
-    bucket=200000,
-    
-    # Số chiều vector (50-100 là vừa đủ):
-    dim=100,
-    
-    epoch=25,
-    lr=0.5
-)
-Mẹo: Khi đặt minn=0 và maxn=0, FastText quay trở về mô hình Phân loại Word-level truyền thống. Tốc độ dự đoán lúc này rơi vào khoảng 0.5 - 1 millisecond / email trên CPU!
-
+```
 3. Nếu vẫn ngại FastText: Linear SVM / Logistic Regression + TF-IDF vẫn là Chân lý cho CPU!
 Nếu bạn lo ngại FastText cồng kềnh hoặc không muốn cài thêm thư viện C++ binding, thì lựa chọn đơn giản, chuẩn mực và nhanh nhất lịch sử Machine Learning chính là:
 

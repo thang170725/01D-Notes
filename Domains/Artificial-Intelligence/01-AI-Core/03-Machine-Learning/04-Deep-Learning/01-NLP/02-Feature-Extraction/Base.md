@@ -108,16 +108,16 @@ Giả sử chúng ta có một tập dữ liệu gồm 3 câu (3 văn bản) sau
     - Văn bản 2 (D2): "Tôi thích ăn kem"
     - Văn bản 3 (D3): "Học AI rất vui"
 Tổng số văn bản trong tập dữ liệu là N = 3.
+Vocab = ["tôi", "thích", "học", "AI", "ăn", "kem", "rất", "vui"]
+
 Chúng ta sẽ tính TF-IDF cho các từ trong Văn bản 1 (D_1).
 ```
 ```bash
 Bước 1: Tính TF (Term Frequency) của các từ trong Văn bản 1
-    TF đo lường mức độ thường xuyên của một từ xuất hiện trong một văn bản cụ thể.
-
-    TF = (Số lần từ xuất hiện trong văn bản) / (Tổng số từ của văn bản đó)
+    TF là đo lường mức độ thường xuyên của một từ xuất hiện trong một văn bản cụ thể.
+        TF = (Số lần từ xuất hiện trong văn bản) / (Tổng số từ của văn bản đó)
  
     Văn bản 1 có tổng cộng 4 từ: "Tôi", "thích", "học", "AI". Mỗi từ xuất hiện đúng 1 lần.
-
         Từ trong D1 	Số lần xuất hiện	Tổng số từ trong D1 	TF
         Tôi         	1	                    4	                1/4=0.25
         thích          	1	                    4	                1/4=0.25
