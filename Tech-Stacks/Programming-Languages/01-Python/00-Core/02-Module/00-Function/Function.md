@@ -6,7 +6,7 @@
   - [lambda (hàm ẩn danh)](#lambda-hàm-ẩn-danh)
 - [nonlocal](#nonlocal)
 - [global](#global)
-- [yield](#yield)
+- [yield (dùng để tạo generator function.)](#yield-dùng-để-tạo-generator-function)
 - [map](#map)
 ---
 # function
@@ -108,13 +108,11 @@ def increase():
 increase() 
 print(count) # 1
 ```
-# yield 
+# yield (dùng để tạo generator function.)
 ```bash
-- Dùng để tạo generator function.
-- Khi hàm có yield:
-  + Không trả về toàn bộ kết quả ngay
-  + Trả từng phần một
-  + Tạm dừng và tiếp tục khi được gọi lại
+Khi hàm có yield:
+  - Không trả về toàn bộ kết quả ngay mà trả từng phần một
+  - Tạm dừng và tiếp tục khi được gọi lại
 ```
 **Ex1**
 ```bash

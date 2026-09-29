@@ -8,7 +8,7 @@ System-Architectures/                              ```mình dùng thư mục nà
 ├── [Layered Monolith](Layered-Monolith/Base.md)   ```mình dùng thư mục này để thiết kế theo Layered-Monolith```  
 ├── [Microservies](Microservices/Base.md)          ```mình dùng thư mục này để thiết kế hệ thống theo Microservices```  
 ├── [Modular Monolith](Modular-Monolith/Base.md)   ```mình dùng thư mục này để thiết kế theo Modular-Monolith```   
-└── [Async & Sync](Async-Sync.md)                  ```mình dùng thư mục này để thiết kế theo Modular-Monolith```   
+└── [Async & Sync](Async-Sync.md)                  ```mình dùng thư mục này để  xem kiến thức về xử lý đồng bộ và bất đồng bộ```   
 
 # Ask
 ## Nên thiết quy tắc cho hệ thông như thế nào?

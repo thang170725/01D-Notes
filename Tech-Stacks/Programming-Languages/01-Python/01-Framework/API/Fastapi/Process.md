@@ -23,7 +23,8 @@
   - [.file](#file)
   - [await file.read()](#await-fileread)
 - [Response](#response)
-  - [HTTPException](#httpexception)
+  - [StreamingResponse (cho phép server gửi response từng phần)](#streamingresponse-cho-phép-server-gửi-response-từng-phần)
+- [HTTPException](#httpexception)
 ---
 # App Configuration
 ```bash
@@ -436,7 +437,49 @@ file object thật
 Đọc nội dung
 ```
 # Response
-## HTTPException
+## StreamingResponse (cho phép server gửi response từng phần)
+**Syn**
+```bash
+from fastapi.responses import StreamingResponse
+
+return StreamingResponse(
+    content,
+    status_code=200,
+    headers={
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "X-Accel-Buffering": "no",
+    },
+    media_type=None,
+    background=None,
+)
+
+- Input:
+    + content=generator|async generator: là nguồn dữ liệu mà StreamingResponse sẽ đọc và gửi dần cho client.
+    + media_type: Dữ liệu mà server đang gửi thuộc loại gì?
+        - application/json: json
+        - text/event-stream: SSE
+```
+**Ex**
+```python
+from fastapi.responses import StreamingResponse
+
+async def generate():
+
+    yield "Hello\n"
+    yield "How\n"
+    yield "are\n"
+    yield "you?\n"
+
+return StreamingResponse(generate())
+
+# Client có thể nhận:
+#     Hello
+#     How
+#     are
+#     you?
+```
+# HTTPException
 ```bash
 - dùng để:
     + Chủ động trả lỗi HTTP cho client

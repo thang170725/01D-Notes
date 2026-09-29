@@ -54,3 +54,33 @@ with open("output.json", "w", encoding="utf-8") as f:
     json.dump(data, f, ensure_ascii=False, indent=4)
 ```
 # dumps() (chuyển python object -> chuỗi json)
+**Syn**
+```bash
+json.dumps(obj, *, skipkeys=False, ensure_ascii=True,
+           check_circular=True, allow_nan=True,
+           cls=None, indent=None, separators=None,
+           default=str, sort_keys=False, **kw)
+
+- Input:
+    + skipkeys=bool:
+        - False: key không hợp lệ -> báo lỗi
+        - True: key không hợp lệ -> bỏ qua
+    + ensure_ascii=bool:
+        - True  → Unicode → \uXXXX
+        - False → giữ nguyên Unicode
+    + default=any: Nếu gặp một object mà JSON không biết xử lý thì phải chuyển nó như thế nào?
+        - str: chuyển về string
+```
+**Ex**
+```python
+import json
+
+data = {
+    "name": "Thắng",
+    "age": 20
+}
+
+result = json.dumps(data)
+
+print(result) # {"name": "Thắng", "age": 20}
+```
