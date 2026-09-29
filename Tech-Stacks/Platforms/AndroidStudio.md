@@ -268,3 +268,134 @@ Lỗi: INSTALL_FAILED_OLDER_SDK
 
 1. Bạn chỉ cần đổi: minSdk = 37 -> minSdk = 28
 ```
+# gravity (dùng để quy định vị trí của nội dung bên trong một View)
+**Syn**
+```bash
+center	Giữa
+center_horizontal	Giữa theo chiều ngang
+center_vertical	Giữa theo chiều dọc
+top	Trên
+bottom	Dưới
+left	Trái
+right	Phải
+start	Đầu dòng
+end	Cuối dòng
+```
+**Ex**
+```bash
+<TextView
+    android:layout_width="200dp"
+    android:layout_height="100dp"
+    android:text="Hello"
+    android:gravity="center" />
+```
+**Ex2: Có thể kết hợp**
+```bash
+android:gravity="center_horizontal|center_vertical"
+
+hoặc đơn giản:
+
+android:gravity="center"
+⚠️ Phân biệt gravity và layout_gravity
+
+Đây là chỗ rất dễ nhầm:
+
+gravity → điều khiển nội dung bên trong View.
+
+<TextView
+    android:layout_width="200dp"
+    android:layout_height="100dp"
+    android:gravity="center"
+    android:text="Hello" />
+
+→ Hello nằm giữa TextView.
+
+Còn:
+
+layout_gravity → điều khiển chính View đó nằm ở đâu trong View cha.
+
+Ví dụ:
+
+<TextView
+    android:layout_width="100dp"
+    android:layout_height="50dp"
+    android:layout_gravity="center"
+    android:text="Hello" />
+
+→ Cả TextView được đặt giữa layout cha.
+
+Bạn có thể nhớ cực ngắn:
+
+gravity → nội dung nằm đâu trong View
+layout_gravity → View nằm đâu trong View cha
+
+Trong Android Studio Design, khi bạn chọn một TextView rồi thấy phần Gravity, đó chính là chỉnh vị trí chữ bên trong TextView.
+```
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hiện / Ẩn" />
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="lê đức thắng"
+        android:textSize="24sp"
+        android:visibility="gone" />
+
+</LinearLayout>
+Những điểm đã thay đổi
+
+EditText được đổi thành TextView: vì bạn chỉ muốn hiển thị chữ, không cần cho người dùng nhập hay sửa chữ.
+
+android:visibility="gone": ẩn dòng chữ ngay khi ứng dụng khởi động.
+
+android:textSize="24sp": tăng kích thước chữ để dễ nhìn.
+
+android:text="lê đức thắng": nội dung sẽ hiển thị khi bạn bấm nút.
+
+Có 3 giá trị thường gặp của visibility:
+
+Giá trị
+
+	
+
+Ý nghĩa
+
+
+
+
+visible
+
+	
+
+Hiện View
+
+
+
+
+invisible
+
+	
+
+Ẩn View nhưng vẫn chiếm chỗ
+
+
+
+
+gone
+
+	
+
+Ẩn View và không chiếm chỗ
