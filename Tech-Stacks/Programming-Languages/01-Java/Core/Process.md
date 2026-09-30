@@ -1,14 +1,23 @@
+- [Comment](#comment)
 - [Display (Cung cấp thông tin)](#display-cung-cấp-thông-tin)
 	- [System.out.println() (xuất một nội dung ra màn hình có xuống dòng)](#systemoutprintln-xuất-một-nội-dung-ra-màn-hình-có-xuống-dòng)
 	- [System.out.print() (in nội dung không xuống dòng)](#systemoutprint-in-nội-dung-không-xuống-dòng)
 	- [System.out.printf() (in nội dung theo một định dạng nào đó)](#systemoutprintf-in-nội-dung-theo-một-định-dạng-nào-đó)
+- [Access modifier (Mức truy cập)](#access-modifier-mức-truy-cập)
+	- [public (Toàn bộ chương trình)](#public-toàn-bộ-chương-trình)
+	- [protected (Chỉ trong cùng package hoặc lớp con)](#protected-chỉ-trong-cùng-package-hoặc-lớp-con)
+	- [default (gói Chỉ trong cùng package)](#default-gói-chỉ-trong-cùng-package)
+	- [private (Chỉ trong cùng lớp)](#private-chỉ-trong-cùng-lớp)
+	- [protected](#protected)
 - [variable (biến)](#variable-biến)
 	- [public (Instance variable - biến toàn cục)](#public-instance-variable---biến-toàn-cục)
 	- [Static variable (Biến static có thể chia sẻ nó ở tất cả mọi thể hiện của lớp)](#static-variable-biến-static-có-thể-chia-sẻ-nó-ở-tất-cả-mọi-thể-hiện-của-lớp)
+- [Datatype (kiểu dữ liệu)](#datatype-kiểu-dữ-liệu)
 	- [Boolean](#boolean)
-- [Integer (Số nguyên)](#integer-số-nguyên)
-	- [parseInt](#parseint)
-	- [Float (Số thực)](#float-số-thực)
+	- [Integer (Số nguyên)](#integer-số-nguyên)
+		- [parseInt](#parseint)
+	- [Float | float (Số thực)](#float--float-số-thực)
+		- [parseFloat()](#parsefloat)
 - [Long](#long)
 	- [.parseLong()](#parselong)
 - [math](#math)
@@ -25,9 +34,6 @@
 - [Operators](#operators)
 	- [++](#)
 	- [--](#--)
-- [String (Là kiểu chuỗi)](#string-là-kiểu-chuỗi)
-	- [int -\> String](#int---string)
-	- [Long.toString() (ép từ long -\> String)](#longtostring-ép-từ-long---string)
 - [char (Là kiểu ký tự. 2 byte)](#char-là-kiểu-ký-tự-2-byte)
 	- [int -\> char](#int---char)
 	- [.charAt() (Chỉ chuyển được một ký tự)](#charat-chỉ-chuyển-được-một-ký-tự)
@@ -93,18 +99,13 @@
 	- [For-each loop (Là cấu trúc lặp duyệt qua phần tử. Thích hợp cho Array, String, …)](#for-each-loop-là-cấu-trúc-lặp-duyệt-qua-phần-tử-thích-hợp-cho-array-string-)
 	- [Labelled for loop (Là cấu trúc lặp được gán nhãn. Thích hợp trong vòng lặp lồng nhau)](#labelled-for-loop-là-cấu-trúc-lặp-được-gán-nhãn-thích-hợp-trong-vòng-lặp-lồng-nhau)
 	- [Do-while loop (Là cấu trúc lặp không có giới hạn lần lặp. và được lặp ít nhất một lần)](#do-while-loop-là-cấu-trúc-lặp-không-có-giới-hạn-lần-lặp-và-được-lặp-ít-nhất-một-lần)
-- [Arrays (Dùng để lưu trữ có các thành phần dữ liệu cùng kiểu)](#arrays-dùng-để-lưu-trữ-có-các-thành-phần-dữ-liệu-cùng-kiểu)
-	- [length (Xác định số phần tử có trong mảng)](#length-xác-định-số-phần-tử-có-trong-mảng)
-- [Object](#object)
-- [ArrayList (ArrayList được sử dụng như một mảng động để lưu trữ phần tử)](#arraylist-arraylist-được-sử-dụng-như-một-mảng-động-để-lưu-trữ-phần-tử)
-	- [size() (Trả về số lượng phần tử có trong ArrayList)](#size-trả-về-số-lượng-phần-tử-có-trong-arraylist)
-	- [add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)](#add-nó-được-sử-dụng-để-nối-thêm-phần-tử-được-chỉ-định-vào-cuối-hoặc-một-vị-trí-bất-kì-trong-một-danh-sách)
-	- [isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)](#isempty-để-kiểm-tra-xem-một-arraylist-có-phần-tử-hay-không)
-	- [remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)](#remove-xóa-một-phần-tử-trong-arraylist-tham-số-truyền-vào-có-thể-là-một-đối-tượng-hoặc-một-số)
-	- [removeAll() (xóa hết phần tử có trong ArrayList value)](#removeall-xóa-hết-phần-tử-có-trong-arraylist-value)
-	- [contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)](#contains-kiểm-tra-xem-có-tồn-tại-value-trong-arraylist-hay-không)
-	- [set() (Để gán phần tử)](#set-để-gán-phần-tử)
 ---
+# Comment
+```bash
+// -  ghi chú trên một dòng
+/* ghi chú trên nhiều dòng */
+/** chú thích để tạo tài liệu javadoc */
+```
 # Display (Cung cấp thông tin)
 ## System.out.println() (xuất một nội dung ra màn hình có xuống dòng)
 **Ex**
@@ -119,6 +120,21 @@ public class test {
 ```
 ## System.out.print() (in nội dung không xuống dòng)
 ## System.out.printf() (in nội dung theo một định dạng nào đó)
+# Access modifier (Mức truy cập)
+```bash
+Để kiểm soát mức độ mức độ truy cập vào các thành phần (biến, phương thức) của một lớp. 
+
+Java cung cấp bốn loại access modifier chính: 
+	- public
+	- protected
+	- default
+	- private
+```
+## public (Toàn bộ chương trình)
+## protected (Chỉ trong cùng package hoặc lớp con)
+## default (gói Chỉ trong cùng package)
+## private (Chỉ trong cùng lớp)
+## protected
 # variable (biến)
 ## public (Instance variable - biến toàn cục)
 **Ex**
@@ -156,18 +172,19 @@ class Solution {
 	}
 }
 ```
+# Datatype (kiểu dữ liệu)
 ## Boolean
 ```bash
 boolean: 1 bit
 ```
-# Integer (Số nguyên)
+## Integer (Số nguyên)
 ```bash
 byte: 1 byte
 short: 2 byte
 int: 4 byte
 long: 8 byte
 ```
-## parseInt
+### parseInt
 **Ex**
 ```java
 int <name> = Integer.parseInt(<variable>);
@@ -180,10 +197,24 @@ class Person{
 	}
 } 
 ```
-## Float (Số thực)
+## Float | float (Số thực)
 ```bash
-float: 4 byte
-double: 8 byte
+float: là kiểu dữ liệu nguyên thủy. 4 byte.
+Float: là kiểu dữ liệu object.
+```
+### parseFloat()
+**Ex**
+```java
+public class Main
+{
+	public static void main(String[] args) {
+	    String a = "12";
+	    String b = "14";
+	    
+		float s = Float.parseFloat(a) + Float.parseFloat(b);
+		System.out.println(s);
+	}
+}
 ```
 # Long
 ## .parseLong()
@@ -256,419 +287,6 @@ class Solution{
 // 10 
 // 8
 ```
-# String (Là kiểu chuỗi)
-## int -> String
-**Syn**
-```bash
-String <name> = String.valueOf(<variable>);
-String <name> = Integer.toString(<variable>);
-```
-**Ex**
-```python
-class Person{
-	public static void main(String[] args) {
-		int a = 10;
-		String s = String.valueOf(a);
-		String t = Integer.toString(a);
-		System.out.println(s + 10); // 20
-		System.out.println(t+10); // 20
-	}
-}
-```
-## Long.toString() (ép từ long -> String)
-**Syn**
-```bash
-String <name> = String.valueOf(<variable>);
-String <name> = Long.toString(<variable>);
-```
-**Ex**
-```java
-class Person{
-	public static void main(String[] args) {
-		int a = 10;
-		String s = String.valueOf(a);
-		String t = Long.toString(a);
-		System.out.println(s + 10); // 1010
-		System.out.println(t+10); // 1010
-	}
-}
-```
-toUpperCase()
-Trả về kí tự viết hoa hoặc trả về chuỗi in hoa hết.
-Cú pháp:
-<variable>.toUpperCase();
-Ví dụ về toUpperCase
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "Le Duc Thang";
-		System.out.println(a.toUpperCase());
-	}
-}
-LE DUC THANG
-Thuật toán viết hoa hết chuỗi nhập từ bàn phím (không viết hoa được chữ có dấu)
-import java.util.Scanner;
-class Solution {
-	public static char UpperCase(char a){
-		if(a >= 'a' && a<='z') { // có thể viết cách khác: a >= 97 && a <= 122
-			return (char) (a-32);
-		}
-		return a;
-	}	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		String a = sc.nextLine();
-		String b = "";
-		for(int i = 0; i < a.length(); i++) {
-			b += UpperCase(a.charAt(i));
-		}
-		System.out.println(b);
-	}	
-}
-
-Thuật toán chuyển ký tự in thường thành in hoa
-import java.util.Scanner;
-class Solution {
-             public static char UpperCase(char a){
-		if(a >= 'a' && a<='z') { // có thể viết cách khác: a >= 97 && a <= 122
-			return (char) (a-32);
-		}
-		return a;
-	}	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		while(true) {
-			String a = sc.next();
-			System.out.println(UpperCase(a));
-		}
-	}	
-}
-Input: a
-Result: A
-Thuật toán viết hoa kí tự đầu của chữ trong một chuỗi
-import java.util.Scanner;
-class Solution {
-	public static char change(char a){
-		if(a >= 'a' && a<='z') {
-			return (char) (a-32);
-		}
-		return a;
-	}	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		String input = sc.nextLine();
-		if(input.length()>0) {
-			input = change(input.charAt(0))+input.substring(1);
-		}
-		StringBuilder result = new StringBuilder(input);
-		for(int i = 1; i < result.length(); i++)
-			if(result.charAt(i-1)==' ' && result.charAt(i)>='a'&& result.charAt(i)<='z') {
-				result.setCharAt(i, change(result.charAt(i)));
-		}
-		System.out.println(result.toString());
-	}	
-}
-
-toLowerCase()
-Chuyển chuỗi thành in thường.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "Le Duc Thang";
-		System.out.println(a.toLowerCase());
-	}
-}
-
-indexOf()
-Để tìm kiếm chuỗi trong một chuỗi nào đó. Trả về số dương nếu có, trả về âm nếu không. Có thể có 1 giá trị trong ngoặc hoặc 2, hoặc nhiều hơn
-Cú pháp:
-    • a.indexOf(b) – tìm b trong a;
-    • …
-class Solution {
-	public static void main(String args[]) {
-		String a = "bfgrui";
-		String b = "g";
-		System.out.println(a.indexOf(b));
-	}
-}
-2
-
-class Solution {
-	public static void main(String args[]) {
-		String a = "bfgrui";
-		String b = "g";
-		System.out.println(a.indexOf(b,3));
-	}
-}
--1
-equals()
-Để so sánh chuỗi, phân biệt viết thường và viết hoa.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		String b = "Le duc thang";
-		String c = "le duc thang";
-		System.out.println(a.equals(b));             		              System.out.println(a.equals(c));
-}
-false
-true
-1.  Find the index of the First Occurrence in a String
-class Solution {
-    public int strStr(String haystack, String needle) {
-        if(needle.length() == 0) return  0;
-        if(haystack.indexOf(needle) < 0) return -1;
-        if(haystack.length() == needle.length()){
-            if(haystack.equals(needle)) return 0;
-        }
-        for(int i = 0; i <= haystack.length()-needle.length(); i++){
-            if(haystack.substring(i, i+needle.length()).equals(needle)) return i;
-        }
-        return -1;
-    }
-}
-
-equalsIgnoreCase()
-So sách chuỗi và không biệt chữ hoa và chữ thường.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		String b = "Le duc thang";
-		String c = "le duc thang";
-		System.out.println(a.equalsIgnoreCase(b));		
-System.out.println(a.equalsIgnoreCase(c));
-}
-True
-True
-
-==
-Để so sánh chuỗi. Phân biệt chữ hoa và chữ thường.
-public class Solution{	
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		String b = "le duc thang";
-		if(a == b) System.out.println("giống nhau");		
-	}
-}
-giống nhau
-substring()
-Để cắt chuỗi con hoặc lấy ra một đoạn chuỗi từ vị trí chỉ định.
-Cú pháp:
-    • <variable>.substring(int startIndex)
-    • <variable>.substring(int startIndex, int endIndex)
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "Le Duc Thang";
-		System.out.println(a.substring(3,6));
-	}
-}
-Duc – tức là nó sẽ lấy từ 3 đến 6-1
-14. Longest Common Prefix
-class Solution {
-    public String longestCommonPrefix(String[] strs) {
-        if(strs.length == 0) return "";
-        String s = strs[0];
-        for(int i = 0; i < s.length(); i++){
-            for(int j = 1; j < strs.length; j++){
-                if(i >= strs[j].length() || s.charAt(i) != strs[j].charAt(i)) return s.substring(0, i);
-            }
-        }
-        return s;
-    }
-}
-
-
-trim()
-Xóa khoản trắng dư thừa ở đầu chuỗi.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "   Le Duc Thang   ";
-		System.out.println(a.trim());
-	}
-}
-
-split(String regex)
-Dùng để tách chuỗi này theo biểu thức chính quy và trả về mảng chuỗi.
-Cú pháp:
-    • <variable>.split(String regex)
-    • <variable>.split(String regex, int limit)
-Tách chữ trong một chuỗi
-public class Solution {
-    public static void main(String[] args) {
-       String s = "he is is";
-       String [] words = s.split(" ");
-       for (String string : words) {
-		System.out.println(string);
-	}
-    }
-}
-
-58. Length of Last Word
-class Solution {
-    public int lengthOfLastWord(String s) {
-        s = s.trim();
-        String [] text = s.split(" ");
-        return text[text.length-1].length();
-    }
-}
-
-compareTo()
-Dùng để so sánh chuỗi theo bảng chữ cái. Nó chỉ có thể so sánh được 2 chuỗi với nhau. Thường dùng compareTo cho bài toán sắp xếp.
-getChars(…)
-Lấy nhiều ký tự nhưng phải gán vào một mảng vì nó xuất ra theo kiêu mảng.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "Hello Wolrd!!";
-		char[] charArr = new char[10];
-		a.getChars(6, 11, charArr, 0);
-		System.out.println(charArr); // cách 1 để xuất ra màn hình
-		for(char value : charArr) { // cách 2 để xuất ra màn hình
-			System.out.print(value);
-		}
-	}
-}
-
-Getbytes()
-Lấy giá trị trong bang mã ascii theo hệ cơ số 10.
-isEmpty()
-Nếu chuỗi trống trả về true, ngược lại trả về false.
-regionMatches()
-So sánh một đoạn chuỗi.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		String b = "thang";
-		System.out.println(a.regionMatches(7,b,0,5)); // so sánh 5 kí tự từ kí tự thứ 7 của a với kí tự thứ 0 của b
-	}
-}
-
-startsWith()
-kiểm tra chuỗi bắt đầu bằng một chuỗi hay một ký tự nào đó không.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		System.out.println(a.startsWith("le")); 
-		System.out.println(a.startsWith("duc"));
-	}
-}
-True
-False
-
-endWith()
-kiểu tra chuỗi có kết thúc bằng một chuỗi hay một ký tự nào đó không.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		System.out.println(a.startsWith("thang"));		              System.out.println(a.startsWith("duc")); 
-	}
-}
-True
-False
-
-lastIndexOf()
-Tìm kiếm chuỗi từ bên phải sang bên trái.
-concat()
-Dùng để nối chuỗi.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "Việt";
-		String b = "Nam";
-		System.out.println(a.concat(b));
-		System.out.println(a+b);
-	}
-}
-
-
-contains()
-Để tìm kiếm chuỗi kí tự trong một chuỗi. kiểu trả về là true hoặc false.
-class Solution {	
-	public static void main(String[] args) {
-		String a = "aa";
-		String b ="aab";
-		System.out.println(a.contains(b)); // tìm kiếm b trong a
-	}
-}
-false
-replace()
-thay thế một kí tự hoặc một chuỗi vào chuỗi đã cho.
-public class Chuoi {
-	public static void main(String[] args) {
-		String a = "le duc thang";
-		System.out.println(a.replace("le", "nguyen"));
-	}
-}
-
-replaceAll()
-Để thay thế nhưng không thay thế biến ban đầu.
-Public char[] toCharArray()
-Được sử dụng để đổi chuỗi thành mảng kí tự. nó trả nề một mảng ký tự có độ dài tương đương độ dài của chuỗi.
-class Solution {
-	public static void main(String args[]) {
-		String s1 = "hello";
-		char[] ch = s1.toCharArray();
-		for (int i = 0; i < ch.length; i++) {
-			System.out.println(ch[i]);
-		}
-	}
-}
-h
-e
-l
-l
-o
-Đếm sô lần xuất hiện của các ký tự trong một chuỗi
-import java.util.Scanner;
-class Solution {
-	public static void main(String args[]) {
-		int[] count = new int[26];
-		Scanner sc = new Scanner(System.in);
-		String text = sc.next();
-		for(char c : text.toCharArray()) {
-			count[c-'a']++;
-		}
-		for(int i = 0; i < count.length; i++) {
-			if(count[i]!=0) {
-				System.out.println((char)(i+'a') + " - " + count[i]);
-			}
-		}
-	}
-}
-thanggg
-a - 1
-g - 3
-h - 1
-n - 1
-t - 1
-
-Java regex / regular expression (biểu thức chính quy)
-Là một API để định nghĩa một mẫu để tìm kiếm hoặc thao tác với chuỗi. Nó được sử dụng rộng rãi để xác định ràng buộc trên các chuỗi như xác thực mật khẩu, email, kiểu dữ liệu datetime, …
-Java regex API cung cấp 1 interface và 3 lớp trong gói java.util.regex
-- interface MathResult
-- lớp Matcher
-- lớp Pattern
-- lớp PatternSyntaxException
-Quy tắc viết regular expression
-    • . – so khớp với bất kỳ ký tự đơn nào
-    • ^ - so khớp phần đầu của chuỗi hay dòng
-    • $ - so khớp phần cuối của chuỗi hay dòng
-    • (…) – so khớp các nhóm kí tự bên trong
-    • […] – so khớp bất kỳ kí tự đơn nào trong dấu ngoặc vuông
-    • [^…] – so khớp bất kì kí tự đơn nào ngoại trừ các kí tự trong dáu ngoặc vuông
-    • [m-n] – so khớp từ ký tự m đến ký tự n theo thứ tự trong ASCII
-    • XY – so khớp với X theo sau là Y, ví dụ[a-e][i-u]
-    • X|Y – so khớp với X hoặc Y
-    • \d – so khớp với ký tự là chữ số, viết tắt của [0-9]
-    • \D – so khớp với ký tự không phải là chữ số, viết tắt là [^0-9]
-    • \s – so khớp với bất kì kí tự nào (dấu cách, tab, xuông dòng) viết tắt của [\t\n\x0B\f\r]
-    • \S – so khớp với bất kỳ ký tự không phải kí tự trống, viết tắt của [^\s]
-    • \w – so khớp với bất kỳ ký tự nào là chữ cái và số [a-zA-z0-9] và dấu gạch dưới
-    • \W – so khớp với bất kỳ ký tự nào không phải chữ cái và số, viết tắt của [^\w]
-    • \b – ranh giới của một từ
-    • \B – không phải ranh giới của một từ
-    • \A – so khớp phần đầu của đầu vào
-    • \G – so khớp phần cuối của đầu vào
-    • X* - so khớp với 0 hoặc nhiều sự xuất hiện của X, viết gọn cho X{0,}
-    • X+ - so khớp với 1 hoặc nhiều sự xuất hiện của X, viết gọn cho X{1,}
-    • X? – so khớp 0 hoặc 1 sự xuất hiện của X, viết gọn cho X{0,1}
-    • X{n} – so khớp chính xác n lần xuất hiện của X
-    • X{n,m} – so khớp với ít nhất n và nhiều nhất m lần xuất hiện của X
 Lớp Pattern – Matcher
 public static pattern compile(String regex)
 Định dạng regex cho Pattern.
@@ -921,106 +539,6 @@ do {
       // code;
 } while();
 ```
-# Arrays (Dùng để lưu trữ có các thành phần dữ liệu cùng kiểu)
-**Syn**
-```bash
-<data type>[] <tên> = new <data type>[<kích_thước>];
-<data type> <tên>[] = new <data type>[<kích_thước>];
-<data type>[] <tên> = {“”, “”, …};
-…
-```
-## length (Xác định số phần tử có trong mảng)
-**Ex**
-```java
-class Solution{
-    public static void main(String[] args) {
-       int [] n = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20};
-       System.out.println(n.length); // 21
-    }
-}
-```
-# Object
-**Ex: Quản lý danh sách sinh viên**
-```java
-class student{
-	String name, room, sex;
-	student(String name, String room, String sex){
-		this.name = name;
-		this.room = room;
-		this.sex = sex;
-	}
-	@Override
-	public String toString() {
-		return "student [name=" + name + ", room=" + room + ", sex=" + sex + "]";
-	}
-}
-public class Solution{
-	public static void main(String[] args) {
-		student [] list = new student[2];
-		student sv1 = new student("JSON", "12A1", "male");
-		student sv2 = new student("MICK", "12A1", "female");
-		list[0] = sv1;
-		list[1] = sv2;
-		for (student student : list) {
-			System.out.println(student);
-		}
-	}
-}
-// student [name=JSON, room=12A1, sex=male]
-// student [name=MICK, room=12A1, sex=female]
-```
-# ArrayList (ArrayList được sử dụng như một mảng động để lưu trữ phần tử)
-```bash
-Cần import java.util.ArrayList
-
-Lưu ý:
-- có thể chứa các phần tử trùng lặp
-- Duy trì thứ thự các phần tử được thêm vào
-- ArrayList là không đồng bộ (non-synchronized)
-- cho phép truy cập ngẫu nhiên vì nó lưu trữ dữ liệu chỉ mục
-- Thao tác chậm vì cần nhiều sự dịch chuyển nếu bất kỳ phần nào bị xóa khỏi danh sách.
-```
-**Syn**
-```bash
-ArrayList list = new ArrayList(); // non-generric – kiểu cũ
-ArrayList<String> list = new ArrayList<String>() // generic – kiểu mới
-```
-## size() (Trả về số lượng phần tử có trong ArrayList)
-## add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)
-**Ex**
-```java
-import java.util.ArrayList;
-public class SinhVien {
-	public static void main(String[] args) {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("le duc thang");
-		list.add("le khanh toan");
-		System.out.println(list);
-	}
-}
-// [le duc thang, le khanh toan]
-```
-**Ex2**
-```java
-import java.util.ArrayList;
-public class SinhVien {
-	public static void main(String[] args) {
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("le duc thang");
-		list.add("le khanh toan");
-		System.out.println(list);
-		list.add(1, "nguyen minh duc");
-		System.out.println(list);
-	}
-}
-// * [le duc thang, le khanh toan]
-// * [le duc thang, nguyen minh duc, le khanh toan]
-```
-## isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)
-## remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)
-## removeAll() (xóa hết phần tử có trong ArrayList value)
-## contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)
-## set() (Để gán phần tử)
 Static boolean matches(String regex, CharSequence input)
 Nó biên dịch biểu thức chính quy và tìm kiếm các chuỗi con từ chuỗi input phù hợp với mẫu regex
 string[] split(CharSequence input)
@@ -1486,24 +1004,6 @@ public class Main {
 		sn.out();
 	}
 }
-Access modifier
-Để kiểm soát mức độ mức độ truy cập vào các thành phần (biến, phương thức) của một lớp. Java cung cấp bốn loại access modifier chính: public, protected, default, private. Việc sử dụng access modifier thích hợp là rất quan trọng để bảo đảm tính bảo mất, tính bảo trì và tính linh hoạt của mã.
-Access Modifier
-Phạm vi truy cập
-public
-Toàn bộ chương trình
-protected
-Chỉ trong cùng package hoặc lớp con
-default (gói)
-Chỉ trong cùng package
-private
-Chỉ trong cùng lớp
-Quy tắc:
-- một lớp chỉ có thể có một access modifier duy nhất. nếu không có từ khóa nào được sử dụng, mặc định là default
-- các phương thức và biến trong cùng một lớp có các access modifier khác nhau	
-- các lớp con có thể truy cập vào các thành phần có mức truy cấp là private của lớp cha
-- các lớp không liên quan không thể truy cập vào các thành phần có mức độ truy cập là default hoặc protected của lớp
-- các lớp không liên quan không thể truy cập vào các thành phần có mức truy cập là private của lớp.
 Enum
 Enum là một từ khóa trong java, là một kiểu dữ liệu đặc biệt đại diện cho hằng số cố định
 Enum có thể chứ các trường, phương thức và constructor.
@@ -3849,10 +3349,6 @@ Ví Dụ:
 Scanner sc = new Scanner(System.in);
 System.out.println(“…”);
 String nhap = sc.nextLine();
-Comment
-// -  ghi chú trên một dòng
-/* ghi chú trên nhiều dòng */
-/** chú thích để tạo tài liệu javadoc */
 final 
 Xác định một biến không thể thay đổi được.
 Cú pháp:

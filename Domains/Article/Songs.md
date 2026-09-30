@@ -31,6 +31,7 @@
 21. Phi điểu và ve sầu (c5)
 22. tây vương nữ quốc
 23. gặp người đúng lúc
+24. cô độc vương
 ```
 **Nhạc việt**
 ```bash

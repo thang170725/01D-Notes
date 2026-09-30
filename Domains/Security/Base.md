@@ -6,6 +6,7 @@
 - [JWT (JSON Web Token là một dạng token thường dùng để xác thực người dùng giữa client và server)](#jwt-json-web-token-là-một-dạng-token-thường-dùng-để-xác-thực-người-dùng-giữa-client-và-server)
   - [Ask](#ask-1)
     - [JWT khác cookie thế nào?](#jwt-khác-cookie-thế-nào)
+- [OAuth2](#oauth2)
 ---
 # Cookie (tờ giấy ghi chú mà website gửi cho trình duyệt giữ hộ)
 ```bash
@@ -289,4 +290,9 @@ JWT và Cookie không phải hai thứ cùng loại để so sánh trực tiếp
     Giống như:
         - Cookie = cái ví/túi chứa
         - JWT = một loại thẻ có thể đặt vào đó
+```
+# OAuth2
+```bash
+OAuth2 giải quyết vấn đề:
+    Một application muốn được phép truy cập tài nguyên thay mặt user mà không cần biết password của user.
 ```

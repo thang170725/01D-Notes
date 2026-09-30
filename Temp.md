@@ -867,42 +867,6 @@ Ví dụ payload:
 
 Quan trọng: payload JWT thường không được mã hóa để giữ bí mật. Nó chủ yếu được ký để phát hiện sửa đổi.
 
-1.5 OAuth2
-
-OAuth2 giải quyết vấn đề:
-
-Một application muốn được phép truy cập tài nguyên thay mặt user mà không cần biết password của user.
-
-Ví dụ:
-
-Your App
-   │
-   │ "Tôi muốn truy cập Google Calendar"
-   ▼
-Google Authorization Server
-   │
-   │ User login + consent
-   ▼
-Access Token
-   │
-   ▼
-Your App
-   │
-   ▼
-Google Calendar API
-
-OAuth2 rất phổ biến khi:
-
-Login with Google
-Login with GitHub
-Login with Microsoft
-
-Nhưng cần phân biệt:
-
-OAuth2 là authorization framework. JWT là token format.
-
-Chúng không phải cùng một thứ.
-
 1.6 RBAC
 
 RBAC = Role-Based Access Control.

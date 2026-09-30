@@ -1,3 +1,25 @@
+- [XML introduction](#xml-introduction)
+- [XSD (XML Schema Definition là file dùng để quy định XML được phép có cấu trúc và dữ liệu như thế nào)](#xsd-xml-schema-definition-là-file-dùng-để-quy-định-xml-được-phép-có-cấu-trúc-và-dữ-liệu-như-thế-nào)
+  - [complexType (Dùng khi một element có cấu trúc bên trong, ví dụ chứa nhiều element con)](#complextype-dùng-khi-một-element-có-cấu-trúc-bên-trong-ví-dụ-chứa-nhiều-element-con)
+  - [sequence (Các element phải xuất hiện đúng thứ tự)](#sequence-các-element-phải-xuất-hiện-đúng-thứ-tự)
+  - [choice (Chỉ được chọn một trong các element)](#choice-chỉ-được-chọn-một-trong-các-element)
+  - [all (Các element có thể xuất hiện theo bất kỳ thứ tự nào)](#all-các-element-có-thể-xuất-hiện-theo-bất-kỳ-thứ-tự-nào)
+  - [Datatype (kiểu dữ liệu trong xsd)](#datatype-kiểu-dữ-liệu-trong-xsd)
+    - [xs:string](#xsstring)
+    - [xs:integer | xs:int](#xsinteger--xsint)
+    - [xs:decimal](#xsdecimal)
+    - [xs:float](#xsfloat)
+    - [xs:double](#xsdouble)
+    - [xs:boolean](#xsboolean)
+    - [xs:date](#xsdate)
+    - [xs:dateTime](#xsdatetime)
+    - [xs:time](#xstime)
+- [xs:attribute](#xsattribute)
+- [value](#value)
+- [xs:restriction](#xsrestriction)
+- [enumeration](#enumeration)
+- [simpleType](#simpletype)
+---
 # XML introduction 
 **Ex**
 ```xml
