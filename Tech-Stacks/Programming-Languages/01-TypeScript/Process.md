@@ -3,8 +3,11 @@
   - [let](#let)
   - [Generic (type động)](#generic-type-động)
 - [Array](#array)
-- [function](#function)
+- [function (hàm)](#function-hàm)
   - [Arrow function](#arrow-function)
+  - [function\*](#function)
+    - [.next()](#next)
+      - [.value()](#value)
 - [Object](#object)
 - [type](#type)
 ---
@@ -56,7 +59,7 @@ if (typeof value === "string") {
   console.log(value.toUpperCase())
 }
 ```
-# function
+# function (hàm)
 **Ex**
 ```ts
 //  hàm js thường
@@ -82,6 +85,27 @@ const sum = (a: number, b: number): number => {
   return a + b
 }
 ```
+## function*
+**Các bình thường**
+```ts
+function hello() {
+    return "Hello";
+}
+
+let result = hello();
+
+console.log(result); // → function chạy một lần từ đầu đến return, rồi kết thúc
+```
+**Cách dùng 'function*'**
+```ts
+function* hello() {
+    yield "Hello";
+    yield "World";
+}
+// Dấu * nghĩa là: Đây là generator function — một function có thể tạm dừng, sau đó tiếp tục chạy từ chỗ đã dừng.
+```
+### .next()
+#### .value()
 # Object
 **Ex: inline type**
 ```ts

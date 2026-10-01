@@ -1,8 +1,13 @@
 + [<<Back](../Base.md)
+- [Directory Structure](#directory-structure)
 - [Typescript Introduction (JavaScript + Static Type)](#typescript-introduction-javascript--static-type)
 - [Installation \& Run](#installation--run)
   - [Typescript + NodeJS](#typescript--nodejs)
 ---
+# Directory Structure
+TypeScript/                  ```mình dùng thư mục này để xem kiến thức về ngôn ngữ lập trình TypeScript```  
+├── [Lib](Lib.md)            ```mình dùng file này để học các thư viện trong typescript```  
+└── [Process](Process.md)    ```mình dùng thư mục này để xem kiến thức về Python``` 
 # Typescript Introduction (JavaScript + Static Type)
 ```bash
 TypeScript giúp:

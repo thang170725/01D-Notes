@@ -1,12 +1,64 @@
 + [<<Back](../Base.md)
+- [Recursion (Đệ quy)](#recursion-đệ-quy)
+  - [Practices](#practices)
+    - [Tìm phần tử thứ n trong dãy fibonaci](#tìm-phần-tử-thứ-n-trong-dãy-fibonaci)
 - [Dijkstra's Algorithm (thuật toán dùng để tìm đường đi ngắn nhất)](#dijkstras-algorithm-thuật-toán-dùng-để-tìm-đường-đi-ngắn-nhất)
+- [Fenwick Tree (là một cấu trúc dữ liệu dùng để cập nhật giá trị của một phần tử trong mảng)](#fenwick-tree-là-một-cấu-trúc-dữ-liệu-dùng-để-cập-nhật-giá-trị-của-một-phần-tử-trong-mảng)
 - [số chẵn và số lẻ](#số-chẵn-và-số-lẻ)
 - [DFS](#dfs)
 - [LeetCode 1038 - Medium](#leetcode-1038---medium)
 - [Leetcode - 2181](#leetcode---2181)
 - [Thuật toán tìm ước chung lớn nhất](#thuật-toán-tìm-ước-chung-lớn-nhất)
 - [Tìm UCLN](#tìm-ucln)
+- [Thuật toán Backtracking (Quay lui)](#thuật-toán-backtracking-quay-lui)
+  - [Practices](#practices-1)
+    - [Sinh dãy nhị phân có n phần tử](#sinh-dãy-nhị-phân-có-n-phần-tử)
 ---
+# Recursion (Đệ quy)
+## Practices
+### Tìm phần tử thứ n trong dãy fibonaci
+```c++
+#include <iostream>
+using namespace std;
+int fibonaci(int n){// n = 0,1,2,...
+    if(n==0 || n==1) return 1;
+    return fibonaci(n-1) + fibonaci(n-2);
+}
+int main(){
+    cout << fibonaci(4);
+    return 0;
+}
+5
+```
+Tìm phần tử thứ n trong dãy fibonaci có nhớ
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Hàm đệ quy có nhớ
+long long fib(int n, vector<long long> &memo) {
+    // Trường hợp cơ sở
+    if (n <= 1) return n;
+
+    // Nếu đã tính rồi, trả về ngay
+    if (memo[n] != -1) return memo[n];
+
+    // Ngược lại, tính và lưu lại
+    memo[n] = fib(n - 1, memo) + fib(n - 2, memo);
+    return memo[n];
+}
+
+int main() {
+    int n;
+    cout << "Nhap n: ";
+    cin >> n;
+
+    // Khởi tạo mảng nhớ, gán -1 (chưa tính)
+    vector<long long> memo(n + 1, -1);
+
+    cout << "So Fibonacci thu " << n << " la: " << fib(n, memo);
+    return 0;
+}
 # Dijkstra's Algorithm (thuật toán dùng để tìm đường đi ngắn nhất)
 **Tư duy cốt lõi của Dijkstra**
 ```bash
@@ -218,6 +270,7 @@ Update distance
 Lặp lại
 
 Nếu bạn đang học LeetCode, Dijkstra là một thuật toán rất đáng học sau BFS/DFS. Đặc biệt, khi gặp đề có các cụm như "minimum cost", "shortest time", "minimum distance", "weighted graph", bạn nên lập tức nghĩ đến Dijkstra (sau đó kiểm tra xem có trọng số âm hay không).
+```
 # Fenwick Tree (là một cấu trúc dữ liệu dùng để cập nhật giá trị của một phần tử trong mảng)
 ```bash
 Tính tổng tiền tố (Prefix Sum) rất nhanh.
@@ -514,3 +567,319 @@ def main():
     print(UCLN(22, 18))
 main()
 ```
+# Thuật toán Backtracking (Quay lui) 
+## Practices
+### Sinh dãy nhị phân có n phần tử
+**Ex**
+```c++
+#include <iostream>
+using namespace std;
+
+void sinh_nhi_phan_2(int n, string current){
+    if (current.length() == n){
+        cout << current << endl;
+        return;
+    }
+    string current1 = current+"0";
+    string current2 = current+"1";
+    sinh_nhi_phan_2(n, current1);
+    sinh_nhi_phan_2(n, current2);
+}
+
+int main(){
+    int n = 3;
+    int x[n+1];
+    sinh_nhi_phan_2(n, x);
+    return 0;
+}
+// 000
+// 001
+// 010
+// 011
+// 100
+// 101
+// 110
+// 111
+```
+#include <iostream>
+using namespace std;
+
+void print(int x[], int n){
+    for(int i = 1; i <= n; i++){
+        cout << x[i];
+    }
+    cout << endl;
+}
+
+void truy(int x[], int index, int n){
+    for(int i = 0; i <= 1; i++){
+        x[index] = i;
+        if(index == n){
+            print(x, n);
+        }
+        else{
+            truy(x, index+1, n);
+        }
+    }
+}
+
+int main(){
+    int n = 3;
+    int x[n+1];
+    truy(x, 1, 3);
+    return 0;
+}
+000
+001
+010
+011
+100
+101
+110
+111
+Sinh tổ hợp chập k của n bằng quay lui
+#include <iostream>
+using namespace std;
+
+void print(int x[], int k){
+    for(int i = 1; i <= k; i++){
+        cout << x[i];
+    }
+    cout << endl;
+}
+
+void truy(int x[], int index, int n, int k){
+    for(int i = x[index-1]+1; i <= n-k+index; i++){
+        x[index] = i; 
+        if(index == k){
+            print(x, k);
+        }
+        else{
+            truy(x, index+1, n, k);
+        }
+    }
+}
+
+int main(){
+    int n = 6;
+    int k = 3;
+    int x[n+1];
+    x[0] = 0;
+    truy(x, 1, n, k);
+    return 0;
+}
+123
+124
+125
+126
+134
+135
+136
+145
+146
+156
+234
+235
+236
+245
+246
+256
+345
+346
+356
+356
+356
+456
+Chia để trị
+Bài tập
+Tìm giá trị lớn nhất trong mảng bằng chia để trị
+int max_value(int x[], int l, int r){
+    if (l==r){
+        return x[l];
+    }
+    else{
+        int m = (int)((l+r)/2);
+        int max_left = max_value(x, l, m);
+        int max_right = max_value(x, m+1, r);
+
+        return max(max_left, max_right);
+    }
+}
+Tìm giá trị chẵn nhỏ nhất trong mảng bằng chia để trị
+#include <iostream>
+#include <climits>
+using namespace std;
+
+int min_even_value(int x[], int l, int r){
+    if (l == r){
+        if (x[l] % 2 == 0) return x[l];
+        return INT_MAX;  // nếu không chẵn thì trả về giá trị rất lớn
+    }
+    int m = (l + r) / 2;
+    int min_left = min_even_value(x, l, m);
+    int min_right = min_even_value(x, m+1, r);
+    return min(min_left, min_right);
+}
+
+int main(){
+    int a[] = {5, 7, 2, 9, 8, 11};
+    int n = sizeof(a)/sizeof(a[0]);
+    int result = min_even_value(a, 0, n-1);
+    if (result == INT_MAX) cout << "Khong co so chan nao\n";
+    else cout << "So chan nho nhat: " << result << endl;
+}
+So chan nho nhat: 2
+Tìm giá trị chẵn lớn nhất trong mảng bằng chia để trị
+#include <iostream>
+#include <climits>
+using namespace std;
+
+int max_even_value(int x[], int l, int r){
+    if (l == r){
+        if (x[l] % 2 == 0) return x[l];
+        return INT_MIN;  // nếu không chẵn thì trả về giá trị rất lớn
+    }
+    int m = (l + r) / 2;
+    int min_left = max_even_value(x, l, m);
+    int min_right = max_even_value(x, m+1, r);
+    return max(min_left, min_right);
+}
+
+int main(){
+    int a[] = {1, 2, 5, 7, 9, 8, 11};
+    int n = sizeof(a)/sizeof(a[0]);
+    int result = max_even_value(a, 0, n-1);
+    if (result == INT_MIN) cout << "Khong co so chan nao\n";
+    else cout << "So chan long nhat: " << result << endl;
+}
+Tính tổng các số dương trong mảng
+#include <iostream>
+using namespace std;
+
+int sum(int x[], int l, int r) {
+    if (l == r) {
+        if (x[l] > 0) return x[l];
+        else return 0;
+    } else {
+        int m = (l + r) / 2;
+        int sum_left = sum(x, l, m);
+        int sum_right = sum(x, m+1, r);
+        return sum_left + sum_right;
+    }
+}
+
+int main() {
+    int a[] = {5, -2, 7, 0, -3, 4};
+    int n = sizeof(a)/sizeof(a[0]);
+    cout << "Tong cac so duong = " << sum(a, 0, n-1) << endl;
+}
+Tong cac so duong = 16   // (5 + 7 + 4)
+Thuật toán pow(a, n)
+Output = 243
+int helper(int a, int n) {
+	if (a == 0) return 0;
+	if (n == 0) return 1;
+	int res = helper(a * a, n / 2);
+	if (n % 2 != 0) return a * res;
+	else return res;
+}
+
+int power(int a, int n) {
+	if (n > 0) return helper(a, n);
+	else if (n == 0) return 1;
+	else if (a == 0) return 0;
+	else return 1.0 / helper(a, -1 * n);
+}
+cout << power(3,5);
+Sắp xếp trộn
+#include <bits/stdc++.h>
+using namespace std;
+void merge(int x[], int l, int m, int r){
+    int n1 = m-l+1; // số phần tử nhánh trái
+    int n2 = r-(m+1)+1; // số phần tử nhánh phải
+    int L[n1], R[n2];
+    for (int i = 0; i<n1; i++) L[i] = x[l+i]; // lất từ l -> m
+    for (int j = 0; j<n2; j++) R[j] = x[m+1+j]; //lấy từ m+1 -> r
+    int i = 0, j = 0, k = l;
+    while(i<n1 && j<n2){
+        if(L[i] <= R[j]) x[k++] = L[i++];
+        else x[k++] = R[j++];
+    }
+    while (i < n1) x[k++] = L[i++];
+    while (j < n2) x[k++] = R[j++];
+}
+
+void merge_sort(int x[], int l, int r){
+    if (l < r){ // nếu mảng có nhiều hơn 1 phần tử thì đệ quy, 1 phần tử thì dừng
+        int m = (l+r)/2;
+        merge_sort(x, l, m);
+        merge_sort(x, m+1, r);
+        merge(x, l, m, r);
+    }
+}
+
+int main(){
+    int arr[] = {38, 27, 43, 3, 9, 82, 10};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "Mang ban dau: ";
+    for (int i = 0; i < n; i++) cout << arr[i] << " ";
+    cout << endl;
+
+    merge_sort(arr, 0, n - 1); // gọi merge sort
+
+    cout << "Mang sau khi sap xep: ";
+    for (int i = 0; i < n; i++) cout << arr[i] << " ";
+    cout << endl;
+    return 0;
+}
+
+Mang ban dau: 38 27 43 3 9 82 10 
+Mang sau khi sap xep: 3 9 10 27 38 43 82
+#include <bits/stdc++.h>
+using namespace std;
+
+void merge(vector<double> &x, int l, int m, int r){
+	vector<double> left(x.begin() + l, x.begin()+m+1); //so phan tu nhanh trai
+	vector<double> right(x.begin()+m+1, x.begin()+r+1); // so phan tu nhanh phai
+	int i = 0; // index nhanh trai
+	int j = 0; // index nhanh phai
+	int k = l; // index nhanh chinh
+	while (i < left.size() && j < right.size()){
+		if (left[i] < right[j]) x[k++] = left[i++];
+		else x[k++] = right[j++];
+	}
+	while (i < left.size()) x[k++] = left[i++];
+	while (j < right.size()) x[k++] = right[j++];
+}
+
+void merge_sort(vector<double> &x, int l, int r){
+	if (l < r){
+		int m = (l+r)/2;
+		merge_sort(x, l, m);
+		merge_sort(x, m+1, r);
+		merge(x, l, m, r);
+	}
+}
+
+int main(){
+	int min = 0;
+	int max = 50;
+	srand(time(0));
+	
+	vector<double> li;
+	int n = 10;
+	for (int i = 0; i < n; i++){
+		double r = min + ((double)rand()/RAND_MAX)*(max-min);
+		li.push_back(r);
+	}
+	for (int i = 0; i < n; i++){
+		cout << li[i] << " ";
+	}
+	cout << endl;
+	merge_sort(li, 0, li.size()-1);
+	for (int i = 0; i < n; i++){
+		cout << li[i] << " ";
+	}
+	return 0;
+}

@@ -17,7 +17,7 @@
   - [shift()](#shift)
   - [unshift()](#unshift)
   - [splice()](#splice)
-  - [.sort()](#sort)
+  - [.sort() (Dùng để sắp xếp. nếu là số thì sắp xếp tăng dần, nếu là chữ thì sắp xếp theo bảng chữ cái)](#sort-dùng-để-sắp-xếp-nếu-là-số-thì-sắp-xếp-tăng-dần-nếu-là-chữ-thì-sắp-xếp-theo-bảng-chữ-cái)
   - [.reverse()](#reverse)
   - [.concat()](#concat)
   - [.slice() (Dùng đê lấy một hay một số phần tử trong mảng)](#slice-dùng-đê-lấy-một-hay-một-số-phần-tử-trong-mảng)
@@ -275,21 +275,13 @@ document.write(Text)
 // Hello,i,am,a,coder
 // Hello,i,from,to Viet Nam,i,am,a,coder
 ```
-## .sort()
-```bash
-Dùng để sắp xếp. nếu là số thì sắp xếp tăng dần, nếu là chữ thì sắp xếp theo bảng chữ cái. 
-```
+## .sort() (Dùng để sắp xếp. nếu là số thì sắp xếp tăng dần, nếu là chữ thì sắp xếp theo bảng chữ cái)
 **Ex1**
 ```js
 var N = [2,4,1,6,8];
 N.sort();
 ```
 **Ex2: sắp xếp list object**
-```bash
-- < 0	: a đứng trước b
-- > 0	: b đứng trước a
-- 0	    : giữ nguyên
-```
 ```js
 const exercises = [
   { name: "Squat", order_index: 2 },
@@ -298,6 +290,10 @@ const exercises = [
 ];
 
 exercises.sort((a, b) => a.order_index - b.order_index);
+// lợi dụng phép trừ để tìm xem a hay b ai đứng trước
+// < 0	: a đứng trước b
+// > 0	: b đứng trước a
+// 0	  
 
 console.log(exercises);
 

@@ -1,4 +1,5 @@
 - [Email Introduction (dùng để tạo, đọc, phân tích và xử lý email theo chuẩn MIME/email)](#email-introduction-dùng-để-tạo-đọc-phân-tích-và-xử-lý-email-theo-chuẩn-mimeemail)
+- [Installation](#installation)
 - [mime](#mime)
   - [text](#text)
     - [MIMETEXT()](#mimetext)
@@ -10,8 +11,9 @@
 - [parser](#parser)
   - [Parser (class dùng để parse email dạng text thành một email message object)](#parser-class-dùng-để-parse-email-dạng-text-thành-một-email-message-object)
 - [parsestr() (dùng để parse email dạng string)](#parsestr-dùng-để-parse-email-dạng-string)
-- ["Nguyen Van A"](#nguyen-van-a)
-- ["nguyenvana@gmail.com"](#nguyenvanagmailcom)
+- [utils](#utils)
+  - [parseaddr() (dùng để tách tên và email address từ một chuỗi địa chỉ email)](#parseaddr-dùng-để-tách-tên-và-email-address-từ-một-chuỗi-địa-chỉ-email)
+  - [getaddresses() (dùng khi bạn có nhiều email address)](#getaddresses-dùng-khi-bạn-có-nhiều-email-address)
 ---
 # Email Introduction (dùng để tạo, đọc, phân tích và xử lý email theo chuẩn MIME/email)
 ```bash
@@ -22,19 +24,21 @@ Nếu không có thư viện này thì server không biết email gồm:
     - Người nhận
     - Nội dung
 ```
-Nó làm được những gì?
-
-Có thể chia thành vài nhóm chính:
-
-Chức năng	Mục đích
-Parse email	Đọc email dạng raw text/bytes thành cấu trúc có thể truy cập
-Đọc headers	Lấy From, To, Subject, Date, CC, Message-ID,...
-Đọc body	Xử lý text/plain, text/html
-Xử lý MIME	Xử lý email multipart
-Xử lý attachment	Đọc file đính kèm, filename, content type, dữ liệu binary
-Decode	Xử lý encoding của nội dung/header
-Tạo email	Xây dựng email mới để gửi
-Serialize	Chuyển email object trở lại thành text/bytes
+**Nó làm được những gì?**
+```bash
+- Parse email: Đọc email dạng raw text/bytes thành cấu trúc có thể truy cập
+- Đọc headers: Lấy From, To, Subject, Date, CC, Message-ID,...
+- Đọc body: Xử lý text/plain, text/html
+- Xử lý MIME: Xử lý email multipart
+- Xử lý attachment: Đọc file đính kèm, filename, content type, dữ liệu binary
+- Decode: Xử lý encoding của nội dung/header
+- Tạo email: Xây dựng email mới để gửi
+- Serialize: Chuyển email object trở lại thành text/bytes
+```
+# Installation
+```bash
+pip install email
+```
 # mime
 ## text
 ### MIMETEXT()
@@ -157,138 +161,43 @@ msg = Parser(policy=policy.default).parsestr(raw_email)
 
 print(type(msg)) # <class 'email.message.EmailMessage'>
 ```
-parseaddr()
-
-Import:
-
-from email.utils import parseaddr
-
-Hàm này dùng để tách tên và email address từ một chuỗi địa chỉ email.
-
-Ví dụ:
-
-"Nguyen Van A" <nguyenvana@gmail.com>
-
-thành:
-
-(
-    "Nguyen Van A",
-    "nguyenvana@gmail.com"
-)
-Cú pháp
+# utils
+## parseaddr() (dùng để tách tên và email address từ một chuỗi địa chỉ email)
+**Syn**
+```bash
 parseaddr(address)
-Input
-address: str
-Output
-(name, email)
-Ví dụ 1
-Input
-parseaddr('"Nguyen Van A" <nguyenvana@gmail.com>')
-Output
-(
-    "Nguyen Van A",
-    "nguyenvana@gmail.com"
-)
 
-Có thể unpack:
-
+- Input
+    + address: str
+- Output: (name, email)
+```
+**Ex**
+```python
 name, email = parseaddr(
     '"Nguyen Van A" <nguyenvana@gmail.com>'
 )
-
-Kết quả:
-
-name
-# "Nguyen Van A"
-
-email
-# "nguyenvana@gmail.com"
-
-Đây chính là đoạn code của bạn:
-
-from_name, from_email = parseaddr(msg.get("From", ""))
-
-Nếu:
-
-msg.get("From", "")
-
-trả về:
-
-"Nguyen Van A" <nguyenvana@gmail.com>
-
-thì:
-
-from_name
-
-là:
-
-Nguyen Van A
-
-và:
-
-from_email
-
-là:
-
-nguyenvana@gmail.com
-Ví dụ 2: chỉ có email
-Input
-parseaddr("nguyenvana@gmail.com")
-Output
-("", "nguyenvana@gmail.com")
-5. getaddresses()
-
-Import:
-
-from email.utils import getaddresses
-
-getaddresses() dùng khi bạn có nhiều email address.
-
-Đây là điểm khác quan trọng giữa:
-
-parseaddr()
-
-và:
-
-getaddresses()
-parseaddr()
-
-Phù hợp với một địa chỉ.
-
-Alice <alice@gmail.com>
-getaddresses()
-
-Phù hợp với nhiều địa chỉ.
-
-Alice <alice@gmail.com>, Bob <bob@gmail.com>
-Cú pháp
+```
+## getaddresses() (dùng khi bạn có nhiều email address)
+**Syn**
+```bash
 getaddresses(fieldvalues)
 
-fieldvalues thường là list các chuỗi address.
-
-Input
-[
-    "Alice <alice@gmail.com>, Bob <bob@gmail.com>"
-]
-Output
-[
-    ("Alice", "alice@gmail.com"),
-    ("Bob", "bob@gmail.com")
-]
-Ví dụ
+- Input:
+    + fieldvalues thường là list các chuỗi address.
+```
+**Ex**
+```python
 addresses = getaddresses([
     "Alice <alice@gmail.com>, Bob <bob@gmail.com>"
 ])
 
 print(addresses)
-
-Output:
-
-[
-    ("Alice", "alice@gmail.com"),
-    ("Bob", "bob@gmail.com")
-]
-6. msg.get()
+# [
+#     ("Alice", "alice@gmail.com"),
+#     ("Bob", "bob@gmail.com")
+# ]
+```
+1. msg.get()
 
 Đây là method của email message object.
 
