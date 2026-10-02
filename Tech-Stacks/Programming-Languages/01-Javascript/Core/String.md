@@ -1,20 +1,20 @@
 - [Create (tạo)](#create-tạo)
   - ["" \& '' \& new String \& \`\`](#----new-string--)
 - [Display (cung cấp thông tin)](#display-cung-cấp-thông-tin)
-  - [length](#length)
+  - [length (Để đếm số ký tự trong chuỗi)](#length-để-đếm-số-ký-tự-trong-chuỗi)
 - [Process (xử lý chuỗi)](#process-xử-lý-chuỗi)
-- [.toString() \& String() \& +](#tostring--string--)
-  - [${} - template string](#---template-string)
+  - [.toString() \& String() \& +](#tostring--string--)
+  - [${} - template string (để nhúng một biểu thức javascript vào chuỗi)](#---template-string-để-nhúng-một-biểu-thức-javascript-vào-chuỗi)
   - [CharAt() | at()](#charat--at)
-  - [CharCodeAt()](#charcodeat)
+  - [CharCodeAt() (Lấy ra mã số của ký tự ở vị trí thứ n trong bảng mã ASCII hoặc Unicode)](#charcodeat-lấy-ra-mã-số-của-ký-tự-ở-vị-trí-thứ-n-trong-bảng-mã-ascii-hoặc-unicode)
   - [.indexOf() \& .search()](#indexof--search)
   - [lastIndexOf()](#lastindexof)
   - [.sclice() \& .substring() \& .substr()](#sclice--substring--substr)
-  - [.replace()](#replace)
-  - [replaceAll()](#replaceall)
+  - [.replace() (Để thay đổi một chuỗi)](#replace-để-thay-đổi-một-chuỗi)
+  - [replaceAll() (Để thay thế chuỗi con trong chuỗi mẹ)](#replaceall-để-thay-thế-chuỗi-con-trong-chuỗi-mẹ)
   - [.toUpperCase() \& .toLowerCase()](#touppercase--tolowercase)
   - [concat()](#concat)
-  - [.split()](#split)
+  - [.split() (Để chuyển đổi chuỗi sang mảng)](#split-để-chuyển-đổi-chuỗi-sang-mảng)
   - [.padStart()](#padstart)
   - [padEnd()](#padend)
   - [repeat()](#repeat)
@@ -30,7 +30,9 @@
   - [.match() (Trả về một mảng với các kết quả khớp. Trả về null nếu không tìm thấy kết quả khớp)](#match-trả-về-một-mảng-với-các-kết-quả-khớp-trả-về-null-nếu-không-tìm-thấy-kết-quả-khớp)
   - [.test() (Trả về True/False nếu chuỗi khớp hoặc không khớp với biểu thức chính quy)](#test-trả-về-truefalse-nếu-chuỗi-khớp-hoặc-không-khớp-với-biểu-thức-chính-quy)
   - [.exec()](#exec)
-  - [.replace()](#replace-1)
+  - [.replace()](#replace)
+- [String](#string)
+  - [.fromCharCode()](#fromcharcode)
 ---
 # Create (tạo)
 ## "" & '' & new String & ``
@@ -46,17 +48,14 @@
 - var | let <name> = ` … `; -  template String
 ```
 # Display (cung cấp thông tin)
-## length
-```bash
-Để đếm số ký tự trong chuỗi.
-```
+## length (Để đếm số ký tự trong chuỗi)
 **Ex**
 ```js
 var Str = "Hello Wolrd";
 console.log(Str.length); // 11
 ```
 # Process (xử lý chuỗi)
-# .toString() & String() & +
+## .toString() & String() & +
 ```bash
 Ép kiểu từ số sang chuỗi.
 ```
@@ -88,14 +87,12 @@ var result = a.toString(2);
 let value = 789;
 let str = value + "";  // "789"
 ```
-## ${} - template string
-```bash
-Để nhúng một biểu thức javascript vào chuỗi.
-```
+## ${} - template string (để nhúng một biểu thức javascript vào chuỗi)
 **Ex**
 ```js
 let name = "Thắng";
 let age = 20;
+
 let str = `${name} is ${age}`; // Thắng is 20
 ```
 ## CharAt() | at()
@@ -113,10 +110,7 @@ let a = "Hello World";
 console.log(a.charAt()); // H
 console.log(a.charAt(6)); // W
 ```
-## CharCodeAt()
-```bash
-Lấy ra mã số của ký tự ở vị trí thứ n trong bảng mã ASCII hoặc Unicode.
-```
+## CharCodeAt() (Lấy ra mã số của ký tự ở vị trí thứ n trong bảng mã ASCII hoặc Unicode)
 **Ex**
 ```js
 let a = "alpha";
@@ -152,10 +146,7 @@ console.log(Str.substring(6,11)); // World
 console.log(Str.slice(6,11)); // World
 console.log(Str.substr(6,5)); // World
 ```
-## .replace()
-```bash
-Để thay đổi một chuỗi.
-```
+## .replace() (Để thay đổi một chuỗi)
 **Ex**
 ```js 
 a = a.replace("coder", "programer");
@@ -163,9 +154,9 @@ console.log(a); // Hello, My name is programer
 
 // Javascript không cho phép thay thế chuỗi giống như thay thế ở mảng.
 ```
-## replaceAll()
+## replaceAll() (Để thay thế chuỗi con trong chuỗi mẹ)
 ```bash
-Để thay thế chuỗi con trong chuỗi mẹ. Sự khác biệt giữa replace và replaceAll là replace chỉ thay thế chuỗi con đầu tiên được tìm thấy trong chuỗi mẹ còn replaceAll thì thay thế tất cả chuỗi con.
+Sự khác biệt giữa replace và replaceAll là replace chỉ thay thế chuỗi con đầu tiên được tìm thấy trong chuỗi mẹ còn replaceAll thì thay thế tất cả chuỗi con.
 ```
 **Syn**
 ```bash
@@ -199,10 +190,7 @@ Text2 = Text2.concat("hello,", " World", " I am from VN");
 console.log(Text1); // Hello, Wolrd I am from VN
 console.log(Text2); // Hello, World I am from VN
 ```
-## .split()
-```bash
-Để chuyển đổi chuỗi sang mảng.
-```
+## .split() (Để chuyển đổi chuỗi sang mảng)
 **Ex**
 ```js
 let a = "Hello World i am from Viet Nam"
@@ -441,3 +429,9 @@ console.log(a) // true
 ```
 ## .exec()
 ## .replace()
+# String
+## .fromCharCode()
+**Ex**
+```js
+String.fromCharCode(97) // "a"
+```

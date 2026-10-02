@@ -31,14 +31,18 @@
   - [Uri](#uri)
 - [database (Liên quan đến database và dữ liệu dạng bảng)](#database-liên-quan-đến-database-và-dữ-liệu-dạng-bảng)
 - [findViewById (Lấy các thành phần từ XML)](#findviewbyid-lấy-các-thành-phần-từ-xml)
-- [setOnClickListener (Lắng nghe sự kiện bấm nút)](#setonclicklistener-lắng-nghe-sự-kiện-bấm-nút)
+  - [.setText() (dùng để gán nội dung cho TextView, EditText, ...)](#settext-dùng-để-gán-nội-dung-cho-textview-edittext-)
+  - [getText() (Dùng để lấy nội dung hiện tại của TextView hoặc EditView)](#gettext-dùng-để-lấy-nội-dung-hiện-tại-của-textview-hoặc-editview)
+  - [setTextSize() (dùng để thay đổi kích thước chữ)](#settextsize-dùng-để-thay-đổi-kích-thước-chữ)
+  - [.setVisibility() (Thay đổi trạng thái hiển thị View)](#setvisibility-thay-đổi-trạng-thái-hiển-thị-view)
   - [.getVisibility() (Lấy trạng thái hiển thị hiện tại của TextView)](#getvisibility-lấy-trạng-thái-hiển-thị-hiện-tại-của-textview)
-  - [.setVisibility() (Thay đổi trạng thái hiển thị của TextView)](#setvisibility-thay-đổi-trạng-thái-hiển-thị-của-textview)
+- [setOnClickListener (Lắng nghe sự kiện bấm nút)](#setonclicklistener-lắng-nghe-sự-kiện-bấm-nút)
+  - [Ask](#ask)
+    - [tại sao chỗ này lại là view mà không phải TextView](#tại-sao-chỗ-này-lại-là-view-mà-không-phải-textview)
 - [Practices](#practices)
   - [4.9](#49)
 - [onClick()](#onclick)
 - [setText()](#settext)
-- [getText()](#gettext)
 ---
 # Android Introduction (dùng để lập trình ứng dụng android)
 ```bash
@@ -647,6 +651,53 @@ findViewById(...) là hàm tìm một thành phần giao diện trong XML thông
 Button button = findViewById(R.id.button); // Button: kiểu dữ liệu, cho biết biến này đại diện cho một nút bấm
 TextView content = findViewById(R.id.content);
 ```
+## .setText() (dùng để gán nội dung cho TextView, EditText, ...)
+**Syn**
+```bash
+txt.setText("Hello");
+
+- Input:
+    + txt: biến đại diện cho TextView
+    + setText(...): hàm thay đổi nội dung
+    + "Hello": nội dung muốn hiển thị
+```
+**Ex**
+```java
+TextView txt = findViewById(R.id.txt);
+
+txt.setText("Hello Android");
+
+// Màn hình sẽ hiển thị:
+// Hello Android
+```
+## getText() (Dùng để lấy nội dung hiện tại của TextView hoặc EditView)
+**Ex**
+```java
+String text = txt.getText().toString();
+```
+## setTextSize() (dùng để thay đổi kích thước chữ)
+**Syn**
+```bash
+txt.setTextSize(20);
+```
+**Ex**
+```java
+TextView txt = findViewById(R.id.txt);
+
+txt.setText("Hello Android");
+txt.setTextSize(20);
+```
+## .setVisibility() (Thay đổi trạng thái hiển thị View)
+**Syn**
+```bash
+txt.setVisibility(View.VISIBLE);
+
+- Input:
+    + View.VISIBLE: Hiển thị View
+    + View.INVISIBLE:  Ẩn View nhưng vẫn giữ chỗ trên giao diện
+    + View.GONE: Ẩn View và xóa luôn khoảng trống không gian mà View chiếm
+```
+## .getVisibility() (Lấy trạng thái hiển thị hiện tại của TextView)
 # setOnClickListener (Lắng nghe sự kiện bấm nút)
 ```java
 button.setOnClickListener(new View.OnClickListener() {
@@ -662,10 +713,10 @@ button.setOnClickListener(new View.OnClickListener() {
 // onClick(View v): hàm được Android gọi tự động khi người dùng bấm nút.
 // @Override: cho biết chúng ta đang viết lại hàm onClick() được quy định trong View.OnClickListener.
 ```
-## .getVisibility() (Lấy trạng thái hiển thị hiện tại của TextView)
-## .setVisibility() (Thay đổi trạng thái hiển thị của TextView)
-
-tại sao chỗ này lại là view mà không phải TextView "button.setOnClickListener(new View.OnClickListener() {
+## Ask
+### tại sao chỗ này lại là view mà không phải TextView 
+```java
+button.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
 
@@ -678,197 +729,12 @@ tại sao chỗ này lại là view mà không phải TextView "button.setOnClic
         }
 
     }
-});"
-
+});
+```
+```bash
 Vì View ở đây không phải là cái Button, mà là kiểu dữ liệu cha (class cha) của rất nhiều thành phần giao diện Android, trong đó có Button và TextView.
-
-Đây là một khái niệm Java/Android rất quan trọng. Bạn mới học Java thì có thể hiểu theo từng bước.
-
-1. Button thực chất cũng là một View
-
-Trong Android, có quan hệ kiểu:
-
-View
-├── TextView
-│   └── Button
-├── EditText
-├── ImageView
-├── CheckBox
-└── ...
-
-Tức là:
-
-Button
-
-là một loại:
-
-View
-
-Vì vậy Android có thể dùng View để đại diện cho các thành phần giao diện nói chung.
-
-2. Vậy View v là gì?
-
-Trong:
-
-@Override
-public void onClick(View v) {
-
-}
-
-v là đối tượng View vừa được click.
-
-Ví dụ bạn có:
-
-Button button = findViewById(R.id.button);
-
-sau đó:
-
-button.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-
-    }
-});
-
-Khi bạn bấm button, Android sẽ tự gọi:
-
-onClick(...)
-
-và truyền Button vừa được bấm vào biến v.
-
-Mặc dù v có kiểu:
-
-View
-
-nhưng đối tượng thực tế mà nó đang tham chiếu có thể là:
-
-Button
-3. Tại sao không viết Button v?
-
-Về mặt ý tưởng, bạn có thể nghĩ:
-
-public void onClick(Button v)
-
-nhưng Android thiết kế OnClickListener để có thể dùng cho mọi loại View, không chỉ Button.
-
-Ví dụ:
-
-TextView
-ImageView
-Button
-CheckBox
-
-đều có thể nhận sự kiện click.
-
-Do đó Android quy định:
-
-public void onClick(View v)
-
-Thay vì:
-
-public void onClick(Button v)
-
-Nhờ vậy cùng một OnClickListener có thể dùng cho nhiều loại thành phần.
-
-4. Ví dụ rất dễ hiểu
-
-Giả sử:
-
-Button button = findViewById(R.id.button);
-
-button.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-
-    }
-});
-
-Có thể hình dung Android làm gần giống:
-
-Bạn bấm Button
-      ↓
-Android phát hiện Button được click
-      ↓
-Android gọi onClick()
-      ↓
-Android đưa Button vào biến v
-      ↓
-onClick(View v)
-
-Nên trong trường hợp này:
-
-v
-
-thực tế đang chứa Button được click.
-
-5. Còn content tại sao lại là TextView?
-
-Đây lại là một chuyện khác:
-
-TextView content = findViewById(R.id.content);
-
-Chúng ta khai báo:
-
-TextView content
-
-vì content trong XML là:
-
-<TextView
-    android:id="@+id/content"
-    ...
-/>
-
-Và chúng ta muốn sử dụng những chức năng riêng của TextView.
-
-Ví dụ:
-
-content.setText("Xin chào");
-
-Đây là chức năng của TextView.
-
-Trong khi đó:
-
-content.setVisibility(View.VISIBLE);
-
-setVisibility() là chức năng mà View cung cấp và TextView được thừa hưởng.
-
-6. Đây chính là tính kế thừa trong Java
-
-Bạn đang bắt đầu gặp một phần rất quan trọng của Java:
-
-View
-  ↑
-TextView
-  ↑
-Button
-
-Nếu class con kế thừa class cha:
-
-class TextView extends View
-
-thì TextView có thể sử dụng những thứ mà View có.
-
-Tương tự:
-
-class Button extends TextView
-
-nên Button cũng kế thừa những thứ từ TextView, và cuối cùng từ View.
-
-Vì vậy:
-
-View v
-
-có thể chứa một Button.
-
-Đây là lý do bạn sẽ thấy Android code sử dụng View rất nhiều, ngay cả khi thành phần bạn đang làm việc thực tế là Button, TextView, ImageView...
-
-Bạn nên nhớ câu này:
-
-View là lớp cơ sở cho các thành phần giao diện Android. Button, TextView, ImageView... đều là những loại View.
-
-Nếu bạn muốn, bước tiếp theo mình có thể giải thích 
-new View.OnClickListener() { ... } thực chất là cái gì, vì đây chính là phần Java hơi khó hiểu nhất trong đoạn code trên.
-
+    - Button thực chất cũng là một View
+```
 # Practices
 ## 4.9
 package com.example.test1;
@@ -982,4 +848,3 @@ public class MainActivity extends AppCompatActivity {
 
 # onClick()
 # setText()
-# getText()

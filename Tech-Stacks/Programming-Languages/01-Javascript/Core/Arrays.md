@@ -1,7 +1,7 @@
 - [Create (tạo)](#create-tạo)
   - [new Array \& \[\] (Trong một Array có thể chứa các kiểu dữ liệu dữ liệu khác nhau)](#new-array---trong-một-array-có-thể-chứa-các-kiểu-dữ-liệu-dữ-liệu-khác-nhau)
   - [isArray()](#isarray)
-  - [.length](#length)
+  - [.length (Lấy chiều dài của một Array)](#length-lấy-chiều-dài-của-một-array)
   - [.join()](#join)
   - [.split()](#split)
   - [valueOf()](#valueof)
@@ -56,10 +56,7 @@ Kiểm tra xem có phải một Array không. Không thể dùng typeOf để ki
 ```bash
 Array.isArray(<variable>);
 ```
-## .length
-```bash
-Lấy chiều dài của một Array.
-```
+## .length (Lấy chiều dài của một Array)
 ## .join() 
 ```bash
 Để nối các phần tử của mảng lại với nhau thành một chuỗi.

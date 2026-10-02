@@ -1,3 +1,6 @@
+- [Fine-tune LLM (lấy một LLM huấn luyện tiếp trên tập dữ liệu riêng)](#fine-tune-llm-lấy-một-llm-huấn-luyện-tiếp-trên-tập-dữ-liệu-riêng)
+  - [Ask](#ask)
+    - [Dùng Langchain langgraph có phải là fine-tune không?](#dùng-langchain-langgraph-có-phải-là-fine-tune-không)
 - [Embedding (chuyển dữ liệu thành vector số)](#embedding-chuyển-dữ-liệu-thành-vector-số)
 - [Similarity Search](#similarity-search)
 - [Qdrant (để lưu vector)](#qdrant-để-lưu-vector)
@@ -5,13 +8,25 @@
 - [Redis (một cuốn sổ ghi chú siêu nhanh)](#redis-một-cuốn-sổ-ghi-chú-siêu-nhanh)
 - [LangSmith (để quan sát, debug, đánh giá và kiểm thử ứng dụng LLM/AI Agent)](#langsmith-để-quan-sát-debug-đánh-giá-và-kiểm-thử-ứng-dụng-llmai-agent)
 - [Ask (câu hỏi liên quan đến AI agent)](#ask-câu-hỏi-liên-quan-đến-ai-agent)
-  - [Có fine-tune được AI Agent không?](#có-fine-tune-được-ai-agent-không)
   - [nếu hỏi AI mà AI trả lời sai thì em sẽ xử lý thế nào, kiểu mình cần lấy thông tin A mà nó nói thông tin B](#nếu-hỏi-ai-mà-ai-trả-lời-sai-thì-em-sẽ-xử-lý-thế-nào-kiểu-mình-cần-lấy-thông-tin-a-mà-nó-nói-thông-tin-b)
   - [khi cho AI gọi API tức là đang cho AI đọc thẳng dữ liệu vào db thì có sợ bị lộ thông tin không, em sẽ xử lý bằng cách nào](#khi-cho-ai-gọi-api-tức-là-đang-cho-ai-đọc-thẳng-dữ-liệu-vào-db-thì-có-sợ-bị-lộ-thông-tin-không-em-sẽ-xử-lý-bằng-cách-nào)
 - [Ask (Câu hỏi liên quan đến tích hợp AI Agent)](#ask-câu-hỏi-liên-quan-đến-tích-hợp-ai-agent)
 - [Vector Index](#vector-index)
 - [ADK](#adk)
 ---
+# Fine-tune LLM (lấy một LLM huấn luyện tiếp trên tập dữ liệu riêng)
+## Ask
+### Dùng Langchain langgraph có phải là fine-tune không?
+```bash
+Việc sử dụng LangChain hay LangGraph để xây dựng AI Agent, cấu hình RAG hay thiết lập quy trình duyệt đồ thị cho Chatbot thì không gọi là Fine-tune
+    -> là quá trình Prompt Engineering, In-Context Learning và Agentic Workflow Architecture
+        tức là chúng ta tối ưu hóa luồng xử lý và ngữ cảnh đầu vào cho LLM mà không hề can thiệp hay thay đổi trọng số (weights) của mô hình gốc.
+
+Còn nếu muốn Fine-tune LLM thực sự, em sẽ có 2 hướng tiếp cận:
+    - Với Closed-source (như GPT, Gemini): Em sẽ chuẩn bị dataset dạng JSONL, dùng API Fine-tuning của hãng để upload dữ liệu lên server của họ, nhờ hạ tầng của họ cập nhật trọng số và tạo ra một custom endpoint riêng.
+
+    - Với Open-source (như Llama 3, Qwen): Em sẽ tự thuê GPU, áp dụng các kỹ thuật PEFT (Parameter-Efficient Fine-Tuning) như LoRA hoặc QLoRA để đóng băng mạng gốc, chỉ train một vài nhánh bổ trợ nhằm tiết kiệm VRAM và tối ưu hóa mô hình theo dữ liệu riêng."
+```
 # Embedding (chuyển dữ liệu thành vector số)
 **Ex**
 ```bash
@@ -372,16 +387,6 @@ Final Response
 => Bạn click từng bước. Biết ngay nó lưu gì?
 ```
 # Ask (câu hỏi liên quan đến AI agent)
-## Có fine-tune được AI Agent không?
-```bash
-Về mặt bản chất kỹ thuật, việc sử dụng LangChain hay LangGraph để xây dựng AI Agent, cấu hình RAG hay thiết lập quy trình duyệt đồ thị cho Chatbot thì không gọi là Fine-tune. Đó là quá trình Prompt Engineering, In-Context Learning và Agentic Workflow Architecture
-    tức là chúng ta tối ưu hóa luồng xử lý và ngữ cảnh đầu vào cho LLM mà không hề can thiệp hay thay đổi trọng số (weights) của mô hình gốc.
-
-Còn nếu muốn Fine-tune LLM thực sự, em sẽ có 2 hướng tiếp cận:
-    - Với Closed-source (như GPT, Gemini): Em sẽ chuẩn bị dataset dạng JSONL, dùng API Fine-tuning của hãng để upload dữ liệu lên server của họ, nhờ hạ tầng của họ cập nhật trọng số và tạo ra một custom endpoint riêng.
-
-    - Với Open-source (như Llama 3, Qwen): Em sẽ tự thuê GPU, áp dụng các kỹ thuật PEFT (Parameter-Efficient Fine-Tuning) như LoRA hoặc QLoRA để đóng băng mạng gốc, chỉ train một vài nhánh bổ trợ nhằm tiết kiệm VRAM và tối ưu hóa mô hình theo dữ liệu riêng."
-```
 ## nếu hỏi AI mà AI trả lời sai thì em sẽ xử lý thế nào, kiểu mình cần lấy thông tin A mà nó nói thông tin B
 ```bash
 Chia làm 3 tầng phòng thủ cụ thể: 

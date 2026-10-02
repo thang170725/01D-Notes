@@ -1,15 +1,20 @@
-- [console.log() \& document.write()](#consolelog--documentwrite)
+- [console.log() (In giá trị ở ô Console của Inspect Element)](#consolelog-in-giá-trị-ở-ô-console-của-inspect-element)
+- [document.write()](#documentwrite)
 - [window.alert() | alert() \& confirm() \& prompt()](#windowalert--alert--confirm--prompt)
 - [comments](#comments)
 ---
-# console.log() & document.write()
+# console.log() (In giá trị ở ô Console của Inspect Element)
+**Syn**
 ```bash
-- console.log       : In giá trị ở ô Console của Inspect Element.
+console.log(value)
+```
+# document.write()
+```bash
+- console.log       : .
 - document.write    : In giá trị nên trình duyệt người dùng.
 ```
 **Syn** 
 ```bash
-- console.log(value);
 - document.write(value);
 ```
 # window.alert() | alert() & confirm() & prompt()

@@ -1,7 +1,7 @@
 - [if ... else](#if--else)
 - [switch case](#switch-case)
 - [? :](#-)
-- [for](#for)
+- [for (vòng lặp biết trước số lần lặp)](#for-vòng-lặp-biết-trước-số-lần-lặp)
 - [While \& do while](#while--do-while)
 - [forEach()](#foreach)
 	- [break](#break)
@@ -38,10 +38,7 @@ let result = age >= 18 ? "Đủ tuổi" : "Chưa đủ tuổi";
 //   result = "Chưa đủ tuổi";
 // }
 ```
-# for
-```bash
-Là vòng lặp biết trước số lần lặp.
-```
+# for (vòng lặp biết trước số lần lặp)
 **Ex**
 ```js
 function main(){

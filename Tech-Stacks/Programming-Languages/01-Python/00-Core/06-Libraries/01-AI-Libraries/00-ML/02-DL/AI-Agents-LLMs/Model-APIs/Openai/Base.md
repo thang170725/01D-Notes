@@ -1,12 +1,12 @@
-- Cần pip install openai
-
-# Lấy API Key của OpenAI
-1. Vào: https://platform.openai.com/
-2. Đăng nhập
-3. Chọn API Keys
-4. Bấm Create new secret key
-5. Copy key lại (chỉ thấy 1 lần)
-
+- [Installation](#installation)
+- [OpenAI() \& .responses.create() \& .output\_text](#openai--responsescreate--output_text)
+- [Ask](#ask)
+  - [Cách lấy API Key của OpenAI](#cách-lấy-api-key-của-openai)
+---
+# Installation
+```bash 
+pip install openai
+```
 # OpenAI() & .responses.create() & .output_text
 ```python
 from openai import OpenAI
@@ -25,4 +25,13 @@ response = client.responses.create(
 
 # In kết quả
 print(response.output_text)
+```
+# Ask
+## Cách lấy API Key của OpenAI
+```bash
+1. Vào: https://platform.openai.com/
+2. Đăng nhập
+3. Chọn API Keys
+4. Bấm Create new secret key
+5. Copy key lại (chỉ thấy 1 lần)
 ```

@@ -1,4 +1,22 @@
 - [Number (Xử lý số)](#number-xử-lý-số)
+  - [toPrecision()](#toprecision)
+  - [toFixed()](#tofixed)
+  - [toExponential()](#toexponential)
+  - [Number.isInteger()](#numberisinteger)
+  - [Number.EPSILON](#numberepsilon)
+  - [Number.isFinite(number)](#numberisfinitenumber)
+  - [Number.isNaN()](#numberisnan)
+  - [Number.isSafeInteger()](#numberissafeinteger)
+  - [Number.MAX\_SAFE\_INTEGER](#numbermax_safe_integer)
+  - [Number.MIN\_SAFE\_INTEGER](#numbermin_safe_integer)
+  - [Number.MAX\_VALUE](#numbermax_value)
+  - [Number.MIN\_VALUE](#numbermin_value)
+  - [Number.POSITIVE\_INFINITY](#numberpositive_infinity)
+  - [Number.NEGATIVE\_INFINITY](#numbernegative_infinity)
+- [instaneof](#instaneof)
+- [JS BigInt](#js-bigint)
+- [Number() (Ép sang kiểu số)](#number-ép-sang-kiểu-số)
+- [ParseInt() \& ParseFloat()](#parseint--parsefloat)
 ---
 # Number (Xử lý số)
 ## toPrecision()
@@ -145,16 +163,14 @@ JS Arrays 2 levels
 4
 3
 ```
-# Number() & ParseInt() & ParseFloat()
-```bash
-- Number    : Ép sang kiểu số.
-```
+# Number() (Ép sang kiểu số)
 **Ex1: Number**
 ```js
 var a = "100.12345";
 var b = Number(a);
 document.write(typeof b); // number
 ```
+# ParseInt() & ParseFloat()
 **Ex2: ParseInt**
 ```js
 var a = "123"; // kiểu chuỗi
