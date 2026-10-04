@@ -39,10 +39,11 @@
 - [setOnClickListener (Lắng nghe sự kiện bấm nút)](#setonclicklistener-lắng-nghe-sự-kiện-bấm-nút)
   - [Ask](#ask)
     - [tại sao chỗ này lại là view mà không phải TextView](#tại-sao-chỗ-này-lại-là-view-mà-không-phải-textview)
-- [Practices](#practices)
-  - [4.9](#49)
 - [onClick()](#onclick)
 - [setText()](#settext)
+- [setOnCheckedChangeListener()](#setoncheckedchangelistener)
+- [Practices](#practices)
+  - [4.9](#49)
 ---
 # Android Introduction (dùng để lập trình ứng dụng android)
 ```bash
@@ -158,6 +159,19 @@ Toast.makeText(MainActivity.this, "Vui lòng nhập đầy đủ 2 số!", Toast
 ```
 #### .show()
 ## ArrayAdapter (là cầu nối giữa một List dữ liệu Java và một ListView trên giao diện)
+**Syn**
+```bash
+ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        this,                              // Context
+        android.R.layout.simple_list_item_1, // Layout cho từng item
+        names                              // Dữ liệu
+);
+
+- Input:
+    + this: Context của Activity hiện tại.
+    + android.R.layout.simple_list_item_1: layout dùng để hiển thị mỗi dòng.
+    + names: mảng dữ liệu cần đưa vào list view.
+```
 **Ex: Ví dụ bạn có**
 ```java
 List<String> names = Arrays.asList(
@@ -202,6 +216,150 @@ ArrayAdapter<String> adapter = new ArrayAdapter<>(
 
 listView.setAdapter(adapter);
 ```
+simple_list_item_1 ở đâu?
+
+Nó nằm bên trong Android SDK/framework, không nằm trong thư mục:
+
+app/
+└── src/
+    └── main/
+        └── res/
+            └── layout/
+
+Bạn sẽ không thấy:
+
+res/layout/simple_list_item_1.xml
+
+trong project của mình.
+
+Thay vào đó:
+
+android.R.layout.simple_list_item_1
+
+có nghĩa là:
+
+android
+  └── R
+      └── layout
+          └── simple_list_item_1
+
+android.R là class R do Android framework cung cấp.
+
+3. Nó thực chất là một layout
+
+simple_list_item_1 là layout đơn giản của Android dùng để hiển thị một dòng text.
+
+Có thể hình dung gần giống:
+
+<TextView
+    ...
+/>
+
+Tức là khi bạn có:
+
+String[] names = {
+    "Nguyễn Văn A",
+    "Trần Văn B",
+    "Lê Đức Thắng"
+};
+
+thì ArrayAdapter sẽ lấy simple_list_item_1 làm khuôn mẫu cho từng dòng:
+
+┌─────────────────────────┐
+│ Nguyễn Văn A             │ ← simple_list_item_1
+├─────────────────────────┤
+│ Trần Văn B               │ ← simple_list_item_1
+├─────────────────────────┤
+│ Lê Đức Thắng             │ ← simple_list_item_1
+└─────────────────────────┘
+
+Có nghĩa là:
+
+names
+  ↓
+ArrayAdapter
+  ↓
+simple_list_item_1
+  ↓
+ListView
+4. Tại sao phải truyền simple_list_item_1?
+
+Vì ArrayAdapter cần biết:
+
+"Tôi phải dùng giao diện nào để vẽ mỗi phần tử trong danh sách?"
+
+Ví dụ:
+
+new ArrayAdapter<>(
+    this,
+    android.R.layout.simple_list_item_1,
+    names
+);
+
+nói với Android:
+
+"Lấy từng String trong names, đưa nó vào layout simple_list_item_1, sau đó tạo các dòng trong ListView."
+
+5. Bạn cũng có thể tự tạo layout
+
+Ví dụ bạn muốn mỗi dòng đẹp hơn, có:
+
+┌──────────────────────────────┐
+│ Nguyễn Văn A                 │
+│ Sinh viên                    │
+└──────────────────────────────┘
+
+thì không nhất thiết dùng:
+
+android.R.layout.simple_list_item_1
+
+Bạn có thể tự tạo:
+
+res
+└── layout
+    └── item_user.xml
+
+Ví dụ:
+
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/txtName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="20sp"
+    android:padding="16dp" />
+
+Sau đó:
+
+ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        this,
+        R.layout.item_user,
+        R.id.txtName,
+        names
+);
+
+Ở đây sẽ có thêm:
+
+R.id.txtName
+
+vì Adapter cần biết String sẽ được đặt vào TextView nào trong item_user.xml.
+
+Tóm lại
+ArrayAdapter<String> adapter = new ArrayAdapter<>(
+        this,
+        android.R.layout.simple_list_item_1,
+        names
+);
+
+có thể đọc thành:
+
+Tạo một Adapter cho dữ liệu kiểu String, dùng Activity hiện tại làm Context, dùng layout simple_list_item_1 của Android làm giao diện cho từng dòng, và lấy dữ liệu từ mảng names.
+
+Còn:
+
+android.R.layout.simple_list_item_1
+
+là layout có sẵn của Android, không phải layout trong project của bạn
 ### setAdapter
 ### getCount() (có bao nhiêu phần tử)
 Một method thường gặp:
@@ -735,6 +893,99 @@ button.setOnClickListener(new View.OnClickListener() {
 Vì View ở đây không phải là cái Button, mà là kiểu dữ liệu cha (class cha) của rất nhiều thành phần giao diện Android, trong đó có Button và TextView.
     - Button thực chất cũng là một View
 ```
+# onClick()
+# setText()
+# setOnCheckedChangeListener()
+```bash
+Nếu bạn có 2 RadioButton trong cùng một RadioGroup, cách đơn giản nhất trong Java là bắt sự kiện bằng setOnCheckedChangeListener() của RadioGroup.
+```
+**Ex**
+*XML*
+```xml
+<RadioGroup
+    android:id="@+id/radioGroup"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <RadioButton
+        android:id="@+id/radioNam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nam" />
+
+    <RadioButton
+        android:id="@+id/radioNu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nữ" />
+
+</RadioGroup>
+```
+```java
+RadioGroup radioGroup = findViewById(R.id.radioGroup);
+
+radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+        if (checkedId == R.id.radioNam) {
+            // Người dùng chọn Nam
+        }
+        else if (checkedId == R.id.radioNu) {
+            // Người dùng chọn Nữ
+        }
+    }
+});
+
+Điểm quan trọng là:
+
+checkedId
+
+chính là ID của RadioButton đang được chọn.
+
+Ví dụ:
+
+RadioGroup
+│
+├── radioNam  ← chọn cái này
+│
+└── radioNu
+
+thì:
+
+checkedId == R.id.radioNam
+
+sẽ là true.
+
+3. Nếu muốn lấy RadioButton đang được chọn
+
+Có thể dùng:
+
+int checkedId = radioGroup.getCheckedRadioButtonId();
+
+RadioButton radioButton = findViewById(checkedId);
+
+String value = radioButton.getText().toString();
+
+Ví dụ người dùng chọn Nam:
+
+String value = radioButton.getText().toString();
+
+thì:
+
+value = "Nam"
+Nhớ 2 cách
+
+Bắt sự kiện ngay khi người dùng chọn:
+
+radioGroup.setOnCheckedChangeListener(...)
+
+Lấy lựa chọn hiện tại khi cần:
+
+radioGroup.getCheckedRadioButtonId()
+
+Nếu bạn đang học Android Java cơ bản thì nên dùng RadioGroup để quản lý 2 RadioButton, vì nó đảm bảo trong group chỉ có một lựa chọn được chọn.
+```
 # Practices
 ## 4.9
 package com.example.test1;
@@ -844,7 +1095,3 @@ public class MainActivity extends AppCompatActivity {
         android:text="Show Time Picker" />
 
 </LinearLayout>
-
-
-# onClick()
-# setText()

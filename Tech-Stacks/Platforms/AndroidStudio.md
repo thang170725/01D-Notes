@@ -4,8 +4,13 @@
   - [Ask](#ask)
     - [Cách xử lý khi cây thư mục không có file MainActivity.java](#cách-xử-lý-khi-cây-thư-mục-không-có-file-mainactivityjava)
 - [xml trong android studio](#xml-trong-android-studio)
+  - [LinearLayout (dùng để xếp các View con theo một đường thẳng)](#linearlayout-dùng-để-xếp-các-view-con-theo-một-đường-thẳng)
+  - [textSize](#textsize)
+    - [Ask tại sao textSize lai dùng đơn vị sp mà không dùng dp](#ask-tại-sao-textsize-lai-dùng-đơn-vị-sp-mà-không-dùng-dp)
   - [gravity (dùng để quy định vị trí của nội dung bên trong một View)](#gravity-dùng-để-quy-định-vị-trí-của-nội-dung-bên-trong-một-view)
   - [visibility](#visibility)
+  - [orientation (để quyết định các View con được xếp theo chiều ngang hay chiều dọc)](#orientation-để-quyết-định-các-view-con-được-xếp-theo-chiều-ngang-hay-chiều-dọc)
+  - [hint (dùng để hiển thị gợi ý bên trong ô nhập liệu (EditText) khi người dùng chưa nhập gì)](#hint-dùng-để-hiển-thị-gợi-ý-bên-trong-ô-nhập-liệu-edittext-khi-người-dùng-chưa-nhập-gì)
 - [Ask](#ask-1)
   - [workflow xây dựng mobile app trên android studio](#workflow-xây-dựng-mobile-app-trên-android-studio)
   - [Các bước để test chương trình đầu tiên bằng android studio và java](#các-bước-để-test-chương-trình-đầu-tiên-bằng-android-studio-và-java)
@@ -69,6 +74,245 @@ Việc không có Activity. Có thể bạn đã chọn một template kiểu No
             └── activity_main.xml
 ```
 # xml trong android studio
+## LinearLayout (dùng để xếp các View con theo một đường thẳng)
+
+Nói đơn giản:
+
+LinearLayout = cái hộp để xếp các View con thành hàng hoặc thành cột.
+
+1. orientation="vertical" → xếp dọc
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tên" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK" />
+
+</LinearLayout>
+
+Hiển thị:
+
+Tên
+[________________]
+
+[ OK ]
+
+Tức là:
+
+TextView
+   ↓
+EditText
+   ↓
+Button
+2. orientation="horizontal" → xếp ngang
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OK" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel" />
+
+</LinearLayout>
+
+Hiển thị:
+
+[ OK ] [ Cancel ]
+Khi nào nên dùng LinearLayout?
+
+Rất phù hợp khi giao diện có cấu trúc đơn giản, tuần tự.
+
+Ví dụ form:
+
+Quản lý nhân viên
+
+Mã NV:   [___________]
+
+Tên NV:  [___________]
+
+Loại NV: ○ Chính thức  ○ Thời vụ
+
+          [ Nhập NV ]
+
+          [ Danh sách ]
+
+Bạn có thể tạo bằng các LinearLayout lồng nhau:
+
+LinearLayout vertical
+│
+├── TextView              ← tiêu đề
+│
+├── LinearLayout horizontal
+│   ├── TextView          ← Mã NV
+│   └── EditText
+│
+├── LinearLayout horizontal
+│   ├── TextView          ← Tên NV
+│   └── EditText
+│
+├── LinearLayout horizontal
+│   ├── TextView          ← Loại NV
+│   └── RadioGroup
+│
+├── Button
+│
+└── Button
+
+Đây chính là lý do lúc nãy tôi đổi TableRow của bạn thành LinearLayout: giao diện của bạn thực chất đang cần xếp các thành phần theo hàng/cột đơn giản, không thực sự cần bảng.
+
+LinearLayout khác TableLayout thế nào?
+
+Ví dụ bạn có:
+
+Mã NV:     [________]
+Tên NV:    [________]
+Ngày sinh: [________]
+
+Đây là layout dạng form → LinearLayout rất phù hợp.
+
+Còn nếu bạn có dữ liệu thực sự dạng bảng:
+
+| Mã NV | Tên | Lương |
+|-------|-----|-------|
+| 001   | An  | 10M   |
+| 002   | Bình| 12M   |
+
+thì TableLayout có ý nghĩa hơn.
+
+Một điểm rất quan trọng
+
+LinearLayout chỉ xếp theo một hướng:
+
+vertical:
+↓
+↓
+↓
+
+hoặc:
+
+horizontal:
+→ → →
+
+Nếu giao diện phức tạp hơn, chẳng hạn cần đặt View ở nhiều vị trí tương đối với nhau, Android còn có ConstraintLayout.
+
+Bạn có thể nhớ thế này:
+
+LinearLayout
+    ↓
+Giao diện đơn giản
+    ↓
+Xếp tuần tự
+    ↓
+vertical / horizontal
+
+Với những bài Android cơ bản bạn đang làm, nắm chắc LinearLayout + orientation + layout_width/height + weight là rất quan trọng.
+## textSize 
+### Ask tại sao textSize lai dùng đơn vị sp mà không dùng dp
+Vì sp được thiết kế riêng cho kích thước chữ, còn dp dùng chủ yếu cho kích thước giao diện.
+
+1. dp là kích thước vật lý tương đối
+
+Ví dụ:
+
+android:layout_width="100dp"
+android:layout_height="50dp"
+
+100dp dùng để nói:
+
+Tôi muốn View này có kích thước khoảng tương đương nhau trên các màn hình có mật độ điểm ảnh khác nhau.
+
+Nó thường dùng cho:
+
+width
+height
+padding
+margin
+khoảng cách giữa các View
+2. sp dành cho chữ
+
+Ví dụ:
+
+android:textSize="20sp"
+
+sp gần giống dp, nhưng có thêm yếu tố kích thước chữ mà người dùng cài đặt trong hệ thống.
+
+Ví dụ người dùng vào:
+
+Settings → Display → Font size
+
+và tăng chữ lên.
+
+Nếu bạn dùng:
+
+android:textSize="20sp"
+
+thì chữ của ứng dụng cũng tăng theo thiết lập font của người dùng.
+
+Còn nếu bạn dùng:
+
+android:textSize="20dp"
+
+thì bạn đang nói:
+
+Kích thước này là 20dp, không phải một kích thước chữ thích ứng theo font preference.
+
+3. Ví dụ dễ hiểu
+
+Giả sử:
+
+<TextView
+    android:layout_width="200dp"
+    android:layout_height="50dp"
+    android:textSize="20sp"
+    android:text="Hello" />
+
+Có thể hiểu:
+
+200dp  → kích thước cái hộp
+
+50dp   → chiều cao cái hộp
+
+20sp   → kích thước chữ
+
+Cho nên quy tắc đơn giản khi học Android:
+
+dp → kích thước giao diện
+sp → kích thước chữ
+
+Ví dụ:
+
+<Button
+    android:layout_width="200dp"
+    android:layout_height="60dp"
+    android:textSize="18sp"
+    android:text="Login" />
+
+Ở đây:
+
+200dp → Button rộng bao nhiêu
+60dp → Button cao bao nhiêu
+18sp → chữ Login lớn bao nhiêu
+
+Vì vậy textSize="20dp" không hẳn là "sai" theo nghĩa Android không chạy, nhưng chuẩn và phù hợp hơn là textSize="20sp".
 ## gravity (dùng để quy định vị trí của nội dung bên trong một View)
 **Syn**
 ```bash
@@ -166,6 +410,63 @@ android:visibility="gone":
     + visible: Hiện View
     + invisible: Ẩn View nhưng vẫn chiếm chỗ
     + gone: Ẩn View và không chiếm chỗ
+```
+## orientation (để quyết định các View con được xếp theo chiều ngang hay chiều dọc)
+**Syn**
+```bash
+
+- Input:
+    + horizontal: xếp ngang
+```
+**Ex: vertical — xếp dọc**
+```xml
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click me" />
+
+</LinearLayout>
+<!-- 
+Kết quả:
+Hello
+[ Click me ]
+
+Tức là:
+View 1
+  ↓
+View 2
+  ↓
+View 3 
+-->
+```
+## hint (dùng để hiển thị gợi ý bên trong ô nhập liệu (EditText) khi người dùng chưa nhập gì)
+**Ex**
+```xml
+<EditText
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Nhập tên của bạn" />
+
+<!-- Ban đầu sẽ hiển thị:
+┌─────────────────────────────┐
+│ Nhập tên của bạn            │
+└─────────────────────────────┘
+
+Khi người dùng nhập:
+┌─────────────────────────────┐
+│ Nguyễn Văn A                │
+└─────────────────────────────┘
+hint tự biến mất, và nó không phải dữ liệu thật của EditText. -->
 ```
 # Ask
 ## workflow xây dựng mobile app trên android studio

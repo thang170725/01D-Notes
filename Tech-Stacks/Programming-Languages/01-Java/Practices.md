@@ -357,186 +357,787 @@ public class MainActivity extends AppCompatActivity{
 **activity_main.xml**
 ```bash
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="6dp">
 
-    <TextView
+    <!-- Tiêu đề -->
+    <TextView android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#26C6DA"
+        android:background="#00BCD4"
         android:gravity="center"
-        android:padding="8dp"
+        android:paddingVertical="4dp"
         android:text="Quản lý nhân viên"
-        android:textColor="#FFFFFF"
+        android:textColor="#0D0D0D"
         android:textSize="20sp" />
 
+    <!-- Mã nhân viên -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp">
-        <TextView
-            android:layout_width="80dp"
+        android:gravity="center_vertical">
+
+        <TextView android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Mã NV" />
+            android:text="Mã NV:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <EditText
-            android:id="@+id/edtMa"
-            android:layout_width="match_parent"
+            android:id="@+id/maNV"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Mã nhân viên"
             android:inputType="text" />
     </LinearLayout>
 
+    <!-- Tên nhân viên -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp">
-        <TextView
-            android:layout_width="80dp"
+        android:gravity="center_vertical">
+        <TextView android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Tên NV" />
-        <EditText
-            android:id="@+id/edtTen"
-            android:layout_width="match_parent"
+            android:text="Tên NV:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+        <EditText android:id="@+id/tenNV"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Tên nhân viên"
             android:inputType="text" />
     </LinearLayout>
-
+    <!-- Loại nhân viên -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:gravity="center_vertical">
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Loại NV" />
+            android:text="Loại NV:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
         <RadioGroup
-            android:id="@+id/rgLoai"
+            android:id="@+id/loaiNVG"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <RadioButton
-                android:id="@+id/radChinhThuc"
+                android:id="@+id/CT"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checked="true"
                 android:text="Chính thức" />
+
             <RadioButton
-                android:id="@+id/radThoiVu"
+                android:id="@+id/TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="Thời vụ" />
         </RadioGroup>
     </LinearLayout>
-
+    <!-- Nút Nhập nhân viên -->
     <Button
-        android:id="@+id/btnNhap"
-        android:layout_width="wrap_content"
+        android:id="@+id/nhapNV"
+        android:layout_width="270dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Nhập NV" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#B38D8D"
+        android:text="Nhập NV"
+        android:textColor="#000000" />
 
-    <TextView
+    <!-- Nút Danh sách -->
+    <Button
+        android:id="@+id/danhSach"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#26C6DA"
-        android:gravity="center"
-        android:padding="6dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="#4CAF50"
         android:text="Danh sách"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textColor="#000000" />
 
     <ListView
-        android:id="@+id/lvNhanVien"
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
 </LinearLayout>
 ```
 **NhanVien.java**
 ```java
-public class NhanVien {
-    private String ma;
-    private String ten;
-    private boolean chinhThuc;
+package com.example.test1;
 
-    public NhanVien(String ma, String ten, boolean chinhThuc) {
-        this.ma = ma;
-        this.ten = ten;
-        this.chinhThuc = chinhThuc;
+public class NhanVien {
+    String maNV;
+    String tenNV;
+    String typeNV;
+
+    NhanVien(String maNV, String tenNV, String typeNV) {
+        this.maNV = maNV;
+        this.tenNV = tenNV;
+        this.typeNV = typeNV;
     }
 
-    public String getMa() { return ma; }
-    public String getTen() { return ten; }
-    public boolean isChinhThuc() { return chinhThuc; }
-
-    // Chính thức: 500k, thời vụ: 150k
-    public int getLuong() {
-        return chinhThuc ? 500 : 150;
+    public String getMaNV() {
+        return maNV;
+    }
+    public String getTenNV(){
+        return tenNV;
+    }
+    public String getTypeNV(){
+        return typeNV;
     }
 }
 ```
 **MyItemList.java**
 ```java
-import android.content.Context;
-import android.graphics.Color;
-import android.view.LayoutInflater;
+package com.example.test1;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+    EditText maNV, tenNV;
+    RadioGroup loaiNVG;
+    String typeNV;
+    Button nhapNV, danhSach;
+    ListView listView;
+
+    List<NhanVien> listNV;
+    List<String> listStringDisplay; // Danh sách chuỗi để hiển thị lên ListView
+    ArrayAdapter<String> adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // 1. Ánh xạ View
+        maNV = findViewById(R.id.maNV);
+        tenNV = findViewById(R.id.tenNV);
+        loaiNVG = findViewById(R.id.loaiNVG);
+        nhapNV = findViewById(R.id.nhapNV);
+        danhSach = findViewById(R.id.danhSach);
+        listView = findViewById(R.id.list);
+
+        // 2. Khởi tạo List & Adapter cho ListView
+        listNV = new ArrayList<>();
+        listStringDisplay = new ArrayList<>();
+        adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                listStringDisplay
+        );
+        listView.setAdapter(adapter);
+
+        // 3. Sự kiện bấm nút "Nhập NV"
+        nhapNV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ma = maNV.getText().toString().trim();
+                String ten = tenNV.getText().toString().trim();
+
+                if (ma.isEmpty() || ten.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int checkId = loaiNVG.getCheckedRadioButtonId();
+                if (checkId == R.id.CT) {
+                    typeNV = "Chính thức";
+                } else {
+                    typeNV = "Thời vụ";
+                }
+
+                // Tạo đối tượng nhân viên và thêm vào list dữ liệu
+                NhanVien nv = new NhanVien(ma, ten, typeNV);
+                listNV.add(nv);
+
+                // Thêm chuỗi định dạng vào list hiển thị
+                listStringDisplay.add(ma + " - " + ten + " - " + typeNV);
+                adapter.notifyDataSetChanged(); // Cập nhật lại Adapter
+
+                // Xóa dữ liệu cũ trên ô nhập liệu
+                maNV.setText("");
+                tenNV.setText("");
+                maNV.requestFocus();
+
+                Toast.makeText(MainActivity.this, "Đã thêm nhân viên!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 4. Sự kiện bấm nút "Danh sách"
+        danhSach.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Hiện ListView nếu đang bị ẩn (visibility = gone)
+                if (listView.getVisibility() == View.GONE) {
+                    listView.setVisibility(View.VISIBLE);
+                } else {
+                    listView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+}
+```
+```java
+// Package của ứng dụng.
+// Nếu project của bạn có package khác thì thay dòng này bằng package của bạn.
+package com.example.test1;
+
+
+// Import các class cần sử dụng.
+import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
 
-public class MyItemList extends ArrayAdapter<NhanVien> {
+public class MainActivity extends Activity {
 
-    private Context context; // ứng dụng android hiện tại
-    private int resource; // file xml dùng làm giao diện 1 dòng
-    private List<NhanVien> list; // danh sách nhân viên
+    /*
+     * ============================================================
+     * 1. CLASS PERSON
+     * ============================================================
+     *
+     * Một Person đại diện cho MỘT người.
+     *
+     * Thay vì chỉ có một String như:
+     *
+     *      "Nguyễn Văn A"
+     *
+     * chúng ta muốn một người có nhiều thông tin:
+     *
+     *      name
+     *      age
+     *      address
+     *      gender
+     *
+     * Vì vậy chúng ta tạo class Person.
+     */
+    static class Person {
 
-    public MyItemList(Context context, int resource, List<NhanVien> list) {
-        super(context, resource, list);
-        this.context = context;
-        this.resource = resource;
-        this.list = list;
+        // Tên người
+        String name;
+
+        // Tuổi
+        int age;
+
+        // Địa chỉ
+        String address;
+
+        // Giới tính
+        String gender;
+
+
+        /*
+         * Constructor của Person.
+         *
+         * Khi tạo một Person:
+         *
+         * new Person(
+         *      "Nguyễn Văn A",
+         *      25,
+         *      "Hà Nội",
+         *      "Nam"
+         * );
+         *
+         * thì các giá trị sẽ được đưa vào constructor này.
+         */
+        Person(String name, int age, String address, String gender) {
+
+            // this.name = name
+            //
+            // "name" bên phải:
+            //      là tham số truyền vào constructor
+            //
+            // "this.name" bên trái:
+            //      là biến name của object Person
+            this.name = name;
+
+            this.age = age;
+
+            this.address = address;
+
+            this.gender = gender;
+        }
     }
 
-    // Android gọi getView() để hỏi Adapter: "Hãy đưa cho tôi giao diện của dòng số X."
+
+    /*
+     * ============================================================
+     * 2. onCreate()
+     * ============================================================
+     *
+     * onCreate() là hàm được Android gọi khi Activity được tạo.
+     *
+     * Đây thường là nơi chúng ta:
+     *
+     * - Load giao diện XML
+     * - Tìm View
+     * - Tạo dữ liệu
+     * - Tạo Adapter
+     * - Gắn Adapter vào ListView
+     */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Nạp layout 1 dòng (tái sử dụng view cũ nếu có)
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(resource, parent, false);
-        }
+    protected void onCreate(Bundle savedInstanceState) {
 
-        // Ánh xạ view trong dòng
-        LinearLayout layoutRow = convertView.findViewById(R.id.layoutRow);
-        TextView txtID = convertView.findViewById(R.id.txtRawID);
-        TextView txtName = convertView.findViewById(R.id.txtRawName);
-        TextView txtType = convertView.findViewById(R.id.txtRawType);
-        TextView txtLuong = convertView.findViewById(R.id.txtRawLuong);
+        // Gọi onCreate() của Activity cha.
+        super.onCreate(savedInstanceState);
 
-        // Lấy nhân viên tại vị trí position
-        NhanVien nv = list.get(position);
 
-        txtID.setText("ID: " + nv.getMa());
-        txtName.setText("Họ tên: " + nv.getTen());
-        txtLuong.setText("Mức lương: " + nv.getLuong() + "k");
+        /*
+         * ========================================================
+         * 3. GẮN FILE activity_main.xml
+         * ========================================================
+         *
+         * setContentView() nói với Android:
+         *
+         * "Hãy sử dụng activity_main.xml làm giao diện
+         *  cho Activity này."
+         *
+         * Trong activity_main.xml của chúng ta có:
+         *
+         *      <ListView
+         *          android:id="@+id/listView"
+         *          ...
+         *      />
+         */
+        setContentView(R.layout.activity_main);
 
-        // Đổi loại + màu nền theo loại nhân viên
-        if (nv.isChinhThuc()) {
-            txtType.setText("Nhân viên chính thức");
-            layoutRow.setBackgroundColor(Color.WHITE);
-        } else {
-            txtType.setText("Nhân viên thời vụ");
-            layoutRow.setBackgroundColor(Color.GREEN);
-        }
 
-        return convertView;
+        /*
+         * ========================================================
+         * 4. LẤY LISTVIEW TỪ XML
+         * ========================================================
+         *
+         * findViewById() tìm View dựa vào ID.
+         *
+         * Trong XML:
+         *
+         *      android:id="@+id/listView"
+         *
+         * thì Java có thể lấy nó bằng:
+         *
+         *      findViewById(R.id.listView)
+         *
+         * Sau dòng này:
+         *
+         *      listView
+         *
+         * chính là đối tượng ListView trong activity_main.xml.
+         */
+        ListView listView = findViewById(R.id.listView);
+
+
+        /*
+         * ========================================================
+         * 5. TẠO DỮ LIỆU
+         * ========================================================
+         *
+         * Chúng ta tạo một mảng Person.
+         *
+         * Person[] có nghĩa:
+         *
+         *      Đây là một mảng chứa các object Person.
+         */
+        Person[] people = {
+
+
+                /*
+                 * Person thứ nhất
+                 *
+                 * name    = Nguyễn Văn A
+                 * age     = 25
+                 * address = Hà Nội
+                 * gender  = Nam
+                 */
+                new Person(
+                        "Nguyễn Văn A",
+                        25,
+                        "Hà Nội",
+                        "Nam"
+                ),
+
+
+                /*
+                 * Person thứ hai
+                 */
+                new Person(
+                        "Trần Văn B",
+                        30,
+                        "Hải Phòng",
+                        "Nữ"
+                ),
+
+
+                /*
+                 * Person thứ ba
+                 */
+                new Person(
+                        "Lê Đức Thắng",
+                        28,
+                        "Đà Nẵng",
+                        "Nam"
+                )
+        };
+
+
+        /*
+         * ========================================================
+         * 6. TẠO ARRAYADAPTER
+         * ========================================================
+         *
+         * Đây là phần quan trọng nhất.
+         *
+         * ArrayAdapter<Person>
+         *
+         * có nghĩa:
+         *
+         * "Adapter này quản lý dữ liệu kiểu Person."
+         *
+         * Vì dữ liệu của chúng ta là:
+         *
+         *      Person[]
+         *
+         * nên Adapter cũng sử dụng:
+         *
+         *      Person
+         */
+        ArrayAdapter<Person> adapter = new ArrayAdapter<Person>(
+
+
+                /*
+                 * ------------------------------------------------
+                 * THAM SỐ 1: this
+                 * ------------------------------------------------
+                 *
+                 * "this" ở đây là MainActivity hiện tại.
+                 *
+                 * Activity chính là một Context.
+                 *
+                 * Adapter cần Context để biết:
+                 *
+                 * - đang hoạt động trong Activity nào
+                 * - lấy resource ở đâu
+                 * - tạo View như thế nào
+                 */
+                this,
+
+
+                /*
+                 * ------------------------------------------------
+                 * THAM SỐ 2: R.layout.item_person
+                 * ------------------------------------------------
+                 *
+                 * Đây là layout của MỘT ITEM.
+                 *
+                 * File:
+                 *
+                 *      res/layout/item_person.xml
+                 *
+                 * Trong file đó chúng ta có:
+                 *
+                 *      txtName
+                 *      txtGender
+                 *      txtAddress
+                 *      txtAge
+                 *
+                 * Adapter sẽ sử dụng layout này làm "khuôn"
+                 * cho từng người.
+                 */
+                R.layout.item_person,
+
+
+                /*
+                 * ------------------------------------------------
+                 * THAM SỐ 3: R.id.txtName
+                 * ------------------------------------------------
+                 *
+                 * ArrayAdapter mặc định cần biết TextView nào
+                 * dùng để hiển thị dữ liệu chính.
+                 *
+                 * Trong item_person.xml chúng ta có:
+                 *
+                 *      <TextView
+                 *          android:id="@+id/txtName"
+                 *          ...
+                 *      />
+                 *
+                 * nên truyền:
+                 *
+                 *      R.id.txtName
+                 *
+                 * Tuy nhiên vì chúng ta override getView()
+                 * bên dưới nên cuối cùng chúng ta tự đưa dữ liệu
+                 * vào cả 4 TextView.
+                 */
+                R.id.txtName,
+
+
+                /*
+                 * ------------------------------------------------
+                 * THAM SỐ 4: people
+                 * ------------------------------------------------
+                 *
+                 * Đây chính là dữ liệu mà Adapter quản lý.
+                 *
+                 * people chứa:
+                 *
+                 *      Person 1
+                 *      Person 2
+                 *      Person 3
+                 *
+                 */
+                people
+        ) {
+
+
+            /*
+             * ====================================================
+             * 7. OVERRIDE getView()
+             * ====================================================
+             *
+             * Đây là phần quan trọng nhất của Custom Adapter.
+             *
+             * ListView sẽ gọi getView() khi nó cần tạo
+             * hoặc hiển thị một item.
+             *
+             * Ví dụ:
+             *
+             * position = 0
+             * → hiển thị Nguyễn Văn A
+             *
+             * position = 1
+             * → hiển thị Trần Văn B
+             *
+             * position = 2
+             * → hiển thị Lê Đức Thắng
+             */
+            @Override
+            public View getView(
+                    int position,
+                    View convertView,
+                    ViewGroup parent
+            ) {
+
+
+                /*
+                 * =================================================
+                 * 8. TẠO/LẤY VIEW CỦA ITEM
+                 * =================================================
+                 *
+                 * super.getView() sẽ sử dụng:
+                 *
+                 *      R.layout.item_person
+                 *
+                 * để tạo ra giao diện của một item.
+                 *
+                 * Kết quả trả về là một View.
+                 *
+                 * View này chính là:
+                 *
+                 *      item_person.xml
+                 */
+                View view = super.getView(
+                        position,
+                        convertView,
+                        parent
+                );
+
+
+                /*
+                 * =================================================
+                 * 9. LẤY PERSON HIỆN TẠI
+                 * =================================================
+                 *
+                 * position cho biết chúng ta đang xử lý
+                 * người thứ mấy.
+                 *
+                 * Ví dụ:
+                 *
+                 * position = 0
+                 * → people[0]
+                 * → Nguyễn Văn A
+                 *
+                 * position = 1
+                 * → people[1]
+                 * → Trần Văn B
+                 */
+                Person person = getItem(position);
+
+
+                /*
+                 * =================================================
+                 * 10. TÌM CÁC TEXTVIEW TRONG ITEM
+                 * =================================================
+                 *
+                 * view chính là item_person.xml.
+                 *
+                 * findViewById() tìm các TextView bên trong
+                 * item đó.
+                 *
+                 * Ví dụ:
+                 *
+                 *      R.id.txtName
+                 *
+                 * chính là:
+                 *
+                 *      <TextView
+                 *          android:id="@+id/txtName"
+                 *          ...
+                 *      />
+                 */
+
+
+                // Tìm TextView hiển thị tên
+                TextView txtName =
+                        view.findViewById(R.id.txtName);
+
+
+                // Tìm TextView hiển thị giới tính
+                TextView txtGender =
+                        view.findViewById(R.id.txtGender);
+
+
+                // Tìm TextView hiển thị địa chỉ
+                TextView txtAddress =
+                        view.findViewById(R.id.txtAddress);
+
+
+                // Tìm TextView hiển thị tuổi
+                TextView txtAge =
+                        view.findViewById(R.id.txtAge);
+
+
+                /*
+                 * =================================================
+                 * 11. ĐƯA DỮ LIỆU VÀO TEXTVIEW
+                 * =================================================
+                 *
+                 * Đây chính là lúc dữ liệu Person được đưa
+                 * vào giao diện XML.
+                 */
+
+
+                // Lấy tên từ Person rồi đưa vào txtName
+                //
+                // person.name:
+                //      "Nguyễn Văn A"
+                //
+                // txtName.setText():
+                //      hiển thị "Nguyễn Văn A"
+                txtName.setText(person.name);
+
+
+                // Lấy giới tính
+                //
+                // Ví dụ:
+                //      "Nam"
+                txtGender.setText(person.gender);
+
+
+                // Lấy địa chỉ
+                //
+                // Ví dụ:
+                //      "Hà Nội"
+                txtAddress.setText(person.address);
+
+
+                // Lấy tuổi.
+                //
+                // person.age là int.
+                //
+                // Chúng ta nối với String " tuổi"
+                // để tạo thành:
+                //
+                //      "25 tuổi"
+                //
+                // Ví dụ:
+                //
+                // person.age = 25
+                //
+                // 25 + " tuổi"
+                //
+                // → "25 tuổi"
+                txtAge.setText(person.age + " tuổi");
+
+
+                /*
+                 * =================================================
+                 * 12. TRẢ VỀ VIEW
+                 * =================================================
+                 *
+                 * Sau khi đã đưa dữ liệu vào:
+                 *
+                 *      txtName
+                 *      txtGender
+                 *      txtAddress
+                 *      txtAge
+                 *
+                 * chúng ta trả item View này về cho ListView.
+                 *
+                 * ListView sau đó sẽ hiển thị nó.
+                 */
+                return view;
+            }
+        };
+
+
+        /*
+         * ========================================================
+         * 13. GẮN ADAPTER VÀO LISTVIEW
+         * ========================================================
+         *
+         * Trước dòng này:
+         *
+         *      ListView
+         *
+         * chỉ là một danh sách rỗng.
+         *
+         * Sau dòng này:
+         *
+         *      listView.setAdapter(adapter);
+         *
+         * ListView biết:
+         *
+         *      "Dữ liệu của tôi nằm trong adapter."
+         *
+         * Adapter sẽ lấy từng Person
+         * rồi tạo item tương ứng.
+         */
+        listView.setAdapter(adapter);
     }
 }
 ```
