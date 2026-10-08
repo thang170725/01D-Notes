@@ -41,6 +41,18 @@ print(type(result))
 # <class 'list'>
 ```
 # .dump() (dùng để ghi dữ liệu ra file json)
+**Syn**
+```bash
+json.dump(
+    email_channel_data,
+    f,
+    ensure_ascii=False,
+    indent=4
+)
+
+- Input:
+    + indent=4: Nó quy định số khoảng trắng để thụt đầu dòng (indentation) khi ghi JSON.
+```
 ```python
 import json
 

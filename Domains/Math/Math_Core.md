@@ -6,12 +6,14 @@
 - [Fenwick Tree (là một cấu trúc dữ liệu dùng để cập nhật giá trị của một phần tử trong mảng)](#fenwick-tree-là-một-cấu-trúc-dữ-liệu-dùng-để-cập-nhật-giá-trị-của-một-phần-tử-trong-mảng)
 - [số chẵn và số lẻ](#số-chẵn-và-số-lẻ)
 - [DFS](#dfs)
+- [Binary Tree](#binary-tree)
+  - [Practices](#practices-1)
 - [LeetCode 1038 - Medium](#leetcode-1038---medium)
 - [Leetcode - 2181](#leetcode---2181)
 - [Thuật toán tìm ước chung lớn nhất](#thuật-toán-tìm-ước-chung-lớn-nhất)
 - [Tìm UCLN](#tìm-ucln)
 - [Thuật toán Backtracking (Quay lui)](#thuật-toán-backtracking-quay-lui)
-  - [Practices](#practices-1)
+  - [Practices](#practices-2)
     - [Sinh dãy nhị phân có n phần tử](#sinh-dãy-nhị-phân-có-n-phần-tử)
 ---
 # Recursion (Đệ quy)
@@ -393,6 +395,8 @@ if __name__ == '__main__':
     p = dfs.dfs_path('A', 'R')
     print("DFS path:", " -> ".join(p) if p else "No path")
 ```
+# Binary Tree
+## Practices
 # LeetCode 1038 - Medium
 ```python
 # Definition for a binary tree node.

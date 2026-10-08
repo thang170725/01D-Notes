@@ -1,5 +1,5 @@
 - [Class Introduction (chứa các phương pháp xử lý trong lớp)](#class-introduction-chứa-các-phương-pháp-xử-lý-trong-lớp)
-- [class](#class)
+- [__init__](#init)
   - [__dict__](#dict)
   - [__init__() \& __str__() \& __len__()](#init--str--len)
   - [__mro__](#mro)
@@ -34,7 +34,7 @@
   - [__del__() (destructor)](#del-destructor)
   - [__hash__() (dùng làm key dict / set)](#hash-dùng-làm-key-dict--set)
   - [__hash__() (dùng làm key dict / set)](#hash-dùng-làm-key-dict--set-1)
-  - [__class__](#class-1)
+  - [__class__](#class)
   - [__slots__](#slots)
   - [__sizeof__()](#sizeof)
   - [__dir__()](#dir)
@@ -43,6 +43,7 @@
   - [__name__](#name)
   - [__doc__](#doc)
   - [@property](#property)
+  - [@staticmethod (định nghĩa method bên trong class không cần self)](#staticmethod-định-nghĩa-method-bên-trong-class-không-cần-self)
   - [@classmethod](#classmethod)
     - [Quản lý kết nối Database (Mô phỏng)](#quản-lý-kết-nối-database-mô-phỏng)
   - [Inheritance (Kế thừa)](#inheritance-kế-thừa)
@@ -64,7 +65,7 @@ Class có 5 tiêu chí:
     6. Duck typing (Python-style)
     7. Protocol (hiện đại) - Giống interface trong Java
 ```
-# class
+# __init__
 **Ex**
 ```python
 class Person:
@@ -540,6 +541,16 @@ class User:
         return 'hello, python'
 u = User()
 print(u.great) # hello, python
+```
+## @staticmethod (định nghĩa method bên trong class không cần self)
+**Ex**
+```python
+class MyClass:
+    @staticmethod
+    def hello():
+        print("Hello")
+
+MyClass.hello()
 ```
 ## @classmethod
 **Ex**
