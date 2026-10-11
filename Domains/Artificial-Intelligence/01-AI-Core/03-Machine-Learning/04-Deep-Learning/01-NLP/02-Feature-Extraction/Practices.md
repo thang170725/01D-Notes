@@ -535,3 +535,214 @@ if __name__ == "__main__":
 [0.0, 0.0, 0.119, 0.0, 0.044, 0.044, 0.0, 0.119]
 [0.044, 0.044, 0.0, 0.119, 0.0, 0.0, 0.119, 0.0]
 ```
+
+
+import re
+import math
+from collections import Counter, defaultdict
+
+
+# =====================================================
+# 1. DATASET: 20 EMAIL ĐÃ CÓ NHÃN
+# =====================================================
+
+dataset = [
+    # 10 email yêu cầu bồi thường
+    ("Tôi muốn yêu cầu bồi thường bảo hiểm", "BOI_THUONG"),
+    ("Tôi gửi hồ sơ bồi thường bảo hiểm", "BOI_THUONG"),
+    ("Vui lòng xử lý hồ sơ yêu cầu bồi thường", "BOI_THUONG"),
+    ("Tôi cần hướng dẫn thủ tục bồi thường", "BOI_THUONG"),
+    ("Hồ sơ bồi thường của tôi đã được gửi", "BOI_THUONG"),
+    ("Tôi muốn kiểm tra tiến độ bồi thường", "BOI_THUONG"),
+    ("Xin hướng dẫn thủ tục yêu cầu bồi thường", "BOI_THUONG"),
+    ("Tôi gửi giấy tờ liên quan đến bồi thường", "BOI_THUONG"),
+    ("Vui lòng xác nhận hồ sơ bồi thường bảo hiểm", "BOI_THUONG"),
+    ("Tôi cần hỗ trợ giải quyết yêu cầu bồi thường", "BOI_THUONG"),
+
+    # 10 email yêu cầu hủy hợp đồng
+    ("Tôi muốn hủy hợp đồng bảo hiểm", "HUY_HOP_DONG"),
+    ("Xin hướng dẫn thủ tục hủy hợp đồng", "HUY_HOP_DONG"),
+    ("Tôi gửi yêu cầu hủy hợp đồng bảo hiểm", "HUY_HOP_DONG"),
+    ("Vui lòng xác nhận việc hủy hợp đồng", "HUY_HOP_DONG"),
+    ("Tôi muốn chấm dứt hợp đồng bảo hiểm", "HUY_HOP_DONG"),
+    ("Đề nghị xử lý hồ sơ hủy hợp đồng", "HUY_HOP_DONG"),
+    ("Tôi cần mẫu đơn hủy hợp đồng bảo hiểm", "HUY_HOP_DONG"),
+    ("Xin xác nhận yêu cầu chấm dứt hợp đồng", "HUY_HOP_DONG"),
+    ("Tôi muốn biết quy trình hủy hợp đồng", "HUY_HOP_DONG"),
+    ("Vui lòng hỗ trợ thủ tục chấm dứt hợp đồng", "HUY_HOP_DONG"),
+]
+
+
+# =====================================================
+# 2. TẠO N-GRAM
+# =====================================================
+
+def tokenize(text):
+    """
+    Tách từ đơn giản bằng regex.
+    Giữ chữ cái tiếng Việt và chữ số.
+    """
+    return re.findall(r"\w+", text.lower(), flags=re.UNICODE)
+
+
+def create_ngrams(text, n=2):
+    """
+    Tạo N-gram từ văn bản.
+
+    n=1: Unigram
+    n=2: Bigram
+    n=3: Trigram
+    """
+    words = tokenize(text)
+
+    return [
+        tuple(words[i:i+n])
+        for i in range(len(words) - n + 1)
+    ]
+
+
+# Có thể đổi thành 1 hoặc 3 để thử nghiệm
+N = 2
+
+
+# =====================================================
+# 3. HUẤN LUYỆN MÔ HÌNH NAIVE BAYES
+# =====================================================
+
+class NgramNaiveBayes:
+
+    def __init__(self, n=2, alpha=1.0):
+        self.n = n
+        self.alpha = alpha
+
+        # Tổng số email thuộc từng lớp
+        self.class_doc_counts = Counter()
+
+        # Đếm số lần từng N-gram xuất hiện trong mỗi lớp
+        self.ngram_counts = defaultdict(Counter)
+
+        # Tổng số N-gram của mỗi lớp
+        self.total_ngrams = Counter()
+
+        # Tập N-gram đã học từ dữ liệu train
+        self.vocabulary = set()
+
+        self.classes = []
+
+    def fit(self, dataset):
+        """
+        Học từ dataset gồm các cặp:
+        (nội dung email, nhãn)
+        """
+
+        for text, label in dataset:
+
+            # Đếm số email thuộc lớp này
+            self.class_doc_counts[label] += 1
+
+            # Tạo N-gram cho email
+            grams = create_ngrams(text, self.n)
+
+            # Học tần suất N-gram theo nhãn
+            for gram in grams:
+                self.ngram_counts[label][gram] += 1
+                self.total_ngrams[label] += 1
+                self.vocabulary.add(gram)
+
+        self.classes = list(self.class_doc_counts.keys())
+
+        return self
+
+    def predict(self, text):
+        """
+        Tính điểm log xác suất cho từng lớp,
+        sau đó chọn lớp có điểm cao nhất.
+        """
+
+        grams = create_ngrams(text, self.n)
+
+        # Chỉ sử dụng N-gram đã xuất hiện trong tập train
+        grams = [g for g in grams if g in self.vocabulary]
+
+        scores = {}
+
+        total_docs = sum(self.class_doc_counts.values())
+        vocab_size = len(self.vocabulary)
+
+        for label in self.classes:
+
+            # Xác suất tiên nghiệm P(class)
+            prior = (
+                self.class_doc_counts[label] / total_docs
+            )
+
+            score = math.log(prior)
+
+            # Tính xác suất từng N-gram theo lớp
+            for gram in grams:
+
+                count = self.ngram_counts[label][gram]
+
+                # Laplace smoothing để tránh xác suất bằng 0
+                probability = (
+                    count + self.alpha
+                ) / (
+                    self.total_ngrams[label]
+                    + self.alpha * vocab_size
+                )
+
+                # Cộng log xác suất
+                score += math.log(probability)
+
+            scores[label] = score
+
+        predicted_label = max(scores, key=scores.get)
+
+        return predicted_label, scores, grams
+
+
+# =====================================================
+# 4. TRAIN
+# =====================================================
+
+model = NgramNaiveBayes(n=N)
+model.fit(dataset)
+
+print("SỐ EMAIL TRAIN:", len(dataset))
+print("N-GRAM:", N)
+print("KÍCH THƯỚC VOCABULARY:", len(model.vocabulary))
+
+print("\nMỘT SỐ N-GRAM ĐÃ HỌC:")
+
+for label in model.classes:
+    print(f"\nLớp {label}:")
+
+    for gram, count in model.ngram_counts[label].most_common(10):
+        print(f"  {' '.join(gram):35s} xuất hiện {count} lần")
+
+
+# =====================================================
+# 5. TEST VỚI EMAIL CHƯA TỪNG XUẤT HIỆN TRONG TRAIN
+# =====================================================
+
+test_email = """
+Kính gửi bộ phận bảo hiểm,
+Tôi gửi hồ sơ và muốn yêu cầu bồi thường bảo hiểm.
+Vui lòng hướng dẫn xử lý hồ sơ.
+"""
+
+prediction, scores, matched_ngrams = model.predict(test_email)
+
+print("\n" + "=" * 50)
+print("EMAIL TEST:")
+print(test_email)
+
+print("\nN-GRAM TEST ĐÃ TÌM THẤY TRONG VOCABULARY:")
+for gram in matched_ngrams:
+    print(" ", " ".join(gram))
+
+print("\nĐIỂM LOG XÁC SUẤT:")
+for label, score in scores.items():
+    print(f"  {label}: {score:.4f}")
+
+print("\nKẾT QUẢ DỰ ĐOÁN:", prediction)

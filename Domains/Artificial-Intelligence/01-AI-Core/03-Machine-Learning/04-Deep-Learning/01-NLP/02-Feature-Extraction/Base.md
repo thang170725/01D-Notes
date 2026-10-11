@@ -2,11 +2,16 @@
 - [TF-IDF (biến token thành feature vector)](#tf-idf-biến-token-thành-feature-vector)
   - [Ask (các câu hỏi liên quan đến TF-IDF)](#ask-các-câu-hỏi-liên-quan-đến-tf-idf)
 - [Attention](#attention)
-- [N-gram (cách tạo feature từ text)](#n-gram-cách-tạo-feature-từ-text)
+- [N-gram (cách tạo feature từ text bằng cách chia chuỗi ký tự thành các nhóm liên tiếp độ dài N)](#n-gram-cách-tạo-feature-từ-text-bằng-cách-chia-chuỗi-ký-tự-thành-các-nhóm-liên-tiếp-độ-dài-n)
+  - [Word N-gram (Chia theo từ)](#word-n-gram-chia-theo-từ)
+    - [Unigram (từng token từ riêng lẻ)](#unigram-từng-token-từ-riêng-lẻ)
+    - [Bigram (từng cặp từ liên tiếp)](#bigram-từng-cặp-từ-liên-tiếp)
+    - [Trigram (bộ 3 từ liên tiếp)](#trigram-bộ-3-từ-liên-tiếp)
+  - [Character N-gram (Chia theo ký tự)](#character-n-gram-chia-theo-ký-tự)
   - [Ask](#ask)
     - [Vậy n-gram có phải embedding không?](#vậy-n-gram-có-phải-embedding-không)
     - [N-gram liên quan gì đến FastText?](#n-gram-liên-quan-gì-đến-fasttext)
-    - [Khi nào dùng word n-gram?](#khi-nào-dùng-word-n-gram)
+  - [word n-gram?](#word-n-gram)
     - [Khi nào dùng character n-gram?](#khi-nào-dùng-character-n-gram)
   - [Character n-gram (là kỹ thuật chia một chuỗi văn bản thành các đoạn con liên tiếp dài đúng n ký tự)](#character-n-gram-là-kỹ-thuật-chia-một-chuỗi-văn-bản-thành-các-đoạn-con-liên-tiếp-dài-đúng-n-ký-tự)
 ---
@@ -364,12 +369,20 @@ Giống:
 thay vì
 
 1 chuyên gia
-# N-gram (cách tạo feature từ text)
+
+# N-gram (cách tạo feature từ text bằng cách chia chuỗi ký tự thành các nhóm liên tiếp độ dài N)
+## Word N-gram (Chia theo từ)
+**Ex**
 ```bash
-Ý tưởng đơn giản: chia chuỗi ký tự/word thành các nhóm liên tiếp độ dài N.
-    - Unigram = từng token / từ riêng lẻ.
-    - Bigram = từng cặp từ liên tiếp.
-    - Trigram = bộ 3 từ liên tiếp.
+Tôi muốn yêu cầu bồi thường bảo hiểm.
+
+-> Word 1-gram (Unigram): Mỗi cụm có 1 từ: [Tôi, muốn, yêu_cầu, bồi_thường, bảo_hiểm]
+-> Word 2-gram (Bigram): Mỗi cụm có 2 từ liên tiếp. [Tôi muốn, muốn yêu_cầu, yêu_cầu bồi_thường, bồi_thường bảo_hiểm]
+-> Word 3-gram (Trigram): Mỗi cụm có 3 từ liên tiếp. [Tôi muốn yêu_cầu, muốn yêu_cầu bồi_thường, yêu_cầu bồi_thường bảo_hiểm]
+```
+### Unigram (từng token từ riêng lẻ)
+### Bigram (từng cặp từ liên tiếp)
+### Trigram (bộ 3 từ liên tiếp)
 
 nắm bắt ngữ cảnh cục bộ (ví dụ “New York” là bigram, có ý nghĩa khác so với hai từ riêng). Dùng trong: language modelling, feature cho classification, spelling correction, autocomplete.
     • Ví dụ dễ hiểu (word-level):
@@ -386,6 +399,82 @@ Nếu tăng N quá lớn: unigram, bigram, trigram, 4-gram, 5-gram, ... -> số 
 
     Vấn đề: n tăng -> feature space tăng -> memory tăng -> sparse matrix rất lớn -> training chậm
 ```
+## Character N-gram (Chia theo ký tự)
+2. Character N-gram là gì?
+Character N-gram lấy các cụm gồm \(N\) ký tự liên tiếp, thay vì lấy từ.
+Ví dụ văn bản:
+claim
+Nếu dùng Character 3-gram, ta thu được:
+Character 3-gram
+c
+
+l
+
+a
+
+i
+
+m
+
+
+cla
+
+
+lai
+
+
+aim
+
+
+
+Mỗi cụm gồm 3 ký tự liên tiếp.
+
+
+Nếu dùng Character 4-gram với từ claim, kết quả là:
+- clai
+- laim
+Character N-gram không nhất thiết phải biết đâu là ranh giới từ. Nó chỉ cần chuỗi ký tự.
+Điểm mạnh của Character N-gram là có thể nhận diện các mẫu ký tự chung ngay cả khi từ bị viết sai, có biến thể hoặc có định dạng đặc biệt.
+Ví dụ trong email:
+- claim
+- claims
+- claimant
+- reclaim
+Một số cụm ký tự có thể xuất hiện ở nhiều từ khác nhau. Nhờ vậy, mô hình có thể học được những mẫu liên quan đến từ vựng mà không cần coi mỗi từ là một đơn vị hoàn toàn độc lập.
+3. So sánh trực tiếp
+Tiêu chí	Word N-gram	Character N-gram
+Đơn vị xử lý	Từ hoặc token	Ký tự
+Nhận diện cụm từ	Tốt	Không trực tiếp bằng word n-gram
+Nhạy với lỗi chính tả	Thường nhạy hơn	Thường ít nhạy hơn
+Xử lý từ mới	Có thể khó nếu từ chưa có trong từ vựng	Có thể tận dụng các cụm ký tự đã thấy
+Số lượng đặc trưng	Có thể lớn	Có thể rất lớn
+Chi phí xử lý	Thường thấp hơn khi dùng tokenizer đơn giản	Phụ thuộc độ dài chuỗi và phạm vi n-gram
+Phù hợp	Cụm từ, ý nghĩa nghiệp vụ	Biến thể từ, mã, lỗi gõ, mẫu ký tự
+4. Với bài toán phân loại email của bạn, nên dùng loại nào?
+Tôi đề xuất thử nghiệm ba phương án:
+
+Phương án A — Word N-gram
+Baseline
+Dùng word unigram và bigram. Phù hợp để nhận biết cụm từ nghiệp vụ, thường là lựa chọn khởi đầu tốt.
+
+
+
+
+Phương án B — Character N-gram
+Dùng các cụm ký tự ngắn, chẳng hạn độ dài từ 3 đến 5 ký tự. Hữu ích khi email chứa mã hồ sơ, lỗi gõ, từ viết tắt hoặc nhiều biến thể từ.
+
+
+
+
+Phương án C — Kết hợp cả hai
+Kết hợp đặc trưng word n-gram và character n-gram. Có thể cải thiện khả năng phân loại nhưng cũng làm tăng số lượng đặc trưng, dung lượng bộ nhớ và thời gian huấn luyện.
+
+
+
+Để hướng đến tốc độ cao, hãy bắt đầu với Word 1–2 gram. Sau đó so sánh với phương án kết hợp Character 3–5 gram trên cùng tập dữ liệu. Chỉ giữ phần character nếu chất lượng phân loại được cải thiện đủ để bù cho chi phí tăng thêm.
+Không có phương án nào tự bảo đảm accuracy trên 95%; bạn cần đánh giá trên tập validation và tập test tách biệt.
+Một lưu ý quan trọng: N-gram là cách tạo đặc trưng, không phải mô hình phân loại. Sau bước này, các cụm từ hoặc ký tự thường được chuyển thành vector số, ví dụ bằng TF-IDF, rồi mới đưa vào mô hình huấn luyện.
+
 **Khi nào nên dùng n-gram?**
 ```bash
 - Dùng n-gram khi một từ riêng lẻ không đủ thông tin, và bạn muốn giữ một phần context cục bộ.
@@ -436,7 +525,7 @@ Cho nên:
        └── character n-gram
               └── FastText
 ```
-### Khi nào dùng word n-gram?
+## word n-gram?
 ```bash
 Dùng khi cụm từ có ý nghĩa quan trọng.
     Ví dụ: "New York", "machine learning", "credit card", "not good", "very good", "customer service", v.v
@@ -570,6 +659,142 @@ Transformer
 BERT/GPT
 
 Ở mỗi bước, bạn đang giải quyết một hạn chế của representation trước đó. Nếu bạn đang học theo hướng muốn hiểu “tại sao người ta phát minh ra model tiếp theo?”, thì chính chuỗi này là một roadmap rất tốt.
+
+Trong kỹ thuật N-gram, 3-gram, 4-gram và 5-gram khác nhau ở số lượng từ liên tiếp được lấy ra để phân tích trong một văn bản.
+- 3-gram: Mỗi cụm gồm 3 từ liên tiếp.
+- 4-gram: Mỗi cụm gồm 4 từ liên tiếp.
+- 5-gram: Mỗi cụm gồm 5 từ liên tiếp.
+1. Ví dụ minh họa
+Giả sử ta có câu:
+Tôi đang học xử lý ngôn ngữ tự nhiên
+
+Câu này có 7 từ:
+Tôi | đang | học | xử | lý | ngôn | ngữ | tự | nhiên
+Thực tế có 9 từ, và khi áp dụng N-gram, ta thu được kết quả như sau.
+3-gram — Cụm 3 từ
+Mỗi lần lấy 3 từ liên tiếp, dịch sang phải 1 từ.
+1. Tôi đang học
+2. đang học xử
+3. học xử lý
+4. xử lý ngôn
+5. lý ngôn ngữ
+6. ngôn ngữ tự
+7. ngữ tự nhiên
+
+Tổng cộng: 7 cụm
+
+
+4-gram — Cụm 4 từ
+Mỗi lần lấy 4 từ liên tiếp.
+1. Tôi đang học xử
+2. đang học xử lý
+3. học xử lý ngôn
+4. xử lý ngôn ngữ
+5. lý ngôn ngữ tự
+6. ngôn ngữ tự nhiên
+
+Tổng cộng: 6 cụm
+
+
+5-gram — Cụm 5 từ
+Mỗi lần lấy 5 từ liên tiếp.
+1. Tôi đang học xử lý
+2. đang học xử lý ngôn
+3. học xử lý ngôn ngữ
+4. xử lý ngôn ngữ tự
+5. lý ngôn ngữ tự nhiên
+
+Tổng cộng: 5 cụm
+
+
+Công thức tính số cụm N-gram trong câu có \(L\) từ, không thêm ký hiệu đầu hoặc cuối câu:
+\[
+\text{Số cụm} = L-n+1
+\]
+
+Với câu có 9 từ:
+- 3-gram: \(9-3+1=7\) cụm.
+- 4-gram: \(9-4+1=6\) cụm.
+- 5-gram: \(9-5+1=5\) cụm.
+2. Vậy 3-gram, 4-gram và 5-gram khác nhau ở điểm nào?
+Tiêu chí	3-gram	4-gram	5-gram
+Số từ trong mỗi cụm	3	4	5
+Ngữ cảnh được xem xét	Ngắn hơn	Trung bình	Dài hơn
+Số cụm tạo ra từ cùng một câu	Nhiều hơn	Ít hơn	Ít nhất
+Khả năng ghi nhận cụm từ dài	Thấp hơn	Tốt hơn	Tốt hơn nữa
+Nguy cơ gặp cụm chưa từng xuất hiện khi huấn luyện	Thấp hơn tương đối	Cao hơn	Cao hơn nữa
+3. Ví dụ ứng dụng trong dự đoán từ tiếp theo
+Giả sử câu cần dự đoán là:
+Hôm nay tôi muốn uống ...
+
+Nếu dùng N-gram để dự đoán từ tiếp theo:
+- 3-gram: Dựa vào 2 từ trước đó, chẳng hạn muốn uống, để dự đoán từ tiếp theo.
+- 4-gram: Dựa vào 3 từ trước đó, chẳng hạn tôi muốn uống.
+- 5-gram: Dựa vào 4 từ trước đó, chẳng hạn nay tôi muốn uống.
+Ví dụ, mô hình có thể dự đoán từ tiếp theo là nước, cà phê hoặc trà, tùy theo xác suất học được từ dữ liệu.
+Điểm quan trọng là mô hình N-gram bậc \(n\) thường dự đoán từ tiếp theo dựa trên tối đa \(n-1\) từ đứng trước nó.
+4. Khi nào nên dùng loại nào?
+- 3-gram: Phù hợp khi dữ liệu huấn luyện không quá lớn, cần mô hình đơn giản.
+- 4-gram: Cân bằng giữa độ dài ngữ cảnh và lượng dữ liệu cần thiết.
+- 5-gram: Hữu ích khi cần xét ngữ cảnh dài hơn và có đủ dữ liệu huấn luyện.
+Lưu ý: N-gram bậc cao không phải lúc nào cũng tốt hơn. Chẳng hạn, nếu cụm 5 từ xuất hiện rất ít trong dữ liệu, mô hình có thể không ước lượng được xác suất đáng tin cậy.
+Tóm lại: Số đứng trước gram chính là số từ trong mỗi cụm. N càng lớn thì ngữ cảnh càng dài, nhưng mô hình thường cần nhiều dữ liệu hơn để học hiệu quả.
+
+nhưng có nên dùng stop word trước n-gram không vì tôi nghĩ nếu dùng stop word là mình bị cắt mất chữ rồi
+
+Bạn nghĩ như vậy là có lý. Không phải lúc nào cũng nên loại bỏ stop words trước khi áp dụng N-gram. Việc có nên loại bỏ hay không phụ thuộc vào mục đích xử lý văn bản.
+Đặc biệt, nếu bạn đang dùng N-gram để phân tích ngôn ngữ hoặc trích xuất cụm từ thì loại bỏ stop words có thể làm mất ngữ cảnh và khiến các cụm từ bị sai ý nghĩa.
+1. Ví dụ: Điều gì xảy ra khi loại bỏ stop words trước N-gram?
+Giả sử câu tiếng Việt:
+Tôi không muốn mua bảo hiểm này.
+
+Giả sử ta coi tôi, không, muốn, này là các từ cần loại bỏ trong một danh sách stop words minh họa.
+Cách 1: Giữ nguyên stop words
+Văn bản gốc được giữ nguyên.
+Tôi | không | muốn | mua | bảo | hiểm | này
+
+Một số 3-gram:
+- Tôi không muốn
+- không muốn mua
+- muốn mua bảo
+- mua bảo hiểm
+- bảo hiểm này
+
+
+Cách 2: Loại bỏ stop words trước
+Sau khi loại bỏ các từ đã chọn:
+mua | bảo | hiểm
+
+Các 3-gram:
+- mua bảo hiểm
+
+
+Bạn thấy vấn đề chưa?
+- Từ không mang ý nghĩa phủ định. Nếu xóa nó, câu không muốn mua bảo hiểm có thể bị hiểu sai thành muốn mua bảo hiểm.
+- Khi xóa từ, các từ vốn không đứng cạnh nhau trong câu gốc có thể trở thành hàng xóm của nhau, tạo ra N-gram không phản ánh đúng cấu trúc ban đầu.
+Lưu ý: Danh sách stop words trên chỉ nhằm minh họa, không có nghĩa tất cả các từ đó đều phải loại bỏ trong mọi bài toán tiếng Việt.
+2. Vậy nên dùng stop words trước hay sau N-gram?
+Mục đích	Cách xử lý nên cân nhắc
+Phân tích cảm xúc, phủ định	Giữ các từ như không, chưa, chẳng
+Trích xuất cụm từ, phân tích ngôn ngữ	Thường tạo N-gram trên văn bản đã chuẩn hóa nhưng chưa xóa stop words
+Tìm kiếm văn bản	Có thể loại bỏ một số stop words, tùy cách lập chỉ mục và truy vấn
+Phân loại văn bản bằng Bag-of-Words hoặc TF-IDF	Có thể thử cả hai cách rồi đánh giá kết quả
+Xây dựng mô hình ngôn ngữ N-gram	Thông thường giữ nguyên các từ trong câu để học xác suất từ tiếp theo
+3. Nếu muốn giảm nhiễu thì làm thế nào?
+Thay vì xóa stop words một cách máy móc, bạn có thể thực hiện quy trình:
+Văn bản gốc
+
+Chuẩn hóa văn bản, dấu câu và khoảng trắng
+Tách từ phù hợp với ngôn ngữ
+Tạo N-gram
+Lọc các N-gram không hữu ích theo mục tiêu
+
+Cách này cho phép bạn giữ nguyên ý nghĩa của câu khi tạo N-gram, sau đó mới chọn những cụm từ phù hợp với bài toán.
+4. Một điểm quan trọng nếu bạn xử lý tiếng Việt
+Tiếng Việt có những từ gồm nhiều tiếng, ví dụ bảo hiểm, ngôn ngữ, xử lý. Nếu chỉ tách theo khoảng trắng, hệ thống sẽ coi mỗi tiếng là một token riêng.
+Vì vậy, nếu bạn muốn khai thác N-gram để trích xuất cụm từ tiếng Việt, hãy cân nhắc tách từ tiếng Việt trước khi tạo N-gram. Nếu không, các cụm 3-gram, 4-gram có thể không tương ứng với ba hoặc bốn từ theo nghĩa ngôn ngữ học.
+Kết luận: Với bài toán trích xuất cụm từ hoặc mô hình hóa ngôn ngữ, tôi khuyên bạn nên bắt đầu bằng cách giữ stop words, tạo N-gram trước, rồi đánh giá xem có cần lọc cụm từ nào không. Đặc biệt, đừng xóa các từ phủ định như không, chưa nếu chúng ảnh hưởng đến ý nghĩa của văn bản.
+
 ## Character n-gram (là kỹ thuật chia một chuỗi văn bản thành các đoạn con liên tiếp dài đúng n ký tự)
 ```bash
 Nó được dùng rất nhiều trong:
