@@ -1,5 +1,4 @@
 - [Android Introduction (dùng để lập trình ứng dụng android)](#android-introduction-dùng-để-lập-trình-ứng-dụng-android)
-- [onCreate()](#oncreate)
 - [app (chứa các class liên quan đến ứng dụng Android và các thành phần cấp ứng dụng)](#app-chứa-các-class-liên-quan-đến-ứng-dụng-android-và-các-thành-phần-cấp-ứng-dụng)
   - [Activity (Một màn hình Android truyền thống thường là một Activity)](#activity-một-màn-hình-android-truyền-thống-thường-là-một-activity)
   - [DatePickerDialog (Hộp thoại chọn ngày)](#datepickerdialog-hộp-thoại-chọn-ngày)
@@ -13,17 +12,26 @@
   - [TextView](#textview)
   - [EditText](#edittext)
   - [RadioGroup](#radiogroup)
+    - [getCheckedRadioButtonID (Dùng trên đối tượng RadioGroup để xem người dùng đang tích chọn vào nút RadioButton nào trong nhóm)](#getcheckedradiobuttonid-dùng-trên-đối-tượng-radiogroup-để-xem-người-dùng-đang-tích-chọn-vào-nút-radiobutton-nào-trong-nhóm)
   - [RadioButton](#radiobutton)
     - [isChecked()](#ischecked)
   - [Toast](#toast)
     - [.makeText()](#maketext)
       - [.show()](#show)
   - [ArrayAdapter (là cầu nối giữa một List dữ liệu Java và một ListView trên giao diện)](#arrayadapter-là-cầu-nối-giữa-một-list-dữ-liệu-java-và-một-listview-trên-giao-diện)
+    - [Ask](#ask)
+      - [simple\_list\_item\_1 ở đâu?](#simple_list_item_1-ở-đâu)
+      - [Tại sao phải truyền simple\_list\_item\_1?](#tại-sao-phải-truyền-simple_list_item_1)
     - [setAdapter](#setadapter)
     - [getCount() (có bao nhiêu phần tử)](#getcount-có-bao-nhiêu-phần-tử)
     - [getItem() (lấy phần tử)](#getitem-lấy-phần-tử)
     - [getItemId(position)](#getitemidposition)
     - [add() (thêm một phần tử)](#add-thêm-một-phần-tử)
+    - [notifyDataSetChanged() (báo cho ListView cập nhật)](#notifydatasetchanged-báo-cho-listview-cập-nhật)
+  - [ListView](#listview)
+    - [setOnItemClickListener (lắng nghe sự kiện người dùng nhấp (click) vào một dòng bất kỳ trong ListView)](#setonitemclicklistener-lắng-nghe-sự-kiện-người-dùng-nhấp-click-vào-một-dòng-bất-kỳ-trong-listview)
+    - [getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)](#getview-tạo-và-vẽ-giao-diện-cho-từng-dòng-item-trong-danh-sách-listview)
+    - [notifyDataSetChanged() (thông báo cho Adapter biết dữ liệu trong nguồn (list) đã thay đổi yêu cầu ListView tự động vẽ lại (refresh) giao diện ngay lập tức để cập nhật danh sách mới)](#notifydatasetchanged-thông-báo-cho-adapter-biết-dữ-liệu-trong-nguồn-list-đã-thay-đổi-yêu-cầu-listview-tự-động-vẽ-lại-refresh-giao-diện-ngay-lập-tức-để-cập-nhật-danh-sách-mới)
 - [content (Thông tin môi trường của ứng dụng hiện tại để Android biết bạn đang thao tác trong app nào)](#content-thông-tin-môi-trường-của-ứng-dụng-hiện-tại-để-android-biết-bạn-đang-thao-tác-trong-app-nào)
   - [Context](#context)
 - [graphics (Liên quan đến đồ họa, hình ảnh, vẽ)](#graphics-liên-quan-đến-đồ-họa-hình-ảnh-vẽ)
@@ -37,7 +45,7 @@
   - [.setVisibility() (Thay đổi trạng thái hiển thị View)](#setvisibility-thay-đổi-trạng-thái-hiển-thị-view)
   - [.getVisibility() (Lấy trạng thái hiển thị hiện tại của TextView)](#getvisibility-lấy-trạng-thái-hiển-thị-hiện-tại-của-textview)
 - [setOnClickListener (Lắng nghe sự kiện bấm nút)](#setonclicklistener-lắng-nghe-sự-kiện-bấm-nút)
-  - [Ask](#ask)
+  - [Ask](#ask-1)
     - [tại sao chỗ này lại là view mà không phải TextView](#tại-sao-chỗ-này-lại-là-view-mà-không-phải-textview)
 - [onClick()](#onclick)
 - [setText()](#settext)
@@ -74,7 +82,6 @@ Bạn có thể hình dung Android SDK như một hộp công cụ khổng lồ:
     └── ...
 -> Mỗi package chứa các class phục vụ một nhóm chức năng.
 ```
-# onCreate()
 # app (chứa các class liên quan đến ứng dụng Android và các thành phần cấp ứng dụng)
 ## Activity (Một màn hình Android truyền thống thường là một Activity)
 **Ex: Activity**
@@ -140,6 +147,24 @@ Nó chứa các widget UI như:
 ## TextView
 ## EditText
 ## RadioGroup
+### getCheckedRadioButtonID (Dùng trên đối tượng RadioGroup để xem người dùng đang tích chọn vào nút RadioButton nào trong nhóm)
+**Syn**
+```bash
+- Output: 
+    + Trả về một số nguyên (int) chính là ID của RadioButton đang được chọn 
+    + Nếu không có nút nào được chọn, nó trả về -1.
+```
+**Ex**
+```java
+int checkedId = radioGroup.getCheckedRadioButtonId();
+
+RadioButton radioButton = findViewById(checkedId);
+
+String value = radioButton.getText().toString();
+
+// Ví dụ người dùng chọn Nam:
+String value = radioButton.getText().toString(); // value = "Nam"
+```
 ## RadioButton
 ### isChecked()
 ## Toast
@@ -216,8 +241,9 @@ ArrayAdapter<String> adapter = new ArrayAdapter<>(
 
 listView.setAdapter(adapter);
 ```
-simple_list_item_1 ở đâu?
-
+### Ask 
+#### simple_list_item_1 ở đâu?
+```bash
 Nó nằm bên trong Android SDK/framework, không nằm trong thư mục:
 
 app/
@@ -226,24 +252,15 @@ app/
         └── res/
             └── layout/
 
-Bạn sẽ không thấy:
+Bạn sẽ không thấy: res/layout/simple_list_item_1.xml trong project của mình.
 
-res/layout/simple_list_item_1.xml
-
-trong project của mình.
-
-Thay vào đó:
-
-android.R.layout.simple_list_item_1
-
-có nghĩa là:
-
-android
-  └── R
-      └── layout
-          └── simple_list_item_1
-
-android.R là class R do Android framework cung cấp.
+Thay vào đó: android.R.layout.simple_list_item_1
+    có nghĩa là:
+        android
+          └── R
+              └── layout
+                  └── simple_list_item_1
+        android.R là class R do Android framework cung cấp.
 
 3. Nó thực chất là một layout
 
@@ -282,8 +299,9 @@ ArrayAdapter
 simple_list_item_1
   ↓
 ListView
-4. Tại sao phải truyền simple_list_item_1?
-
+```
+#### Tại sao phải truyền simple_list_item_1?
+```bash
 Vì ArrayAdapter cần biết:
 
 "Tôi phải dùng giao diện nào để vẽ mỗi phần tử trong danh sách?"
@@ -300,7 +318,7 @@ nói với Android:
 
 "Lấy từng String trong names, đưa nó vào layout simple_list_item_1, sau đó tạo các dòng trong ListView."
 
-5. Bạn cũng có thể tự tạo layout
+1. Bạn cũng có thể tự tạo layout
 
 Ví dụ bạn muốn mỗi dòng đẹp hơn, có:
 
@@ -360,6 +378,7 @@ Còn:
 android.R.layout.simple_list_item_1
 
 là layout có sẵn của Android, không phải layout trong project của bạn
+```
 ### setAdapter
 ### getCount() (có bao nhiêu phần tử)
 Một method thường gặp:
@@ -512,46 +531,72 @@ Sau:
 adapter.clear();
 
 → danh sách rỗng:
-
-ListView
-┌───────────────────────┐
-│                       │
-│       Không có gì     │
-│                       │
-└───────────────────────┘
-11. notifyDataSetChanged() — báo cho ListView cập nhật
-
-Đây là method rất quan trọng.
-
-Ví dụ:
-
-adapter.add("Phạm Văn C");
-
-thường Adapter sẽ xử lý cập nhật, nhưng khi bạn thay đổi dữ liệu gốc theo cách khác, bạn thường cần:
-
-adapter.notifyDataSetChanged();
-
-Ví dụ:
-
-names.add("Phạm Văn C");
-
-adapter.notifyDataSetChanged();
-
-Ý nghĩa:
-
-"Dữ liệu của tôi vừa thay đổi, hãy vẽ lại ListView."
+### notifyDataSetChanged() (báo cho ListView cập nhật)
+```bash
 
 Có thể hình dung:
+    Dữ liệu thay đổi -> notifyDataSetChanged() -> Adapter thông báo -> ListView cập nhật -> Màn hình thay đổi
+```
+**Syn**
+```bash
+adapterPerson.notifyDataSetChanged();
+```
+## ListView
+### setOnItemClickListener (lắng nghe sự kiện người dùng nhấp (click) vào một dòng bất kỳ trong ListView)
+**syn**
+```bash
+listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        // Xử lý khi click vào dòng
+    }
+});
 
-Dữ liệu thay đổi
-      ↓
-notifyDataSetChanged()
-      ↓
-Adapter thông báo
-      ↓
-ListView cập nhật
-      ↓
-Màn hình thay đổi
+- Input:
+    + onItemClick: Hàm tự động chạy khi hành động click xảy ra.
+    + Input (Các tham số):
+    + AdapterView<?> parent: Đại diện cho ListView.
+    + View view: Giao diện của dòng cụ thể vừa bị click vào.
+    + int position: Vị trí dòng vừa được click (cực kỳ quan trọng để biết người dùng đang chọn phần tử thứ mấy trong list).
+    + long id: ID của dòng được chọn.
+- Output: Không có (void).
+```
+radTv.setChecked(true) và radCt.setChecked(true) là gì?
+Ý nghĩa: Dùng để lập trình đánh dấu tích chọn (hoặc bỏ chọn) cho một RadioButton.
+
+Truyền vào true: Bật tích chọn (nút tròn sáng lên).
+
+Truyền vào false: Bỏ tích chọn.
+
+Trong ngữ cảnh code của bạn: Khi người dùng bấm vào một dòng nhân viên trong danh sách, ứng dụng sẽ đọc xem nhân viên đó là "thời vụ" hay "chính thức" để tự động tích sáng nút tròn tương ứng trên form.
+
+7. Hàm maNV.requestFocus() là gì?
+Ý nghĩa: Lệnh dùng để đưa con trỏ chuột (focus) nhấp nháy tập trung vào ô nhập liệu (EditText) đó.
+
+Ứng dụng: Thường được gọi sau khi bấm Thêm/Sửa/Xóa xong để con trỏ tự động nhảy về ô nhập "Mã NV", giúp người dùng có thể gõ tiếp dữ liệu mới ngay lập tức mà không cần dùng tay bấm vào màn hình điện thoại.
+
+8. Giải thích khối code khi click chọn dòng trong ListView:
+Java
+listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        selectedIndex = position; // 1. Lưu lại vị trí dòng đang chọn
+        Person p = list.get(position); // 2. Lấy đối tượng Person tại vị trí đó ra
+
+        // 3. Đẩy thông tin của nhân viên đó ngược lại lên các ô EditText trên form
+        maNV.setText(p.id);
+        tenNV.setText(p.name);
+        
+        // 4. Kiểm tra loại nhân viên để tích chọn RadioButton tương ứng
+        if (p.type.equals("thời vụ")) {
+            radTv.setChecked(true);
+        } else {
+            radCt.setChecked(true);
+        }
+    }
+});
+Giải thích tổng quát: Đoạn code này thực hiện tính năng Read / Select (Xem lại / Chọn). Khi bạn chạm tay vào bất kỳ dòng nào trong danh sách nhân viên, thông tin của nhân viên đó sẽ được điền tự động ngược lại lên các ô nhập liệu phía trên để bạn xem hoặc chuẩn bị bấm nút Sửa / Xóa.
+
 12. insert()
 
 Thêm một phần tử vào vị trí cụ thể:
@@ -708,6 +753,21 @@ Vì vậy:
 NhanVien nv = list.get(position);
 
 rất hợp lý.
+### getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)
+**Syn**
+```bash
+@Override
+public View getView(int position, View convertView, ViewGroup parent) { ... }
+
+- int position: Vị trí (chỉ số index) của dòng hiện tại trong mảng list (bắt đầu từ 0, 1, 2...).
+- View convertView: Ô nhớ chứa giao diện cũ được tái sử dụng (giúp tối ưu bộ nhớ, tránh việc phải tạo mới giao diện liên tục khi người dùng cuộn danh sách lên xuống).
+- ViewGroup parent: ViewGroup chứa danh sách này (chính là cái ListView).
+```
+### notifyDataSetChanged() (thông báo cho Adapter biết dữ liệu trong nguồn (list) đã thay đổi yêu cầu ListView tự động vẽ lại (refresh) giao diện ngay lập tức để cập nhật danh sách mới)
+**Syn**
+```bash
+adapterPerson.notifyDataSetChanged();.
+```
 # content (Thông tin môi trường của ứng dụng hiện tại để Android biết bạn đang thao tác trong app nào)
 ## Context
 **Ex**
@@ -857,7 +917,8 @@ txt.setVisibility(View.VISIBLE);
 ```
 ## .getVisibility() (Lấy trạng thái hiển thị hiện tại của TextView)
 # setOnClickListener (Lắng nghe sự kiện bấm nút)
-```java
+**Syn**
+```bash
 button.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
@@ -865,11 +926,12 @@ button.setOnClickListener(new View.OnClickListener() {
     }
 });
 
-// button: nút bấm mà chúng ta muốn theo dõi.
-// setOnClickListener(...): đăng ký một bộ lắng nghe sự kiện bấm nút.
-// new View.OnClickListener(): tạo một đối tượng thực hiện nhiệm vụ lắng nghe sự kiện.
-// onClick(View v): hàm được Android gọi tự động khi người dùng bấm nút.
-// @Override: cho biết chúng ta đang viết lại hàm onClick() được quy định trong View.OnClickListener.
+- Input:
+    + button: nút bấm mà chúng ta muốn theo dõi.
+    + setOnClickListener(...): đăng ký một bộ lắng nghe sự kiện bấm nút.
+    + new View.OnClickListener(): tạo một đối tượng thực hiện nhiệm vụ lắng nghe sự kiện.
+    + onClick(View v): hàm được Android gọi tự động khi người dùng bấm nút.
+    + @Override: cho biết chúng ta đang viết lại hàm onClick() được quy định trong View.OnClickListener.
 ```
 ## Ask
 ### tại sao chỗ này lại là view mà không phải TextView 
@@ -957,35 +1019,7 @@ checkedId == R.id.radioNam
 
 sẽ là true.
 
-3. Nếu muốn lấy RadioButton đang được chọn
 
-Có thể dùng:
-
-int checkedId = radioGroup.getCheckedRadioButtonId();
-
-RadioButton radioButton = findViewById(checkedId);
-
-String value = radioButton.getText().toString();
-
-Ví dụ người dùng chọn Nam:
-
-String value = radioButton.getText().toString();
-
-thì:
-
-value = "Nam"
-Nhớ 2 cách
-
-Bắt sự kiện ngay khi người dùng chọn:
-
-radioGroup.setOnCheckedChangeListener(...)
-
-Lấy lựa chọn hiện tại khi cần:
-
-radioGroup.getCheckedRadioButtonId()
-
-Nếu bạn đang học Android Java cơ bản thì nên dùng RadioGroup để quản lý 2 RadioButton, vì nó đảm bảo trong group chỉ có một lựa chọn được chọn.
-```
 # Practices
 ## 4.9
 package com.example.test1;
@@ -1095,3 +1129,4 @@ public class MainActivity extends AppCompatActivity {
         android:text="Show Time Picker" />
 
 </LinearLayout>
+

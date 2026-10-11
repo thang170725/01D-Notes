@@ -1,12 +1,13 @@
 - [List](#list)
 - [ArrayList (được sử dụng như một mảng động để lưu trữ phần tử)](#arraylist-được-sử-dụng-như-một-mảng-động-để-lưu-trữ-phần-tử)
-  - [size() (Trả về số lượng phần tử có trong ArrayList)](#size-trả-về-số-lượng-phần-tử-có-trong-arraylist)
-  - [add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)](#add-nó-được-sử-dụng-để-nối-thêm-phần-tử-được-chỉ-định-vào-cuối-hoặc-một-vị-trí-bất-kì-trong-một-danh-sách)
-  - [isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)](#isempty-để-kiểm-tra-xem-một-arraylist-có-phần-tử-hay-không)
-  - [remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)](#remove-xóa-một-phần-tử-trong-arraylist-tham-số-truyền-vào-có-thể-là-một-đối-tượng-hoặc-một-số)
-  - [removeAll() (xóa hết phần tử có trong ArrayList value)](#removeall-xóa-hết-phần-tử-có-trong-arraylist-value)
-  - [contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)](#contains-kiểm-tra-xem-có-tồn-tại-value-trong-arraylist-hay-không)
-  - [set() (Để gán phần tử)](#set-để-gán-phần-tử)
+	- [.get() (Lấy phần tử)](#get-lấy-phần-tử)
+	- [size() (Trả về số lượng phần tử có trong ArrayList)](#size-trả-về-số-lượng-phần-tử-có-trong-arraylist)
+	- [add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)](#add-nó-được-sử-dụng-để-nối-thêm-phần-tử-được-chỉ-định-vào-cuối-hoặc-một-vị-trí-bất-kì-trong-một-danh-sách)
+	- [isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)](#isempty-để-kiểm-tra-xem-một-arraylist-có-phần-tử-hay-không)
+	- [remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)](#remove-xóa-một-phần-tử-trong-arraylist-tham-số-truyền-vào-có-thể-là-một-đối-tượng-hoặc-một-số)
+	- [removeAll() (xóa hết phần tử có trong ArrayList value)](#removeall-xóa-hết-phần-tử-có-trong-arraylist-value)
+	- [contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)](#contains-kiểm-tra-xem-có-tồn-tại-value-trong-arraylist-hay-không)
+	- [set() (Để gán phần tử)](#set-để-gán-phần-tử)
 ---
 # List
 # ArrayList (được sử dụng như một mảng động để lưu trữ phần tử)
@@ -23,6 +24,17 @@ Lưu ý:
 ```bash
 ArrayList list = new ArrayList(); // non-generric – kiểu cũ
 ArrayList<String> list = new ArrayList<String>() // generic – kiểu mới
+```
+## .get() (Lấy phần tử)
+**Syn**
+```bash
+list.get(index);
+```
+**Ex**
+```java
+String name = list.get(1);
+
+System.out.println(name); // Binh
 ```
 ## size() (Trả về số lượng phần tử có trong ArrayList)
 ## add() (Nó được sử dụng để nối thêm phần tử được chỉ định vào cuối hoặc một vị trí bất kì trong một danh sách)
@@ -57,6 +69,28 @@ public class SinhVien {
 ```
 ## isEmpty() (để kiểm tra xem một ArrayList có phần tử hay không)
 ## remove() (xóa một phần tử trong ArrayList tham số truyền vào có thể là một đối tượng hoặc một số)
+**EE: Cách 1: Xóa theo index**
+```java
+list.remove(1);
+
+System.out.println(list); //[An, Cuong]
+```
+**Ex2: Cách 2 Xóa theo giá trị**
+```java
+list.remove("An");
+
+System.out.println(list); // [Cuong]
+```
 ## removeAll() (xóa hết phần tử có trong ArrayList value)
 ## contains() (Kiểm tra xem có tồn tại value trong ArrayList hay không)
 ## set() (Để gán phần tử)
+**Syn**
+```bash
+list.set(index, value);
+```
+**EE**
+```java
+list.set(1, "Dung");
+
+System.out.println(list); // [An, Dung, Cuong]
+```

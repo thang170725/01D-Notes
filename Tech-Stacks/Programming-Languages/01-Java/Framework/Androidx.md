@@ -2,6 +2,7 @@
 - [appcompat](#appcompat)
   - [app](#app)
     - [AppCompatActivity](#appcompatactivity)
+      - [onCreate()](#oncreate)
 ---
 # AndroidX (xây dựng Android app hiện đại, được phân phối dưới dạng dependencies của project)
 Tại sao AndroidX phải cài bằng Gradle?
@@ -67,3 +68,17 @@ Cho nên bạn chỉ việc:
 import androidx.appcompat.app.AppCompatActivity;
 
 mà không cần tự đi tìm thư viện trên Google.
+#### onCreate()
+```bash
+Đây là hàm khởi động cốt lõi (lifecycle method) của một màn hình (Activity) trong Android. Ngay khi bạn mở ứng dụng lên, hàm này sẽ chạy đầu tiên.
+```
+**Syn**
+```bash
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+}
+
+- setContentView(R.layout.activity_main): Nạp giao diện XML (activity_main.xml) lên màn hình điện thoại để người dùng nhìn thấy và tương tác. Nơi đây cũng là chỗ lý tưởng để viết các mã ánh xạ (findViewById) và xử lý sự kiện nút bấm.
+```

@@ -3,6 +3,7 @@
   - [Ứng dụng tính tổng 2 số](#ứng-dụng-tính-tổng-2-số)
   - [Máy tính cơ bản cộng trừ nhân chia](#máy-tính-cơ-bản-cộng-trừ-nhân-chia)
   - [ListView quản lý nhân viên (Bài 4.8)](#listview-quản-lý-nhân-viên-bài-48)
+- [ListView thêm suử xoó quaả ly nhan vien](#listview-thêm-suử-xoó-quaả-ly-nhan-vien)
 ---
 # Android
 ## Tạo nút bấm khi nhấn cho phép ẩn hiện thông tin
@@ -1138,6 +1139,462 @@ public class MainActivity extends Activity {
          * rồi tạo item tương ứng.
          */
         listView.setAdapter(adapter);
+    }
+}
+```
+# ListView thêm suử xoó quaả ly nhan vien
+**MainActivity.java**
+```java
+package com.example.test1;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity {
+
+    // Model Person
+    static class Person {
+        String id;
+        String name;
+        String type;
+        float salary;
+
+        Person(String id, String name, String type, float salary) {
+            this.id = id;
+            this.name = name;
+            this.type = type;
+            this.salary = salary;
+        }
+    }
+
+    // Khai báo các biến toàn cục
+    EditText maNV, tenNV;
+    RadioGroup typeGroup;
+    RadioButton radCt, radTv;
+    Button nhapNV, btnSua, btnXoa;
+    ListView listView;
+
+    List<Person> list = new ArrayList<>();
+    ArrayAdapter<Person> adapterPerson;
+
+    // Biến lưu vị trí đang được chọn trong ListView (-1 là chưa chọn)
+    int selectedIndex = -1;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // 1. Ánh xạ View
+        maNV = findViewById(R.id.maNV);
+        tenNV = findViewById(R.id.tenNV);
+        typeGroup = findViewById(R.id.typeGroup);
+        radCt = findViewById(R.id.ct);
+        radTv = findViewById(R.id.tv);
+        nhapNV = findViewById(R.id.nhapNV);
+        btnSua = findViewById(R.id.btnSua);
+        btnXoa = findViewById(R.id.btnXoa);
+        listView = findViewById(R.id.listView);
+
+        // 2. Khởi tạo Custom Adapter một lần duy nhất
+        adapterPerson = new ArrayAdapter<Person>(
+                MainActivity.this,
+                R.layout.item_person,
+                R.id.id,
+                list
+        ) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                Person person = getItem(position);
+
+                TextView id = view.findViewById(R.id.id);
+                TextView name = view.findViewById(R.id.name);
+                TextView type = view.findViewById(R.id.type);
+                TextView salary = view.findViewById(R.id.salary);
+
+                if (person != null) {
+                    id.setText(person.id);
+                    name.setText(person.name);
+                    type.setText(person.type);
+                    salary.setText(String.valueOf(person.salary));
+                }
+
+                return view;
+            }
+        };
+
+        // Gắn adapter vào ListView ngay từ đầu
+        listView.setAdapter(adapterPerson);
+
+        // -------------------------------------------------------------
+        // 3. THÊM NHÂN VIÊN (CREATE)
+        // -------------------------------------------------------------
+        nhapNV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String ma = maNV.getText().toString().trim();
+                String ten = tenNV.getText().toString().trim();
+
+                if (ma.isEmpty() || ten.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String type = "chính thức";
+                float salary = 500;
+
+                int checked = typeGroup.getCheckedRadioButtonId();
+                if (checked == R.id.tv) {
+                    type = "thời vụ";
+                    salary = 100;
+                }
+
+                // Thêm vào mảng
+                Person p = new Person(ma, ten, type, salary);
+                list.add(p);
+
+                // Cập nhật giao diện
+                adapterPerson.notifyDataSetChanged();
+                clearForm();
+                Toast.makeText(MainActivity.this, "Thêm thành công!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // -------------------------------------------------------------
+        // 4. CHỌN DÒNG TRONG LISTVIEW ĐỂ XEM/SỬA/XÓA (READ / SELECT)
+        // -------------------------------------------------------------
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selectedIndex = position; // Lưu lại vị trí chọn
+                Person p = list.get(position);
+
+                // Đẩy thông tin lên form nhập
+                maNV.setText(p.id);
+                tenNV.setText(p.name);
+                if (p.type.equals("thời vụ")) {
+                    radTv.setChecked(true);
+                } else {
+                    radCt.setChecked(true);
+                }
+            }
+        });
+
+        // -------------------------------------------------------------
+        // 5. SỬA THÔNG TIN NHÂN VIÊN (UPDATE)
+        // -------------------------------------------------------------
+        btnSua.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedIndex == -1) {
+                    Toast.makeText(MainActivity.this, "Vui lòng chọn nhân viên cần sửa từ danh sách!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String ma = maNV.getText().toString().trim();
+                String ten = tenNV.getText().toString().trim();
+
+                if (ma.isEmpty() || ten.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Không được để trống thông tin!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                String type = "chính thức";
+                float salary = 500;
+
+                int checked = typeGroup.getCheckedRadioButtonId();
+                if (checked == R.id.tv) {
+                    type = "thời vụ";
+                    salary = 100;
+                }
+
+                // Cập nhật thông tin phần tử tại vị trí selectedIndex
+                Person p = list.get(selectedIndex);
+                p.id = ma;
+                p.name = ten;
+                p.type = type;
+                p.salary = salary;
+
+                // Cập nhật ListView
+                adapterPerson.notifyDataSetChanged();
+                clearForm();
+                Toast.makeText(MainActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // -------------------------------------------------------------
+        // 6. XÓA NHÂN VIÊN (DELETE)
+        // -------------------------------------------------------------
+        btnXoa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectedIndex == -1) {
+                    Toast.makeText(MainActivity.this, "Vui lòng chọn nhân viên cần xóa từ danh sách!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Xóa khỏi danh sách theo vị trí
+                list.remove(selectedIndex);
+
+                // Cập nhật ListView
+                adapterPerson.notifyDataSetChanged();
+                clearForm();
+                Toast.makeText(MainActivity.this, "Xóa thành công!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Hàm xóa trắng form và đưa trạng thái vị trí chọn về mặc định
+    private void clearForm() {
+        maNV.setText("");
+        tenNV.setText("");
+        radCt.setChecked(true);
+        maNV.requestFocus();
+        selectedIndex = -1; // Reset vị trí chọn
+    }
+}
+```
+**item_person**
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
+
+    <!-- CỘT TRÁI -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- TÊN -->
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- GIỚI TÍNH -->
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+    <!-- CỘT PHẢI -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <!-- ĐỊA CHỈ -->
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- TUỔI -->
+        <TextView
+            android:id="@+id/salary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
+```
+**activity_main**
+```bash
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#4CAF50"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="Quản lý nhân viên (CRUD)"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <!-- MÃ NV -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Mã NV:" />
+
+        <EditText
+            android:id="@+id/maNV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Mã nhân viên"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <!-- TÊN NV -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Tên NV:" />
+
+        <EditText
+            android:id="@+id/tenNV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Tên nhân viên"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <!-- LOẠI NV -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Loại NV:" />
+
+        <RadioGroup
+            android:id="@+id/typeGroup"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/ct"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="Chính thức" />
+
+            <RadioButton
+                android:id="@+id/tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Thời vụ" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <!-- HÀNG NÚT CHỨC NĂNG: THÊM - SỬA - XÓA -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/nhapNV"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#4CAF50"
+            android:text="Thêm" />
+
+        <Button
+            android:id="@+id/btnSua"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#FF9800"
+            android:text="Sửa" />
+
+        <Button
+            android:id="@+id/btnXoa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#F44336"
+            android:text="Xóa" />
+    </LinearLayout>
+
+    <!-- DANH SÁCH -->
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
+```
+**NhanVien.java**
+```java
+package com.example.test1;
+
+public class NhanVien {
+    String maNV;
+    String tenNV;
+    String typeNV;
+
+    NhanVien(String maNV, String tenNV, String typeNV) {
+        this.maNV = maNV;
+        this.tenNV = tenNV;
+        this.typeNV = typeNV;
+    }
+
+    public String getMaNV() {
+        return maNV;
+    }
+    public String getTenNV(){
+        return tenNV;
+    }
+    public String getTypeNV(){
+        return typeNV;
     }
 }
 ```

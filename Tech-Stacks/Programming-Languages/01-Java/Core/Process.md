@@ -1010,19 +1010,7 @@ Enum có thể chứ các trường, phương thức và constructor.
 Bởi vì các giá trị của enum là các hằng số, nên tên của các trường kiểu enum thường là các chữ cái hoa.
 Cú pháp:
 Enum tên{…}
-equals
-Dùng để so sánh kiểu dữ liệu không phải nguyên thủy
-Cú pháp:
-Public boolean equals(Object obj){
-	if(this == obj) return true;
-	if(this == null) return fault;
-	if(this.getClass() != obj.getClass()) return fault;
-	MyDate other = (MyDate) obj;
-	if(this.day != other.day) return fault;
-	if(this.month != other.month) return fault;
-	if(this.year != other.year) return fault;
-	Return true;
-}
+
 getName()
 là một phương thức để lấy ra tên của một đối tượng cụ thể. Tên này thường là chuỗi ký tự String dùng để xác định hoặc phân biệt đối tượng đó với các đối tượng khác trong chương trình
 garbage Collection

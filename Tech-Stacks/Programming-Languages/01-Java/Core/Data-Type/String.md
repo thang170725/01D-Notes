@@ -1,3 +1,4 @@
+- [equals (Dùng để so sánh kiểu dữ liệu không phải nguyên thủy)](#equals-dùng-để-so-sánh-kiểu-dữ-liệu-không-phải-nguyên-thủy)
 - [.trim() (Xóa khoản trắng dư thừa ở đầu chuỗi)](#trim-xóa-khoản-trắng-dư-thừa-ở-đầu-chuỗi)
 - [isEmpty() (Nếu chuỗi trống trả về true ngược lại trả về false)](#isempty-nếu-chuỗi-trống-trả-về-true-ngược-lại-trả-về-false)
 ---
@@ -44,6 +45,7 @@ class Person{
 	}
 }
 ```
+# equals (Dùng để so sánh kiểu dữ liệu không phải nguyên thủy)
 toUpperCase()
 Trả về kí tự viết hoa hoặc trả về chuỗi in hoa hết.
 Cú pháp:
