@@ -28,9 +28,9 @@
     - [getItemId(position)](#getitemidposition)
     - [add() (thêm một phần tử)](#add-thêm-một-phần-tử)
     - [notifyDataSetChanged() (báo cho ListView cập nhật)](#notifydatasetchanged-báo-cho-listview-cập-nhật)
+    - [getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)](#getview-tạo-và-vẽ-giao-diện-cho-từng-dòng-item-trong-danh-sách-listview)
   - [ListView](#listview)
     - [setOnItemClickListener (lắng nghe sự kiện người dùng nhấp (click) vào một dòng bất kỳ trong ListView)](#setonitemclicklistener-lắng-nghe-sự-kiện-người-dùng-nhấp-click-vào-một-dòng-bất-kỳ-trong-listview)
-    - [getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)](#getview-tạo-và-vẽ-giao-diện-cho-từng-dòng-item-trong-danh-sách-listview)
     - [notifyDataSetChanged() (thông báo cho Adapter biết dữ liệu trong nguồn (list) đã thay đổi yêu cầu ListView tự động vẽ lại (refresh) giao diện ngay lập tức để cập nhật danh sách mới)](#notifydatasetchanged-thông-báo-cho-adapter-biết-dữ-liệu-trong-nguồn-list-đã-thay-đổi-yêu-cầu-listview-tự-động-vẽ-lại-refresh-giao-diện-ngay-lập-tức-để-cập-nhật-danh-sách-mới)
 - [content (Thông tin môi trường của ứng dụng hiện tại để Android biết bạn đang thao tác trong app nào)](#content-thông-tin-môi-trường-của-ứng-dụng-hiện-tại-để-android-biết-bạn-đang-thao-tác-trong-app-nào)
   - [Context](#context)
@@ -541,6 +541,16 @@ Có thể hình dung:
 ```bash
 adapterPerson.notifyDataSetChanged();
 ```
+### getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)
+**Syn**
+```bash
+@Override
+public View getView(int position, View convertView, ViewGroup parent) { ... }
+
+- int position: Vị trí (chỉ số index) của dòng hiện tại trong mảng list (bắt đầu từ 0, 1, 2...).
+- View convertView: Ô nhớ chứa giao diện cũ được tái sử dụng (giúp tối ưu bộ nhớ, tránh việc phải tạo mới giao diện liên tục khi người dùng cuộn danh sách lên xuống).
+- ViewGroup parent: ViewGroup chứa danh sách này (chính là cái ListView).
+```
 ## ListView
 ### setOnItemClickListener (lắng nghe sự kiện người dùng nhấp (click) vào một dòng bất kỳ trong ListView)
 **syn**
@@ -753,16 +763,6 @@ Vì vậy:
 NhanVien nv = list.get(position);
 
 rất hợp lý.
-### getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)
-**Syn**
-```bash
-@Override
-public View getView(int position, View convertView, ViewGroup parent) { ... }
-
-- int position: Vị trí (chỉ số index) của dòng hiện tại trong mảng list (bắt đầu từ 0, 1, 2...).
-- View convertView: Ô nhớ chứa giao diện cũ được tái sử dụng (giúp tối ưu bộ nhớ, tránh việc phải tạo mới giao diện liên tục khi người dùng cuộn danh sách lên xuống).
-- ViewGroup parent: ViewGroup chứa danh sách này (chính là cái ListView).
-```
 ### notifyDataSetChanged() (thông báo cho Adapter biết dữ liệu trong nguồn (list) đã thay đổi yêu cầu ListView tự động vẽ lại (refresh) giao diện ngay lập tức để cập nhật danh sách mới)
 **Syn**
 ```bash
