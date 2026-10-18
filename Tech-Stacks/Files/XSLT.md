@@ -1,11 +1,42 @@
-# XSLT Introduction
+- [XSLT Introduction (chuyển tử xml sang định dạng khác)](#xslt-introduction-chuyển-tử-xml-sang-định-dạng-khác)
+- [XPath](#xpath)
+- [xsl:stylesheet (khung của file XSLT)](#xslstylesheet-khung-của-file-xslt)
+  - [Ask](#ask)
+    - [msxsl là gì?](#msxsl-là-gì)
+- [xsl:output (quy định đầu ra)](#xsloutput-quy-định-đầu-ra)
+- [xsl:template (nơi xử lý dữ liệu)](#xsltemplate-nơi-xử-lý-dữ-liệu)
+- [xsl:for-each](#xslfor-each)
+- [xsl:value-of (lấy giá trị của node)](#xslvalue-of-lấy-giá-trị-của-node)
+- [xsl:if](#xslif)
+- [xsl:choose (tương đương if elif else)](#xslchoose-tương-đương-if-elif-else)
+- [xsl:sort (sắp xếp)](#xslsort-sắp-xếp)
+- [xsl:variable](#xslvariable)
+- [XPath](#xpath-1)
+  - [\<	(Nhỏ hơn)](#nhỏ-hơn)
+  - [\&gt (Lớn hơn)](#gt-lớn-hơn)
+  - [\<= (Nhỏ hơn hoặc bằng)](#-nhỏ-hơn-hoặc-bằng)
+  - [\>= (Lớn hơn hoặc bằng)](#-lớn-hơn-hoặc-bằng)
+  - [= (Bằng)](#-bằng)
+  - [!= (Khác)](#-khác)
+  - [\& (\&)](#-)
+  - [" (Dấu nháy kép)](#-dấu-nháy-kép)
+  - [' (Dấu nháy đơn)](#-dấu-nháy-đơn)
+  - [and (Và)](#and-và)
+  - [or (Hoặc)](#or-hoặc)
+  - [not() (Phủ định)](#not-phủ-định)
+  - [+ (Cộng)](#-cộng)
+  - [- (Trừ)](#--trừ)
+  - [\* (Nhân)](#-nhân)
+  - [div (Chia)](#div-chia)
+  - [mod (Chia lấy dư)](#mod-chia-lấy-dư)
+- [xsl:apply-templates (dùng để duyệt các phần tử con trong XML và áp dụng quy tắc xử lý đã định nghĩa bằng xsl:template)](#xslapply-templates-dùng-để-duyệt-các-phần-tử-con-trong-xml-và-áp-dụng-quy-tắc-xử-lý-đã-định-nghĩa-bằng-xsltemplate)
+- [practices](#practices)
+  - [Cấu trúc của một file XSLT](#cấu-trúc-của-một-file-xslt)
+---
+# XSLT Introduction (chuyển tử xml sang định dạng khác)
 **Hãy hình dung**
 ```bash
-XML
- │
- │  XSLT + XPath
- ▼
-HTML / XML / Text
+XML --XSLT + XPath--> HTML / XML / Text
 ```
 **Ex**
 *XML*
@@ -116,6 +147,13 @@ Hiểu đơn giản: XML -> XSLT tìm node phù hợp -> template xử lý node 
 <xsl:template match="XPath">
     <!-- các lệnh xử lý -->
 </xsl:template>
+
+- Input:
+    + match: xác định node nào sẽ được template xử lý.
+        - match="/">
+        - match="employee"
+        - match="employees"
+        - match="employee[@status='active']"
 ```
 **Ex**
 ```xml
@@ -126,7 +164,7 @@ Hiểu đơn giản: XML -> XSLT tìm node phù hợp -> template xử lý node 
 </employees>
 ```
 *XSLT*
-```xslt
+```xsl
 <xsl:stylesheet
     version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -145,111 +183,27 @@ Hiểu đơn giản: XML -> XSLT tìm node phù hợp -> template xử lý node 
         </html>
     </xsl:template>
 </xsl:stylesheet>
-
-Kết quả:
-
-<html>
-    <body>
-        <h1>Employee List</h1>
-        <p>Hello</p>
-    </body>
-</html>
-
-Luồng chạy:
-
-employees.xml
-      ↓
-xsl:stylesheet
-      ↓
-xsl:output
-      ↓
-xsl:template match="/"
-      ↓
-<html>
-   <body>
-      ...
-   </body>
-</html>
-      ↓
-HTML output
-
-6. Demo lấy dữ liệu XML
-Bây giờ thêm:
-
-<xsl:value-of select="/employees/employee/name"/>
-
-XSLT:
-
-<xsl:stylesheet
-    version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-    <xsl:output method="html" indent="yes"/>
-
-    <xsl:template match="/">
-
-        <html>
-            <body>
-
-                <h1>Employee</h1>
-
-                <p>
-                    <xsl:value-of select="/employees/employee/name"/>
-                </p>
-
-            </body>
-        </html>
-
-    </xsl:template>
-
-</xsl:stylesheet>
-
-XML:
-
-<employees>
-    <employee>
-        <name>Nguyen Van A</name>
-    </employee>
-</employees>
-
-Kết quả:
-
-<h1>Employee</h1>
-<p>Nguyen Van A</p>
-
-Ở đây:
-
-<xsl:value-of select="/employees/employee/name"/>
-
-có nghĩa:
-
-/               → từ document root
-employees       → tìm employees
-employee        → tìm employee
-name            → lấy name
 ```
-
-xsl:for-each
-<xsl:for-each select="/employees/employee">
-
-Nghĩ đơn giản:
-
-for mỗi employee
-    làm việc này
-
-Ví dụ:
-
+# xsl:for-each
+**Ex**
+```xsl
 <xsl:for-each select="/employees/employee">
     <xsl:value-of select="name"/>
 </xsl:for-each>
 
-Kết quả:
-
-Nguyen Van A
+<!-- Nguyen Van A
 Tran Van B
-Le Van C
-
+Le Van C -->
+```
 # xsl:value-of (lấy giá trị của node)
+**Syn**
+```bash
+<xsl:value-of select="position()"/>
+
+- Input:
+    + select:
+        - position(): số thứ tự tăng dần
+```
 **Ex**
 ```xml
 <name>Nguyen Van A</name>
@@ -257,7 +211,7 @@ Le Van C
 *XSLT*
 ```xslt
 <xsl:value-of select="name"/>
-Nguyen Van A
+<!-- Nguyen Van A -->
 ```
 # xsl:if
 **Ex: Ví dụ chỉ hiển thị nhân viên IT**
@@ -270,13 +224,12 @@ Nguyen Van A
     </xsl:if>
 </xsl:for-each>
 
-Kết quả:
-Nguyen Van A
-Le Van C
+<!-- Nguyen Van A
+Le Van C -->
 ```
-# xsl:choose (tương đương if/else if/else)
+# xsl:choose (tương đương if elif else)
 **Ex: Ví dụ phân loại lương**
-```xslt
+```xsl
 <xsl:choose>
     <xsl:when test="salary >= 2500">
         Senior
@@ -292,18 +245,22 @@ Le Van C
 
 </xsl:choose>
 
-Tư duy:
+<!-- 
 if salary >= 2500
     Senior
 else if salary >= 1800
     Mid
 else
     Junior
--> Đây là một trong những cấu trúc bạn sẽ dùng rất nhiều.
+-> Đây là một trong những cấu trúc bạn sẽ dùng rất nhiều. -->
 ```
-9. xsl:sort — cực kỳ hữu ích
-Muốn sort nhân viên theo salary:
-
+# xsl:sort (sắp xếp)
+**Syn**
+```bash
+<xsl:sort select="salary" data-type="number" order="descending"/>
+```
+*Ex**
+```xsl
 <xsl:for-each select="/employees/employee">
 
     <xsl:sort select="salary" data-type="number" order="descending"/>
@@ -316,104 +273,13 @@ Muốn sort nhân viên theo salary:
 
 </xsl:for-each>
 
-Kết quả:
-
-Le Van C - 2500
+<!-- Le Van C - 2500
 Tran Van B - 1800
-Nguyen Van A - 1500
-
-Tăng dần:
-
-<xsl:sort
-    select="salary"
-    data-type="number"
-    order="ascending"/>
-
-10. Điều cực kỳ quan trọng: .
-Trong XSLT bạn sẽ gặp:
-
-.
-
-Nó nghĩa gần như:
-
-context hiện tại
-
-Ví dụ:
-
-<xsl:for-each select="/employees/employee">
-
-    <xsl:value-of select="name"/>
-
-</xsl:for-each>
-
-Khi đang ở:
-
-<employee>
-
-thì:
-
-name
-
-nghĩa là:
-
-name của employee hiện tại
-
-Còn:
-
-.
-
-là chính employee hiện tại.
-
-Ví dụ:
-
-<xsl:value-of select="."/>
-
-sẽ lấy text của context hiện tại.
-
-11. @ — lấy Attribute
-XML:
-
-<employee id="1001" department="IT">
-    <name>Nguyen Van A</name>
-</employee>
-
-Lấy id:
-
-@id
-
-Lấy department:
-
-@department
-
-Trong XSLT:
-
-<xsl:value-of select="@id"/>
-
-Đây là điểm người mới học XSLT rất hay nhầm:
-
-name
-
-là element
-
-còn:
-
-@name
-
-là attribute.
-
-12. Một bảng “cheat sheet” XSLT
-Bạn muốn	XSLT/XPath
-Lặp	xsl:for-each
-Lấy giá trị	xsl:value-of
-Điều kiện	xsl:if
-If/else	xsl:choose
-Sắp xếp	xsl:sort
-Template	xsl:template
-Gọi template	xsl:call-template
-Apply template	xsl:apply-templates
+Nguyen Van A - 1500 -->
+```
 # xsl:variable
 **Ex**
-```xslt
+```xsl
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl"
@@ -432,257 +298,349 @@ Apply template	xsl:apply-templates
     </xsl:template>
 </xsl:stylesheet>
 ```
-Parameter	xsl:param
-Truyền parameter	xsl:with-param
-Copy node	xsl:copy
-Copy cả cây	xsl:copy-of
-Tạo attribute	xsl:attribute
-Tạo element	xsl:element
-Text cố định	xsl:text
-Output	xsl:output
-Import XSLT	xsl:import
-Include XSLT	xsl:include
-Key	xsl:key
-Message/debug	xsl:message
+# XPath
+## &lt;	(Nhỏ hơn)
+**Ex**
+```bash
+ngaycong &lt; 20 # ngaycong < 20
+```
+## &gt (Lớn hơn)	
+```bash
+ngaycong &gt; 20 # ngaycong > 20
+```
+## &lt;= (Nhỏ hơn hoặc bằng)	
+```bash
+ngaycong &lt;= 20 # ngaycong <= 20
+``` 
+## &gt;= (Lớn hơn hoặc bằng)
+```bash
+ngaycong &gt;= 20 # ngaycong >= 20
+```
+## = (Bằng)	
+```bash
+ngaycong = 20
+```
+## != (Khác)	
+```bash
+ngaycong != 20
+```
+## &amp; (&)
+## &quot; (Dấu nháy kép)
+## &apos; (Dấu nháy đơn)
+## and (Và)	
+```bash
+ngaycong > 20 and ngaycong <= 25
+```
+## or (Hoặc)
+```bash
+ngaycong < 10 or ngaycong > 25
+```
+## not() (Phủ định)
+```bash
+not(ngaycong = 0)
+```
+## + (Cộng)	
+```bash
+ngaycong + 5
+```
+## - (Trừ)
+```bash
+ngaycong - 20
+```
+## * (Nhân)
+```bash
+ngaycong * 150000
+```
+## div (Chia)
+```bash
+ngaycong div 2
+```
+## mod (Chia lấy dư)
+```bash
+ngaycong mod 2
+```
+# xsl:apply-templates (dùng để duyệt các phần tử con trong XML và áp dụng quy tắc xử lý đã định nghĩa bằng xsl:template)
+1. Cú pháp cơ bản
+<xsl:apply-templates select="biểu_thức_xpath"/>
+
+
+- xsl:apply-templates: gọi xử lý template cho các node được chọn.
+- select: xác định những node nào sẽ được xử lý bằng XPath.
+- Nếu bỏ select, XSLT mặc định xử lý các node con của node hiện tại.
+2. Ví dụ đơn giản
+Giả sử file XML có dữ liệu:
+<congty>
+    <nhanvien>
+        <name>Thắng</name>
+        <luong>15000000</luong>
+    </nhanvien>
+    <nhanvien>
+        <name>Hùng</name>
+        <luong>12000000</luong>
+    </nhanvien>
+</congty>
+
+
+Bạn muốn in tên của tất cả nhân viên.
+File XSLT:
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+    <xsl:template match="/">
+        <html>
+            <body>
+                <h2>Danh sách nhân viên</h2>
+
+                <xsl:apply-templates select="congty/nhanvien"/>
+            </body>
+        </html>
+    </xsl:template>
+
+    <xsl:template match="nhanvien">
+        <p>
+            <xsl:apply-templates select="name"/>
+        </p>
+    </xsl:template>
 
-14. Nhưng đừng học thuộc tất cả
-Có một điều mình muốn bạn nhớ:
+    <xsl:template match="name">
+        <xsl:value-of select="."/>
+    </xsl:template>
 
-XSLT không phải là ngôn ngữ mà bạn cần thuộc 50–100 câu lệnh.
+</xsl:stylesheet>
 
-Để làm việc nhanh, bạn cần thành thạo khoảng:
 
-XPath
-   ↓
-template
-   ↓
-apply-templates
-   ↓
-for-each
-   ↓
-value-of
-   ↓
-if / choose
-   ↓
-sort
-   ↓
-variable / param
-   ↓
-copy / copy-of
-   ↓
-namespace
+Kết quả HTML:
+Danh sách nhân viên
+Thắng
 
-Sau đó bạn sẽ đọc được phần lớn file XSLT trong dự án.
+Hùng
 
-14. Cách học với Visual Studio
-Mình khuyên bạn tạo một project học riêng:
+3. Luồng hoạt động của apply-templates
+Template gốc
+match="/"
 
-XSLT-Learning
-│
-├── 01-basic
-│   ├── employees.xml
-│   └── employees.xsl
-│
-├── 02-xpath
-│   ├── employees.xml
-│   └── test.xsl
-│
-├── 03-condition
-│   ├── employees.xml
-│   └── condition.xsl
-│
-├── 04-sort
-│   ├── employees.xml
-│   └── sort.xsl
-│
-├── 05-template
-│   ├── employees.xml
-│   └── template.xsl
-│
-└── ...
+apply-templates select="congty/nhanvien"
+Chọn các node nhân viên
 
-Mỗi bài chỉ tập trung vào một kỹ thuật.
+Template nhân viên 1
+match="nhanvien"
 
-Đừng copy nguyên một file XSLT lớn rồi cố hiểu toàn bộ.
 
-15. Lộ trình A → Z mình đề xuất cho bạn
-Mình có thể dạy bạn theo dạng “không biết gì → có thể đọc/sửa/viết XSLT thực tế” như sau:
+Template nhân viên 2
+match="nhanvien"
 
-Phần A — Nền tảng
-XML là gì
 
-Element / Attribute
 
-XML Tree
+Mỗi node được xử lý bằng template phù hợp. Template nhân viên tiếp tục gọi template name để lấy tên.
 
-Namespace
+Điểm quan trọng: apply-templates không trực tiếp lấy giá trị của node. Nó chuyển việc xử lý node đó cho template phù hợp. Trong ví dụ trên, xsl:value-of select="." mới là lệnh lấy giá trị văn bản của node name.
+4. Những cách dùng thường gặp
+Cách 1: Chọn các node con
+<xsl:apply-templates select="nhanvien"/>
 
-XPath
 
-Context node
+Áp dụng template cho các phần tử nhanvien là con của node hiện tại.
+Cách 2: Chọn tất cả node con
+<xsl:apply-templates select="*"/>
 
-Absolute vs relative XPath
 
-Phần B — XPath thực chiến
-/
+Áp dụng template cho tất cả phần tử con trực tiếp.
+Cách 3: Chọn theo điều kiện XPath
+<xsl:apply-templates select="nhanvien[luong &gt; 10000000]"/>
 
-//
 
-.
+Chỉ xử lý những nhân viên có lương lớn hơn 10 triệu.
+Cách 4: Gọi template theo mode
+<xsl:apply-templates select="nhanvien" mode="inLuong"/>
 
-..
+<xsl:template match="nhanvien" mode="inLuong">
+    <p>
+        <xsl:value-of select="luong"/>
+    </p>
+</xsl:template>
 
-@
 
-*
+mode cho phép bạn có nhiều cách xử lý khác nhau cho cùng một loại node.
+5. Phân biệt apply-templates, call-template và value-of
+Lệnh	Công dụng
+xsl:apply-templates	Chọn node và tìm template phù hợp để xử lý
+xsl:call-template	Gọi trực tiếp một template theo tên
+xsl:value-of	Lấy giá trị của biểu thức XPath và xuất ra kết quả
+xsl:for-each	Lặp qua các node được chọn để thực hiện nội dung bên trong
+Ví dụ, nếu muốn lấy tên nhân viên ngay tại chỗ thì có thể dùng:
+<xsl:value-of select="name"/>
 
-[]
 
-and
+Nhưng nếu muốn mỗi nhân viên được xử lý theo một quy tắc riêng đã định nghĩa trong xsl:template, hãy dùng:
+<xsl:apply-templates select="nhanvien"/>
 
-or
 
-contains()
+Mẹo nhớ: match định nghĩa template sẽ xử lý node nào; select chọn node cần xử lý; apply-templates kết nối hai việc đó với nhau.
+Mình giải thích lại từ đầu nhé. Vấn đề là: tại sao không viết thẳng tên nhân viên ra, mà phải chia thành 3 xsl:template rồi gọi qua xsl:apply-templates?
+Thực ra, bạn không bắt buộc phải viết phức tạp như vậy. Ví dụ trước dùng nhiều template để minh họa cách apply-templates hoạt động.
+1. Đầu tiên, hãy nhìn vào dữ liệu XML
+Giả sử file XML của bạn là:
+<congty>
+    <nhanvien>
+        <name>Thắng</name>
+        <luong>15000000</luong>
+    </nhanvien>
+    <nhanvien>
+        <name>Hùng</name>
+        <luong>12000000</luong>
+    </nhanvien>
+</congty>
 
-starts-with()
 
-substring()
+Hãy tưởng tượng dữ liệu có cấu trúc như sau:
+congty
 
-string()
+nhanvien thứ nhất
 
-number()
+name
+Thắng
 
-count()
+luong
+15000000
 
-sum()
 
-position()
+nhanvien thứ hai
 
-last()
+name
+Hùng
 
-Phần C — XSLT cơ bản
+luong
+12000000
 
 
-template
 
-value-of
+Mục tiêu của chúng ta là biến XML trên thành HTML hiển thị:
+- Thắng
+- Hùng
+2. Cách dễ nhất: Không cần apply-templates
+Nếu chỉ cần in tên nhân viên, bạn có thể viết ngắn gọn thế này:
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
-for-each
+    <xsl:template match="/">
+        <html>
+            <body>
+                <h2>Danh sách nhân viên</h2>
 
-if
+                <xsl:for-each select="congty/nhanvien">
+                    <p>
+                        <xsl:value-of select="name"/>
+                    </p>
+                </xsl:for-each>
 
-choose
+            </body>
+        </html>
+    </xsl:template>
 
-when
+</xsl:stylesheet>
 
-otherwise
 
-sort
+Ở đây chỉ cần hiểu 3 việc:
+1. match="/": bắt đầu xử lý từ node gốc của tài liệu XML.
+2. for-each: duyệt lần lượt từng nhân viên.
+3. value-of select="name": lấy tên của nhân viên đang được duyệt.
+Kết quả:
+Danh sách nhân viên
+Thắng
+Hùng
 
-output
+Đây là cách dễ hiểu hơn nếu bạn mới học XSLT.
 
-Phần D — XSLT thực tế
-apply-templates
+3. Vậy apply-templates dùng để làm gì?
+Bây giờ, giả sử mỗi nhân viên cần được xử lý theo một quy tắc riêng. Ví dụ:
+- Tên nhân viên được in đậm.
+- Lương được hiển thị riêng.
+- Mỗi nhân viên được trình bày trong một khối HTML.
+- Có thể tái sử dụng cách hiển thị nhân viên ở nhiều nơi.
+Lúc này, bạn có thể tách cách xử lý thành những template riêng.
+Template 1: Bắt đầu từ node gốc
+<xsl:template match="/">
+    <html>
+        <body>
+            <h2>Danh sách nhân viên</h2>
+            <xsl:apply-templates select="congty/nhanvien"/>
+        </body>
+    </html>
+</xsl:template>
 
-match
 
-call-template
+Dòng quan trọng là:
+<xsl:apply-templates select="congty/nhanvien"/>
 
-param
 
-with-param
+Nó có nghĩa là:
+“Hãy tìm các phần tử nhanvien nằm trong congty, rồi xử lý từng phần tử bằng template phù hợp.”
+Nó không có nghĩa là lấy giá trị tên nhân viên. Nó giao việc xử lý các node nhanvien cho template khác.
+Template 2: Quy định cách hiển thị một nhân viên
+<xsl:template match="nhanvien">
+    <p>
+        <b>
+            <xsl:value-of select="name"/>
+        </b>
+        -
+        <xsl:value-of select="luong"/>
+    </p>
+</xsl:template>
 
-variable
 
-copy
+match="nhanvien" có nghĩa là template này dùng để xử lý các phần tử <nhanvien>.
+Khi apply-templates chọn nhân viên Thắng, XSLT sẽ chạy template này với nhân viên Thắng làm node hiện tại. Sau đó nó chạy tiếp với nhân viên Hùng.
+Kết quả sẽ là:
+Thắng - 15000000
 
-copy-of
 
-attribute
+Hùng - 12000000
 
-element
 
-text
 
-Phần E — Kỹ thuật nâng cao
-Namespace trong XSLT
+Lưu ý: Trong ví dụ này, mình dùng value-of trực tiếp để lấy name và luong, nên chưa cần template riêng cho name.
+Template 3: Nếu muốn tách riêng cả phần tên
+Bạn cũng có thể viết:
+<xsl:template match="nhanvien">
+    <p>
+        <xsl:apply-templates select="name"/>
+    </p>
+</xsl:template>
 
-XML có namespace
+<xsl:template match="name">
+    <b>
+        <xsl:value-of select="."/>
+    </b>
+</xsl:template>
 
-Grouping
 
-xsl:key
+Lúc này, khi xử lý nhân viên Thắng:
+1. Template match="nhanvien" được chạy.
+2. apply-templates select="name" yêu cầu xử lý node name của nhân viên đó.
+3. XSLT tìm template match="name" và chạy nó.
+4. value-of select="." lấy nội dung của node name hiện tại, tức là Thắng.
+Luồng xử lý:
+match="/"
+Bắt đầu
 
-Muenchian grouping
+apply-templates select="congty/nhanvien"
 
-Recursive template
+match="nhanvien"
+Xử lý từng nhân viên
 
-Include
+apply-templates select="name"
 
-Import
+match="name"
+Xuất ra Thắng hoặc Hùng
 
-Mode
 
-Priority
-
-XSLT 1.0
-
-XSLT 2.0
-
-XSLT 3.0
-
-Performance
-
-Debugging
-
-XSLT trong Visual Studio
-
-XSLT transform từ C#
-
-XSLT transform từ command line
-
-Đọc và sửa XSLT của dự án thực tế
-
-Và mình muốn dạy bạn theo kiểu thực hành
-Thay vì chỉ giải thích lý thuyết, mỗi bài sẽ theo mẫu:
-
-1. Đây là XML
-       ↓
-2. Tôi hỏi bạn muốn lấy dữ liệu nào
-       ↓
-3. Viết XPath
-       ↓
-4. Viết XSLT
-       ↓
-5. Chạy trong Visual Studio
-       ↓
-6. Xem kết quả
-       ↓
-7. Tôi cho bài tập biến thể
-
-Ví dụ sau khi học xsl:for-each, mình sẽ đưa:
-
-<employees>
-    ...
-</employees>
-
-và yêu cầu:
-
-Chỉ lấy nhân viên IT, sort salary giảm dần, salary > 1800, rồi xuất thành HTML table.
-
-Bạn sẽ tự viết:
-
-/employees/employee[department='IT' and salary > 1800]
-
-sau đó ghép với:
-
-<xsl:for-each>
-<xsl:sort>
-<xsl:value-of>
-
-Đây là cách nhanh nhất để thực sự đọc được XSLT của người khác và tự sửa XSLT trong công việc.
-
-Nếu bạn muốn, bài tiếp theo mình sẽ bắt đầu từ số 0 với XPath, giải thích cực kỹ ./, /, //, ., .., @, *, [] bằng một file XML duy nhất và khoảng 20 bài tập, vì nắm chắc XPath là bạn đã đi được hơn nửa đường với XSLT.
+4. Chốt lại: Khi nào dùng cái nào?
+Bạn muốn làm gì?	Nên dùng
+Lặp qua nhân viên rồi lấy tên, lương	for-each + value-of
+Định nghĩa cách hiển thị nhân viên ở template riêng	apply-templates
+Định nghĩa cách xử lý riêng cho node name	apply-templates + template match="name"
+Gọi trực tiếp một template có tên cụ thể	call-template
+Điều quan trọng nhất cần nhớ: apply-templates giúp bạn tách biệt việc chọn node và việc quy định cách xử lý node đó. Bạn không cần dùng nó cho mọi trường hợp; với tác vụ đơn giản, for-each thường dễ đọc hơn.
 # practices
 ## Cấu trúc của một file XSLT
 ```xslt
@@ -705,47 +663,7 @@ Nếu bạn muốn, bài tiếp theo mình sẽ bắt đầu từ số 0 với X
     </xsl:template>
 
 </xsl:>
-
-Hãy tách nó thành:
-
-XSLT
-│
-├── xsl:
-│   │
-│   ├── xsl:output
-│   │
-│   ├── xsl:template
-│   │   │
-│   │   └── HTML/XML output
-│   │
-│   └── các XSLT instruction khác
-│
-└── kết quả output
 ```
-Ví dụ:
-
-<xsl:template match="/">
-    <html>
-        ...
-    </html>
-</xsl:template>
-
-match
-match="/"
-
-match xác định node nào sẽ được template xử lý.
-
-Sau này bạn sẽ gặp:
-
-<xsl:template match="/">
-
-<xsl:template match="employee">
-
-<xsl:template match="employees">
-
-<xsl:template match="employee[@status='active']">
-
-Đây là chỗ XPath bắt đầu kết hợp với XSLT.
 
 select
 Ví dụ:
