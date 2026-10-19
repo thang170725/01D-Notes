@@ -1,13 +1,14 @@
 - [Argparse Introduction (dùng để nhận tham số từ command line/terminal khi chạy chương trình)](#argparse-introduction-dùng-để-nhận-tham-số-từ-command-lineterminal-khi-chạy-chương-trình)
 - [ArgumentParser (class dùng để tạo một bộ phân tích command-line arguments)](#argumentparser-class-dùng-để-tạo-một-bộ-phân-tích-command-line-arguments)
-  - [.add\_argument() (Nó dùng để nói cho chương trình biết: command-line của chương trình nhận những tham số nào, kiểu gì, mặc định là gì, bắt buộc hay không)](#add_argument-nó-dùng-để-nói-cho-chương-trình-biết-command-line-của-chương-trình-nhận-những-tham-số-nào-kiểu-gì-mặc-định-là-gì-bắt-buộc-hay-không)
+  - [.add\_argument() (dùng để nói cho chương trình biết command-line của chương trình nhận những tham số nào kiểu gì mặc định là gì bắt buộc hay không)](#add_argument-dùng-để-nói-cho-chương-trình-biết-command-line-của-chương-trình-nhận-những-tham-số-nào-kiểu-gì-mặc-định-là-gì-bắt-buộc-hay-không)
   - [.parse\_args()](#parse_args)
+    - [.name](#name)
 ---
 # Argparse Introduction (dùng để nhận tham số từ command line/terminal khi chạy chương trình)
 ```bash
 argparse là standard library của Python. 
-    Bạn chỉ cần: import argparse 
-    Không cần: pip install argparse
+    - Bạn chỉ cần: import argparse 
+    - Không cần: pip install argparse
 
 Nó rất hữu ích để biến một file Python thành kiểu:
     python train.py --model yolov8n.pt --epochs 100 --batch 16 -> thay vì phải sửa trực tiếp trong code.
@@ -45,14 +46,17 @@ Python program
 # ArgumentParser (class dùng để tạo một bộ phân tích command-line arguments)
 **Syn**
 ```bash
-parser = argparse.ArgumentParser() # Sau đó bạn định nghĩa các argument mà chương trình cho phép nhận
+parser = argparse.ArgumentParser(
+    description=""
+) # Sau đó bạn định nghĩa các argument mà chương trình cho phép nhận
 ```
-## .add_argument() (Nó dùng để nói cho chương trình biết: command-line của chương trình nhận những tham số nào, kiểu gì, mặc định là gì, bắt buộc hay không)
+## .add_argument() (dùng để nói cho chương trình biết command-line của chương trình nhận những tham số nào kiểu gì mặc định là gì bắt buộc hay không)
 **Syn**
 ```bash
 parser.add_argument(
     "--name",
-    type=str,
+    type=str,,
+    action="store_true",
     default="unknown",
     required=True,
     help="Tên người dùng"
@@ -65,9 +69,11 @@ parser.add_argument(
     + help      : mô tả argument. Dùng để giải thích argument khi chạy
     + choices   : giới hạn giá trị được phép
     + action    : thay đổi cách argument hoạt động
+        - store_true
     + metavar   : metavar chủ yếu để đổi cách hiển thị trong --help.
 ```
 ## .parse_args()
+### .name
 **Ex**
 ```python
 import argparse
