@@ -1,5 +1,4 @@
 - [XSLT Introduction (chuyển tử xml sang định dạng khác)](#xslt-introduction-chuyển-tử-xml-sang-định-dạng-khác)
-- [XPath](#xpath)
 - [xsl:stylesheet (khung của file XSLT)](#xslstylesheet-khung-của-file-xslt)
   - [Ask](#ask)
     - [msxsl là gì?](#msxsl-là-gì)
@@ -11,24 +10,6 @@
 - [xsl:choose (tương đương if elif else)](#xslchoose-tương-đương-if-elif-else)
 - [xsl:sort (sắp xếp)](#xslsort-sắp-xếp)
 - [xsl:variable](#xslvariable)
-- [XPath](#xpath-1)
-  - [\<	(Nhỏ hơn)](#nhỏ-hơn)
-  - [\&gt (Lớn hơn)](#gt-lớn-hơn)
-  - [\<= (Nhỏ hơn hoặc bằng)](#-nhỏ-hơn-hoặc-bằng)
-  - [\>= (Lớn hơn hoặc bằng)](#-lớn-hơn-hoặc-bằng)
-  - [= (Bằng)](#-bằng)
-  - [!= (Khác)](#-khác)
-  - [\& (\&)](#-)
-  - [" (Dấu nháy kép)](#-dấu-nháy-kép)
-  - [' (Dấu nháy đơn)](#-dấu-nháy-đơn)
-  - [and (Và)](#and-và)
-  - [or (Hoặc)](#or-hoặc)
-  - [not() (Phủ định)](#not-phủ-định)
-  - [+ (Cộng)](#-cộng)
-  - [- (Trừ)](#--trừ)
-  - [\* (Nhân)](#-nhân)
-  - [div (Chia)](#div-chia)
-  - [mod (Chia lấy dư)](#mod-chia-lấy-dư)
 - [xsl:apply-templates (dùng để duyệt các phần tử con trong XML và áp dụng quy tắc xử lý đã định nghĩa bằng xsl:template)](#xslapply-templates-dùng-để-duyệt-các-phần-tử-con-trong-xml-và-áp-dụng-quy-tắc-xử-lý-đã-định-nghĩa-bằng-xsltemplate)
 - [practices](#practices)
   - [Cấu trúc của một file XSLT](#cấu-trúc-của-một-file-xslt)
@@ -56,49 +37,6 @@ XML --XSLT + XPath--> HTML / XML / Text
 -> XSLT sẽ đọc XML này và biến nó thành thứ khác, ví dụ HTML:
 -> XSLT không hoạt động một mình. Bạn cần hiểu XPath vì XPath chính là cách XSLT “chỉ đường” tới dữ liệu trong XML.
 ```
-# XPath
-/
-
-//
-
-.
-
-..
-
-@
-
-*
-
-[]
-
-and
-
-or
-
-=
-
-!=
-
->
-
-<
-
-contains()
-
-starts-with()
-
-string()
-
-number()
-
-count()
-
-sum()
-
-position()
-
-last()
-Được. Mình giải thích ngắn gọn, đúng trọng tâm 3 phần bạn hỏi: stylesheet, output, template.
 # xsl:stylesheet (khung của file XSLT)
 **Syn**
 ```xslt
@@ -231,11 +169,11 @@ Le Van C -->
 **Ex: Ví dụ phân loại lương**
 ```xsl
 <xsl:choose>
-    <xsl:when test="salary >= 2500">
+    <xsl:when test="salary &gt;= 2500">
         Senior
     </xsl:when>
 
-    <xsl:when test="salary >= 1800">
+    <xsl:when test="salary &gt;= 1800">
         Mid
     </xsl:when>
 
@@ -297,67 +235,6 @@ Nguyen Van A - 1500 -->
 		</html>
     </xsl:template>
 </xsl:stylesheet>
-```
-# XPath
-## &lt;	(Nhỏ hơn)
-**Ex**
-```bash
-ngaycong &lt; 20 # ngaycong < 20
-```
-## &gt (Lớn hơn)	
-```bash
-ngaycong &gt; 20 # ngaycong > 20
-```
-## &lt;= (Nhỏ hơn hoặc bằng)	
-```bash
-ngaycong &lt;= 20 # ngaycong <= 20
-``` 
-## &gt;= (Lớn hơn hoặc bằng)
-```bash
-ngaycong &gt;= 20 # ngaycong >= 20
-```
-## = (Bằng)	
-```bash
-ngaycong = 20
-```
-## != (Khác)	
-```bash
-ngaycong != 20
-```
-## &amp; (&)
-## &quot; (Dấu nháy kép)
-## &apos; (Dấu nháy đơn)
-## and (Và)	
-```bash
-ngaycong > 20 and ngaycong <= 25
-```
-## or (Hoặc)
-```bash
-ngaycong < 10 or ngaycong > 25
-```
-## not() (Phủ định)
-```bash
-not(ngaycong = 0)
-```
-## + (Cộng)	
-```bash
-ngaycong + 5
-```
-## - (Trừ)
-```bash
-ngaycong - 20
-```
-## * (Nhân)
-```bash
-ngaycong * 150000
-```
-## div (Chia)
-```bash
-ngaycong div 2
-```
-## mod (Chia lấy dư)
-```bash
-ngaycong mod 2
 ```
 # xsl:apply-templates (dùng để duyệt các phần tử con trong XML và áp dụng quy tắc xử lý đã định nghĩa bằng xsl:template)
 1. Cú pháp cơ bản

@@ -366,6 +366,16 @@ Bạn dùng <canvas> khi cần:
 # List (Danh sách)
 ## ul & ol & li & dl & dt & dd
 ## select & option (Tạo danh sách xổ xuống danh sách này không dùng để điều hướng)
+**Ex**
+```html
+<label for="language">Bạn muốn học ngôn ngữ nào?</label>
+
+<select id="language" name="language">
+    <option value="python">Python</option>
+    <option value="javascript">JavaScript</option>
+    <option value="java">Java</option>
+</select>
+```
 ## fieldset & legend (để tạo ra khung bao quanh, nhóm các phần tử có liên quan vào cùng một nhóm)
 ## legend (để tạo tiêu đề cho thẻ fieldset. Thường kết hợp với thẻ fieldset)
 ## textarea (để tạo ra một vùng nhập dữ liệu nhiều dòng)

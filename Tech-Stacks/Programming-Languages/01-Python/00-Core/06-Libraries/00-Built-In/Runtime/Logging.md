@@ -12,6 +12,7 @@
   - [FileHandler](#filehandler)
 - [Hiển thị trên màn hình](#hiển-thị-trên-màn-hình)
 - [Ghi vào file](#ghi-vào-file)
+- [.disable()](#disable)
 ---
 # Logging Introduction (dùng để ghi lại thông tin trong quá trình chương trình chạy)
 ```bash
@@ -606,3 +607,4 @@ Có thể dùng:
 setLevel() để lọc mức log.
 setFormatter() để định dạng log.
 addHandler() để gắn StreamHandler vào Logger.
+# .disable()
