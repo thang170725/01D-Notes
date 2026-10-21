@@ -1,5 +1,5 @@
 - [Mermaid Live Introduction (vẽ sơ đồ bằng code, rất phổ biến trong lập trình và tài liệu kỹ thuật)](#mermaid-live-introduction-vẽ-sơ-đồ-bằng-code-rất-phổ-biến-trong-lập-trình-và-tài-liệu-kỹ-thuật)
-- [%%](#)
+- [%% (comment code)](#-comment-code)
 - [flowchart ... (Chỉ đinh muốn vẽ sơ đồ luồng)](#flowchart--chỉ-đinh-muốn-vẽ-sơ-đồ-luồng)
 - [Tạo node](#tạo-node)
 - [Vẽ mũi tên](#vẽ-mũi-tên)
@@ -41,7 +41,7 @@ Nó hỗ trợ rất nhiều loại sơ đồ như:
     - Kanban
     - v.v.
 ```
-# %%
+# %% (comment code)
 # flowchart ... (Chỉ đinh muốn vẽ sơ đồ luồng)
 **Syn**
 ```bash
