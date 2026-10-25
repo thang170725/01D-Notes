@@ -7,7 +7,7 @@
   - [.exception()](#exception)
   - [setLevel() (dùng để đặt mức log tối thiểu mà Logger hoặc Handler sẽ xử lý)](#setlevel-dùng-để-đặt-mức-log-tối-thiểu-mà-logger-hoặc-handler-sẽ-xử-lý)
   - [.addHandler() (dùng để gắn thêm một Handler vào Logger)](#addhandler-dùng-để-gắn-thêm-một-handler-vào-logger)
-- [Formatter()](#formatter)
+- [.Formatter() (dùng để quy định hình thức hiển thị của log)](#formatter-dùng-để-quy-định-hình-thức-hiển-thị-của-log)
 - [StreamHandler() (dùng để ghi log ra một luồng stream)](#streamhandler-dùng-để-ghi-log-ra-một-luồng-stream)
   - [FileHandler](#filehandler)
 - [Hiển thị trên màn hình](#hiển-thị-trên-màn-hình)
@@ -406,7 +406,61 @@ Hình dung dễ nhớ
     Màn hình            log.txt
 
 addHandler() giống như cắm thêm một "đầu ra" cho Logger. Mỗi lần Logger tạo log, nó sẽ gửi bản sao của log đến tất cả các Handler đã được thêm bằng addHandler().
-# Formatter()
+# .Formatter() (dùng để quy định hình thức hiển thị của log)
+**Syn**
+```bash
+logging.Formatter(
+    fmt=None,
+    datefmt=None,
+    style='%'
+)
+
+- Input:
+    + fmt: Định dạng nội dung log: thời gian, level, tên file...
+    + datefmt	Định dạng thời gian hiển thị
+    + style: Cách viết placeholder trong fmt; mặc định là %
+        - %(asctime)s	Thời gian	2026-10-25 19:55:10
+        - %(levelname)s	Mức độ log	DEBUG, INFO, WARNING
+        - %(message)s	Nội dung log	Đang xử lý file
+        - %(name)s	Tên logger	processor
+        - %(filename)s	Tên file Python	processor.py
+        - %(lineno)d	Số dòng code	25
+        - %(funcName)s	Tên hàm phát sinh log	filter_email
+```
+**Ex1: log hiển thị thời gian, mức độ và nội dung**
+```python
+import logging
+
+# 1. Tạo logger
+logger = logging.getLogger("my_app")
+logger.setLevel(logging.DEBUG)
+
+# 2. Tạo handler để in log ra terminal
+console_handler = logging.StreamHandler()
+
+# 3. Tạo formatter để quy định hình thức log
+formatter = logging.Formatter(
+    fmt="%(asctime)s | %(levelname)s | %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S"
+)
+
+# 4. Gắn formatter vào handler
+console_handler.setFormatter(formatter)
+
+# 5. Gắn handler vào logger
+logger.addHandler(console_handler)
+
+# 6. Thử ghi log
+logger.debug("Bắt đầu chương trình")
+logger.info("Đang đọc file JSON")
+logger.warning("File có dữ liệu bất thường")
+logger.error("Không thể đọc file")
+# Kết quả sẽ có dạng:
+# 2026-10-25 19:55:10 | DEBUG | Bắt đầu chương trình
+# 2026-10-25 19:55:10 | INFO | Đang đọc file JSON
+# 2026-10-25 19:55:10 | WARNING | File có dữ liệu bất thường
+# 2026-10-25 19:55:10 | ERROR | Không thể đọc file
+```
 # StreamHandler() (dùng để ghi log ra một luồng stream)
 **Syn**
 ```bash
