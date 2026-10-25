@@ -52,10 +52,9 @@ with open("data.json", "rb") as f:
 #        └── ...
 # Không cần load toàn bộ file.
 ```
-1. Trường hợp quan trọng nhất: JSON là list
-
-Ví dụ file của bạn:
-
+**Ex2: JSON là list**
+*file json*
+```json
 [
     {
         "id": "001",
@@ -66,9 +65,8 @@ Ví dụ file của bạn:
         "name": "Nguyen Van B"
     }
 ]
-
-Dùng:
-
+```
+```python
 import ijson
 
 
@@ -77,11 +75,10 @@ with open("data.json", "rb") as f:
         print(item["id"])
         print(item["name"])
 
-"item" nghĩa là:
+# "item" nghĩa là: Lấy từng phần tử bên trong list ở root.
+```
 
-Lấy từng phần tử bên trong list ở root.
-
-4. JSON của bạn có dạng object
+1. JSON của bạn có dạng object
 
 Ví dụ:
 

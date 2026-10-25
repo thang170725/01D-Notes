@@ -13,6 +13,8 @@
 - [Hiển thị trên màn hình](#hiển-thị-trên-màn-hình)
 - [Ghi vào file](#ghi-vào-file)
 - [.disable()](#disable)
+- [Practices](#practices)
+  - [Set up logging cho một dự án](#set-up-logging-cho-một-dự-án)
 ---
 # Logging Introduction (dùng để ghi lại thông tin trong quá trình chương trình chạy)
 ```bash
@@ -608,3 +610,65 @@ setLevel() để lọc mức log.
 setFormatter() để định dạng log.
 addHandler() để gắn StreamHandler vào Logger.
 # .disable()
+# Practices
+## Set up logging cho một dự án
+```python
+import logging
+import os
+import sys
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+class ColorFormatter(logging.Formatter):
+    """Tô màu log level bằng ANSI escape codes."""
+
+    RESET = "\033[0m"
+    COLORS = {
+        logging.DEBUG: "\033[90m",      # Xám
+        logging.INFO: "\033[92m",       # Xanh lá
+        logging.WARNING: "\033[93m",    # Vàng
+        logging.ERROR: "\033[91m",      # Đỏ
+        logging.CRITICAL: "\033[97;41m",  # Chữ trắng, nền đỏ
+    }
+
+    def format(self, record):
+        # Sao chép record để không ảnh hưởng đến handler khác
+        record = logging.makeLogRecord(record.__dict__.copy())
+
+        color = self.COLORS.get(record.levelno, "")
+        record.levelname = f"{color}{record.levelname}{self.RESET}"
+
+        return super().format(record)
+
+
+def setup_logging():
+    """Cấu hình logging có màu cho terminal."""
+
+    # Đảm bảo terminal sử dụng UTF-8
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
+
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8")
+
+    handler = logging.StreamHandler(sys.stdout)
+    handler.setFormatter(
+        ColorFormatter("%(levelname)s | %(name)s | %(message)s")
+    )
+
+    root_logger = logging.getLogger()
+    root_logger.setLevel(
+        getattr(
+            logging,
+            os.getenv("LOG_LEVEL", "DEBUG").upper(),
+            logging.DEBUG,
+        )
+    )
+
+    # Xóa handler cũ để tránh log bị in trùng
+    root_logger.handlers.clear()
+    root_logger.addHandler(handler)
+```

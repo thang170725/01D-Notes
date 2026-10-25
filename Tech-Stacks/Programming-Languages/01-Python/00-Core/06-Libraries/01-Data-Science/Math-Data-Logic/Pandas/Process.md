@@ -880,10 +880,7 @@ print(newDf1)
 # 2  Huy   21
 ```
 ## Duplicate Process (xử lý dữ liệu trùng)
-### .duplicated()
-```bash
-- Để phát hiện dòng trùng lặp trong DataFrame.
-```
+### .duplicated() (Để phát hiện dòng trùng lặp trong DataFrame)
 **Syn**
 ```bash
 df.duplicated(subset=None, keep='first')
@@ -893,7 +890,8 @@ df.duplicated(subset=None, keep='first')
     + keep:
         - 'first': đánh dấu True từ dòng trùng thứ 2 trở đi
         - 'last': đánh dấu True trừ dòng cuối cùng
-        - False: tất cả các dòng trùng đều được đánh dấu T
+        - False: tất cả các dòng trùng đều được đánh dấu True
+- Output: bool
 ```
 **Ex**
 ```python
@@ -901,8 +899,8 @@ import pandas as pd
 
 # Tạo DataFrame mẫu
 df = pd.DataFrame({
-    'ID': [1, 2, 2, 3, 4, 4, 4, 5],
-    'Name': ['An', 'Bình', 'Bình', 'Cường', 'Dũng', 'Dũng', 'Dũng', 'Hà']
+    'ID': [1, 2, 2, 3, 4, 4, 4, 5, 6, 6, 6],
+    'Name': ['An', 'Bình', 'Bình', 'Cường', 'Dũng', 'Dũng', 'Dũng', 'Hà', "Ha", "Ha", "Ha"]
 })
 
 print("=== Dataset gốc ===")
@@ -927,11 +925,89 @@ print(df.duplicated(subset='ID', keep=False))
 # 5️⃣ Lọc ra các dòng trùng
 print("\nCác dòng trùng lặp:")
 print(df[df.duplicated(subset='ID', keep=False)])
+
+=== Dataset gốc ===
+    ID   Name
+0    1     An
+1    2   Bình
+2    2   Bình
+3    3  Cường
+4    4   Dũng
+5    4   Dũng
+6    4   Dũng
+7    5     Hà
+8    6     Ha
+9    6     Ha
+10   6     Ha
+
+Duplicated toàn bộ cột:
+0     False
+1     False
+2      True
+3     False
+4     False
+5      True
+6      True
+7     False
+8     False
+9      True
+10     True
+dtype: bool
+
+Duplicated theo cột ID:
+0     False
+1     False
+2      True
+3     False
+4     False
+5      True
+6      True
+7     False
+8     False
+9      True
+10     True
+dtype: bool
+
+Duplicated (keep='last'):
+0     False
+1      True
+2     False
+3     False
+4      True
+5      True
+6     False
+7     False
+8      True
+9      True
+10    False
+dtype: bool
+
+Duplicated (keep=False):
+0     False
+1      True
+2      True
+3     False
+4      True
+5      True
+6      True
+7     False
+8      True
+9      True
+10     True
+dtype: bool
+
+Các dòng trùng lặp:
+    ID  Name
+1    2  Bình
+2    2  Bình
+4    4  Dũng
+5    4  Dũng
+6    4  Dũng
+8    6    Ha
+9    6    Ha
+10   6    Ha
 ```
-### .drop_duplicates()
-```bash
-xóa dòng trùng
-```
+### .drop_duplicates() (xóa dòng trùng)
 **Syn**
 ```bash
 df_no_dup = df.drop_duplicates(subset='ID', keep='first')

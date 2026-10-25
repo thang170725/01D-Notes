@@ -4,6 +4,7 @@
 - [git clone](#git-clone)
 - [git pull (Lấy dữ liệu \& hợp nhất)](#git-pull-lấy-dữ-liệu--hợp-nhất)
   - [--no-rebase (Bắt Git dùng merge, không dùng rebase (nghĩa là fetch + merge))](#--no-rebase-bắt-git-dùng-merge-không-dùng-rebase-nghĩa-là-fetch--merge)
+  - [--rebase](#--rebase)
   - [git config pull (đây là các cách pull cũ)](#git-config-pull-đây-là-các-cách-pull-cũ)
 - [Run (Nhóm thực thi)](#run-nhóm-thực-thi)
   - [git push](#git-push)
@@ -24,7 +25,9 @@
     - [--oneline (Rút gọn mỗi commit thành 1 dòng)](#--oneline-rút-gọn-mỗi-commit-thành-1-dòng)
     - [--graph (Vẽ cây branch/merge bằng ASCII)](#--graph-vẽ-cây-branchmerge-bằng-ascii)
     - [--all (xem mọi branch: local branches, remote-tracking branches)](#--all-xem-mọi-branch-local-branches-remote-tracking-branches)
-  - [git diff (So sánh với commit cuối cùng, giữa nội dung cũ và mới. Dùng để xem sự khác biệt)](#git-diff-so-sánh-với-commit-cuối-cùng-giữa-nội-dung-cũ-và-mới-dùng-để-xem-sự-khác-biệt)
+  - [git diff (dùng để so sánh commit cuối cùng giữa nội dung cũ và mới)](#git-diff-dùng-để-so-sánh-commit-cuối-cùng-giữa-nội-dung-cũ-và-mới)
+    - [git diff --check (dùng để kiểm tra các lỗi khoảng trắng trong những thay đổi Git)](#git-diff---check-dùng-để-kiểm-tra-các-lỗi-khoảng-trắng-trong-những-thay-đổi-git)
+    - [git diff --staged	Hiển thị những thay đổi đã đưa vào staging](#git-diff---stagedhiển-thị-những-thay-đổi-đã-đưa-vào-staging)
 - [git reset](#git-reset-1)
   - [–soft](#soft)
   - [–hard (Di chuyển con trỏ head về vị trí commit reset và loại bỏ tất cả sử thay đổi của file)](#hard-di-chuyển-con-trỏ-head-về-vị-trí-commit-reset-và-loại-bỏ-tất-cả-sử-thay-đổi-của-file)
@@ -75,6 +78,7 @@ git pull origin main
 ```bash
 git pull --no-rebase origin feature/profile 
 ```
+## --rebase
 ## git config pull (đây là các cách pull cũ)
 **Syn**
 ```bash
@@ -268,8 +272,8 @@ git log --oneline -6
 PS D:\workspace\learn_project> git log --oneline --graph --all
 * df75c47 (HEAD -> main) Initial project
 ```
-## git diff (So sánh với commit cuối cùng, giữa nội dung cũ và mới. Dùng để xem sự khác biệt)
-**Ex1**
+## git diff (dùng để so sánh commit cuối cùng giữa nội dung cũ và mới)
+**Syn**
 ```bash
 git diff # Xem xem nội dung đã thay đổi với lần commit gần nhất hay chưa
 git diff name.txt # Xem xem nội dung đã thay đổi với lần commit gần nhất hay chưa, tại file name.txt
@@ -289,6 +293,26 @@ chạy: git diff
   - Quan trọng: git diff
   - so sánh: Working directory vs staging (tức sửa nhưng chưa add)
   - Sau git add. git diff có thể không ra gì. vì đã stage.
+```
+### git diff --check (dùng để kiểm tra các lỗi khoảng trắng trong những thay đổi Git)
+### git diff --staged	Hiển thị những thay đổi đã đưa vào staging
+**Ex**
+*Giả sử bạn sửa file Python như sau*
+```python
+def hello():    
+  print("Hello")    
+
+# Dòng print("Hello") có dấu cách thừa ở cuối dòng.
+
+# Chạy:
+# git diff --check
+
+# Git có thể báo:
+# main.py:2: trailing whitespace.
+# +    print("Hello")
+
+# Điều này cho biết dòng số 2 có khoảng trắng ở cuối dòng. Dấu + cho biết đây là dòng mới được thêm hoặc thay đổi.
+# Ngoài trailing whitespace, lệnh này còn có thể phát hiện một số vấn đề như dấu cách trước tab trong phần thay đổi.
 ```
 # git reset 
 ## –soft 

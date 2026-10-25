@@ -14,21 +14,12 @@ Nếu bạn hỏi về tốc độ, thì câu trả lời ngắn là:
 
 Điểm khác nhau chủ yếu là API và cách viết, không phải hiệu năng.
     - Nếu xét performance
-        Có thể hình dung:
-            Python code
-                ↓
-            pathlib / os
-                ↓
-            system call
-                ↓
-            filesystem
-                ↓
-            SSD / HDD
-        -> Chi phí lớn thường nằm ở:
-            - filesystem
-            - disk I/O
-            - network filesystem
-            - chứ không phải:
-                + pathlib
-                + os
+        Có thể hình dung: Python code -> pathlib / os -> system call -> filesystem -> SSD / HDD
+    -> Chi phí lớn thường nằm ở:
+        - filesystem
+        - disk I/O
+        - network filesystem
+        - chứ không phải:
+            + pathlib
+            + os
 ```

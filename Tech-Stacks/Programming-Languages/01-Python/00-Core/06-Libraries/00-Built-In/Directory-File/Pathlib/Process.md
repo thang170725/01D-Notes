@@ -9,6 +9,7 @@
   - [.name (Lấy tên cuối cùng)](#name-lấy-tên-cuối-cùng)
   - [.glob() (dùng để tìm các file hoặc thư mục theo một mẫu (pattern))](#glob-dùng-để-tìm-các-file-hoặc-thư-mục-theo-một-mẫu-pattern)
   - [.rglob()](#rglob)
+  - [.resolve() (dùng để chuyển đường dẫn thành đường dẫn tuyệt đối)](#resolve-dùng-để-chuyển-đường-dẫn-thành-đường-dẫn-tuyệt-đối)
 - [stem (tên file không bao gồm phần đuôi mở rộng)](#stem-tên-file-không-bao-gồm-phần-đuôi-mở-rộng)
 - [with\_name() (tạo ra một đường dẫn mới bằng cách thay tên file, nhưng giữ nguyên thư mục chứa file)](#with_name-tạo-ra-một-đường-dẫn-mới-bằng-cách-thay-tên-file-nhưng-giữ-nguyên-thư-mục-chứa-file)
 ---
@@ -217,6 +218,41 @@ folder = Path(folder_path)
 count = 0
 for _ in folder.rglob("*.pdf"):
     count += 1
+```
+## .resolve() (dùng để chuyển đường dẫn thành đường dẫn tuyệt đối)
+**Syn**
+```bash
+from pathlib import Path
+
+Path.resolve(strict=False)
+
+- Input:
+    + strict=bool
+        - False: mặc định, không bắt buộc đường dẫn phải tồn tại.
+        - True: yêu cầu đường dẫn tồn tại; nếu không, Python sẽ báo lỗi FileNotFoundError.
+```
+**Ex: Đường dẫn tương đối → tuyệt đối**
+*Giả sử bạn đang chạy Python tại thư mục D:\workspace\email_automation_project*
+```python
+from pathlib import Path
+
+path = Path("data/original_data")
+
+print(path.resolve()) # D:\workspace\email_automation_project\data\original_data
+```
+**Ex2: Xử lý . và ..**
+```python
+from pathlib import Path
+
+path = Path("data/../data/original_data")
+print(path.resolve()) # D:\workspace\email_automation_project\data\original_data
+```
+**Ex3: Dùng với __file__**
+```python
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+print(BASE_DIR) # D:\workspace\email_automation_project\backend
 ```
 # stem (tên file không bao gồm phần đuôi mở rộng)
 Ví dụ:
