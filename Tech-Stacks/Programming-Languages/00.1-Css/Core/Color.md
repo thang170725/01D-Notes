@@ -1,6 +1,7 @@
 - [HSL (Sử dụng bảng màu theo vòng tròn màu sắc)](#hsl-sử-dụng-bảng-màu-theo-vòng-tròn-màu-sắc)
 - [HSLA](#hsla)
 - [HSV (Hue, Saturation, Value)](#hsv-hue-saturation-value)
+- [color](#color)
 - [background-color (Để thiết lập màu sắc cho nền của phần tử.)](#background-color-để-thiết-lập-màu-sắc-cho-nền-của-phần-tử)
   - [linear-gradient (Để thiết lập dạng màu chuyển)](#linear-gradient-để-thiết-lập-dạng-màu-chuyển)
   - [repeating-linear-gradient](#repeating-linear-gradient)
@@ -43,6 +44,7 @@ div{
 ```bash
 Là hệ màu không có kênh sáng tối như grayscale, mà nó phân tách rõ về màu sắc
 ```
+# color
 # background-color (Để thiết lập màu sắc cho nền của phần tử.)
 **Syn**
 ```bash

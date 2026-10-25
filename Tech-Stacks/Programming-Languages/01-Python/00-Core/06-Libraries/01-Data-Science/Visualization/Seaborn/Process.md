@@ -200,12 +200,24 @@ Dùng để xem các feature tương quan với nhau như thế nào. 2 feature 
 ```
 **Syn**
 ```bash
-sns.heatmap(data)
+sns.heatmap(
+  corr | df,
+  annot=True,
+  fmt='.2f',
+  cmap='coolwarm',
+  square=True
+)
 
-- df: ma trận dữ liệu cần vẽ.
-- annot=True: hiện giá trị số trong từng ô.
-- cmap="YlOrRd": bảng màu (Yellow → Orange → Red).
-- linewidths=0.5: độ dày đường kẻ giữa các ô.
+- Input:
+  + corr: Ma trận tương quan, thường được tạo bằng df.corr().
+  + df: ma trận dữ liệu cần vẽ.
+  + annot=True: Hiển thị giá trị số bên trong từng ô.
+  + fmt='.2f': Định dạng số với 2 chữ số sau dấu thập phân.
+  + cmap=
+    + 'coolwarm': Sử dụng bảng màu chuyển từ xanh lạnh sang đỏ nóng.
+    + 'YlOrRd': bảng màu (Yellow → Orange → Red).
+  + square=True
+  + linewidths=0.5: độ dày đường kẻ giữa các ô.
 ```
 **Ex: Xem điểm số trung bình của học sinh theo môn học và lớp học.**
 ```bash

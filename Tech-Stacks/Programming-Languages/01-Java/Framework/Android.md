@@ -28,9 +28,9 @@
     - [getItemId(position)](#getitemidposition)
     - [add() (thêm một phần tử)](#add-thêm-một-phần-tử)
     - [notifyDataSetChanged() (báo cho ListView cập nhật)](#notifydatasetchanged-báo-cho-listview-cập-nhật)
+    - [getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)](#getview-tạo-và-vẽ-giao-diện-cho-từng-dòng-item-trong-danh-sách-listview)
   - [ListView](#listview)
     - [setOnItemClickListener (lắng nghe sự kiện người dùng nhấp (click) vào một dòng bất kỳ trong ListView)](#setonitemclicklistener-lắng-nghe-sự-kiện-người-dùng-nhấp-click-vào-một-dòng-bất-kỳ-trong-listview)
-    - [getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)](#getview-tạo-và-vẽ-giao-diện-cho-từng-dòng-item-trong-danh-sách-listview)
     - [notifyDataSetChanged() (thông báo cho Adapter biết dữ liệu trong nguồn (list) đã thay đổi yêu cầu ListView tự động vẽ lại (refresh) giao diện ngay lập tức để cập nhật danh sách mới)](#notifydatasetchanged-thông-báo-cho-adapter-biết-dữ-liệu-trong-nguồn-list-đã-thay-đổi-yêu-cầu-listview-tự-động-vẽ-lại-refresh-giao-diện-ngay-lập-tức-để-cập-nhật-danh-sách-mới)
 - [content (Thông tin môi trường của ứng dụng hiện tại để Android biết bạn đang thao tác trong app nào)](#content-thông-tin-môi-trường-của-ứng-dụng-hiện-tại-để-android-biết-bạn-đang-thao-tác-trong-app-nào)
   - [Context](#context)
@@ -50,8 +50,8 @@
 - [onClick()](#onclick)
 - [setText()](#settext)
 - [setOnCheckedChangeListener()](#setoncheckedchangelistener)
-- [Practices](#practices)
-  - [4.9](#49)
+- [Intent](#intent)
+  - [.putExtra()](#putextra)
 ---
 # Android Introduction (dùng để lập trình ứng dụng android)
 ```bash
@@ -541,6 +541,16 @@ Có thể hình dung:
 ```bash
 adapterPerson.notifyDataSetChanged();
 ```
+### getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)
+**Syn**
+```bash
+@Override
+public View getView(int position, View convertView, ViewGroup parent) { ... }
+
+- int position: Vị trí (chỉ số index) của dòng hiện tại trong mảng list (bắt đầu từ 0, 1, 2...).
+- View convertView: Ô nhớ chứa giao diện cũ được tái sử dụng (giúp tối ưu bộ nhớ, tránh việc phải tạo mới giao diện liên tục khi người dùng cuộn danh sách lên xuống).
+- ViewGroup parent: ViewGroup chứa danh sách này (chính là cái ListView).
+```
 ## ListView
 ### setOnItemClickListener (lắng nghe sự kiện người dùng nhấp (click) vào một dòng bất kỳ trong ListView)
 **syn**
@@ -753,16 +763,6 @@ Vì vậy:
 NhanVien nv = list.get(position);
 
 rất hợp lý.
-### getView() (tạo và vẽ giao diện cho từng dòng (item) trong danh sách ListView)
-**Syn**
-```bash
-@Override
-public View getView(int position, View convertView, ViewGroup parent) { ... }
-
-- int position: Vị trí (chỉ số index) của dòng hiện tại trong mảng list (bắt đầu từ 0, 1, 2...).
-- View convertView: Ô nhớ chứa giao diện cũ được tái sử dụng (giúp tối ưu bộ nhớ, tránh việc phải tạo mới giao diện liên tục khi người dùng cuộn danh sách lên xuống).
-- ViewGroup parent: ViewGroup chứa danh sách này (chính là cái ListView).
-```
 ### notifyDataSetChanged() (thông báo cho Adapter biết dữ liệu trong nguồn (list) đã thay đổi yêu cầu ListView tự động vẽ lại (refresh) giao diện ngay lập tức để cập nhật danh sách mới)
 **Syn**
 ```bash
@@ -1129,4 +1129,140 @@ public class MainActivity extends AppCompatActivity {
         android:text="Show Time Picker" />
 
 </LinearLayout>
+```
+# Intent
+// Viết bên trong sự kiện click nút (ví dụ: nút "Mở trang mới")
+Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+startActivity(intent);
+## .putExtra()
+Intent intent = new Intent(MainActivity.this, DetailActivity.class);
+intent.putExtra("maNhanVien", "NV01"); // Đính kèm dữ liệu (Key - Value)
+startActivity(intent);
 
+Intent intent = getIntent(); // Nhận intent gửi sang
+String ma = intent.getStringExtra("maNhanVien"); // Lấy dữ liệu ra theo Key
+PHẦN 2: OPTIONS MENU (Menu trên thanh tiêu cao / Toolbar góc phải trên)
+Dùng khi: Đề bài yêu cầu tạo thanh menu phía góc trên bên phải (ví dụ: menu gồm các chức năng "Thêm", "Tìm kiếm", "Thoát").
+
+Bước 1: Tạo file XML cho Menu
+Tạo file menu_main.xml trong thư mục res/menu (nếu chưa có thư mục menu thì click phải vào res 
+→ New 
+→ Android Resource Directory 
+→ chọn type là menu):
+
+XML
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menuThem"
+        android:title="Thêm mới"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/menuThoat"
+        android:title="Thoát"
+        app:showAsAction="never" />
+</menu>
+Bước 2: Viết code trong MainActivity.java
+Java
+// 1. Nạp menu lên giao diện
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+}
+
+// 2. Bắt sự kiện khi người dùng bấm vào các mục trong menu
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.menuThem) {
+        // Xử lý khi bấm nút Thêm
+        Toast.makeText(this, "Bạn chọn Thêm mới", Toast.LENGTH_SHORT).show();
+        return true;
+    } else if (id == R.id.menuThoat) {
+        finish(); // Thoát ứng dụng
+        return true;
+    }
+    return super.onOptionsItemSelected(item);
+}
+PHẦN 3: CONTEXT MENU (Menu nhấn giữ vào ListView - Rất hay ra thi!)
+Dùng khi: Đề bài yêu cầu nhấn giữ (long click) vào một dòng nhân viên trong ListView, lập tức hiện ra bảng menu nhỏ có chữ "Sửa" hoặc "Xóa".
+
+Cú pháp chuẩn bị và xử lý (Thêm vào onCreate của MainActivity):
+Java
+// 1. Đăng ký ListView nhận Context Menu
+registerForContextMenu(listView);
+Java
+// 2. Tạo giao diện menu khi người dùng nhấn giữ
+@Override
+public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+    getMenuInflater().inflate(R.menu.context_menu, menu); // Bạn tạo 1 file menu_context.xml tương tự phần trên
+    // Hoặc tạo code thuần:
+    menu.add(0, 1, 0, "Sửa");
+    menu.add(0, 2, 0, "Xóa");
+}
+
+// 3. Bắt sự kiện chọn Xóa / Sửa trong bảng menu nhấn giữ
+@Override
+public boolean onContextItemSelected(MenuItem item) {
+    // Lấy vị trí dòng bị nhấn giữ
+    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    int position = info.position; 
+
+    if (item.getTitle().equals("Xóa")) {
+        list.remove(position);
+        adapterPerson.notifyDataSetChanged();
+        Toast.makeText(this, "Đã xóa!", Toast.LENGTH_SHORT).show();
+    } else if (item.getTitle().equals("Sửa")) {
+        // Lấy dữ liệu dòng đó đưa lên form để sửa
+        Person p = list.get(position);
+        nhapMa.setText(p.id);
+        nhapTen.setText(p.name);
+        selectedIndex = position; // Gán lại để lát bấm nút Sửa cập nhật
+    }
+    return super.onContextItemSelected(item);
+}
+PHẦN 4: ADAPTER NÂNG CAO (BaseAdapter)
+Khi nào dùng: Nếu đề bài yêu cầu giao diện danh sách phức tạp hơn (ví dụ: trong mỗi dòng của ListView ngoài chữ ra còn có kèm 1 cái nút bấm riêng để xóa nhanh dòng đó ngay trên list), lúc này ArrayAdapter thông thường không làm được mà phải dùng BaseAdapter.
+
+Cú pháp khung của một BaseAdapter tự chế:
+Java
+BaseAdapter myAdapter = new BaseAdapter() {
+    @Override
+    public int getCount() {
+        return list.size(); // Trả về tổng số phần tử trong mảng
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
+    }
+
+    @Override
+    long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // Nạp layout từng dòng (item_person.xml)
+        View view = getLayoutInflater().inflate(R.layout.item_person, parent, false);
+        
+        // Ánh xạ các TextView trong dòng và gán dữ liệu
+        TextView tvName = view.findViewById(R.id.name);
+        tvName.setText(list.get(position).name);
+
+        // (Nếu có nút xóa riêng trong dòng thì bắt sự kiện ở đây luôn)
+        
+        return view;
+    }
+};
+listView.setAdapter(myAdapter);
+📌 Chiến lược ôn tập cho bạn:
+Ưu tiên số 1: Nắm vững phần Intent chuyển trang và Truyền dữ liệu (vì đề thi phân chia các chức năng ra các màn hình rất hay dùng).
+
+Ưu tiên số 2: Xem lại kỹ phần Context Menu (Nhấn giữ ListView) vì các thầy cô cực kỳ thích ra câu lệnh này kết hợp với CRUD.
+
+Bạn có muốn tôi cho một bài tập tổng hợp kết hợp cả Intent + CRUD để luyện tập ngay bây giờ không?

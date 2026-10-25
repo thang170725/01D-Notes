@@ -1,4 +1,4 @@
-- [Re Introduction](#re-introduction)
+- [Re Introduction (dùng để tìm chuỗi, kiểm tra định dạng, trích xuất dữ liệu, thay thế text)](#re-introduction-dùng-để-tìm-chuỗi-kiểm-tra-định-dạng-trích-xuất-dữ-liệu-thay-thế-text)
 - [.search() (Tìm vị trí đầu tiên khớp pattern)](#search-tìm-vị-trí-đầu-tiên-khớp-pattern)
 - [.sub() (Thay thế chuỗi)](#sub-thay-thế-chuỗi)
 - [.findall()](#findall)
@@ -12,18 +12,16 @@
   - [Nhập một số nguyên có 5 chữ số](#nhập-một-số-nguyên-có-5-chữ-số)
 
 ---
-# Re Introduction
+# Re Introduction (dùng để tìm chuỗi, kiểm tra định dạng, trích xuất dữ liệu, thay thế text)
 ```bash
 re = Regular Expression là thư viện built-in không cần tải
-
-dùng để:
-    + Tìm chuỗi
-    + Kiểm tra định dạng
-    + Trích xuất dữ liệu
-    + Thay thế text
 ```
 **các ký tự Regex cơ bản**
 ```bash
+- (?i): Không phân biệt chữ hoa, chữ thường (ABC@GMAIL.COM và abc@gmail.com)
+- \b: Ranh giới từ (word boundary). Đảm bảo vị trí bắt đầu hoặc kết thúc nằm giữa ký tự thuộc nhóm \w và ký tự không thuộc nhóm đó, hoặc ở đầu/cuối chuỗi. Nó không đơn giản có nghĩa là khoảng trắng.
+- \\.: Dấu chấm thực sự Dấu . thông thường trong regex có nghĩa là khớp với gần như bất kỳ ký tự nào. Viết \. để yêu cầu dấu chấm . đúng nghĩa.
+(trong gmail.com, phần này khớp dấu chấm giữa gmail và com)
 - .             : Bất kỳ ký tự nào (trừ dòng mới)
 - \d            : Bất kỳ chữ số nào (0-9) # \d khớp với "12", "99"
 - \w	        : Chữ cái, chữ số và dấu gạch dưới	

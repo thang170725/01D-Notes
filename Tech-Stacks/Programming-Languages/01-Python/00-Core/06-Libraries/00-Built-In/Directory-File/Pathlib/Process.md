@@ -1,6 +1,6 @@
 - [Path (Tạo đối tượng)](#path-tạo-đối-tượng)
   - [/ (nối đường dẫn)](#-nối-đường-dẫn)
-  - [.parent (dùng để lấy thư mục cha (parent directory) của một đường dẫn)](#parent-dùng-để-lấy-thư-mục-cha-parent-directory-của-một-đường-dẫn)
+  - [.parent (dùng để lấy thư mục cha của một đường dẫn)](#parent-dùng-để-lấy-thư-mục-cha-của-một-đường-dẫn)
   - [.mkdir (Tạo thư mục)](#mkdir-tạo-thư-mục)
   - [.cwd() (thư mục làm việc hiện tại)](#cwd-thư-mục-làm-việc-hiện-tại)
   - [.iterdir() (Nó sẽ duyệt tất cả file và thư mục con)](#iterdir-nó-sẽ-duyệt-tất-cả-file-và-thư-mục-con)
@@ -9,6 +9,9 @@
   - [.name (Lấy tên cuối cùng)](#name-lấy-tên-cuối-cùng)
   - [.glob() (dùng để tìm các file hoặc thư mục theo một mẫu (pattern))](#glob-dùng-để-tìm-các-file-hoặc-thư-mục-theo-một-mẫu-pattern)
   - [.rglob()](#rglob)
+  - [.resolve() (dùng để chuyển đường dẫn thành đường dẫn tuyệt đối)](#resolve-dùng-để-chuyển-đường-dẫn-thành-đường-dẫn-tuyệt-đối)
+- [stem (tên file không bao gồm phần đuôi mở rộng)](#stem-tên-file-không-bao-gồm-phần-đuôi-mở-rộng)
+- [with\_name() (tạo ra một đường dẫn mới bằng cách thay tên file, nhưng giữ nguyên thư mục chứa file)](#with_name-tạo-ra-một-đường-dẫn-mới-bằng-cách-thay-tên-file-nhưng-giữ-nguyên-thư-mục-chứa-file)
 ---
 # Path (Tạo đối tượng)
 ```bash
@@ -30,7 +33,7 @@ print(type(path)) # <class 'pathlib.WindowsPath'>
 BASE_DIR = Path(r"D:\workspace\filter_signature")
 YAML_PATH = BASE_DIR / "yolo_augmented_data" / "data.yaml"
 ```
-## .parent (dùng để lấy thư mục cha (parent directory) của một đường dẫn)
+## .parent (dùng để lấy thư mục cha của một đường dẫn)
 **Ex1: Đường dẫn nhiều cấp**
 ```python
 from pathlib import Path
@@ -62,12 +65,13 @@ print(path.parents[2]) # C:\Users\Thang
 ## .mkdir (Tạo thư mục)
 **Syn**
 ```bash
-folder.mkdir()
+folder.mkdir(exist_ok=True, parents=True)
 
-- exist_ok=True:
-    + Nếu thư mục chưa có → tạo mới.
-    + Nếu đã có → bỏ qua, không báo lỗi
-- parents=True: tự động tạo các thư mục cha nếu chưa có
+- Input:
+    + exist_ok=True:
+        - Nếu thư mục chưa có → tạo mới.
+        - Nếu đã có → bỏ qua, không báo lỗi
+    + parents=True: tự động tạo các thư mục cha nếu chưa có
 ```
 ## .cwd() (thư mục làm việc hiện tại)
 **Syn**
@@ -214,4 +218,69 @@ folder = Path(folder_path)
 count = 0
 for _ in folder.rglob("*.pdf"):
     count += 1
+```
+## .resolve() (dùng để chuyển đường dẫn thành đường dẫn tuyệt đối)
+**Syn**
+```bash
+from pathlib import Path
+
+Path.resolve(strict=False)
+
+- Input:
+    + strict=bool
+        - False: mặc định, không bắt buộc đường dẫn phải tồn tại.
+        - True: yêu cầu đường dẫn tồn tại; nếu không, Python sẽ báo lỗi FileNotFoundError.
+```
+**Ex: Đường dẫn tương đối → tuyệt đối**
+*Giả sử bạn đang chạy Python tại thư mục D:\workspace\email_automation_project*
+```python
+from pathlib import Path
+
+path = Path("data/original_data")
+
+print(path.resolve()) # D:\workspace\email_automation_project\data\original_data
+```
+**Ex2: Xử lý . và ..**
+```python
+from pathlib import Path
+
+path = Path("data/../data/original_data")
+print(path.resolve()) # D:\workspace\email_automation_project\data\original_data
+```
+**Ex3: Dùng với __file__**
+```python
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
+print(BASE_DIR) # D:\workspace\email_automation_project\backend
+```
+# stem (tên file không bao gồm phần đuôi mở rộng)
+Ví dụ:
+Đường dẫn file ban đầu
+D:/data/emails.json
+
+emails
+
+← stem
+
+.json
+
+← suffix (phần mở rộng)
+from pathlib import Path
+
+output_file = Path("D:/data/emails.json")
+
+print(output_file.stem)    # emails
+print(output_file.suffix)  # .json
+print(output_file.name)    # emails.json
+# with_name() (tạo ra một đường dẫn mới bằng cách thay tên file, nhưng giữ nguyên thư mục chứa file)
+**Ex**
+```python
+from pathlib import Path
+
+output_file = Path("D:/data/emails.json")
+new_file = output_file.with_name("report.json")
+
+print(new_file) # D:\data\report.json
+# Lưu ý: with_name() chỉ tạo đối tượng đường dẫn mới, không tự tạo file trên ổ đĩa.
 ```

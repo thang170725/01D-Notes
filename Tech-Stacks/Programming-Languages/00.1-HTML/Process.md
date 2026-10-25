@@ -70,8 +70,8 @@
 - [Table (Bảng)](#table-bảng)
   - [table (Để định nghĩa một bảng)](#table-để-định-nghĩa-một-bảng)
   - [caption (Để đặt tiêu đề cho một bảng)](#caption-để-đặt-tiêu-đề-cho-một-bảng)
+  - [tr (định nghĩa một hàng trong bảng)](#tr-định-nghĩa-một-hàng-trong-bảng)
   - [th (định nghĩa tiêu đề cho từng cột)](#th-định-nghĩa-tiêu-đề-cho-từng-cột)
-  - [tr (định nghĩa một hàng (dòng) trong bảng)](#tr-định-nghĩa-một-hàng-dòng-trong-bảng)
   - [td (Sẽ định nghĩa một ô tiêu chuẩn trong một bảng)](#td-sẽ-định-nghĩa-một-ô-tiêu-chuẩn-trong-một-bảng)
   - [colgroup (Xác định một nhóm của một hoặc nhiều cột trong bảng để phục vụ cho việc định dạng)](#colgroup-xác-định-một-nhóm-của-một-hoặc-nhiều-cột-trong-bảng-để-phục-vụ-cho-việc-định-dạng)
   - [col (Chỉ định thuộc tính cho mỗi cột)](#col-chỉ-định-thuộc-tính-cho-mỗi-cột)
@@ -366,6 +366,16 @@ Bạn dùng <canvas> khi cần:
 # List (Danh sách)
 ## ul & ol & li & dl & dt & dd
 ## select & option (Tạo danh sách xổ xuống danh sách này không dùng để điều hướng)
+**Ex**
+```html
+<label for="language">Bạn muốn học ngôn ngữ nào?</label>
+
+<select id="language" name="language">
+    <option value="python">Python</option>
+    <option value="javascript">JavaScript</option>
+    <option value="java">Java</option>
+</select>
+```
 ## fieldset & legend (để tạo ra khung bao quanh, nhóm các phần tử có liên quan vào cùng một nhóm)
 ## legend (để tạo tiêu đề cho thẻ fieldset. Thường kết hợp với thẻ fieldset)
 ## textarea (để tạo ra một vùng nhập dữ liệu nhiều dòng)
@@ -376,8 +386,8 @@ Bạn dùng <canvas> khi cần:
 ```bash
 thẻ <caption> phải được đặt ngay sau thẻ <table>. Chỉ có thể đặt một <caption> cho một thẻ <table>
 ```
+## tr (định nghĩa một hàng trong bảng)
 ## th (định nghĩa tiêu đề cho từng cột)
-## tr (định nghĩa một hàng (dòng) trong bảng)
 ## td (Sẽ định nghĩa một ô tiêu chuẩn trong một bảng)
 ## colgroup (Xác định một nhóm của một hoặc nhiều cột trong bảng để phục vụ cho việc định dạng)
 ```bash
