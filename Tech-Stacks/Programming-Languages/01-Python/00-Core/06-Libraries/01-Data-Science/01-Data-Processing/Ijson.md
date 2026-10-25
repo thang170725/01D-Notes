@@ -1,8 +1,8 @@
-- [Ijson Introduction (dùng để đọc JSON theo kiểu streaming, tức là không cần json.load() toàn bộ file vào RAM)](#ijson-introduction-dùng-để-đọc-json-theo-kiểu-streaming-tức-là-không-cần-jsonload-toàn-bộ-file-vào-ram)
+- [Ijson Introduction (dùng để đọc JSON theo kiểu streaming không load toàn bộ file vào RAM)](#ijson-introduction-dùng-để-đọc-json-theo-kiểu-streaming-không-load-toàn-bộ-file-vào-ram)
 - [Installation](#installation)
 - [.items()](#items)
 ---
-# Ijson Introduction (dùng để đọc JSON theo kiểu streaming, tức là không cần json.load() toàn bộ file vào RAM)
+# Ijson Introduction (dùng để đọc JSON theo kiểu streaming không load toàn bộ file vào RAM)
 ```bash
 Điều này rất hữu ích nếu JSON của bạn rất lớn, ví dụ vài GB hoặc hàng triệu object.
 ```
@@ -12,8 +12,8 @@ pip install ijson
 ```
 # .items()
 **Không dùng ijson**
+*file json*
 ```bash
-Ví dụ JSON:
 [
     {"id": 1, "name": "A"},
     {"id": 2, "name": "B"},
