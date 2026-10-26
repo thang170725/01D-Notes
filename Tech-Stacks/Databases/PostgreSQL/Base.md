@@ -6,6 +6,7 @@
   - [DROP DATABASE (xóa database)](#drop-database-xóa-database)
   - [ALTER DATABASE ... rename to ... (sửa tên database)](#alter-database--rename-to--sửa-tên-database)
 - [Schema](#schema)
+  - [create schema ... (tạo một schema)](#create-schema--tạo-một-schema)
   - [information\_schema (PostgreSQL có một hệ thống các bảng đặc biệt gọi là Information Schema. Nó chứa thông tin về chính database của bạn)](#information_schema-postgresql-có-một-hệ-thống-các-bảng-đặc-biệt-gọi-là-information-schema-nó-chứa-thông-tin-về-chính-database-của-bạn)
     - [.tables (dùng để xem thông tin về các bảng trong database)](#tables-dùng-để-xem-thông-tin-về-các-bảng-trong-database)
       - [table\_name (Đây là column của information\_schema.tables)](#table_name-đây-là-column-của-information_schematables)
@@ -160,6 +161,78 @@ CREATE TABLE documents (
 
 Đây là SQL tạo ra schema.
 ```
+## create schema ... (tạo một schema)
+**Syn**
+```bash
+CREATE SCHEMA my_schema;
+```
+
+Ví dụ, bạn đang làm dự án xử lý email, có thể tạo schema tên email_processing:
+CREATE SCHEMA email_processing;
+
+
+1. Tạo schema trong pgAdmin
+
+
+
+
+
+
+
+
+
+Bước 1. Mở pgAdmin và kết nối đến PostgreSQL server.
+
+
+
+
+
+
+
+
+
+
+
+Bước 2. Chọn database cần tạo schema, mở Query Tool, chạy lệnh CREATE SCHEMA.
+
+
+
+
+
+
+
+
+
+
+
+Bước 3. Làm mới mục Schemas trong cây thư mục để xem schema mới.
+
+
+
+3. Tạo bảng bên trong schema
+Ví dụ tạo bảng lưu thông tin email:
+CREATE TABLE email_processing.emails (
+    id BIGSERIAL PRIMARY KEY,
+    subject TEXT,
+    content TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+Truy vấn dữ liệu:
+SELECT *
+FROM email_processing.emails;
+
+
+Cú pháp tên đầy đủ là schema_name.table_name.
+4. Một số lệnh hữu ích
+Mục đích	SQL
+Tạo schema nếu chưa tồn tại	CREATE SCHEMA IF NOT EXISTS email_processing;
+Liệt kê schema	SELECT schema_name FROM information_schema.schemata;
+Xóa schema rỗng	DROP SCHEMA email_processing;
+Xóa schema và toàn bộ đối tượng bên trong	DROP SCHEMA email_processing CASCADE;
+
+Lưu ý: Schema được tạo trong database hiện tại mà bạn đang kết nối, không phải tạo trực tiếp trên toàn bộ server PostgreSQL. Nếu bạn đang dùng database email_cs, hãy kết nối vào database đó trước khi chạy lệnh.
 ## information_schema (PostgreSQL có một hệ thống các bảng đặc biệt gọi là Information Schema. Nó chứa thông tin về chính database của bạn)
 **Ex**
 ```bash
