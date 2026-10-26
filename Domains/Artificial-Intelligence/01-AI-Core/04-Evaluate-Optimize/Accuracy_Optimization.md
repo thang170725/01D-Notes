@@ -383,18 +383,15 @@ R2 = 1 - ((y1-y_pred1)**2 + ... + (yn-y_predn)**2)/((y1-y_tb)**2 + ... + (yn-y_t
 ## Accuracy (Độ chính xác tổng thể)
 ```bash
 Trong tất cả dự đoán, mô hình đúng bao nhiêu phần trăm.
+```
+**Nhược điểm**
+```bash
+Accuracy dễ gây hiểu lầm khi dữ liệu mất cân bằng.
 
-Nhược điểm
-    Accuracy dễ gây hiểu lầm khi dữ liệu mất cân bằng.
-
-    Ví dụ:
-        - 99 email bình thường
-        - 1 email spam
-        
-        Mô hình đoán tất cả là "không spam":
-            Accuracy = 99%
-
-        Nhưng thực tế không phát hiện được spam nào.
+Ví dụ:
+    - 99 email bình thường
+    - 1 email spam
+-> Mô hình đoán tất cả là "không spam": Accuracy = 99%. Nhưng thực tế không phát hiện được spam nào.
 ```
 **Fomula**
 ```bash
@@ -402,9 +399,7 @@ Accuracy = (TP + TN)/(TP + TNN + FP + FN)
 ```
 **Ex**
 ```bash
-
-Accuracy= (80+90)/(80+90+10+20) = 170/200 = 85%
-=> Mô hình dự đoán đúng 85% tổng số email.
+Accuracy= (80+90)/(80+90+10+20) = 170/200 = 85% # Mô hình dự đoán đúng 85% tổng số email.
 ```
 ## Precision (Độ chính xác của dự đoán dương tính)
 ```bash
