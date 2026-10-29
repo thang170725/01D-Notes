@@ -7,6 +7,7 @@
   - [.end()](#end)
   - [.group()](#group)
   - [.fullmatch() (dùng để kiểm tra toàn bộ chuỗi có khớp với một pattern hay không)](#fullmatch-dùng-để-kiểm-tra-toàn-bộ-chuỗi-có-khớp-với-một-pattern-hay-không)
+- [compile() (dùng để biên dịch một biểu thức chính quy thành một đối tượng regex để có thể tái sử dụng nhiều lần mà không cần viết lại mẫu)](#compile-dùng-để-biên-dịch-một-biểu-thức-chính-quy-thành-một-đối-tượng-regex-để-có-thể-tái-sử-dụng-nhiều-lần-mà-không-cần-viết-lại-mẫu)
 - [Practices](#practices)
   - [Bắt email](#bắt-email)
   - [Nhập một số nguyên có 5 chữ số](#nhập-một-số-nguyên-có-5-chữ-số)
@@ -42,6 +43,17 @@ re = Regular Expression là thư viện built-in không cần tải
 # .search() (Tìm vị trí đầu tiên khớp pattern) 
 ```bash
 Dùng khi: Cần kiểm tra có tồn tại hay không. Không cần tất cả kết quả.
+```
+**Ex**
+```python
+import re
+
+text = "Xin chào, tôi là Thắng"
+
+result = re.search("Thắng", text)
+
+print(result) # <re.Match object; span=(16, 21), match='Thắng'>
+print(result.group()) # Thắng
 ```
 # .sub() (Thay thế chuỗi)
 ```bash
@@ -363,18 +375,18 @@ là cắt phần thập phân.
 Nếu bạn muốn làm tròn thì logic sẽ khác.
 
 Một điểm nữa: nếu OCR của bạn có dạng "594,666.67" hoặc "594.666,67" thì pattern trên không match. Khi đó cần thiết kế regex theo đúng format số mà dữ liệu OCR của bạn thực tế sinh ra.
-# compile() (dùng để biên dịch (compile) một biểu thức chính quy (regex) thành một đối tượng regex để có thể tái sử dụng nhiều lần mà không cần viết lại mẫu)
+```
+# compile() (dùng để biên dịch một biểu thức chính quy thành một đối tượng regex để có thể tái sử dụng nhiều lần mà không cần viết lại mẫu)
+**Khi nào nên dùng compile()?**
 ```bash
-Khi nào nên dùng compile()?
-    - Nếu chỉ tìm một lần, bạn có thể dùng trực tiếp: re.search(r"\d+", text)
-    - Nếu dùng cùng một regex nhiều lần, nên compile(): pattern = re.compile(r"\d+")
-        + pattern.search(text1)
-        + pattern.search(text2)
-        + pattern.search(text3)
-
-        -> Viết mã ngắn gọn hơn.
-        -> Không phải lặp lại biểu thức chính quy.
-        -> Hiệu quả hơn khi sử dụng nhiều lần.
+- Nếu chỉ tìm một lần, bạn có thể dùng trực tiếp: re.search(r"\d+", text)
+- Nếu dùng cùng một regex nhiều lần, nên compile(): pattern = re.compile(r"\d+")
+    + pattern.search(text1)
+    + pattern.search(text2)
+    + pattern.search(text3)
+-> Viết mã ngắn gọn hơn.
+-> Không phải lặp lại biểu thức chính quy.
+-> Hiệu quả hơn khi sử dụng nhiều lần.
 ```
 **Syn**
 ```bash

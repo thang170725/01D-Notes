@@ -567,11 +567,10 @@ Encode thành:
 # Imbalanced Data (Mất cân bằng dữ liệu)
 ```bash
 Là khi dữ liệu bị lệch rất nhiều giữa các lớp.
-
-Ví dụ:
-- 95%: không gian lận
-- 5%: gian lận
-👉 Model dễ “học lệch” → chỉ đoán lớp nhiều (95%)
+    Ví dụ:
+        - 95%: không gian lận
+        - 5%: gian lận
+    👉 Model dễ “học lệch” → chỉ đoán lớp nhiều (95%)
 ```
 ## SMOTE (Oversampling) (Tạo thêm dữ liệu giả cho lớp ít)
 ```bash
@@ -591,11 +590,235 @@ Lớp nhiều (không gian lận) → bỏ bớt
 ## Class Weights (Không thay đổi dữ liệu, nhưng phạt lỗi lớp ít nặng hơn)
 ```bash
 Model bị ép phải quan tâm hơn tới lớp hiếm
-
-
-📌 Ví dụ:
-- Sai gian lận → bị phạt nặng hơn sai bình thường
+    Ví dụ:
+        - Sai gian lận → bị phạt nặng hơn sai bình thường
 ```
+Với bài toán của bạn là phân loại email có nhiều nhãn (multi-class classification), trong đó một số nhãn có vài chục nghìn email nhưng một số nhãn chỉ có 200–300 email, ngoài SMOTE, Downsampling và Class Weights, còn khá nhiều phương pháp khác.
+
+Đặc biệt, nếu không được loại bỏ nhãn ít dữ liệu, thì không nên chỉ tập trung vào việc cân bằng số lượng mẫu. Bạn cần giải quyết cả hai vấn đề:
+- Mất cân bằng dữ liệu: mô hình thiên về các nhãn có nhiều email.
+- Thiếu dữ liệu để học: 200–300 email có thể chưa đủ để mô hình hiểu hết sự đa dạng của một nhãn.
+1. Các phương pháp bạn có thể sử dụng
+
+
+
+
+
+
+
+
+
+1. Data Augmentation — Tăng cường dữ liệu
+
+Tạo thêm các phiên bản của email thuộc nhãn ít dữ liệu mà vẫn giữ nguyên ý nghĩa và nhãn.
+
+Ví dụ, email gốc: “Tôi muốn kiểm tra tình trạng hồ sơ bồi thường.”
+
+Có thể tạo biến thể: “Cho tôi hỏi hồ sơ bồi thường của tôi hiện đang được xử lý đến đâu?”
+- Phù hợp với phân loại email văn bản.
+- Có thể dùng paraphrase bằng mô hình ngôn ngữ, dịch vòng (back-translation) hoặc thay thế từ có kiểm soát.
+- Cần kiểm tra để tránh làm thay đổi ý nghĩa nghiệp vụ hoặc tạo dữ liệu trùng lặp.
+
+
+
+
+
+
+
+
+
+
+
+
+2. Transfer Learning — Học chuyển giao
+
+Dùng mô hình ngôn ngữ đã được huấn luyện trước, sau đó fine-tune trên dữ liệu email của bạn.
+
+Ví dụ: PhoBERT hoặc một mô hình embedding tiếng Việt phù hợp.
+- Mô hình đã học được đặc trưng ngôn ngữ từ lượng dữ liệu lớn.
+- Thường hữu ích hơn việc huấn luyện mô hình từ đầu khi nhãn chỉ có vài trăm mẫu.
+- Nên thử trước khi tạo dữ liệu tổng hợp hàng loạt.
+
+
+
+
+
+
+
+
+
+
+
+
+3. Stratified Sampling và Cross-validation
+
+Chia tập dữ liệu sao cho tỷ lệ của từng nhãn được giữ tương đối ổn định trong train, validation và test.
+- Giúp đánh giá đáng tin cậy hơn với nhãn ít dữ liệu.
+- Có thể dùng Stratified K-Fold khi một số nhãn quá ít để đánh giá trên một lần chia dữ liệu.
+- Đây không phải cách trực tiếp làm mô hình học tốt hơn, mà giúp đánh giá và lựa chọn mô hình chính xác hơn.
+
+
+
+
+
+
+
+
+
+
+
+
+4. Weighted Sampling / Balanced Batch Sampling
+
+Điều chỉnh cách lấy mẫu trong quá trình huấn luyện để nhãn hiếm xuất hiện thường xuyên hơn, thay vì tạo thêm dữ liệu giả.
+
+Ví dụ: một batch có thể chứa nhiều email của nhãn chỉ có 250 mẫu hơn so với cách lấy mẫu ngẫu nhiên thông thường.
+- Giữ nguyên dữ liệu gốc.
+- Có thể kết hợp với Class Weights.
+- Nếu dùng đồng thời cả hai quá mạnh, mô hình có thể quá chú trọng nhãn hiếm và tăng false positive.
+
+
+
+
+
+
+
+
+
+
+
+
+5. Metric Learning / Prototype-based Classification
+
+Học biểu diễn sao cho email cùng nhãn nằm gần nhau trong không gian embedding, còn email khác nhãn nằm xa nhau.
+- Hữu ích khi nhãn có ít ví dụ nhưng nội dung mang tính ngữ nghĩa rõ ràng.
+- Có thể kết hợp với mô hình embedding và bộ phân loại như cosine similarity hoặc nearest prototype.
+- Cần thử nghiệm; không phải lúc nào cũng tốt hơn fine-tuning thông thường.
+
+
+
+
+
+
+
+
+
+
+
+
+6. Hierarchical Classification — Phân loại phân cấp
+
+Nếu các nhãn có quan hệ cha–con, mô hình dự đoán nhóm nghiệp vụ trước rồi mới dự đoán nhãn chi tiết.
+
+Ví dụ: Bồi thường → Yêu cầu bổ sung hồ sơ.
+- Giúp thu hẹp không gian lựa chọn ở từng bước.
+- Hữu ích nếu nhãn hiếm thuộc một nhóm có nhiều dữ liệu liên quan.
+- Không thể áp dụng hiệu quả nếu các nhãn không có cấu trúc phân cấp hợp lý.
+
+
+
+2. Một số phương pháp nâng cao khác
+Ngoài các phương pháp trên, bạn có thể cân nhắc thêm:
+Phương pháp	Ý tưởng	Khi nào nên dùng?
+Focal Loss	Tập trung hơn vào những mẫu mô hình đang phân loại sai hoặc khó phân loại	Mất cân bằng và nhiều mẫu khó
+LDAM Loss	Điều chỉnh biên phân loại để hỗ trợ các lớp ít mẫu	Muốn thử kỹ thuật chuyên biệt cho long-tailed classification
+Few-shot Learning	Học cách phân loại từ một số ít ví dụ có nhãn	Nhãn chỉ có rất ít email
+Ensemble Learning	Kết hợp dự đoán của nhiều mô hình	Muốn cải thiện độ ổn định và hiệu quả tổng thể
+Semantic Retrieval	Tìm email tương tự trong tập dữ liệu đã gán nhãn rồi dùng chúng để hỗ trợ dự đoán	Nhãn hiếm có nội dung tương tự nhau về ngữ nghĩa
+Threshold Calibration	Điều chỉnh ngưỡng quyết định của từng nhãn	Mô hình nhận diện nhãn hiếm quá ít hoặc quá nhiều
+
+Lưu ý: Focal Loss, LDAM và điều chỉnh ngưỡng không tự tạo ra thông tin mới cho nhãn hiếm. Chúng giúp mô hình học hoặc đưa ra quyết định tốt hơn trong một số tình huống, nhưng vẫn cần dữ liệu đại diện.
+3. Nếu là bài toán phân loại email của bạn, nên xử lý thế nào?
+Giả sử dữ liệu có phân bố như sau:
+Nhãn A
+30,000 email
+
+
+
+
+Nhãn B
+15,000 email
+
+
+
+
+Nhãn C
+3,000 email
+
+
+
+
+Nhãn D
+250 email
+
+
+
+
+Ví dụ minh họa, không phải dữ liệu thực tế của bạn.
+
+Tôi sẽ ưu tiên quy trình sau, thay vì cố cân bằng tất cả nhãn về cùng một số lượng.
+
+Bước 1 — Fine-tune mô hình pretrained
+
+Dùng PhoBERT hoặc mô hình Transformer tiếng Việt phù hợp với nội dung email. Đây là lựa chọn nên thử đầu tiên vì mô hình đã có kiến thức ngôn ngữ từ trước.
+
+
+
+Bước 2 — Dùng Class Weights hoặc Weighted Sampling
+
+Bắt đầu với một phương pháp, sau đó thử kết hợp nếu cần. Không nhất thiết phải đưa nhãn 250 email lên ngang nhãn 30.000 email.
+
+
+
+Bước 3 — Tăng cường dữ liệu có kiểm soát
+
+Với nhãn hiếm, có thể thử tạo thêm biến thể email bằng paraphrase hoặc back-translation. Chỉ thực hiện trên tập train, kiểm tra chất lượng và tránh tạo hàng nghìn mẫu giả từ vài trăm mẫu gốc mà không có kiểm soát.
+
+
+
+Bước 4 — Đánh giá riêng từng nhãn
+
+Theo dõi Precision, Recall và F1-score của từng nhãn, đồng thời xem Macro-F1. Đừng chỉ nhìn Accuracy vì nhãn lớn có thể khiến kết quả tổng thể trông tốt dù mô hình bỏ sót nhãn hiếm.
+
+
+
+4. Có nên dùng SMOTE cho email không?
+SMOTE hoạt động tốt hơn với dữ liệu số dạng vector trong những điều kiện phù hợp. Với văn bản email, áp dụng trực tiếp SMOTE lên dữ liệu văn bản thô là không phù hợp.
+
+Có thể áp dụng SMOTE trên embedding của email, nhưng cách này cũng có rủi ro vì vector tổng hợp có thể không tương ứng với một email thực tế hợp lý. Vì vậy, tôi sẽ thử Class Weights, Weighted Sampling và fine-tuning trước, rồi mới đánh giá SMOTE trên embedding nếu có lý do cụ thể.
+
+Một lưu ý quan trọng: nếu nhiều email thuộc cùng một luồng trao đổi, hãy chia train/test theo luồng email trước khi augmentation. Nếu các email gần như giống nhau xuất hiện ở cả hai tập, kết quả đánh giá sẽ bị cao giả tạo.
+
+5. Tôi cần biết thêm một điểm để chọn đúng phương pháp
+Bạn đang dùng mô hình nào để phân loại email?
+
+TF-IDF + Logistic Regression / SVM
+
+PhoBERT / BERT / Transformer fine-tuning
+
+Embedding + Machine Learning hoặc cosine similarity
+
+LLM phân loại trực tiếp
+
+Mô hình khác / chưa chọn
+
+
+Mỗi email chỉ có một nhãn hay có thể có nhiều nhãn?
+
+Một email chỉ thuộc một nhãn (multi-class)
+
+Một email có thể thuộc nhiều nhãn (multi-label)
+
+
+Bạn ưu tiên điều gì nhất?
+
+Nhận diện tốt các nhãn ít dữ liệu
+
+Cải thiện hiệu quả chung của tất cả nhãn
+
+Giảm chi phí huấn luyện và xử lý dữ liệu
+
+Đề xuất phương pháp phù hợp
 # Data Leakage (Rò rỉ dữ liệu)
 ```bash
 👉 Là khi model “nhìn thấy trước đáp án” trong dữ liệu test hoặc tương lai trong lúc học.
