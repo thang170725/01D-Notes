@@ -41,7 +41,7 @@
   - [Label Encoding (Gán số cho từng giá trị)](#label-encoding-gán-số-cho-từng-giá-trị)
   - [Target Encoding (Thay mỗi giá trị bằng trung bình của biến mục tiêu)](#target-encoding-thay-mỗi-giá-trị-bằng-trung-bình-của-biến-mục-tiêu)
 - [Imbalanced Data (Mất cân bằng dữ liệu)](#imbalanced-data-mất-cân-bằng-dữ-liệu)
-  - [SMOTE (Oversampling) (Tạo thêm dữ liệu giả cho lớp ít)](#smote-oversampling-tạo-thêm-dữ-liệu-giả-cho-lớp-ít)
+  - [SMOTE (Oversampling là tạo thêm dữ liệu giả cho lớp ít)](#smote-oversampling-là-tạo-thêm-dữ-liệu-giả-cho-lớp-ít)
   - [Downsampling (Giảm bớt dữ liệu lớp nhiều)](#downsampling-giảm-bớt-dữ-liệu-lớp-nhiều)
   - [Class Weights (Không thay đổi dữ liệu, nhưng phạt lỗi lớp ít nặng hơn)](#class-weights-không-thay-đổi-dữ-liệu-nhưng-phạt-lỗi-lớp-ít-nặng-hơn)
 - [Data Leakage (Rò rỉ dữ liệu)](#data-leakage-rò-rỉ-dữ-liệu)
@@ -572,13 +572,10 @@ Là khi dữ liệu bị lệch rất nhiều giữa các lớp.
         - 5%: gian lận
     👉 Model dễ “học lệch” → chỉ đoán lớp nhiều (95%)
 ```
-## SMOTE (Oversampling) (Tạo thêm dữ liệu giả cho lớp ít)
+## SMOTE (Oversampling là tạo thêm dữ liệu giả cho lớp ít)
 ```bash
-Lớp ít (fraud) → bị thiếu. SMOTE sẽ tạo thêm dữ liệu giống nó
-👉 giống như “nhân bản thông minh”
-
-📌 Ví dụ:
-- 100 gian lận → tạo thêm thành 1000
+Lớp ít (fraud) → bị thiếu. SMOTE sẽ tạo thêm dữ liệu giống nó 👉 giống như “nhân bản thông minh”
+    📌 Ví dụ: 100 gian lận → tạo thêm thành 1000
 ```
 ## Downsampling (Giảm bớt dữ liệu lớp nhiều)
 ```bash
