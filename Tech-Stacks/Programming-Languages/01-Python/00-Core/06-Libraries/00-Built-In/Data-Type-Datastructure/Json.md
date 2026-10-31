@@ -1,5 +1,5 @@
 - [.load() (dùng để đọc json từ file)](#load-dùng-để-đọc-json-từ-file)
-- [.loads() (dùng để chuyển một chuỗi JSON (str) thành object Python)](#loads-dùng-để-chuyển-một-chuỗi-json-str-thành-object-python)
+- [.loads() (dùng để chuyển một chuỗi JSON thành object Python)](#loads-dùng-để-chuyển-một-chuỗi-json-thành-object-python)
 - [.dump() (dùng để ghi dữ liệu ra file json)](#dump-dùng-để-ghi-dữ-liệu-ra-file-json)
 - [dumps() (chuyển python object -\> chuỗi json)](#dumps-chuyển-python-object---chuỗi-json)
 ---
@@ -13,7 +13,7 @@ with open("data.json", "r", encoding="utf-8") as f:
 
 print(data)
 ```
-# .loads() (dùng để chuyển một chuỗi JSON (str) thành object Python)
+# .loads() (dùng để chuyển một chuỗi JSON thành object Python)
 **Ex**
 ```python
 import json
