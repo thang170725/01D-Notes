@@ -21,7 +21,8 @@
   - [normal()](#normal)
   - [binomial()](#binomial)
   - [.choice() (Dùng để chọn ngẫu nhiên phần tử từ một tập hợp)](#choice-dùng-để-chọn-ngẫu-nhiên-phần-tử-từ-một-tập-hợp)
-
+- [DataType (kiểu dữ liệu trong numpy)](#datatype-kiểu-dữ-liệu-trong-numpy)
+  - [np.nan](#npnan)
 ---
 # Numpy Array (Mảng trong numpy)
 ## np.array() (Tạo mảng có sẵn giá trị, không tạo mảng rỗng được)
@@ -403,3 +404,5 @@ np.random.choice(
 # A có 70% khả năng xuất hiện.
 # Ví dụ: ['A' 'A' 'B' 'A' ...]
 ```
+# DataType (kiểu dữ liệu trong numpy)
+## np.nan

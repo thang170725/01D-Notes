@@ -2,7 +2,7 @@
   - [JSON](#json)
   - [unique key](#unique-key)
   - [index](#index)
-- [insert into](#insert-into)
+- [insert into (Dùng để thêm dữ liệu vào bảng)](#insert-into-dùng-để-thêm-dữ-liệu-vào-bảng)
 - [Update](#update)
   - [update (cập nhật dữ liệu)](#update-cập-nhật-dữ-liệu)
 - [Search (tìm kiếm, lọc, xem dữ liệu)](#search-tìm-kiếm-lọc-xem-dữ-liệu)
@@ -88,10 +88,7 @@ CREATE TABLE users (
     INDEX idx_name (name)        -- chỉ để search nhanh
 );
 ```
-# insert into
-```bash
-- Dùng để thêm dữ liệu vào bảng.
-```
+# insert into (Dùng để thêm dữ liệu vào bảng)
 **Ex**
 ```sql
 -- Thêm 1 dòng --

@@ -1,18 +1,18 @@
 - [Asyncio Introduction (Giúp chương trình xử lý nhiều tác vụ cùng lúc mà không cần phải chờ từng tác vụ hoàn thành trước khi chuyển sang tác vụ tiếp theo)](#asyncio-introduction-giúp-chương-trình-xử-lý-nhiều-tác-vụ-cùng-lúc-mà-không-cần-phải-chờ-từng-tác-vụ-hoàn-thành-trước-khi-chuyển-sang-tác-vụ-tiếp-theo)
 - [coroutine (Hàm có thể tạm dừng và tiếp tục)](#coroutine-hàm-có-thể-tạm-dừng-và-tiếp-tục)
 - [await (Tạm nhường quyền điều khiển cho even loop (even loop là người điều phối chương trình))](#await-tạm-nhường-quyền-điều-khiển-cho-even-loop-even-loop-là-người-điều-phối-chương-trình)
-- [.sleep() \& .gather() \& .run()](#sleep--gather--run)
-  - [Bài tập](#bài-tập)
-    - [Nhận diện và sửa code bị block event loop](#nhận-diện-và-sửa-code-bị-block-event-loop)
+- [.sleep()](#sleep)
+- [.gather() (Gom lại để event loop quản lý cùng lúc)](#gather-gom-lại-để-event-loop-quản-lý-cùng-lúc)
 - [create\_task()](#create_task)
-  - [Bài tập](#bài-tập-1)
+  - [Bài tập](#bài-tập)
     - [Sự khác biệt khi dùng và không dùng create\_task](#sự-khác-biệt-khi-dùng-và-không-dùng-create_task)
     - [Sự khác biệt của create\_task \& gather](#sự-khác-biệt-của-create_task--gather)
     - [Khi gather không đủ bắt buộc phải dùng create\_task](#khi-gather-không-đủ-bắt-buộc-phải-dùng-create_task)
+- [.run()](#run)
   - [.cancel() \& .CancelledError()](#cancel--cancellederror)
     - [Demo chuẩn luồng hoạt động cơ bản](#demo-chuẩn-luồng-hoạt-động-cơ-bản)
 - [.Queue() \& .put() \& .get() \& task\_done() \& .join()](#queue--put--get--task_done--join)
-  - [Bài tập](#bài-tập-2)
+  - [Bài tập](#bài-tập-1)
     - [Demo](#demo)
 ---
 # Asyncio Introduction (Giúp chương trình xử lý nhiều tác vụ cùng lúc mà không cần phải chờ từng tác vụ hoàn thành trước khi chuyển sang tác vụ tiếp theo)
@@ -65,10 +65,9 @@ async def f():
 # Mỗi lần gặp await, Python dừng f, nhường quyền cho event loop chạy việc khác.
 # Khi xong, f tiếp tục từ đúng dòng đó, i vẫn giữ nguyên.
 ```
-# .sleep() & .gather() & .run()
-
-- gather: Gom lại để event loop quản lý cùng lúc
-**Ví dụ**
+# .sleep() 
+# .gather() (Gom lại để event loop quản lý cùng lúc)
+**Ex**
 ```python
 import asyncio
 
@@ -91,13 +90,6 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
-## Bài tập
-### Nhận diện và sửa code bị block event loop
-**code bị block**
-```python
-
-```
-
 # create_task()
 đăng ký cho event loop chạy nền
 ## Bài tập
@@ -270,6 +262,8 @@ async def main():
 if __name__ == "__main__":
     asyncio.run(main())
 ```
+# .run()
+
 
 ## .cancel() & .CancelledError()
 - hủy một task đang chạy

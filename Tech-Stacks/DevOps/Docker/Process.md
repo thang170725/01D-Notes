@@ -3,7 +3,7 @@
   - [Create \& Config (tạo \& cấu hình)](#create--config-tạo--cấu-hình)
     - [docker compose up (chạy file yaml)](#docker-compose-up-chạy-file-yaml)
       - [--build](#--build)
-      - [-d (detached mode, chạy nền không chiếm terminal)](#-d-detached-mode-chạy-nền-không-chiếm-terminal)
+      - [-d (detached mode là chạy nền không chiếm terminal)](#-d-detached-mode-là-chạy-nền-không-chiếm-terminal)
   - [Remove (xóa \& dừng)](#remove-xóa--dừng)
     - [docker compose down (dừng và xóa toàn bộ tài nguyên mà Docker Compose đã tạo cho project hiện tại)](#docker-compose-down-dừng-và-xóa-toàn-bộ-tài-nguyên-mà-docker-compose-đã-tạo-cho-project-hiện-tại)
       - [--rmi](#--rmi)
@@ -97,7 +97,7 @@ Bước 2:
     ↓
     Container
 ```
-#### -d (detached mode, chạy nền không chiếm terminal)
+#### -d (detached mode là chạy nền không chiếm terminal)
 **Ex: file docker-compose.yml**
 ```bash
 version: "3.9"

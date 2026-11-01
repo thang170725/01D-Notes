@@ -1,5 +1,5 @@
 - [.load() (dùng để đọc json từ file)](#load-dùng-để-đọc-json-từ-file)
-- [.loads() (dùng để chuyển một chuỗi JSON (str) thành object Python)](#loads-dùng-để-chuyển-một-chuỗi-json-str-thành-object-python)
+- [.loads() (dùng để chuyển một chuỗi JSON thành object Python)](#loads-dùng-để-chuyển-một-chuỗi-json-thành-object-python)
 - [.dump() (dùng để ghi dữ liệu ra file json)](#dump-dùng-để-ghi-dữ-liệu-ra-file-json)
 - [dumps() (chuyển python object -\> chuỗi json)](#dumps-chuyển-python-object---chuỗi-json)
 ---
@@ -13,7 +13,7 @@ with open("data.json", "r", encoding="utf-8") as f:
 
 print(data)
 ```
-# .loads() (dùng để chuyển một chuỗi JSON (str) thành object Python)
+# .loads() (dùng để chuyển một chuỗi JSON thành object Python)
 **Ex**
 ```python
 import json
@@ -68,18 +68,28 @@ with open("output.json", "w", encoding="utf-8") as f:
 # dumps() (chuyển python object -> chuỗi json)
 **Syn**
 ```bash
-json.dumps(obj, *, skipkeys=False, ensure_ascii=True,
-           check_circular=True, allow_nan=True,
-           cls=None, indent=None, separators=None,
-           default=str, sort_keys=False, **kw)
+json.dumps(
+    obj, 
+    *, 
+    skipkeys=False, 
+    ensure_ascii=True,
+    check_circular=True, 
+    allow_nan=True,
+    cls=None, 
+    indent=None, 
+    separators=None,
+    default=str, 
+    sort_keys=False, 
+    **kw
+)
 
 - Input:
     + skipkeys=bool:
         - False: key không hợp lệ -> báo lỗi
         - True: key không hợp lệ -> bỏ qua
-    + ensure_ascii=bool:
-        - True  → Unicode → \uXXXX
-        - False → giữ nguyên Unicode
+    + ensure_ascii=bool: quyết định cách python mã hóa các ký tự Unicode kh python chuyển từ python obj -> json
+        - True: Mặc định. Python chuyển các ký tự Unicode → \ (Nguyễn Văn An -> Nguy\u1ec5n V\u0103n An)
+        - False: giữ nguyên Unicode
     + default=any: Nếu gặp một object mà JSON không biết xử lý thì phải chuyển nó như thế nào?
         - str: chuyển về string
 ```

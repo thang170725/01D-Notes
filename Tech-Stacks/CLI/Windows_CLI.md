@@ -11,6 +11,9 @@
 - [Get-NetIPAddress -AddressFamily IPv4](#get-netipaddress--addressfamily-ipv4)
 - [Get-NetRoute -AddressFamily IPv4](#get-netroute--addressfamily-ipv4)
 - [tree /F](#tree-f)
+- [Powershell chặn việc chạy script](#powershell-chặn-việc-chạy-script)
+  - [Get-ExecutionPolicy -List (kiểm tra chính sách hiện tại)](#get-executionpolicy--list-kiểm-tra-chính-sách-hiện-tại)
+  - [Set-ExecutionPolicy -Scope CurrentUser RemoteSigned](#set-executionpolicy--scope-currentuser-remotesigned)
 ---
 # Kiểm tra xem cổng có bị ai chiếm không
 ```bash
@@ -109,3 +112,6 @@ PS C:\Users\thang.ld> Get-NetRoute -AddressFamily IPv4
 # 5       0.0.0.0/0                                      192.168.9.1                                        0 25       ActiveStore
 ```
 # tree /F
+# Powershell chặn việc chạy script
+## Get-ExecutionPolicy -List (kiểm tra chính sách hiện tại) 
+## Set-ExecutionPolicy -Scope CurrentUser RemoteSigned

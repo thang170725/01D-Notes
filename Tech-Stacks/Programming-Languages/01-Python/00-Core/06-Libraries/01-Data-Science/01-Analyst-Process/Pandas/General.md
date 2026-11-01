@@ -1,6 +1,5 @@
-- [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
-  - [Series](#series)
-  - [DataFrame (tao dữ liêụ 2 chiều dạng bảng)](#dataframe-tao-dữ-liêụ-2-chiều-dạng-bảng)
+- [Series (Cấu trúc dữ liệu 1 chiều)](#series-cấu-trúc-dữ-liệu-1-chiều)
+- [DataFrame (tao dữ liêụ 2 chiều dạng bảng)](#dataframe-tao-dữ-liêụ-2-chiều-dạng-bảng)
 - [Display (Nhóm cung cấp thông tin)](#display-nhóm-cung-cấp-thông-tin)
   - [.head()](#head)
   - [.shape](#shape)
@@ -32,8 +31,8 @@
   - [Basic Process (xử lý dữ liệu cơ bản)](#basic-process-xử-lý-dữ-liệu-cơ-bản)
     - [.drop() \& .dropna()](#drop--dropna)
   - [Duplicate Process (xử lý dữ liệu trùng)](#duplicate-process-xử-lý-dữ-liệu-trùng)
-    - [.duplicated()](#duplicated)
-    - [.drop\_duplicates()](#drop_duplicates)
+    - [.duplicated() (Để phát hiện dòng trùng lặp trong DataFrame)](#duplicated-để-phát-hiện-dòng-trùng-lặp-trong-dataframe)
+    - [.drop\_duplicates() (xóa dòng trùng)](#drop_duplicates-xóa-dòng-trùng)
   - [.apply() (Áp dụng function lên Series hoặc DataFrame)](#apply-áp-dụng-function-lên-series-hoặc-dataframe)
   - [.map()](#map)
   - [replace() (Thay thế giá trị cũ bằng giá trị mới trong Series hoặc DataFrame)](#replace-thay-thế-giá-trị-cũ-bằng-giá-trị-mới-trong-series-hoặc-dataframe)
@@ -79,12 +78,8 @@
   - [.eval() (Đánh giá biểu thức)](#eval-đánh-giá-biểu-thức)
   - [.format()](#format)
 ---
-# Create (Nhóm khởi tạo)
-## Series
-```bash
-- series    : Cấu trúc dữ liệu 1 chiều.
-```
-**Ex2: Series**
+# Series (Cấu trúc dữ liệu 1 chiều)
+**Ex**
 ```python
 s = pd.Series([0,1,2,3], index=["a","b","c","d"])
 
@@ -94,16 +89,23 @@ s = pd.Series([0,1,2,3], index=["a","b","c","d"])
 # d    3
 # dtype: int64
 ```
-## DataFrame (tao dữ liêụ 2 chiều dạng bảng)
+# DataFrame (tao dữ liêụ 2 chiều dạng bảng)
 **Syn: DataFrame**
 ```bash
-df = pd.DataFrame(data, index=None, columns=None, dtype=None, copy=False)
+df = pd.DataFrame(
+    data, 
+    index=None, 
+    columns=None, 
+    dtype=None, 
+    copy=False
+)
 
-- data (dict, list, numpy array, …): Dữ liệu gốc tạo nên bảng.
-- index (list hoặc array): Nhãn cho các dòng, mặc địn là 0,1,2, …
-- columns (list hoặc array): Tên cho các cột (nếu không sẽ tự động lấy từ data).
-- dtype: Ép kiểu dữ liệu cho toàn bộ bảng.
-- copy (bool): Nếu True tạo bản sao của dữ liệu gốc.
+- Input:
+    + data=dict, list, numpy array, … : Dữ liệu gốc tạo nên bảng.
+    + index=list|array: Nhãn cho các dòng, mặc định là 0,1,2, …
+    + columns=list|array: Tên cho các cột (nếu không sẽ tự động lấy từ data).
+    + dtype: Ép kiểu dữ liệu cho toàn bộ bảng.
+    + copy=bool: Nếu True tạo bản sao của dữ liệu gốc.
 ```
 **Ex1: DataFrame**
 ```python
@@ -119,7 +121,7 @@ print(li)
 # 1      Duo     Hanoi
 # 2  Chicago     Tokyo
 ```
-**Ex**
+**Ex2: list of dict**
 ```python
 import pandas as pd
 

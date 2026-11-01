@@ -77,6 +77,7 @@
     - [OLD và NEW](#old-và-new)
   - [Tại sao trigger function phải RETURN NEW?](#tại-sao-trigger-function-phải-return-new)
   - [Xem cấu trúc cột của 1 bảng](#xem-cấu-trúc-cột-của-1-bảng)
+- [Trong PostgreSQL, WITH AS được sử dụng để tạo CTE (Common Table Expression) – tức là một bảng tạm thời tồn tại trong phạm vi của một câu SQL.](#trong-postgresql-with-as-được-sử-dụng-để-tạo-cte-common-table-expression--tức-là-một-bảng-tạm-thời-tồn-tại-trong-phạm-vi-của-một-câu-sql)
 ---
 # PostgreSQL Introduction
 # Database
@@ -1679,3 +1680,432 @@ SELECT column_name
 FROM information_schema.columns
 WHERE table_schema = 'test'
   AND table_name = 'users';
+
+# Trong PostgreSQL, WITH AS được sử dụng để tạo CTE (Common Table Expression) – tức là một bảng tạm thời tồn tại trong phạm vi của một câu SQL.
+
+Nó giúp chia một câu SQL phức tạp thành nhiều bước nhỏ, dễ đọc, dễ debug và dễ tái sử dụng kết quả truy vấn.
+1. Cú pháp cơ bản
+WITH ten_cte AS (
+    SELECT ...
+    FROM ...
+    WHERE ...
+)
+SELECT *
+FROM ten_cte;
+
+
+Trong đó:
+- WITH: Khai báo CTE.
+- ten_cte: Tên của CTE (bạn tự đặt).
+- AS (...): Chứa câu SQL tạo dữ liệu cho CTE.
+- Câu SQL phía sau sử dụng CTE như một bảng bình thường.
+2. Ví dụ cơ bản
+Giả sử bạn có bảng email_nhan_tho:
+id	yeu_cau	noi_dung
+1	Khiếu nại	Email A
+2	Tư vấn	Email B
+3	Khiếu nại	Email C
+4	Hỗ trợ	Email D
+
+Bạn muốn lọc các email có yeu_cau = 'Khiếu nại'.
+
+Không dùng WITH:
+SELECT *
+FROM clean_data.email_nhan_tho
+WHERE yeu_cau = 'Khiếu nại';
+
+
+Dùng WITH:
+WITH filtered_email AS (
+    SELECT *
+    FROM clean_data.email_nhan_tho
+    WHERE yeu_cau = 'Khiếu nại'
+)
+SELECT *
+FROM filtered_email;
+
+
+Kết quả giống nhau, nhưng khi truy vấn phức tạp hơn thì CTE sẽ phát huy tác dụng.
+3. Sử dụng nhiều WITH AS
+Bạn có thể khai báo nhiều CTE trong cùng một câu SQL.
+
+Ví dụ:
+- Bước 1: Lọc email có yêu cầu là Khiếu nại.
+- Bước 2: Thống kê số lượng email theo yêu cầu.
+- Bước 3: Chỉ lấy những nhóm có trên 100 email.
+WITH filtered_email AS (
+    SELECT *
+    FROM clean_data.email_nhan_tho
+    WHERE yeu_cau IS NOT NULL
+),
+
+statistic_email AS (
+    SELECT
+        yeu_cau,
+        COUNT(*) AS total
+    FROM filtered_email
+    GROUP BY yeu_cau
+)
+
+SELECT *
+FROM statistic_email
+WHERE total > 100
+ORDER BY total DESC;
+
+
+Điểm quan trọng: CTE phía sau có thể sử dụng CTE được khai báo phía trước.
+4. WITH AS kết hợp JOIN
+Ví dụ bạn có hai bảng:
+- email: Chứa thông tin email.
+- label: Chứa thông tin nhãn.
+Bạn muốn lọc email trước rồi JOIN với bảng nhãn.
+WITH filtered_email AS (
+    SELECT *
+    FROM clean_data.email
+    WHERE created_at >= '2026-01-01'
+)
+
+SELECT
+    e.id,
+    e.content,
+    l.label_name
+FROM filtered_email e
+JOIN clean_data.label l
+    ON e.label_id = l.id;
+
+
+5. WITH AS kết hợp INSERT, UPDATE, DELETE
+Đây là điểm khá hữu ích của PostgreSQL: CTE không chỉ dùng với SELECT, mà còn có thể thực hiện thao tác ghi dữ liệu.
+
+Ví dụ INSERT:
+WITH new_emails AS (
+    SELECT *
+    FROM clean_data.raw_email
+    WHERE yeu_cau = 'Khiếu nại'
+)
+
+INSERT INTO clean_data.email_nhan_tho
+SELECT *
+FROM new_emails;
+
+
+Ví dụ UPDATE:
+WITH target_emails AS (
+    SELECT id
+    FROM clean_data.email_nhan_tho
+    WHERE yeu_cau IS NULL
+)
+
+UPDATE clean_data.email_nhan_tho
+SET yeu_cau = 'Chưa phân loại'
+WHERE id IN (
+    SELECT id FROM target_emails
+);
+
+
+6. WITH RECURSIVE
+PostgreSQL còn hỗ trợ WITH RECURSIVE, dùng để truy vấn dữ liệu có cấu trúc phân cấp hoặc lặp.
+
+Ví dụ tạo dãy số từ 1 đến 5:
+WITH RECURSIVE numbers AS (
+    SELECT 1 AS n
+
+    UNION ALL
+
+    SELECT n + 1
+    FROM numbers
+    WHERE n < 5
+)
+
+SELECT *
+FROM numbers;
+
+
+Kết quả:
+1
+2
+3
+4
+5
+
+
+7. Một số lưu ý quan trọng về hiệu năng
+Trong PostgreSQL:
+- CTE có thể được optimizer inline vào câu truy vấn chính, tùy phiên bản và cấu trúc truy vấn.
+- MATERIALIZED: Ép PostgreSQL tính toán và lưu kết quả CTE trung gian.
+- NOT MATERIALIZED: Cho phép optimizer inline CTE.
+- CTE có thể được tham chiếu nhiều lần trong cùng câu SQL.
+Ví dụ:
+WITH filtered_email AS MATERIALIZED (
+    SELECT *
+    FROM clean_data.email_nhan_tho
+    WHERE yeu_cau IS NOT NULL
+)
+
+SELECT *
+FROM filtered_email;
+
+
+
+8. Khi nào nên sử dụng WITH AS?
+Trường hợp	Có nên dùng?
+Query đơn giản, một SELECT	Không cần thiết
+Query có nhiều bước xử lý	Rất nên
+Lọc dữ liệu rồi GROUP BY	Nên
+JOIN nhiều bảng phức tạp	Nên
+INSERT dữ liệu từ kết quả SELECT	Nên
+Truy vấn dữ liệu phân cấp	Dùng WITH RECURSIVE
+
+Lời khuyên: Hãy xem WITH AS như cách viết SQL theo từng pipeline xử lý dữ liệu.
+
+Ví dụ, nếu bạn đang xử lý dữ liệu email trong PostgreSQL, bạn có thể chia thành các bước:
+WITH
+-- Bước 1: Lọc dữ liệu hợp lệ
+valid_emails AS (
+    SELECT *
+    FROM clean_data.email_nhan_tho
+    WHERE yeu_cau IS NOT NULL
+),
+
+-- Bước 2: Thống kê dữ liệu
+email_statistics AS (
+    SELECT
+        yeu_cau,
+        COUNT(*) AS total
+    FROM valid_emails
+    GROUP BY yeu_cau
+),
+
+-- Bước 3: Xếp hạng nhãn
+ranked_emails AS (
+    SELECT
+        *,
+        RANK() OVER (ORDER BY total DESC) AS ranking
+    FROM email_statistics
+)
+
+-- Bước 4: Trả kết quả
+SELECT *
+FROM ranked_emails
+ORDER BY ranking;
+
+
+Cách viết này đặc biệt hữu ích khi bạn xây dựng các câu SQL phân tích dữ liệu lớn và muốn tách logic thành từng công đoạn rõ ràng.
+
+Trong PostgreSQL, UNION ALL dùng để gộp kết quả của nhiều câu lệnh SELECT thành một tập dữ liệu duy nhất, bằng cách nối các dòng của chúng lại với nhau.
+
+Điểm quan trọng nhất: UNION ALL giữ nguyên tất cả các dòng, kể cả những dòng trùng lặp.
+1. Cú pháp cơ bản
+SELECT column_1, column_2
+FROM table_1
+
+UNION ALL
+
+SELECT column_1, column_2
+FROM table_2;
+
+
+Ví dụ, bạn có hai bảng:
+
+Bảng email_thang_1:
+id	yeu_cau
+1	Khiếu nại
+2	Tư vấn
+3	Hỗ trợ
+
+Bảng email_thang_2:
+id	yeu_cau
+4	Khiếu nại
+5	Tư vấn
+3	Hỗ trợ
+
+Truy vấn:
+SELECT id, yeu_cau
+FROM email_thang_1
+
+UNION ALL
+
+SELECT id, yeu_cau
+FROM email_thang_2;
+
+
+Kết quả:
+id	yeu_cau
+1	Khiếu nại
+2	Tư vấn
+3	Hỗ trợ
+4	Khiếu nại
+5	Tư vấn
+3	Hỗ trợ
+
+Bạn thấy dòng id = 3 xuất hiện hai lần. Đây chính là đặc điểm của UNION ALL.
+2. Phân biệt UNION và UNION ALL
+Đây là điểm rất quan trọng.
+
+Giả sử hai truy vấn trả về:
+SELECT 'Khiếu nại' AS yeu_cau
+
+UNION ALL
+
+SELECT 'Khiếu nại' AS yeu_cau;
+
+
+Kết quả:
+Khiếu nại
+Khiếu nại
+
+
+Nếu sử dụng UNION:
+SELECT 'Khiếu nại' AS yeu_cau
+
+UNION
+
+SELECT 'Khiếu nại' AS yeu_cau;
+
+
+Kết quả:
+Khiếu nại
+
+
+So sánh:
+Tiêu chí	UNION	UNION ALL
+Gộp dữ liệu	Có	Có
+Loại bỏ dòng trùng	Có	Không
+Giữ nguyên số dòng	Không	Có
+Hiệu năng	Thường chậm hơn	Thường nhanh hơn
+
+Kinh nghiệm: Nếu bạn không cần loại bỏ dữ liệu trùng lặp, hãy ưu tiên UNION ALL vì PostgreSQL không phải thực hiện thêm bước loại trùng.
+3. Điều kiện khi sử dụng UNION ALL
+Hai câu SELECT phải đáp ứng các điều kiện:
+
+Điều kiện 1: Số lượng cột phải bằng nhau.
+
+Đúng:
+SELECT id, yeu_cau
+FROM table_1
+
+UNION ALL
+
+SELECT id, yeu_cau
+FROM table_2;
+
+
+Sai:
+SELECT id, yeu_cau
+FROM table_1
+
+UNION ALL
+
+SELECT id
+FROM table_2;
+
+
+Điều kiện 2: Kiểu dữ liệu tương ứng phải tương thích.
+
+Ví dụ:
+SELECT id::TEXT AS value
+FROM table_1
+
+UNION ALL
+
+SELECT yeu_cau AS value
+FROM table_2;
+
+
+Điều kiện 3: Thứ tự cột phải tương ứng với nhau.
+
+PostgreSQL ghép cột theo vị trí, không ghép theo tên.
+4. Kết hợp UNION ALL với WITH AS
+Đây là cách khá hay khi xây dựng các truy vấn phức tạp.
+
+Ví dụ: Bạn có hai bảng chứa dữ liệu email của hai giai đoạn khác nhau:
+- email_2024: Email năm 2024.
+- email_2025: Email năm 2025.
+Bạn muốn gộp dữ liệu rồi thống kê số lượng email theo yeu_cau.
+WITH all_emails AS (
+    SELECT id, yeu_cau, created_at
+    FROM clean_data.email_2024
+
+    UNION ALL
+
+    SELECT id, yeu_cau, created_at
+    FROM clean_data.email_2025
+),
+
+email_statistics AS (
+    SELECT
+        yeu_cau,
+        COUNT(*) AS total
+    FROM all_emails
+    GROUP BY yeu_cau
+)
+
+SELECT *
+FROM email_statistics
+ORDER BY total DESC;
+
+
+Luồng xử lý:
+email_2024
+
+SELECT id, yeu_cau, created_at
+
+email_2025
+
+SELECT id, yeu_cau, created_at
+
+UNION ALL
+
+Gộp tất cả các dòng
+
+all_emails
+
+CTE chứa dữ liệu đã gộp
+
+GROUP BY yeu_cau
+
+Thống kê số lượng email theo nhãn
+
+
+5. UNION ALL có thể gộp nhiều bảng không?
+Có. Bạn có thể gộp 3, 4 hoặc nhiều bảng tùy ý.
+SELECT id, yeu_cau FROM email_2023
+
+UNION ALL
+
+SELECT id, yeu_cau FROM email_2024
+
+UNION ALL
+
+SELECT id, yeu_cau FROM email_2025
+
+UNION ALL
+
+SELECT id, yeu_cau FROM email_2026;
+
+
+Bạn cũng có thể sử dụng WHERE, JOIN, GROUP BY riêng cho từng SELECT.
+6. Lưu ý về ORDER BY
+Nếu muốn sắp xếp kết quả sau khi UNION ALL, hãy đặt ORDER BY ở cuối:
+SELECT id, yeu_cau
+FROM email_2024
+
+UNION ALL
+
+SELECT id, yeu_cau
+FROM email_2025
+
+ORDER BY id DESC;
+
+
+
+Tóm lại, hãy phân biệt 3 thao tác SQL này:
+Lệnh	Công dụng
+JOIN	Ghép các bảng theo chiều ngang (thêm cột)
+UNION ALL	Ghép các kết quả theo chiều dọc (thêm dòng, giữ trùng lặp)
+UNION	Ghép theo chiều dọc và loại bỏ dòng trùng
+
+Một cách ghi nhớ đơn giản:
+- JOIN → Ghép thêm thông tin vào một dòng.
+- UNION ALL → Nối thêm các dòng dữ liệu.
+- UNION → Nối thêm dòng và loại bỏ dòng trùng.

@@ -1,8 +1,8 @@
 - [Introduction](#introduction)
-- [Suspense](#suspense)
+- [Suspense (dùng để  hiển thị fallback UI (loading) trong lúc chờ component lazy load xong)](#suspense-dùng-để--hiển-thị-fallback-ui-loading-trong-lúc-chờ-component-lazy-load-xong)
 - [Lazy (dùng để load component một cách động (lazy load))](#lazy-dùng-để-load-component-một-cách-động-lazy-load)
 - [Hook (dùng để "hook" (móc) vào các tính năng của React)](#hook-dùng-để-hook-móc-vào-các-tính-năng-của-react)
-  - [useRef (Lưu dữ liệu nội bộ, không vẽ lại)](#useref-lưu-dữ-liệu-nội-bộ-không-vẽ-lại)
+  - [useRef (lưu dữ liệu nội bộ mà không cần render lại)](#useref-lưu-dữ-liệu-nội-bộ-mà-không-cần-render-lại)
     - [.current (lấy giá trị của useRef)](#current-lấy-giá-trị-của-useref)
     - [current.contains()](#currentcontains)
   - [useState()](#usestate)
@@ -22,7 +22,7 @@
     - cách cập nhật khối
     - cách quản lý trạng thái
 ```
-# Suspense
+# Suspense (dùng để  hiển thị fallback UI (loading) trong lúc chờ component lazy load xong)
 # Lazy (dùng để load component một cách động (lazy load))
 ```bash
 - Lazy 
@@ -31,9 +31,8 @@
     - Giảm kích thước bundle ban đầu
     - Tăng tốc độ load trang
     - Cải thiện performance
-- Suspense dùng để  hiển thị fallback UI (loading) trong lúc chờ component lazy load xong.
 ```
-**Ex**
+**Ex: Kết hợp lazy load với suspense**
 ```js
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -82,12 +81,7 @@ Ví dụ
   ↓
   Móc component vào hệ thống State.
 ```
-## useRef (Lưu dữ liệu nội bộ, không vẽ lại)
-```bash
-Dùng cho dữ liệu xử lý frontend, không cần rerender”. Không cần backend hay frontend gì cả — chỉ cần không muốn render lại là dùng useRef
-
-Không dùng để hiển thị -> dùng useRef
-```
+## useRef (lưu dữ liệu nội bộ mà không cần render lại)
 **Syn**
 ```bash
 const intervalRef = useRef(null);

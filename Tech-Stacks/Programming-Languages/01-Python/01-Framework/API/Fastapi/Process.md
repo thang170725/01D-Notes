@@ -2,7 +2,7 @@
   - [FastAPI() (tạo một ứng dụng web API)](#fastapi-tạo-một-ứng-dụng-web-api)
     - [.include\_router()](#include_router)
       - [APIRouter()](#apirouter)
-    - [.add\_middleware()](#add_middleware)
+    - [.add\_middleware() (dùng để thêm middleware vào ứng dụng FastAPI)](#add_middleware-dùng-để-thêm-middleware-vào-ứng-dụng-fastapi)
       - [CORSMiddleware](#corsmiddleware)
     - [.mount() (gắn một ứng dụng ASGI khác vào một đường dẫn cụ thể)](#mount-gắn-một-ứng-dụng-asgi-khác-vào-một-đường-dẫn-cụ-thể)
 - [Routing (HTTP Methods)](#routing-http-methods)
@@ -24,7 +24,7 @@
   - [await file.read()](#await-fileread)
 - [Response](#response)
   - [StreamingResponse (cho phép server gửi response từng phần)](#streamingresponse-cho-phép-server-gửi-response-từng-phần)
-- [HTTPException](#httpexception)
+- [HTTPException (chủ động trả lỗi HTTP cho client)](#httpexception-chủ-động-trả-lỗi-http-cho-client)
 ---
 # App Configuration
 ```bash
@@ -90,10 +90,7 @@ router = APIRouter(prefix="/user", tags=["User"])
 - tags=["User"]: Chỉ dùng cho Swagger UI /docs
     + Nó giúp: nhóm API, dễ đọc, không ảnh hưởng runtime
 ```
-### .add_middleware()
-```bash
-Dùng để thêm middleware vào ứng dụng FastAPI
-```
+### .add_middleware() (dùng để thêm middleware vào ứng dụng FastAPI)
 **Syn**
 ```bash
 from fastapi import FastAPI
@@ -479,10 +476,8 @@ return StreamingResponse(generate())
 #     are
 #     you?
 ```
-# HTTPException
+# HTTPException (chủ động trả lỗi HTTP cho client)
 ```bash
-- dùng để:
-    + Chủ động trả lỗi HTTP cho client
     + Dừng xử lý request ngay lập tức
     + Trả về status code + message rõ ràng
 - Các lỗi:

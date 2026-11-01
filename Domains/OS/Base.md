@@ -5,6 +5,9 @@
   - [Ask](#ask)
     - [Snap khác gì so với apt?](#snap-khác-gì-so-với-apt)
     - [theo bạn mô tả thì tôi thấy snap có vẻ tốt hơn nhưng sao nhiều người lại không thích dùng](#theo-bạn-mô-tả-thì-tôi-thấy-snap-có-vẻ-tốt-hơn-nhưng-sao-nhiều-người-lại-không-thích-dùng)
+- [Windows](#windows)
+  - [Ask](#ask-1)
+    - [Lỗi Account restrictions are preventing this user from signing in khi share file qua LAN](#lỗi-account-restrictions-are-preventing-this-user-from-signing-in-khi-share-file-qua-lan)
 ---
 # OS Introduction (Dùng để tổng hợp kiến thức liên quan đến hệ điều hành)
 # Linux
@@ -240,4 +243,40 @@ và:
 aws --version
 
 Nếu sau này bạn học sâu hơn về Linux administration/server, lúc đó mình khuyên bạn nên hiểu cả APT, Snap, Flatpak và Docker, vì chúng giải quyết những bài toán khác nhau.
+```
+# Windows
+## Ask
+### Lỗi Account restrictions are preventing this user from signing in khi share file qua LAN
+**Nguyên nhân**
+```bash
+Do chính sách bảo mật của Windows chặn quyền truy cập mạng của tài khoản khi gặp các trường hợp sau:
+  - Tài khoản Windows ở máy đích không có mật khẩu (blank password).
+  - Chính sách hệ thống (Local Security Policy) đang bật chế độ cấm tài khoản không có mật khẩu truy cập từ xa qua mạng.
+```
+**Cách khắc phục**
+```bash
+Cách 1: Cho phép tài khoản không có mật khẩu truy cập mạng (Nhanh nhất)
+  Nếu máy tính chia sẻ file đang dùng tài khoản không đặt mật khẩu, bạn cần tắt cấu hình chặn mật khẩu trống trên máy đó:
+
+  1. Trên máy tính chứa file (máy đích có IP 10.8.94.102), nhấn tổ hợp phím Windows + R, gõ secpol.msc rồi nhấn Enter.
+  2. Trong cửa sổ Local Security Policy, điều hướng theo đường dẫn: Security Settings -> Local Policies -> Security Options.
+  3. Tìm và nhấp đúp vào dòng: Accounts: Limit local account use of blank passwords to console logon only.
+  4. Chọn Disabled, sau đó nhấn Apply và OK.
+  5. Thử truy cập lại từ máy của bạn.
+
+Cách 2: Đặt mật khẩu cho tài khoản Windows trên máy đích
+Nếu không muốn thay đổi chính sách bảo mật, bạn có thể tạo mật khẩu cho tài khoản Windows trên máy chứa file:
+
+Trên máy chứa file, nhấn Windows + I để mở Settings.
+
+Vào Accounts -> Sign-in options -> chọn Password để thiết lập mật khẩu.
+
+Khi bạn truy cập lại từ máy của mình, Windows sẽ hiện bảng yêu cầu nhập tên tài khoản và mật khẩu của máy đích. Hãy điền chính xác để đăng nhập.
+
+Cách 3: Kiểm tra lại quyền chia sẻ thư mục (Permissions)
+Nhấp chuột phải vào thư mục cần chia sẻ trên máy chủ, chọn Properties -> chọn tab Sharing -> chọn Advanced Sharing.
+
+Nhấp vào nút Permissions, đảm bảo đã có nhóm Everyone hoặc tài khoản của bạn được cấp quyền Full Control hoặc Change/Read.
+
+Chuyển sang tab Security ngay bên cạnh, kiểm tra xem tài khoản truy cập có quyền đọc/ghi trong thư mục đó hay không.
 ```
