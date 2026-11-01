@@ -51,7 +51,7 @@
   - [duck typing (Python-style)](#duck-typing-python-style)
 - [callable()](#callable)
 - [hasattr() (dùng để kiểm tra xem một đối tượng (object) có thuộc tính (attribute) hoặc phương thức (method) hay không)](#hasattr-dùng-để-kiểm-tra-xem-một-đối-tượng-object-có-thuộc-tính-attribute-hoặc-phương-thức-method-hay-không)
-- [getattr() ( dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi)](#getattr--dùng-để-lấy-một-attribute-của-object-bằng-tên-được-truyền-dưới-dạng-chuỗi)
+- [getattr() (dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi)](#getattr-dùng-để-lấy-một-attribute-của-object-bằng-tên-được-truyền-dưới-dạng-chuỗi)
 - [dir() (dùng để xem một object có những thuộc tính (attribute), method, tên biến... nào)](#dir-dùng-để-xem-một-object-có-những-thuộc-tính-attribute-method-tên-biến-nào)
 ---
 # Class Introduction (chứa các phương pháp xử lý trong lớp)
@@ -752,7 +752,7 @@ s = Student()
 print(hasattr(s, "hello")) # True
 print(hasattr(s, "name")) # False
 ```
-# getattr() ( dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi)
+# getattr() (dùng để lấy một attribute của object bằng tên được truyền dưới dạng chuỗi)
 **Syn**
 ```bash
 getattr(object, "attribute_name")

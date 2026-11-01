@@ -1,43 +1,15 @@
++ [<<Back](../../../Base.md)
 - [Directory Structure](#directory-structure)
-- [Introduction](#introduction)
 - [Installation](#installation)
 - [Architecture](#architecture)
 - [Workflow tổng quan hệ thống AI Agent bằng langgrapgh](#workflow-tổng-quan-hệ-thống-ai-agent-bằng-langgrapgh)
 ---
 # Directory Structure
-```bash
-LangGraph/        # mình dùng thư mục này để xem kiến thức về LangGraph
-├── Base.md       # mình dùng file này để xem kiến thức và tiện ích
-├── Practices.md  # mình dùng thư mục này để xem code mẫu và bài tập
-└── Process.md    # mình dùng thư mục này để thao tác xử lý     
-```
-# Introduction
-```bash
-- Nói đơn giản:
-    + LangChain → Xây 1 luồng AI chạy từ trên xuống (linear flow)
-    + LangGraph → Xây AI như sơ đồ node → node, có thể:
-        - Rẽ nhánh
-        - Lặp lại
-        - Ghi nhớ trạng thái
-        - Tạo agent phức tạp
-```
-**LangGraph có 3 thứ bạn cần hiểu**
-```bash
-State - Chiếc thùng hàng:
-  Khi người dùng nhắn 1 câu, hệ thống sẽ tạo ra 1 "thùng hàng". 
-    - Thùng này sẽ chạy trên băng chuyền. 
-    - Đi qua mỗi trạm, người ta sẽ bỏ thêm đồ vào thùng (thêm tin nhắn, thêm dữ liệu kết quả...).
+LangGraph/        ```mình dùng thư mục này để xem kiến thức về LangGraph``` 
+├── [Practices](Practices.md)  ```mình dùng thư mục này để xem code mẫu và bài tập```  
+└── [Process](Process.md)    ```mình dùng thư mục này để thao tác xử lý```  
 
-Node - Các Trạm xử lý
-  Đây là các căn phòng trong nhà máy. Thùng hàng chạy vào phòng nào, nhân viên ở phòng đó sẽ làm một nhiệm vụ cụ thể
-        - Gọi LLM
-        - Gọi database
-        - Gọi tool
-        - Làm bất kỳ logic gì
 
-Edge / Router (route_...) - Người Bẻ Ghi / Băng Chuyền: 
-  Nhiệm vụ của phần này là quyết định xem thùng hàng từ Trạm A sẽ chạy tiếp sang Trạm B, Trạm C, hay chạy ra cửa kết thúc (END).
-```
 # Installation
 ```bash
 1. pip install langgraph langchain langchain-community

@@ -1,3 +1,4 @@
+- [Introduction](#introduction)
 - [graph](#graph)
   - [StateGraph (Tạo graph với state kiểu TypeDict)](#stategraph-tạo-graph-với-state-kiểu-typedict)
     - [Create \& Config (Khởi tạo \& cấu hình)](#create--config-khởi-tạo--cấu-hình)
@@ -9,10 +10,37 @@
       - [.edges](#edges)
   - [.set\_entry\_point()](#set_entry_point)
   - [.add\_conditional\_edges()](#add_conditional_edges)
-  - [.compile()](#compile)
+  - [.compile() (dùng để biên dịch một graph đã khai báo thành một ứng dụng có thể thực thi)](#compile-dùng-để-biên-dịch-một-graph-đã-khai-báo-thành-một-ứng-dụng-có-thể-thực-thi)
   - [.invoke()](#invoke)
   - [.stream()](#stream)
 ---
+# Introduction
+```bash
+- Nói đơn giản:
+    + LangChain → Xây 1 luồng AI chạy từ trên xuống (linear flow)
+    + LangGraph → Xây AI như sơ đồ node → node, có thể:
+        - Rẽ nhánh
+        - Lặp lại
+        - Ghi nhớ trạng thái
+        - Tạo agent phức tạp
+```
+**LangGraph có 3 thứ bạn cần hiểu**
+```bash
+State - Chiếc thùng hàng:
+  Khi người dùng nhắn 1 câu, hệ thống sẽ tạo ra 1 "thùng hàng". 
+    - Thùng này sẽ chạy trên băng chuyền. 
+    - Đi qua mỗi trạm, người ta sẽ bỏ thêm đồ vào thùng (thêm tin nhắn, thêm dữ liệu kết quả...).
+
+Node - Các Trạm xử lý
+  Đây là các căn phòng trong nhà máy. Thùng hàng chạy vào phòng nào, nhân viên ở phòng đó sẽ làm một nhiệm vụ cụ thể
+        - Gọi LLM
+        - Gọi database
+        - Gọi tool
+        - Làm bất kỳ logic gì
+
+Edge / Router (route_...) - Người Bẻ Ghi / Băng Chuyền: 
+  Nhiệm vụ của phần này là quyết định xem thùng hàng từ Trạm A sẽ chạy tiếp sang Trạm B, Trạm C, hay chạy ra cửa kết thúc (END).
+```
 # graph
 ## StateGraph (Tạo graph với state kiểu TypeDict)
 **Syn**
@@ -237,10 +265,30 @@ graph.add_conditional_edges(
     router_function
 )
 ```
-## .compile()
+## .compile() (dùng để biên dịch một graph đã khai báo thành một ứng dụng có thể thực thi)
+**Syn**
 ```bash
 app = graph.compile()
 ```
+**Ex**
+```python
+from langgraph.graph import StateGraph, START, END
+
+# 1. Khởi tạo Graph
+builder = StateGraph(dict)
+
+# 2. Khai báo node
+builder.add_node("node_a", node_a)
+builder.add_node("node_b", node_b)
+
+# 3. Khai báo luồng chạy
+builder.add_edge(START, "node_a")
+builder.add_edge("node_a", "node_b")
+builder.add_edge("node_b", END)
+
+# 4. Compile Graph
+graph = builder.compile()
+``` 
 ## .invoke()
 ```bash
 Chạy Graph

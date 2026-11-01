@@ -3,7 +3,7 @@
 - [ollama pull ... (tải model từ hugging face)](#ollama-pull--tải-model-từ-hugging-face)
 - [ollama run ... (chạy llm trực tiếp ằng terminal)](#ollama-run--chạy-llm-trực-tiếp-ằng-terminal)
 - [Create (Nhóm khởi tạo)](#create-nhóm-khởi-tạo)
-  - [ChatOllama() (khởi tạo một đối tượng LLM)](#chatollama-khởi-tạo-một-đối-tượng-llm)
+  - [ChatOllama() (class dùng để khởi tạo đối tượng kết nối Langchain với một LLM đang chạy trên Ollama)](#chatollama-class-dùng-để-khởi-tạo-đối-tượng-kết-nối-langchain-với-một-llm-đang-chạy-trên-ollama)
     - [.bind\_tools() (abstract từ langchain\_core dùng để cho phép LLM sử dụng tool nào)](#bind_tools-abstract-từ-langchain_core-dùng-để-cho-phép-llm-sử-dụng-tool-nào)
       - [.ainvoke()](#ainvoke)
 ---
@@ -29,7 +29,7 @@ ollama pull qwen2.5:1.5b
 ollama run qwen2.5:1.5b
 ```
 # Create (Nhóm khởi tạo)
-## ChatOllama() (khởi tạo một đối tượng LLM)
+## ChatOllama() (class dùng để khởi tạo đối tượng kết nối Langchain với một LLM đang chạy trên Ollama)
 ```bash
 2 thư viện có thể dùng:
     - langchain_community (cách cũ): Là nơi chứa các integration “gom chung” (Ollama, HuggingFace, v.v.)
@@ -54,16 +54,38 @@ llm = ChatOllama(
 )
 
 - Input:
-    + model         : tên của model llm, phải đúng tên model bạn đã pull bằng Ollama
-    + temperature   : độ sáng tạo của AI
+    + model=str: tên của model llm, phải đúng tên model bạn đã pull bằng Ollama
+    + temperature=float: độ sáng tạo của AI
         - 0: ít sáng tạo
         - 0.7: cân bằng
         - 1+: sáng tạo hơn
+    + request_timeout=float: thời gian tối đa Langchain chờ phản hồi từ Ollama
+    + num_ctx=float: số lượng token tối đa trong context window mà model được cấu hình sử dụng
+        - 2048: Context nhỏ
+        - 4096: Context vừa
+        - 8192: Context tương đối lớn
+        - 16384: Context lớn
+        - 32768: Context rất lớn
     + base_url: 
         - Mặc định: Ollama chạy ở port 11434
         - Nếu bạn chạy Docker / server khác → bắt buộc set
-    + num_predict: giới hạn số token output
-        - Tránh output quá dài hoặc tốn tài nguyên
+    + num_predict=float: giới hạn số token tối đa mà model được phép sinh ra câu trả lời
+        - 64: Phân loại, trả về nhãn ngắn
+        - 128: Phân loại kèm giải thích ngắn
+        - 256: JSON hoặc câu trả lời ngắn
+        - 512: Câu trả lời có giải thích
+        - 1024: Nội dung dài
+        - 2048: Nội dung rất dài
+        - -1: không đặt giới hạn sinh token theo tham số này
+        - -2: sử dụng cơ chế sinh token đến khi đầy context
+    + num_thread=int: số lượng CPU thread được sử dụng trong quá trình tính toán của model
+    + keep_alive=str: thời gian Ollama giữ model trong bộ nhớ sau khi xử lý xong request
+        - '5m': Sau khi hoàn thành request, Ollama tiếp tục giữ model trong RAM/VRAM khoảng 5 phút nếu không có request mới
+        - "0"	Giải phóng model ngay sau request
+        - "30s"	Giữ 30 giây
+        - "5m"	Giữ 5 phút
+        - "30m"	Giữ 30 phút
+        - "-1"	Giữ model vô thời hạn
     + repeat_penalty: giảm lặp từ
 - Output: <class 'langchain_ollama.chat_models.ChatOllama'>
 ```

@@ -204,19 +204,20 @@ Nhưng production thì sao? Một website có thể có 1000 request/s Hoặc 10
         FastAPI
 ```
 # SSE (cơ chế để server chủ động gửi dữ liệu liên tục về client qua một HTTP connection đang mở)
+```bash
+Điểm quan trọng: SSE là giao tiếp một chiều: Backend → Frontend. Nếu muốn Frontend gửi dữ liệu lên Backend, chúng ta vẫn sử dụng HTTP API bình thường.
+```
 **SSE khác API bình thường thế nào?**  
 *API bình thường*
 ```bash
-FE ───── request ─────> BE
-FE <──── toàn bộ JSON ── BE
+FE ───── request ─────> BE ─────> toàn bộ JSON ─────> FE
 ```
-*Ex*
+*SSE*
 ```bash
 {
   "answer": "Xin chào, tôi có thể giúp gì?"
 }
 ```
-*SSE*
 ```bash
 FE ───── request ─────> BE
        connection giữ mở

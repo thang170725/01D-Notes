@@ -941,3 +941,43 @@ Giai đoạn	Nhóm kiến thức	Lệnh cần thành thạo
 Giai đoạn 6 sẽ đi sâu hơn vào cách process hoạt động, system call, kernel parameters và phân tích lưu lượng mạng. Với strace và tcpdump, bạn có thể điều tra các lỗi khó mà log ứng dụng thông thường không giải thích được.
 
 Một nguyên tắc rất đáng nhớ: đừng học Linux chỉ bằng cách ghi nhớ cú pháp. Hãy học cách đặt câu hỏi cho hệ thống: process nào đang chạy, port nào đang lắng nghe, user nào đang thực thi, tài nguyên nào đang cạn, và log nào chứng minh nguyên nhân? Khi làm được điều đó, bạn sẽ xử lý sự cố nhanh hơn rất nhiều.
+
+cloc không cài bằng pip install cloc. Trên Linux, bạn cài qua package manager của hệ điều hành.
+
+Ubuntu / Debian:
+sudo apt update
+sudo apt install cloc
+
+
+Fedora:
+sudo dnf install cloc
+
+
+Arch Linux:
+sudo pacman -S cloc
+
+
+Sử dụng
+Di chuyển vào thư mục project:
+cd /path/to/your/project
+
+
+Đếm toàn bộ project:
+cloc .
+
+
+Chỉ đếm Python:
+cloc . --include-lang=Python
+
+
+Bỏ qua các thư mục không cần thống kê:
+cloc . --exclude-dir=.venv,__pycache__,node_modules,.git
+
+
+Kiểm tra đã cài thành công:
+cloc --version
+
+
+Lưu ý: cloc là công cụ độc lập, không cần cài vào virtual environment Python (.venv).
+
+cloc . --vcs=git
