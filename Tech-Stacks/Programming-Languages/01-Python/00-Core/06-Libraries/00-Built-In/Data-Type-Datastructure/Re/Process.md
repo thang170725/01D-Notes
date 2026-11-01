@@ -1,4 +1,8 @@
 - [Re Introduction (dùng để tìm chuỗi, kiểm tra định dạng, trích xuất dữ liệu, thay thế text)](#re-introduction-dùng-để-tìm-chuỗi-kiểm-tra-định-dạng-trích-xuất-dữ-liệu-thay-thế-text)
+- [Re flags](#re-flags)
+  - [(?im) (không phân biệt chữ hoa thường và cho phép ^ khớp với đầu mỗi dòng thay vvif chỉ đầu toàn bộ chuỗi)](#im-không-phân-biệt-chữ-hoa-thường-và-cho-phép--khớp-với-đầu-mỗi-dòng-thay-vvif-chỉ-đầu-toàn-bộ-chuỗi)
+  - [\\t (đại diện cho dấu cách tab)](#t-đại-diện-cho-dấu-cách-tab)
+  - [\\s (đại diện cho space, tab, newline)](#s-đại-diện-cho-space-tab-newline)
 - [.search() (Tìm vị trí đầu tiên khớp pattern)](#search-tìm-vị-trí-đầu-tiên-khớp-pattern)
 - [.sub() (Thay thế chuỗi)](#sub-thay-thế-chuỗi)
 - [.findall()](#findall)
@@ -16,6 +20,27 @@
 ```bash
 re = Regular Expression là thư viện built-in không cần tải
 ```
+# Re flags
+## (?im) (không phân biệt chữ hoa thường và cho phép ^ khớp với đầu mỗi dòng thay vvif chỉ đầu toàn bộ chuỗi)
+**Ex**
+```bash
+Hello,
+
+Tôi cần hỗ trợ.
+
+From: customer@gmail.com
+To: support@insmart.com.vn
+
+Nội dung email tiếp theo...
+```
+*regex*
+```python
+pattern = r"(?im)^[ \t]*(?:from|từ)\s*:" # Regex có thể tìm thấy cả From:, FROM:, from: và Từ: ở đầu dòng.
+# Nếu bỏ i, from: sẽ không khớp với From: hoặc FROM:.
+# Nếu bỏ m, dấu ^ chỉ khớp ở đầu toàn bộ chuỗi, nên không tìm thấy From: ở dòng phía dưới.
+```
+## \t (đại diện cho dấu cách tab)
+## \s (đại diện cho space, tab, newline)	
 **các ký tự Regex cơ bản**
 ```bash
 - (?i): Không phân biệt chữ hoa, chữ thường (ABC@GMAIL.COM và abc@gmail.com)
@@ -26,7 +51,6 @@ re = Regular Expression là thư viện built-in không cần tải
 - \d            : Bất kỳ chữ số nào (0-9) # \d khớp với "12", "99"
 - \w	        : Chữ cái, chữ số và dấu gạch dưới	
 - \w+           : khớp với "Python_3"
-- \s	        : Khoảng trắng (space, tab, newline)	
 + \s+           : khớp với các khoảng trống
 - \S            : không phải khoảng trắng
 - ^	            : Bắt đầu một dòng	^Hello

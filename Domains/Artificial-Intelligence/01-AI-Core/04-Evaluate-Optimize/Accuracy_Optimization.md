@@ -48,6 +48,7 @@
     - [StepLR (Cứ N epoch giảm)](#steplr-cứ-n-epoch-giảm)
     - [OneCycleLR (Tăng rồi giảm)](#onecyclelr-tăng-rồi-giảm)
     - [Warmup + Cosine (Tăng nhẹ rồi giảm dần)](#warmup--cosine-tăng-nhẹ-rồi-giảm-dần)
+- [K-Fold Cross-Validation là một kỹ thuật trong Machine Learning dùng để đánh giá mô hình có khả năng dự đoán tốt trên dữ liệu mới hay không, thay vì chỉ đánh giá trên một lần chia dữ liệu duy nhất.](#k-fold-cross-validation-là-một-kỹ-thuật-trong-machine-learning-dùng-để-đánh-giá-mô-hình-có-khả-năng-dự-đoán-tốt-trên-dữ-liệu-mới-hay-không-thay-vì-chỉ-đánh-giá-trên-một-lần-chia-dữ-liệu-duy-nhất)
 ---
 # Underfitting (học quá kỹ dữ liệu huấn luyện, mất khả năng tổng quát với dữ liệu mới)
 # Overfitting (học quá kỹ dữ liệu huấn luyện, mất khả năng tổng quát với dữ liệu mới)
@@ -1164,3 +1165,157 @@ Ví dụ:
         LR giảm theo Cosine
 => Đây gần như là cấu hình mặc định cho rất nhiều mô hình hiện đại của Google Research, Meta AI và Hugging Face Transformers.
 ```
+# K-Fold Cross-Validation là một kỹ thuật trong Machine Learning dùng để đánh giá mô hình có khả năng dự đoán tốt trên dữ liệu mới hay không, thay vì chỉ đánh giá trên một lần chia dữ liệu duy nhất.
+1. K-Fold hoạt động như thế nào?
+Giả sử bạn có 1.000 email đã được gán nhãn và muốn huấn luyện mô hình phân loại email thành các nhóm.
+
+Nếu sử dụng 5-Fold Cross-Validation (K = 5), bạn chia dữ liệu thành 5 phần bằng nhau:
+Ví dụ: 1.000 email, chia thành 5 Fold
+Fold 1
+
+Test
+
+Train
+
+Train
+
+Train
+
+Train
+
+
+
+Fold 2
+
+Train
+
+Test
+
+Train
+
+Train
+
+Train
+
+
+
+Fold 3
+
+Train
+
+Train
+
+Test
+
+Train
+
+Train
+
+
+
+Fold 4
+
+Train
+
+Train
+
+Train
+
+Test
+
+Train
+
+
+
+Fold 5
+
+Train
+
+Train
+
+Train
+
+Train
+
+Test
+
+
+
+
+Train: dữ liệu huấn luyện (4 phần)
+
+
+Test: dữ liệu dùng để đánh giá trong lượt đó (1 phần)
+
+
+Mô hình được huấn luyện và đánh giá 5 lần:
+Lần chạy	Dữ liệu Train	Dữ liệu Test
+1	Fold 2, 3, 4, 5	Fold 1
+2	Fold 1, 3, 4, 5	Fold 2
+3	Fold 1, 2, 4, 5	Fold 3
+4	Fold 1, 2, 3, 5	Fold 4
+5	Fold 1, 2, 3, 4	Fold 5
+
+Mỗi email được sử dụng làm dữ liệu đánh giá đúng một lần và làm dữ liệu huấn luyện trong 4 lần còn lại.
+
+Cuối cùng, bạn lấy trung bình các kết quả để đánh giá mô hình.
+
+Ví dụ, độ chính xác (Accuracy) của 5 lần là:
+- Lần 1: 90%
+- Lần 2: 92%
+- Lần 3: 88%
+- Lần 4: 91%
+- Lần 5: 89%
+Accuracy trung bình:
+\[
+\frac{90+92+88+91+89}{5}=90\%
+\]
+
+Như vậy, kết quả đánh giá qua 5 lượt là 90%.
+2. K-Fold dùng để làm gì?
+Có 4 mục đích chính:
+- Đánh giá khả năng tổng quát hóa: Kiểm tra mô hình hoạt động ra sao trên những dữ liệu chưa được dùng để huấn luyện trong từng lượt.
+- Giảm sự phụ thuộc vào một lần chia dữ liệu: Tránh trường hợp mô hình được đánh giá cao hoặc thấp chỉ vì một cách chia dữ liệu tình cờ.
+- So sánh mô hình: Ví dụ, so sánh Logistic Regression, SVM và Random Forest trên cùng các Fold.
+- Tối ưu siêu tham số (Hyperparameter tuning): Tìm các thiết lập phù hợp, chẳng hạn C của SVM hoặc max_depth của Random Forest.
+3. Phân biệt Train / Validation / Test với K-Fold
+K-Fold không hoàn toàn thay thế việc chia dữ liệu thành Train, Validation và Test.
+
+Một quy trình phổ biến:
+Toàn bộ dữ liệu
+
+Train + Validation
+
+Dùng K-Fold để chọn mô hình và siêu tham số
+
+
+Test set
+
+Giữ riêng để đánh giá cuối cùng
+
+
+
+
+Điểm quan trọng: Test set cuối cùng không nên được sử dụng trong quá trình lựa chọn mô hình hoặc điều chỉnh siêu tham số. Nếu dùng nó nhiều lần để ra quyết định, kết quả đánh giá cuối cùng có thể bị lạc quan quá mức.
+4. Khi nào nên dùng K-Fold?
+Trường hợp	Cách dùng phù hợp
+Dữ liệu ít	K-Fold giúp tận dụng dữ liệu hiệu quả hơn
+Phân loại nhãn tương đối cân bằng	Có thể dùng KFold thông thường
+Phân loại nhãn mất cân bằng	Thường nên dùng StratifiedKFold để giữ tỷ lệ nhãn giữa các Fold
+Dữ liệu chuỗi thời gian	Dùng cách chia theo thời gian như TimeSeriesSplit, không chia ngẫu nhiên thông thường
+Nhiều email thuộc cùng một hội thoại/khách hàng	Cân nhắc GroupKFold để tránh dữ liệu liên quan xuất hiện ở cả Train và Validation
+
+Đặc biệt, nếu bạn đang xây dựng mô hình phân loại email, việc chia Fold cần chú ý tránh data leakage. Ví dụ, hai email trong cùng một chuỗi hội thoại xuất hiện ở cả Train và Validation có thể khiến điểm đánh giá cao giả tạo.
+5. Ví dụ code Python với Scikit-learn
+from sklearn.model_selection import KFold, cross_val_scorefrom sklearn.ensemble import RandomForestClassifier# X: đặc trưng của dữ liệu# y: nhãn tương ứngmodel = RandomForestClassifier(random_state=42)kf = KFold(    n_splits=5,    shuffle=True,    random_state=42)scores = cross_val_score(    model,    X,    y,    cv=kf,    scoring="accuracy")print("Accuracy từng Fold:", scores)print("Accuracy trung bình:", scores.mean())print("Độ lệch chuẩn:", scores.std())
+
+
+
+- n_splits=5: chia thành 5 Fold.
+- shuffle=True: xáo trộn dữ liệu trước khi chia.
+- random_state=42: giúp tái lập cách chia dữ liệu.
+- scores.mean(): Accuracy trung bình.
+- scores.std(): mức dao động của kết quả giữa các Fold.
+Lưu ý: Với bài toán phân loại, nếu nhãn không cân bằng, nên cân nhắc StratifiedKFold thay vì KFold thông thường.
+
+Tóm lại: K-Fold giúp bạn đánh giá mô hình đáng tin cậy hơn bằng cách huấn luyện và kiểm tra nhiều lần trên các phần dữ liệu khác nhau. Nó đặc biệt hữu ích khi dữ liệu hạn chế và khi cần so sánh hoặc tối ưu nhiều mô hình.
