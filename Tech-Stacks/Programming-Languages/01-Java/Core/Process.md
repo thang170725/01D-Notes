@@ -99,6 +99,7 @@
 	- [For-each loop (Là cấu trúc lặp duyệt qua phần tử. Thích hợp cho Array, String, …)](#for-each-loop-là-cấu-trúc-lặp-duyệt-qua-phần-tử-thích-hợp-cho-array-string-)
 	- [Labelled for loop (Là cấu trúc lặp được gán nhãn. Thích hợp trong vòng lặp lồng nhau)](#labelled-for-loop-là-cấu-trúc-lặp-được-gán-nhãn-thích-hợp-trong-vòng-lặp-lồng-nhau)
 	- [Do-while loop (Là cấu trúc lặp không có giới hạn lần lặp. và được lặp ít nhất một lần)](#do-while-loop-là-cấu-trúc-lặp-không-có-giới-hạn-lần-lặp-và-được-lặp-ít-nhất-một-lần)
+- [Enum (là một kiểu dữ liệu đặc biệt đại diện cho hằng số cố định)](#enum-là-một-kiểu-dữ-liệu-đặc-biệt-đại-diện-cho-hằng-số-cố-định)
 ---
 # Comment
 ```bash
@@ -1004,13 +1005,15 @@ public class Main {
 		sn.out();
 	}
 }
-Enum
-Enum là một từ khóa trong java, là một kiểu dữ liệu đặc biệt đại diện cho hằng số cố định
-Enum có thể chứ các trường, phương thức và constructor.
-Bởi vì các giá trị của enum là các hằng số, nên tên của các trường kiểu enum thường là các chữ cái hoa.
-Cú pháp:
-Enum tên{…}
-
+# Enum (là một kiểu dữ liệu đặc biệt đại diện cho hằng số cố định)
+**Syn**
+```bash
+public enum TenEnum { GIA_TRI_1, GIA_TRI_2 }
+```
+**Ex**
+```bash
+public enum ChucVu { TruongPhong, NhanVien }
+```
 getName()
 là một phương thức để lấy ra tên của một đối tượng cụ thể. Tên này thường là chuỗi ký tự String dùng để xác định hoặc phân biệt đối tượng đó với các đối tượng khác trong chương trình
 garbage Collection

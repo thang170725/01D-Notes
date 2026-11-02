@@ -16,6 +16,10 @@
   - [Các bước để test chương trình đầu tiên bằng android studio và java](#các-bước-để-test-chương-trình-đầu-tiên-bằng-android-studio-và-java)
   - [lỗi báo error running 'app' default activity not found](#lỗi-báo-error-running-app-default-activity-not-found)
   - [Lỗi error running app the application could be installed: INSTALL\_FAILED\_OLDER\_SDK, ...](#lỗi-error-running-app-the-application-could-be-installed-install_failed_older_sdk-)
+- [AndroidManifest.xml](#androidmanifestxml)
+- [Practices](#practices)
+  - [Tạo options menu đơn giản](#tạo-options-menu-đơn-giản)
+  - [Tạo menu 2 cấp cha con](#tạo-menu-2-cấp-cha-con)
 ---
 # Android Studio Introduction
 **Cách xây dựng app android trong android studio**
@@ -671,3 +675,159 @@ Lỗi: INSTALL_FAILED_OLDER_SDK
 
 1. Bạn chỉ cần đổi: minSdk = 37 -> minSdk = 28
 ```
+# AndroidManifest.xml 
+```bash
+Mỗi khi tạo một Activity mới (Trang 2), phải đảm bảo nó đã được khai báo trong file app > manifests > AndroidManifest.xml. 
+    Android Studio thường tự làm điều này, nhưng em nên kiểm tra lại xem có thẻ <activity android:name=".SecondActivity" /> nằm bên trong thẻ <application> chưa nhé.
+```
+# Practices
+## Tạo options menu đơn giản
+**Các kiến thức cần học trước**
+
+**BƯỚC 1: Tạo file giao diện Menu (XML)**
+```bash
+1. Nhấp chuột phải vào thư mục res → chọn New → chọn Android Resource Directory.
+2. Ở mục Resource type, chọn menu (Android Studio sẽ tự tạo thư mục menu nằm trong res).
+3. Nhấp chuột phải vào thư mục menu vừa tạo → chọn New → Menu Resource File, đặt tên file là main_menu.xml.
+```
+**Nội dung file main_menu.xml**
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- Mục menu 1: Cài đặt -->
+    <item
+        android:id="@+id/menu_settings"
+        android:title="Cài đặt" />
+
+    <!-- Mục menu 2: Đăng xuất -->
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Đăng xuất" />
+
+</menu>
+```
+**BƯỚC 2: Viết code trong MainActivity.java**
+```java
+package com.example.appkiemtra; // (Tên package của em có thể khác dòng này)
+
+import android.os.Bundle;
+import android.view.Menu;            // Thư viện quản lý chung đối tượng Menu
+import android.view.MenuInflater;    // Thư viện giúp nạp file XML menu lên giao diện
+import android.view.MenuItem;        // Thư viện đại diện cho từng mục chọn trong menu
+import android.widget.Toast;         // Thư viện hiển thị thông báo nhanh trên màn hình
+
+import androidx.annotation.NonNull;   // Thư viện kiểm tra giá trị không được null (dùng cho hàm sự kiện)
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+    }
+
+    // --- PHẦN 1: HÀM NẠP MENU LÊN MÀN HÌNH ---
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Khởi tạo đối tượng MenuInflater thuộc package android.view
+        MenuInflater inflater = getMenuInflater();
+        
+        // Nạp file giao diện main_menu.xml vào menu của Activity này
+        inflater.inflate(R.menu.main_menu, menu);
+        
+        return true; // Phải trả về true thì menu mới hiển thị ra ngoài màn hình
+    }
+
+    // --- PHẦN 2: HÀM XỬ LÝ KHI NGƯỜI DÙNG BẤM VÀO TỪNG MỤC TRONG MENU ---
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        // Lấy ID của mục menu vừa được người dùng click (thuộc package android.view.MenuItem)
+        int id = item.getItemId();
+
+        // Kiểm tra xem người dùng bấm vào mục nào dựa vào ID trong file XML
+        if (id == R.id.menu_settings) {
+            Toast.makeText(this, "Bạn đã bấm chọn: Cài đặt", Toast.LENGTH_SHORT).show();
+            return true;
+        } 
+        else if (id == R.id.menu_logout) {
+            Toast.makeText(this, "Bạn đã bấm chọn: Đăng xuất", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        // Nếu bấm các nút khác thì gọi hàm mặc định của hệ thống
+        return super.onOptionsItemSelected(item);
+    }
+}
+```
+## Tạo menu 2 cấp cha con
+BƯỚC 1: Sửa lại file XML của Menu (main_menu.xml)
+Để tạo menu con, em chỉ cần lồng một thẻ <menu> bên trong một thẻ <item> của menu cha.
+
+Ví dụ mẫu file main_menu.xml:
+
+XML
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <!-- 1. Một mục menu bình thường -->
+    <item
+        android:id="@+id/menu_settings"
+        android:title="Cài đặt" />
+
+    <!-- 2. Menu Cha (Khi bấm vào đây sẽ xổ ra menu con) -->
+    <item
+        android:id="@+id/menu_parent"
+        android:title="Quản lý tài khoản"> <!-- Tên hiển thị của menu cha -->
+        
+        <!-- Đặt thẻ <menu> bên trong <item> để tạo danh sách con -->
+        <menu>
+            <!-- Menu con số 1 -->
+            <item
+                android:id="@+id/menu_sub_profile"
+                android:title="Xem thông tin cá nhân" />
+
+            <!-- Menu con số 2 -->
+            <item
+                android:id="@+id/menu_sub_logout"
+                android:title="Đăng xuất" />
+        </menu>
+        
+    </item>
+
+</menu>
+Cách hoạt động ở giao diện: Khi ứng dụng chạy lên, trên thanh Action Bar sẽ chỉ hiển thị chữ "Cài đặt" và "Quản lý tài khoản". Khi người dùng bấm vào chữ "Quản lý tài khoản", hệ thống sẽ tự động bật một menu dạng popup nhỏ xổ ra chứa "Xem thông tin cá nhân" và "Đăng xuất".
+
+BƯỚC 2: Viết code bắt sự kiện trong MainActivity.java
+Phần xử lý sự kiện khi người dùng bấm vào các mục menu con hoàn toàn giống y hệt như menu thông thường mà thầy đã hướng dẫn ở bước trước. Em chỉ cần gọi đúng ID của menu con trong hàm onOptionsItemSelected:
+
+Java
+import android.view.MenuItem;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+
+@Override
+public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    // Lấy ID của mục vừa click (có thể là menu cha hoặc menu con)
+    int id = item.getItemId();
+
+    // Kiểm tra từng ID của menu con
+    if (id == R.id.menu_settings) {
+        Toast.makeText(this, "Bạn chọn: Cài đặt", Toast.LENGTH_SHORT).show();
+        return true;
+    } 
+    else if (id == R.id.menu_sub_profile) {
+        Toast.makeText(this, "Bạn chọn menu con: Xem thông tin cá nhân", Toast.LENGTH_SHORT).show();
+        return true;
+    } 
+    else if (id == R.id.menu_sub_logout) {
+        Toast.makeText(this, "Bạn chọn menu con: Đăng xuất", Toast.LENGTH_SHORT).show();
+        return true;
+    }
+
+    return super.onOptionsItemSelected(item);
+}
+Lưu ý nhỏ cho bài kiểm tra: Em không cần phải viết code lệnh mở/đóng menu con vì Android đã tự động xử lý khi người dùng chạm vào menu cha. Việc của em chỉ là thiết kế đúng cấu trúc thẻ <menu> lồng nhau trong XML và bắt đúng id trong Java là xong!
+
+Em đã nắm được cách làm menu con này chưa? Gõ "next step" nếu em muốn chuyển sang nội dung ôn tập tiếp theo nhé!
