@@ -1,7 +1,6 @@
 - [Android Introduction (dùng để lập trình ứng dụng android)](#android-introduction-dùng-để-lập-trình-ứng-dụng-android)
 - [app (chứa các class liên quan đến ứng dụng Android và các thành phần cấp ứng dụng)](#app-chứa-các-class-liên-quan-đến-ứng-dụng-android-và-các-thành-phần-cấp-ứng-dụng)
   - [Activity (Một màn hình Android truyền thống thường là một Activity)](#activity-một-màn-hình-android-truyền-thống-thường-là-một-activity)
-    - [registerForContextMenu (dùng để đăng ký một thành phần giao diện)](#registerforcontextmenu-dùng-để-đăng-ký-một-thành-phần-giao-diện)
   - [DatePickerDialog (Hộp thoại chọn ngày)](#datepickerdialog-hộp-thoại-chọn-ngày)
   - [TimePickerDialog (Hộp thoại chọn giờ)](#timepickerdialog-hộp-thoại-chọn-giờ)
 - [os (các API liên quan đến hệ thống Android / operating system)](#os-các-api-liên-quan-đến-hệ-thống-android--operating-system)
@@ -56,18 +55,6 @@ Bạn có thể hình dung Android SDK như một hộp công cụ khổng lồ:
 ```java
 public class MainActivity extends Activity {
 }
-```
-### registerForContextMenu (dùng để đăng ký một thành phần giao diện)
-```bash
-Với hệ thống Android, ra lệnh rằng: 
-    "Hãy theo dõi thành phần này, nếu người dùng nhấn giữ (Long Click) vào nó, hãy kích hoạt Context Menu".
-```
-**Ex**
-```java
-ListView lvPhongBan = findViewById(R.id.lvPhongBan);
-registerForContextMenu(lvPhongBan);
-
-System.out.println(lvPhongBan); // androidx.appcompat.widget.AppCompatListView{4f3a2b1 VFED..CL. .......... 0,0-1080,1542 #7f0800be app:id/lvPhongBan}
 ```
 ## DatePickerDialog (Hộp thoại chọn ngày)
 ```java
