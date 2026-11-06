@@ -3,8 +3,10 @@
 - [StandardScaler()](#standardscaler)
 - [preprocessing (Tiền xử lý)](#preprocessing-tiền-xử-lý)
   - [LabelEncoder() (chuyển đổi các giá trị thành các số nguyên)](#labelencoder-chuyển-đổi-các-giá-trị-thành-các-số-nguyên)
-- [Pipeline](#pipeline)
-- [CountVectorizer()](#countvectorizer)
+- [Pipeline (chuỗi các bước xử lý dữ liệu + model)](#pipeline-chuỗi-các-bước-xử-lý-dữ-liệu--model)
+- [CountVectorizer() (Công cụ tự động hóa việc tách từ xây dựng từ vựng đếm số lần xuất hiện của từng từ trong mỗi tài liệu)](#countvectorizer-công-cụ-tự-động-hóa-việc-tách-từ-xây-dựng-từ-vựng-đếm-số-lần-xuất-hiện-của-từng-từ-trong-mỗi-tài-liệu)
+  - [.get\_feature\_names\_out() (Xem danh sách từ vựng)](#get_feature_names_out-xem-danh-sách-từ-vựng)
+    - [.toarray() (Xem ma trận đếm)](#toarray-xem-ma-trận-đếm)
 - [.inverse\_transform() (Để giải mã)](#inverse_transform-để-giải-mã)
 - [.class\_ (In ra tất cả các giá trị khác nhau của intent. Các giá trị tạo thành một mảng)](#class_-in-ra-tất-cả-các-giá-trị-khác-nhau-của-intent-các-giá-trị-tạo-thành-một-mảng)
 - [model\_selection](#model_selection)
@@ -146,10 +148,7 @@ print(arr)
 # 3  da nang            0
 # 4      hue            3
 ```
-# Pipeline
-```bash
-Chuỗi các bước xử lý dữ liệu + model
-```
+# Pipeline (chuỗi các bước xử lý dữ liệu + model)
 **Syn**
 ```bash
 from sklearn.pipeline import Pipeline
@@ -192,20 +191,14 @@ print("Accuracy:", pipe.score(X_test, y_test))
 
 # Không cần gọi scaler.fit_transform() thủ công Pipeline tự xử lý thứ tự chuẩn.
 ```
-# CountVectorizer()
-```bash
-Công cụ tự động hóa việc: Tách từ (tokenize), Xây dựng từ vựng (vocabulary), Đếm số lần xuất hiện của từng từ trong mỗi tài liệu
-```
+# CountVectorizer() (Công cụ tự động hóa việc tách từ xây dựng từ vựng đếm số lần xuất hiện của từng từ trong mỗi tài liệu)
 **Ex**
 ```python
 vectorizer = CountVectorizer()
 X = vectorizer.fit_transform(self.df["text"]).toarray()
 ```
-
-.get_feature_names_out()
-Xem danh sách từ vựng.
-.toarray()
-Xem ma trận đếm
+## .get_feature_names_out() (Xem danh sách từ vựng)
+### .toarray() (Xem ma trận đếm)
 ```bash
 from sklearn.linear_model import LinearRegression
 ```

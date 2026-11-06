@@ -5,11 +5,14 @@
 - [appcompat](#appcompat)
   - [app](#app)
     - [AppCompatActivity](#appcompatactivity)
-      - [onCreate()](#oncreate)
-      - [getLayoutInflater()](#getlayoutinflater)
+      - [onCreate() (là hàm khởi động cốt lõi của một màn hình Activity trong Android ngay khi mở ứng dụng lên hàm này sẽ chạy đầu tiên)](#oncreate-là-hàm-khởi-động-cốt-lõi-của-một-màn-hình-activity-trong-android-ngay-khi-mở-ứng-dụng-lên-hàm-này-sẽ-chạy-đầu-tiên)
+      - [getLayoutInflater() (dùng để lấy đối tượng LayoutInflater có nhiệm vụ chuyển file giao diện XML thành đối tượng View trong Java)](#getlayoutinflater-dùng-để-lấy-đối-tượng-layoutinflater-có-nhiệm-vụ-chuyển-file-giao-diện-xml-thành-đối-tượng-view-trong-java)
       - [inflate() (dùng để đọc file XML và chuyển nó thành một đối tượng View trong Java)](#inflate-dùng-để-đọc-file-xml-và-chuyển-nó-thành-một-đối-tượng-view-trong-java)
       - [addHeaderView() (dùng để thêm một View vào vị trí đầu tiên của ListView đóng vai trò là phần tiêu đề)](#addheaderview-dùng-để-thêm-một-view-vào-vị-trí-đầu-tiên-của-listview-đóng-vai-trò-là-phần-tiêu-đề)
       - [registerForContextMenu (hàm dùng để đăng ký một view khi người dùng nhấn giữ vào view đó thì android hiển thị context menu)](#registerforcontextmenu-hàm-dùng-để-đăng-ký-một-view-khi-người-dùng-nhấn-giữ-vào-view-đó-thì-android-hiển-thị-context-menu)
+        - [onCreateContextMenu()	(tạo nội dung menu)](#oncreatecontextmenutạo-nội-dung-menu)
+        - [onContextItemSelected() (xử lý khi lựa chọn menu)](#oncontextitemselected-xử-lý-khi-lựa-chọn-menu)
+        - [onContextItemSelected() (lấy vị trí dòng)](#oncontextitemselected-lấy-vị-trí-dòng)
 - [findViewById (Lấy các thành phần từ XML)](#findviewbyid-lấy-các-thành-phần-từ-xml)
   - [.setText() (dùng để gán nội dung cho TextView, EditText, ...)](#settext-dùng-để-gán-nội-dung-cho-textview-edittext-)
   - [getText() (Dùng để lấy nội dung hiện tại của TextView hoặc EditView)](#gettext-dùng-để-lấy-nội-dung-hiện-tại-của-textview-hoặc-editview)
@@ -59,10 +62,7 @@ public class MainActivity extends AppCompatActivity {
 // Có thể hình dung: Activity <- AppCompatActivity <- MainActivity
 ```
 
-#### onCreate()
-```bash
-Đây là hàm khởi động cốt lõi (lifecycle method) của một màn hình (Activity) trong Android. Ngay khi bạn mở ứng dụng lên, hàm này sẽ chạy đầu tiên.
-```
+#### onCreate() (là hàm khởi động cốt lõi của một màn hình Activity trong Android ngay khi mở ứng dụng lên hàm này sẽ chạy đầu tiên)
 **Syn**
 ```bash
 @Override
@@ -71,27 +71,21 @@ protected void onCreate(Bundle savedInstanceState) {
     setContentView(R.layout.activity_main);
 }
 
-- setContentView(R.layout.activity_main): Nạp giao diện XML (activity_main.xml) lên màn hình điện thoại để người dùng nhìn thấy và tương tác. Nơi đây cũng là chỗ lý tưởng để viết các mã ánh xạ (findViewById) và xử lý sự kiện nút bấm.
+- setContentView(R.layout.activity_main): 
+    - Nạp giao diện XML - activity_main.xml lên màn hình điện thoại để người dùng nhìn thấy và tương tác. 
+    - Đây cũng là chỗ lý tưởng để viết các mã ánh xạ (findViewById) và xử lý sự kiện nút bấm.
 ```
 annotation.NonNull
-#### getLayoutInflater()
-Công dụng
-Dùng để lấy đối tượng LayoutInflater, có nhiệm vụ chuyển file giao diện XML thành đối tượng View trong Java.
-
+#### getLayoutInflater() (dùng để lấy đối tượng LayoutInflater có nhiệm vụ chuyển file giao diện XML thành đối tượng View trong Java)
+```bash
 Ví dụ: Bạn có file table_header.xml mô tả giao diện tiêu đề bảng. Android chưa thể trực tiếp sử dụng file XML đó như một View trong Java. Vì vậy, cần LayoutInflater để chuyển đổi.
-Cú pháp
+```
+**Syn**
+```bash
 LayoutInflater inflater = getLayoutInflater();
-
-
-Hoặc:
-LayoutInflater inflater =
-        (LayoutInflater) getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE
-        );
-
-
-Ví dụ dễ hiểu
-Giả sử bạn có file table_header.xml:
+```
+**Ex**
+```xml
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -111,23 +105,17 @@ Giả sử bạn có file table_header.xml:
         android:text="Họ tên"/>
 
 </LinearLayout>
-
-
-Trong Activity:
+```
+*Trong Activity*
+```java
 LayoutInflater inflater = getLayoutInflater();
-
-
-Kết quả giả định:
-
-Bạn nhận được một đối tượng LayoutInflater có khả năng đọc và chuyển XML thành các đối tượng View.
-
-Lưu ý: Dòng code trên chưa tạo ra giao diện tiêu đề. Nó chỉ lấy công cụ để tạo giao diện.
-
+// Bạn nhận được một đối tượng LayoutInflater có khả năng đọc và chuyển XML thành các đối tượng View.
+```
 #### inflate() (dùng để đọc file XML và chuyển nó thành một đối tượng View trong Java)
 ```bash
 Nói đơn giản:
-- getLayoutInflater() lấy công cụ.
-- inflate() sử dụng công cụ đó để tạo giao diện từ XML.
+    - getLayoutInflater() lấy công cụ.
+    - inflate() sử dụng công cụ đó để tạo giao diện từ XML.
 ```
 **Syn**
 ```bash
@@ -254,6 +242,8 @@ public class MainActivity extends AppCompatActivity {
 ```bash
 Với hệ thống Android, ra lệnh rằng: 
     "Hãy theo dõi thành phần này, nếu người dùng nhấn giữ (Long Click) vào nó, hãy kích hoạt Context Menu".
+
+- registerForContextMenu thường kết hợp với onCreateContextMenu.
 ```
 **Syn**
 ```bash
@@ -354,8 +344,48 @@ public boolean onContextItemSelected(MenuItem item) {
     return super.onContextItemSelected(item);
 }
 
+##### onCreateContextMenu()	(tạo nội dung menu)
+##### onContextItemSelected() (xử lý khi lựa chọn menu)
+**Ex1**
+*Đăng ký ListView nhận Context Menu*
+```java
+registerForContextMenu(listView);
+```
+*Tạo giao diện menu khi người dùng nhấn giữ*
+```java
+@Override
+public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    super.onCreateContextMenu(menu, v, menuInfo);
+    getMenuInflater().inflate(R.menu.context_menu, menu); // Bạn tạo 1 file menu_context.xml tương tự phần trên
+    // Hoặc tạo code thuần:
+    menu.add(0, 1, 0, "Sửa");
+    menu.add(0, 2, 0, "Xóa");
+}
+```
+*Bắt sự kiện chọn Xóa / Sửa trong bảng menu nhấn giữ*
+```java
+@Override
+public boolean onContextItemSelected(MenuItem item) {
+    // Lấy vị trí dòng bị nhấn giữ
+    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    int position = info.position; 
 
-4. Ví dụ hoàn chỉnh với ListView
+    if (item.getTitle().equals("Xóa")) {
+        list.remove(position);
+        adapterPerson.notifyDataSetChanged();
+        Toast.makeText(this, "Đã xóa!", Toast.LENGTH_SHORT).show();
+    } else if (item.getTitle().equals("Sửa")) {
+        // Lấy dữ liệu dòng đó đưa lên form để sửa
+        Person p = list.get(position);
+        nhapMa.setText(p.id);
+        nhapTen.setText(p.name);
+        selectedIndex = position; // Gán lại để lát bấm nút Sửa cập nhật
+    }
+    return super.onContextItemSelected(item);
+}
+```
+**Ex2**
+```java
 public class MainActivity extends AppCompatActivity {
 
     ListView lvNhanVien;
@@ -427,19 +457,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 }
-
-
-5. Một điểm rất quan trọng: Lấy vị trí dòng được nhấn giữ
-Khi sử dụng Context Menu với ListView, bạn có thể lấy vị trí dòng mà người dùng nhấn giữ thông qua menuInfo.
-
-Ví dụ:
-@Override
-public void onContextMenuClosed(Menu menu) {
-    super.onContextMenuClosed(menu);
-}
-
-
-Để lấy vị trí dòng, ta sử dụng trong onContextItemSelected():
+```
+##### onContextItemSelected() (lấy vị trí dòng)
+```java
 @Override
 public boolean onContextItemSelected(MenuItem item) {
 
@@ -455,33 +475,15 @@ public boolean onContextItemSelected(MenuItem item) {
     return true;
 }
 
+// Vị trí	Nhân viên
+// 0	Nguyễn Văn A
+// 1	Trần Văn B
+// 2	Lê Văn C
 
-Ví dụ kết quả:
-Vị trí	Nhân viên
-0	Nguyễn Văn A
-1	Trần Văn B
-2	Lê Văn C
-
-Nếu nhấn giữ Nguyễn Văn A thì position = 0.
-
-Nếu nhấn giữ Trần Văn B thì position = 1.
-
-Lưu ý: Nếu ListView có Header bằng addHeaderView(), vị trí info.position bao gồm cả Header. Ví dụ Header ở vị trí 0 thì nhân viên đầu tiên ở vị trí 1.
-
-6. Phân biệt các hàm bạn đã học
-Hàm	Công dụng
-getLayoutInflater()	Lấy công cụ tạo giao diện
-inflate()	Chuyển XML thành View
-addHeaderView()	Thêm tiêu đề vào đầu ListView
-registerForContextMenu()	Đăng ký menu khi nhấn giữ View
-onCreateContextMenu()	Tạo nội dung menu
-onContextItemSelected()	Xử lý lựa chọn menu
-
-Mẹo nhớ khi đi thi thực hành Android:
-- registerForContextMenu() → Đăng ký.
-- onCreateContextMenu() → Tạo menu.
-- onContextItemSelected() → Xử lý khi chọn menu.
-Đây là 3 thành phần thường đi cùng nhau khi tạo chức năng Sửa/Xóa một phần tử trong ListView.
+// Nếu nhấn giữ Nguyễn Văn A thì position = 0.
+// Nếu nhấn giữ Trần Văn B thì position = 1.
+// Lưu ý: Nếu ListView có Header bằng addHeaderView(), vị trí info.position bao gồm cả Header. Ví dụ Header ở vị trí 0 thì nhân viên đầu tiên ở vị trí 1.
+```
 # findViewById (Lấy các thành phần từ XML)
 ```bash
 Hàm findViewById là phương thức có sẵn nằm trong lớp android.app.Activity (và được kế thừa qua androidx.appcompat.app.AppCompatActivity) cũng như lớp android.view.View.

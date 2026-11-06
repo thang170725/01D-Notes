@@ -4,6 +4,7 @@
   - [Máy tính cơ bản cộng trừ nhân chia](#máy-tính-cơ-bản-cộng-trừ-nhân-chia)
   - [ListView quản lý nhân viên (Bài 4.8)](#listview-quản-lý-nhân-viên-bài-48)
 - [ListView thêm suử xoó quaả ly nhan vien](#listview-thêm-suử-xoó-quaả-ly-nhan-vien)
+- [Ôn tập kiểm tra thường xuyên 2](#ôn-tập-kiểm-tra-thường-xuyên-2)
 ---
 # Android
 ## Tạo nút bấm khi nhấn cho phép ẩn hiện thông tin
@@ -1595,6 +1596,439 @@ public class NhanVien {
     }
     public String getTypeNV(){
         return typeNV;
+    }
+}
+```
+# Ôn tập kiểm tra thường xuyên 2
+*Task.java*
+```java
+package example.com.tx1;
+
+public class Task{
+    String maTask, tenTask, trangThai, ngayTao;
+
+    Task(String maTask, String tenTask, String trangThai, String ngayTao){
+        this.maTask = maTask;
+        this.tenTask = tenTask;
+        this.trangThai = trangThai;
+        this.ngayTao = ngayTao;
+    }
+}
+```
+*activity_main.xml*
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <!-- Dòng tiêu đề có nút 3 gạch ở góc trái -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF9800"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/btnMenu3Gach"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:text="☰"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingEnd="48dp"
+            android:text="Quản Lý Công Việc"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Form nhập liệu -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Mã Task:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editMaTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập mã công việc"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Tên Task:"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/editTenTask"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nhập tên công việc"
+                android:inputType="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Trạng thái:"
+                android:textSize="16sp" />
+
+            <RadioGroup
+                android:id="@+id/rgTrangThai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rbDangLam"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Đang làm" />
+
+                <RadioButton
+                    android:id="@+id/rbHoanThanh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="Hoàn thành" />
+            </RadioGroup>
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnLuuTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="#4CAF50"
+        android:text="Lưu công việc"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Danh sách công việc:"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/lvTask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="5dp" />
+
+</LinearLayout>
+```
+*table_header.xml (Đặt trong res/layout/)*
+```java
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#DDDDDD"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Mã"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Tên"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Trạng thái"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        android:text="Ngày tạo"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+</LinearLayout>
+```
+*row_task.xml (Đặt trong res/layout/)*
+```java
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tvMa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvTen"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvTrangThai"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvNgay"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.2"
+        android:textColor="#000000"
+        android:textSize="14sp" />
+</LinearLayout>
+```
+*main_menu.xml*
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_tai_khoan"
+        android:title="Tài khoản">
+        <menu>
+            <item
+                android:id="@+id/menu_dangnhap"
+                android:title="Đăng nhập" />
+            <item
+                android:id="@+id/menu_dangky"
+                android:title="Đăng ký" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_dangxuat"
+        android:title="Đăng xuất" />
+</menu>
+```
+*MainActivity.java*
+```java
+package example.com.tx1;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.EditText;      // Sửa từ EditView thành EditText
+import android.widget.RadioGroup;
+import android.widget.RadioButton;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.ArrayAdapter;
+import android.widget.PopupMenu;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
+
+public class MainActivity extends AppCompatActivity {
+    TextView btnMenu3Gach;
+    EditText editMaTask, editTenTask; // Sửa từ EditView thành EditText
+    RadioGroup rgTrangThai;
+    RadioButton rbDangLam, rbHoanThanh;
+
+    Button btnLuuTask;
+
+    ListView lvTask;
+
+    ArrayList<Task> dsTask = new ArrayList<>();
+    ArrayAdapter<?> adapter;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContextView(R.layout.activity_main);
+
+        // Gắn Custom Adapter cho ListView
+        adapter = new ArrayAdapter<Task>(this, 0, dsTask) {
+            @Override
+            public View getView(int position, View convertView, android.view.ViewGroup parent) {
+                if (convertView == null) {
+                    convertView = getLayoutInflater().inflate(R.layout.row_task, parent, false);
+                }
+                Task t = getItem(position);
+                TextView tvMa = convertView.findViewById(R.id.tvMa);
+                TextView tvTen = convertView.findViewById(R.id.tvTen);
+                TextView tvTrangThai = convertView.findViewById(R.id.tvTrangThai);
+                TextView tvNgay = convertView.findViewById(R.id.tvNgay);
+
+                if (t != null) {
+                    tvMa.setText(t.maTask);
+                    tvTen.setText(t.tenTask);
+                    tvTrangThai.setText(t.trangThai);
+                    tvNgay.setText(t.ngayTao);
+                }
+                return convertView;
+            }
+        };
+
+        // 1. ánh xạ
+        anhXa();
+
+        // Thêm Header vào ListView (Phải gọi trước setAdapter)
+        View headerView = getLayoutInflater().inflate(R.layout.table_header, null);
+        lvTask.addHeaderView(headerView);
+        lvTask.setAdapter(adapter);
+
+        // 2. lưu công việc
+        doLuuTask();
+
+        // 3. menu 3 gach
+        doMenu3Gach();
+    }
+
+    //
+    //
+    //
+    public void anhXa(){
+        btnMenu3Gach = findViewById(R.id.btnMenu3Gach);
+        editMaTask = findViewById(R.id.editMaTask);
+        editTenTask = findViewById(R.id.editTenTask);
+        rgTrangThai = findViewById(R.id.rgTrangThai);
+        rbDangLam = findViewById(R.id.rbDangLam);
+        rbHoanThanh = findViewById(R.id.rbHoanThanh);
+        btnLuuTask = findViewById(R.id.btnLuuTask);
+        lvTask = findViewById(R.id.lvTask);
+    }
+
+    public void doLuuTask(){
+        btnLuuTask.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                String maTask = editMaTask.getText().toString().trim();
+                String tenTask = editTenTask.getText().toString().trim();
+                String trangThai = "";
+                int checked = rgTrangThai.getCheckedRadioButtonId();
+                if (checked == R.id.rbDangLam){
+                    trangThai = "Dang Lam";
+                } else {
+                    trangThai = "Hoan Thanh";
+                }
+                // Lấy ngày giờ hệ thống dạng chuỗi DateTime
+                String ngayTao = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
+
+                Task task = new Task(maTask, tenTask, trangThai, ngayTao);
+                dsTask.add(task);
+
+                adapter.notifyDataSetChanged();
+                reset();
+            }
+        });
+    }
+
+    public void doMenu3Gach(){
+        btnMenu3Gach.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                // Khởi tạo PopupMenu neo vào cái TextView ☰
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+
+                // Nạp file main_menu.xml vào
+                popupMenu.getMenuInflater().inflate(R.menu.main_menu, popupMenu.getMenu());
+
+                // Bắt sự kiện khi click chọn từng mục menu
+                popupMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(android.view.MenuItem item) {
+                        int id = item.getItemId();
+                        if (id == R.id.menu_dangnhap) {
+                            android.widget.Toast.makeText(MainActivity.this, "Đăng nhập", android.widget.Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if (id == R.id.menu_dangky) {
+                            android.widget.Toast.makeText(MainActivity.this, "Đăng ký", android.widget.Toast.LENGTH_SHORT).show();
+                            return true;
+                        } else if (id == R.id.menu_dangxuat) {
+                            android.widget.Toast.makeText(MainActivity.this, "Đăng xuất", android.widget.Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+                        return false;
+                    }
+                });
+
+                // Hiển thị menu lên màn hình
+                popupMenu.show();
+            }
+        });
+    }
+
+    public void reset(){
+        editMaTask.setText("");
+        editTenTask.setText("");
     }
 }
 ```

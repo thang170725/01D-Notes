@@ -390,44 +390,7 @@ public boolean onOptionsItemSelected(MenuItem item) {
     }
     return super.onOptionsItemSelected(item);
 }
-PHẦN 3: CONTEXT MENU (Menu nhấn giữ vào ListView - Rất hay ra thi!)
-Dùng khi: Đề bài yêu cầu nhấn giữ (long click) vào một dòng nhân viên trong ListView, lập tức hiện ra bảng menu nhỏ có chữ "Sửa" hoặc "Xóa".
 
-Cú pháp chuẩn bị và xử lý (Thêm vào onCreate của MainActivity):
-Java
-// 1. Đăng ký ListView nhận Context Menu
-registerForContextMenu(listView);
-Java
-// 2. Tạo giao diện menu khi người dùng nhấn giữ
-@Override
-public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-    super.onCreateContextMenu(menu, v, menuInfo);
-    getMenuInflater().inflate(R.menu.context_menu, menu); // Bạn tạo 1 file menu_context.xml tương tự phần trên
-    // Hoặc tạo code thuần:
-    menu.add(0, 1, 0, "Sửa");
-    menu.add(0, 2, 0, "Xóa");
-}
-
-// 3. Bắt sự kiện chọn Xóa / Sửa trong bảng menu nhấn giữ
-@Override
-public boolean onContextItemSelected(MenuItem item) {
-    // Lấy vị trí dòng bị nhấn giữ
-    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-    int position = info.position; 
-
-    if (item.getTitle().equals("Xóa")) {
-        list.remove(position);
-        adapterPerson.notifyDataSetChanged();
-        Toast.makeText(this, "Đã xóa!", Toast.LENGTH_SHORT).show();
-    } else if (item.getTitle().equals("Sửa")) {
-        // Lấy dữ liệu dòng đó đưa lên form để sửa
-        Person p = list.get(position);
-        nhapMa.setText(p.id);
-        nhapTen.setText(p.name);
-        selectedIndex = position; // Gán lại để lát bấm nút Sửa cập nhật
-    }
-    return super.onContextItemSelected(item);
-}
 PHẦN 4: ADAPTER NÂNG CAO (BaseAdapter)
 Khi nào dùng: Nếu đề bài yêu cầu giao diện danh sách phức tạp hơn (ví dụ: trong mỗi dòng của ListView ngoài chữ ra còn có kèm 1 cái nút bấm riêng để xóa nhanh dòng đó ngay trên list), lúc này ArrayAdapter thông thường không làm được mà phải dùng BaseAdapter.
 
