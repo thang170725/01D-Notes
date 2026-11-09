@@ -1600,17 +1600,15 @@ public class NhanVien {
 }
 ```
 # Ôn tập kiểm tra thường xuyên 2
-*Task.java*
+*Product.java*
 ```java
-package example.com.tx1;
+public class Product{
+    public String maSP, tenSP, loaiSP, ngayTao;
 
-public class Task{
-    String maTask, tenTask, trangThai, ngayTao;
-
-    Task(String maTask, String tenTask, String trangThai, String ngayTao){
-        this.maTask = maTask;
-        this.tenTask = tenTask;
-        this.trangThai = trangThai;
+    Task(String maSP, String tenSP, String loaiSP, String ngayTao){
+        this.maSP = maSP;
+        this.tenSP = tenSP;
+        this.loaiSP = loaiSP;
         this.ngayTao = ngayTao;
     }
 }
@@ -1676,11 +1674,11 @@ public class Task{
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Mã Task:"
+                android:text="Mã SP:"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/editMaTask"
+                android:id="@+id/editMaSP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nhập mã công việc"
@@ -1697,11 +1695,11 @@ public class Task{
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Tên Task:"
+                android:text="Tên SP:"
                 android:textSize="16sp" />
 
             <EditText
-                android:id="@+id/editTenTask"
+                android:id="@+id/editTenSP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Nhập tên công việc"
@@ -1718,101 +1716,98 @@ public class Task{
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Trạng thái:"
+                android:text="Loại SP:"
                 android:textSize="16sp" />
 
             <RadioGroup
-                android:id="@+id/rgTrangThai"
+                android:id="@+id/rgLoaiSP"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/rbDangLam"
+                    android:id="@+id/rbRan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="Đang làm" />
+                    android:text="Rắn" />
 
                 <RadioButton
-                    android:id="@+id/rbHoanThanh"
+                    android:id="@+id/rbLong"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="Hoàn thành" />
+                    android:text="Lỏng" />
             </RadioGroup>
         </LinearLayout>
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnLuuTask"
+        android:id="@+id/btnLuuSP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:backgroundTint="#4CAF50"
-        android:text="Lưu công việc"
+        android:text="Lưu sản phẩm"
         android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:text="Danh sách công việc:"
+        android:text="Danh sách sản phẩm:"
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#DDDDDD"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mã"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tên"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Loại SP"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:text="Ngày tạo"
+            android:textColor="#000000"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <ListView
-        android:id="@+id/lvTask"
+        android:id="@+id/lvSP"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="5dp" />
 
 </LinearLayout>
 ```
-*table_header.xml (Đặt trong res/layout/)*
-```java
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#DDDDDD"
-    android:orientation="horizontal"
-    android:padding="10dp">
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Mã"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Tên"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Trạng thái"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.2"
-        android:text="Ngày tạo"
-        android:textColor="#000000"
-        android:textStyle="bold" />
-</LinearLayout>
-```
-*row_task.xml (Đặt trong res/layout/)*
+*row_product.xml (Đặt trong res/layout/)*
 ```java
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -1875,160 +1870,269 @@ public class Task{
         android:title="Đăng xuất" />
 </menu>
 ```
+**activity_detail.xsml**
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CHI TIẾT SẢN PHẨM"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#FF9800"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+        <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Mã sản phẩm:" android:textStyle="bold" android:textSize="16sp"/>
+        <TextView android:id="@+id/tvDetailMa" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+        <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Tên sản phẩm:" android:textStyle="bold" android:textSize="16sp"/>
+        <TextView android:id="@+id/tvDetailTen" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp">
+        <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Loại sản phẩm:" android:textStyle="bold" android:textSize="16sp"/>
+        <TextView android:id="@+id/tvDetailLoai" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="20dp">
+        <TextView android:layout_width="120dp" android:layout_height="wrap_content" android:text="Ngày tạo:" android:textStyle="bold" android:textSize="16sp"/>
+        <TextView android:id="@+id/tvDetailNgay" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quay lại"
+        android:backgroundTint="#607D8B"
+        android:textColor="#FFFFFF"/>
+
+</LinearLayout>
+```
 *MainActivity.java*
 ```java
-package example.com.tx1;
-
-import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
-import android.widget.EditText;      // Sửa từ EditView thành EditText
-import android.widget.RadioGroup;
-import android.widget.RadioButton;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.ArrayAdapter;
-import android.widget.PopupMenu;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
-
 public class MainActivity extends AppCompatActivity {
+    public static int NHANVIENCONSTANTS = 5;
     TextView btnMenu3Gach;
-    EditText editMaTask, editTenTask; // Sửa từ EditView thành EditText
-    RadioGroup rgTrangThai;
-    RadioButton rbDangLam, rbHoanThanh;
+    EditText editMaSP, editTenSP; 
+    RadioGroup rgLoaiSP;
+    RadioButton rbRan, rbLong;
 
-    Button btnLuuTask;
+    Button btnLuuSP;
 
-    ListView lvTask;
+    ListView lvSP;
 
-    ArrayList<Task> dsTask = new ArrayList<>();
-    ArrayAdapter<?> adapter;
+    ArrayList<Product> dsSP = new ArrayList<>();
+    ArrayAdapter<Product> adapterSP;
 
+    Product productSelected = null;
+    boolean isSua = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContextView(R.layout.activity_main);
 
-        // Gắn Custom Adapter cho ListView
-        adapter = new ArrayAdapter<Task>(this, 0, dsTask) {
+        // 1. ánh xạ
+        btnMenu3Gach = findViewById(R.id.btnMenu3Gach);
+        editMaSP = findViewById(R.id.editMaSP);
+        editTenSP = findViewById(R.id.editTenSP);
+        rgLoaiSP = findViewById(R.id.rgLoaiSP);
+        rbRan = findViewById(R.id.rbRan);
+        rbLong = findViewById(R.id.rbLong);
+        btnLuuSP = findViewById(R.id.btnLuuSP);
+        lvSP = findViewById(R.id.lvSP);
+
+        // 2. Gắn Custom Adapter cho ListView
+        adapterSP = new ArrayAdapter<Task>(
+            this, 
+            R.layout.row_product, 
+            R.id.tvMa,
+            dsSP
+        ) {
             @Override
-            public View getView(int position, View convertView, android.view.ViewGroup parent) {
-                if (convertView == null) {
-                    convertView = getLayoutInflater().inflate(R.layout.row_task, parent, false);
-                }
-                Task t = getItem(position);
+            public View getView(int position, View convertView, ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                Product p = getItem(position)
+
                 TextView tvMa = convertView.findViewById(R.id.tvMa);
                 TextView tvTen = convertView.findViewById(R.id.tvTen);
-                TextView tvTrangThai = convertView.findViewById(R.id.tvTrangThai);
+                TextView tvLoaiSP = convertView.findViewById(R.id.tvLoaiSP);
                 TextView tvNgay = convertView.findViewById(R.id.tvNgay);
 
-                if (t != null) {
-                    tvMa.setText(t.maTask);
-                    tvTen.setText(t.tenTask);
-                    tvTrangThai.setText(t.trangThai);
-                    tvNgay.setText(t.ngayTao);
+                if (p != null) {
+                    tvMa.setText(p.maSP);
+                    tvTen.setText(p.tenSSP);
+                    tvLoaiSP.setText(p.loaiSP);
+                    tvNgay.setText(p.ngayTao);
                 }
                 return convertView;
             }
         };
+        lvSP.setAdapter(adapterSP);
 
-        // 1. ánh xạ
-        anhXa();
+        // 3. bấm nút lưu sản phẩm
+        btnLuuTask.setOnClickListener(v -> {
+            String maSP = editMaSP.getText().toString().trim();
+            String tenSP = editTenSP.getText().toString().trim();
+            String loaiSP = rbRan.isChecked() ? "Rắn" : "Lỏng";
+            String ngayTao = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
 
-        // Thêm Header vào ListView (Phải gọi trước setAdapter)
-        View headerView = getLayoutInflater().inflate(R.layout.table_header, null);
-        lvTask.addHeaderView(headerView);
-        lvTask.setAdapter(adapter);
+            if (isSua == false){
+                Product sp = new Product(maSP, tenSP, loaiSP, ngayTao);
+                dsSP.add(sp);
+            } else {
+                productSelected.maSP = maSP;
+                productSelected.tenSP = tenSP;
+                productSelected.loaiSP = loaiSP;
+                productSelected.ngayTao = ngayTao;
+                isSua = false;
+            }
+           
+            adapterSP.notifyDataSetChanged();
+            reset();
+        });
 
-        // 2. lưu công việc
-        doLuuTask();
-
-        // 3. menu 3 gach
-        doMenu3Gach();
-    }
-
-    //
-    //
-    //
-    public void anhXa(){
-        btnMenu3Gach = findViewById(R.id.btnMenu3Gach);
-        editMaTask = findViewById(R.id.editMaTask);
-        editTenTask = findViewById(R.id.editTenTask);
-        rgTrangThai = findViewById(R.id.rgTrangThai);
-        rbDangLam = findViewById(R.id.rbDangLam);
-        rbHoanThanh = findViewById(R.id.rbHoanThanh);
-        btnLuuTask = findViewById(R.id.btnLuuTask);
-        lvTask = findViewById(R.id.lvTask);
-    }
-
-    public void doLuuTask(){
-        btnLuuTask.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                String maTask = editMaTask.getText().toString().trim();
-                String tenTask = editTenTask.getText().toString().trim();
-                String trangThai = "";
-                int checked = rgTrangThai.getCheckedRadioButtonId();
-                if (checked == R.id.rbDangLam){
-                    trangThai = "Dang Lam";
-                } else {
-                    trangThai = "Hoan Thanh";
+        // 4. sử lý menu 3 gạch
+        btnMenu3Gach.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(MainActivity, this);
+            popup.getMenuInflater().inflate(R.menu.main_menu, popup.getmenu());
+            popup.setOnMenuItemClickListener(item -> {
+                int id = item.getItemId();
+                if (id == R.id.menu_dientu) {
+                    Toast.makeText(MainActivity.this, "Điện tử", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.menu_thoitrang) {
+                    Toast.makeText(MainActivity.this, "Thời trang", Toast.LENGTH_SHORT).show();
+                    return true;
+                } else if (id == R.id.menu_thoat) {
+                    Toast.makeText(MainActivity.this, "Thoát", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
-                // Lấy ngày giờ hệ thống dạng chuỗi DateTime
-                String ngayTao = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(new Date());
-
-                Task task = new Task(maTask, tenTask, trangThai, ngayTao);
-                dsTask.add(task);
-
-                adapter.notifyDataSetChanged();
-                reset();
-            }
+                return false;
+            });
+            popup.show();
         });
+
+        // 5. bắt sự kiện click 1 dòng để sửa
+        lvSP.setOnItemClickListener((parent, view, position, id) -> {
+            productSelected = dsSP.get(position);
+            
+            Intent i = new Intent(MainActivity.this, DetailActivity.class);
+            i.putExtra("ma_sp", productSelected.maSP);
+            i.putExtra("ten_sp", productSelected.tenSP);
+            i.putExtra("loai_sp", productSelected.loaiSP);
+            i.putExtra("ngay_sp", productSelected.ngayTao);
+
+            startActivity(i);
+        });
+
+        // 6. bắt sự kiện nhấn giữ
+        registerForContextMenu(lvSP);
     }
 
-    public void doMenu3Gach(){
-        btnMenu3Gach.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                // Khởi tạo PopupMenu neo vào cái TextView ☰
-                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+    @Override
+    public void onCreateContextMenu(
+        ContextMenu menu,
+        View view,
+        ContextMenu.ContextMenuInfo menuinfo
+    ){
+        super.onCreateContextMenu(menu, view, menuinfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuinfo;
 
-                // Nạp file main_menu.xml vào
-                popupMenu.getMenuInflater().inflate(R.menu.main_menu, popupMenu.getMenu());
+        productSelected = dsSP.get(info.position);
+        getMenuInflater().inflate(R.menu.xoa, menu);
+    }
 
-                // Bắt sự kiện khi click chọn từng mục menu
-                popupMenu.setOnMenuItemClickListener(new android.widget.PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(android.view.MenuItem item) {
-                        int id = item.getItemId();
-                        if (id == R.id.menu_dangnhap) {
-                            android.widget.Toast.makeText(MainActivity.this, "Đăng nhập", android.widget.Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (id == R.id.menu_dangky) {
-                            android.widget.Toast.makeText(MainActivity.this, "Đăng ký", android.widget.Toast.LENGTH_SHORT).show();
-                            return true;
-                        } else if (id == R.id.menu_dangxuat) {
-                            android.widget.Toast.makeText(MainActivity.this, "Đăng xuất", android.widget.Toast.LENGTH_SHORT).show();
-                            return true;
-                        }
-                        return false;
-                    }
-                });
-
-                // Hiển thị menu lên màn hình
-                popupMenu.show();
-            }
-        });
+    @Override
+    public boolean onContextItemSelected(MenuItem item){
+        int id = item.getItemId();
+        if (id == R.id.xoa){
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setTitle("Xóa sản phẩm");
+            builder.setMessage("Bạn có chắc chắn muốn xóa công việc này không");
+            builder.setPositiveButton("Có", (dialog, which) -> {
+                dsSP.remove(productSelected);
+                adapterSP.notifyDataSetChanged();
+                productSelected=null;
+                reset();
+            });
+            builder.setNegativeButton("Không", (dialog, which) -> {
+                dialog.dimiss();
+            });
+            builder.show();
+            return true;
+        }
     }
 
     public void reset(){
-        editMaTask.setText("");
-        editTenTask.setText("");
+        editMaSP.setText("");
+        editTenSP.setText("");
+        isSua = false;
+        productSelected = null;
+    }
+}
+```
+**DetailActivity.java**
+```java
+public class DetailActivity extends AppCompatActivity {
+    TextView tvDetailMa, tvDetailTen, tvDetailLoai, tvDetailNgay;
+    Button btnBack;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_detail);
+
+        // Ánh xạ
+        tvDetailMa = findViewById(R.id.tvDetailMa);
+        tvDetailTen = findViewById(R.id.tvDetailTen);
+        tvDetailLoai = findViewById(R.id.tvDetailLoai);
+        tvDetailNgay = findViewById(R.id.tvDetailNgay);
+        btnBack = findViewById(R.id.btnBack);
+
+        // Nhận Intent được gửi từ MainActivity sang
+        Intent intent = getIntent();
+        if (intent != null) {
+            String ma = intent.getStringExtra("ma_sp");
+            String ten = intent.getStringExtra("ten_sp");
+            String loai = intent.getStringExtra("loai_sp");
+            String ngay = intent.getStringExtra("ngay_sp");
+
+            // Đưa lên TextView để hiển thị
+            tvDetailMa.setText(ma);
+            tvDetailTen.setText(ten);
+            tvDetailLoai.setText(loai);
+            tvDetailNgay.setText(ngay);
+        }
+
+        // Nút quay lại màn hình chính
+        btnBack.setOnClickListener(v -> finish());
     }
 }
 ```

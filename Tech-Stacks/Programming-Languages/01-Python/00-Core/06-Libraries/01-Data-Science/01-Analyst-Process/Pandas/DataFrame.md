@@ -43,6 +43,7 @@ li = pd.read_csv(
     + sep=';'           : Phân cách
     + decimal=','       : Nói cho Pandas dấu "," là dấu thập phân
     + parse_dates=[0]   : Bảo Pandas cột số 0 (cột đầu tiên) hãy chuyển thành kiểu ngày giờ.
+    + low_memory=False: Hạn chế Pandas suy luận kiểu dữ liệu theo từng phần nhỏ của file, giúp việc xác định kiểu dữ liệu nhất quán hơn
 ```
 ## Write (Nhóm ghi dữ liệu)
 ### .to_csv() (Ghi dữ liệu vào file csv)
