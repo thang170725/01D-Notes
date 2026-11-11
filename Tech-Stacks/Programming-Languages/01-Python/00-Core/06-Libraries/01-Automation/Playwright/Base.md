@@ -1,4 +1,5 @@
 - [Directory structure](#directory-structure)
+- [Playwright Introduction](#playwright-introduction)
 - [Set up](#set-up)
 - [gencode](#gencode)
 - [khi nào thì dùng playwright.async\_api, sync\_api](#khi-nào-thì-dùng-playwrightasync_api-sync_api)
@@ -16,7 +17,6 @@
 - [page.mouse.wheel()](#pagemousewheel)
 ---
 # Directory structure
-```bash
 Browser-Automation/
 ├── 01_Browser_Context.md     # Quản lý, Khởi tạo Browser, Context, New Page, Async API
 ├── 02_Navigation_Waiting.md  # Điều hướng, đợi trang
@@ -24,13 +24,21 @@ Browser-Automation/
 ├── 04_AntiBot_Stealth.md     # Playwright-stealth, bypass cloudflare, antibot
 ├── 05_Scraping_Crawling.md   # Logic cào dữ liệu, xử lý bảng, scroll trang
 └── 06_Debug_Tooling.md       # Debug mode, Playwright Inspector, Trace Viewer
-```
+
+# Playwright Introduction
 ```bash
 Để hiểu cách hoạt động của Playwright một cách đơn giản nhất, bạn có thể tưởng tượng nó như một người dùng thật: Mở trình duyệt -> Đợi trang hiện ra -> Tìm thứ mình cần -> Lấy thông tin.
+
+Các kỹ thuật crawl dữ liệu
+    + listing vs detail
+    + crawl theo label
+    + field missing → None    
+    + pipeline
 ```
 # Set up
 ```bash
-pip install playwright
+1. pip install playwright # cái thư viện
+2. python -m playwright install chromium # cài trình duyệt
 playwright install
 ```
 # gencode

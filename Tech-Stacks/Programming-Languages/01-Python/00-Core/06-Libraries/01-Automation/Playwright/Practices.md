@@ -1,11 +1,3 @@
-```text
-- Các kỹ thuật crawl dữ liệu
-    + listing vs detail
-    + crawl theo label
-    + field missing → None    
-    + pipeline
-```
-
 # crawl bằng sync
 ## demo craw dữ liệu trên trang bất động sản
 ```python

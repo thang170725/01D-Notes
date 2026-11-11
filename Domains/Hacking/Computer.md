@@ -524,5 +524,5 @@ Ví dụ:
 Stack overflow → chiếm quyền thực thi
 Heap overflow / use-after-free → RCE
 Buffer overflow là nền tảng hacking cổ điển
-👉 Đây là kiến thức bắt buộc nếu học security / low-level.
+👉 Đây là kiến thức bắt buộc nếu học security/low-level.
 ```

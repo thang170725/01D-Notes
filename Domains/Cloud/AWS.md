@@ -1,5 +1,5 @@
 + [<<Back](00-Core.md)
-- [AWS (Amazon Web Services)](#aws-amazon-web-services)
+- [AWS Introduction (Amazon Web Services)](#aws-introduction-amazon-web-services)
 - [Region (khu vực địa lý)](#region-khu-vực-địa-lý)
   - [Availability Zone (AZ) (1 data center hoặc 1 cụm data center trong cùng 1 Region)](#availability-zone-az-1-data-center-hoặc-1-cụm-data-center-trong-cùng-1-region)
   - [EC2 (1 máy tính ảo chạy trong AWS)](#ec2-1-máy-tính-ảo-chạy-trong-aws)
@@ -29,7 +29,7 @@
 - [Bucket (thùng chứa để lưu trữ dữ liệu)](#bucket-thùng-chứa-để-lưu-trữ-dữ-liệu)
 - [vps (virtual private server là một máy chủ ảo)](#vps-virtual-private-server-là-một-máy-chủ-ảo)
 ---
-# AWS (Amazon Web Services)
+# AWS Introduction (Amazon Web Services)
 ```bash
 - Một “siêu chợ cloud”
 - Bạn cần gì về máy tính → AWS có
