@@ -2790,3 +2790,84 @@ LangGraph   → điều phối workflow/Agent
 Quality Inspection → kiểm tra kết quả
 
 Đặc biệt đừng xếp chúng ngang hàng. AWQ, GPTQ, GGUF nằm ở tầng model/format, ExLlama và vLLM ở tầng inference, còn Google ADK và LangGraph ở tầng agent/orchestration.
+
+Bạn hiểu gần đúng, nhưng có một điểm cần sửa: LangGraph không chỉ dùng để xây dựng luồng đi cho một AI. Nó cũng xây dựng được hệ thống Multi-Agent.
+
+Cả CrewAI và LangGraph đều có thể xây dựng Multi-Agent, nhưng cách tiếp cận khác nhau.
+1. Phân biệt đơn giản
+Framework	Cách tiếp cận chính
+CrewAI	Xây dựng một đội nhiều AI Agent, phân công vai trò và nhiệm vụ
+AutoGen	Xây dựng nhiều Agent giao tiếp, trao đổi và phối hợp
+LangGraph	Xây dựng luồng điều phối bằng Graph, có thể gồm một hoặc nhiều Agent
+
+2. LangGraph cũng xây dựng được Multi-Agent
+Ví dụ hệ thống của bạn có 3 Agent:
+- Router Agent: Phân loại yêu cầu.
+- Search Agent: Tìm kiếm dữ liệu.
+- Builder Agent: Xây dựng kết quả.
+Bạn hoàn toàn có thể dùng LangGraph:
+
+
+
+
+
+
+
+
+linkedin.com
+
+
+Trong đó:
+- Mỗi Agent là một node hoặc một subgraph.
+- State dùng để chia sẻ dữ liệu giữa các Agent.
+- Edge xác định Agent nào chạy tiếp theo.
+- Conditional Edge quyết định chuyển sang Agent nào dựa trên kết quả.
+Đặc biệt, LangGraph cho phép bạn kiểm soát rất chi tiết quá trình này.
+3. So sánh bằng một ví dụ
+Giả sử bạn muốn xây dựng hệ thống viết báo cáo tự động.
+CrewAI – Tổ chức một đội làm việc
+
+
+
+
+
+
+
+
+dev.to
+
+
+Bạn khai báo:
+- Researcher chịu trách nhiệm nghiên cứu.
+- Writer chịu trách nhiệm viết.
+- Reviewer chịu trách nhiệm kiểm tra.
+CrewAI giúp bạn tổ chức và điều phối đội Agent.
+
+LangGraph – Thiết kế quy trình làm việc
+
+
+
+
+
+
+
+
+wikidocs.net
+
+
+Bạn tự thiết kế:
+- Node Research.
+- Node Write.
+- Node Review.
+- Nếu Review không đạt thì quay lại Write.
+- Nếu đạt thì kết thúc.
+LangGraph giúp bạn kiểm soát chính xác quy trình.
+
+4. Kết luận cần nhớ
+Hãy hình dung:
+- CrewAI tập trung vào câu hỏi: Ai làm việc gì?
+- AutoGen tập trung vào câu hỏi: Các Agent giao tiếp và phối hợp thế nào?
+- LangGraph tập trung vào câu hỏi: Hệ thống thực hiện các bước theo luồng nào?
+Đây là cách phân biệt về tư duy thiết kế, không phải giới hạn cứng của framework.
+
+Lời khuyên: Nếu bạn đang học LangGraph thì chưa cần chuyển sang CrewAI. Hãy học cách xây dựng Supervisor Agent, Worker Agent, Subgraph và Conditional Edge trước. Khi đó bạn sẽ hiểu Multi-Agent rất sâu, kể cả khi chuyển sang framework khác.
