@@ -76,24 +76,6 @@ ArrayAdapter<String> adapter = new ArrayAdapter<>(
     + android.R.layout.simple_list_item_1: layout dùng để hiển thị mỗi dòng.
     + names: mảng dữ liệu cần đưa vào list view.
 ```
-**Ex: Ví dụ bạn có**
-```java
-List<String> names = Arrays.asList(
-    "Nguyễn Văn A",
-    "Trần Văn B",
-    "Lê Đức Thắng"
-);
-
-// Bạn muốn biến nó thành:
-// ┌─────────────────────┐
-// │ Nguyễn Văn A        │
-// ├─────────────────────┤
-// │ Trần Văn B          │
-// ├─────────────────────┤
-// │ Lê Đức Thắng        │
-// └─────────────────────┘
-// -> thì ArrayAdapter giúp làm việc đó.
-```
 **Ex2**
 *xml*
 ```xml

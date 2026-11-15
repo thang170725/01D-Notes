@@ -3,7 +3,7 @@
   - [Ứng dụng tính tổng 2 số](#ứng-dụng-tính-tổng-2-số)
   - [Máy tính cơ bản cộng trừ nhân chia](#máy-tính-cơ-bản-cộng-trừ-nhân-chia)
   - [ListView quản lý nhân viên (Bài 4.8)](#listview-quản-lý-nhân-viên-bài-48)
-- [ListView thêm suử xoó quaả ly nhan vien](#listview-thêm-suử-xoó-quaả-ly-nhan-vien)
+- [ListView thêm sửa xóa quản lý nhân viênz](#listview-thêm-sửa-xóa-quản-lý-nhân-viênz)
 - [Ôn tập kiểm tra thường xuyên 2](#ôn-tập-kiểm-tra-thường-xuyên-2)
 ---
 # Android
@@ -1143,7 +1143,7 @@ public class MainActivity extends Activity {
     }
 }
 ```
-# ListView thêm suử xoó quaả ly nhan vien
+# ListView thêm sửa xóa quản lý nhân viênz
 **MainActivity.java**
 ```java
 package com.example.test1;
