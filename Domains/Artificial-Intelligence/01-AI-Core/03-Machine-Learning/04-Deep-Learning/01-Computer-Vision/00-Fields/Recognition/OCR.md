@@ -1,5 +1,5 @@
-- [OCR Introduction](#ocr-introduction)
-- [OCR Introduction (Optical Character Recognition - Là công nghệ nhận dạng ký tự quang học)](#ocr-introduction-optical-character-recognition---là-công-nghệ-nhận-dạng-ký-tự-quang-học)
+- [OCR Introduction (Optical Character Recognition là công nghệ nhận dạng ký tự quang học)](#ocr-introduction-optical-character-recognition-là-công-nghệ-nhận-dạng-ký-tự-quang-học)
+- [Luồng hoạt động cua OCR](#luồng-hoạt-động-cua-ocr)
 - [Candidate (Thay vì chỉ trả về một đáp án duy nhất, mô hình thường giữ lại nhiều đáp án có xác suất cao nhất để xử lý tiếp)](#candidate-thay-vì-chỉ-trả-về-một-đáp-án-duy-nhất-mô-hình-thường-giữ-lại-nhiều-đáp-án-có-xác-suất-cao-nhất-để-xử-lý-tiếp)
 - [Confidence (mức độ tự tin của model)](#confidence-mức-độ-tự-tin-của-model)
 - [Quy trình hậu xử lý khi scan tài liệu bằng OCR](#quy-trình-hậu-xử-lý-khi-scan-tài-liệu-bằng-ocr)
@@ -13,13 +13,9 @@
   - [mình không biết trước từ nào sẽ bị sai thì làm sao có vocab từ đúng để mà tính toán distance](#mình-không-biết-trước-từ-nào-sẽ-bị-sai-thì-làm-sao-có-vocab-từ-đúng-để-mà-tính-toán-distance)
   - [tôi tưởng Bert, phoBERT để hiểu ngữ cảnh, làm gì sửa trực tiếp được từ sai khi OCR](#tôi-tưởng-bert-phobert-để-hiểu-ngữ-cảnh-làm-gì-sửa-trực-tiếp-được-từ-sai-khi-ocr)
 ---
-- [OCR Introduction](#ocr-introduction)
----
-# OCR Introduction
+# OCR Introduction (Optical Character Recognition là công nghệ nhận dạng ký tự quang học)
 **Các bài báo liên quan**
 [An End-to-End Trainable Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition](https://arxiv.org/pdf/1507.05717)
-
-# OCR Introduction (Optical Character Recognition - Là công nghệ nhận dạng ký tự quang học)
 ```bash
 Nó là một quá trình chuyển đổi hình ảnh chứa văn bản (chẳng hạn như tài liệu đã quét, ảnh chụp hoặc tệp PDF) thành văn bản mà máy tính có thể đọc, tìm kiếm và chỉnh sửa được.
 
@@ -31,37 +27,75 @@ Các ứng dụng phổ biến của OCR:
     - Dịch thuật: Nhận dạng văn bản trong ảnh để dịch sang ngôn ngữ khác.
     - Tìm kiếm văn bản trong ảnh hoặc tệp PDF không tìm kiếm được.
 ```
-**Quy trình OCR**
+# Luồng hoạt động cua OCR
 ```bash
-Ảnh (Tài liệu được quét hoặc chụp ảnh. Phần mềm OCR sẽ phân tích hình ảnh này, xác định các vùng sáng (nền) và vùng tối (văn bản))
-   │
-   ▼
-Tiền xử lý ảnh (Hình ảnh được làm sạch và tối ưu hóa để cải thiện độ chính xác nhận dạng. Các bước này có thể bao gồm)
-    - Chỉnh sửa độ nghiêng: Điều chỉnh lại hình ảnh nếu nó bị lệch khi quét.
-    - Loại bỏ nhiễu: Xóa các điểm hoặc vệt không mong muốn trên hình ảnh.
-    - Làm rõ nét: Tăng độ tương phản và làm sắc nét các ký tự.
-    - Phân đoạn: Chia hình ảnh thành các dòng, từ và ký tự riêng lẻ.
-   │
-   ▼
-OCR (PaddleOCR)
-   │
-   ▼
-Text thô (có lỗi)
-   │
-   ▼
-Tiền xử lý văn bản (Văn bản đã nhận dạng có thể được kiểm tra lỗi chính tả, ngữ pháp và định dạng lại cho phù hợp)
-   │
-   ▼
-Sửa lỗi OCR
-   │
-   ▼
-Kiểm tra theo ngữ cảnh
-   │
-   ▼
-Kiểm tra theo quy tắc nghiệp vụ
-   │
-   ▼
-Kết quả cuối cùng
+Ảnh đầu vào gốc (1000x1000 định dạng PNG kênh màu RGB)
+      │
+      ▼
+┌───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ 1. Tiền xử lý ảnh                                                                                 │
+│  ├── Chuyến sang ảnh xám                                                                          │
+│  │   └─ Input: 1000x1000x3                                                                        │
+│  │   └─ Output: 1000x1000                                                                         │
+│  │                                                                                                │
+│  ├── Khử nhiễu & Tăng tương phản (Denoising & Contrast)                                           │
+│  │                                                                                                │
+│  ├── Xoay thẳng ảnh (Deskew)                                                                      │
+│  │                                                                                                │
+│  ├── ...                                                                                          │
+│  │                                                                                                │
+│  └── Chuẩn hóa kích thước & Ma trận số (Resize & Normalize)                                       │
+│      └─ Ép ảnh về kích thước chuẩn mà model yêu cầu (ví dụ 960x960)                               │
+│      └─ chia giá trị pixel cho 255 (để số nằm trong khoảng 0.0 đến 1.0)                           │
+│      └─ Output: tensor(1000x1000)                                                                 │
+└───────────────────────────────────────────────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  
+│ 2. Nhận Output của 1 và đưa qua mô hình Text Detection (ví dụ: DBNet)                                       │ 
+│  ├── Tạo bản đồ nhiệt xác suất (CNN)                                                                        │
+│  │   └─ chấm điểm cho từng điểm ảnh (0 -> 1)                                                                │
+│  │   └─ điểm nào thuộc về nét chữ sẽ có điểm cao (gần 1 - màu nóng)                                         │
+│  │                                                                                                          │        
+│  ├── Nhị phân hóa                                                                                           │
+│  │   └─ Đặt một ngưỡng (ví dụ 0.3). > 0.3 -> trắng                                                          │
+│  │                                                                                                          │ 
+│  └── Vẽ khung bao & Lấy tọa độ (Bounding Box Extraction)                                                    │
+│      └─ Dùng thuật toán tìm đường viền (Contours) bao quanh từng mảng trắng                                 │
+│      └─ Output: tọa độ 4 góc (x1, y1, x2, y2, x3, y3, x4, y4) của mỗi dòng chữ.                             │
+│      └─ Lưu ý: Hệ thống sắp xếp tọa độ theo thứ tự trên -> dưới, trái -> phải -> đảm bảo thứ tự câu văn.    │          
+│                                                                                                             │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  
+│ 3. Cắt ảnh & Nắn thẳng dòng chữ (Cropping & Rectification)                                                                │ 
+│  ├── Cắt vùng chữ từ ảnh gốc (Cropping)                                                                                   │
+│  │   └─ dùng tọa độ ở bước 2 để cắt từng dòng chứ ra khỏi ảnh gốc                                                         │
+│  │                                                                                                                        │        
+│  ├── Nắn phẳng & Xoay ngang (Perspective Transform)                                                                       │
+│  │   └─ Thực tế, khung tọa độ của dòng chữ thường là hình bình hành hoặc hình thang bị nghiêng/méo do góc chụp            |
+│  │   └─ Code dùng phép biến đổi phối cảnh (OpenCV getPerspectiveTransform) -> hình chữ nhật, xoay lại chiều               │
+│  │                                                                                                                        │ 
+│  └── Ép chiều cao cố định (Fixed-Height Resizing)                                                                         │
+│      └─ Các dòng chữ cắt ra có độ dài ngắn khác nhau -> ép cho chiều cao bằng nhau.                                       │
+│      └─ Hệ thống giữ nguyên tỷ lệ khung hình, ép chiều cao của mọi mảnh ảnh về đúng 32px (ví dụ: 32x120, 32x450, ...).    │
+│                                                                                                                           │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+    │
+    ▼
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  
+│ 4. Nhận diện ký tự — Biến ảnh thành chữ (Text Recognition)                                                                │ 
+│  ├── Rút trích đặc trưng hình ảnh (Feature Extraction — Mạng CNN)                                                         │
+│  │                                                                                                                        │        
+│  ├── Học ngữ cảnh hai chiều (Sequence Modeling — BiLSTM hoặc Transformer)                                                 │
+│  │                                                                                                                        │ 
+│  └── Giải mã thành chuỗi chữ hoàn chỉnh (Decoding — CTC Loss hoặc Attention)                                              │          
+│      └─ Toàn bộ 25 mảnh ảnh dòng chữ ở Bước 3 đã được dịch thành 25 chuỗi văn bản (String) kèm theo điểm tự tin           │ 
+│      └─ (ví dụ: "Cộng hòa xã hội chủ nghĩa Việt Nam" — độ tự tin 0.98).                                                   │
+│                                                                                                                           │
+└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+Bước 5: Hậu xử lý & Đóng gói kết quả (Post-processing & Output Assembly)Lúc này, trong bộ nhớ của bạn đang có hai thứ rời rạc: 25 chuỗi văn bản (từ Bước 4) và 25 bộ tọa độ gốc trên ảnh (từ Bước 2). Bước cuối cùng này không dùng AI nặng nữa, mà dùng thuật toán và logic lập trình để "dọn dẹp" lỗi chính tả và ráp lại thành dữ liệu dùng được.Quá trình diễn ra qua 3 thao tác:Lọc rác theo điểm tự tin (Confidence Filtering):Mỗi chuỗi chữ đọc ra đều đi kèm một điểm tự tin từ 0.0 đến 1.0.Những mảnh có điểm quá thấp (ví dụ < 0.5 — thường là do model nhận nhầm vết bẩn hoặc hoa văn thành ký tự vô nghĩa kiểu "~@#"), hệ thống sẽ tự động vứt bỏ.Sửa lỗi đặc thù & Chuẩn hóa định dạng (Rule-based Correction):Ép kiểu dữ liệu: Nếu biết chắc vùng đó là ngày tháng hoặc số tiền, code dùng biểu thức chính quy (Regex) để tự sửa các lỗi kinh điển của OCR (ví dụ: đổi chữ O thành số 0, chữ l thành số 1 trong chuỗi "2O/1l/2O26" $\rightarrow$ "20/11/2026").Sửa chính tả theo từ điển: So khớp tên địa danh, tên thuốc hoặc thuật ngữ ngành với từ điển chuẩn (dùng khoảng cách Levenshtein) để nắn lại các từ bị sai 1–2 dấu tiếng Việt.Tái cấu trúc không gian (Spatial Reconstruction):Code dựa vào tọa độ (x, y) đã lưu ở Bước 2 để biết dòng nào đứng trước, dòng nào đứng sau, dòng nào nằm thẳng hàng dọc với nhau (tạo thành cột/bảng).Từ đó, hệ thống ghép 25 chuỗi rời rạc thành đoạn văn bản hoàn chỉnh, bảng Markdown/Excel, hoặc đối tượng JSON có cấu trúc để lưu vào cơ sở dữ liệu.
 ```
 # Candidate (Thay vì chỉ trả về một đáp án duy nhất, mô hình thường giữ lại nhiều đáp án có xác suất cao nhất để xử lý tiếp)
 ```bash
