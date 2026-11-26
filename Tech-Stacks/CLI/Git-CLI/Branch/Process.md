@@ -871,3 +871,28 @@ reset / revert
 stash
 
 Trong đó reset và revert là hai lệnh tiếp theo rất đáng học vì chúng liên quan trực tiếp đến câu hỏi: "lỡ commit sai rồi thì quay lại thế nào?"
+
+Để lấy code mới nhất từ nhánh develop về nhánh A mà không cần commit những gì bạn đang sửa dở, bạn dùng git stash để cất tạm code đang sửa, kéo code mới về rồi bung code cũ ra lại.
+
+Thực hiện lần lượt 4 lệnh sau trong terminal (đang đứng ở nhánh A):
+
+Cất tạm code đang sửa dở vào bộ nhớ đệm (Stash):
+
+Bash
+git stash
+(Nếu bạn có tạo thêm file mới chưa từng git add, dùng lệnh git stash -u để cất cả file mới).
+
+Kéo code mới nhất từ nhánh develop trên GitLab thẳng vào nhánh A hiện tại:
+
+Bash
+git pull origin develop
+(Lệnh này vừa tải code mới của develop từ GitLab về, vừa gộp thẳng vào nhánh A của bạn mà không cần chuyển qua chuyển lại giữa 2 nhánh).
+
+Lấy lại phần code bạn đã cất tạm ở bước 1:
+
+Bash
+git stash pop
+Xử lý nếu có xung đột (Conflict)
+Nếu không trùng file/dòng code với bạn của bạn: Mọi thứ tự động xong, code của bạn vẫn còn nguyên trạng thái chưa commit như lúc đầu, kèm theo code mới từ develop.
+
+Nếu sửa trùng đúng chỗ bạn của bạn vừa đẩy lên: Git sẽ báo CONFLICT ở bước 2 hoặc bước 3. Bạn chỉ cần mở file báo đỏ đó ra, chọn giữ lại phần code phù hợp, xóa các ký tự đánh dấu <<<<<<<, =======, >>>>>>> rồi lưu lại là xong (vẫn chưa cần commit).
