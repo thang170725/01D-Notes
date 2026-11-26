@@ -1,3 +1,4 @@
+- [OCR Introduction](#ocr-introduction)
 - [OCR Introduction (Optical Character Recognition - Là công nghệ nhận dạng ký tự quang học)](#ocr-introduction-optical-character-recognition---là-công-nghệ-nhận-dạng-ký-tự-quang-học)
 - [Candidate (Thay vì chỉ trả về một đáp án duy nhất, mô hình thường giữ lại nhiều đáp án có xác suất cao nhất để xử lý tiếp)](#candidate-thay-vì-chỉ-trả-về-một-đáp-án-duy-nhất-mô-hình-thường-giữ-lại-nhiều-đáp-án-có-xác-suất-cao-nhất-để-xử-lý-tiếp)
 - [Confidence (mức độ tự tin của model)](#confidence-mức-độ-tự-tin-của-model)
@@ -12,6 +13,12 @@
   - [mình không biết trước từ nào sẽ bị sai thì làm sao có vocab từ đúng để mà tính toán distance](#mình-không-biết-trước-từ-nào-sẽ-bị-sai-thì-làm-sao-có-vocab-từ-đúng-để-mà-tính-toán-distance)
   - [tôi tưởng Bert, phoBERT để hiểu ngữ cảnh, làm gì sửa trực tiếp được từ sai khi OCR](#tôi-tưởng-bert-phobert-để-hiểu-ngữ-cảnh-làm-gì-sửa-trực-tiếp-được-từ-sai-khi-ocr)
 ---
+- [OCR Introduction](#ocr-introduction)
+---
+# OCR Introduction
+**Các bài báo liên quan**
+[An End-to-End Trainable Neural Network for Image-based Sequence Recognition and Its Application to Scene Text Recognition](https://arxiv.org/pdf/1507.05717)
+
 # OCR Introduction (Optical Character Recognition - Là công nghệ nhận dạng ký tự quang học)
 ```bash
 Nó là một quá trình chuyển đổi hình ảnh chứa văn bản (chẳng hạn như tài liệu đã quét, ảnh chụp hoặc tệp PDF) thành văn bản mà máy tính có thể đọc, tìm kiếm và chỉnh sửa được.
