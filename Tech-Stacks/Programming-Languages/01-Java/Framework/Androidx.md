@@ -13,6 +13,15 @@
         - [onCreateContextMenu()	(tạo nội dung menu)](#oncreatecontextmenutạo-nội-dung-menu)
         - [onContextItemSelected() (xử lý khi lựa chọn menu)](#oncontextitemselected-xử-lý-khi-lựa-chọn-menu)
         - [onContextItemSelected() (lấy vị trí dòng)](#oncontextitemselected-lấy-vị-trí-dòng)
+    - [AlertDialog (hộp thoại nổi trên màn hình Android)](#alertdialog-hộp-thoại-nổi-trên-màn-hình-android)
+      - [setTitle() (Đặt tiêu đề)](#settitle-đặt-tiêu-đề)
+      - [setMessage() (Đặt nội dung)](#setmessage-đặt-nội-dung)
+      - [setPositiveButton() (Nút đồng ý)](#setpositivebutton-nút-đồng-ý)
+      - [setNegativeButton() (Nút hủy)](#setnegativebutton-nút-hủy)
+      - [setNeutralButton() (Nút phụ)](#setneutralbutton-nút-phụ)
+      - [setItems() (Hiển thị danh sách lựa chọn)](#setitems-hiển-thị-danh-sách-lựa-chọn)
+      - [setView() (Hiển thị giao diện XML tùy chỉnh)](#setview-hiển-thị-giao-diện-xml-tùy-chỉnh)
+      - [show() (Hiển thị hộp thoại)](#show-hiển-thị-hộp-thoại)
 - [findViewById (Lấy các thành phần từ XML)](#findviewbyid-lấy-các-thành-phần-từ-xml)
   - [.setText() (dùng để gán nội dung cho TextView, EditText, ...)](#settext-dùng-để-gán-nội-dung-cho-textview-edittext-)
   - [getText() (Dùng để lấy nội dung hiện tại của TextView hoặc EditView)](#gettext-dùng-để-lấy-nội-dung-hiện-tại-của-textview-hoặc-editview)
@@ -256,14 +265,9 @@ registerForContextMenu(view);
 **Ex: Giả sử có một ListView hiển thị danh sách**
 ```bash
 Danh sách nhân viên
-Nguyễn Văn A
-Nhấn giữ
-
-Trần Văn B
-Nhấn giữ
-
-Lê Văn C
-Nhấn giữ
+Nguyễn Văn A            Nhấn giữ
+Trần Văn B              Nhấn giữ
+Lê Văn C                Nhấn giữ
 
 Context Menu khi nhấn giữ
 Sửa nhân viên
@@ -279,9 +283,9 @@ registerForContextMenu(lvNhanVien);
 ```java
 @Override
 public void onCreateContextMenu(
-        ContextMenu menu,
-        View v,
-        ContextMenu.ContextMenuInfo menuInfo) {
+        ContextMenu menu, // Đối tượng quản lý Context Menu
+        View v, // View được nhấn giữ
+        ContextMenu.ContextMenuInfo menuInfo) { // Thông tin về phần tử được nhấn giữ
 
     super.onCreateContextMenu(menu, v, menuInfo);
 
@@ -291,21 +295,13 @@ public void onCreateContextMenu(
     menu.add(0, 2, 1, "Xóa nhân viên");
     menu.add(0, 3, 2, "Xem thông tin");
 }
-
-
-Giải thích:
-Thành phần	Ý nghĩa
-menu	Đối tượng quản lý Context Menu
-v	View được nhấn giữ
-menuInfo	Thông tin về phần tử được nhấn giữ
-setHeaderTitle()	Đặt tiêu đề menu
-add()	Thêm một lựa chọn vào menu
-
-Cú pháp menu.add():
+##### .add()
+**Syn**
+```bash
 menu.add(groupId, itemId, order, title);
-
-
-Ví dụ:
+```
+**Ex**
+```java
 menu.add(0, 1, 0, "Sửa nhân viên");
 
 
@@ -483,6 +479,36 @@ public boolean onContextItemSelected(MenuItem item) {
 // Nếu nhấn giữ Nguyễn Văn A thì position = 0.
 // Nếu nhấn giữ Trần Văn B thì position = 1.
 // Lưu ý: Nếu ListView có Header bằng addHeaderView(), vị trí info.position bao gồm cả Header. Ví dụ Header ở vị trí 0 thì nhân viên đầu tiên ở vị trí 1.
+```
+### AlertDialog (hộp thoại nổi trên màn hình Android)
+**Syn**
+```bash
+AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+```
+#### setTitle() (Đặt tiêu đề)
+#### setMessage() (Đặt nội dung)
+#### setPositiveButton() (Nút đồng ý)
+#### setNegativeButton() (Nút hủy)
+#### setNeutralButton() (Nút phụ)
+#### setItems() (Hiển thị danh sách lựa chọn)
+#### setView() (Hiển thị giao diện XML tùy chỉnh)
+#### show() (Hiển thị hộp thoại)
+**Ex1**
+```java
+btnThongBao.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        AlertDialog.Builder builder =
+                new AlertDialog.Builder(MainActivity.this);
+
+        builder.setTitle("Thông báo");
+        builder.setMessage("Thêm phòng ban thành công!");
+
+        builder.setPositiveButton("OK", null);
+
+        builder.show();
+    }
+});
 ```
 # findViewById (Lấy các thành phần từ XML)
 ```bash

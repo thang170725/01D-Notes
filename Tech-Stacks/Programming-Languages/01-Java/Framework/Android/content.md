@@ -1,3 +1,11 @@
+- [content (Thông tin môi trường của ứng dụng hiện tại để Android biết bạn đang thao tác trong app nào)](#content-thông-tin-môi-trường-của-ứng-dụng-hiện-tại-để-android-biết-bạn-đang-thao-tác-trong-app-nào)
+  - [Context](#context)
+  - [Intent (khởi tạo intent để chuyển dữ liệu từ activity này sang activity khác)](#intent-khởi-tạo-intent-để-chuyển-dữ-liệu-từ-activity-này-sang-activity-khác)
+    - [startActivity()](#startactivity)
+    - [.putExtra()  (Đính kèm dữ liệu trực tiếp vào Intent để chuyển cho activity khác)](#putextra--đính-kèm-dữ-liệu-trực-tiếp-vào-intent-để-chuyển-cho-activity-khác)
+  - [getIntent() (nhận intent)](#getintent-nhận-intent)
+    - [.getStringExtra()](#getstringextra)
+---
 # content (Thông tin môi trường của ứng dụng hiện tại để Android biết bạn đang thao tác trong app nào)
 ## Context
 **Ex**
@@ -69,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 │  └────────────────────┘  │
 └──────────────────────────┘
 ```
-## Intent (khởi tạo intent để chuyển từ activity này sang activity khác)
+## Intent (khởi tạo intent để chuyển dữ liệu từ activity này sang activity khác)
 **Syn**
 ```bash
 Intent intent = new Intent(ContextHienTai.this, TargetActivity.class);

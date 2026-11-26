@@ -66,6 +66,7 @@
     - [Error (Biểu tượng lỗi)](#error-biểu-tượng-lỗi)
     - [Question (Biểu tượng câu hỏi)](#question-biểu-tượng-câu-hỏi)
   - [DialogResult (Lưu kết quả mà người dùng chọn trong hộp thoại MessageBox)](#dialogresult-lưu-kết-quả-mà-người-dùng-chọn-trong-hộp-thoại-messagebox)
+- [DataGridView](#datagridview)
   - [.Rows (Truy cập danh sách các dòng trong DataGridView)](#rows-truy-cập-danh-sách-các-dòng-trong-datagridview)
     - [.Cells() (Lấy dữ liệu của một ô cụ thể)](#cells-lấy-dữ-liệu-của-một-ô-cụ-thể)
       - [.Value (Lấy hoặc gán nội dung cho một ô trong DataGridView)](#value-lấy-hoặc-gán-nội-dung-cho-một-ô-trong-datagridview)
@@ -74,26 +75,6 @@
   - [DataGridViewCellEventArgs](#datagridviewcelleventargs)
     - [RowIndex (Xác định người dùng vừa click vào dòng nào)](#rowindex-xác-định-người-dùng-vừa-click-vào-dòng-nào)
     - [SelectedRows (Lấy dòng đang được chọn)](#selectedrows-lấy-dòng-đang-được-chọn)
-- [System](#system)
-  - [Xml](#xml)
-    - [XmlDocument (đại diện cho toàn bộ tài liệu XML)](#xmldocument-đại-diện-cho-toàn-bộ-tài-liệu-xml)
-      - [Load()	(Đọc XML từ file)](#loadđọc-xml-từ-file)
-      - [Save()	(Lưu XML xuống file)](#savelưu-xml-xuống-file)
-      - [CreateElement() (Tạo phần tử XML)](#createelement-tạo-phần-tử-xml)
-        - [InnerText (Lấy hoặc gán nội dung văn bản)](#innertext-lấy-hoặc-gán-nội-dung-văn-bản)
-        - [InnerXml (Lấy hoặc gán nội dung XML bên trong)](#innerxml-lấy-hoặc-gán-nội-dung-xml-bên-trong)
-        - [Attributes (Truy cập các thuộc tính của phần tử)](#attributes-truy-cập-các-thuộc-tính-của-phần-tử)
-        - [Name (Lấy tên phần tử)](#name-lấy-tên-phần-tử)
-      - [CreateAttribute() (Tạo thuộc tính XML)](#createattribute-tạo-thuộc-tính-xml)
-      - [DocumentElement() (Lấy phần tử gốc)](#documentelement-lấy-phần-tử-gốc)
-      - [XmlElement (Đại diện cho một phần tử XML)](#xmlelement-đại-diện-cho-một-phần-tử-xml)
-      - [XmlAttribute (Tạo và quản lý thuộc tính của phần tử XML)](#xmlattribute-tạo-và-quản-lý-thuộc-tính-của-phần-tử-xml)
-    - [XmlNode (Đại diện cho một nút trong tài liệu XML)](#xmlnode-đại-diện-cho-một-nút-trong-tài-liệu-xml)
-      - [AppendChild() (Thêm nút con)](#appendchild-thêm-nút-con)
-      - [RemoveChild() (Xóa nút con)](#removechild-xóa-nút-con)
-      - [ReplaceChild() (Thay nút cũ bằng nút mới)](#replacechild-thay-nút-cũ-bằng-nút-mới)
-      - [SelectSingleNode() (Tìm một nút theo XPath)](#selectsinglenode-tìm-một-nút-theo-xpath)
-      - [SelectNodes() (Tìm nhiều nút theo XPath)](#selectnodes-tìm-nhiều-nút-theo-xpath)
 ---
 # C Sharp Introduction
 **Ứng dụng**
@@ -677,6 +658,7 @@ private void bt_Xoa_Click(object sender, EventArgs e)
     }
 }
 ```
+# DataGridView
 ## .Rows (Truy cập danh sách các dòng trong DataGridView)
 **Syn**
 ```bash
@@ -689,107 +671,65 @@ int soDong = table.Rows.Count;
 MessageBox.Show(soDong.ToString());
 ```
 ### .Cells() (Lấy dữ liệu của một ô cụ thể)
-Cú pháp:
+**Syn**
+```bash
 table.Rows[chỉ_số_dòng].Cells[chỉ_số_cột].Value
-
-
-Bạn cần nhớ:
-- Rows[0]: Dòng đầu tiên.
-- Cells[0]: Cột đầu tiên.
-- Chỉ số dòng và cột đều bắt đầu từ 0.
-Ví dụ bảng:
+```
+**Ex: bảng**
+```bash
 Chỉ số cột	0	1	2	3
 Tên cột	Mã NV	Họ	Tên	Địa chỉ
-
-Lấy mã nhân viên của dòng đầu tiên:
-string maNV = table.Rows[0].Cells[0].Value.ToString();
-
-
-Nếu dòng đầu tiên chứa NV01 thì:
-maNV = "NV01"
-
-
-Lấy tên nhân viên:
-string ten = table.Rows[0].Cells[2].Value.ToString();
-
-
-Output:
-An
-
-
-Mẹo đi thi: Hãy nhớ công thức:
-table.Rows[i].Cells[j].Value
-
-
-Trong đó:
-- i là vị trí dòng.
-- j là vị trí cột.
+```
+```c#
+string maNV = table.Rows[0].Cells[0].Value.ToString(); // "NV01"
+string ten = table.Rows[0].Cells[2].Value.ToString(); // An
+```
 #### .Value (Lấy hoặc gán nội dung cho một ô trong DataGridView)
-Cú pháp:
+**Syn**
+```bash
 table.Rows[0].Cells[0].Value
-
-
-Ví dụ lấy dữ liệu:
+```
+**Ex: lấy dữ liệu**
+```c#
 string maNV = table.Rows[0].Cells[0].Value.ToString();
-
-
-Ví dụ gán dữ liệu:
-table.Rows[0].Cells[0].Value = "NV999";
-
-
-Kết quả: Mã nhân viên ở dòng đầu tiên thay đổi thành NV999.
-
-Lưu ý: Nếu ô không có dữ liệu, Value có thể là null. Vì vậy, khi chưa chắc chắn có dữ liệu, nên kiểm tra null trước hoặc dùng cách an toàn:
-string maNV = table.Rows[0].Cells[0].Value?.ToString() ?? "";
+```
 ### .Add() (Thêm dữ liệu mới vào DataGridView)
-Cú pháp:
+**Syn**
+```bash
 table.Rows.Add(giá_trị_cột_1, giá_trị_cột_2, ...);
-
-
-Ví dụ:
+```
+**Ex**
+```c#
 table.Rows.Add("NV04", "Phạm", "Nam", "Hà Nội");
-
-
-Kết quả:
-Mã NV	Họ	Tên	Địa chỉ
-NV01	Nguyễn	An	Hà Nội
-NV02	Trần	Bình	Đà Nẵng
-NV03	Lê	Minh	TP.HCM
-NV04	Phạm	Nam	Hà Nội
-
-Lưu ý: Các giá trị truyền vào phải tương ứng với số cột và thứ tự cột của bảng.
-
-Nếu DataGridView được liên kết dữ liệu bằng DataSource, không nên sử dụng Rows.Add() trực tiếp; khi đó cần thêm dữ liệu vào nguồn dữ liệu.
+// Mã NV	Họ	Tên	Địa chỉ
+// NV01	Nguyễn	An	Hà Nội
+// NV02	Trần	Bình	Đà Nẵng
+// NV03	Lê	Minh	TP.HCM
+// NV04	Phạm	Nam	Hà Nội
+```
 ### RemoveAt() (Xóa dòng dựa vào chỉ số dòng)
-Cú pháp:
+**Syn**
+```bash
 table.Rows.RemoveAt(chỉ_số_dòng);
-
-
-Ví dụ:
+```
+**Syn**
+```c#
 table.Rows.RemoveAt(0);
+// Ban đầu:
+// Mã NV	Tên
+// NV01	An
+// NV02	Bình
+// NV03	Minh
 
-
-Kết quả: Xóa dòng đầu tiên trong bảng.
-
-Ban đầu:
-Mã NV	Tên
-NV01	An
-NV02	Bình
-NV03	Minh
-
-Sau khi chạy:
-table.Rows.RemoveAt(0);
-
-
-Kết quả:
-Mã NV	Tên
-NV02	Bình
-NV03	Minh
-
-Chú ý: Chỉ số dòng phải hợp lệ. Nếu bảng có dòng trống cuối cùng để nhập dữ liệu, cần tránh xóa nhầm dòng đó.
+// Kết quả:
+// Mã NV	Tên
+// NV02	Bình
+// NV03	Minh
+```
 ## DataGridViewCellEventArgs 
 ### RowIndex (Xác định người dùng vừa click vào dòng nào)
-Cú pháp thường dùng trong sự kiện CellClick:
+**Syn: Cú pháp thường dùng trong sự kiện CellClick**
+```bash
 private void table_CellClick(
     object sender,
     DataGridViewCellEventArgs e)
@@ -797,15 +737,13 @@ private void table_CellClick(
     int dongChon = e.RowIndex;
 }
 
-
-Giải thích:
-Thành phần	Ý nghĩa
-table_CellClick	Sự kiện click vào ô trong bảng
-DataGridViewCellEventArgs e	Thông tin về ô được click
-e.RowIndex	Chỉ số dòng được click
-e.ColumnIndex	Chỉ số cột được click
-
-Ví dụ:
+- table_CellClick	Sự kiện click vào ô trong bảng
+- DataGridViewCellEventArgs e	Thông tin về ô được click
+- e.RowIndex	Chỉ số dòng được click
+- e.ColumnIndex	Chỉ số cột được click
+```
+**Ex**
+```c#
 private void table_CellClick(object sender, DataGridViewCellEventArgs e)
 {
     int dongChon = e.RowIndex;
@@ -813,316 +751,116 @@ private void table_CellClick(object sender, DataGridViewCellEventArgs e)
     MessageBox.Show(dongChon.ToString());
 }
 
-
-Nếu bạn click vào dòng nhân viên NV02 (dòng thứ 2), kết quả là:
-1
-
-
-Bởi vì chỉ số dòng bắt đầu từ 0.
-
-Chú ý: Khi click vào phần tiêu đề cột, RowIndex có thể bằng -1. Vì vậy cần kiểm tra:
-if (e.RowIndex >= 0)
-{
-    // Xử lý dòng được chọn
-}
+// Nếu bạn click vào dòng nhân viên NV02 (dòng thứ 2), kết quả là:
+// 1
+```
 ### SelectedRows (Lấy dòng đang được chọn)
-Công dụng: Truy cập những dòng mà người dùng đang chọn.
-
-Cú pháp:
+**Syn**
+```bash
 table.SelectedRows
-
-
-Ví dụ:
+```
+**Ex**
+```c#
 if (table.SelectedRows.Count > 0)
 {
     string maNV = table.SelectedRows[0].Cells[0].Value.ToString();
 
     MessageBox.Show(maNV);
 }
-
-
-Giải thích:
-- SelectedRows: Danh sách dòng được chọn.
-- Count: Số dòng đang được chọn.
-- [0]: Dòng được chọn đầu tiên.
-- Cells[0]: Ô đầu tiên của dòng.
-- Value: Giá trị trong ô.
-Phân biệt:
-Câu lệnh	Chức năng
-e.RowIndex	Lấy dòng vừa được click
-SelectedRows	Lấy danh sách dòng đang được chọn
-
-Muốn sử dụng SelectedRows thuận tiện, bạn có thể đặt thuộc tính:
-table.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-
-Khi đó click vào một ô sẽ chọn cả dòng.
-# System
-## Xml
-### XmlDocument (đại diện cho toàn bộ tài liệu XML)
-**Syn**
-```bash
-XmlDocument doc = new XmlDocument();
 ```
-#### Load()	(Đọc XML từ file)
-**Ex**
-```bash
-XmlDocument doc = new XmlDocument();
-
-doc.Load("nhanvien.xml");
-
-MessageBox.Show("Đọc XML thành công!");
-```
-#### Save()	(Lưu XML xuống file)
-#### CreateElement() (Tạo phần tử XML)
-##### InnerText (Lấy hoặc gán nội dung văn bản)
-**Ex**
-```csharp
-XmlElement ho = doc.CreateElement("ho");
-
-ho.InnerText = "Nguyen Van";
-
-MessageBox.Show(ho.InnerText); // Nguyen Van
-```
-##### InnerXml (Lấy hoặc gán nội dung XML bên trong)
-##### Attributes (Truy cập các thuộc tính của phần tử)
-##### Name (Lấy tên phần tử)
-#### CreateAttribute() (Tạo thuộc tính XML)
-#### DocumentElement() (Lấy phần tử gốc)
-**Ex**
-```xml
-<ds>
-    <nhanvien manv="NV01"/>
-</ds>
-```
-```csharp
-XmlElement theGoc = doc.DocumentElement; // theGoc đại diện cho thẻ <ds>.
-```
-#### XmlElement (Đại diện cho một phần tử XML)
-**Syn**
-```csharp
-XmlElement nhanVien = doc.CreateElement("nhanvien"); // Kết quả tạo ra phần tử: <nhanvien />
-```
-#### XmlAttribute (Tạo và quản lý thuộc tính của phần tử XML)
-**Ex**
-```xml
-<nhanvien manv="NV01"/>
-```
-```csharp
-XmlAttribute maNV = doc.CreateAttribute("manv"); // Tạo thuộc tính tên manv.
-
-maNV.InnerText = "NV01"; // Gán giá trị thuộc tính.
-```
-### XmlNode (Đại diện cho một nút trong tài liệu XML)
-#### AppendChild() (Thêm nút con)
-#### RemoveChild() (Xóa nút con)
-#### ReplaceChild() (Thay nút cũ bằng nút mới)
-#### SelectSingleNode() (Tìm một nút theo XPath)
-#### SelectNodes() (Tìm nhiều nút theo XPath)
-SelectSingleNode()
-Công dụng: Tìm và lấy một nút XML đầu tiên thỏa mãn điều kiện.
-
-Cú pháp:
-XmlNode node = doc.SelectSingleNode("đường_dẫn_XPath");
-
-
-Ví dụ có file XML:
-<ds>
-    <nhanvien manv="NV01">
-        <hoten>
-            <ho>Nguyen</ho>
-            <ten>An</ten>
-        </hoten>
-        <diachi>Ha Noi</diachi>
-    </nhanvien>
-
-    <nhanvien manv="NV02">
-        <hoten>
-            <ho>Tran</ho>
-            <ten>Binh</ten>
-        </hoten>
-        <diachi>Da Nang</diachi>
-    </nhanvien>
-</ds>
-
-
-Muốn tìm nhân viên NV01:
-XmlNode nv = doc.SelectSingleNode("/ds/nhanvien");
-
-
-Kết quả: Lấy nhân viên đầu tiên trong danh sách.
-
-Muốn lấy nhân viên có mã NV02:
-XmlNode nv = doc.SelectSingleNode(
-    "/ds/nhanvien[@manv='NV02']"
-);
-
-
-Kết quả: Lấy nút nhân viên NV02.
-
-Giải thích XPath:
-Thành phần	Ý nghĩa
-/	Bắt đầu từ nút gốc
-ds	Thẻ gốc
-nhanvien	Thẻ nhân viên
-@manv	Thuộc tính manv
-[@manv='NV02']	Điều kiện mã nhân viên bằng NV02
-
-Nếu không tìm thấy, SelectSingleNode() trả về null.
-
-Vì vậy thường phải kiểm tra:
-if (nv != null)
+Trong C# WinForms (Visual Studio), nếu bạn thiết kế giao diện trong file Form1.cs [Design] thì có thể lấy giá trị của RadioButton và ComboBox (Dropdown) trong file Form1.cs như sau.
+1. Lấy giá trị RadioButton
+Giả sử bạn có 2 RadioButton:
+- radioButtonNam
+- radioButtonNu
+Kiểm tra RadioButton nào được chọn:
+if (radioButtonNam.Checked)
 {
-    MessageBox.Show("Tìm thấy nhân viên!");
+    string gioiTinh = "Nam";
+}
+else if (radioButtonNu.Checked)
+{
+    string gioiTinh = "Nữ";
+}
+
+
+Thuộc tính quan trọng:
+- .Checked: Kiểm tra có được chọn hay không.
+- .Text: Lấy nội dung hiển thị trên RadioButton.
+Ví dụ:
+string gioiTinh = "";
+
+if (radioButtonNam.Checked)
+    gioiTinh = radioButtonNam.Text;
+else if (radioButtonNu.Checked)
+    gioiTinh = radioButtonNu.Text;
+
+
+2. Lấy giá trị Dropdown (ComboBox)
+Giả sử ComboBox có tên comboBoxKhoa.
+
+Lấy giá trị đang được chọn:
+string khoa = comboBoxKhoa.SelectedItem?.ToString();
+
+
+Hoặc:
+string khoa = comboBoxKhoa.Text;
+
+
+Hai cách khác nhau một chút:
+Cách	Ý nghĩa
+SelectedItem	Lấy item đang được chọn
+SelectedValue	Lấy giá trị tương ứng với ValueMember
+Text	Lấy nội dung văn bản đang hiển thị
+
+Kiểm tra người dùng đã chọn chưa:
+if (comboBoxKhoa.SelectedIndex != -1)
+{
+    string khoa = comboBoxKhoa.SelectedItem.ToString();
+    MessageBox.Show(khoa);
 }
 else
 {
-    MessageBox.Show("Không tìm thấy!");
+    MessageBox.Show("Vui lòng chọn khoa!");
 }
 
 
-
-2. SelectNodes()
-Công dụng: Tìm và lấy tất cả các nút thỏa mãn điều kiện.
-
-Khác với SelectSingleNode() chỉ lấy một nút, SelectNodes() lấy danh sách nút.
-
-Cú pháp:
-XmlNodeList danhSach = doc.SelectNodes("đường_dẫn_XPath");
-
-
-Ví dụ:
-XmlNodeList danhSach = doc.SelectNodes("/ds/nhanvien");
-
-
-Kết quả có 2 nhân viên:
-- NV01
-- NV02
-Muốn duyệt danh sách nhân viên
-XmlNodeList danhSach = doc.SelectNodes("/ds/nhanvien");
-
-foreach (XmlNode nv in danhSach)
+3. Ví dụ kết hợp trong nút Button
+Giả sử form có:
+- RadioButton: radioButtonNam, radioButtonNu
+- ComboBox: comboBoxKhoa
+- Button: btnLuu
+Code sự kiện Click:
+private void btnLuu_Click(object sender, EventArgs e)
 {
-    MessageBox.Show(nv.Attributes["manv"].Value);
-}
+    // Lấy giới tính
+    string gioiTinh = "";
 
+    if (radioButtonNam.Checked)
+        gioiTinh = "Nam";
+    else if (radioButtonNu.Checked)
+        gioiTinh = "Nữ";
 
-Kết quả:
-NV01
-NV02
+    // Lấy khoa
+    string khoa = comboBoxKhoa.SelectedItem?.ToString();
 
-
-Giải thích:
-- SelectNodes(): Lấy danh sách nhân viên.
-- foreach: Duyệt từng nhân viên.
-- nv: Đại diện cho một nhân viên.
-- Attributes["manv"]: Lấy thuộc tính mã nhân viên.
-- .Value: Lấy giá trị của thuộc tính.
-
-3. Các cách viết XPath thường gặp
-Đây là phần nên ghi nhớ khi đi thi.
-
-Giả sử XML có cấu trúc như ví dụ phía trên.
-XPath	Ý nghĩa
-/ds	Lấy thẻ gốc ds
-/ds/nhanvien	Lấy các nhân viên
-/ds/nhanvien[1]	Lấy nhân viên đầu tiên
-/ds/nhanvien[2]	Lấy nhân viên thứ hai
-/ds/nhanvien[@manv='NV01']	Tìm nhân viên có mã NV01
-/ds/nhanvien/hoten	Lấy thẻ họ tên của các nhân viên
-/ds/nhanvien/diachi	Lấy các thẻ địa chỉ
-/ds/nhanvien[hoten/ten='An']	Tìm nhân viên có tên An
-
-Lưu ý: Trong XPath, chỉ số [1] là phần tử đầu tiên, không phải [0] như chỉ số mảng trong C#.
-
-4. Lấy dữ liệu bên trong thẻ XML
-Ví dụ:
-<nhanvien manv="NV01">
-    <hoten>
-        <ho>Nguyen</ho>
-        <ten>An</ten>
-    </hoten>
-    <diachi>Ha Noi</diachi>
-</nhanvien>
-
-
-Cách 1: Dùng SelectSingleNode()
-XmlNode nv = doc.SelectSingleNode(
-    "/ds/nhanvien[@manv='NV01']"
-);
-
-if (nv != null)
-{
-    string diaChi = nv.SelectSingleNode("diachi").InnerText;
-
-    MessageBox.Show(diaChi);
-}
-
-
-Kết quả:
-Ha Noi
-
-
-Ở đây:
-- nv: Nút nhân viên.
-- SelectSingleNode("diachi"): Tìm thẻ địa chỉ bên trong nhân viên.
-- InnerText: Lấy nội dung của thẻ.
-Cách 2: Dùng Attributes
-Lấy mã nhân viên:
-string ma = nv.Attributes["manv"].Value;
-
-
-Kết quả:
-NV01
-
-
-So sánh hai cách:
-// Lấy nội dung thẻ
-string diaChi = nv.SelectSingleNode("diachi").InnerText;
-
-// Lấy giá trị thuộc tính
-string ma = nv.Attributes["manv"].Value;
-
-
-Đây là hai cách rất hay gặp trong đề thi.
-
-5. Kết hợp XML với DataGridView
-Đây là ví dụ thực tế để đưa dữ liệu XML lên bảng.
-private void HienThi()
-{
-    doc.Load(duongDanFile);
-
-    table.Rows.Clear();
-
-    XmlNodeList danhSach = doc.SelectNodes("/ds/nhanvien");
-
-    foreach (XmlNode nv in danhSach)
+    // Kiểm tra dữ liệu
+    if (string.IsNullOrEmpty(gioiTinh))
     {
-        string ma = nv.Attributes["manv"].Value;
-
-        string ho = nv.SelectSingleNode("hoten/ho").InnerText;
-
-        string ten = nv.SelectSingleNode("hoten/ten").InnerText;
-
-        string diaChi = nv.SelectSingleNode("diachi").InnerText;
-
-        table.Rows.Add(ma, ho, ten, diaChi);
+        MessageBox.Show("Vui lòng chọn giới tính!");
+        return;
     }
+
+    if (string.IsNullOrEmpty(khoa))
+    {
+        MessageBox.Show("Vui lòng chọn khoa!");
+        return;
+    }
+
+    MessageBox.Show($"Giới tính: {gioiTinh}\nKhoa: {khoa}");
 }
 
 
-Giải thích luồng chạy:
-1. Đọc file XML bằng Load().
-2. Xóa dữ liệu cũ trên DataGridView bằng Rows.Clear().
-3. Lấy danh sách nhân viên bằng SelectNodes().
-4. Dùng foreach duyệt từng nhân viên.
-5. Lấy mã, họ, tên và địa chỉ.
-6. Dùng Rows.Add() đưa dữ liệu lên bảng.
-Kết quả hiển thị:
-Danh sách nhân viên
-Mã NV	Họ	Tên	Địa chỉ
-NV01	Nguyen	An	Ha Noi
-NV02	Tran	Binh	Da Nang
+Lưu ý: Nếu bạn có nhiều RadioButton nhưng muốn chúng chỉ chọn được một giá trị tại một thời điểm, hãy đặt chúng trong cùng một GroupBox hoặc Panel.
 
-
-Lưu ý: Ví dụ trên giả sử XML có đầy đủ các thẻ và thuộc tính cần thiết. Nếu dữ liệu có thể thiếu, cần kiểm tra null trước khi gọi .InnerText hoặc .Value.
+Bạn đang sử dụng Windows Forms (WinForms) đúng không? Nếu đúng, mình có thể hướng dẫn thêm cách lấy dữ liệu từ TextBox, RadioButton, ComboBox và lưu tất cả vào SQL Server.
